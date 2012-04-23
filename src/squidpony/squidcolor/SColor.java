@@ -3,20 +3,19 @@ package squidpony.squidcolor;
 import java.awt.Color;
 
 /**
- * Allows for the use of custom colors.  These colors are comparable for equality
+ * Allows for the use of custom colors. These colors are comparable for equality
  * but the ordering of them is based on the actual hex values of them.
- * 
- * Has some built in pallets:
- * FULL_PALLET which contains all custom named colors.
- * RAINBOW which contains the colors found in the rainbow.
- * 
+ *
+ * Has some built in pallets: FULL_PALLET which contains all custom named
+ * colors. RAINBOW which contains the colors found in the rainbow.
+ *
  * Can be used to make any color with aRGB values from 0-255.
- * 
- * @author Eben Howard 
+ *
+ * @author Eben Howard - http://squidpony.com
  */
 public class SColor extends Color implements Comparable {
     /**
-     *<pre><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp@&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp@&nbsp</font></font><font style="background-color: #000000;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -26,7 +25,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BLACK = new SColor(0x000000);
     /**
-     *<pre><font style="background-color: #0000ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #0000ff;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #0000ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #0000ff;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #0000ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=0000ff>&nbsp@&nbsp</font><font style="background-color: #888888;" color=0000ff>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=0000ff>&nbsp@&nbsp</font></font><font style="background-color: #0000ff;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #0000ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #0000ff;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -36,7 +35,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BLUE = new SColor(0x0000ff);
     /**
-     *<pre><font style="background-color: #808000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #808000;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #808000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #808000;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #808000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=808000>&nbsp@&nbsp</font><font style="background-color: #888888;" color=808000>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=808000>&nbsp@&nbsp</font></font><font style="background-color: #808000;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #808000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #808000;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -47,7 +46,7 @@ public class SColor extends Color implements Comparable {
     public static final SColor BROWN = new SColor(0x808000);
     /**
      * Duplicated as AQUA for usability
-     *<pre><font style="background-color: #00ffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #00ffff;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00ffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #00ffff;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00ffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=00ffff>&nbsp@&nbsp</font><font style="background-color: #888888;" color=00ffff>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=00ffff>&nbsp@&nbsp</font></font><font style="background-color: #00ffff;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00ffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #00ffff;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -57,7 +56,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CYAN = new SColor(0x00ffff);
     /**
-     *<pre><font style="background-color: #0000c8;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #0000c8;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #0000c8;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #0000c8;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #0000c8;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=0000c8>&nbsp@&nbsp</font><font style="background-color: #888888;" color=0000c8>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=0000c8>&nbsp@&nbsp</font></font><font style="background-color: #0000c8;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #0000c8;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #0000c8;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -67,7 +66,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_BLUE = new SColor(0x0000c8);
     /**
-     *<pre><font style="background-color: #404040;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #404040;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #404040;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #404040;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #404040;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=404040>&nbsp@&nbsp</font><font style="background-color: #888888;" color=404040>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=404040>&nbsp@&nbsp</font></font><font style="background-color: #404040;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #404040;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #404040;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -77,7 +76,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_GRAY = new SColor(0x404040);
     /**
-     *<pre><font style="background-color: #800000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #800000;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #800000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #800000;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #800000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=800000>&nbsp@&nbsp</font><font style="background-color: #888888;" color=800000>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=800000>&nbsp@&nbsp</font></font><font style="background-color: #800000;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #800000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #800000;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -87,7 +86,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_RED = new SColor(0x800000);
     /**
-     *<pre><font style="background-color: #808080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #808080;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #808080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #808080;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #808080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=808080>&nbsp@&nbsp</font><font style="background-color: #888888;" color=808080>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=808080>&nbsp@&nbsp</font></font><font style="background-color: #808080;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #808080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #808080;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -97,7 +96,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor GRAY = new SColor(0x808080);
     /**
-     *<pre><font style="background-color: #008000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #008000;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #008000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #008000;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #008000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=008000>&nbsp@&nbsp</font><font style="background-color: #888888;" color=008000>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=008000>&nbsp@&nbsp</font></font><font style="background-color: #008000;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #008000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #008000;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -108,7 +107,7 @@ public class SColor extends Color implements Comparable {
     public static final SColor GREEN = new SColor(0x008000);
     /**
      * Duplicated as LIGHT_GREEN for usability
-     *<pre><font style="background-color: #00FF00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #00FF00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00FF00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #00FF00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00FF00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=00FF00>&nbsp@&nbsp</font><font style="background-color: #888888;" color=00FF00>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=00FF00>&nbsp@&nbsp</font></font><font style="background-color: #00FF00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00FF00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #00FF00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -118,7 +117,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LIME = new SColor(0x00FF00);
     /**
-     *<pre><font style="background-color: #c0c0c0;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #c0c0c0;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #c0c0c0;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #c0c0c0;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #c0c0c0;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=c0c0c0>&nbsp@&nbsp</font><font style="background-color: #888888;" color=c0c0c0>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=c0c0c0>&nbsp@&nbsp</font></font><font style="background-color: #c0c0c0;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #c0c0c0;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #c0c0c0;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -128,7 +127,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LIGHT_GRAY = new SColor(0xc0c0c0);
     /**
-     *<pre><font style="background-color: #ff00ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ff00ff;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ff00ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ff00ff;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ff00ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=ff00ff>&nbsp@&nbsp</font><font style="background-color: #888888;" color=ff00ff>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=ff00ff>&nbsp@&nbsp</font></font><font style="background-color: #ff00ff;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ff00ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ff00ff;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -138,7 +137,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MAGENTA = new SColor(0xff00ff);
     /**
-     *<pre><font style="background-color: #ffc800;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffc800;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ffc800;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffc800;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ffc800;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=ffc800>&nbsp@&nbsp</font><font style="background-color: #888888;" color=ffc800>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=ffc800>&nbsp@&nbsp</font></font><font style="background-color: #ffc800;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ffc800;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffc800;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -148,7 +147,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ORANGE = new SColor(0xffc800);
     /**
-     *<pre><font style="background-color: #ffafaf;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffafaf;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ffafaf;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffafaf;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ffafaf;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=ffafaf>&nbsp@&nbsp</font><font style="background-color: #888888;" color=ffafaf>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=ffafaf>&nbsp@&nbsp</font></font><font style="background-color: #ffafaf;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ffafaf;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffc800;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -158,7 +157,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PINK = new SColor(0xffafaf);
     /**
-     *<pre><font style="background-color: #800080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #800080;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #800080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #800080;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #800080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=800080>&nbsp@&nbsp</font><font style="background-color: #888888;" color=800080>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=800080>&nbsp@&nbsp</font></font><font style="background-color: #800080;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #800080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #800080;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -168,7 +167,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PURPLE = new SColor(0x800080);
     /**
-     *<pre><font style="background-color: #008080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #008080;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #008080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #008080;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #008080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=800080>&nbsp@&nbsp</font><font style="background-color: #888888;" color=008080>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=008080>&nbsp@&nbsp</font></font><font style="background-color: #008080;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #008080;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #008080;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -178,7 +177,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TEAL = new SColor(0x008080);
     /**
-     *<pre><font style="background-color: #ff0000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ff0000;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ff0000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ff0000;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ff0000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=ff0000>&nbsp@&nbsp</font><font style="background-color: #888888;" color=ff0000>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=ff0000>&nbsp@&nbsp</font></font><font style="background-color: #ff0000;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ff0000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ff0000;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -188,7 +187,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor RED = new SColor(0xff0000);
     /**
-     *<pre><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=ffffff>&nbsp@&nbsp</font><font style="background-color: #888888;" color=ffffff>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=ffffff>&nbsp@&nbsp</font></font><font style="background-color: #ffffff;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -198,7 +197,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor WHITE = new SColor(0xffffff);
     /**
-     *<pre><font style="background-color: #ffff00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffff00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ffff00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffff00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ffff00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=ffff00>&nbsp@&nbsp</font><font style="background-color: #888888;" color=ffff00>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=ffff00>&nbsp@&nbsp</font></font><font style="background-color: #ffff00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ffff00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffff00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -208,7 +207,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor YELLOW = new SColor(0xffff00);
     /**
-     *<pre><font style="background-color: #f0f8ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #f0f8ff;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #f0f8ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #f0f8ff;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #f0f8ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=f0f8ff>&nbsp@&nbsp</font><font style="background-color: #888888;" color=f0f8ff>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=f0f8ff>&nbsp@&nbsp</font></font><font style="background-color: #f0f8ff;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #f0f8ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #f0f8ff;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -218,7 +217,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ALICE_BLUE = new SColor(0xf0f8ff);
     /**
-     *<pre><font style="background-color: #E32636;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #E32636;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E32636;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #E32636;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E32636;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=E32636>&nbsp@&nbsp</font><font style="background-color: #888888;" color=E32636>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=E32636>&nbsp@&nbsp</font></font><font style="background-color: #E32636;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E32636;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #E32636;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -228,7 +227,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ALIZARIN = new SColor(0xE32636);
     /**
-     *<pre><font style="background-color: #E52B50;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #E52B50;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E52B50;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #E52B50;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E52B50;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=E52B50>&nbsp@&nbsp</font><font style="background-color: #888888;" color=E52B50>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=E52B50>&nbsp@&nbsp</font></font><font style="background-color: #E52B50;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E52B50;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #E52B50;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -238,7 +237,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor AMARANTH = new SColor(0xE52B50);
     /**
-     *<pre><font style="background-color: #FFBF00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #FFBF00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFBF00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #FFBF00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFBF00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=FFBF00>&nbsp@&nbsp</font><font style="background-color: #888888;" color=FFBF00>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=FFBF00>&nbsp@&nbsp</font></font><font style="background-color: #FFBF00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFBF00;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #FFBF00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -248,7 +247,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor AMBER = new SColor(0xFFBF00);
     /**
-     *<pre><font style="background-color: #9966CC;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #9966CC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #9966CC;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #9966CC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #9966CC;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=9966CC>&nbsp@&nbsp</font><font style="background-color: #888888;" color=9966CC>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=9966CC>&nbsp@&nbsp</font></font><font style="background-color: #9966CC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #9966CC;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #9966CC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -258,7 +257,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor AMETHYST = new SColor(0x9966CC);
     /**
-     *<pre><font style="background-color: #FBCEB1;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #FBCEB1;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FBCEB1;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #FBCEB1;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FBCEB1;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=FBCEB1>&nbsp@&nbsp</font><font style="background-color: #888888;" color=FBCEB1>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=FBCEB1>&nbsp@&nbsp</font></font><font style="background-color: #FBCEB1;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FBCEB1;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #FBCEB1;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -269,7 +268,7 @@ public class SColor extends Color implements Comparable {
     public static final SColor APRICOT = new SColor(0xFBCEB1);
     /**
      * Duplicated as CYAN for backwards compatability
-     *<pre><font style="background-color: #00FFFF;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #00FFFF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00FFFF;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #00FFFF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00FFFF;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=00FFFF>&nbsp@&nbsp</font><font style="background-color: #888888;" color=00FFFF>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=00FFFF>&nbsp@&nbsp</font></font><font style="background-color: #00FFFF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00FFFF;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #00FFFF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -279,7 +278,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor AQUA = new SColor(0x00FFFF);
     /**
-     *<pre><font style="background-color: #7FFFD4;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #7FFFD4;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #7FFFD4;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #7FFFD4;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #7FFFD4;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=7FFFD4>&nbsp@&nbsp</font><font style="background-color: #888888;" color=7FFFD4>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=7FFFD4>&nbsp@&nbsp</font></font><font style="background-color: #7FFFD4;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #7FFFD4;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #7FFFD4;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -289,7 +288,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor AQUAMARINE = new SColor(0x7FFFD4);
     /**
-     *<pre><font style="background-color: #4B5320;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #4B5320;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #4B5320;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #4B5320;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #4B5320;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=4B5320>&nbsp@&nbsp</font><font style="background-color: #888888;" color=4B5320>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=4B5320>&nbsp@&nbsp</font></font><font style="background-color: #4B5320;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #4B5320;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #4B5320;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -299,7 +298,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ARMY_GREEN = new SColor(0x4B5320);
     /**
-     *<pre><font style="background-color: #7BA05B;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #7BA05B;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #7BA05B;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #7BA05B;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #7BA05B;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=7BA05B>&nbsp@&nbsp</font><font style="background-color: #888888;" color=7BA05B>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=7BA05B>&nbsp@&nbsp</font></font><font style="background-color: #7BA05B;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #7BA05B;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #7BA05B;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -309,7 +308,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ASPARAGUS = new SColor(0x7BA05B);
     /**
-     *<pre><font style="background-color: #FF9966;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #FF9966;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF9966;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #FF9966;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF9966;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=FF9966>&nbsp@&nbsp</font><font style="background-color: #888888;" color=FF9966>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=FF9966>&nbsp@&nbsp</font></font><font style="background-color: #FF9966;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF9966;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #FF9966;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -319,7 +318,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ATOMIC_TANGERINE = new SColor(0xFF9966);
     /**
-     *<pre><font style="background-color: #6D351A;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #6D351A;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #6D351A;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #6D351A;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #6D351A;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=6D351A>&nbsp@&nbsp</font><font style="background-color: #888888;" color=6D351A>&nbsp@&nbsp</font><font style="background-color: #ffffff;" color=6D351A>&nbsp@&nbsp</font></font><font style="background-color: #6D351A;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #6D351A;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #6D351A;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -329,7 +328,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor AUBURN = new SColor(0x6D351A);
     /**
-     *<pre><font style="background-color: #007FFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #007FFF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #007FFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #007FFF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #007FFF;" color=007FFF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #007FFF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #007FFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #007FFF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -339,7 +338,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor AZUL = new SColor(0x007FFF);
     /**
-     *<pre><font style="background-color: #F0FFFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F0FFFF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F0FFFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F0FFFF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F0FFFF;" color=F0FFFF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F0FFFF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F0FFFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F0FFFF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -349,7 +348,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor AZURE = new SColor(0xF0FFFF);
     /**
-     *<pre><font style="background-color: #E0FFFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E0FFFF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E0FFFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E0FFFF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E0FFFF;" color=E0FFFF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E0FFFF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E0FFFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E0FFFF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -359,7 +358,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BABY_BLUE = new SColor(0xE0FFFF);
     /**
-     *<pre><font style="background-color: #F5F5DC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F5F5DC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F5F5DC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F5F5DC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F5F5DC;" color=F5F5DC>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F5F5DC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F5F5DC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F5F5DC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -369,7 +368,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BEIGE = new SColor(0xF5F5DC);
     /**
-     *<pre><font style="background-color: #3D2B1F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #3D2B1F;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #3D2B1F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #3D2B1F;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #3D2B1F;" color=3D2B1F>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #3D2B1F;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #3D2B1F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #3D2B1F;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -379,7 +378,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BISTRE = new SColor(0x3D2B1F);
     /**
-     *<pre><font style="background-color: #333399;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #333399;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #333399;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #333399;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #333399;" color=333399>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #333399;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #333399;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #333399;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -389,7 +388,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PIGMENT_BLUE = new SColor(0x333399);
     /**
-     *<pre><font style="background-color: #00DDDD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00DDDD;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00DDDD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00DDDD;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00DDDD;" color=00DDDD>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #00DDDD;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00DDDD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00DDDD;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -399,7 +398,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BLUE_GREEN = new SColor(0x00DDDD);
     /**
-     *<pre><font style="background-color: #8A2BE2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #8A2BE2;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #8A2BE2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #8A2BE2;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #8A2BE2;" color=8A2BE2>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #8A2BE2;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #8A2BE2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #8A2BE2;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -409,7 +408,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BLUE_VIOLET = new SColor(0x8A2BE2);
     /**
-     *<pre><font style="background-color: #0095B6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0095B6;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #0095B6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0095B6;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #0095B6;" color=0095B6>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #0095B6;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #0095B6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0095B6;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -419,7 +418,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BONDI_BLUE = new SColor(0x0095B6);
     /**
-     *<pre><font style="background-color: #B5A642;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B5A642;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #B5A642;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B5A642;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #B5A642;" color=B5A642>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #B5A642;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #B5A642;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B5A642;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -429,7 +428,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BRASS = new SColor(0xB5A642);
     /**
-     *<pre><font style="background-color: #66FF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #66FF00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #66FF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #66FF00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #66FF00;" color=66FF00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #66FF00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #66FF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #66FF00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -439,7 +438,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BRIGHT_GREEN = new SColor(0x66FF00);
     /**
-     *<pre><font style="background-color: #FF0080;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF0080;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF0080;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF0080;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF0080;" color=FF0080>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF0080;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF0080;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF0080;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -449,7 +448,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BRIGHT_PINK = new SColor(0xFF0080);
     /**
-     *<pre><font style="background-color: #08E8DE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #08E8DE;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #08E8DE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #08E8DE;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #08E8DE;" color=08E8DE>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #08E8DE;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #08E8DE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #08E8DE;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -459,7 +458,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BRIGHT_TURQUOISE = new SColor(0x08E8DE);
     /**
-     *<pre><font style="background-color: #FF55A3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF55A3;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF55A3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF55A3;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF55A3;" color=FF55A3>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF55A3;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF55A3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF55A3;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -469,7 +468,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BRILLIANT_ROSE = new SColor(0xFF55A3);
     /**
-     *<pre><font style="background-color: #CD7F32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD7F32;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CD7F32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD7F32;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CD7F32;" color=CD7F32>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CD7F32;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CD7F32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD7F32;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -479,7 +478,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BRONZE = new SColor(0xCD7F32);
     /**
-     *<pre><font style="background-color: #964B00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #964B00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #964B00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #964B00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #964B00;" color=964B00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #964B00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #964B00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #964B00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -489,7 +488,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BROWNER = new SColor(0x964B00);
     /**
-     *<pre><font style="background-color: #F0DC82;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F0DC82;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F0DC82;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F0DC82;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F0DC82;" color=F0DC82>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F0DC82;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F0DC82;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F0DC82;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -499,7 +498,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BUFF = new SColor(0xF0DC82);
     /**
-     *<pre><font style="background-color: #900020;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #900020;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #900020;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #900020;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #900020;" color=900020>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #900020;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #900020;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #900020;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -509,7 +508,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BURGUNDY = new SColor(0x900020);
     /**
-     *<pre><font style="background-color: #CC5500;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC5500;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CC5500;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC5500;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CC5500;" color=CC5500>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CC5500;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CC5500;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC5500;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -519,7 +518,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BURNT_ORANGE = new SColor(0xCC5500);
     /**
-     *<pre><font style="background-color: #E97451;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E97451;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E97451;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E97451;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E97451;" color=E97451>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E97451;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E97451;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E97451;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -529,7 +528,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BURNT_SIENNA = new SColor(0xE97451);
     /**
-     *<pre><font style="background-color: #8A3324;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #8A3324;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #8A3324;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #8A3324;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #8A3324;" color=8A3324>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #8A3324;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #8A3324;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #8A3324;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -539,7 +538,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor BURNT_UMBER = new SColor(0x8A3324);
     /**
-     *<pre><font style="background-color: #78866B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #78866B;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #78866B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #78866B;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #78866B;" color=78866B>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #78866B;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #78866B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #78866B;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -549,7 +548,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CAMO_GREEN = new SColor(0x78866B);
     /**
-     *<pre><font style="background-color: #592720;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #592720;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #592720;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #592720;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #592720;" color=592720>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #592720;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #592720;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #592720;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -559,7 +558,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CAPUT_MORTUUM = new SColor(0x592720);
     /**
-     *<pre><font style="background-color: #C41E3A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C41E3A;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C41E3A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C41E3A;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C41E3A;" color=C41E3A>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C41E3A;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C41E3A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C41E3A;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -569,7 +568,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CARDINAL = new SColor(0xC41E3A);
     /**
-     *<pre><font style="background-color: #960018;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #960018;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #960018;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #960018;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #960018;" color=960018>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #960018;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #960018;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #960018;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -579,7 +578,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CARMINE = new SColor(0x960018);
     /**
-     *<pre><font style="background-color: #FFA6C9;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFA6C9;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFA6C9;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFA6C9;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFA6C9;" color=FFA6C9>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFA6C9;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFA6C9;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFA6C9;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -589,7 +588,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CARNATION_PINK = new SColor(0xFFA6C9);
     /**
-     *<pre><font style="background-color: #99BADD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #99BADD;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #99BADD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #99BADD;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #99BADD;" color=99BADD>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #99BADD;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #99BADD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #99BADD;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -599,7 +598,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CAROLINA_BLUE = new SColor(0x99BADD);
     /**
-     *<pre><font style="background-color: #ED9121;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ED9121;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ED9121;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ED9121;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ED9121;" color=ED9121>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #ED9121;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ED9121;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ED9121;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -609,7 +608,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CARROT_ORANGE = new SColor(0xED9121);
     /**
-     *<pre><font style="background-color: #ACE1AF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ACE1AF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ACE1AF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ACE1AF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ACE1AF;" color=ACE1AF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #ACE1AF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ACE1AF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ACE1AF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -619,7 +618,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CELADON = new SColor(0xACE1AF);
     /**
-     *<pre><font style="background-color: #DE3163;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DE3163;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DE3163;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DE3163;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DE3163;" color=DE3163>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DE3163;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DE3163;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DE3163;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -629,7 +628,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CERISE = new SColor(0xDE3163);
     /**
-     *<pre><font style="background-color: #007BA7;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #007BA7;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #007BA7;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #007BA7;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #007BA7;" color=007BA7>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #007BA7;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #007BA7;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #007BA7;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -639,7 +638,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CERULEAN = new SColor(0x007BA7);
     /**
-     *<pre><font style="background-color: #2A52BE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #2A52BE;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #2A52BE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #2A52BE;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #2A52BE;" color=2A52BE>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #2A52BE;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #2A52BE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #2A52BE;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -649,7 +648,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CERULEAN_BLUE = new SColor(0x2A52BE);
     /**
-     *<pre><font style="background-color: #DFFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DFFF00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DFFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DFFF00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DFFF00;" color=DFFF00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DFFF00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DFFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DFFF00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -659,7 +658,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CHARTREUSE = new SColor(0xDFFF00);
     /**
-     *<pre><font style="background-color: #7FFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7FFF00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #7FFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7FFF00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #7FFF00;" color=7FFF00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #7FFF00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #7FFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7FFF00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -669,7 +668,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CHARTREUSE_GREEN = new SColor(0x7FFF00);
     /**
-     *<pre><font style="background-color: #FFB7C5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFB7C5;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFB7C5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFB7C5;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFB7C5;" color=FFB7C5>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFB7C5;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFB7C5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFB7C5;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -679,7 +678,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CHERRY_BLOSSOM = new SColor(0xFFB7C5);
     /**
-     *<pre><font style="background-color: #CD5C5C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD5C5C;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CD5C5C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD5C5C;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CD5C5C;" color=CD5C5C>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CD5C5C;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CD5C5C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD5C5C;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -689,7 +688,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CHESTNUT = new SColor(0xCD5C5C);
     /**
-     *<pre><font style="background-color: #7B3F00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7B3F00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #7B3F00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7B3F00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #7B3F00;" color=7B3F00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #7B3F00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #7B3F00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7B3F00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -699,7 +698,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CHOCOLATE = new SColor(0x7B3F00);
     /**
-     *<pre><font style="background-color: #E34234;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E34234;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E34234;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E34234;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E34234;" color=E34234>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E34234;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E34234;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E34234;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -709,7 +708,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CINNABAR = new SColor(0xE34234);
     /**
-     *<pre><font style="background-color: #D2691E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D2691E;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #D2691E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D2691E;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #D2691E;" color=D2691E>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #D2691E;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #D2691E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D2691E;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -719,7 +718,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CINNAMON = new SColor(0xD2691E);
     /**
-     *<pre><font style="background-color: #0047AB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0047AB;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #0047AB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0047AB;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #0047AB;" color=0047AB>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #0047AB;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #0047AB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0047AB;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -729,7 +728,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor COBALT = new SColor(0x0047AB);
     /**
-     *<pre><font style="background-color: #9BDDFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9BDDFF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #9BDDFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9BDDFF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #9BDDFF;" color=9BDDFF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #9BDDFF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #9BDDFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9BDDFF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -739,7 +738,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor COLUMBIA_BLUE = new SColor(0x9BDDFF);
     /**
-     *<pre><font style="background-color: #B87333;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B87333;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #B87333;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B87333;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #B87333;" color=B87333>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #B87333;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #B87333;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B87333;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -749,7 +748,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor COPPER = new SColor(0xB87333);
     /**
-     *<pre><font style="background-color: #996666;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #996666;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #996666;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #996666;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #996666;" color=996666>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #996666;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #996666;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #996666;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -759,7 +758,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor COPPER_ROSE = new SColor(0x996666);
     /**
-     *<pre><font style="background-color: #FF7F50;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF7F50;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF7F50;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF7F50;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF7F50;" color=FF7F50>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF7F50;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF7F50;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF7F50;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -769,7 +768,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CORAL = new SColor(0xFF7F50);
     /**
-     *<pre><font style="background-color: #FF4040;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF4040;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF4040;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF4040;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF4040;" color=FF4040>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF4040;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF4040;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF4040;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -779,7 +778,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CORAL_RED = new SColor(0xFF4040);
     /**
-     *<pre><font style="background-color: #FBEC5D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FBEC5D;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FBEC5D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FBEC5D;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FBEC5D;" color=FBEC5D>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FBEC5D;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FBEC5D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FBEC5D;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -789,7 +788,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CORN = new SColor(0xFBEC5D);
     /**
-     *<pre><font style="background-color: #6495ED;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6495ED;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #6495ED;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6495ED;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #6495ED;" color=6495ED>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #6495ED;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #6495ED;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6495ED;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -799,7 +798,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CORNFLOWER_BLUE = new SColor(0x6495ED);
     /**
-     *<pre><font style="background-color: #FFF8E7;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFF8E7;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFF8E7;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFF8E7;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFF8E7;" color=FFF8E7>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFF8E7;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFF8E7;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFF8E7;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -809,7 +808,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor COSMIC_LATTE = new SColor(0xFFF8E7);
     /**
-     *<pre><font style="background-color: #FFFDD0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFFDD0;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFFDD0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFFDD0;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFFDD0;" color=FFFDD0>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFFDD0;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFFDD0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFFDD0;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -819,7 +818,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CREAM = new SColor(0xFFFDD0);
     /**
-     *<pre><font style="background-color: #DC143C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DC143C;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DC143C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DC143C;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DC143C;" color=DC143C>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DC143C;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DC143C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DC143C;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -829,7 +828,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor CRIMSON = new SColor(0xDC143C);
     /**
-     *<pre><font style="background-color: #654321;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #654321;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #654321;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #654321;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #654321;" color=654321>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #654321;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #654321;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #654321;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -839,7 +838,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_BROWN = new SColor(0x654321);
     /**
-     *<pre><font style="background-color: #08457E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #08457E;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #08457E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #08457E;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #08457E;" color=08457E>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #08457E;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #08457E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #08457E;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -849,7 +848,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_CERULEAN = new SColor(0x08457E);
     /**
-     *<pre><font style="background-color: #986960;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #986960;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #986960;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #986960;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #986960;" color=986960>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #986960;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #986960;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #986960;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -859,7 +858,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_CHESTNUT = new SColor(0x986960);
     /**
-     *<pre><font style="background-color: #CD5B45;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD5B45;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CD5B45;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD5B45;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CD5B45;" color=CD5B45>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CD5B45;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CD5B45;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD5B45;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -869,7 +868,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_CORAL = new SColor(0xCD5B45);
     /**
-     *<pre><font style="background-color: #B8860B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B8860B;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #B8860B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B8860B;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #B8860B;" color=B8860B>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #B8860B;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #B8860B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B8860B;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -879,7 +878,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_GOLDENROD = new SColor(0xB8860B);
     /**
-     *<pre><font style="background-color: #013220;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #013220;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #013220;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #013220;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #013220;" color=013220>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #013220;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #013220;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #013220;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -889,7 +888,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_GREEN = new SColor(0x013220);
     /**
-     *<pre><font style="background-color: #BDB76B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #BDB76B;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #BDB76B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #BDB76B;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #BDB76B;" color=BDB76B>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #BDB76B;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #BDB76B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #BDB76B;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -899,7 +898,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_KHAKI = new SColor(0xBDB76B);
     /**
-     *<pre><font style="background-color: #03C03C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #03C03C;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #03C03C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #03C03C;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #03C03C;" color=03C03C>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #03C03C;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #03C03C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #03C03C;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -909,7 +908,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_PASTEL_GREEN = new SColor(0x03C03C);
     /**
-     *<pre><font style="background-color: #E75480;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E75480;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E75480;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E75480;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E75480;" color=E75480>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E75480;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E75480;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E75480;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -919,7 +918,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_PINK = new SColor(0xE75480);
     /**
-     *<pre><font style="background-color: #560319;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #560319;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #560319;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #560319;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #560319;" color=560319>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #560319;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #560319;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #560319;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -929,7 +928,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_SCARLET = new SColor(0x560319);
     /**
-     *<pre><font style="background-color: #E9967A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E9967A;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E9967A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E9967A;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E9967A;" color=E9967A>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E9967A;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E9967A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E9967A;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -939,7 +938,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_SALMON = new SColor(0xE9967A);
     /**
-     *<pre><font style="background-color: #2F4F4F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #2F4F4F;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #2F4F4F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #2F4F4F;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #2F4F4F;" color=2F4F4F>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #2F4F4F;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #2F4F4F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #2F4F4F;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -949,7 +948,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_SLATE_GRAY = new SColor(0x2F4F4F);
     /**
-     *<pre><font style="background-color: #177245;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #177245;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #177245;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #177245;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #177245;" color=177245>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #177245;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #177245;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #177245;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -959,7 +958,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_SPRING_GREEN = new SColor(0x177245);
     /**
-     *<pre><font style="background-color: #918151;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #918151;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #918151;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #918151;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #918151;" color=918151>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #918151;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #918151;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #918151;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -969,7 +968,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_TAN = new SColor(0x918151);
     /**
-     *<pre><font style="background-color: #00CED1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00CED1;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00CED1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00CED1;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00CED1;" color=00CED1>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #00CED1;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00CED1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00CED1;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -979,7 +978,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_TURQUOISE = new SColor(0x00CED1);
     /**
-     *<pre><font style="background-color: #9400D3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9400D3;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #9400D3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9400D3;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #9400D3;" color=9400D3>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #9400D3;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #9400D3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9400D3;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -989,7 +988,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DARK_VIOLET = new SColor(0x9400D3);
     /**
-     *<pre><font style="background-color: #DA3287;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DA3287;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DA3287;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DA3287;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DA3287;" color=DA3287>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DA3287;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DA3287;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DA3287;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -999,7 +998,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DEEP_CERISE = new SColor(0xDA3287);
     /**
-     *<pre><font style="background-color: #B94E48;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B94E48;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #B94E48;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B94E48;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #B94E48;" color=B94E48>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #B94E48;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #B94E48;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B94E48;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1009,7 +1008,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DEEP_CHESTNUT = new SColor(0xB94E48);
     /**
-     *<pre><font style="background-color: #C154C1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C154C1;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C154C1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C154C1;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C154C1;" color=C154C1>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C154C1;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C154C1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C154C1;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1019,7 +1018,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DEEP_FUCHSIA = new SColor(0xC154C1);
     /**
-     *<pre><font style="background-color: #9955BB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9955BB;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #9955BB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9955BB;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #9955BB;" color=9955BB>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #9955BB;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #9955BB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9955BB;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1029,7 +1028,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DEEP_LILAC = new SColor(0x9955BB);
     /**
-     *<pre><font style="background-color: #CD00CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD00CC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CD00CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD00CC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CD00CC;" color=CD00CC>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CD00CC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CD00CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD00CC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1039,7 +1038,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DEEP_MAGENTA = new SColor(0xCD00CC);
     /**
-     *<pre><font style="background-color: #FFCBA4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFCBA4;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFCBA4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFCBA4;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFCBA4;" color=FFCBA4>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFCBA4;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFCBA4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFCBA4;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1049,7 +1048,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DEEP_PEACH = new SColor(0xFFCBA4);
     /**
-     *<pre><font style="background-color: #FF1493;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF1493;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF1493;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF1493;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF1493;" color=FF1493>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF1493;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF1493;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF1493;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1059,7 +1058,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DEEP_PINK = new SColor(0xFF1493);
     /**
-     *<pre><font style="background-color: #1560BD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1560BD;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #1560BD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1560BD;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #1560BD;" color=1560BD>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #1560BD;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #1560BD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1560BD;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1069,7 +1068,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DENIM = new SColor(0x1560BD);
     /**
-     *<pre><font style="background-color: #1E90FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1E90FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #1E90FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1E90FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #1E90FF;" color=1E90FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #1E90FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #1E90FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1E90FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1079,7 +1078,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor DODGER_BLUE = new SColor(0x1E90FF);
     /**
-     *<pre><font style="background-color: #C2B280;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C2B280;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C2B280;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C2B280;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C2B280;" color=C2B280>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C2B280;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C2B280;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C2B280;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1089,7 +1088,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ECRU = new SColor(0xC2B280);
     /**
-     *<pre><font style="background-color: #1034A6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1034A6;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #1034A6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1034A6;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #1034A6;" color=1034A6>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #1034A6;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #1034A6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1034A6;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1099,7 +1098,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor EGYPTIAN_BLUE = new SColor(0x1034A6);
     /**
-     *<pre><font style="background-color: #7DF9FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7DF9FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #7DF9FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7DF9FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #7DF9FF;" color=7DF9FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #7DF9FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #7DF9FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7DF9FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1109,7 +1108,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ELECTRIC_BLUE = new SColor(0x7DF9FF);
     /**
-     *<pre><font style="background-color: #00FF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00FF00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00FF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00FF00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00FF00;" color=00FF00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #00FF00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00FF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00FF00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1119,7 +1118,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ELECTRIC_GREEN = new SColor(0x00FF00);
     /**
-     *<pre><font style="background-color: #6600FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6600FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #6600FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6600FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #6600FF;" color=6600FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #6600FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #6600FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6600FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1129,7 +1128,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ELECTRIC_INDIGO = new SColor(0x6600FF);
     /**
-     *<pre><font style="background-color: #CCFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CCFF00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CCFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CCFF00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CCFF00;" color=CCFF00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CCFF00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CCFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CCFF00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1139,7 +1138,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ELECTRIC_LIME = new SColor(0xCCFF00);
     /**
-     *<pre><font style="background-color: #BF00FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #BF00FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #BF00FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #BF00FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #BF00FF;" color=BF00FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #BF00FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #BF00FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #BF00FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1149,7 +1148,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ELECTRIC_PURPLE = new SColor(0xBF00FF);
     /**
-     *<pre><font style="background-color: #50C878;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #50C878;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #50C878;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #50C878;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #50C878;" color=50C878>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #50C878;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #50C878;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #50C878;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1159,7 +1158,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor EMERALD = new SColor(0x50C878);
     /**
-     *<pre><font style="background-color: #614051;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #614051;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #614051;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #614051;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #614051;" color=614051>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #614051;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #614051;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #614051;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1169,7 +1168,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor EGGPLANT = new SColor(0x614051);
     /**
-     *<pre><font style="background-color: #801818;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #801818;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #801818;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #801818;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #801818;" color=801818>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #801818;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #801818;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #801818;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1179,7 +1178,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor FALU_RED = new SColor(0x801818);
     /**
-     *<pre><font style="background-color: #4F7942;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4F7942;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #4F7942;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4F7942;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #4F7942;" color=4F7942>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #4F7942;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #4F7942;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4F7942;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1189,7 +1188,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor FERN_GREEN = new SColor(0x4F7942);
     /**
-     *<pre><font style="background-color: #B22222;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B22222;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #B22222;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B22222;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #B22222;" color=B22222>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #B22222;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #B22222;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B22222;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1199,7 +1198,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor FIREBRICK = new SColor(0xB22222);
     /**
-     *<pre><font style="background-color: #EEDC82;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EEDC82;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #EEDC82;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EEDC82;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #EEDC82;" color=EEDC82>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #EEDC82;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #EEDC82;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EEDC82;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1209,7 +1208,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor FLAX = new SColor(0xEEDC82);
     /**
-     *<pre><font style="background-color: #228B22;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #228B22;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #228B22;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #228B22;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #228B22;" color=228B22>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #228B22;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #228B22;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #228B22;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1219,7 +1218,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor FOREST_GREEN = new SColor(0x228B22);
     /**
-     *<pre><font style="background-color: #F64A8A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F64A8A;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F64A8A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F64A8A;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F64A8A;" color=F64A8A>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F64A8A;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F64A8A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F64A8A;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1229,7 +1228,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor FRENCH_ROSE = new SColor(0xF64A8A);
     /**
-     *<pre><font style="background-color: #FF77FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF77FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF77FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF77FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF77FF;" color=FF77FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF77FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF77FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF77FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1239,7 +1238,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor FUCSHIA_PINK = new SColor(0xFF77FF);
     /**
-     *<pre><font style="background-color: #E49B0F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E49B0F;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E49B0F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E49B0F;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E49B0F;" color=E49B0F>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E49B0F;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E49B0F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E49B0F;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1249,7 +1248,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor GAMBOGE = new SColor(0xE49B0F);
     /**
-     *<pre><font style="background-color: #D4AF37;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D4AF37;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #D4AF37;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D4AF37;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #D4AF37;" color=D4AF37>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #D4AF37;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #D4AF37;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D4AF37;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1259,7 +1258,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor GOLD = new SColor(0xD4AF37);
     /**
-     *<pre><font style="background-color: #FFD700;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFD700;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFD700;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFD700;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFD700;" color=FFD700>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFD700;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFD700;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFD700;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1269,7 +1268,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor GOLDEN = new SColor(0xFFD700);
     /**
-     *<pre><font style="background-color: #996515;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #996515;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #996515;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #996515;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #996515;" color=996515>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #996515;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #996515;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #996515;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1279,7 +1278,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor GOLDEN_BROWN = new SColor(0x996515);
     /**
-     *<pre><font style="background-color: #FFDF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFDF00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFDF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFDF00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFDF00;" color=FFDF00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFDF00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFDF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFDF00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1289,7 +1288,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor GOLDEN_YELLOW = new SColor(0xFFDF00);
     /**
-     *<pre><font style="background-color: #DAA520;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DAA520;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DAA520;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DAA520;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DAA520;" color=DAA520>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DAA520;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DAA520;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DAA520;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1299,7 +1298,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor GOLDENROD = new SColor(0xDAA520);
     /**
-     *<pre><font style="background-color: #465945;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #465945;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #465945;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #465945;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #465945;" color=465945>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #465945;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #465945;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #465945;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1309,7 +1308,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor GRAY_ASPARAGUS = new SColor(0x465945);
     /**
-     *<pre><font style="background-color: #ADFF2F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ADFF2F;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ADFF2F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ADFF2F;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ADFF2F;" color=ADFF2F>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #ADFF2F;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ADFF2F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ADFF2F;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1319,7 +1318,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor GREEN_YELLOW = new SColor(0xADFF2F);
     /**
-     *<pre><font style="background-color: #5218FA;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #5218FA;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #5218FA;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #5218FA;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #5218FA;" color=5218FA>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #5218FA;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #5218FA;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #5218FA;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1329,7 +1328,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor HAN_PURPLE = new SColor(0x5218FA);
     /**
-     *<pre><font style="background-color: #DF73FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DF73FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DF73FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DF73FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DF73FF;" color=DF73FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DF73FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DF73FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DF73FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1339,7 +1338,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor HELIOTROPE = new SColor(0xDF73FF);
     /**
-     *<pre><font style="background-color: #F400A1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F400A1;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F400A1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F400A1;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F400A1;" color=F400A1>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F400A1;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F400A1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F400A1;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1349,7 +1348,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor HOLLYWOOD_CERISE = new SColor(0xF400A1);
     /**
-     *<pre><font style="background-color: #FF00CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF00CC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF00CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF00CC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF00CC;" color=FF00CC>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF00CC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF00CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF00CC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1359,7 +1358,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor HOT_MAGENTA = new SColor(0xFF00CC);
     /**
-     *<pre><font style="background-color: #FF69B4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF69B4;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF69B4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF69B4;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF69B4;" color=FF69B4>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF69B4;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF69B4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF69B4;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1369,7 +1368,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor HOT_PINK = new SColor(0xFF69B4);
     /**
-     *<pre><font style="background-color: #00416A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00416A;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00416A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00416A;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00416A;" color=00416A>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #00416A;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00416A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00416A;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1379,7 +1378,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor INDIGO_DYE = new SColor(0x00416A);
     /**
-     *<pre><font style="background-color: #4B0082;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4B0082;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #4B0082;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4B0082;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #4B0082;" color=4B0082>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #4B0082;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #4B0082;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4B0082;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1389,7 +1388,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor INDIGO = new SColor(0x4B0082);
     /**
-     *<pre><font style="background-color: #002FA7;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #002FA7;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #002FA7;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #002FA7;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #002FA7;" color=002FA7>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #002FA7;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #002FA7;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #002FA7;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1399,7 +1398,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor INTERNATIONAL_KLEIN_BLUE = new SColor(0x002FA7);
     /**
-     *<pre><font style="background-color: #FF4F00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF4F00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF4F00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF4F00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF4F00;" color=FF4F00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF4F00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF4F00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF4F00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1409,7 +1408,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor INTERNATIONAL_ORANGE = new SColor(0xFF4F00);
     /**
-     *<pre><font style="background-color: #009000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #009000;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #009000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #009000;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #009000;" color=009000>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #009000;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #009000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #009000;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1419,7 +1418,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ISLAMIC_GREEN = new SColor(0x009000);
     /**
-     *<pre><font style="background-color: #FFFFF0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFFFF0;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFFFF0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFFFF0;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFFFF0;" color=FFFFF0>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFFFF0;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFFFF0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFFFF0;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1429,7 +1428,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor IVORY = new SColor(0xFFFFF0);
     /**
-     *<pre><font style="background-color: #00A86B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00A86B;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00A86B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00A86B;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00A86B;" color=00A86B>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #00A86B;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00A86B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00A86B;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1439,7 +1438,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor JADE = new SColor(0x00A86B);
     /**
-     *<pre><font style="background-color: #4CBB17;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4CBB17;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #4CBB17;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4CBB17;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #4CBB17;" color=4CBB17>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #4CBB17;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #4CBB17;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4CBB17;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1449,7 +1448,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor KELLY_GREEN = new SColor(0x4CBB17);
     /**
-     *<pre><font style="background-color: #C3B091;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C3B091;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C3B091;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C3B091;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C3B091;" color=C3B091>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C3B091;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C3B091;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C3B091;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1459,7 +1458,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor KHAKI = new SColor(0xC3B091);
     /**
-     *<pre><font style="background-color: #F0E68C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F0E68C;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F0E68C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F0E68C;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F0E68C;" color=F0E68C>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F0E68C;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F0E68C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F0E68C;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1469,7 +1468,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LIGHT_KHAKI = new SColor(0xF0E68C);
     /**
-     *<pre><font style="background-color: #B57EDC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B57EDC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #B57EDC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B57EDC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #B57EDC;" color=B57EDC>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #B57EDC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #B57EDC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B57EDC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1479,7 +1478,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAVENDER_FLORAL = new SColor(0xB57EDC);
     /**
-     *<pre><font style="background-color: #E6E6FA;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E6E6FA;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E6E6FA;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E6E6FA;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E6E6FA;" color=E6E6FA>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E6E6FA;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E6E6FA;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E6E6FA;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1489,7 +1488,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAVENDER = new SColor(0xE6E6FA);
     /**
-     *<pre><font style="background-color: #CCCCFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CCCCFF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CCCCFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CCCCFF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CCCCFF;" color=CCCCFF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CCCCFF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CCCCFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CCCCFF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1499,7 +1498,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAVENDER_BLUE = new SColor(0xCCCCFF);
     /**
-     *<pre><font style="background-color: #FFF0F5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFF0F5;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFF0F5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFF0F5;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFF0F5;" color=FFF0F5>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFF0F5;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFF0F5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFF0F5;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1509,7 +1508,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAVENDER_BLUSH = new SColor(0xFFF0F5);
     /**
-     *<pre><font style="background-color: #C4C3D0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C4C3D0;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C4C3D0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C4C3D0;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C4C3D0;" color=C4C3D0>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C4C3D0;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C4C3D0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C4C3D0;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1519,7 +1518,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAVENDER_GRAY = new SColor(0xC4C3D0);
     /**
-     *<pre><font style="background-color: #EE82EE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EE82EE;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #EE82EE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EE82EE;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #EE82EE;" color=EE82EE>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #EE82EE;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #EE82EE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EE82EE;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1529,7 +1528,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAVENDER_MAGENTA = new SColor(0xEE82EE);
     /**
-     *<pre><font style="background-color: #FBAED2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FBAED2;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FBAED2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FBAED2;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FBAED2;" color=FBAED2>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FBAED2;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FBAED2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FBAED2;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1539,7 +1538,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAVENDER_PINK = new SColor(0xFBAED2);
     /**
-     *<pre><font style="background-color: #967BB6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #967BB6;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #967BB6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #967BB6;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #967BB6;" color=967BB6>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #967BB6;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #967BB6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #967BB6;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1549,7 +1548,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAVENDER_PURPLE = new SColor(0x967BB6);
     /**
-     *<pre><font style="background-color: #FBA0E3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FBA0E3;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FBA0E3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FBA0E3;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FBA0E3;" color=FBA0E3>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FBA0E3;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FBA0E3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FBA0E3;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1559,7 +1558,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAVENDER_ROSE = new SColor(0xFBA0E3);
     /**
-     *<pre><font style="background-color: #7CFC00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7CFC00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #7CFC00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7CFC00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #7CFC00;" color=7CFC00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #7CFC00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #7CFC00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #7CFC00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1569,7 +1568,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LAWN_GREEN = new SColor(0x7CFC00);
     /**
-     *<pre><font style="background-color: #FFFACD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFFACD;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFFACD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFFACD;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFFACD;" color=FFFACD>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFFACD;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFFACD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFFACD;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1579,7 +1578,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LEMON_CHIFFON = new SColor(0xFFFACD);
     /**
-     *<pre><font style="background-color: #ADD8E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ADD8E6;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ADD8E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ADD8E6;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ADD8E6;" color=ADD8E6>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #ADD8E6;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ADD8E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ADD8E6;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1589,7 +1588,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LIGHT_BLUE = new SColor(0xADD8E6);
     /**
-     *<pre><font style="background-color: #FFB6C1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFB6C1;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFB6C1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFB6C1;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFB6C1;" color=FFB6C1>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFB6C1;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFB6C1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFB6C1;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1599,7 +1598,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LIGHT_PINK = new SColor(0xFFB6C1);
     /**
-     *<pre><font style="background-color: #C8A2C8;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C8A2C8;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C8A2C8;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C8A2C8;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C8A2C8;" color=C8A2C8>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C8A2C8;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C8A2C8;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C8A2C8;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1609,7 +1608,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LILAC = new SColor(0xC8A2C8);
     /**
-     *<pre><font style="background-color: #FDE910;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FDE910;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FDE910;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FDE910;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FDE910;" color=FDE910>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FDE910;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FDE910;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FDE910;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1619,7 +1618,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LEMON = new SColor(0xFDE910);
     /**
-     *<pre><font style="background-color: #BFFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #BFFF00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #BFFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #BFFF00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #BFFF00;" color=BFFF00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #BFFF00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #BFFF00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #BFFF00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1629,7 +1628,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LIGHT_LIME = new SColor(0xBFFF00);
     /**
-     *<pre><font style="background-color: #32CD32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #32CD32;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #32CD32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #32CD32;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #32CD32;" color=32CD32>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #32CD32;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #32CD32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #32CD32;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1639,7 +1638,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LIME_GREEN = new SColor(0x32CD32);
     /**
-     *<pre><font style="background-color: #FAF0E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FAF0E6;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FAF0E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FAF0E6;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FAF0E6;" color=FAF0E6>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FAF0E6;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FAF0E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FAF0E6;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1649,7 +1648,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LINEN = new SColor(0xFAF0E6);
     /**
-     *<pre><font style="background-color: #CA1F7B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CA1F7B;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CA1F7B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CA1F7B;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CA1F7B;" color=CA1F7B>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CA1F7B;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CA1F7B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CA1F7B;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1659,7 +1658,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MAGENTA_DYE = new SColor(0xCA1F7B);
     /**
-     *<pre><font style="background-color: #AAF0D1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AAF0D1;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #AAF0D1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AAF0D1;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #AAF0D1;" color=AAF0D1>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #AAF0D1;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #AAF0D1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AAF0D1;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1669,7 +1668,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MAGIC_MINT = new SColor(0xAAF0D1);
     /**
-     *<pre><font style="background-color: #F8F4FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F8F4FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F8F4FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F8F4FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F8F4FF;" color=F8F4FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F8F4FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F8F4FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F8F4FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1679,7 +1678,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MAGNOLIA = new SColor(0xF8F4FF);
     /**
-     *<pre><font style="background-color: #0BDA51;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0BDA51;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #0BDA51;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0BDA51;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #0BDA51;" color=0BDA51>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #0BDA51;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #0BDA51;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0BDA51;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1689,7 +1688,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MALACHITE = new SColor(0x0BDA51);
     /**
-     *<pre><font style="background-color: #800000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #800000;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #800000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #800000;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #800000;" color=800000>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #800000;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #800000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #800000;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1699,7 +1698,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MAROON = new SColor(0x800000);
     /**
-     *<pre><font style="background-color: #B03060;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B03060;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #B03060;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B03060;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #B03060;" color=B03060>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #B03060;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #B03060;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B03060;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1709,7 +1708,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LIGHT_MAROON = new SColor(0xB03060);
     /**
-     *<pre><font style="background-color: #73C2FB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #73C2FB;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #73C2FB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #73C2FB;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #73C2FB;" color=73C2FB>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #73C2FB;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #73C2FB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #73C2FB;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1719,7 +1718,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MAYA_BLUE = new SColor(0x73C2FB);
     /**
-     *<pre><font style="background-color: #E0B0FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E0B0FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E0B0FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E0B0FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E0B0FF;" color=E0B0FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E0B0FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E0B0FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E0B0FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1729,7 +1728,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MAUVE = new SColor(0xE0B0FF);
     /**
-     *<pre><font style="background-color: #915F6D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #915F6D;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #915F6D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #915F6D;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #915F6D;" color=915F6D>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #915F6D;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #915F6D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #915F6D;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1739,7 +1738,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MAUVE_TAUPE = new SColor(0x915F6D);
     /**
-     *<pre><font style="background-color: #0000CD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0000CD;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #0000CD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0000CD;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #0000CD;" color=0000CD>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #0000CD;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #0000CD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0000CD;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1749,7 +1748,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MEDIUM_BLUE = new SColor(0x0000CD);
     /**
-     *<pre><font style="background-color: #AF4035;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AF4035;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #AF4035;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AF4035;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #AF4035;" color=AF4035>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #AF4035;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #AF4035;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AF4035;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1759,7 +1758,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MEDIUM_CARMINE = new SColor(0xAF4035);
     /**
-     *<pre><font style="background-color: #CC99CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC99CC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CC99CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC99CC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CC99CC;" color=CC99CC>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CC99CC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CC99CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC99CC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1769,7 +1768,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MEDIUM_LAVENDER_MAGENTA = new SColor(0xCC99CC);
     /**
-     *<pre><font style="background-color: #9370DB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9370DB;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #9370DB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9370DB;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #9370DB;" color=9370DB>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #9370DB;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #9370DB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9370DB;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1779,7 +1778,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MEDIUM_PURPLE = new SColor(0x9370DB);
     /**
-     *<pre><font style="background-color: #00FA9A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00FA9A;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00FA9A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00FA9A;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00FA9A;" color=00FA9A>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #00FA9A;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00FA9A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00FA9A;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1789,7 +1788,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MEDIUM_SPRING_GREEN = new SColor(0x00FA9A);
     /**
-     *<pre><font style="background-color: #003366;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #003366;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #003366;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #003366;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #003366;" color=003366>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #003366;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #003366;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #003366;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1799,7 +1798,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MIDNIGHT_BLUE = new SColor(0x003366);
     /**
-     *<pre><font style="background-color: #98FF98;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #98FF98;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #98FF98;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #98FF98;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #98FF98;" color=98FF98>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #98FF98;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #98FF98;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #98FF98;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1809,7 +1808,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MINT_GREEN = new SColor(0x98FF98);
     /**
-     *<pre><font style="background-color: #FFE4E1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFE4E1;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFE4E1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFE4E1;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFE4E1;" color=FFE4E1>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFE4E1;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFE4E1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFE4E1;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1819,7 +1818,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MISTY_ROSE = new SColor(0xFFE4E1);
     /**
-     *<pre><font style="background-color: #ADDFAD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ADDFAD;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ADDFAD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ADDFAD;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ADDFAD;" color=ADDFAD>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #ADDFAD;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ADDFAD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ADDFAD;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1829,7 +1828,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MOSS_GREEN = new SColor(0xADDFAD);
     /**
-     *<pre><font style="background-color: #997A8D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #997A8D;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #997A8D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #997A8D;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #997A8D;" color=997A8D>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #997A8D;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #997A8D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #997A8D;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1839,7 +1838,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MOUNTBATTEN_PINK = new SColor(0x997A8D);
     /**
-     *<pre><font style="background-color: #FFDB58;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFDB58;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFDB58;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFDB58;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFDB58;" color=FFDB58>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFDB58;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFDB58;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFDB58;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1849,7 +1848,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MUSTARD = new SColor(0xFFDB58);
     /**
-     *<pre><font style="background-color: #21421E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #21421E;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #21421E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #21421E;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #21421E;" color=21421E>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #21421E;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #21421E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #21421E;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1859,7 +1858,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor MYRTLE = new SColor(0x21421E);
     /**
-     *<pre><font style="background-color: #FFDEAD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFDEAD;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFDEAD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFDEAD;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFDEAD;" color=FFDEAD>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFDEAD;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFDEAD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFDEAD;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1869,7 +1868,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor NAVAJO_WHITE = new SColor(0xFFDEAD);
     /**
-     *<pre><font style="background-color: #000080;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000080;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #000080;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000080;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #000080;" color=000080>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #000080;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #000080;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000080;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1879,7 +1878,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor NAVY_BLUE = new SColor(0x000080);
     /**
-     *<pre><font style="background-color: #CC7722;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC7722;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CC7722;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC7722;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CC7722;" color=CC7722>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CC7722;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CC7722;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC7722;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1889,7 +1888,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor OCHRE = new SColor(0xCC7722);
     /**
-     *<pre><font style="background-color: #CFB53B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CFB53B;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CFB53B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CFB53B;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CFB53B;" color=CFB53B>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CFB53B;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CFB53B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CFB53B;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1899,7 +1898,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor OLD_GOLD = new SColor(0xCFB53B);
     /**
-     *<pre><font style="background-color: #FDF5E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FDF5E6;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FDF5E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FDF5E6;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FDF5E6;" color=FDF5E6>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FDF5E6;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FDF5E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FDF5E6;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1909,7 +1908,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor OLD_LACE = new SColor(0xFDF5E6);
     /**
-     *<pre><font style="background-color: #796878;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #796878;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #796878;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #796878;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #796878;" color=796878>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #796878;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #796878;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #796878;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1919,7 +1918,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor OLD_LAVENDER = new SColor(0x796878);
     /**
-     *<pre><font style="background-color: #C08081;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C08081;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C08081;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C08081;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C08081;" color=C08081>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C08081;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C08081;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C08081;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1929,7 +1928,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor OLD_ROSE = new SColor(0xC08081);
     /**
-     *<pre><font style="background-color: #808000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #808000;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #808000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #808000;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #808000;" color=808000>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #808000;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #808000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #808000;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1939,7 +1938,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor OLIVE = new SColor(0x808000);
     /**
-     *<pre><font style="background-color: #6B8E23;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6B8E23;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #6B8E23;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6B8E23;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #6B8E23;" color=6B8E23>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #6B8E23;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #6B8E23;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6B8E23;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1949,7 +1948,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor OLIVE_DRAB = new SColor(0x6B8E23);
     /**
-     *<pre><font style="background-color: #9AB973;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9AB973;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #9AB973;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9AB973;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #9AB973;" color=9AB973>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #9AB973;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #9AB973;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9AB973;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1959,7 +1958,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor OLIVINE = new SColor(0x9AB973);
     /**
-     *<pre><font style="background-color: #FFA000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFA000;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFA000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFA000;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFA000;" color=FFA000>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFA000;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFA000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFA000;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1969,7 +1968,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ORANGE_PEEL = new SColor(0xFFA000);
     /**
-     *<pre><font style="background-color: #FF4500;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF4500;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF4500;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF4500;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF4500;" color=FF4500>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF4500;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF4500;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF4500;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1979,7 +1978,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ORANGE_RED = new SColor(0xFF4500);
     /**
-     *<pre><font style="background-color: #DA70D6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DA70D6;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DA70D6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DA70D6;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DA70D6;" color=DA70D6>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DA70D6;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DA70D6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DA70D6;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1989,7 +1988,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ORCHID = new SColor(0xDA70D6);
     /**
-     *<pre><font style="background-color: #AFEEEE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AFEEEE;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #AFEEEE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AFEEEE;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #AFEEEE;" color=AFEEEE>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #AFEEEE;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #AFEEEE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AFEEEE;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -1999,7 +1998,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PALE_BLUE = new SColor(0xAFEEEE);
     /**
-     *<pre><font style="background-color: #987654;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #987654;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #987654;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #987654;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #987654;" color=987654>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #987654;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #987654;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #987654;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2009,7 +2008,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PALE_BROWN = new SColor(0x987654);
     /**
-     *<pre><font style="background-color: #AF4035;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AF4035;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #AF4035;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AF4035;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #AF4035;" color=AF4035>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #AF4035;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #AF4035;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #AF4035;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2019,7 +2018,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PALE_CARMINE = new SColor(0xAF4035);
     /**
-     *<pre><font style="background-color: #DDADAF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DDADAF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DDADAF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DDADAF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DDADAF;" color=DDADAF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DDADAF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DDADAF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DDADAF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2029,7 +2028,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PALE_CHESTNUT = new SColor(0xDDADAF);
     /**
-     *<pre><font style="background-color: #ABCDEF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ABCDEF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ABCDEF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ABCDEF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ABCDEF;" color=ABCDEF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #ABCDEF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ABCDEF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ABCDEF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2039,7 +2038,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PALE_CORNFLOWER_BLUE = new SColor(0xABCDEF);
     /**
-     *<pre><font style="background-color: #F984E5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F984E5;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F984E5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F984E5;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F984E5;" color=F984E5>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F984E5;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F984E5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F984E5;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2049,7 +2048,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PALE_MAGENTA = new SColor(0xF984E5);
     /**
-     *<pre><font style="background-color: #FADADD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FADADD;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FADADD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FADADD;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FADADD;" color=FADADD>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FADADD;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FADADD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FADADD;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2059,7 +2058,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PALE_PINK = new SColor(0xFADADD);
     /**
-     *<pre><font style="background-color: #DB7093;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DB7093;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DB7093;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DB7093;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DB7093;" color=DB7093>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DB7093;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DB7093;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DB7093;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2069,7 +2068,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PALE_RED_VIOLET = new SColor(0xDB7093);
     /**
-     *<pre><font style="background-color: #FFEFD5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFEFD5;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFEFD5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFEFD5;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFEFD5;" color=FFEFD5>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFEFD5;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFEFD5;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFEFD5;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2079,7 +2078,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PAPAYA_WHIP = new SColor(0xFFEFD5);
     /**
-     *<pre><font style="background-color: #77DD77;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #77DD77;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #77DD77;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #77DD77;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #77DD77;" color=77DD77>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #77DD77;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #77DD77;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #77DD77;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2089,7 +2088,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PASTEL_GREEN = new SColor(0x77DD77);
     /**
-     *<pre><font style="background-color: #FFD1DC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFD1DC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFD1DC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFD1DC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFD1DC;" color=FFD1DC>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFD1DC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFD1DC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFD1DC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2099,7 +2098,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PASTEL_PINK = new SColor(0xFFD1DC);
     /**
-     *<pre><font style="background-color: #FFE5B4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFE5B4;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFE5B4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFE5B4;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFE5B4;" color=FFE5B4>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFE5B4;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFE5B4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFE5B4;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2109,7 +2108,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PEACH = new SColor(0xFFE5B4);
     /**
-     *<pre><font style="background-color: #FFCC99;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFCC99;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFCC99;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFCC99;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFCC99;" color=FFCC99>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFCC99;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFCC99;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFCC99;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2119,7 +2118,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PEACH_ORANGE = new SColor(0xFFCC99);
     /**
-     *<pre><font style="background-color: #FADFAD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FADFAD;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FADFAD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FADFAD;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FADFAD;" color=FADFAD>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FADFAD;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FADFAD;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FADFAD;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2129,7 +2128,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PEACH_YELLOW = new SColor(0xFADFAD);
     /**
-     *<pre><font style="background-color: #D1E231;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D1E231;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #D1E231;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D1E231;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #D1E231;" color=D1E231>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #D1E231;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #D1E231;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D1E231;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2139,7 +2138,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PEAR = new SColor(0xD1E231);
     /**
-     *<pre><font style="background-color: #CCCCFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CCCCFF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CCCCFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CCCCFF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CCCCFF;" color=CCCCFF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CCCCFF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CCCCFF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CCCCFF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2149,7 +2148,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PERIWINKLE = new SColor(0xCCCCFF);
     /**
-     *<pre><font style="background-color: #1C39BB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1C39BB;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #1C39BB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1C39BB;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #1C39BB;" color=1C39BB>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #1C39BB;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #1C39BB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #1C39BB;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2159,7 +2158,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PERSIAN_BLUE = new SColor(0x1C39BB);
     /**
-     *<pre><font style="background-color: #00A693;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00A693;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00A693;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00A693;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00A693;" color=00A693>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #00A693;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00A693;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00A693;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2169,7 +2168,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PERSIAN_GREEN = new SColor(0x00A693);
     /**
-     *<pre><font style="background-color: #32127A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #32127A;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #32127A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #32127A;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #32127A;" color=32127A>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #32127A;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #32127A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #32127A;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2179,7 +2178,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PERSIAN_INDIGO = new SColor(0x32127A);
     /**
-     *<pre><font style="background-color: #CC3333;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC3333;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CC3333;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC3333;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CC3333;" color=CC3333>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CC3333;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CC3333;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC3333;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2189,7 +2188,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PERSIAN_RED = new SColor(0xCC3333);
     /**
-     *<pre><font style="background-color: #F77FBE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F77FBE;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F77FBE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F77FBE;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F77FBE;" color=F77FBE>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F77FBE;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F77FBE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F77FBE;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2199,7 +2198,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PERSIAN_PINK = new SColor(0xF77FBE);
     /**
-     *<pre><font style="background-color: #FE28A2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FE28A2;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FE28A2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FE28A2;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FE28A2;" color=FE28A2>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FE28A2;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FE28A2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FE28A2;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2209,7 +2208,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PERSIAN_ROSE = new SColor(0xFE28A2);
     /**
-     *<pre><font style="background-color: #EC5800;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EC5800;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #EC5800;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EC5800;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #EC5800;" color=EC5800>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #EC5800;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #EC5800;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EC5800;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2219,7 +2218,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PERSIMMON = new SColor(0xEC5800);
     /**
-     *<pre><font style="background-color: #01796F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #01796F;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #01796F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #01796F;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #01796F;" color=01796F>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #01796F;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #01796F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #01796F;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2229,7 +2228,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PINE_GREEN = new SColor(0x01796F);
     /**
-     *<pre><font style="background-color: #FFC0CB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFC0CB;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFC0CB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFC0CB;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFC0CB;" color=FFC0CB>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFC0CB;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFC0CB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFC0CB;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2239,7 +2238,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TRUE_PINK = new SColor(0xFFC0CB);
     /**
-     *<pre><font style="background-color: #FF9966;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF9966;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF9966;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF9966;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF9966;" color=FF9966>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF9966;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF9966;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF9966;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2249,7 +2248,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PINK_ORANGE = new SColor(0xFF9966);
     /**
-     *<pre><font style="background-color: #E5E4E2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E5E4E2;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E5E4E2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E5E4E2;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E5E4E2;" color=E5E4E2>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E5E4E2;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E5E4E2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E5E4E2;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2259,7 +2258,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PLATINUM = new SColor(0xE5E4E2);
     /**
-     *<pre><font style="background-color: #CC99CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC99CC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CC99CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC99CC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CC99CC;" color=CC99CC>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CC99CC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CC99CC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC99CC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2269,7 +2268,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PLUM = new SColor(0xCC99CC);
     /**
-     *<pre><font style="background-color: #B0E0E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B0E0E6;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #B0E0E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B0E0E6;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #B0E0E6;" color=B0E0E6>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #B0E0E6;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #B0E0E6;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B0E0E6;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2279,7 +2278,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor POWDER_BLUE = new SColor(0xB0E0E6);
     /**
-     *<pre><font style="background-color: #CC8899;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC8899;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CC8899;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC8899;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CC8899;" color=CC8899>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CC8899;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CC8899;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CC8899;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2289,7 +2288,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PUCE = new SColor(0xCC8899);
     /**
-     *<pre><font style="background-color: #003153;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #003153;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #003153;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #003153;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #003153;" color=003153>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #003153;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #003153;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #003153;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2299,7 +2298,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PRUSSIAN_BLUE = new SColor(0x003153);
     /**
-     *<pre><font style="background-color: #DD00FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DD00FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #DD00FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DD00FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #DD00FF;" color=DD00FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #DD00FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #DD00FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #DD00FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2309,7 +2308,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PSYCHEDELIC_PURPLE = new SColor(0xDD00FF);
     /**
-     *<pre><font style="background-color: #FF7518;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF7518;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF7518;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF7518;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF7518;" color=FF7518>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF7518;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF7518;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF7518;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2319,7 +2318,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PUMPKIN = new SColor(0xFF7518);
     /**
-     *<pre><font style="background-color: #50404D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #50404D;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #50404D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #50404D;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #50404D;" color=50404D>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #50404D;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #50404D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #50404D;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2329,7 +2328,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor PURPLE_TAUPE = new SColor(0x50404D);
     /**
-     *<pre><font style="background-color: #734A12;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #734A12;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #734A12;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #734A12;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #734A12;" color=734A12>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #734A12;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #734A12;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #734A12;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2339,7 +2338,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor RAW_UMBER = new SColor(0x734A12);
     /**
-     *<pre><font style="background-color: #E30B5C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E30B5C;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E30B5C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E30B5C;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E30B5C;" color=E30B5C>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E30B5C;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E30B5C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E30B5C;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2349,7 +2348,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor RAZZMATAZZ = new SColor(0xE30B5C);
     /**
-     *<pre><font style="background-color: #ED1C24;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ED1C24;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #ED1C24;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ED1C24;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #ED1C24;" color=ED1C24>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #ED1C24;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #ED1C24;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ED1C24;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2359,7 +2358,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor RED_PIGMENT = new SColor(0xED1C24);
     /**
-     *<pre><font style="background-color: #C71585;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C71585;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C71585;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C71585;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C71585;" color=C71585>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C71585;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C71585;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C71585;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2369,7 +2368,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor RED_VIOLET = new SColor(0xC71585);
     /**
-     *<pre><font style="background-color: #D70040;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D70040;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #D70040;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D70040;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #D70040;" color=D70040>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #D70040;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #D70040;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D70040;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2379,7 +2378,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor RICH_CARMINE = new SColor(0xD70040);
     /**
-     *<pre><font style="background-color: #00CCCC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00CCCC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00CCCC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00CCCC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00CCCC;" color=00CCCC>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #00CCCC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00CCCC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00CCCC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2389,7 +2388,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ROBIN_EGG_BLUE = new SColor(0x00CCCC);
     /**
-     *<pre><font style="background-color: #FF007F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF007F;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF007F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF007F;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF007F;" color=FF007F>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF007F;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF007F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF007F;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2399,7 +2398,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ROSE = new SColor(0xFF007F);
     /**
-     *<pre><font style="background-color: #E32636;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E32636;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E32636;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E32636;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E32636;" color=E32636>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E32636;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E32636;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E32636;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2409,7 +2408,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ROSE_MADDER = new SColor(0xE32636);
     /**
-     *<pre><font style="background-color: #905D5D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #905D5D;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #905D5D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #905D5D;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #905D5D;" color=905D5D>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #905D5D;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #905D5D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #905D5D;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2419,7 +2418,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ROSE_TAUPE = new SColor(0x905D5D);
     /**
-     *<pre><font style="background-color: #4169E1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4169E1;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #4169E1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4169E1;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #4169E1;" color=4169E1>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #4169E1;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #4169E1;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4169E1;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2429,7 +2428,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ROYAL_BLUE = new SColor(0x4169E1);
     /**
-     *<pre><font style="background-color: #6B3FA0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6B3FA0;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #6B3FA0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6B3FA0;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #6B3FA0;" color=6B3FA0>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #6B3FA0;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #6B3FA0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #6B3FA0;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2439,7 +2438,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ROYAL_PURPLE = new SColor(0x6B3FA0);
     /**
-     *<pre><font style="background-color: #E0115F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E0115F;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E0115F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E0115F;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E0115F;" color=E0115F>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E0115F;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E0115F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E0115F;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2449,7 +2448,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor RUBY = new SColor(0xE0115F);
     /**
-     *<pre><font style="background-color: #80461B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #80461B;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #80461B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #80461B;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #80461B;" color=80461B>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #80461B;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #80461B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #80461B;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2459,7 +2458,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor RUSSET = new SColor(0x80461B);
     /**
-     *<pre><font style="background-color: #B7410E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B7410E;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #B7410E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B7410E;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #B7410E;" color=B7410E>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #B7410E;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #B7410E;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #B7410E;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2469,7 +2468,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor RUST = new SColor(0xB7410E);
     /**
-     *<pre><font style="background-color: #FF6600;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF6600;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF6600;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF6600;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF6600;" color=FF6600>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF6600;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF6600;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF6600;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2479,7 +2478,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SAFETY_ORANGE = new SColor(0xFF6600);
     /**
-     *<pre><font style="background-color: #F4C430;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F4C430;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F4C430;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F4C430;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F4C430;" color=F4C430>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F4C430;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F4C430;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F4C430;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2489,7 +2488,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SAFFRON = new SColor(0xF4C430);
     /**
-     *<pre><font style="background-color: #FF8C69;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF8C69;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF8C69;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF8C69;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF8C69;" color=FF8C69>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF8C69;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF8C69;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF8C69;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2499,7 +2498,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SALMON = new SColor(0xFF8C69);
     /**
-     *<pre><font style="background-color: #F4A460;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F4A460;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F4A460;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F4A460;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F4A460;" color=F4A460>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F4A460;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F4A460;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F4A460;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2509,7 +2508,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SANDY_BROWN = new SColor(0xF4A460);
     /**
-     *<pre><font style="background-color: #92000A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #92000A;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #92000A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #92000A;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #92000A;" color=92000A>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #92000A;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #92000A;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #92000A;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2519,7 +2518,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SANGRIA = new SColor(0x92000A);
     /**
-     *<pre><font style="background-color: #082567;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #082567;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #082567;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #082567;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #082567;" color=082567>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #082567;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #082567;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #082567;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2529,7 +2528,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SAPPHIRE = new SColor(0x082567);
     /**
-     *<pre><font style="background-color: #FF2400;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF2400;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF2400;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF2400;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF2400;" color=FF2400>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF2400;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF2400;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF2400;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2539,7 +2538,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SCARLET = new SColor(0xFF2400);
     /**
-     *<pre><font style="background-color: #FFD800;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFD800;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFD800;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFD800;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFD800;" color=FFD800>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFD800;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFD800;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFD800;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2549,7 +2548,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SCHOOL_BUS_YELLOW = new SColor(0xFFD800);
     /**
-     *<pre><font style="background-color: #2E8B57;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #2E8B57;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #2E8B57;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #2E8B57;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #2E8B57;" color=2E8B57>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #2E8B57;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #2E8B57;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #2E8B57;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2559,7 +2558,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SEA_GREEN = new SColor(0x2E8B57);
     /**
-     *<pre><font style="background-color: #FFF5EE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFF5EE;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFF5EE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFF5EE;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFF5EE;" color=FFF5EE>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFF5EE;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFF5EE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFF5EE;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2569,7 +2568,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SEASHELL = new SColor(0xFFF5EE);
     /**
-     *<pre><font style="background-color: #FFBA00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFBA00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFBA00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFBA00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFBA00;" color=FFBA00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFBA00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFBA00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFBA00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2579,7 +2578,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SELECTIVE_YELLOW = new SColor(0xFFBA00);
     /**
-     *<pre><font style="background-color: #704214;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #704214;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #704214;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #704214;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #704214;" color=704214>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #704214;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #704214;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #704214;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2589,7 +2588,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SEPIA = new SColor(0x704214);
     /**
-     *<pre><font style="background-color: #009E60;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #009E60;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #009E60;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #009E60;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #009E60;" color=009E60>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #009E60;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #009E60;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #009E60;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2599,7 +2598,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SHAMROCK_GREEN = new SColor(0x009E60);
     /**
-     *<pre><font style="background-color: #FC0FC0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FC0FC0;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FC0FC0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FC0FC0;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FC0FC0;" color=FC0FC0>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FC0FC0;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FC0FC0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FC0FC0;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2609,7 +2608,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SHOCKING_PINK = new SColor(0xFC0FC0);
     /**
-     *<pre><font style="background-color: #C0C0C0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C0C0C0;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C0C0C0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C0C0C0;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C0C0C0;" color=C0C0C0>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C0C0C0;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C0C0C0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C0C0C0;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2619,7 +2618,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SILVER = new SColor(0xC0C0C0);
     /**
-     *<pre><font style="background-color: #87CEEB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #87CEEB;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #87CEEB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #87CEEB;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #87CEEB;" color=87CEEB>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #87CEEB;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #87CEEB;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #87CEEB;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2629,7 +2628,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SKY_BLUE = new SColor(0x87CEEB);
     /**
-     *<pre><font style="background-color: #708090;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #708090;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #708090;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #708090;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #708090;" color=708090>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #708090;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #708090;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #708090;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2639,7 +2638,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SLATE_GRAY = new SColor(0x708090);
     /**
-     *<pre><font style="background-color: #003399;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #003399;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #003399;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #003399;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #003399;" color=003399>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #003399;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #003399;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #003399;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2649,7 +2648,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SMALT = new SColor(0x003399);
     /**
-     *<pre><font style="background-color: #A7FC00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #A7FC00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #A7FC00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #A7FC00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #A7FC00;" color=A7FC00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #A7FC00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #A7FC00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #A7FC00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2659,7 +2658,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SPRING_BUD = new SColor(0xA7FC00);
     /**
-     *<pre><font style="background-color: #00FF7F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00FF7F;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #00FF7F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00FF7F;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #00FF7F;" color=00FF7F>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #00FF7F;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #00FF7F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00FF7F;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2669,7 +2668,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor SPRING_GREEN = new SColor(0x00FF7F);
     /**
-     *<pre><font style="background-color: #4682B4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4682B4;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #4682B4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4682B4;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #4682B4;" color=4682B4>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #4682B4;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #4682B4;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #4682B4;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2679,7 +2678,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor STEEL_BLUE = new SColor(0x4682B4);
     /**
-     *<pre><font style="background-color: #D2B48C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D2B48C;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #D2B48C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D2B48C;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #D2B48C;" color=D2B48C>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #D2B48C;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #D2B48C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D2B48C;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2689,7 +2688,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TAN = new SColor(0xD2B48C);
     /**
-     *<pre><font style="background-color: #F28500;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F28500;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F28500;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F28500;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F28500;" color=F28500>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F28500;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F28500;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F28500;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2699,7 +2698,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TANGERINE = new SColor(0xF28500);
     /**
-     *<pre><font style="background-color: #FFCC00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFCC00;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FFCC00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFCC00;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FFCC00;" color=FFCC00>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FFCC00;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FFCC00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FFCC00;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2709,7 +2708,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TANGERINE_YELLOW = new SColor(0xFFCC00);
     /**
-     *<pre><font style="background-color: #483C32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #483C32;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #483C32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #483C32;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #483C32;" color=483C32>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #483C32;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #483C32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #483C32;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2719,7 +2718,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TAUPE = new SColor(0x483C32);
     /**
-     *<pre><font style="background-color: #D0F0C0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D0F0C0;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #D0F0C0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D0F0C0;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #D0F0C0;" color=D0F0C0>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #D0F0C0;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #D0F0C0;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D0F0C0;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2729,7 +2728,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TEA_GREEN = new SColor(0xD0F0C0);
     /**
-     *<pre><font style="background-color: #F88379;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F88379;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F88379;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F88379;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F88379;" color=F88379>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F88379;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F88379;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F88379;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2739,7 +2738,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TEA_ORANGE = new SColor(0xF88379);
     /**
-     *<pre><font style="background-color: #F4C2C2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F4C2C2;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F4C2C2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F4C2C2;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F4C2C2;" color=F4C2C2>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F4C2C2;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F4C2C2;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F4C2C2;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2749,7 +2748,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TEA_ROSE = new SColor(0xF4C2C2);
     /**
-     *<pre><font style="background-color: #CD5700;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD5700;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #CD5700;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD5700;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #CD5700;" color=CD5700>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #CD5700;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #CD5700;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #CD5700;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2759,7 +2758,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TAWNY = new SColor(0xCD5700);
     /**
-     *<pre><font style="background-color: #E2725B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E2725B;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E2725B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E2725B;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E2725B;" color=E2725B>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E2725B;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E2725B;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E2725B;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2769,7 +2768,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TERRA_COTTA = new SColor(0xE2725B);
     /**
-     *<pre><font style="background-color: #D8BFD8;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D8BFD8;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #D8BFD8;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D8BFD8;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #D8BFD8;" color=D8BFD8>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #D8BFD8;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #D8BFD8;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #D8BFD8;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2779,7 +2778,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor THISTLE = new SColor(0xD8BFD8);
     /**
-     *<pre><font style="background-color: #FF6347;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF6347;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #FF6347;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF6347;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #FF6347;" color=FF6347>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #FF6347;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #FF6347;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #FF6347;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2789,7 +2788,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TOMATO = new SColor(0xFF6347);
     /**
-     *<pre><font style="background-color: #30D5C8;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #30D5C8;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #30D5C8;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #30D5C8;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #30D5C8;" color=30D5C8>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #30D5C8;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #30D5C8;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #30D5C8;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2799,7 +2798,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TURQUOISE = new SColor(0x30D5C8);
     /**
-     *<pre><font style="background-color: #66023C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #66023C;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #66023C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #66023C;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #66023C;" color=66023C>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #66023C;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #66023C;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #66023C;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2809,7 +2808,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor TYRIAN_PURPLE = new SColor(0x66023C);
     /**
-     *<pre><font style="background-color: #120A8F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #120A8F;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #120A8F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #120A8F;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #120A8F;" color=120A8F>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #120A8F;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #120A8F;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #120A8F;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2819,7 +2818,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ULTRAMARINE = new SColor(0x120A8F);
     /**
-     *<pre><font style="background-color: #C5B358;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C5B358;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C5B358;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C5B358;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C5B358;" color=C5B358>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C5B358;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C5B358;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C5B358;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2829,7 +2828,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor VEGAS_GOLD = new SColor(0xC5B358);
     /**
-     *<pre><font style="background-color: #E34234;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E34234;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #E34234;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E34234;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #E34234;" color=E34234>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #E34234;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #E34234;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #E34234;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2839,7 +2838,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor VERMILION = new SColor(0xE34234);
     /**
-     *<pre><font style="background-color: #8B00FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #8B00FF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #8B00FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #8B00FF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #8B00FF;" color=8B00FF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #8B00FF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #8B00FF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #8B00FF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2849,7 +2848,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor VIOLET = new SColor(0x8B00FF);
     /**
-     *<pre><font style="background-color: #EE82EE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EE82EE;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #EE82EE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EE82EE;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #EE82EE;" color=EE82EE>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #EE82EE;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #EE82EE;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EE82EE;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2859,7 +2858,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor LIGHT_VIOLET = new SColor(0xEE82EE);
     /**
-     *<pre><font style="background-color: #40826D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #40826D;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #40826D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #40826D;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #40826D;" color=40826D>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #40826D;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #40826D;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #40826D;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2869,7 +2868,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor VIRIDIAN = new SColor(0x40826D);
     /**
-     *<pre><font style="background-color: #F5DEB3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F5DEB3;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #F5DEB3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F5DEB3;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #F5DEB3;" color=F5DEB3>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #F5DEB3;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #F5DEB3;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #F5DEB3;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2879,7 +2878,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor WHEAT = new SColor(0xF5DEB3);
     /**
-     *<pre><font style="background-color: #C9A0DC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C9A0DC;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #C9A0DC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C9A0DC;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #C9A0DC;" color=C9A0DC>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #C9A0DC;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #C9A0DC;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #C9A0DC;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2889,7 +2888,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor WISTERIA = new SColor(0xC9A0DC);
     /**
-     *<pre><font style="background-color: #9ACD32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9ACD32;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #9ACD32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9ACD32;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #9ACD32;" color=9ACD32>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #9ACD32;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #9ACD32;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #9ACD32;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2899,7 +2898,7 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor YELLOW_GREEN = new SColor(0x9ACD32);
     /**
-     *<pre><font style="background-color: #EBC2AF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EBC2AF;" color=000000>&nbsp@&nbsp</font>
+     * <pre><font style="background-color: #EBC2AF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EBC2AF;" color=000000>&nbsp@&nbsp</font>
      *<font style="background-color: #EBC2AF;" color=EBC2AF>&nbsp&nbsp&nbsp<font style="background-color: #000000;">&nbsp@&nbsp<font style="background-color: #888888;">&nbsp@&nbsp<font style="background-color: #ffffff;">&nbsp@&nbsp<font style="background-color: #EBC2AF;" color=888888>&nbsp@&nbsp</font>
      *<font style="background-color: #EBC2AF;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #EBC2AF;" color=ffffff>&nbsp@&nbsp</font>
      *
@@ -2908,14 +2907,15 @@ public class SColor extends Color implements Comparable {
      *<font style="background-color: #ff0000;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #ffff00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #00ff00;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #0000ff;" color=000000>&nbsp&nbsp&nbsp<font style="background-color: #964b00;" color=000000>&nbsp&nbsp&nbsp</font></pre>
      */
     public static final SColor ZINNWALDITE = new SColor(0xEBC2AF);
-    
     /**
-     * This array is loaded with the colors found in the rainbow, in the standard ROYGBIV order.
+     * This array is loaded with the colors found in the rainbow, in the
+     * standard ROYGBIV order.
      */
     public static SColor[] RAINBOW = {
         RED_PIGMENT, ORANGE_PEEL, YELLOW, GREEN, BLUE, INDIGO_DYE, VIOLET};
     /**
-     * This array is loaded with all of the colors defined in SColor, in arbitrary order.
+     * This array is loaded with all of the colors defined in SColor, in
+     * arbitrary order.
      */
     public static SColor[] FULL_PALLET = {BLACK, BLUE, BROWN, CYAN, DARK_BLUE, DARK_GRAY, DARK_RED, //TODO -- alphabetize this
         GRAY, GREEN, LIME, LIGHT_GRAY, MAGENTA, ORANGE, PINK, PURPLE, TEAL, RED, WHITE, YELLOW, ALICE_BLUE,
@@ -2953,31 +2953,31 @@ public class SColor extends Color implements Comparable {
         TYRIAN_PURPLE, ULTRAMARINE, VEGAS_GOLD, VERMILION, VIOLET, LIGHT_VIOLET, VIRIDIAN, WHEAT, WISTERIA,
         YELLOW_GREEN, ZINNWALDITE};
 
-
     /**
-     * A constructor with no passed values.  Builds a white (opaque all channels) object.
+     * A constructor with no passed values. Builds a white (opaque all channels)
+     * object.
      */
     public SColor() { //builds white
         super(Color.WHITE.getRGB());
     }
-    
+
     /**
      * Creates a new color that's the same value as the passed in color.
-     * 
-     * @param color 
+     *
+     * @param color
      */
-    public SColor(Color color){
+    public SColor(Color color) {
         super(color.getRGB());
     }
-    
-    
-    public SColor(int colorValue){
+
+    public SColor(int colorValue) {
         super(colorValue);
     }
-    
+
     /**
-     * Compares the current color to another color.  Comparison is not guaranteed to
-     * lead to a logical color ordering that may be expected.
+     * Compares the current color to another color. Comparison is not guaranteed
+     * to lead to a logical color ordering that may be expected.
+     *
      * @param color new color to compare with current color
      * @return indicator of comparison between colors
      */
@@ -2992,10 +2992,11 @@ public class SColor extends Color implements Comparable {
     }
 
     /**
-     * Compares the current color to another object of any type.
-     * If the second object is not a SColor object than an exception will be thrown.
-     * 
-     * @throws UnsupportedOperationException if second object not a SColor object
+     * Compares the current color to another object of any type. If the second
+     * object is not a SColor object than an exception will be thrown.
+     *
+     * @throws UnsupportedOperationException if second object not a SColor
+     * object
      * @param arg0 second object to be compared to
      * @return indicator of comparison between colors
      */
