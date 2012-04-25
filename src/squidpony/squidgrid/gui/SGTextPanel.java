@@ -17,6 +17,8 @@ public class SGTextPanel extends JPanel {
     private Dimension cellDimension, panelDimension;
     private BufferedImage image = new BufferedImage(20, 20, BufferedImage.TYPE_4BYTE_ABGR);
     private TextBlockFactory factory = TextBlockFactory.getInstance();
+    private Color defaultForeground = SColor.BLACK;
+    private Color defaultBackground = SColor.WHITE;
 
     /**
      * Builds a new panel with the desired traits. The size of the font will be
@@ -76,10 +78,53 @@ public class SGTextPanel extends JPanel {
      * @param chars
      */
     public void setText(char[][] chars) {
-        for (int x = 0; x < panelWidth; x++) {
-            for (int y = 0; y < panelHeight; y++) {
+        setSubText(chars, 0, 0);
+    }
+
+    /**
+     * Sets the contents of the component to reflect the two dimensional
+     * character array, starting at the given offset position. The initial
+     * offset must be within the grid. Any content that would be off the screen
+     * to the right or down is ignored.
+     *
+     * @param chars
+     * @param xOffset
+     * @param yOffset
+     */
+    public void setSubText(char[][] chars, int xOffset, int yOffset) {
+        if (xOffset < 0 || yOffset < 0 || xOffset >= panelWidth || yOffset >= panelHeight) {//check for valid input
+            return;
+        }
+        for (int x = xOffset; x < chars.length; x++) {
+            for (int y = yOffset; y < chars[0].length; y++) {
+                if (x >= panelWidth) {
+                    continue;//skip this iteration
+                }
+                if (y >= panelHeight) {
+                    return;//can't print any more
+                }
                 setBlock(x, y, chars[x][y]);
             }
+        }
+    }
+
+    /**
+     * Prints out a string starting at the given offset position. Any portion of
+     * the string that would cross the edge is ignored.
+     *
+     * @param string
+     * @param xOffset
+     * @param yOffset
+     */
+    public void setString(int xOffset, int yOffset, String string) {
+        if (xOffset < 0 || yOffset < 0 || xOffset >= panelWidth || yOffset >= panelHeight) {//check for valid input
+            return;
+        }
+        for (int x = 0; x < string.length(); x++) {
+            if (x >= panelWidth) {
+                return;//done
+            }
+            setBlock(x + xOffset, yOffset, string.charAt(x));
         }
     }
 
@@ -156,8 +201,8 @@ public class SGTextPanel extends JPanel {
         this.panelHeight = panelHeight;
         this.panelWidth = panelWidth;
         contents = new BufferedImage[panelWidth][panelHeight];
-        for(int x =0;x<panelWidth;x++){
-            for(int y=0;y<panelHeight;y++){
+        for (int x = 0; x < panelWidth; x++) {
+            for (int y = 0; y < panelHeight; y++) {
                 contents[x][y] = factory.getImageFor(' ', SColor.BLACK, SColor.BABY_BLUE);
             }
         }
@@ -201,5 +246,25 @@ public class SGTextPanel extends JPanel {
      */
     public boolean willFit(char character) {
         return factory.willFit(character);
+    }
+
+    public void setDefaultBackground(Color defaultBackground) {
+        this.defaultBackground = defaultBackground;
+    }
+
+    public void setDefaultForeground(Color defaultForeground) {
+        this.defaultForeground = defaultForeground;
+    }
+
+    public Dimension getCellDimension() {
+        return cellDimension;
+    }
+
+    public int getPanelHeight() {
+        return panelHeight;
+    }
+
+    public int getPanelWidth() {
+        return panelWidth;
     }
 }
