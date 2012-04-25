@@ -13,7 +13,7 @@ import squidpony.squidcolor.SColor;
  */
 public class SGTextPanel extends JPanel {
     private BufferedImage[][] contents;
-    private int panelHeight, panelWidth;
+    private int gridHeight, gridWidth;
     private Dimension cellDimension, panelDimension;
     private BufferedImage image = new BufferedImage(20, 20, BufferedImage.TYPE_4BYTE_ABGR);
     private TextBlockFactory factory = TextBlockFactory.getInstance();
@@ -55,8 +55,8 @@ public class SGTextPanel extends JPanel {
 
     private void redrawImage() {
         Graphics2D g2 = image.createGraphics();
-        for (int x = 0; x < panelWidth; x++) {
-            for (int y = 0; y < panelHeight; y++) {
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
                 g2.drawImage(contents[x][y], x * cellDimension.width, y * cellDimension.height, null);
             }
         }
@@ -92,15 +92,15 @@ public class SGTextPanel extends JPanel {
      * @param yOffset
      */
     public void setSubText(char[][] chars, int xOffset, int yOffset) {
-        if (xOffset < 0 || yOffset < 0 || xOffset >= panelWidth || yOffset >= panelHeight) {//check for valid input
+        if (xOffset < 0 || yOffset < 0 || xOffset >= gridWidth || yOffset >= gridHeight) {//check for valid input
             return;
         }
         for (int x = xOffset; x < chars.length; x++) {
             for (int y = yOffset; y < chars[0].length; y++) {
-                if (x >= panelWidth) {
+                if (x >= gridWidth) {
                     continue;//skip this iteration
                 }
-                if (y >= panelHeight) {
+                if (y >= gridHeight) {
                     return;//can't print any more
                 }
                 setBlock(x, y, chars[x][y]);
@@ -117,11 +117,11 @@ public class SGTextPanel extends JPanel {
      * @param yOffset
      */
     public void setString(int xOffset, int yOffset, String string) {
-        if (xOffset < 0 || yOffset < 0 || xOffset >= panelWidth || yOffset >= panelHeight) {//check for valid input
+        if (xOffset < 0 || yOffset < 0 || xOffset >= gridWidth || yOffset >= gridHeight) {//check for valid input
             return;
         }
         for (int x = 0; x < string.length(); x++) {
-            if (x >= panelWidth) {
+            if (x >= gridWidth) {
                 return;//done
             }
             setBlock(x + xOffset, yOffset, string.charAt(x));
@@ -198,8 +198,8 @@ public class SGTextPanel extends JPanel {
     }
 
     private void doInitialization(int panelWidth, int panelHeight) {
-        this.panelHeight = panelHeight;
-        this.panelWidth = panelWidth;
+        this.gridHeight = panelHeight;
+        this.gridWidth = panelWidth;
         contents = new BufferedImage[panelWidth][panelHeight];
         for (int x = 0; x < panelWidth; x++) {
             for (int y = 0; y < panelHeight; y++) {
@@ -260,11 +260,11 @@ public class SGTextPanel extends JPanel {
         return cellDimension;
     }
 
-    public int getPanelHeight() {
-        return panelHeight;
+    public int getGridHeight() {
+        return gridHeight;
     }
 
-    public int getPanelWidth() {
-        return panelWidth;
+    public int getGridWidth() {
+        return gridWidth;
     }
 }
