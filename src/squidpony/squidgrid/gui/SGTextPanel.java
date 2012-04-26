@@ -12,6 +12,7 @@ import squidpony.squidcolor.SColor;
  * @author Eben Howard - http://squidpony.com
  */
 public class SGTextPanel extends JPanel {
+
     private BufferedImage[][] contents;
     private int gridHeight, gridWidth;
     private Dimension cellDimension, panelDimension;
@@ -48,7 +49,8 @@ public class SGTextPanel extends JPanel {
     }
 
     /**
-     * Empty constructor to allow use for drag and drop in NetBeans.
+     * Empty constructor. One of the initialization methods must be called
+     * before this panel is used.
      */
     public SGTextPanel() {
     }
@@ -70,40 +72,46 @@ public class SGTextPanel extends JPanel {
     /**
      * Sets the contents of the component to reflect the two dimensional
      * character array. Will ignore any portion of the array that is outside the
-     * bounds of the component itself. The incoming array must be at least as
-     * large in either dimension as the number of rows and columns.
+     * bounds of the component itself.
      *
-     * The default colors of black foreground and white background will be used.
+     * The default colors of the foreground and background will be used.
      *
      * @param chars
      */
     public void setText(char[][] chars) {
-        setSubText(chars, 0, 0);
+        placeText(0, 0, chars);
     }
 
     /**
      * Sets the contents of the component to reflect the two dimensional
-     * character array, starting at the given offset position. The initial
-     * offset must be within the grid. Any content that would be off the screen
-     * to the right or down is ignored.
+     * character array, starting at the given offset position.
+     *
+     * Any content that would be off the screen to the right or down is ignored.
      *
      * @param chars
      * @param xOffset
      * @param yOffset
      */
-    public void setSubText(char[][] chars, int xOffset, int yOffset) {
-        if (xOffset < 0 || yOffset < 0 || xOffset >= gridWidth || yOffset >= gridHeight) {//check for valid input
-            return;
-        }
+    public void placeText(int xOffset, int yOffset, char[][] chars) {
+        placeText(xOffset, yOffset, chars, defaultForeground, defaultBackground);
+    }
+
+    /**
+     * Sets the contents of the component to reflect the two dimensional
+     * character array, starting at the given offset position.
+     * 
+     * @param xOffset
+     * @param yOffset
+     * @param chars
+     * @param foreground
+     * @param background 
+     */
+    public void placeText(int xOffset, int yOffset, char[][] chars, Color foreground, Color background) {
         for (int x = xOffset; x < chars.length; x++) {
             for (int y = yOffset; y < chars[0].length; y++) {
-                if (x >= gridWidth) {
-                    continue;//skip this iteration
+                if (xOffset >= 0 && yOffset >= 0 && xOffset < gridWidth && yOffset < gridHeight) {//check for valid input
+                    placeCharacter(x, y, chars[x][y]);
                 }
-                if (y >= gridHeight) {
-                    return;//can't print any more
-                }
-                setBlock(x, y, chars[x][y]);
             }
         }
     }
@@ -116,16 +124,52 @@ public class SGTextPanel extends JPanel {
      * @param xOffset
      * @param yOffset
      */
-    public void setString(int xOffset, int yOffset, String string) {
-        if (xOffset < 0 || yOffset < 0 || xOffset >= gridWidth || yOffset >= gridHeight) {//check for valid input
-            return;
+    public void placeHorizontalString(int xOffset, int yOffset, String string) {
+        placeHorizontalString(xOffset, yOffset, string, defaultForeground, defaultBackground);
+    }
+
+    /**
+     * Prints out a string starting at the given offset position. Any portion of
+     * the string that would cross the edge is ignored.
+     *
+     * @param xOffset
+     * @param yOffset
+     * @param string
+     * @param foreground
+     * @param background
+     */
+    public void placeHorizontalString(int xOffset, int yOffset, String string, Color foreground, Color background) {
+        placeText(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground, background);
+    }
+
+    /**
+     * Prints out a string vertically starting at the given offset position and
+     * traveling down.
+     *
+     * @param xOffset
+     * @param yOffset
+     * @param string
+     */
+    public void placeVerticalString(int xOffset, int yOffset, String string) {
+        placeVerticalString(xOffset, yOffset, string, defaultForeground, defaultBackground);
+    }
+
+    /**
+     * Prints out a string vertically starting at the given offset position and
+     * traveling down.
+     *
+     * @param xOffset
+     * @param yOffset
+     * @param string
+     * @param foreground
+     * @param background
+     */
+    public void placeVerticalString(int xOffset, int yOffset, String string, Color foreground, Color background) {
+        char[][] temp = new char[1][string.length()];
+        for (int i = 0; i < string.length(); i++) {
+            temp[0][i] = string.charAt(i);
         }
-        for (int x = 0; x < string.length(); x++) {
-            if (x >= gridWidth) {
-                return;//done
-            }
-            setBlock(x + xOffset, yOffset, string.charAt(x));
-        }
+        placeText(xOffset, yOffset, temp, foreground, background);
     }
 
     /**
@@ -138,8 +182,8 @@ public class SGTextPanel extends JPanel {
      * @param y The y coordinate to set
      * @param c The character to be displayed
      */
-    public void setBlock(int x, int y, char c) {
-        setBlock(x, y, c, Color.BLACK, Color.WHITE);
+    public void placeCharacter(int x, int y, char c) {
+        placeCharacter(x, y, c, defaultForeground, defaultBackground);
     }
 
     /**
@@ -155,7 +199,7 @@ public class SGTextPanel extends JPanel {
      * @param fore The foreground color
      * @param back The background color
      */
-    public void setBlock(int x, int y, char c, Color fore, Color back) {
+    public void placeCharacter(int x, int y, char c, Color fore, Color back) {
         contents[x][y] = factory.getImageFor(c, fore, back);
     }
 
