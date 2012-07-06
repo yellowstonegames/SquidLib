@@ -12,7 +12,6 @@ import squidpony.squidcolor.SColor;
  * @author Eben Howard - http://squidpony.com
  */
 public class SGTextPanel extends JPanel {
-
     private BufferedImage[][] contents;
     private int gridHeight, gridWidth;
     private Dimension cellDimension, panelDimension;
@@ -20,6 +19,7 @@ public class SGTextPanel extends JPanel {
     private TextBlockFactory factory = TextBlockFactory.getInstance();
     private Color defaultForeground = SColor.BLACK;
     private Color defaultBackground = SColor.WHITE;
+    private boolean updating = false;
 
     /**
      * Builds a new panel with the desired traits. The size of the font will be
@@ -56,12 +56,14 @@ public class SGTextPanel extends JPanel {
     }
 
     private void redrawImage() {
+        updating = true;
         Graphics2D g2 = image.createGraphics();
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 g2.drawImage(contents[x][y], x * cellDimension.width, y * cellDimension.height, null);
             }
         }
+        updating = false;
     }
 
     @Override
@@ -99,12 +101,12 @@ public class SGTextPanel extends JPanel {
     /**
      * Sets the contents of the component to reflect the two dimensional
      * character array, starting at the given offset position.
-     * 
+     *
      * @param xOffset
      * @param yOffset
      * @param chars
      * @param foreground
-     * @param background 
+     * @param background
      */
     public void placeText(int xOffset, int yOffset, char[][] chars, Color foreground, Color background) {
         for (int x = xOffset; x < chars.length; x++) {
@@ -129,6 +131,24 @@ public class SGTextPanel extends JPanel {
     }
 
     /**
+     * Prints out a string vertically starting at the given offset position and
+     * traveling down.
+     *
+     * @param xOffset
+     * @param yOffset
+     * @param string
+     * @param foreground
+     * @param background
+     */
+    public void placeHorizontalString(int xOffset, int yOffset, String string, Color foreground, Color background) {
+        char[][] temp = new char[string.length()][1];
+        for (int i = 0; i < string.length(); i++) {
+            temp[i][0] = string.charAt(i);
+        }
+        placeText(xOffset, yOffset, temp, foreground, background);
+    }
+
+    /**
      * Prints out a string starting at the given offset position. Any portion of
      * the string that would cross the edge is ignored.
      *
@@ -138,7 +158,7 @@ public class SGTextPanel extends JPanel {
      * @param foreground
      * @param background
      */
-    public void placeHorizontalString(int xOffset, int yOffset, String string, Color foreground, Color background) {
+    public void placeVerticalString(int xOffset, int yOffset, String string, Color foreground, Color background) {
         placeText(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground, background);
     }
 
@@ -152,24 +172,6 @@ public class SGTextPanel extends JPanel {
      */
     public void placeVerticalString(int xOffset, int yOffset, String string) {
         placeVerticalString(xOffset, yOffset, string, defaultForeground, defaultBackground);
-    }
-
-    /**
-     * Prints out a string vertically starting at the given offset position and
-     * traveling down.
-     *
-     * @param xOffset
-     * @param yOffset
-     * @param string
-     * @param foreground
-     * @param background
-     */
-    public void placeVerticalString(int xOffset, int yOffset, String string, Color foreground, Color background) {
-        char[][] temp = new char[1][string.length()];
-        for (int i = 0; i < string.length(); i++) {
-            temp[0][i] = string.charAt(i);
-        }
-        placeText(xOffset, yOffset, temp, foreground, background);
     }
 
     /**
@@ -200,7 +202,9 @@ public class SGTextPanel extends JPanel {
      * @param back The background color
      */
     public void placeCharacter(int x, int y, char c, Color fore, Color back) {
-        contents[x][y] = factory.getImageFor(c, fore, back);
+        if (!updating) {
+            contents[x][y] = factory.getImageFor(c, fore, back);
+        }
     }
 
     /**
@@ -241,20 +245,20 @@ public class SGTextPanel extends JPanel {
         doInitialization(panelWidth, panelHeight);
     }
 
-    private void doInitialization(int panelWidth, int panelHeight) {
-        this.gridHeight = panelHeight;
-        this.gridWidth = panelWidth;
-        contents = new BufferedImage[panelWidth][panelHeight];
-        for (int x = 0; x < panelWidth; x++) {
-            for (int y = 0; y < panelHeight; y++) {
+    private void doInitialization(int gridWidth, int gridHeight) {
+        this.gridHeight = gridHeight;
+        this.gridWidth = gridWidth;
+        contents = new BufferedImage[gridWidth][gridHeight];
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
                 contents[x][y] = factory.getImageFor(' ', SColor.BLACK, SColor.BABY_BLUE);
             }
         }
 
         cellDimension = factory.getCellDimension();
 
-        int w = panelWidth * cellDimension.width;
-        int h = panelHeight * cellDimension.height;
+        int w = gridWidth * cellDimension.width;
+        int h = gridHeight * cellDimension.height;
         panelDimension = new Dimension(w, h);
 
         setSize(panelDimension);
