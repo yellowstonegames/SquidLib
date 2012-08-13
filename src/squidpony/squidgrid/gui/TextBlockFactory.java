@@ -249,7 +249,7 @@ public class TextBlockFactory {
     }
 
     /**
-     * Returns the image for the given input.
+     * Returns the image for the given character.
      *
      * @param c
      * @param foreground
@@ -262,6 +262,24 @@ public class TextBlockFactory {
 
         if (block == null) {
             block = makeImage(c, foreground, background);
+            blocks.put(search, block);
+        }
+        return block;
+    }
+
+    /**
+     * Returns the image of the character provided with a transparent background.
+     * 
+     * @param c
+     * @param foreground
+     * @return 
+     */
+    public BufferedImage getImageFor(char c, Color foreground) {
+        String search = getStringRepresentationOf(c, foreground);
+        BufferedImage block = blocks.get(search);
+
+        if (block == null) {
+            block = makeImage(c, foreground);
             blocks.put(search, block);
         }
         return block;
@@ -282,13 +300,32 @@ public class TextBlockFactory {
     }
 
     /**
-     * Creates an image based on the input.
+     * Returns a string representation of the character and the hex value of the foreground.
+     * 
+     * @param c
+     * @param foreground
+     * @param background
+     * @return 
      */
+    public String getStringRepresentationOf(char c, Color foreground) {
+        return c + " " + foreground.getClass().getSimpleName() + ": " + Integer.toHexString(foreground.getRGB());
+    }
+    
     private BufferedImage makeImage(char c, Color foreground, Color background) {
         BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
         g.setColor(background);
         g.fillRect(0, 0, cellWidth, cellHeight);
+        g.setColor(foreground);
+        g.setFont(font);
+
+        g.drawString("" + c, (cellWidth - g.getFontMetrics().charWidth(c)) / 2, g.getFontMetrics().getMaxAscent() - verticalOffset);
+        return i;
+    }
+    
+    private BufferedImage makeImage(char c, Color foreground) {
+        BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g = i.createGraphics();
         g.setColor(foreground);
         g.setFont(font);
 

@@ -1,9 +1,13 @@
 package squidpony.squidmath;
 
+import java.awt.Point;
 import java.util.LinkedList;
+import java.util.Queue;
 
 /**
- * @author Lewis Potter Derived from Bob Pendletons C algorithm, which is in
+ * @author Eben Howard - http://squidpony.com
+ * @author Lewis Potter 
+ * @author Derived from Bob Pendletons C algorithm, which is in
  *         turn derived from Paul Heckberts algorithm ("Digital Line Drawing"
  *         from "Graphics Gems", Academic Press, 1990
  */
@@ -14,6 +18,30 @@ public class Bresenham {
     private static int zsgn(int a) {
         return ((a < 0) ? -1 : (a > 0) ? 1 : 0);
     }
+    
+    /**
+     * Generates a 2D Bresenham line between two points.
+     * 
+     * @param a 
+     * @param b 
+     * @return 
+     */
+    public static Queue<Point3D> line2D(Point a, Point b){
+        return line2D(a.x, a.y, b.x, b.y);
+    }
+    
+    /**
+     * Generates a 2D Bresenham line between two points.
+     * 
+     * @param startX
+     * @param startY
+     * @param endX
+     * @param endY
+     * @return 
+     */
+    public static Queue<Point3D> line2D(int startX, int startY, int endX, int endY){
+       return  line3D(startX, startY, 0, endX, endY, 0);
+    }
 
     /**
      * Generates a 3D Bresenham line between two points.
@@ -22,8 +50,8 @@ public class Bresenham {
      * @param b Point to end at. This will be the last element of the list.
      * @return A list of points between a and b.
      */
-    public static LinkedList<Coord3D> line3d(Coord3D a, Coord3D b) {
-        return line3d(a.x, a.y, a.z, b.x, b.y, b.z);
+    public static Queue<Point3D> line3D(Point3D a, Point3D b) {
+        return line3D(a.x, a.y, a.z, b.x, b.y, b.z);
     }
 
     /**
@@ -37,8 +65,8 @@ public class Bresenham {
      * @param z2
      * @return 
      */
-    public static LinkedList<Coord3D> line3d(int x1, int y1, int z1, int x2, int y2, int z2) {
-        LinkedList<Coord3D> result = new LinkedList<Coord3D>();
+    public static Queue<Point3D> line3D(int x1, int y1, int z1, int x2, int y2, int z2) {
+        Queue<Point3D> result = new LinkedList<Point3D>();
 
         int xd, yd, zd;
         int x, y, z;
@@ -66,7 +94,7 @@ public class Bresenham {
             yd = ay - (ax >> 1);
             zd = az - (ax >> 1);
             for (;;) {
-                result.add(new Coord3D(x, y, z));
+                result.offer(new Point3D(x, y, z));
                 if (x == x2) {
                     return result;
                 }
@@ -89,7 +117,7 @@ public class Bresenham {
             xd = ax - (ay >> 1);
             zd = az - (ay >> 1);
             for (;;) {
-                result.add(new Coord3D(x, y, z));
+                result.offer(new Point3D(x, y, z));
                 if (y == y2) {
                     return result;
                 }
@@ -112,7 +140,7 @@ public class Bresenham {
             xd = ax - (az >> 1);
             yd = ay - (az >> 1);
             for (;;) {
-                result.add(new Coord3D(x, y, z));
+                result.offer(new Point3D(x, y, z));
                 if (z == z2) {
                     return result;
                 }

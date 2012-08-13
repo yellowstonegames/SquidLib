@@ -1,13 +1,15 @@
 package squidpony.squidmath;
 
+import java.awt.Point;
+
 /**
  * Generic three dimensional coordinate class.
  *
  * @author Lewis Potter
  * @author Eben Howard - http://squidpony.com
  */
-public class Coord3D {
-    public int x, y, z;
+public class Point3D extends Point {
+    public int z;
 
     /**
      * Creates a three dimensional coordinate with the given location.
@@ -16,9 +18,8 @@ public class Coord3D {
      * @param y
      * @param z 
      */
-    public Coord3D(int x, int y, int z) {
-        this.x = x;
-        this.y = y;
+    public Point3D(int x, int y, int z) {
+        super(x, y);
         this.z = z;
     }
 
@@ -28,7 +29,7 @@ public class Coord3D {
      * @param other
      * @return 
      */
-    public double distance(Coord3D other) {
+    public double distance(Point3D other) {
         return Math.sqrt(squareDistance(other));
     }
 
@@ -39,7 +40,7 @@ public class Coord3D {
      * @param other
      * @return 
      */
-    public double squareDistance(Coord3D other) {
+    public double squareDistance(Point3D other) {
         double dx = x - other.x;
         double dy = y - other.y;
         double dz = z - other.z;
@@ -54,7 +55,7 @@ public class Coord3D {
      * @param other
      * @return 
      */
-    public int manhattanDistance(Coord3D other) {
+    public int manhattanDistance(Point3D other) {
         int distance = Math.abs(x - other.x);
         distance += Math.abs(y - other.y);
         distance += Math.abs(z - other.z);
@@ -67,24 +68,23 @@ public class Coord3D {
      * @param other
      * @return 
      */
-    public int maxAxisDistance(Coord3D other) {
+    public int maxAxisDistance(Point3D other) {
         return Math.max(Math.max(Math.abs(x - other.x), Math.abs(y - other.y)), Math.abs(z - other.z));
     }
-    
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 73 * hash + this.x;
-        hash = 73 * hash + this.y;
-        hash = 73 * hash + this.z;
+        hash = 73 * hash + x;
+        hash = 73 * hash + y;
+        hash = 73 * hash + z;
         return hash;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Coord3D) {
-            Coord3D other = (Coord3D) o;
+        if (o instanceof Point3D) {
+            Point3D other = (Point3D) o;
             return x == other.x && y == other.y && z == other.z;
         } else {
             return false;
