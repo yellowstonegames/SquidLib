@@ -1,25 +1,36 @@
 package squidpony.squidgrid.gui;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import javax.swing.JPanel;
+import java.util.LinkedList;
+import javax.swing.JLayeredPane;
 import squidpony.squidcolor.SColor;
+import squidpony.squidgrid.gui.animation.Animation;
+import squidpony.squidgrid.gui.animation.AnimationManager;
+import squidpony.squidgrid.gui.animation.BumpAnimation;
+import squidpony.squidgrid.gui.animation.SlideAnimation;
+import squidpony.squidgrid.gui.animation.WiggleAnimation;
+import squidpony.squidgrid.util.Direction;
 
 /**
- * This class is a JPanel that will display a text string as a monospaced font
+ * This class is a JComponent that will display a text string as a monospaced font
  * regardless of the font's actual spacing.
  *
  * @author Eben Howard - http://squidpony.com
  */
-public class SGTextPanel extends JPanel {
-    private BufferedImage[][] contents;
+public class SGTextPanel extends JLayeredPane {
+    private AnimationManager animationManager;
+    private static int DEFAULT_MOVEMENT_SPEED = 3;//one move step per x milliseconds
+    private BufferedImage[][] backgroundContents, foregroundContents;
+    private LinkedList<Animation> animations = new LinkedList<Animation>();
     private int gridHeight, gridWidth;
     private Dimension cellDimension, panelDimension;
-    private BufferedImage image = new BufferedImage(20, 20, BufferedImage.TYPE_4BYTE_ABGR);
+    private BufferedImage contentsImage = new BufferedImage(20, 20, BufferedImage.TYPE_4BYTE_ABGR),
+            worldBackgroundImage = null;
     private TextBlockFactory factory = TextBlockFactory.getInstance();
-    private Color defaultForeground = SColor.BLACK;
-    private Color defaultBackground = SColor.WHITE;
-    private boolean updating = false;
+    private Color defaultForeground = SColor.WHITE;
+    private Color defaultBackground = SColor.BLACK;
 
     /**
      * Builds a new panel with the desired traits. The size of the font will be
@@ -55,20 +66,14 @@ public class SGTextPanel extends JPanel {
     public SGTextPanel() {
     }
 
-    private void redrawImage() {
-        updating = true;
-        Graphics2D g2 = image.createGraphics();
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                g2.drawImage(contents[x][y], x * cellDimension.width, y * cellDimension.height, null);
-            }
-        }
-        updating = false;
-    }
-
     @Override
     public void paintComponent(Graphics g) {
-        g.drawImage(image, 0, 0, null);
+        if (worldBackgroundImage != null) {
+            g.drawImage(worldBackgroundImage, 0, 0, null);
+        }
+        g.drawImage(contentsImage, 0, 0, null);
+        paintComponents(g);
+        Toolkit.getDefaultToolkit().sync();
     }
 
     /**
@@ -109,10 +114,10 @@ public class SGTextPanel extends JPanel {
      * @param background
      */
     public void placeText(int xOffset, int yOffset, char[][] chars, Color foreground, Color background) {
-        for (int x = xOffset; x < chars.length; x++) {
-            for (int y = yOffset; y < chars[0].length; y++) {
-                if (xOffset >= 0 && yOffset >= 0 && xOffset < gridWidth && yOffset < gridHeight) {//check for valid input
-                    placeCharacter(x, y, chars[x][y]);
+        for (int x = xOffset; x < xOffset + chars.length; x++) {
+            for (int y = yOffset; y < yOffset + chars[0].length; y++) {
+                if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
+                    placeCharacter(x, y, chars[x - xOffset][y - yOffset], foreground, background);
                 }
             }
         }
@@ -185,7 +190,7 @@ public class SGTextPanel extends JPanel {
      * @param c The character to be displayed
      */
     public void placeCharacter(int x, int y, char c) {
-        placeCharacter(x, y, c, defaultForeground, defaultBackground);
+        placeCharacter(x, y, c, defaultForeground);
     }
 
     /**
@@ -202,16 +207,152 @@ public class SGTextPanel extends JPanel {
      * @param back The background color
      */
     public void placeCharacter(int x, int y, char c, Color fore, Color back) {
-        if (!updating) {
-            contents[x][y] = factory.getImageFor(c, fore, back);
+        if (c != ' ') {
+            foregroundContents[x][y] = factory.getImageFor(c, fore);
+        } else {
+            foregroundContents[x][y] = null;
+        }
+
+        if (back.equals(defaultBackground)) {
+            backgroundContents[x][y] = null;
+        } else {
+            backgroundContents[x][y] = factory.getImageFor(' ', defaultForeground, back);
+        }
+
+    }
+
+    public void placeCharacter(int x, int y, char c, Color fore) {
+        foregroundContents[x][y] = factory.getImageFor(c, fore);
+    }
+
+    /**
+     * Starts a movement animation for the object at the given grid location at the default speed.
+     * 
+     * @param start
+     * @param end 
+     */
+    public void slide(Point start, Point end) {
+        slide(start, end, DEFAULT_MOVEMENT_SPEED);
+    }
+
+    /**
+     * Starts a movement animation for the object at the given grid location at the default speed
+     * for one grid square in the direction provided.
+     * 
+     * @param start
+     * @param direction 
+     */
+    public void slide(Point start, Direction direction) {
+        slide(start, new Point(direction.deltaX + start.x, direction.deltaY + start.y), DEFAULT_MOVEMENT_SPEED);
+    }
+
+    /**
+     * Starts a sliding movement animation for the object at the given location at the provided speed.
+     * The speed is how many milliseconds should pass between movement steps.
+     * 
+     * @param start
+     * @param end
+     * @param speed 
+     */
+    public void slide(Point start, Point end, int speed) {
+        if (foregroundContents[start.x][start.y] != null) {
+            Animation anim = new SlideAnimation(foregroundContents[start.x][start.y],
+                    new Point(start.x * cellDimension.width, start.y * cellDimension.height),
+                    new Point(end.x * cellDimension.width, end.y * cellDimension.height), speed);
+            foregroundContents[start.x][start.y] = null;
+            animations.add(anim);
+            animationManager.add(anim);
         }
     }
+
+    /**
+     * Starts an wiggling animation for the object at the given location.
+     * 
+     * @param location 
+     */
+    public void wiggle(Point location) {
+        if (foregroundContents[location.x][location.y] != null) {
+            Animation anim = new WiggleAnimation(foregroundContents[location.x][location.y],
+                    new Point(location.x * cellDimension.width, location.y * cellDimension.height), 0.3,
+                    new Point(cellDimension.width / 4, cellDimension.height / 4), 500);
+            foregroundContents[location.x][location.y] = null;
+            animations.add(anim);
+            animationManager.add(anim);
+        }
+    }
+
+    /**
+     * Starts a bumping animation in the direction provided.
+     * 
+     * @param location
+     * @param direction 
+     */
+    public void bump(Point location, Direction direction) {
+        bump(location, new Point(direction.deltaX, direction.deltaY));
+    }
+
+    /**
+     * Starts a bumping animation in the direction provided.
+     * 
+     * @param location
+     * @param direction 
+     */
+    public void bump(Point location, Point direction) {
+        if (foregroundContents[location.x][location.y] != null) {
+            Animation anim = new BumpAnimation(foregroundContents[location.x][location.y],
+                    new Point(location.x * cellDimension.width, location.y * cellDimension.height), cellDimension, direction);
+            foregroundContents[location.x][location.y] = null;
+            animations.add(anim);
+            animationManager.add(anim);
+        }
+    }
+
+    private void trimAnimations() {
+        LinkedList<Animation> removals = new LinkedList<Animation>();
+        for (Animation anim : animations) {
+            if (!anim.isActive()) {
+                removals.add(anim);
+            }
+        }
+
+        animations.removeAll(removals);
+        for (Animation anim : removals) {
+            animationManager.stopAnimation(anim);
+            anim.remove();
+            foregroundContents[anim.getLocation().x / cellDimension.width][anim.getLocation().y / cellDimension.height] = anim.getImage();
+        }
+    }
+    
 
     /**
      * Signals that this component should update its display image.
      */
     public void refresh() {
-        redrawImage();
+        trimAnimations();
+
+        Graphics2D g = contentsImage.createGraphics();
+
+        if (worldBackgroundImage == null) {//clear to background color
+            g.setColor(defaultBackground);
+            g.fillRect(0, 0, getWidth(), getHeight());
+        } else {
+            Composite backup = g.getComposite();
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.0f));
+            g.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
+            g.setComposite(backup);
+        }
+
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
+                if (backgroundContents[x][y] != null) {
+                    g.drawImage(backgroundContents[x][y], null, x * cellDimension.width, y * cellDimension.height);
+                }
+                if (foregroundContents[x][y] != null) {
+                    g.drawImage(foregroundContents[x][y], null, x * cellDimension.width, y * cellDimension.height);
+                }
+            }
+        }
+
         repaint();
     }
 
@@ -248,12 +389,10 @@ public class SGTextPanel extends JPanel {
     private void doInitialization(int gridWidth, int gridHeight) {
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
-        contents = new BufferedImage[gridWidth][gridHeight];
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                contents[x][y] = factory.getImageFor(' ', SColor.BLACK, SColor.BABY_BLUE);
-            }
-        }
+
+        backgroundContents = new BufferedImage[gridWidth][gridHeight];
+        foregroundContents = new BufferedImage[gridWidth][gridHeight];
+        setBackground(defaultBackground);
 
         cellDimension = factory.getCellDimension();
 
@@ -265,7 +404,9 @@ public class SGTextPanel extends JPanel {
         setMinimumSize(panelDimension);
         setPreferredSize(panelDimension);
 
-        image = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
+        contentsImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
+        animationManager = AnimationManager.startNewAnimationManager(this);
+
         refresh();
     }
 

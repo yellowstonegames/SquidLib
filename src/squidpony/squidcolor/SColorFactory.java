@@ -2,10 +2,10 @@ package squidpony.squidcolor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import squidpony.squidmath.Bresenham;
-import squidpony.squidmath.Coord3D;
+import squidpony.squidmath.Point3D;
 import squidpony.squidmath.RNG;
 
 /**
@@ -182,21 +182,21 @@ public class SColorFactory {
      * @return 
      */
     public static ArrayList<SColor> getGradient(SColor color1, SColor color2) {
-        LinkedList<Coord3D> gradient = Bresenham.line3d(scolorToCoord3D(color1), scolorToCoord3D(color2));
+        Queue<Point3D> gradient = Bresenham.line3D(scolorToCoord3D(color1), scolorToCoord3D(color2));
         ArrayList<SColor> ret = new ArrayList<SColor>();
         ret.add(color1);
-        for (Coord3D coord : gradient) {
+        for (Point3D coord : gradient) {
             ret.add(coord3DToSColor(coord));
         }
         ret.add(color2);
         return ret;
     }
 
-    private static Coord3D scolorToCoord3D(SColor color) {
-        return new Coord3D(color.getRed(), color.getGreen(), color.getBlue());
+    private static Point3D scolorToCoord3D(SColor color) {
+        return new Point3D(color.getRed(), color.getGreen(), color.getBlue());
     }
 
-    private static SColor coord3DToSColor(Coord3D coord) {
+    private static SColor coord3DToSColor(Point3D coord) {
         return getSColor(coord.x, coord.y, coord.z);
     }
 }
