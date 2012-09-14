@@ -13,16 +13,15 @@ import java.util.TreeMap;
  *
  * @author Eben Howard - http://squidpony.com
  */
-public class TextBlockFactory {
-    private static TextBlockFactory instance = new TextBlockFactory();
-    TreeMap<String, BufferedImage> blocks = new TreeMap<String, BufferedImage>();
-    int cellWidth = 10, cellHeight = 60;
-    int verticalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size vertically
-    Font font;
-    char[] fitting;
+public class TextCellFactory extends CellFactory {
+
+    private static TextCellFactory instance = new TextCellFactory();
+    private int verticalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size vertically
+    private Font font;
+    private char[] fitting;
     private boolean whiteSpace = true;
 
-    private TextBlockFactory() {
+    private TextCellFactory() {
         fitting = new char[126 - 33];
         for (char c = 33; c <= 125; c++) {
             fitting[c - 33] = c;
@@ -80,12 +79,8 @@ public class TextBlockFactory {
      *
      * @return
      */
-    public static TextBlockFactory getInstance() {
+    public static TextCellFactory getInstance() {
         return instance;
-    }
-
-    public Dimension getCellDimension() {
-        return new Dimension(cellWidth, cellHeight);
     }
 
     /**
@@ -183,7 +178,8 @@ public class TextBlockFactory {
             verticalOffset = 0;
             for (char c : fitting) {
                 rightSize = true;
-                if (!willFit(c, whiteSpace)) {//found one that doesn't work, skip to the next step
+                if (!willFit(c, whiteSpace)) {
+                    //found one that doesn't work, skip to the next step
                     rightSize = false;
                     break;
                 }
@@ -268,11 +264,12 @@ public class TextBlockFactory {
     }
 
     /**
-     * Returns the image of the character provided with a transparent background.
-     * 
+     * Returns the image of the character provided with a transparent
+     * background.
+     *
      * @param c
      * @param foreground
-     * @return 
+     * @return
      */
     public BufferedImage getImageFor(char c, Color foreground) {
         String search = getStringRepresentationOf(c, foreground);
@@ -300,17 +297,18 @@ public class TextBlockFactory {
     }
 
     /**
-     * Returns a string representation of the character and the hex value of the foreground.
-     * 
+     * Returns a string representation of the character and the hex value of the
+     * foreground.
+     *
      * @param c
      * @param foreground
      * @param background
-     * @return 
+     * @return
      */
     public String getStringRepresentationOf(char c, Color foreground) {
         return c + " " + foreground.getClass().getSimpleName() + ": " + Integer.toHexString(foreground.getRGB());
     }
-    
+
     private BufferedImage makeImage(char c, Color foreground, Color background) {
         BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
@@ -322,7 +320,7 @@ public class TextBlockFactory {
         g.drawString("" + c, (cellWidth - g.getFontMetrics().charWidth(c)) / 2, g.getFontMetrics().getMaxAscent() - verticalOffset);
         return i;
     }
-    
+
     private BufferedImage makeImage(char c, Color foreground) {
         BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
