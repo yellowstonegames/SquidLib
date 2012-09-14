@@ -8,20 +8,21 @@ import javax.swing.JComponent;
 import javax.swing.Timer;
 
 /**
- * This class manages a collection of animations and handles update drawing to the
- * provided BufferedImage.
+ * This class manages a collection of animations and handles update drawing to
+ * the provided BufferedImage.
  *
  * @author Eben Howard - http://squidpony.com
  */
 public class AnimationManager implements Runnable {
+
     private ConcurrentHashMap<Animation, Timer> animations = new ConcurrentHashMap<Animation, Timer>();
     private JComponent component;
 
     /**
-     * Creates a new AnimationManager that will draw to the provided image and then
-     * starts it in a daemon worker thread to manage the animations.
-     * 
-     * @param image 
+     * Creates a new AnimationManager that will draw to the provided image and
+     * then starts it in a daemon worker thread to manage the animations.
+     *
+     * @param image
      * @return the created AnimationManager
      */
     public static AnimationManager startNewAnimationManager(JComponent component) {
@@ -37,13 +38,15 @@ public class AnimationManager implements Runnable {
     }
 
     /**
-     * Adds the animation and starts it immediately, with the given speed parameter
-     * indicating how many milliseconds to wait between animation steps.
-     * 
-     * Additionally sets the animations component to be this animation manager's component.
-     * 
+     * Adds the animation and starts it immediately, with the given speed
+     * parameter indicating how many milliseconds to wait between animation
+     * steps.
+     *
+     * Additionally sets the animations component to be this animation manager's
+     * component.
+     *
      * @param animation
-     * @param speed 
+     * @param speed
      */
     public void add(Animation animation) {
         if (!animations.containsKey(animation)) {
@@ -55,12 +58,13 @@ public class AnimationManager implements Runnable {
     }
 
     /**
-     * Stops the given animation if it is in the current list of running animations.
-     * 
+     * Stops the given animation if it is in the current list of running
+     * animations.
+     *
      * @param animation
-     * @param speed 
+     * @param speed
      */
-    public void stopAnimation(Animation animation) {
+    public synchronized void stopAnimation(Animation animation) {
         if (animations.containsKey(animation)) {
             animations.remove(animation).stop();
         }
