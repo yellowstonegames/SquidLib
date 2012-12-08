@@ -254,7 +254,7 @@ public class TextCellFactory extends CellFactory {
      */
     public BufferedImage getImageFor(char c, Color foreground, Color background) {
         String search = getStringRepresentationOf(c, foreground, background);
-        BufferedImage block = blocks.get(search);
+        BufferedImage block = (BufferedImage) blocks.get(search);
 
         if (block == null) {
             block = makeImage(c, foreground, background);
@@ -273,7 +273,7 @@ public class TextCellFactory extends CellFactory {
      */
     public BufferedImage getImageFor(char c, Color foreground) {
         String search = getStringRepresentationOf(c, foreground);
-        BufferedImage block = blocks.get(search);
+        BufferedImage block = (BufferedImage) blocks.get(search);
 
         if (block == null) {
             block = makeImage(c, foreground);

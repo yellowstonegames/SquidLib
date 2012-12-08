@@ -13,7 +13,7 @@ import java.awt.*;
  */
 public class SGTextPanel extends SPanel {
 
-    private TextCellFactory factory = TextCellFactory.getInstance();
+    protected TextCellFactory textFactory = TextCellFactory.getInstance();
 
     /**
      * Builds a new panel with the desired traits. The size of the font will be
@@ -191,7 +191,7 @@ public class SGTextPanel extends SPanel {
      */
     public void placeCharacter(int x, int y, char c, Color fore, Color back) {
         if (c != ' ') {
-            foregroundContents[x][y] = factory.getImageFor(c, fore);
+            foregroundContents[x][y] = textFactory.getImageFor(c, fore);
         } else {
             foregroundContents[x][y] = null;
         }
@@ -199,13 +199,13 @@ public class SGTextPanel extends SPanel {
         if (back.equals(defaultBackground)) {
             backgroundContents[x][y] = null;
         } else {
-            backgroundContents[x][y] = factory.getImageFor(' ', defaultForeground, back);
+            backgroundContents[x][y] = textFactory.getImageFor(' ', defaultForeground, back);
         }
         imageChanged[x][y] = true;
     }
 
     public void placeCharacter(int x, int y, char c, Color fore) {
-        foregroundContents[x][y] = factory.getImageFor(c, fore);
+        foregroundContents[x][y] = textFactory.getImageFor(c, fore);
         imageChanged[x][y] = true;
     }
 
@@ -221,7 +221,7 @@ public class SGTextPanel extends SPanel {
      * @param font
      */
     public void initialize(int cellWidth, int cellHeight, int panelWidth, int panelHeight, Font font) {
-        factory.initializeBySize(cellWidth, cellHeight, font);
+        textFactory.initializeBySize(cellWidth, cellHeight, font);
         doInitialization(panelWidth, panelHeight);
     }
 
@@ -235,7 +235,7 @@ public class SGTextPanel extends SPanel {
      * @param font
      */
     public void initialize(int panelWidth, int panelHeight, Font font) {
-        factory.initializeByFont(font);
+        textFactory.initializeByFont(font);
         doInitialization(panelWidth, panelHeight);
     }
 
@@ -252,7 +252,7 @@ public class SGTextPanel extends SPanel {
      * @param whiteSpace
      */
     public void ensureFits(char[] characters, boolean whiteSpace) {
-        factory.setFitCharacters(characters, whiteSpace);
+        textFactory.setFitCharacters(characters, whiteSpace);
     }
 
     /**
@@ -263,6 +263,6 @@ public class SGTextPanel extends SPanel {
      * @return true if it will fit, false otherwise.
      */
     public boolean willFit(char character) {
-        return factory.willFit(character);
+        return textFactory.willFit(character);
     }
 }
