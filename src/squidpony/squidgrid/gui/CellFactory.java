@@ -9,11 +9,11 @@ import java.util.TreeMap;
  *
  * @author Eben Howard - http://squidpony.com
  */
-public class CellFactory {
+public abstract class CellFactory {
 
-    TreeMap<String, BufferedImage> blocks = new TreeMap<String, BufferedImage>();
     int cellHeight = 60;
     int cellWidth = 10;
+    TreeMap<String, BufferedImage> blocks = new TreeMap<String, BufferedImage>();
 
     public Dimension getCellDimension() {
         return new Dimension(cellWidth, cellHeight);

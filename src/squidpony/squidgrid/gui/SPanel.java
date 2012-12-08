@@ -21,11 +21,11 @@ import squidpony.squidgrid.util.Direction;
 
 /**
  *
- * @author Eben Howard
+ * @author Eben Howard - http://squidpony.com
  */
 public class SPanel extends JLayeredPane {
 
-    protected static int DEFAULT_MOVEMENT_SPEED = 1; //one move step per x milliseconds
+    protected static int DEFAULT_MOVEMENT_SPEED = 0; //one move step per x milliseconds
     protected AnimationManager animationManager;
     protected ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<Animation>();
     protected BufferedImage[][] backgroundContents;
