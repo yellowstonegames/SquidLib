@@ -36,8 +36,8 @@ Current Features
 Features in Nightly Build
 *Animations
 	Slide, bump, wiggle, etc.
-*Sound
-	mp3, ogg, wav, etc.
+*Generic Images
+	Load in images as tiles alongside character tiles.
 
 
 
