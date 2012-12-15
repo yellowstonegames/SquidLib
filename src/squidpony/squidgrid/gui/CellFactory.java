@@ -15,7 +15,20 @@ public abstract class CellFactory {
     int cellWidth = 10;
     TreeMap<String, BufferedImage> blocks = new TreeMap<String, BufferedImage>();
 
+    /**
+     * Returns the dimension of a single grid cell.
+     *
+     * @return
+     */
     public Dimension getCellDimension() {
         return new Dimension(cellWidth, cellHeight);
+    }
+
+    /**
+     * Clears out the backing cache. Should be used if a very large number of
+     * one-off cells are being made.
+     */
+    public void emptyCache() {
+        blocks = new TreeMap<String, BufferedImage>();
     }
 }

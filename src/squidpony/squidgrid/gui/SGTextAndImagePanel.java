@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
  */
 public class SGTextAndImagePanel extends SGTextPanel {
 
-    protected ImageCellFactory cellFactory = ImageCellFactory.getInstance();
+    ImageCellFactory cellFactory = ImageCellFactory.getInstance();
 
     /**
      * Empty constructor. An initialization method must be used before this
