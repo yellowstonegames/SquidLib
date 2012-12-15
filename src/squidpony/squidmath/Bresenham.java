@@ -6,41 +6,49 @@ import java.util.Queue;
 
 /**
  * @author Eben Howard - http://squidpony.com
- * @author Lewis Potter 
- * @author Derived from Bob Pendletons C algorithm, which is in
- *         turn derived from Paul Heckberts algorithm ("Digital Line Drawing"
- *         from "Graphics Gems", Academic Press, 1990
+ * @author Lewis Potter
+ * @author Derived from Bob Pendletons C algorithm, which is in turn derived
+ * from Paul Heckberts algorithm ("Digital Line Drawing" from "Graphics Gems",
+ * Academic Press, 1990
  */
 public class Bresenham {
-    /** Returns 0 for 0, -1 for negative parameters and 1 for positive
+
+    /**
+     * Prevents any instances from being created
+     */
+    private Bresenham() {
+    }
+
+    /**
+     * Returns 0 for 0, -1 for negative parameters and 1 for positive
      * parameters.
      */
     private static int zsgn(int a) {
         return ((a < 0) ? -1 : (a > 0) ? 1 : 0);
     }
-    
+
     /**
      * Generates a 2D Bresenham line between two points.
-     * 
-     * @param a 
-     * @param b 
-     * @return 
+     *
+     * @param a
+     * @param b
+     * @return
      */
-    public static Queue<Point3D> line2D(Point a, Point b){
+    public static Queue<Point3D> line2D(Point a, Point b) {
         return line2D(a.x, a.y, b.x, b.y);
     }
-    
+
     /**
      * Generates a 2D Bresenham line between two points.
-     * 
+     *
      * @param startX
      * @param startY
      * @param endX
      * @param endY
-     * @return 
+     * @return
      */
-    public static Queue<Point3D> line2D(int startX, int startY, int endX, int endY){
-       return  line3D(startX, startY, 0, endX, endY, 0);
+    public static Queue<Point3D> line2D(int startX, int startY, int endX, int endY) {
+        return line3D(startX, startY, 0, endX, endY, 0);
     }
 
     /**
@@ -56,14 +64,14 @@ public class Bresenham {
 
     /**
      * Generates a 3D Bresenham line between the given coordinates.
-     * 
+     *
      * @param x1
      * @param y1
      * @param z1
      * @param x2
      * @param y2
      * @param z2
-     * @return 
+     * @return
      */
     public static Queue<Point3D> line3D(int x1, int y1, int z1, int x2, int y2, int z2) {
         Queue<Point3D> result = new LinkedList<Point3D>();
