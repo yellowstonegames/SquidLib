@@ -28,6 +28,15 @@ public class SColorFactory {
     private SColorFactory() {
     }
 
+    /**
+     * Utility method to blend the two colors by the amount passed in as the
+     * coefficient.
+     *
+     * @param a
+     * @param b
+     * @param coef
+     * @return
+     */
     private static int blend(int a, int b, double coef) {
         return (int) (a + (b - a) * coef);
     }
@@ -222,10 +231,24 @@ public class SColorFactory {
         return ret;
     }
 
+    /**
+     * Converts the provided color into a three dimensional coordinate point for
+     * use in the Bresenham algorithms.
+     *
+     * @param color
+     * @return
+     */
     private static Point3D scolorToCoord3D(SColor color) {
         return new Point3D(color.getRed(), color.getGreen(), color.getBlue());
     }
 
+    /**
+     * Converts the provided three dimensional coordinate into a color for use
+     * in the Bresenham algorithms.
+     *
+     * @param coord
+     * @return
+     */
     private static SColor coord3DToSColor(Point3D coord) {
         return getSColor(coord.x, coord.y, coord.z);
     }
