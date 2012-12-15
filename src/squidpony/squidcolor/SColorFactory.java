@@ -12,11 +12,21 @@ import squidpony.squidmath.RNG;
  * Provides utilities for working with colors as well as caching operations for
  * color creation.
  *
+ * All returned SColor objects are cached so multiple requests for the same
+ * SColor will not create duplicate long term objects.
+ *
  * @author Eben Howard - http://squidpony.com
  */
 public class SColorFactory {
+
     private static RNG rng = new RNG();
     private static Map<Integer, SColor> colorBag = new HashMap<Integer, SColor>();
+
+    /**
+     * Prevents any instances from being created.
+     */
+    private SColorFactory() {
+    }
 
     private static int blend(int a, int b, double coef) {
         return (int) (a + (b - a) * coef);
@@ -25,11 +35,11 @@ public class SColorFactory {
     /**
      * Returns an SColor that is the given distance from the first color to the
      * second color.
-     * 
+     *
      * @param color1 The first color
      * @param color2 The second color
      * @param coef The percent towards the second color, as 0.0 to 1.0
-     * @return 
+     * @return
      */
     public static SColor blend(SColor color1, SColor color2, double coef) {
         return getSColor(blend(color1.getRed(), color2.getRed(), coef),
@@ -38,26 +48,38 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is randomly chosen from the color line between
-     * the two provided colors from the two provided points.
-     * 
+     * Returns an SColor that is randomly chosen from the color line between the
+     * two provided colors from the two provided points.
+     *
      * @param color1
      * @param color2
-     * @param min   The minimum percent towards the second color, as 0.0 to 1.0
-     * @param max   The maximum percent towards the second color, as 0.0 to 1.0
-     * @return 
+     * @param min The minimum percent towards the second color, as 0.0 to 1.0
+     * @param max The maximum percent towards the second color, as 0.0 to 1.0
+     * @return
      */
     public static SColor randomBlend(SColor color1, SColor color2, double min, double max) {
         return blend(color1, color2, rng.between(min, max));
     }
 
     /**
+     * Clears the backing cache.
+     *
+     * Should only be used if an extreme number of colors are being created and
+     * then not reused, such as when blending different colors in different
+     * areas that will not be revisited.
+     */
+    public static void emptyCache() {
+        colorBag = new HashMap<Integer, SColor>();
+    }
+
+    /**
      * Returns the cached color that matches the desired rgb value.
-     * 
-     * If the color is not already in the cache, it is created and added to the cache.
-     * 
+     *
+     * If the color is not already in the cache, it is created and added to the
+     * cache.
+     *
      * @param rgb
-     * @return 
+     * @return
      */
     public static SColor getSColor(int rgb) {
         if (colorBag.containsKey(rgb)) {
@@ -70,12 +92,13 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor with the given values, with those values clamped between 0 and 255.
-     * 
+     * Returns an SColor with the given values, with those values clamped
+     * between 0 and 255.
+     *
      * @param r
      * @param g
      * @param b
-     * @return 
+     * @return
      */
     public static SColor getSColor(int r, int g, int b) {
         r = Math.min(r, 255);
@@ -88,20 +111,22 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is a slightly dimmer version of the provided color.
-     * 
+     * Returns an SColor that is a slightly dimmer version of the provided
+     * color.
+     *
      * @param color
-     * @return 
+     * @return
      */
     public static SColor dim(SColor color) {
         return blend(color, SColor.BLACK, 0.1);
     }
 
     /**
-     * Returns an SColor that is a somewhat dimmer version of the provided color.
-     * 
+     * Returns an SColor that is a somewhat dimmer version of the provided
+     * color.
+     *
      * @param color
-     * @return 
+     * @return
      */
     public static SColor dimmer(SColor color) {
         return blend(color, SColor.BLACK, 0.3);
@@ -109,29 +134,31 @@ public class SColorFactory {
 
     /**
      * Returns an SColor that is a lot darker version of the provided color.
-     * 
+     *
      * @param color
-     * @return 
+     * @return
      */
     public static SColor dimmest(SColor color) {
         return blend(color, SColor.BLACK, 0.7);
     }
 
     /**
-     * Returns an SColor that is a slightly lighter version of the provided color.
-     * 
+     * Returns an SColor that is a slightly lighter version of the provided
+     * color.
+     *
      * @param color
-     * @return 
+     * @return
      */
     public static SColor light(SColor color) {
         return blend(color, SColor.WHITE, 0.1);
     }
 
     /**
-     * Returns an SColor that is a somewhat lighter version of the provided color.
-     * 
+     * Returns an SColor that is a somewhat lighter version of the provided
+     * color.
+     *
      * @param color
-     * @return 
+     * @return
      */
     public static SColor lighter(SColor color) {
         return blend(color, SColor.WHITE, 0.3);
@@ -139,19 +166,20 @@ public class SColorFactory {
 
     /**
      * Returns an SColor that is a lot lighter version of the provided color.
-     * 
+     *
      * @param color
-     * @return 
+     * @return
      */
     public static SColor lightest(SColor color) {
         return blend(color, SColor.WHITE, 0.6);
     }
 
     /**
-     * Returns an SColor that is the fully desaturated (greyscale) version of the provided color.
-     * 
+     * Returns an SColor that is the fully desaturated (greyscale) version of
+     * the provided color.
+     *
      * @param color
-     * @return 
+     * @return
      */
     public static SColor desaturated(SColor color) {
         int r = color.getRed();
@@ -163,23 +191,25 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is the version of the provided color desaturated the given amount.
-     * 
+     * Returns an SColor that is the version of the provided color desaturated
+     * the given amount.
+     *
      * @param color
-     * @param percent The percent to desaturate, from 0.0 for none to 1.0 for fully desaturated
-     * @return 
+     * @param percent The percent to desaturate, from 0.0 for none to 1.0 for
+     * fully desaturated
+     * @return
      */
     public static SColor desaturate(SColor color, double percent) {
         return blend(color, desaturated(color), percent);
     }
 
     /**
-     * Returns a list of colors starting at the first color and moving to the second color. The
-     * end point colors are included in the list.
-     * 
+     * Returns a list of colors starting at the first color and moving to the
+     * second color. The end point colors are included in the list.
+     *
      * @param color1
      * @param color2
-     * @return 
+     * @return
      */
     public static ArrayList<SColor> getGradient(SColor color1, SColor color2) {
         Queue<Point3D> gradient = Bresenham.line3D(scolorToCoord3D(color1), scolorToCoord3D(color2));

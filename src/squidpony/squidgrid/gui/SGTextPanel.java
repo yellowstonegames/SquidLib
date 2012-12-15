@@ -13,7 +13,7 @@ import java.awt.*;
  */
 public class SGTextPanel extends SPanel {
 
-    protected TextCellFactory textFactory = TextCellFactory.getInstance();
+    TextCellFactory textFactory = TextCellFactory.getInstance();
 
     /**
      * Builds a new panel with the desired traits. The size of the font will be
@@ -204,6 +204,16 @@ public class SGTextPanel extends SPanel {
         imageChanged[x][y] = true;
     }
 
+    /**
+     * Sets the block at the given coordinates to contain the passed in
+     * character drawn with the given foreground color. The default background
+     * color will be used.
+     *
+     * @param x
+     * @param y
+     * @param c
+     * @param fore
+     */
     public void placeCharacter(int x, int y, char c, Color fore) {
         foregroundContents[x][y] = textFactory.getImageFor(c, fore);
         imageChanged[x][y] = true;

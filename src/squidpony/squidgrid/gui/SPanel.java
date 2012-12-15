@@ -20,30 +20,35 @@ import squidpony.squidgrid.gui.animation.WiggleAnimation;
 import squidpony.squidgrid.util.Direction;
 
 /**
+ * A basic component to hold grid-world images and/or characters.
  *
  * @author Eben Howard - http://squidpony.com
  */
 public class SPanel extends JLayeredPane {
 
-    protected static int DEFAULT_MOVEMENT_SPEED = 0; //one move step per x milliseconds
-    protected AnimationManager animationManager;
-    protected ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<Animation>();
-    protected BufferedImage[][] backgroundContents;
-    protected boolean[][] imageChanged;
-    protected Dimension cellDimension;
-    protected BufferedImage contentsImage = new BufferedImage(20, 20, BufferedImage.TYPE_4BYTE_ABGR);
-    protected Color defaultBackground = SColor.BLACK;
-    protected Color defaultForeground = SColor.WHITE;
-    protected BufferedImage[][] foregroundContents;
-    protected int gridHeight;
-    protected int gridWidth;
-    protected Dimension panelDimension;
-    protected BufferedImage worldBackgroundImage = null;
+    private static int DEFAULT_MOVEMENT_SPEED = 0; //one move step per x milliseconds
+    private AnimationManager animationManager;
+    private ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<Animation>();
+    BufferedImage[][] backgroundContents;
+    boolean[][] imageChanged;
+    Dimension cellDimension;
+    BufferedImage contentsImage = new BufferedImage(20, 20, BufferedImage.TYPE_4BYTE_ABGR);
+    Color defaultBackground = SColor.BLACK;
+    Color defaultForeground = SColor.WHITE;
+    BufferedImage[][] foregroundContents;
+    int gridHeight;
+    int gridWidth;
+    Dimension panelDimension;
+    BufferedImage worldBackgroundImage = null;
 
     public SPanel() {
     }
 
-    protected void doInitialization(int gridWidth, int gridHeight) {
+    /**
+     * Clears backing arrays and sets fields to proper size for the new grid
+     * size.
+     */
+    void doInitialization(int gridWidth, int gridHeight) {
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
         backgroundContents = new BufferedImage[gridWidth][gridHeight];
@@ -67,14 +72,29 @@ public class SPanel extends JLayeredPane {
         refresh();
     }
 
+    /**
+     * Returns the Dimension of one single grid cell.
+     *
+     * @return
+     */
     public Dimension getCellDimension() {
         return cellDimension;
     }
 
+    /**
+     * Returns the hight of the grid. This is the number of rows in the grid.
+     *
+     * @return
+     */
     public int getGridHeight() {
         return gridHeight;
     }
 
+    /**
+     * Returns the width of the grid. This is the number of columns in the grid.
+     *
+     * @return
+     */
     public int getGridWidth() {
         return gridWidth;
     }
@@ -114,10 +134,22 @@ public class SPanel extends JLayeredPane {
         }
     }
 
+    /**
+     * Sets the background color which will be used on all text and transparent
+     * tiles when not other color is specified.
+     *
+     * @param defaultBackground
+     */
     public void setDefaultBackground(Color defaultBackground) {
         this.defaultBackground = defaultBackground;
     }
 
+    /**
+     * Sets the background color which will be used on all text and transparent
+     * tiles when not other color is specified.
+     *
+     * @param defaultForeground
+     */
     public void setDefaultForeground(Color defaultForeground) {
         this.defaultForeground = defaultForeground;
     }
@@ -207,7 +239,10 @@ public class SPanel extends JLayeredPane {
         }
     }
 
-    protected void trimAnimations() {
+    /**
+     * Drops any finished animations from the animation list.
+     */
+    private void trimAnimations() {
         LinkedList<Animation> removals = new LinkedList<Animation>();
         for (Animation anim : animations) {
             if (!anim.isActive()) {
@@ -223,6 +258,13 @@ public class SPanel extends JLayeredPane {
         }
     }
 
+    /**
+     * Causes the component to stop responding to input until all current
+     * animations are finished.
+     *
+     * Note that if an animation is set to not stop then this method will never
+     * return.
+     */
     public void waitForAnimations() {
         while (!animations.isEmpty()) {
             trimAnimations();
