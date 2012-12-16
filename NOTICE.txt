@@ -1,0 +1,21 @@
+SquidLib
+Copyright 2011-2013 Eben Howard
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+This product includes software developed at
+SquidPony (http://squidpony.com)
+
+Portions of Bresenham methods are derived from Bob Pendletons C algorithm, which is in turn derived from Paul Heckberts algorithm ("Digital Line Drawing" from "Graphics Gems", Academic Press, 1990
+
+Portions of FOV and LOS classes are derived from works by Steven Blacken originally distributed as part of the Blacken Library for roguelike games
