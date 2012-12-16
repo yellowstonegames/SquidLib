@@ -7,9 +7,6 @@ import java.util.Queue;
 /**
  * @author Eben Howard - http://squidpony.com
  * @author Lewis Potter
- * @author Derived from Bob Pendletons C algorithm, which is in turn derived
- * from Paul Heckberts algorithm ("Digital Line Drawing" from "Graphics Gems",
- * Academic Press, 1990
  */
 public class Bresenham {
 
