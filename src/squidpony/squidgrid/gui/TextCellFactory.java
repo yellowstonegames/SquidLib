@@ -19,13 +19,27 @@ public class TextCellFactory extends CellFactory {
     private int verticalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size vertically
     private Font font;
     private char[] fitting;
-    private boolean whiteSpace = true;
+    private boolean whiteSpace = true, antialias = false;
 
     private TextCellFactory() {
         fitting = new char[126 - 33];
         for (char c = 33; c <= 125; c++) {
             fitting[c - 33] = c;
         }
+    }
+
+    /**
+     * Sets whether or not characters should be drawn with antialiasing.
+     *
+     * @param set
+     */
+    public void setAntialias(boolean set) {
+        if (set == antialias) {
+            return;//nothing to do
+        }
+
+        emptyCache();//since rendering is changed everything has to be cleared out
+        antialias = set;
     }
 
     /**
@@ -317,6 +331,13 @@ public class TextCellFactory extends CellFactory {
         g.setColor(foreground);
         g.setFont(font);
 
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        if (antialias) {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        } else {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        }
+
         g.drawString("" + c, (cellWidth - g.getFontMetrics().charWidth(c)) / 2, g.getFontMetrics().getMaxAscent() - verticalOffset);
         return i;
     }
@@ -327,6 +348,13 @@ public class TextCellFactory extends CellFactory {
         g.setColor(foreground);
         g.setFont(font);
 
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        if (antialias) {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        } else {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        }
+        
         g.drawString("" + c, (cellWidth - g.getFontMetrics().charWidth(c)) / 2, g.getFontMetrics().getMaxAscent() - verticalOffset);
         return i;
     }

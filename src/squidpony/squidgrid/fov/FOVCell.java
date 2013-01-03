@@ -4,7 +4,7 @@ package squidpony.squidgrid.fov;
  * This interface indicates that an object can be used to determine Field of
  * View and Line of Sight.
  *
- * The values returned may not be related to sight, they may be scent, sound,
+ * The values returned need not be related to sight, they may be scent, sound,
  * etc.
  *
  * In order to support multiple such values per cell, all methods use an
@@ -16,16 +16,16 @@ package squidpony.squidgrid.fov;
 public interface FOVCell {
 
     /**
-     * Returns the amount of transparency this cell has associated with the
-     * given key. A value of 0 indicates that the cell is fully opaque while a
-     * value of 1 indicates it is fully transparent.
+     * Returns the amount of resistance this cell has associated with the
+     * given key. A value of 1 indicates that the cell is fully opaque while a
+     * value of 0 indicates it is fully transparent.
      *
      * It is acceptable that this value falls outside the range of 0 to 1.
      *
      * @param key
      * @return
      */
-    public float getTransparency(String key);
+    public float getResistance(String key);
 
     /**
      * Returns the amount of light currently in this cell. Generally a value of
@@ -36,16 +36,4 @@ public interface FOVCell {
      * @return
      */
     public float getCurrentLight(String key);
-
-    /**
-     * Returns the amount of resistance this cell provides to objects trying to
-     * pass through. Generally values of 1 or higher means that objects may not
-     * pass through, even if light may, such as in the case of glass. Values of
-     * 0 or lower indicate that this cell offers no resistance to normal
-     * objects.
-     *
-     * @param key
-     * @return
-     */
-    public float getReistance(String key);
 }

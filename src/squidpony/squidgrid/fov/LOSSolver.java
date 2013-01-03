@@ -1,5 +1,8 @@
 package squidpony.squidgrid.fov;
 
+import java.awt.Point;
+import java.util.Queue;
+
 /**
  * An interface for Line of Sight algorithms.
  *
@@ -9,25 +12,6 @@ package squidpony.squidgrid.fov;
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
 public interface LOSSolver {
-
-    /**
-     * Returns true if the target is visible from the provided starting
-     * coordinates.
-     *
-     * If the line run from the origin to the target is blocked, the target is
-     * considered to not be visible. Light quantities are not taken into
-     * account, so this method may be used for linear effects besides just
-     * sight.
-     *
-     * @param map
-     * @param x
-     * @param y
-     * @param targetX
-     * @param targetY
-     * @param key indicates what kind of view is being used
-     * @return
-     */
-    public boolean isVisible(FOVCell[][] map, int x, int y, int targetX, int targetY, String key);
 
     /**
      * Returns true if the target can be affected by physical objects from the
@@ -49,4 +33,12 @@ public interface LOSSolver {
      * @return
      */
     public boolean isReachable(FOVCell[][] map, int x, int y, int targetX, int targetY, float force, String key);
+
+    /**
+     * Returns the path of the last LOS calculation, with the starting point as
+     * the head of the queue.
+     *
+     * @return
+     */
+    public Queue<Point> getLastPath();
 }
