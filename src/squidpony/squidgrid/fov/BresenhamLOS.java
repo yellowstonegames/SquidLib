@@ -1,5 +1,8 @@
 package squidpony.squidgrid.fov;
 
+import java.awt.Point;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Queue;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Point3D;
@@ -11,36 +14,32 @@ import squidpony.squidmath.Point3D;
  */
 public class BresenhamLOS implements LOSSolver {
 
-    @Override
-    public boolean isVisible(FOVCell[][] map, int x, int y, int targetX, int targetY, String key) {
-        //check to see if target is in total darkness
-        if (map[targetX][targetY].getCurrentLight(key) <= 0) {
-            return false;//too dark, can't see it
-        }
+    Queue<Point3D> lastPath = new LinkedList<Point3D>();
 
+    @Override
+    public boolean isReachable(FOVCell[][] map, int x, int y, int targetX, int targetY, float force, String key) {
         Queue<Point3D> path = Bresenham.line2D(x, y, targetX, targetY);
+        lastPath = new LinkedList<Point3D>(path);
         path.poll();//remove starting point
         for (Point3D p : path) {
-            if (map[p.x][p.y].getTransparency(key) <= 0 && p.x != targetX && p.y != targetY) {
-                return false;//found a blocking instance
+            if (p.x == targetX && p.y == targetY) {
+                return true;//reached the end 
+            }
+            force -= map[p.x][p.y].getResistance(key);
+            if (force <= 0) {
+                return false;//too much resistance
             }
         }
         return true;//made it all the way to the target
     }
 
     @Override
-    public boolean isReachable(FOVCell[][] map, int x, int y, int targetX, int targetY, float force, String key) {
-        Queue<Point3D> path = Bresenham.line2D(x, y, targetX, targetY);
-        path.poll();//remove starting point
-        for (Point3D p : path) {
-            if (p.x == targetX && p.y == targetY) {
-                return true;//reached the end 
-            }
-            force -= map[p.x][p.y].getReistance(key);
-            if (force <= 0) {
-                return false;//too much resistance
-            }
+    public Queue<Point> getLastPath() {
+        //copy the Point3D elements into a 2D Point structure only if needed
+        Queue<Point> returnPath = new LinkedList<Point>();
+        for (Point3D p : lastPath) {
+            returnPath.add(new Point(p.x, p.y));
         }
-        return true;//made it all the way to the target
+        return returnPath;
     }
 }

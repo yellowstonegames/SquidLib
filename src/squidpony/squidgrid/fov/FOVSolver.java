@@ -7,6 +7,10 @@ package squidpony.squidgrid.fov;
  * can be seen. They return a two dimensional array of floats, representing the
  * amount of view (typically sight, but perhaps sound, smell, etc.) which the
  * origin has of each cell.
+ * 
+ * The force parameter allows tiles to have a varying resistance to the kind of
+ * rays emanating from the source. If a simple radius is desired, set the resistance
+ * of your FOVCells to 0.0f, the force to 1, and the decay to 1/radius.
  *
  * The coordinates of the returned structure match those of the input grid.
  * 
@@ -38,7 +42,7 @@ public interface FOVSolver {
      * @param map the grid of cells to calculate on
      * @param x the horizontal component of the starting location
      * @param y the vertical component of the starting location
-     * @param distance the distance away from the starting point to examine
+     * @param force the power of the ray
      * @param decay how much the light is reduced for each whole integer step in
      * distance
      * @param simplifiedDiagonals if true then diagonal distances are treated as
@@ -46,5 +50,5 @@ public interface FOVSolver {
      * if they are the same distance as horizontal and vertical distances
      * @return the compute light grid
      */
-    public float[][] calculateFOV(FOVCell[][] map, int x, int y, float distance, float decay, boolean simplifiedDiagonals, String key);
+    public float[][] calculateFOV(FOVCell[][] map, int x, int y, float force, float decay, boolean simplifiedDiagonals, String key);
 }
