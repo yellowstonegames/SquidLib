@@ -29,6 +29,6 @@ public abstract class CellFactory {
      * one-off cells are being made.
      */
     public void emptyCache() {
-        blocks = new TreeMap<String, BufferedImage>();
+        blocks.clear();
     }
 }

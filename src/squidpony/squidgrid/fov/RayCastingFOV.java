@@ -94,12 +94,6 @@ public class RayCastingFOV implements FOVSolver {
      */
     private void runLine(int startx, int starty, int endx, int endy) {
         //in order to cover all paths, each of the three nearest corners have to be run to each other
-
-        //find nearest three corners
-//        float[] x1 = {startx + 0.5f, startx - gap, startx + 1 + gap},
-//                x2 = {endx - gap, endx + 1 - gap},
-//                y1 = {starty + 0.5f, starty - gap, starty + 1 + gap},
-//                y2 = {endy + gap, endy + 1 - gap};
         float[] x1 = {startx + 0.5f, startx - gap, startx + 1 + gap},
                 x2 = {endx + 0.5f},
                 y1 = {starty + 0.5f, starty - gap, starty + 1 + gap},
@@ -110,7 +104,6 @@ public class RayCastingFOV implements FOVSolver {
                 for (int k = 0; k < x2.length; k++) {
                     for (int f = 0; f < y2.length; f++) {
                         if (runLine(x1[i], y1[j], Math.atan2(x2[k] - x1[i], y2[f] - y1[j]), force)) {
-//                    return;//end point reached
                         }
                     }
                 }
