@@ -20,11 +20,14 @@ public class ShadowFOV implements FOVSolver {
     private float[][] light;
     private FOVCell[][] map;
     private String key;
+    private float force, decay;
 
     @Override
     public float[][] calculateFOV(FOVCell[][] map, int x, int y, float force, float decay, boolean simplifiedDiagonals, String key) {
         width = map.length;
         height = map[0].length;
+        this.force = force;
+        this.decay = decay;
         light = new float[width][height];
         this.map = map;
         this.key = key;
@@ -54,7 +57,7 @@ public class ShadowFOV implements FOVSolver {
                     MULT[0][oct], MULT[1][oct], MULT[2][oct], MULT[3][oct], 0,
                     true);
         }
-        light[x][y] = 1f;
+        light[x][y] = force;
 
         return light;
     }
@@ -86,7 +89,7 @@ public class ShadowFOV implements FOVSolver {
                     }
                     if (dx * dx + dy * dy <= r2
                             && (light_walls || map[X][Y].getResistance(key) < 1)) {
-                        light[X][Y] = 1.0f;
+                        light[X][Y] = (float) (force * decay * Math.sqrt(dx * dx + dy * dy));
                     }
                     if (blocked) {
                         if (map[X][Y].getResistance(key) >= 1) {

@@ -264,7 +264,12 @@ public class SGTextPanel extends SPanel {
      * @param whiteSpace
      */
     public void ensureFits(char[] characters, boolean whiteSpace) {
-        textFactory.setFitCharacters(characters, whiteSpace);
+        if (whiteSpace) {
+            textFactory.setPadding(1);
+        } else {
+            textFactory.setPadding(0);
+        }
+        textFactory.setFitCharacters(characters);
     }
 
     /**

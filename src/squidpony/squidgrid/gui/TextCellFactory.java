@@ -50,21 +50,40 @@ public class TextCellFactory extends CellFactory {
      * called to then make this take effect.
      *
      * @param fit
-     * @param whiteSpace true if there must be white space around all characters
      */
-    public void setFitCharacters(char[] fit, boolean whiteSpace) {
+    public void setFitCharacters(char[] fit) {
         fitting = fit;
-        if (whiteSpace) {
-            leftPadding = 1;
-            rightPadding = 1;
-            topPadding = 1;
-            bottomPadding = 1;
-        } else {
-            leftPadding = 0;
-            rightPadding = 0;
-            topPadding = 0;
-            bottomPadding = 0;
-        }
+        emptyCache();
+    }
+
+    /**
+     * Sets the minimum amount of space between the characters and all four
+     * edges.
+     *
+     * @param pad
+     */
+    public void setPadding(int pad) {
+        leftPadding = pad;
+        rightPadding = pad;
+        topPadding = pad;
+        bottomPadding = pad;
+        emptyCache();
+    }
+
+    /**
+     * Sets the minimum amount of space between the characters and the edges.
+     *
+     * @param left
+     * @param right
+     * @param top
+     * @param bottom
+     */
+    public void setPadding(int left, int right, int top, int bottom) {
+        leftPadding = left;
+        rightPadding = right;
+        topPadding = top;
+        bottomPadding = bottom;
+        emptyCache();
     }
 
     /**
@@ -74,11 +93,11 @@ public class TextCellFactory extends CellFactory {
      */
     public void initializeByFont(Font font) {
         this.font = font;
-        blocks = new TreeMap<String, BufferedImage>();
+        emptyCache();
         verticalOffset = 0;
         horizontalOffset = 0;
         sizeCellByFont();
-        blocks = new TreeMap<String, BufferedImage>();
+        emptyCache();
     }
 
     /**
@@ -95,11 +114,11 @@ public class TextCellFactory extends CellFactory {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.font = font;
-        blocks = new TreeMap<String, BufferedImage>();
+        emptyCache();
         verticalOffset = 0;
         horizontalOffset = 0;
-        this.sizeCellByDimension();
-        blocks = new TreeMap<String, BufferedImage>();
+        sizeCellByDimension();
+        emptyCache();
     }
 
     /**
@@ -196,7 +215,7 @@ public class TextCellFactory extends CellFactory {
         }
 
         //set cell sizes based on found best sizes
-        horizontalOffset += (cellWidth - bestWidth + leftPadding) / 2;//adjust based on horizontal squeeze
+        horizontalOffset += Math.ceil((double) (cellWidth - bestWidth + leftPadding) / 2.0);//adjust based on horizontal squeeze
         cellWidth = bestWidth;
         cellHeight = bestHeight;
 
@@ -213,6 +232,10 @@ public class TextCellFactory extends CellFactory {
     private void sizeCellByDimension() {
         int fontSize = font.getSize();
         boolean rightSize = false;
+        int trueWidth = cellWidth;
+        int trueHeight = cellHeight;
+        cellWidth = cellWidth - leftPadding - rightPadding;
+        cellHeight = cellHeight - topPadding - bottomPadding;
         do {
             font = new Font(font.getName(), font.getStyle(), fontSize);
             blocks = new TreeMap<String, BufferedImage>();
@@ -227,6 +250,11 @@ public class TextCellFactory extends CellFactory {
             }
             fontSize--;
         } while (!rightSize);
+
+        verticalOffset = topPadding;
+        horizontalOffset = leftPadding;
+        cellWidth = trueWidth;
+        cellHeight = trueHeight;
     }
 
     /**
