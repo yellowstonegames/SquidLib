@@ -232,6 +232,7 @@ public class SGTextPanel extends SPanel {
      */
     public void initialize(int cellWidth, int cellHeight, int panelWidth, int panelHeight, Font font) {
         textFactory.initializeBySize(cellWidth, cellHeight, font);
+        setFont(font);
         doInitialization(panelWidth, panelHeight);
     }
 
@@ -246,6 +247,7 @@ public class SGTextPanel extends SPanel {
      */
     public void initialize(int panelWidth, int panelHeight, Font font) {
         textFactory.initializeByFont(font);
+        setFont(font);
         doInitialization(panelWidth, panelHeight);
     }
 
