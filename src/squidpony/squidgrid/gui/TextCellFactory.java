@@ -3,6 +3,7 @@ package squidpony.squidgrid.gui;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.TreeMap;
+import squidpony.squidgrid.util.Direction;
 
 /**
  * Singleton class for creating text blocks.
@@ -16,10 +17,11 @@ import java.util.TreeMap;
 public class TextCellFactory extends CellFactory {
 
     private static TextCellFactory instance = new TextCellFactory();
-    private int verticalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size vertically
+    private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
     private Font font;
     private char[] fitting;
-    private boolean whiteSpace = true, antialias = false;
+    private boolean antialias = false;
+    private int leftPadding = 1, rightPadding = 1, topPadding = 1, bottomPadding = 1;
 
     private TextCellFactory() {
         fitting = new char[126 - 33];
@@ -52,7 +54,17 @@ public class TextCellFactory extends CellFactory {
      */
     public void setFitCharacters(char[] fit, boolean whiteSpace) {
         fitting = fit;
-        this.whiteSpace = whiteSpace;
+        if (whiteSpace) {
+            leftPadding = 1;
+            rightPadding = 1;
+            topPadding = 1;
+            bottomPadding = 1;
+        } else {
+            leftPadding = 0;
+            rightPadding = 0;
+            topPadding = 0;
+            bottomPadding = 0;
+        }
     }
 
     /**
@@ -64,6 +76,7 @@ public class TextCellFactory extends CellFactory {
         this.font = font;
         blocks = new TreeMap<String, BufferedImage>();
         verticalOffset = 0;
+        horizontalOffset = 0;
         sizeCellByFont();
         blocks = new TreeMap<String, BufferedImage>();
     }
@@ -84,6 +97,7 @@ public class TextCellFactory extends CellFactory {
         this.font = font;
         blocks = new TreeMap<String, BufferedImage>();
         verticalOffset = 0;
+        horizontalOffset = 0;
         this.sizeCellByDimension();
         blocks = new TreeMap<String, BufferedImage>();
     }
@@ -104,83 +118,96 @@ public class TextCellFactory extends CellFactory {
      * @param whiteSpace true if an extra pixel should be ensured around the
      * largest characters.
      */
-    private void sizeCellByFont() {
-        //build a sample image to get actual font metrics
-        Graphics2D graphics = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR).createGraphics();
-        graphics.setFont(font);
-        FontMetrics metrics = graphics.getFontMetrics();
+    private void sizeCellByFont() {//TODO -- refactor to size starting small and increasing, using willfit to get exact size needed
+        cellWidth = font.getSize();
+        cellHeight = font.getSize();
 
-        //set cellWidth and cellHeight to largest possible values according to the font metrics
-        cellWidth = metrics.getMaxAdvance() * 2;
-        cellHeight = (metrics.getMaxAscent() + metrics.getMaxDescent()) * 2;
+        //temporarily remove padding values
+        int tempLeftPadding = leftPadding;
+        int tempRightPadding = rightPadding;
+        int tempTopPadding = topPadding;
+        int tempBottomPadding = bottomPadding;
+        leftPadding = 0;
+        rightPadding = 0;
+        topPadding = 0;
+        bottomPadding = 0;
+        horizontalOffset = 0;
+        verticalOffset = 0;
 
-        //set up working variables
-        int testWidthLeft = cellWidth - 1;
-        int testWidthRight = 0;
-        int testHeightTop = cellHeight - 1;
-        int testHeightBottom = 0;
-        BufferedImage testImage;
-
-        //loop through basic printable characters and outside edges
+        //size up with square cells
         for (char c : fitting) {
-            if (!Character.isISOControl(c)) {//make sure it's a printable character
-                testImage = getImageFor(c, Color.BLACK, Color.WHITE);
-
-                //measure widest spot
-                leftCheckLoop:
-                for (int x = 0; x < cellWidth; x++) {//check for left side
-                    for (int y = 0; y < cellHeight; y++) {
-                        if (testImage.getRGB(x, y) != Color.WHITE.getRGB()) {
-                            testWidthLeft = Math.min(x, testWidthLeft);//set farthest left seen
-                            break leftCheckLoop;
-                        }
-                    }
-                }
-
-                rightCheckLoop:
-                for (int x = cellWidth - 1; x >= 0; x--) {//check for right side
-                    for (int y = 0; y < cellHeight; y++) {
-                        if (testImage.getRGB(x, y) != Color.WHITE.getRGB()) {
-                            testWidthRight = Math.max(x, testWidthRight);//set farthest right seen
-                            break rightCheckLoop;
-                        }
-                    }
-                }
-
-                //measure tallest spot
-                topCheckLoop:
-                for (int y = 0; y < cellHeight; y++) {//check for top
-                    for (int x = 0; x < cellWidth; x++) {
-                        if (testImage.getRGB(x, y) != Color.WHITE.getRGB()) {
-                            testHeightTop = Math.min(y, testHeightTop);//set highest seen
-                            break topCheckLoop;
-                        }
-                    }
-                }
-
-                //measure lowest spot
-                bottomCheckLoop:
-                for (int y = cellHeight - 1; y >= 0; y--) {//check for bottom
-                    for (int x = 0; x < cellWidth; x++) {
-                        if (testImage.getRGB(x, y) != Color.WHITE.getRGB()) {
-                            testHeightBottom = Math.max(y, testHeightBottom);//set farthest down seen
-                            break bottomCheckLoop;
-                        }
-                    }
-                }
+            while (!willFit(c)) {
+                cellWidth++;
+                cellHeight++;
             }
         }
 
-        //set cellWidth and cellHeight to widest values found
-        verticalOffset = testHeightTop;
-        cellWidth = testWidthRight - testWidthLeft + 2;//have to add one since right is the index found at
-        cellHeight = testHeightBottom - testHeightTop + 2;//have to add one since bottom is the index found at
-
-        if (whiteSpace) {//add enough to guarantee pixel on all four sides even with odd centering
-            cellWidth += 4;
-            cellHeight += 4;
-            verticalOffset -= 2;
+        //find best horizontal offset
+        int bestHorizontalOffset = -cellWidth;//worst case, offset by an entire cell
+        for (char c : fitting) {
+            int tempHorizontalOffset = horizontalOffset;
+            while (horizontalOffset > -cellWidth && willFit(c)) {
+                horizontalOffset--;
+            }
+            bestHorizontalOffset = Math.max(bestHorizontalOffset, horizontalOffset + 1);
+            horizontalOffset = tempHorizontalOffset;
         }
+        horizontalOffset = bestHorizontalOffset;
+
+        //find best vertical offset
+        int bestVerticalOffset = -cellHeight;
+        for (char c : fitting) {
+            int tempVerticalOffset = verticalOffset;
+            while (verticalOffset > -cellHeight && willFit(c)) {
+                verticalOffset--;
+            }
+            bestVerticalOffset = Math.max(bestVerticalOffset, verticalOffset + 1);
+            verticalOffset = tempVerticalOffset;
+        }
+        verticalOffset = bestVerticalOffset;
+
+        //variables to hold value for best fitting cell sizes
+        int bestWidth = 1;
+        int bestHeight = 1;
+
+        //squeeze back down to rectangle cell
+        for (char c : fitting) {
+
+            //squeeze width
+            int tempWidth = cellWidth;
+            int tempHorizontalOffset = horizontalOffset;
+            while (cellWidth > 0 && willFit(c)) {
+                cellWidth--;
+                if (cellWidth % 2 == 1) {
+                    horizontalOffset++;
+                }
+            }
+            bestWidth = Math.max(bestWidth, cellWidth + 1);//take whatever the largest needed width so far is
+            cellWidth = tempWidth;
+            horizontalOffset = tempHorizontalOffset;
+
+            //squeeze height
+            int tempHeight = cellHeight;
+            while (cellHeight > 0 && willFit(c)) {
+                cellHeight--;
+            }
+            bestHeight = Math.max(bestHeight, cellHeight + 1);//take whatever the largest needed height so far is
+            cellHeight = tempHeight;
+        }
+
+        //set cell sizes based on found best sizes
+        horizontalOffset += (cellWidth - bestWidth + leftPadding) / 2;//adjust based on horizontal squeeze
+        cellWidth = bestWidth;
+        cellHeight = bestHeight;
+
+        //restore cell sizes based on padding
+        leftPadding = tempLeftPadding;
+        rightPadding = tempRightPadding;
+        topPadding = tempTopPadding;
+        bottomPadding = tempBottomPadding;
+        verticalOffset += topPadding;
+        cellWidth += leftPadding + rightPadding;
+        cellHeight += topPadding + bottomPadding;
     }
 
     private void sizeCellByDimension() {
@@ -192,7 +219,7 @@ public class TextCellFactory extends CellFactory {
             verticalOffset = 0;
             for (char c : fitting) {
                 rightSize = true;
-                if (!willFit(c, whiteSpace)) {
+                if (!willFit(c)) {
                     //found one that doesn't work, skip to the next step
                     rightSize = false;
                     break;
@@ -205,52 +232,53 @@ public class TextCellFactory extends CellFactory {
     /**
      * Returns true if the given character will fit inside the current cell
      * dimensions with the current font. ISO Control characters are considered
-     * to not fit by definition.
+     * to fit by definition.
      *
      * @param c
      * @return
      */
-    public boolean willFit(char c) {
-        return willFit(c, whiteSpace);
-    }
-
-    private boolean willFit(char c, boolean whiteSpace) {
+    public boolean willFit(char c) {//TODO -- make it "wiggle" one space and see if that made a clear edge
         if (Character.isISOControl(c)) {//make sure it's a printable character
-            return false;
+            return true;
         }
 
-        //set up working variables
-        int testWidth, testHeight;
-        if (whiteSpace) {
-            testWidth = 1;
-            testHeight = 1;
-        } else {
-            testWidth = 0;
-            testHeight = 0;
-        }
+        for (Direction dir : Direction.cardinals) {
+            //set offsets in a direction to test if it cleared the space
+            horizontalOffset += dir.deltaX;
+            verticalOffset += dir.deltaY;
 
-        //the test image has to be slightly larger to ensure outside is clear
-        BufferedImage testImage = new BufferedImage(cellWidth + 2 + 2 * testWidth, cellHeight + 2 + 2 * testHeight, BufferedImage.TYPE_4BYTE_ABGR);
-        Graphics2D g = testImage.createGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, testImage.getWidth(), testImage.getHeight());
-        g.setColor(Color.BLACK);
-        g.setFont(font);
+            BufferedImage testImage = makeImage(c, Color.BLACK, Color.WHITE);
 
-        g.drawString("" + c, (cellWidth + 1 + 2 * testWidth - g.getFontMetrics().charWidth(c)) / 2, g.getFontMetrics().getMaxAscent() - verticalOffset + 1 + testHeight);
+            //reset offsets to actual values
+            horizontalOffset -= dir.deltaX;
+            verticalOffset -= dir.deltaY;
 
-        //check for font drawn at the edge
-        for (int y = 0; y < testImage.getHeight(); y++) {
-            if (testImage.getRGB(0, y) != Color.WHITE.getRGB()
-                    || testImage.getRGB(testImage.getWidth() - 1, y) != Color.WHITE.getRGB()) {
-                return false;
+            int startx = 0, starty = 0, endx = 0, endy = 0;//end points should be included in check
+            switch (dir) {//set values to check edge opposite of movement
+                case RIGHT:
+                    endy = cellHeight - 1;
+                    break;
+                case LEFT:
+                    startx = cellWidth - 1;
+                    endx = startx;
+                    endy = cellHeight - 1;
+                    break;
+                case UP:
+                    endx = cellWidth - 1;
+                    starty = cellHeight - 1;
+                    endy = starty;
+                    break;
+                case DOWN:
+                    endx = cellWidth - 1;
             }
-        }
 
-        for (int x = 0; x < testImage.getWidth(); x++) {
-            if (testImage.getRGB(x, 0) != Color.WHITE.getRGB()
-                    || testImage.getRGB(x, testImage.getHeight() - 1) != Color.WHITE.getRGB()) {
-                return false;
+            //test for edge hit
+            for (int x = startx; x <= endx; x++) {
+                for (int y = starty; y <= endy; y++) {
+                    if (testImage.getRGB(x, y) != Color.WHITE.getRGB()) {
+                        return false;//found an edge that would normally be printed off the cell
+                    }
+                }
             }
         }
 
@@ -328,23 +356,18 @@ public class TextCellFactory extends CellFactory {
         Graphics2D g = i.createGraphics();
         g.setColor(background);
         g.fillRect(0, 0, cellWidth, cellHeight);
-        g.setColor(foreground);
-        g.setFont(font);
-
-        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        if (antialias) {
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        } else {
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-        }
-
-        g.drawString("" + c, (cellWidth - g.getFontMetrics().charWidth(c)) / 2, g.getFontMetrics().getMaxAscent() - verticalOffset);
+        drawForeground(g, c, foreground);
         return i;
     }
 
     private BufferedImage makeImage(char c, Color foreground) {
         BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
+        drawForeground(g, c, foreground);
+        return i;
+    }
+
+    private void drawForeground(Graphics2D g, char c, Color foreground) {
         g.setColor(foreground);
         g.setFont(font);
 
@@ -354,8 +377,10 @@ public class TextCellFactory extends CellFactory {
         } else {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
-        
-        g.drawString("" + c, (cellWidth - g.getFontMetrics().charWidth(c)) / 2, g.getFontMetrics().getMaxAscent() - verticalOffset);
-        return i;
+
+        int x = cellWidth / 2 - g.getFontMetrics().charWidth(c) / 2;//start with half of the cell size and half the character's width
+        x += horizontalOffset;
+        int y = g.getFontMetrics().getMaxAscent() + verticalOffset;
+        g.drawString(String.valueOf(c), x, y);
     }
 }

@@ -22,6 +22,7 @@ public class SColorFactory {
     private static RNG rng = new RNG();
     private static Map<Integer, SColor> colorBag = new HashMap<Integer, SColor>();
     private static Map<String, ArrayList<SColor>> pallets = new HashMap<String, ArrayList<SColor>>();
+    private static int flooring = 1;//what multiple to floor rgb values to in order to reduce total colors
 
     /**
      * Prevents any instances from being created.
@@ -85,6 +86,23 @@ public class SColorFactory {
     }
 
     /**
+     * Sets the value at which each of the red, green, and blue values will be
+     * set to the nearest lower multiple of.
+     *
+     * For example, a floor value of 5 would mean that each of those values
+     * would be considered the nearest lower multiple of 5 when building the
+     * colors.
+     *
+     * If the value passed in is less than 1, then the flooring value is set at
+     * 1.
+     *
+     * @param value
+     */
+    public static void setRGBFloorValue(int value) {
+        flooring = Math.max(1, value);
+    }
+
+    /**
      * Returns the cached color that matches the desired rgb value.
      *
      * If the color is not already in the cache, it is created and added to the
@@ -94,6 +112,15 @@ public class SColorFactory {
      * @return
      */
     public static SColor getSColor(int rgb) {
+        if (flooring != 1) {//need to convert to floored values
+            int r = rgb >> 16;
+            r -= r % flooring;
+            int g = rgb >> 8 & 0xFF;
+            g -= g % flooring;
+            int b = rgb & 0xFF;
+            b -= b % flooring;
+            rgb = r << 16 + g << 8 + b;//put the colors back in order
+        }
         if (colorBag.containsKey(rgb)) {
             return colorBag.get(rgb);
         } else {

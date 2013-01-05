@@ -4,6 +4,11 @@ package squidpony.squidgrid.fov;
  * Recursive shadowcasting FOV. Uses force * decay for the radius calculation
  * and treats all translucent cells as fully transparent.
  *
+ * Assumes that it will hit an opaque cell before running off the map edge,
+ * therefor does not do any bounds checking. In order to avoid errors if passing
+ * in a subsection that is not edged with all opaque cells, please ensure the
+ * section's width and height are sufficient to contain the radius.
+ *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
 public class ShadowFOV implements FOVSolver {
