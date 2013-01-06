@@ -16,6 +16,10 @@ package squidpony.squidgrid.fov;
  *
  * The coordinates of the returned structure match those of the input grid.
  *
+ * The solvers expect the edges of the map to have opaque cells. Since there are
+ * no bounds checking in the algorithms, they will fail if the edges are not
+ * opaque.
+ *
  * The key passed in will be used to get the desired layer of information from
  * the map. This allows a single FOVCell to contain multiple types of views,
  * each related to a specific String key.
@@ -31,11 +35,11 @@ public interface FOVSolver {
      *
      * In general a value equal to or below 0 means that cell is not in the
      * field of view, whereas a value equal to or above 1 means that cell is
-     * fully in the
+     * fully in the field of view.
      *
      * Note that values below 0 and above 1 may be returned in certain
-     * circumstances. field of view. In these cases it is up to the calling
-     * class to determine how to treat such values.
+     * circumstances. In these cases it is up to the calling class to determine
+     * how to treat such values.
      *
      * The starting point for the calculations is considered to be at the center
      * of the origin cell. Each whole number reaches one cell away horizontally
@@ -63,7 +67,7 @@ public interface FOVSolver {
      * simplified diagonals. Uses the empty String for the key.
      *
      * @param map the grid of cells to calculate on
-     * @param startx 
+     * @param startx
      * @param starty
      * @param radius
      * @return

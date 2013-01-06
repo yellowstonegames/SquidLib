@@ -6,28 +6,53 @@ import java.util.TreeMap;
 import squidpony.squidgrid.util.Direction;
 
 /**
- * Singleton class for creating text blocks.
+ * Class for creating text blocks.
  *
  * The default characters guaranteed to fit are ASCII 33 through 125, which are
- * the commonly used symbols, numbers, and letters. Whitespace defaults to being
- * used on all characters.
+ * the commonly used symbols, numbers, and letters.
  *
  * @author Eben Howard - http://squidpony.com
  */
-public class TextCellFactory extends CellFactory {
+public class TextCellFactory implements Cloneable {
 
-    private static TextCellFactory instance = new TextCellFactory();
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
     private Font font;
     private char[] fitting;
     private boolean antialias = false;
-    private int leftPadding = 1, rightPadding = 1, topPadding = 1, bottomPadding = 1;
+    private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
+    int cellHeight = 10;
+    int cellWidth = 10;
+    TreeMap<String, BufferedImage> blocks = new TreeMap<String, BufferedImage>();
 
-    private TextCellFactory() {
+    /**
+     * Sets up this factory to ensure ASCII (or UTF-8) characters in the range
+     * 33 to 125 all fit and no padding on the cells.
+     *
+     * After this object is created one of the initialization methods must be
+     * called before it can be used.
+     */
+    public TextCellFactory() {
         fitting = new char[126 - 33];
         for (char c = 33; c <= 125; c++) {
             fitting[c - 33] = c;
         }
+    }
+
+    /**
+     * Returns the dimension of a single grid cell.
+     *
+     * @return
+     */
+    public Dimension getCellDimension() {
+        return new Dimension(cellWidth, cellHeight);
+    }
+
+    /**
+     * Clears out the backing cache. Should be used if a very large number of
+     * one-off cells are being made.
+     */
+    public void emptyCache() {
+        blocks.clear();
     }
 
     /**
@@ -119,15 +144,6 @@ public class TextCellFactory extends CellFactory {
         horizontalOffset = 0;
         sizeCellByDimension();
         emptyCache();
-    }
-
-    /**
-     * Gets the singleton instance.
-     *
-     * @return
-     */
-    public static TextCellFactory getInstance() {
-        return instance;
     }
 
     /**
@@ -410,5 +426,23 @@ public class TextCellFactory extends CellFactory {
         x += horizontalOffset;
         int y = g.getFontMetrics().getMaxAscent() + verticalOffset;
         g.drawString(String.valueOf(c), x, y);
+    }
+
+    @Override
+    public TextCellFactory clone() {
+        TextCellFactory ret = new TextCellFactory();
+        ret.antialias = antialias;
+        ret.blocks = new TreeMap<String, BufferedImage>(blocks);
+        ret.bottomPadding = bottomPadding;
+        ret.cellHeight = cellHeight;
+        ret.cellWidth = cellWidth;
+        ret.fitting = fitting;
+        ret.font = font;
+        ret.horizontalOffset = horizontalOffset;
+        ret.leftPadding = leftPadding;
+        ret.rightPadding = rightPadding;
+        ret.topPadding = topPadding;
+        ret.verticalOffset = verticalOffset;
+        return ret;
     }
 }
