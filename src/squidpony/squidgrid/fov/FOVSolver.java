@@ -7,16 +7,18 @@ package squidpony.squidgrid.fov;
  * can be seen. They return a two dimensional array of floats, representing the
  * amount of view (typically sight, but perhaps sound, smell, etc.) which the
  * origin has of each cell.
- * 
+ *
  * The force parameter allows tiles to have a varying resistance to the kind of
- * rays emanating from the source. If a simple radius is desired, set the resistance
- * of your FOVCells to 0.0f, the force to 1, and the decay to 1/radius.
+ * rays emanating from the source. If a simple radius is desired, set the
+ * resistance of your FOVCells to 0.0f, the force to the radius you want, and
+ * the decay to 1. Opaque cells should return a resistance of 1f and translucent
+ * 0f.
  *
  * The coordinates of the returned structure match those of the input grid.
- * 
+ *
  * The key passed in will be used to get the desired layer of information from
- * the map. This allows a single FOVCell to contain multiple types of views, each
- * related to a specific String key.
+ * the map. This allows a single FOVCell to contain multiple types of views,
+ * each related to a specific String key.
  *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
@@ -40,15 +42,31 @@ public interface FOVSolver {
      * and vertically.
      *
      * @param map the grid of cells to calculate on
-     * @param x the horizontal component of the starting location
-     * @param y the vertical component of the starting location
+     * @param startx the horizontal component of the starting location
+     * @param starty the vertical component of the starting location
      * @param force the power of the ray
      * @param decay how much the light is reduced for each whole integer step in
      * distance
      * @param simplifiedDiagonals if true then diagonal distances are treated as
-     * @param key the String associated with the type of view desired, such as "sight" or "scent"
      * if they are the same distance as horizontal and vertical distances
+     * @param key the String associated with the type of view desired, such as
+     * "sight" or "scent"
      * @return the compute light grid
      */
-    public float[][] calculateFOV(FOVCell[][] map, int x, int y, float force, float decay, boolean simplifiedDiagonals, String key);
+    public float[][] calculateFOV(FOVCell[][] map, int startx, int starty, float force, float decay, boolean simplifiedDiagonals, String key);
+
+    /**
+     * Calculates the Field of View in the same manner as the version with more
+     * parameters.
+     *
+     * Assumes decay to be 1, so light will extend to the radius value. Uses
+     * simplified diagonals. Uses the empty String for the key.
+     *
+     * @param map the grid of cells to calculate on
+     * @param startx 
+     * @param starty
+     * @param radius
+     * @return
+     */
+    public float[][] calculateFOV(FOVCell[][] map, int startx, int starty, float radius);
 }
