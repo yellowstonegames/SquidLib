@@ -26,14 +26,4 @@ public interface FOVCell {
      * @return
      */
     public float getResistance(String key);
-
-    /**
-     * Returns the amount of light currently in this cell. Generally a value of
-     * 1 or higher indicates fully lit while a value of 0 or lower indicates
-     * fully dark.
-     *
-     * @param key
-     * @return
-     */
-    public float getCurrentLight(String key);
 }
