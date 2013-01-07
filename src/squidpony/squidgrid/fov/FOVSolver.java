@@ -53,11 +53,9 @@ public interface FOVSolver {
      * distance
      * @param simplifiedDiagonals if true then diagonal distances are treated as
      * if they are the same distance as horizontal and vertical distances
-     * @param key the String associated with the type of view desired, such as
-     * "sight" or "scent"
-     * @return the compute light grid
+     * @return the computed light grid
      */
-    public float[][] calculateFOV(FOVCell[][] map, int startx, int starty, float force, float decay, boolean simplifiedDiagonals, String key);
+    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, boolean simplifiedDiagonals);
 
     /**
      * Calculates the Field of View in the same manner as the version with more
@@ -72,5 +70,5 @@ public interface FOVSolver {
      * @param radius
      * @return
      */
-    public float[][] calculateFOV(FOVCell[][] map, int startx, int starty, float radius);
+    public float[][] calculateFOV(float[][] map, int startx, int starty, float radius);
 }

@@ -20,8 +20,8 @@ import squidpony.squidmath.RNG;
 public class SColorFactory {
 
     private static RNG rng = new RNG();
-    private static Map<Integer, SColor> colorBag = new HashMap<Integer, SColor>();
-    private static Map<String, ArrayList<SColor>> pallets = new HashMap<String, ArrayList<SColor>>();
+    private static Map<Integer, SColor> colorBag = new HashMap<>();
+    private static Map<String, ArrayList<SColor>> pallets = new HashMap<>();
     private static int flooring = 1;//what multiple to floor rgb values to in order to reduce total colors
 
     /**
@@ -82,7 +82,7 @@ public class SColorFactory {
      * areas that will not be revisited.
      */
     public static void emptyCache() {
-        colorBag = new HashMap<Integer, SColor>();
+        colorBag = new HashMap<>();
     }
 
     /**
@@ -251,14 +251,14 @@ public class SColorFactory {
      * @return
      */
     public static ArrayList<SColor> getGradient(SColor color1, SColor color2) {
-        String name = palletNamer(color2, color2);
+        String name = palletNamer(color1, color2);
         if (pallets.containsKey(name)) {
             return pallets.get(name);
         }
 
         //get the gradient
         Queue<Point3D> gradient = Bresenham.line3D(scolorToCoord3D(color1), scolorToCoord3D(color2));
-        ArrayList<SColor> ret = new ArrayList<SColor>();
+        ArrayList<SColor> ret = new ArrayList<>();
         for (Point3D coord : gradient) {
             ret.add(coord3DToSColor(coord));
         }
@@ -280,20 +280,25 @@ public class SColorFactory {
 
     /**
      * Returns the SColor that is the provided percent towards the end of the
-     * gradient.
+     * pallet. Bounds are checked so as long as there is at least one color in
+     * the palette, values below 0 will return the first element and values
+     * above 1 will return the last element;
+     *
+     * If there is no pallette keyed to the provided name, null is returned.
      *
      * @param name
      * @param percent
      * @return
      */
-    public static SColor getFromGradient(String name, float percent) {
+    public static SColor getFromPallet(String name, float percent) {
         ArrayList<SColor> list = pallets.get(name);
         if (list == null) {
             return null;
         }
 
-        int index = (int) (list.size() * percent);//find the index that's the given percent into the gradient
-
+        int index = Math.round(list.size() * percent);//find the index that's the given percent into the gradient
+        index = Math.min(index, list.size() - 1);
+        index = Math.max(index, 0);
         return list.get(index);
     }
 
@@ -304,7 +309,7 @@ public class SColorFactory {
      * @param pallet
      */
     public static void addPallet(String name, ArrayList<SColor> pallet) {
-        ArrayList<SColor> temp = new ArrayList<SColor>();
+        ArrayList<SColor> temp = new ArrayList<>();
 
         //make sure all the colors in the pallet are also in the general color cache
         for (SColor sc : pallet) {

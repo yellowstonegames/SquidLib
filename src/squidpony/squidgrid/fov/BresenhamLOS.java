@@ -1,7 +1,6 @@
 package squidpony.squidgrid.fov;
 
 import java.awt.Point;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 import squidpony.squidmath.Bresenham;
@@ -14,18 +13,18 @@ import squidpony.squidmath.Point3D;
  */
 public class BresenhamLOS implements LOSSolver {
 
-    Queue<Point3D> lastPath = new LinkedList<Point3D>();
+    Queue<Point3D> lastPath = new LinkedList<>();
 
     @Override
-    public boolean isReachable(FOVCell[][] map, int x, int y, int targetX, int targetY, float force, String key) {
+    public boolean isReachable(float[][] map, int x, int y, int targetX, int targetY, float force) {
         Queue<Point3D> path = Bresenham.line2D(x, y, targetX, targetY);
-        lastPath = new LinkedList<Point3D>(path);
+        lastPath = new LinkedList<>(path);
         path.poll();//remove starting point
         for (Point3D p : path) {
             if (p.x == targetX && p.y == targetY) {
                 return true;//reached the end 
             }
-            force -= map[p.x][p.y].getResistance(key);
+            force -= map[p.x][p.y];
             if (force <= 0) {
                 return false;//too much resistance
             }
@@ -36,7 +35,7 @@ public class BresenhamLOS implements LOSSolver {
     @Override
     public Queue<Point> getLastPath() {
         //copy the Point3D elements into a 2D Point structure only if needed
-        Queue<Point> returnPath = new LinkedList<Point>();
+        Queue<Point> returnPath = new LinkedList<>();
         for (Point3D p : lastPath) {
             returnPath.add(new Point(p.x, p.y));
         }

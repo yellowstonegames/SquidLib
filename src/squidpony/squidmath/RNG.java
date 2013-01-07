@@ -23,7 +23,7 @@ public class RNG extends Random {
     }
 
     /**
-     * Returns a value between min (inclusive) to max (exclusive).
+     * Returns a value between min and max inclusive.
      *
      * @param min
      * @param max
