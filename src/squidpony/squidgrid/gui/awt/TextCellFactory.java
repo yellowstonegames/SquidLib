@@ -255,20 +255,26 @@ public class TextCellFactory implements Cloneable {
     }
 
     private void sizeCellByDimension() {
-        int fontSize = 1;
         boolean rightSize = false;
         int desiredWidth = cellWidth;
         int desiredHeight = cellHeight;
-        do {
-            blocks = new TreeMap<>();
-            fontSize++;
-            font = new Font(font.getFontName(), font.getStyle(), fontSize);
-            sizeCellByFont();
-            if (cellWidth > desiredWidth || cellHeight > desiredHeight) {
-                fontSize--;//previous one still fit so go back to it
-                rightSize = true;
-            }
-        } while (!rightSize);
+
+        //try provided font size first
+        sizeCellByFont();
+        if (cellWidth > desiredWidth || cellHeight > desiredHeight) {
+            //try all font sizes and take largest that fits
+            int fontSize = 0;
+            do {
+                blocks = new TreeMap<>();
+                fontSize++;
+                font = new Font(font.getFontName(), font.getStyle(), fontSize);
+                sizeCellByFont();
+                if (cellWidth > desiredWidth || cellHeight > desiredHeight) {
+                    fontSize--;//previous one still fit so go back to it
+                    rightSize = true;
+                }
+            } while (!rightSize);
+        }
 
         leftPadding += Math.floor((desiredWidth - cellWidth) / 2.0);//add half of the new size
         rightPadding += Math.ceil((desiredWidth - cellWidth) / 2.0);
