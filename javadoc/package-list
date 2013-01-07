@@ -1,6 +1,9 @@
 squidpony.squidcolor
 squidpony.squidgrid.fov
 squidpony.squidgrid.gui
+squidpony.squidgrid.gui.awt
+squidpony.squidgrid.gui.libgdx
+squidpony.squidgrid.gui.swing
 squidpony.squidgrid.gui.swing.animation
 squidpony.squidgrid.gui.swing.listener
 squidpony.squidgrid.util

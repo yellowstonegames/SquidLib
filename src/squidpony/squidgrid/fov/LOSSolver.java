@@ -29,10 +29,9 @@ public interface LOSSolver {
      * @param targetY
      * @param force the amount of impetus to start with, will be decreased by
      * each cell's resistance as it passes through
-     * @param key indicates what type of view is being used
      * @return
      */
-    public boolean isReachable(FOVCell[][] map, int x, int y, int targetX, int targetY, float force, String key);
+    public boolean isReachable(float[][] map, int x, int y, int targetX, int targetY, float force);
 
     /**
      * Returns the path of the last LOS calculation, with the starting point as

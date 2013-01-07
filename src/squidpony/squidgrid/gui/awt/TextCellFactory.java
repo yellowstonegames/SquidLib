@@ -1,4 +1,4 @@
-package squidpony.squidgrid.gui;
+package squidpony.squidgrid.gui.awt;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

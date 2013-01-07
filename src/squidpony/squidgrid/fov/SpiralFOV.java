@@ -3,17 +3,17 @@ package squidpony.squidgrid.fov;
 /**
  * Performs FOV by pushing values outwards from the source location.
  *
- * This algorithm does validate map boundaries.
+ * This algorithm does perform bounds checking.
  *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
 public class SpiralFOV implements FOVSolver {
 
     private float[][] lightMap;
-    private FOVCell[][] map;
-    private String key;
-    private float radius, decay, force;
-    private int startx, starty, width, height, left, right, top, bottom;
+    private float[][] map;
+    private float radius, decay;
+    private int startx, starty, width, height;
+    private boolean simplified;
 
     /**
      * Find the light let through by the nearest square.
@@ -26,31 +26,38 @@ public class SpiralFOV implements FOVSolver {
         int x2 = x - (int) Math.signum(x - startx);
         int y2 = y - (int) Math.signum(y - starty);
 
-        //find largest emmitted light in direction of source
-        float light = Math.max(Math.max(lightMap[x2][y] * (1 - map[x2][y].getResistance(key)),
-                lightMap[x][y2]) * (1 - map[x][y2].getResistance(key)),
-                lightMap[x2][y2]) * (1 - map[x2][y2].getResistance(key));
+        //clamp x2 and y2 to bound within map
+        x2 = Math.max(0, x2);
+        x2 = Math.min(width - 1, x2);
+        y2 = Math.max(0, y2);
+        y2 = Math.min(height - 1, y2);
 
-        return light - decay;
+        //find largest emmitted light in direction of source
+        float light = Math.max(Math.max(lightMap[x2][y] * (1 - map[x2][y]),
+                lightMap[x][y2] * (1 - map[x][y2])),
+                lightMap[x2][y2] * (1 - map[x2][y2]));
+
+        float distance = (float) Math.sqrt((x - startx) * (x - startx) + (y - starty) * (y - starty));
+        if (simplified) {
+            distance = 1;
+        }
+
+        distance = Math.max(0, distance);
+        light = light - decay * distance;
+        return light;
     }
 
     @Override
-    public float[][] calculateFOV(FOVCell[][] map, int startx, int starty, float force, float decay, boolean simplifiedDiagonals, String key) {
+    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, boolean simplifiedDiagonals) {
         this.map = map;
-        this.key = key;
-        this.force = force;
         this.decay = decay;
         this.startx = startx;
         this.starty = starty;
+        this.simplified = simplifiedDiagonals;
         radius = force / decay;//assume worst case of no resistance in tiles
         width = map.length;
         height = map[0].length;
         lightMap = new float[width][height];
-
-        left = (int) Math.max(0, startx - radius);
-        right = (int) Math.min(width - 1, startx + radius);
-        top = (int) Math.max(0, starty - radius);
-        bottom = (int) Math.min(height - 1, starty + radius);
 
         lightMap[startx][starty] = force;//make the starting space full power
 
@@ -60,13 +67,24 @@ public class SpiralFOV implements FOVSolver {
     }
 
     private void lightSurroundings(int x, int y) {
-        if (lightMap[x][y] * (1 - map[x][y].getResistance(key)) - decay <= 0) {
+        if (lightMap[x][y] <= 0) {
             return;//no light to spread
         }
 
         for (int dx = x - 1; dx <= x + 1; dx++) {
             for (int dy = y - 1; dy <= y + 1; dy++) {
-                if (dx >= left && dx <= right && dy >= top && dy <= bottom && (dx != x || dy != y)) {
+                //ensure in bounds
+                if (dx < 0 || dx >= width || dy < 0 || dy >= height) {
+                    continue;
+                }
+
+                double r2;
+                if (simplified) {
+                    r2 = Math.sqrt((dx - startx) * (dx - startx) + (dy - starty) * (dy - starty));
+                } else {
+                    r2 = Math.abs(dx - startx) + Math.abs(dy - starty);
+                }
+                if (r2 <= radius) {
                     float surroundingLight = getNearLight(dx, dy);
                     if (lightMap[dx][dy] < surroundingLight) {
                         lightMap[dx][dy] = surroundingLight;
@@ -78,7 +96,7 @@ public class SpiralFOV implements FOVSolver {
     }
 
     @Override
-    public float[][] calculateFOV(FOVCell[][] map, int startx, int starty, float radius) {
-        return calculateFOV(map, startx, starty, radius, 1, true, "");
+    public float[][] calculateFOV(float[][] map, int startx, int starty, float radius) {
+        return calculateFOV(map, startx, starty, radius, 1, true);
     }
 }

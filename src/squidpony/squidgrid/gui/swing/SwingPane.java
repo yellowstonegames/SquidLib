@@ -1,4 +1,4 @@
-package squidpony.squidgrid.gui;
+package squidpony.squidgrid.gui.swing;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.JLayeredPane;
 import squidpony.squidcolor.SColor;
+import squidpony.squidgrid.gui.awt.ImageCellMap;
+import squidpony.squidgrid.gui.SGPane;
+import squidpony.squidgrid.gui.awt.TextCellFactory;
 import squidpony.squidgrid.gui.swing.animation.Animation;
 import squidpony.squidgrid.gui.swing.animation.AnimationManager;
 import squidpony.squidgrid.gui.swing.animation.BumpAnimation;
@@ -22,7 +25,7 @@ import squidpony.squidgrid.util.Direction;
  *
  * @author Eben Howard - http://squidpony.com
  */
-public class SwingPane extends JLayeredPane {
+public class SwingPane extends JLayeredPane implements SGPane {
 
     private static int DEFAULT_MOVEMENT_SPEED = 0; //one move step per x milliseconds
     private AnimationManager animationManager;
@@ -94,6 +97,7 @@ public class SwingPane extends JLayeredPane {
      *
      * @param chars
      */
+    @Override
     public void setText(char[][] chars) {
         placeText(0, 0, chars);
     }
@@ -125,6 +129,7 @@ public class SwingPane extends JLayeredPane {
      * @param y
      * @param key
      */
+    @Override
     public void placeImage(int x, int y, String key) {
         BufferedImage image = imageCellMap.getImage(key);
         if (image == null) {
@@ -149,6 +154,7 @@ public class SwingPane extends JLayeredPane {
      * @param key
      * @param background
      */
+    @Override
     public void placeImage(int x, int y, String key, Color background) {
         BufferedImage image = imageCellMap.getImage(key);
         if (image == null) {
@@ -169,6 +175,7 @@ public class SwingPane extends JLayeredPane {
      * @param xOffset
      * @param yOffset
      */
+    @Override
     public void placeText(int xOffset, int yOffset, char[][] chars) {
         placeText(xOffset, yOffset, chars, defaultForeground, defaultBackground);
     }
@@ -183,6 +190,7 @@ public class SwingPane extends JLayeredPane {
      * @param foreground
      * @param background
      */
+    @Override
     public void placeText(int xOffset, int yOffset, char[][] chars, Color foreground, Color background) {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
@@ -201,6 +209,7 @@ public class SwingPane extends JLayeredPane {
      * @param xOffset
      * @param yOffset
      */
+    @Override
     public void placeHorizontalString(int xOffset, int yOffset, String string) {
         placeHorizontalString(xOffset, yOffset, string, defaultForeground, defaultBackground);
     }
@@ -215,6 +224,7 @@ public class SwingPane extends JLayeredPane {
      * @param foreground
      * @param background
      */
+    @Override
     public void placeHorizontalString(int xOffset, int yOffset, String string, Color foreground, Color background) {
         char[][] temp = new char[string.length()][1];
         for (int i = 0; i < string.length(); i++) {
@@ -233,6 +243,7 @@ public class SwingPane extends JLayeredPane {
      * @param foreground
      * @param background
      */
+    @Override
     public void placeVerticalString(int xOffset, int yOffset, String string, Color foreground, Color background) {
         placeText(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground, background);
     }
@@ -245,6 +256,7 @@ public class SwingPane extends JLayeredPane {
      * @param yOffset
      * @param string
      */
+    @Override
     public void placeVerticalString(int xOffset, int yOffset, String string) {
         placeVerticalString(xOffset, yOffset, string, defaultForeground, defaultBackground);
     }
@@ -259,6 +271,7 @@ public class SwingPane extends JLayeredPane {
      * @param y The y coordinate to set
      * @param c The character to be displayed
      */
+    @Override
     public void placeCharacter(int x, int y, char c) {
         placeCharacter(x, y, c, defaultForeground);
     }
@@ -276,6 +289,7 @@ public class SwingPane extends JLayeredPane {
      * @param fore The foreground color
      * @param back The background color
      */
+    @Override
     public void placeCharacter(int x, int y, char c, Color fore, Color back) {
         if (c != ' ') {
             foregroundContents[x][y] = textFactory.getImageFor(c, fore);
@@ -301,6 +315,7 @@ public class SwingPane extends JLayeredPane {
      * @param c
      * @param fore
      */
+    @Override
     public void placeCharacter(int x, int y, char c, Color fore) {
         foregroundContents[x][y] = textFactory.getImageFor(c, fore);
         imageChanged[x][y] = true;
@@ -317,6 +332,7 @@ public class SwingPane extends JLayeredPane {
      * @param panelHeight in cells
      * @param font
      */
+    @Override
     public void initialize(int cellWidth, int cellHeight, int panelWidth, int panelHeight, Font font) {
         textFactory.initializeBySize(cellWidth, cellHeight, font);
         setFont(font);
@@ -333,6 +349,7 @@ public class SwingPane extends JLayeredPane {
      * @param panelHeight in cells
      * @param font
      */
+    @Override
     public void initialize(int panelWidth, int panelHeight, Font font) {
         textFactory.initializeByFont(font);
         setFont(font);
@@ -357,6 +374,7 @@ public class SwingPane extends JLayeredPane {
      * @param character
      * @return true if it will fit, false otherwise.
      */
+    @Override
     public boolean willFit(char character) {
         return textFactory.willFit(character);
     }
@@ -403,6 +421,7 @@ public class SwingPane extends JLayeredPane {
      *
      * @return
      */
+    @Override
     public int getGridHeight() {
         return gridHeight;
     }
@@ -412,6 +431,7 @@ public class SwingPane extends JLayeredPane {
      *
      * @return
      */
+    @Override
     public int getGridWidth() {
         return gridWidth;
     }
@@ -419,6 +439,7 @@ public class SwingPane extends JLayeredPane {
     /**
      * Signals that this component should update its display image.
      */
+    @Override
     public void refresh() {
         trimAnimations();
         redraw();
@@ -457,6 +478,7 @@ public class SwingPane extends JLayeredPane {
      *
      * @param defaultBackground
      */
+    @Override
     public void setDefaultBackground(Color defaultBackground) {
         this.defaultBackground = defaultBackground;
     }
@@ -467,6 +489,7 @@ public class SwingPane extends JLayeredPane {
      *
      * @param defaultForeground
      */
+    @Override
     public void setDefaultForeground(Color defaultForeground) {
         this.defaultForeground = defaultForeground;
     }
@@ -588,5 +611,15 @@ public class SwingPane extends JLayeredPane {
         }
         redraw();
         repaint();
+    }
+
+    @Override
+    public int getCellHeight() {
+        return cellDimension.height;
+    }
+
+    @Override
+    public int getCellWidth() {
+        return cellDimension.width;
     }
 }
