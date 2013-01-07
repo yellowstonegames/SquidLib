@@ -97,6 +97,6 @@ public class SpiralFOV implements FOVSolver {
 
     @Override
     public float[][] calculateFOV(float[][] map, int startx, int starty, float radius) {
-        return calculateFOV(map, startx, starty, radius, 1, true);
+        return calculateFOV(map, startx, starty, 1, 1 / radius, true);
     }
 }
