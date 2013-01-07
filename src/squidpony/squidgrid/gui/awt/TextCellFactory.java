@@ -240,7 +240,7 @@ public class TextCellFactory implements Cloneable {
         }
 
         //set cell sizes based on found best sizes
-        horizontalOffset += Math.ceil((double) (cellWidth - bestWidth + leftPadding) / 2.0);//adjust based on horizontal squeeze
+        horizontalOffset += Math.floor((double) (cellWidth - bestWidth + leftPadding) / 2.0);//adjust based on horizontal squeeze
         cellWidth = bestWidth;
         cellHeight = bestHeight;
 
@@ -276,11 +276,8 @@ public class TextCellFactory implements Cloneable {
             } while (!rightSize);
         }
 
-        leftPadding += Math.floor((desiredWidth - cellWidth) / 2.0);//add half of the new size
-        rightPadding += Math.ceil((desiredWidth - cellWidth) / 2.0);
-        topPadding += Math.floor((desiredHeight - cellHeight) / 2.0);//add half of the new size
-        bottomPadding += Math.ceil((desiredHeight - cellHeight) / 2.0);
-        verticalOffset += topPadding;
+        verticalOffset += Math.round((desiredHeight - cellHeight) / 2.0);
+        horizontalOffset += Math.round(desiredWidth - cellWidth) / 2.0;
         cellWidth = desiredWidth;
         cellHeight = desiredHeight;
     }
