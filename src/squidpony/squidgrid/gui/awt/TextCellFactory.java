@@ -162,9 +162,9 @@ public class TextCellFactory implements Cloneable {
      * @param whiteSpace true if an extra pixel should be ensured around the
      * largest characters.
      */
-    private void sizeCellByFont() {//TODO -- refactor to size starting small and increasing, using willfit to get exact size needed
-        cellWidth = font.getSize();
-        cellHeight = font.getSize();
+    private void sizeCellByFont() {
+        cellWidth = 5;
+        cellHeight = 5;
 
         //temporarily remove padding values
         int tempLeftPadding = leftPadding;
@@ -255,29 +255,29 @@ public class TextCellFactory implements Cloneable {
     }
 
     private void sizeCellByDimension() {
-        boolean rightSize = false;
         int desiredWidth = cellWidth;
         int desiredHeight = cellHeight;
 
         //try provided font size first
         sizeCellByFont();
-        if (cellWidth > desiredWidth || cellHeight > desiredHeight) {
-            //try all font sizes and take largest that fits
-            int fontSize = 0;
-            do {
-                blocks = new TreeMap<>();
-                fontSize++;
-                font = new Font(font.getFontName(), font.getStyle(), fontSize);
-                sizeCellByFont();
-                if (cellWidth > desiredWidth || cellHeight > desiredHeight) {
-                    fontSize--;//previous one still fit so go back to it
-                    rightSize = true;
-                }
-            } while (!rightSize);
+
+        //try all font sizes and take largest that fits
+        int fontSize = 0;
+        boolean sized = false;
+        while (cellWidth <= desiredWidth && cellHeight <= desiredHeight) {
+            sized = true;//mark that this loop was entered
+            blocks = new TreeMap<>();
+            fontSize++;
+            font = new Font(font.getFontName(), font.getStyle(), fontSize);
+            sizeCellByFont();
+        }
+
+        if (sized) {
+            fontSize--;//previous one still fit so go back to it
+            horizontalOffset += Math.round(desiredWidth - cellWidth) / 2.0;
         }
 
         verticalOffset += Math.round((desiredHeight - cellHeight) / 2.0);
-//        horizontalOffset += Math.round(desiredWidth - cellWidth) / 2.0;
         cellWidth = desiredWidth;
         cellHeight = desiredHeight;
     }
