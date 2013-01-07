@@ -152,9 +152,9 @@ public class RayCastingFOV implements FOVSolver {
                 lightMap[x][y2] * (1 - map[x][y2])),
                 lightMap[x2][y2] * (1 - map[x2][y2]));
 
-        float distance = (float) Math.sqrt((x - startx) * (x - startx) + (y - starty) * (y - starty));
-        if (simplified) {
-            distance = 1;
+        float distance = 1;
+        if (!simplified && x2 != x && y2 != y) {//it's a diagonal
+            distance = (float) Math.sqrt(2);
         }
 
         distance = Math.max(0, distance);
