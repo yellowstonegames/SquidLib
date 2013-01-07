@@ -277,7 +277,7 @@ public class TextCellFactory implements Cloneable {
         }
 
         verticalOffset += Math.round((desiredHeight - cellHeight) / 2.0);
-        horizontalOffset += Math.round(desiredWidth - cellWidth) / 2.0;
+//        horizontalOffset += Math.round(desiredWidth - cellWidth) / 2.0;
         cellWidth = desiredWidth;
         cellHeight = desiredHeight;
     }
@@ -431,7 +431,7 @@ public class TextCellFactory implements Cloneable {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
 
-        int x = cellWidth / 2 - g.getFontMetrics().charWidth(c) / 2;//start with half of the cell size and half the character's width
+        int x = (int) ((cellWidth - g.getFontMetrics().charWidth(c)) / 2.0);//start with half of the cell size and half the character's width
         x += horizontalOffset;
         int y = g.getFontMetrics().getMaxAscent() + verticalOffset;
         g.drawString(String.valueOf(c), x, y);
@@ -441,7 +441,7 @@ public class TextCellFactory implements Cloneable {
     public TextCellFactory clone() {
         TextCellFactory ret = new TextCellFactory();
         ret.antialias = antialias;
-        ret.blocks = new TreeMap<String, BufferedImage>(blocks);
+        ret.blocks = new TreeMap<>(blocks);
         ret.bottomPadding = bottomPadding;
         ret.cellHeight = cellHeight;
         ret.cellWidth = cellWidth;

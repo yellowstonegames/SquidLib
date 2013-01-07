@@ -10,15 +10,15 @@ package squidpony.squidgrid.fov;
  *
  * The force parameter allows tiles to have a varying resistance to the kind of
  * rays emanating from the source. If a simple radius is desired, set the
- * resistance of your FOVCells to 0.0f, the force to the radius you want, and
- * the decay to 1. Opaque cells should return a resistance of 1f and translucent
+ * resistance of your to 0.0f, the force to 1, and the decay to 1 / (the
+ * radius). Opaque cells should return a resistance of 1f and translucent ones
  * 0f.
  *
  * The coordinates of the returned structure match those of the input grid.
  *
- * The solvers expect the edges of the map to have opaque cells. Since there are
- * no bounds checking in the algorithms, they will fail if the edges are not
- * opaque.
+ * Most solvers expect the edges of the map to have opaque cells. Since there
+ * are no bounds checking in the these algorithms, they will fail if the edges
+ * are not opaque.
  *
  * The key passed in will be used to get the desired layer of information from
  * the map. This allows a single FOVCell to contain multiple types of views,
