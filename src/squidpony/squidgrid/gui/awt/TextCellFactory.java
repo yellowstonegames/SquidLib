@@ -22,7 +22,7 @@ public class TextCellFactory implements Cloneable {
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     int cellHeight = 10;
     int cellWidth = 10;
-    TreeMap<String, BufferedImage> blocks = new TreeMap<String, BufferedImage>();
+    TreeMap<String, BufferedImage> blocks = new TreeMap<>();
 
     /**
      * Sets up this factory to ensure ASCII (or UTF-8) characters in the range
@@ -45,6 +45,15 @@ public class TextCellFactory implements Cloneable {
      */
     public Dimension getCellDimension() {
         return new Dimension(cellWidth, cellHeight);
+    }
+
+    /**
+     * Returns the font used by this factory.
+     *
+     * @return
+     */
+    public Font getFont() {
+        return font;
     }
 
     /**
@@ -246,31 +255,29 @@ public class TextCellFactory implements Cloneable {
     }
 
     private void sizeCellByDimension() {
-        int fontSize = font.getSize();
+        int fontSize = 1;
         boolean rightSize = false;
-        int trueWidth = cellWidth;
-        int trueHeight = cellHeight;
-        cellWidth = cellWidth - leftPadding - rightPadding;
-        cellHeight = cellHeight - topPadding - bottomPadding;
+        int desiredWidth = cellWidth;
+        int desiredHeight = cellHeight;
         do {
-            font = new Font(font.getName(), font.getStyle(), fontSize);
-            blocks = new TreeMap<String, BufferedImage>();
-            verticalOffset = 0;
-            for (char c : fitting) {
+            blocks = new TreeMap<>();
+            fontSize++;
+            font = new Font(font.getFontName(), font.getStyle(), fontSize);
+            sizeCellByFont();
+            if (cellWidth > desiredWidth || cellHeight > desiredHeight) {
+                fontSize--;//previous one still fit so go back to it
                 rightSize = true;
-                if (!willFit(c)) {
-                    //found one that doesn't work, skip to the next step
-                    rightSize = false;
-                    break;
-                }
             }
-            fontSize--;
         } while (!rightSize);
 
-        verticalOffset = topPadding;
-        horizontalOffset = leftPadding;
-        cellWidth = trueWidth;
-        cellHeight = trueHeight;
+        leftPadding += Math.floor((desiredWidth - cellWidth) / 2.0);//add half of the new size
+        rightPadding += Math.ceil((desiredWidth - cellWidth) / 2.0);
+        topPadding += Math.floor((desiredHeight - cellHeight) / 2.0);//add half of the new size
+        bottomPadding += Math.ceil((desiredHeight - cellHeight) / 2.0);
+        verticalOffset += topPadding;
+        horizontalOffset += leftPadding;
+        cellWidth = desiredWidth;
+        cellHeight = desiredHeight;
     }
 
     /**
