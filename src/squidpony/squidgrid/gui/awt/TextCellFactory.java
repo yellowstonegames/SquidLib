@@ -277,7 +277,6 @@ public class TextCellFactory implements Cloneable {
         }
 
         leftPadding += Math.floor((desiredWidth - cellWidth) / 2.0);//add half of the new size
-        horizontalOffset += Math.floor((desiredWidth - cellWidth) / 2.0);
         rightPadding += Math.ceil((desiredWidth - cellWidth) / 2.0);
         topPadding += Math.floor((desiredHeight - cellHeight) / 2.0);//add half of the new size
         bottomPadding += Math.ceil((desiredHeight - cellHeight) / 2.0);
