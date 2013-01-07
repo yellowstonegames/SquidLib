@@ -1,14 +1,15 @@
 package squidpony.squidgrid.fov;
 
 /**
- * Performs FOV by pushing values outwards from the source location. It will only
- * go around corners slightly.
+ * Performs FOV by pushing values outwards from the source location. It will
+ * spread around edges like smoke or water. This may not be the desired behavior
+ * for a strict sight area, but may be appropriate for a sound map.
  *
  * This algorithm does perform bounds checking.
  *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
-public class SpiralFOV implements FOVSolver {
+public class SpreadFOV implements FOVSolver {
 
     private float[][] lightMap;
     private float[][] map;
@@ -34,25 +35,9 @@ public class SpiralFOV implements FOVSolver {
         y2 = Math.min(height - 1, y2);
 
         //find largest emmitted light in direction of source
-        float light;
-
-        light = 0f;
-        int lit = 0;
-        if (map[x2][y2] < 1f && lightMap[x2][y2] > 0) {
-            light = Math.max(light, lightMap[x2][y2] * (1 - map[x2][y2]));
-            lit++;
-        }
-        if (map[x][y2] < 1f && lightMap[x][y2] > 0) {
-            light = Math.max(light, lightMap[x][y2] * (1 - map[x][y2]));
-            lit++;
-        }
-        if (map[x2][y] < 1f && lightMap[x2][y] > 0) {
-            light = Math.max(light, lightMap[x2][y] * (1 - map[x2][y]));
-            lit++;
-        }
-        if (lit < 2) {
-            light = 0;
-        }
+        float light = Math.max(Math.max(lightMap[x2][y] * (1 - map[x2][y]),
+                lightMap[x][y2] * (1 - map[x][y2])),
+                lightMap[x2][y2] * (1 - map[x2][y2]));
 
         float distance = 1;
         if (!simplified && x2 != x && y2 != y) {//it's a diagonal
