@@ -2,6 +2,9 @@ package squidpony.squidgrid.gui.awt;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.TreeMap;
 import squidpony.squidgrid.util.Direction;
 
@@ -18,11 +21,12 @@ public class TextCellFactory implements Cloneable {
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
     private Font font;
     private char[] fitting;
+    private ArrayList<Character> largeCharacters;//size on only the largest characters, determined as sizing is performed
     private boolean antialias = false;
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
-    int cellHeight = 10;
-    int cellWidth = 10;
-    TreeMap<String, BufferedImage> blocks = new TreeMap<>();
+    private int cellHeight = 10;
+    private int cellWidth = 10;
+    private TreeMap<String, BufferedImage> blocks = new TreeMap<>();
 
     /**
      * Sets up this factory to ensure ASCII (or UTF-8) characters in the range
@@ -127,9 +131,8 @@ public class TextCellFactory implements Cloneable {
      */
     public void initializeByFont(Font font) {
         this.font = font;
+        largeCharacters = new ArrayList<>();
         emptyCache();
-        verticalOffset = 0;
-        horizontalOffset = 0;
         sizeCellByFont();
         emptyCache();
     }
@@ -148,9 +151,8 @@ public class TextCellFactory implements Cloneable {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.font = font;
+        largeCharacters = new ArrayList<>();
         emptyCache();
-        verticalOffset = 0;
-        horizontalOffset = 0;
         sizeCellByDimension();
         emptyCache();
     }
@@ -163,8 +165,8 @@ public class TextCellFactory implements Cloneable {
      * largest characters.
      */
     private void sizeCellByFont() {
-        cellWidth = 5;
-        cellHeight = 5;
+        cellWidth = 1;
+        cellHeight = 1;
 
         //temporarily remove padding values
         int tempLeftPadding = leftPadding;
@@ -175,37 +177,132 @@ public class TextCellFactory implements Cloneable {
         rightPadding = 0;
         topPadding = 0;
         bottomPadding = 0;
-        horizontalOffset = 0;
         verticalOffset = 0;
+        horizontalOffset = cellWidth / 2;
 
-        //size up with square cells
-        for (char c : fitting) {
-            while (!willFit(c)) {
-                cellWidth++;
-                cellHeight++;
+        findSize();
+        trimCell();
+
+        //restore cell sizes based on padding
+        leftPadding = tempLeftPadding;
+        rightPadding = tempRightPadding;
+        topPadding = tempTopPadding;
+        bottomPadding = tempBottomPadding;
+        verticalOffset += topPadding;
+        horizontalOffset += leftPadding;
+        cellWidth += leftPadding + rightPadding;
+        cellHeight += topPadding + bottomPadding;
+    }
+
+    private void findSize() {
+        //size up with square cells, it's okay if we oversize since we'll shrink back down
+        int bestw = 1;
+        int besth = 1;
+        ArrayList<Character> testingList;
+        if (!largeCharacters.isEmpty()) {
+            testingList = largeCharacters;
+            largeCharacters = new ArrayList<>();
+        } else {
+            testingList = new ArrayList<>();
+            for (char c : fitting) {
+                testingList.add(c);
             }
         }
 
-        //find best horizontal offset
-        int bestHorizontalOffset = -cellWidth;//worst case, offset by an entire cell
-        for (char c : fitting) {
-            int tempHorizontalOffset = horizontalOffset;
-            while (horizontalOffset > -cellWidth && willFit(c)) {
-                horizontalOffset--;
+        for (char c : testingList) {//try all requested characters
+            int largestw = 1;
+            int largesth = 1;
+            int smallestw = 1000;
+            int smallesth = 1000;
+
+            //size up until part of the font is seen or size is maxed out, in second case don't change the width and heights
+            float factor = 2f;
+            int maxVal = (int) (1000 / factor);
+            boolean visible = visible(c);
+            while (maxVal > cellWidth && maxVal > cellHeight && !visible) {
+                cellWidth *= factor;
+                cellHeight *= factor;
+                horizontalOffset = cellWidth / 2;
+                visible = visible(c);
             }
-            bestHorizontalOffset = Math.max(bestHorizontalOffset, horizontalOffset + 1);
+
+            //certain at this point that the character is a printing character, find size that works
+            if (visible) {
+                smallestw = Math.min(smallestw, cellWidth);
+                smallesth = Math.min(smallesth, cellHeight);
+                boolean fits = willFit(c);
+
+                //size up until it fits
+                while (maxVal > cellWidth && maxVal > cellHeight && !fits) {
+                    cellWidth *= factor;
+                    cellHeight *= factor;
+                    horizontalOffset = cellWidth / 2;
+                    fits = willFit(c);
+                }
+                if (fits) {//if it doesn't fit than the requested font is too large
+                    largestw = Math.max(largestw, cellWidth);
+                    largesth = Math.max(largesth, cellHeight);
+
+                    //binary search between smallest and largest to find right size
+                    do {
+                        cellWidth = (int) Math.floor((largestw + smallestw) / 2.0);
+                        cellHeight = (int) Math.floor((largesth + smallesth) / 2.0);//make sure to round up
+                        horizontalOffset = cellWidth / 2;
+
+                        fits = willFit(c);
+                        if (fits) {//enough room, size down
+                            largestw = cellWidth;
+                            largesth = cellHeight;
+                        } else {//not enough room, size up by 1 since we know those sizes didn't work
+                            smallestw = cellWidth + 1;
+                            smallesth = cellHeight + 1;
+                        }
+                    } while (smallestw < largestw && smallesth < largesth);//if equal need to size up once
+
+                    cellWidth = smallestw;
+                    cellHeight = smallesth;
+                    horizontalOffset = cellWidth / 2;
+                    bestw = Math.max(bestw, cellWidth);
+                    besth = Math.max(besth, cellHeight);
+
+                    if (bestw == cellWidth || besth == cellHeight) {//this character hit an edge and expanded the cell size requirement, log it
+                        largeCharacters.add(c);
+                    }
+                }
+            } else {
+                cellWidth = largestw;
+                cellHeight = largesth;
+            }
+        }
+
+        cellWidth = bestw;
+        cellHeight = besth;
+        horizontalOffset = cellWidth / 2;
+    }
+
+    private void trimCell() {
+        //find best horizontal offset
+        int bestHorizontalOffset = 0;//worst case, already in position
+        for (char c : largeCharacters) {
+            int tempHorizontalOffset = horizontalOffset;
+            if (visible(c)) {//only calculate on printable characters
+                while (horizontalOffset > -cellWidth && willFit(c)) {
+                    horizontalOffset--;
+                }
+            }
+            bestHorizontalOffset = Math.max(bestHorizontalOffset, Math.min(tempHorizontalOffset, horizontalOffset + 1));//slide back one to the right if we slid left
             horizontalOffset = tempHorizontalOffset;
         }
         horizontalOffset = bestHorizontalOffset;
 
         //find best vertical offset
-        int bestVerticalOffset = -cellHeight;
-        for (char c : fitting) {
+        int bestVerticalOffset = -cellHeight;//worst case, already in position
+        for (char c : largeCharacters) {
             int tempVerticalOffset = verticalOffset;
             while (verticalOffset > -cellHeight && willFit(c)) {
                 verticalOffset--;
             }
-            bestVerticalOffset = Math.max(bestVerticalOffset, verticalOffset + 1);
+            bestVerticalOffset = Math.max(bestVerticalOffset, Math.min(tempVerticalOffset, verticalOffset + 1));//slide back down one if slid up
             verticalOffset = tempVerticalOffset;
         }
         verticalOffset = bestVerticalOffset;
@@ -215,20 +312,15 @@ public class TextCellFactory implements Cloneable {
         int bestHeight = 1;
 
         //squeeze back down to rectangle cell
-        for (char c : fitting) {
+        for (char c : largeCharacters) {
 
             //squeeze width
             int tempWidth = cellWidth;
-            int tempHorizontalOffset = horizontalOffset;
-            while (cellWidth > 0 && willFit(c)) {
+            while (cellWidth > 0 && willFit(c)) {//TODO -- determine if single pixel on right edge is a bug here or some other place
                 cellWidth--;
-                if (cellWidth % 2 == 1) {
-                    horizontalOffset++;
-                }
             }
             bestWidth = Math.max(bestWidth, cellWidth + 1);//take whatever the largest needed width so far is
             cellWidth = tempWidth;
-            horizontalOffset = tempHorizontalOffset;
 
             //squeeze height
             int tempHeight = cellHeight;
@@ -240,18 +332,8 @@ public class TextCellFactory implements Cloneable {
         }
 
         //set cell sizes based on found best sizes
-        horizontalOffset += Math.floor((double) (cellWidth - bestWidth + leftPadding) / 2.0);//adjust based on horizontal squeeze
         cellWidth = bestWidth;
         cellHeight = bestHeight;
-
-        //restore cell sizes based on padding
-        leftPadding = tempLeftPadding;
-        rightPadding = tempRightPadding;
-        topPadding = tempTopPadding;
-        bottomPadding = tempBottomPadding;
-        verticalOffset += topPadding;
-        cellWidth += leftPadding + rightPadding;
-        cellHeight += topPadding + bottomPadding;
     }
 
     private void sizeCellByDimension() {
@@ -259,27 +341,46 @@ public class TextCellFactory implements Cloneable {
         int desiredHeight = cellHeight;
 
         //try provided font size first
-        sizeCellByFont();
+        initializeByFont(font);
 
-        //try all font sizes and take largest that fits
-        int fontSize = 0;
-        boolean sized = false;
-        while (cellWidth <= desiredWidth && cellHeight <= desiredHeight) {
-            sized = true;//mark that this loop was entered
-            blocks = new TreeMap<>();
-            fontSize++;
+        //try all font sizes and take largest that fits if passed in font is too large
+        int fontSize = font.getSize();
+        int largeSide = Math.max(cellWidth, cellHeight);
+        int largeDesiredSide = Math.max(desiredWidth, desiredHeight);
+        fontSize = largeDesiredSide * fontSize / largeSide;//approximately the right ratio
+        fontSize *= 1.2;//pad just a bit
+        while (cellWidth > desiredWidth || cellHeight > desiredHeight) {
             font = new Font(font.getFontName(), font.getStyle(), fontSize);
-            sizeCellByFont();
+            initializeByFont(font);
+            fontSize--;
         }
 
-        if (sized) {
-            fontSize--;//previous one still fit so go back to it
-            horizontalOffset += Math.round(desiredWidth - cellWidth) / 2.0;
-        }
-
-        verticalOffset += Math.round((desiredHeight - cellHeight) / 2.0);
+        horizontalOffset += (desiredWidth - cellWidth) / 2;//increase by added width, error on the side of one pixel left of center
+        verticalOffset += (desiredHeight - cellHeight) / 2;
         cellWidth = desiredWidth;
         cellHeight = desiredHeight;
+
+        this.emptyCache();
+    }
+
+    /**
+     * Checks if printing this character will place anything in the square at
+     * all.
+     *
+     * @param c
+     * @return
+     */
+    private boolean visible(char c) {
+        BufferedImage testImage = makeImage(c, Color.BLACK, Color.WHITE);
+        for (int x = 0; x < testImage.getWidth(); x++) {
+            for (int y = 0; y < testImage.getHeight(); y++) {
+                if (testImage.getRGB(x, y) != Color.WHITE.getRGB()) {
+                    return true;//found a filled in pixel
+                }
+            }
+        }
+
+        return false;//no pixels found
     }
 
     /**
@@ -290,7 +391,7 @@ public class TextCellFactory implements Cloneable {
      * @param c
      * @return
      */
-    public boolean willFit(char c) {//TODO -- make it "wiggle" one space and see if that made a clear edge
+    public boolean willFit(char c) {
         if (Character.isISOControl(c)) {//make sure it's a printable character
             return true;
         }
@@ -431,8 +532,7 @@ public class TextCellFactory implements Cloneable {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
 
-        int x = (int) ((cellWidth - g.getFontMetrics().charWidth(c)) / 2.0);//start with half of the cell size and half the character's width
-        x += horizontalOffset;
+        int x = horizontalOffset - g.getFontMetrics().charWidth(c) / 2;//start with half of the character's width
         int y = g.getFontMetrics().getMaxAscent() + verticalOffset;
         g.drawString(String.valueOf(c), x, y);
     }
