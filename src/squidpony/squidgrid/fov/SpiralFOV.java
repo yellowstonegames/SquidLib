@@ -1,8 +1,8 @@
 package squidpony.squidgrid.fov;
 
 /**
- * Performs FOV by pushing values outwards from the source location. It will only
- * go around corners slightly.
+ * Performs FOV by pushing values outwards from the source location. It will
+ * only go around corners slightly.
  *
  * This algorithm does perform bounds checking.
  *
@@ -35,22 +35,32 @@ public class SpiralFOV implements FOVSolver {
 
         //find largest emmitted light in direction of source
         float light;
+        int xDominant = Math.abs(x - startx) - Math.abs(y - starty);
 
         light = 0f;
         int lit = 0;
         if (map[x2][y2] < 1f && lightMap[x2][y2] > 0) {
             light = Math.max(light, lightMap[x2][y2] * (1 - map[x2][y2]));
             lit++;
+            if (xDominant == 0) {
+                lit++;
+            }
         }
         if (map[x][y2] < 1f && lightMap[x][y2] > 0) {
             light = Math.max(light, lightMap[x][y2] * (1 - map[x][y2]));
             lit++;
+            if (xDominant < 0) {
+                lit++;
+            }
         }
         if (map[x2][y] < 1f && lightMap[x2][y] > 0) {
             light = Math.max(light, lightMap[x2][y] * (1 - map[x2][y]));
             lit++;
+            if (xDominant > 0) {
+                lit++;
+            }
         }
-        if (lit < 2) {
+        if (lit < 2 && !(map[x2][y2] < 1f && map[x2][y] >= 1f && map[x][y2] >= 1f)) {
             light = 0;
         }
 
