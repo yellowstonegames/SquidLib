@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.JLayeredPane;
 import squidpony.squidcolor.SColor;
-import squidpony.squidgrid.gui.awt.ImageCellMap;
 import squidpony.squidgrid.gui.SGPane;
+import squidpony.squidgrid.gui.awt.ImageCellMap;
 import squidpony.squidgrid.gui.awt.TextCellFactory;
 import squidpony.squidgrid.gui.swing.animation.Animation;
 import squidpony.squidgrid.gui.swing.animation.AnimationManager;
@@ -28,8 +28,8 @@ import squidpony.squidgrid.util.Direction;
 public class SwingPane extends JLayeredPane implements SGPane {
 
     private static int DEFAULT_MOVEMENT_SPEED = 0; //one move step per x milliseconds
-    private AnimationManager animationManager;
-    private ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<Animation>();
+    private AnimationManager animationManager;//don't instantiate until an animation is needed
+    private ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<>();
     private BufferedImage[][] backgroundContents;
     private boolean[][] imageChanged;
     private Dimension cellDimension;
@@ -403,7 +403,6 @@ public class SwingPane extends JLayeredPane implements SGPane {
         setMinimumSize(panelDimension);
         setPreferredSize(panelDimension);
         contentsImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
-        animationManager = AnimationManager.startNewAnimationManager(this);
         refresh();
     }
 
@@ -517,6 +516,9 @@ public class SwingPane extends JLayeredPane implements SGPane {
             imageChanged[location.x][location.y] = true;
             redraw();
             animations.add(anim);
+            if (animationManager == null) {
+                animationManager = AnimationManager.startNewAnimationManager(this);
+            }
             animationManager.add(anim);
         }
     }
@@ -559,6 +561,9 @@ public class SwingPane extends JLayeredPane implements SGPane {
             imageChanged[start.x][start.y] = true;
             redraw();
             animations.add(anim);
+            if (animationManager == null) {
+                animationManager = AnimationManager.startNewAnimationManager(this);
+            }
             animationManager.add(anim);
         }
     }
@@ -575,6 +580,9 @@ public class SwingPane extends JLayeredPane implements SGPane {
             imageChanged[location.x][location.y] = true;
             redraw();
             animations.add(anim);
+            if (animationManager == null) {
+                animationManager = AnimationManager.startNewAnimationManager(this);
+            }
             animationManager.add(anim);
         }
     }
@@ -583,7 +591,10 @@ public class SwingPane extends JLayeredPane implements SGPane {
      * Drops any finished animations from the animation list.
      */
     private void trimAnimations() {
-        LinkedList<Animation> removals = new LinkedList<Animation>();
+        if (animationManager == null) {
+            return;//no manager means nothing to trim
+        }
+        LinkedList<Animation> removals = new LinkedList<>();
         for (Animation anim : animations) {
             if (!anim.isActive()) {
                 removals.add(anim);

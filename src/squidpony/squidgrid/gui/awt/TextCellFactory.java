@@ -3,10 +3,10 @@ package squidpony.squidgrid.gui.awt;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.TreeMap;
+import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.Pair;
 
 /**
  * Class for creating text blocks.
@@ -181,6 +181,7 @@ public class TextCellFactory implements Cloneable {
         horizontalOffset = cellWidth / 2;
 
         findSize();
+        cullLargeCharacters();
         trimCell();
 
         //restore cell sizes based on padding
@@ -201,7 +202,7 @@ public class TextCellFactory implements Cloneable {
         ArrayList<Character> testingList;
         if (!largeCharacters.isEmpty()) {
             testingList = largeCharacters;
-            largeCharacters = new ArrayList<>();
+//            largeCharacters = new ArrayList<>();//TODO -- determine if there are any cases where changing font size would change which character is the widest or tallest
         } else {
             testingList = new ArrayList<>();
             for (char c : fitting) {
@@ -218,12 +219,14 @@ public class TextCellFactory implements Cloneable {
             //size up until part of the font is seen or size is maxed out, in second case don't change the width and heights
             float factor = 2f;
             int maxVal = (int) (1000 / factor);
-            boolean visible = visible(c);
+            BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
+            boolean visible = visible(c, image);
             while (maxVal > cellWidth && maxVal > cellHeight && !visible) {
                 cellWidth *= factor;
                 cellHeight *= factor;
                 horizontalOffset = cellWidth / 2;
-                visible = visible(c);
+                image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
+                visible = visible(c, image);
             }
 
             //certain at this point that the character is a printing character, find size that works
@@ -280,12 +283,76 @@ public class TextCellFactory implements Cloneable {
         horizontalOffset = cellWidth / 2;
     }
 
+    private void cullLargeCharacters() {
+        if (largeCharacters.isEmpty()) {
+            return;
+        }
+
+        Pair<Integer, Character> left = new Pair(Integer.MAX_VALUE, ' '),
+                right = new Pair(Integer.MIN_VALUE, ' '),
+                top = new Pair(Integer.MAX_VALUE, ' '),
+                bottom = new Pair(Integer.MIN_VALUE, ' ');
+        BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
+        for (char c : largeCharacters) {
+            BufferedImage tile = makeMonoImage(c, image);
+
+            leftCheck:
+            for (int x = 0; x < Math.min(left.getFirst(), cellWidth); x++) {
+                for (int y = 0; y < cellHeight; y++) {
+                    if (tile.getRGB(x, y) != Color.WHITE.getRGB()) {
+                        left = new Pair(x, c);//this character is further left than any so far so mark it
+                        break leftCheck;
+                    }
+                }
+            }
+
+            rightCheck:
+            for (int x = cellWidth - 1; x > Math.max(right.getFirst(), -1); x--) {
+                for (int y = 0; y < cellHeight; y++) {
+                    if (tile.getRGB(x, y) != Color.WHITE.getRGB()) {
+                        right = new Pair(x, c);//this character is further left than any so far so mark it
+                        break rightCheck;
+                    }
+                }
+            }
+
+            topCheck:
+            for (int y = 0; y < Math.min(top.getFirst(), cellHeight); y++) {
+                for (int x = 0; x < cellWidth; x++) {
+                    if (tile.getRGB(x, y) != Color.WHITE.getRGB()) {
+                        top = new Pair(y, c);//this character is further left than any so far so mark it
+                        break topCheck;
+                    }
+                }
+            }
+
+            bottomCheck:
+            for (int y = cellHeight - 1; y > Math.max(bottom.getFirst(), -1); y--) {
+                for (int x = 0; x < cellWidth; x++) {
+                    if (tile.getRGB(x, y) != Color.WHITE.getRGB()) {
+                        bottom = new Pair(y, c);//this character is further left than any so far so mark it
+                        break bottomCheck;
+                    }
+                }
+            }
+
+        }
+
+        largeCharacters = new ArrayList<>();
+        largeCharacters.add(left.getSecond());
+        largeCharacters.add(right.getSecond());
+        largeCharacters.add(top.getSecond());
+        largeCharacters.add(bottom.getSecond());
+    }
+
     private void trimCell() {
+        BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
+
         //find best horizontal offset
         int bestHorizontalOffset = 0;//worst case, already in position
         for (char c : largeCharacters) {
             int tempHorizontalOffset = horizontalOffset;
-            if (visible(c)) {//only calculate on printable characters
+            if (visible(c, image)) {//only calculate on printable characters
                 while (horizontalOffset > -cellWidth && willFit(c)) {
                     horizontalOffset--;
                 }
@@ -370,17 +437,36 @@ public class TextCellFactory implements Cloneable {
      * @param c
      * @return
      */
-    private boolean visible(char c) {
-        BufferedImage testImage = makeImage(c, Color.BLACK, Color.WHITE);
-        for (int x = 0; x < testImage.getWidth(); x++) {
+    private boolean visible(char c, BufferedImage i) {
+        BufferedImage testImage = makeMonoImage(c, i);
+        //work from middle out to maximize chance of finding visilble bit
+        int startx = testImage.getWidth() / 2;
+        for (int x = 0; x <= startx; x++) {
             for (int y = 0; y < testImage.getHeight(); y++) {
-                if (testImage.getRGB(x, y) != Color.WHITE.getRGB()) {
-                    return true;//found a filled in pixel
+                if (startx + x < testImage.getWidth()) {//make sure no overflow on rounding
+                    if (testImage.getRGB(x + startx, y) != Color.WHITE.getRGB() || testImage.getRGB(startx - x, y) != Color.WHITE.getRGB()) {
+                        return true;//found a filled in pixel
+                    }
                 }
             }
         }
 
         return false;//no pixels found
+    }
+
+    private boolean willFit(char c, BufferedImage image) {
+        if (Character.isISOControl(c)) {//make sure it's a printable character
+            return true;
+        }
+
+        for (Direction dir : Direction.cardinals) {
+            if (!testSlide(c, dir, image)) {
+                return false;
+            }
+        }
+
+        //all the needed space was clear!
+        return true;
     }
 
     /**
@@ -392,51 +478,57 @@ public class TextCellFactory implements Cloneable {
      * @return
      */
     public boolean willFit(char c) {
-        if (Character.isISOControl(c)) {//make sure it's a printable character
-            return true;
+        BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
+        return willFit(c, image);
+    }
+
+    /**
+     * Slides the character on pixel in the provided direction and test if fully
+     * exposed the opposite edge. Returns true if opposite edge was fully
+     * exposed.
+     *
+     * @param c
+     * @param dir
+     * @return
+     */
+    private boolean testSlide(char c, Direction dir, BufferedImage image) {
+        //set offsets in a direction to test if it cleared the space
+        horizontalOffset += dir.deltaX;
+        verticalOffset += dir.deltaY;
+
+        BufferedImage testImage = makeMonoImage(c, image);
+
+        //reset offsets to actual values
+        horizontalOffset -= dir.deltaX;
+        verticalOffset -= dir.deltaY;
+
+        int startx = 0, starty = 0, endx = 0, endy = 0;//end points should be included in check
+        switch (dir) {//set values to check edge opposite of movement
+            case RIGHT:
+                endy = cellHeight - 1;
+                break;
+            case LEFT:
+                startx = cellWidth - 1;
+                endx = startx;
+                endy = cellHeight - 1;
+                break;
+            case UP:
+                endx = cellWidth - 1;
+                starty = cellHeight - 1;
+                endy = starty;
+                break;
+            case DOWN:
+                endx = cellWidth - 1;
         }
 
-        for (Direction dir : Direction.cardinals) {
-            //set offsets in a direction to test if it cleared the space
-            horizontalOffset += dir.deltaX;
-            verticalOffset += dir.deltaY;
-
-            BufferedImage testImage = makeImage(c, Color.BLACK, Color.WHITE);
-
-            //reset offsets to actual values
-            horizontalOffset -= dir.deltaX;
-            verticalOffset -= dir.deltaY;
-
-            int startx = 0, starty = 0, endx = 0, endy = 0;//end points should be included in check
-            switch (dir) {//set values to check edge opposite of movement
-                case RIGHT:
-                    endy = cellHeight - 1;
-                    break;
-                case LEFT:
-                    startx = cellWidth - 1;
-                    endx = startx;
-                    endy = cellHeight - 1;
-                    break;
-                case UP:
-                    endx = cellWidth - 1;
-                    starty = cellHeight - 1;
-                    endy = starty;
-                    break;
-                case DOWN:
-                    endx = cellWidth - 1;
-            }
-
-            //test for edge hit
-            for (int x = startx; x <= endx; x++) {
-                for (int y = starty; y <= endy; y++) {
-                    if (testImage.getRGB(x, y) != Color.WHITE.getRGB()) {
-                        return false;//found an edge that would normally be printed off the cell
-                    }
+        //test for edge hit
+        for (int x = startx; x <= endx; x++) {
+            for (int y = starty; y <= endy; y++) {
+                if (testImage.getRGB(x, y) != Color.WHITE.getRGB()) {
+                    return false;//found an edge that would normally be printed off the cell
                 }
             }
         }
-
-        //all the needed space was clear!
         return true;
     }
 
@@ -503,6 +595,14 @@ public class TextCellFactory implements Cloneable {
      */
     public String getStringRepresentationOf(char c, Color foreground) {
         return c + " " + foreground.getClass().getSimpleName() + ": " + Integer.toHexString(foreground.getRGB());
+    }
+
+    private BufferedImage makeMonoImage(char c, BufferedImage i) {
+        Graphics2D g = i.createGraphics();
+        g.setColor(SColor.WHITE);
+        g.fillRect(0, 0, cellWidth, cellHeight);
+        drawForeground(g, c, SColor.BLACK);
+        return i;
     }
 
     private BufferedImage makeImage(char c, Color foreground, Color background) {

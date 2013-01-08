@@ -15,7 +15,7 @@ import javax.swing.Timer;
  */
 public class AnimationManager implements Runnable {
 
-    private ConcurrentHashMap<Animation, Timer> animations = new ConcurrentHashMap<Animation, Timer>();
+    private ConcurrentHashMap<Animation, Timer> animations = new ConcurrentHashMap<>();
     private JComponent component;
 
     /**
@@ -74,7 +74,7 @@ public class AnimationManager implements Runnable {
      * Stops and removes any animations that are no longer active.
      */
     private void trimAnimations() {
-        LinkedList<Animation> removes = new LinkedList<Animation>();
+        LinkedList<Animation> removes = new LinkedList<>();
         for (Animation anim : animations.keySet()) {
             if (!anim.isActive()) {
                 removes.add(anim);
