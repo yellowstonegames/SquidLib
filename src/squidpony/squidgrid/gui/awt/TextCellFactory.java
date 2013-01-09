@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.util.Direction;
-import squidpony.squidgrid.util.Pair;
+import squidpony.squidutility.Pair;
 
 /**
  * Class for creating text blocks.
@@ -599,9 +599,9 @@ public class TextCellFactory implements Cloneable {
 
     private BufferedImage makeMonoImage(char c, BufferedImage i) {
         Graphics2D g = i.createGraphics();
-        g.setColor(SColor.WHITE);
+        g.setColor(Color.WHITE);
         g.fillRect(0, 0, cellWidth, cellHeight);
-        drawForeground(g, c, SColor.BLACK);
+        drawForeground(g, c, Color.BLACK);
         return i;
     }
 

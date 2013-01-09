@@ -15,7 +15,7 @@ public class SpreadFOV implements FOVSolver {
     private float[][] map;
     private float radius, decay;
     private int startx, starty, width, height;
-    private boolean simplified;
+    private RadiusStrategy rStrat;
 
     /**
      * Find the light let through by the nearest square.
@@ -39,23 +39,18 @@ public class SpreadFOV implements FOVSolver {
                 lightMap[x][y2] * (1 - map[x][y2])),
                 lightMap[x2][y2] * (1 - map[x2][y2]));
 
-        float distance = 1;
-        if (!simplified && x2 != x && y2 != y) {//it's a diagonal
-            distance = (float) Math.sqrt(2);
-        }
-
-        distance = Math.max(0, distance);
+        float distance = rStrat.radius(x, y, x2, y2);
         light = light - decay * distance;
         return light;
     }
 
     @Override
-    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, boolean simplifiedDiagonals) {
+    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, RadiusStrategy rStrat) {
         this.map = map;
         this.decay = decay;
         this.startx = startx;
         this.starty = starty;
-        this.simplified = simplifiedDiagonals;
+        this.rStrat = rStrat;
         radius = force / decay;//assume worst case of no resistance in tiles
         width = map.length;
         height = map[0].length;
@@ -80,12 +75,7 @@ public class SpreadFOV implements FOVSolver {
                     continue;
                 }
 
-                double r2;
-                if (simplified) {
-                    r2 = Math.sqrt((dx - startx) * (dx - startx) + (dy - starty) * (dy - starty));
-                } else {
-                    r2 = Math.abs(dx - startx) + Math.abs(dy - starty);
-                }
+                double r2 = rStrat.radius(startx, starty, dx, dy);
                 if (r2 <= radius) {
                     float surroundingLight = getNearLight(dx, dy);
                     if (lightMap[dx][dy] < surroundingLight) {
@@ -99,6 +89,6 @@ public class SpreadFOV implements FOVSolver {
 
     @Override
     public float[][] calculateFOV(float[][] map, int startx, int starty, float radius) {
-        return calculateFOV(map, startx, starty, 1, 1 / radius, true);
+        return calculateFOV(map, startx, starty, 1, 1 / radius, BasicRadiusStrategy.CIRCLE);
     }
 }

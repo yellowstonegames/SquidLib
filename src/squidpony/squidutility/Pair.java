@@ -1,4 +1,4 @@
-package squidpony.squidgrid.util;
+package squidpony.squidutility;
 
 import java.util.Objects;
 

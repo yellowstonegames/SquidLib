@@ -1,4 +1,4 @@
-package squidpony.squidgrid.gui.swing.listener;
+package squidpony.squidgrid.gui.awt.event;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -13,15 +13,19 @@ import java.util.logging.Logger;
  *
  * Optionally blocks until input received when there are no events waiting.
  *
+ * This listener is appropriate for a game loop driven application that
+ * regularly checks for user input. If your application is event driven then a
+ * standard java.awt.even.KeyListener would be more appropriate to use;
+ *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
 public class SGKeyListener implements KeyListener {
 
-    private BlockingQueue<KeyEvent> queue = new LinkedBlockingQueue<KeyEvent>();
+    private BlockingQueue<KeyEvent> queue = new LinkedBlockingQueue<>();
     private boolean blockOnEmpty, captureOnKeyDown;
 
     /**
-     * Crates a new listener which can optionally block when no input is
+     * Creates a new listener which can optionally block when no input is
      * currently available and will capture on key up or key down depending on
      * the parameters.
      *
@@ -38,7 +42,7 @@ public class SGKeyListener implements KeyListener {
 
     /**
      * Returns the next KeyEvent. If the event queue is empty then a null is
-     * returned if not blocking or when blocking but an interrupt has occured.
+     * returned if not blocking or when blocking but an interrupt has occurred.
      *
      * @return
      */
@@ -60,7 +64,7 @@ public class SGKeyListener implements KeyListener {
      * Empties the backing queue of data.
      */
     public void flush() {
-        queue = new LinkedBlockingQueue<KeyEvent>();
+        queue.clear();
     }
 
     @Override
