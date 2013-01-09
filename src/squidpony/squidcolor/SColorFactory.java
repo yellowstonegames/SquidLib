@@ -29,6 +29,15 @@ public class SColorFactory {
      */
     private SColorFactory() {
     }
+    
+    /**
+     * Returns the number of SColor objects currently cached.
+     * 
+     * @return 
+     */
+    public int getQuantityCached(){
+        return colorBag.size();
+    }
 
     /**
      * Utility method to blend the two colors by the amount passed in as the

@@ -9,8 +9,6 @@ package squidpony.squidgrid.fov;
  * traversal hits an opaque cell, runs out of light (based on decay), or reaches
  * the set radius, that walk is terminated.
  *
- * This algorithm treats transparency as either fully transparent or fully
- * opaque. If a cell's transparency is less than 1 it is treated as transparent.
  *
  * Light will decay, with solid objects being lit if there is a lit cell next to
  * them in the direction of the source point. Such objects will be lit according

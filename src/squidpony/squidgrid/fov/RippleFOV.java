@@ -10,7 +10,7 @@ import java.awt.Point;
  *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
-public class AwesomeSquidFOV implements FOVSolver {
+public class RippleFOV implements FOVSolver {
 
     private float[][] lightMap;
     private float[][] map;
@@ -30,6 +30,8 @@ public class AwesomeSquidFOV implements FOVSolver {
         int y2 = y - (int) Math.signum(y - starty);
 
         int xDominant = Math.abs(x - startx) - Math.abs(y - starty);
+        float distance = rStrat.radius(x, y, x2, y2);
+        boolean corner = false;
 
         //clamp x2 and y2 to bound within map
         x2 = Math.max(0, x2);
@@ -37,52 +39,86 @@ public class AwesomeSquidFOV implements FOVSolver {
         y2 = Math.max(0, y2);
         y2 = Math.min(height - 1, y2);
 
-        int lit = 0;//track the number of nearby cells which are lit
+        if (map[x2][y2] < 1f && map[x][y2] >= 1f && map[x2][y] >= 1f) {
+            corner = true;
+        }
 
-        //add points to be checked
-        Point p1, p2;
-        p1 = new Point(x, y2);
-        p2 = new Point(x2, y);
-        if (x2 == x) {//add one up and one down
-            p1 = new Point(Math.max(0, x - 1), y2);
-            p2 = new Point(Math.min(width - 1, x + 1), y2);
-            lit++;//from straight on only need one more side visible
-        }
-        if (y2 == y) {//add one up and one down
-            p1 = new Point(x2, Math.max(0, y - 1));
-            p2 = new Point(x2, Math.min(height - 1, y + 1));
-            lit++;//from straight on only need one more side visible
-        }
+        boolean mainLit = false, sideALit = false, sideBLit = false;
 
         //find largest emmitted light in direction of source
         float light = 0f;
         int close = rStrat.radius(startx, starty, x, y) <= 1 ? 0 : 1; //if next to start cell, don't apply start cell's resistance
         if (map[x2][y2] < 1f && lightMap[x2][y2] > 0) {
             light = Math.max(light, lightMap[x2][y2] * (1 - close * map[x2][y2]));
-            lit++;
-        }
-        if (map[p1.x][p1.y] < 1f && lightMap[p1.x][p1.y] > 0) {
-            light = Math.max(light, lightMap[p1.x][p1.y] * (1 - close * map[p1.x][p1.y]));
-            lit++;
-            if (xDominant < 0) {
-                lit++;
-            }
-        }
-        if (map[p2.x][p2.y] < 1f && lightMap[p2.x][p2.y] > 0) {
-            light = Math.max(light, lightMap[p2.x][p2.y] * (1 - close * map[p2.x][p2.y]));
-            lit++;
-            if (xDominant > 0) {
-                lit++;
+            mainLit = true;
+            if (xDominant == 0 || x2 == x || y2 == y) {//on a diagonal or axis
+//                lit++;
             }
         }
 
-        //make sure there's enough light, but allow an exception if closest cell is clear and both neighbors are walls
-        if (lit < 2 //not enought light
-                && !(map[x2][y2] < 1f && map[x2][y] >= 1f && map[x][y2] >= 1f)) {
+        //check neighbors
+        if (x2 == x) {//add one left and right
+            int dx1 = Math.max(0, x - 1);
+            int dx2 = Math.min(width - 1, x + 1);
+            int dy = y2;
+            if (map[dx2][dy] < 1f && lightMap[dx2][dy] > 0) {
+                light = Math.max(light, lightMap[dx2][dy] * (1 - close * map[dx2][dy]));
+                sideALit = true;
+            }
+            if (map[dx1][dy] < 1f && lightMap[dx1][dy] > 0) {
+                light = Math.max(light, lightMap[dx1][dy] * (1 - close * map[dx1][dy]));
+                sideBLit = true;
+            }
+        } else if (y2 == y) {//add one up and one down
+            int dy1 = Math.max(0, y - 1);
+            int dy2 = Math.min(height - 1, y + 1);
+            int dx = x2;
+            if (map[dx][dy1] < 1f && lightMap[dx][dy1] > 0) {
+                light = Math.max(light, lightMap[dx][dy1] * (1 - close * map[dx][dy1]));
+                sideALit = true;
+            }
+            if (map[dx][dy2] < 1f && lightMap[dx][dy2] > 0) {
+                light = Math.max(light, lightMap[dx][dy2] * (1 - close * map[dx][dy2]));
+                sideBLit = true;
+            }
+        } else {
+            if (map[x2][y] < 1f && lightMap[x2][y] > 0) {
+                float tempLight = lightMap[x2][y];
+                if (tempLight > 0) {
+                    if (xDominant > 0 && map[x2][y2] >= 1f) {
+//                        lit++;
+                    }
+                    light = Math.max(light, tempLight * (1 - close * map[x2][y]));
+                    sideALit = true;
+                }
+            }
+            if (map[x][y2] < 1f && lightMap[x][y2] > 0) {
+                float tempLight = lightMap[x][y2];
+                if (tempLight > 0) {
+                    if (xDominant < 0 && map[x2][y2] >= 1f) {
+//                        lit++;
+                    }
+                    light = Math.max(light, tempLight * (1 - close * map[x][y2]));
+                    sideBLit = true;
+                }
+            }
+        }
+
+        //make sure there's at either the most direct tile or both other tiles lit, but allow an exception if closest cell is clear and both neighbors are walls
+        boolean killLight = true;//broken out into steps for debugging
+        if (mainLit) {
+            killLight = false;
+        }
+        if (sideALit && sideBLit) {
+            killLight = false;
+        }
+        if (corner) {
+            killLight = false;
+        }
+        if (killLight) {
             light = 0;
         }
 
-        float distance = rStrat.radius(x, y, x2, y2);
         light = light - decay * distance;
         return light;
     }

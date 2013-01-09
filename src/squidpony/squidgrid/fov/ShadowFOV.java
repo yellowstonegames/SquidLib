@@ -4,10 +4,9 @@ package squidpony.squidgrid.fov;
  * Recursive shadowcasting FOV. Uses force * decay for the radius calculation
  * and treats all translucent cells as fully transparent.
  *
- * Assumes that it will hit an opaque cell before running off the map edge,
- * therefor does not do any bounds checking. In order to avoid errors if passing
- * in a subsection that is not edged with all opaque cells, please ensure the
- * section's width and height are sufficient to contain the radius.
+ * Performs bounds checking so edges are not required to be opaque.
+ * 
+ * Does not function properly with strategies other than Circle.
  *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
@@ -69,7 +68,7 @@ public class ShadowFOV implements FOVSolver {
         if (start < end) {
             return;
         }
-        for (j = row; j < radius + 1; j++) {
+        for (j = row; j <= radius; j++) {
             int dx = -j - 1;
             int dy = -j;
             boolean blocked = false;
@@ -78,7 +77,7 @@ public class ShadowFOV implements FOVSolver {
                 dx++;
                 X = cx + dx * xx + dy * xy;
                 Y = cy + dx * yx + dy * yy;
-                if (X < this.width && Y < this.height) {
+                if (X >= 0 && Y >= 0 && X < this.width && Y < this.height) {
                     float l_slope, r_slope;
                     l_slope = (dx - 0.5f) / (dy + 0.5f);
                     r_slope = (dx + 0.5f) / (dy - 0.5f);
@@ -88,7 +87,7 @@ public class ShadowFOV implements FOVSolver {
                         break;
                     }
                     if (dx * dx + dy * dy <= r2 && (light_walls || map[X][Y] < 1)) {
-                        float bright = (float) (1 - (decay * rStrat.radius(dx, dy) / force));//use manhatten distance
+                        float bright = (float) (1 - (decay * rStrat.radius(dx, dy) / force));
                         light[X][Y] = bright;
                     }
                     if (blocked) {
