@@ -16,16 +16,17 @@ public class BresenhamLOS implements LOSSolver {
     Queue<Point3D> lastPath = new LinkedList<>();
 
     @Override
-    public boolean isReachable(float[][] map, int x, int y, int targetX, int targetY, float force) {
+    public boolean isReachable(float[][] map, int x, int y, int targetX, int targetY, float force, float decay, RadiusStrategy radiusStrategy) {
         Queue<Point3D> path = Bresenham.line2D(x, y, targetX, targetY);
-        lastPath = new LinkedList<>(path);
+        lastPath = new LinkedList<>(path);//save path for later retreival
         path.poll();//remove starting point
         for (Point3D p : path) {
             if (p.x == targetX && p.y == targetY) {
                 return true;//reached the end 
             }
             force -= map[p.x][p.y];
-            if (force <= 0) {
+            double radius = radiusStrategy.radius(x, y, p.x, p.y);
+            if (force - (radius * decay) <= 0) {
                 return false;//too much resistance
             }
         }
@@ -40,5 +41,10 @@ public class BresenhamLOS implements LOSSolver {
             returnPath.add(new Point(p.x, p.y));
         }
         return returnPath;
+    }
+
+    @Override
+    public boolean isReachable(float[][] resistanceMap, int startx, int starty, int targetx, int targety) {
+        return isReachable(resistanceMap, startx, starty, targety, targety, Float.MAX_VALUE, 0f, BasicRadiusStrategy.CIRCLE);
     }
 }

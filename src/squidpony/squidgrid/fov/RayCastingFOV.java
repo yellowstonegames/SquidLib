@@ -21,21 +21,23 @@ package squidpony.squidgrid.fov;
  */
 public class RayCastingFOV implements FOVSolver {
 
-    private float gap = 0.01f;//how much gap to leave from the edges when tracing rays
-    private double step = 0.1f;//the size of step to take when walking out rays
+    private float gap = 0.4f;//how much gap to leave from the edges when tracing rays
+    private float step = 0.1f;//the size of step to take when walking out rays
     private float[][] lightMap;
     private float[][] map;
-    private float radius, decay, force;
-    private int startx, starty, width, height;
-    private boolean simplified;
+    private float decay, force, startx, starty;
+    private int width, height;
+    private RadiusStrategy rStrat;
 
     /**
      * Builds a new ray tracing fov solver.
      *
      * @param step the length along the ray to traverse in each step
+     * @param gap the offset from the center the lines will be traced
      */
-    public RayCastingFOV(double step) {
+    public RayCastingFOV(float step, float gap) {
         this.step = step;
+        this.gap = gap;
     }
 
     /**
@@ -45,22 +47,23 @@ public class RayCastingFOV implements FOVSolver {
     }
 
     @Override
-    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, boolean simplifiedDiagonals) {
+    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, RadiusStrategy radiusStrategy) {
         this.map = map;
         this.force = force;
         this.decay = decay;
-        this.startx = startx;
-        this.starty = starty;
-        this.simplified = simplifiedDiagonals;
-        radius = force / decay;//assume worst case of no resistance in tiles
+        this.startx = startx + 0.5f;
+        this.starty = starty + 0.5f;
+        this.rStrat = radiusStrategy;
         width = map.length;
         height = map[0].length;
         lightMap = new float[width][height];
 
-        int left = (int) Math.max(0, startx - radius);
-        int right = (int) Math.min(width - 1, startx + radius);
-        int top = (int) Math.max(0, starty - radius);
-        int bottom = (int) Math.min(height - 1, starty + radius);
+        float maxRadius = force / decay;
+
+        int left = (int) Math.max(0, startx - maxRadius);
+        int right = (int) Math.min(width - 1, startx + maxRadius);
+        int top = (int) Math.max(0, starty - maxRadius);
+        int bottom = (int) Math.min(height - 1, starty + maxRadius);
 
         lightMap[startx][starty] = force;
 
@@ -89,9 +92,13 @@ public class RayCastingFOV implements FOVSolver {
      */
     private void runLine(int startx, int starty, int endx, int endy) {
         //in order to cover all paths, each of the three nearest corners have to be run to each other
-        float[] x1 = {startx + 0.5f, startx - gap, startx + 1 + gap},
+        float x = startx + 0.05f;
+        float y = starty + 0.05f;
+
+        //build up arrays of points to run
+        float[] x1 = {x, x - gap, x + gap},
                 x2 = {endx + 0.5f},
-                y1 = {starty + 0.5f, starty - gap, starty + 1 + gap},
+                y1 = {y, y - gap, y + gap},
                 y2 = {endy + 0.5f};
 
         for (int i = 0; i < x1.length; i++) {
@@ -113,20 +120,20 @@ public class RayCastingFOV implements FOVSolver {
      * @param angle
      * @return true if end point reached
      */
-    private void runLine(double x, double y, double angle, double currentLight) {
+    private void runLine(float x, float y, double angle, float currentLight) {
         //check that still in range
-        double deltax = startx - x;
-        double deltay = starty - y;
-        double distance = Math.sqrt(deltax * deltax + deltay * deltay);
-        if (distance > radius || currentLight <= 0) {
+        float deltax = startx - x;
+        float deltay = starty - y;
+        float distance = rStrat.radius(Math.abs(deltax), Math.abs(deltay));
+        if (currentLight <= 0) {
             return;//reached edge of vision
         }
 
-        int x2 = (int) x;
-        int y2 = (int) y;
+        int x2 = (int) Math.round(x);
+        int y2 = (int) Math.round(y);
         if (map[x2][y2] < 1f) {
             lightMap[x2][y2] = (float) Math.max(lightMap[x2][y2], getNearLight(x2, y2));
-            runLine(x + step * Math.cos(angle), y + step * Math.sin(angle), angle, (force - decay * distance) * (1 - map[x2][y2]));
+            runLine(x + step * (float) Math.cos(angle), y + step * (float) Math.sin(angle), angle, (force - decay * distance) * (1 - map[x2][y2]));
         }
     }
 
@@ -138,8 +145,8 @@ public class RayCastingFOV implements FOVSolver {
      * @return
      */
     private float getNearLight(int x, int y) {
-        int x2 = x - (int) Math.signum(x - startx);
-        int y2 = y - (int) Math.signum(y - starty);
+        int x2 = (int) (x - Math.signum(x - (int) startx));
+        int y2 = (int) (y - Math.signum(y - (int) starty));
 
         //clamp x2 and y2 to bound within map
         x2 = Math.max(0, x2);
@@ -152,12 +159,7 @@ public class RayCastingFOV implements FOVSolver {
                 lightMap[x][y2] * (1 - map[x][y2])),
                 lightMap[x2][y2] * (1 - map[x2][y2]));
 
-        float distance = 1;
-        if (!simplified && x2 != x && y2 != y) {//it's a diagonal
-            distance = (float) Math.sqrt(2);
-        }
-
-        distance = Math.max(0, distance);
+        float distance = rStrat.radius(x, y, x2, y2);//find radius for one square away
         light = light - decay * distance;
         return light;
     }
@@ -185,6 +187,6 @@ public class RayCastingFOV implements FOVSolver {
 
     @Override
     public float[][] calculateFOV(float[][] map, int startx, int starty, float radius) {
-        return calculateFOV(map, startx, starty, 1, 1/radius, true);
+        return calculateFOV(map, startx, starty, 1, 1 / radius, BasicRadiusStrategy.CIRCLE);
     }
 }

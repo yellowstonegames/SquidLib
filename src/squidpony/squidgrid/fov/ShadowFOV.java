@@ -20,15 +20,15 @@ public class ShadowFOV implements FOVSolver {
     private float[][] light;
     private float[][] map;
     private float force, decay;
-    private boolean simplified;
+    private RadiusStrategy rStrat;
 
     @Override
-    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, boolean simplifiedDiagonals) {
+    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, RadiusStrategy rStrat) {
         width = map.length;
         height = map[0].length;
         this.force = force;
         this.decay = decay;
-        simplified = simplifiedDiagonals;
+        this.rStrat = rStrat;
         light = new float[width][height];
         this.map = map;
 
@@ -88,12 +88,7 @@ public class ShadowFOV implements FOVSolver {
                         break;
                     }
                     if (dx * dx + dy * dy <= r2 && (light_walls || map[X][Y] < 1)) {
-                        float bright;
-                        if (!simplified) {
-                            bright = (float) (1 - (decay * Math.sqrt(dx * dx + dy * dy) / force));//use circular distance
-                        } else {
-                            bright = (float) (1 - (decay * (Math.abs(dx) + Math.abs(dy)) / force));//use manhatten distance
-                        }
+                        float bright = (float) (1 - (decay * rStrat.radius(dx, dy) / force));//use manhatten distance
                         light[X][Y] = bright;
                     }
                     if (blocked) {
@@ -122,6 +117,6 @@ public class ShadowFOV implements FOVSolver {
 
     @Override
     public float[][] calculateFOV(float[][] map, int startx, int starty, float radius) {
-        return calculateFOV(map, startx, starty, 1, 1 / radius, true);
+        return calculateFOV(map, startx, starty, 1, 1 / radius, BasicRadiusStrategy.CIRCLE);
     }
 }
