@@ -1,7 +1,5 @@
 package squidpony.squidgrid.fov;
 
-import java.awt.Point;
-
 /**
  * Performs FOV by pushing values outwards from the source location. It will
  * only go around corners slightly.
@@ -15,8 +13,11 @@ public class RippleFOV implements FOVSolver {
     private float[][] lightMap;
     private float[][] map;
     private float radius, decay;
-    private int startx, starty, width, height;
+    private int startx, starty, width = 1, height = 1;
     private RadiusStrategy rStrat;
+
+    public RippleFOV() {
+    }
 
     /**
      * Find the light let through by the nearest square.
@@ -29,7 +30,7 @@ public class RippleFOV implements FOVSolver {
         int x2 = x - (int) Math.signum(x - startx);
         int y2 = y - (int) Math.signum(y - starty);
 
-        int xDominant = Math.abs(x - startx) - Math.abs(y - starty);
+        int xDominance = Math.abs(x - startx) - Math.abs(y - starty);
         float distance = rStrat.radius(x, y, x2, y2);
         boolean corner = false;
 
@@ -51,9 +52,6 @@ public class RippleFOV implements FOVSolver {
         if (map[x2][y2] < 1f && lightMap[x2][y2] > 0) {
             light = Math.max(light, lightMap[x2][y2] * (1 - close * map[x2][y2]));
             mainLit = true;
-            if (xDominant == 0 || x2 == x || y2 == y) {//on a diagonal or axis
-//                lit++;
-            }
         }
 
         //check neighbors
@@ -82,37 +80,31 @@ public class RippleFOV implements FOVSolver {
                 sideBLit = true;
             }
         } else {
-            if (map[x2][y] < 1f && lightMap[x2][y] > 0) {
+            if (xDominance > 0 && map[x2][y] < 1f && lightMap[x2][y] > 0) {
                 float tempLight = lightMap[x2][y];
                 if (tempLight > 0) {
-                    if (xDominant > 0 && map[x2][y2] >= 1f) {
-//                        lit++;
-                    }
                     light = Math.max(light, tempLight * (1 - close * map[x2][y]));
                     sideALit = true;
                 }
-            }
-            if (map[x][y2] < 1f && lightMap[x][y2] > 0) {
+            } else if (xDominance < 0 && map[x][y2] < 1f && lightMap[x][y2] > 0) {
                 float tempLight = lightMap[x][y2];
                 if (tempLight > 0) {
-                    if (xDominant < 0 && map[x2][y2] >= 1f) {
-//                        lit++;
-                    }
                     light = Math.max(light, tempLight * (1 - close * map[x][y2]));
                     sideBLit = true;
+                }
+            } else if (xDominance == 0 && (map[x2][y2] < 1f || (map[x][y2] < 1f && map[x2][y] < 1f))) {//on a diagonal 
+                float tempLight = Math.max(lightMap[x2][y2] * (1 - close * map[x2][y2]),
+                        Math.max(lightMap[x2][y] * (1 - close * map[x2][y]), lightMap[x][y2] * (1 - close * map[x][y2])));
+                if (tempLight > 0) {
+                    light = Math.max(light, tempLight);
+                    mainLit = true;//really it might be that both sides are lit, but that counts the same
                 }
             }
         }
 
         //make sure there's at either the most direct tile or both other tiles lit, but allow an exception if closest cell is clear and both neighbors are walls
         boolean killLight = true;//broken out into steps for debugging
-        if (mainLit) {
-            killLight = false;
-        }
-        if (sideALit && sideBLit) {
-            killLight = false;
-        }
-        if (corner) {
+        if (mainLit || (sideALit && sideBLit) || corner) {
             killLight = false;
         }
         if (killLight) {
@@ -131,9 +123,18 @@ public class RippleFOV implements FOVSolver {
         this.starty = starty;
         this.rStrat = rStrat;
         radius = force / decay;//assume worst case of no resistance in tiles
-        width = map.length;
-        height = map[0].length;
-        lightMap = new float[width][height];
+
+        if (map.length != width || map[0].length != height) {
+            width = map.length;
+            height = map[0].length;
+            lightMap = new float[width][height];
+        }else{
+            for(int x = 0;x<width;x++){
+                for(int y = 0;y<height;y++){
+                    lightMap[x][y] = 0f;//mark as unlit
+                }
+            }
+        }
 
         lightMap[startx][starty] = force;//make the starting space full power
 

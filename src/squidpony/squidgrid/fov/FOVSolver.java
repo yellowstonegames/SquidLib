@@ -9,16 +9,18 @@ package squidpony.squidgrid.fov;
  * origin has of each cell.
  *
  * The force parameter allows tiles to have a varying resistance to the kind of
- * rays emanating from the source. If a simple radius is desired, set the
- * resistance of your to 0.0f, the force to 1, and the decay to 1 / (the
- * radius). Opaque cells should return a resistance of 1f and transparent ones
- * 0f.
+ * rays emanating from the source. This parameter is a percentage of light
+ * passed so 1f or higher will block all light. 0f or lower will block no light.
+ *
+ * If a simple radius is desired, set the resistance of your cells to 0f, the force
+ * to 1f, and the decay to 1f / (the radius).
  *
  * The coordinates of the returned structure match those of the input grid.
  *
- * Most solvers expect the edges of the map to have opaque cells. Since there
+ * Some solvers expect the edges of the map to have opaque cells. Since there
  * are no bounds checking in the these algorithms, they will fail if the edges
- * are not opaque.
+ * are not opaque. Check the documentation for the individual solvers for more
+ * details.
  *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
@@ -41,7 +43,7 @@ public interface FOVSolver {
      * of the origin cell. Radius determinations are determined by the provided
      * BasicRadiusStrategy.
      *
-     * @param map the grid of cells to calculate on
+     * @param resistanceMap the grid of cells to calculate on
      * @param startx the horizontal component of the starting location
      * @param starty the vertical component of the starting location
      * @param force the power of the ray
@@ -50,7 +52,7 @@ public interface FOVSolver {
      * @param radiusStrategy provides a means to calculate the radius as desired
      * @return the computed light grid
      */
-    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, RadiusStrategy radiusStrategy);
+    public float[][] calculateFOV(float[][] resistanceMap, int startx, int starty, float force, float decay, RadiusStrategy radiusStrategy);
 
     /**
      * Calculates the Field of View in the same manner as the version with more
@@ -59,11 +61,11 @@ public interface FOVSolver {
      * Light will extend to the radius value. Uses the implementation's default
      * radius strategy.
      *
-     * @param map the grid of cells to calculate on
+     * @param resistanceMap the grid of cells to calculate on
      * @param startx
      * @param starty
      * @param radius
      * @return
      */
-    public float[][] calculateFOV(float[][] map, int startx, int starty, float radius);
+    public float[][] calculateFOV(float[][] resistanceMap, int startx, int starty, float radius);
 }

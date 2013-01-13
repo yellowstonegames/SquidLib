@@ -5,7 +5,7 @@ package squidpony.squidgrid.fov;
  * and treats all translucent cells as fully transparent.
  *
  * Performs bounds checking so edges are not required to be opaque.
- * 
+ *
  * Does not function properly with strategies other than Circle.
  *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
@@ -18,7 +18,7 @@ public class ShadowFOV implements FOVSolver {
         {1, 0, 0, 1, -1, 0, 0, -1}};
     private float[][] light;
     private float[][] map;
-    private float force, decay;
+    private float force, decay, radius;
     private RadiusStrategy rStrat;
 
     @Override
@@ -31,30 +31,12 @@ public class ShadowFOV implements FOVSolver {
         light = new float[width][height];
         this.map = map;
 
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                light[i][j] = 0f;
-            }
-        }
+        radius = (force / decay);
 
-        int maxRadius = (int) (force * decay);
-        int oct, r2;
-
-        if (maxRadius <= 0) {
-            int max_radius_x = this.width - startx;
-            int max_radius_y = this.height - starty;
-            max_radius_x = Math.max(max_radius_x, startx);
-            max_radius_y = Math.max(max_radius_y, starty);
-            maxRadius = (int) (Math.sqrt(max_radius_x * max_radius_x
-                    + max_radius_y * max_radius_y)) + 1;
-        }
-        r2 = maxRadius * maxRadius;
-
-        /* recursive shadow casting */
-        for (oct = 0; oct < 8; oct++) {
-            castLight(startx, starty, 1, 1.0f, 0.0f, maxRadius, r2,
-                    MULT[0][oct], MULT[1][oct], MULT[2][oct], MULT[3][oct], 0,
-                    true);
+        // shadow casting each octant
+        for (int oct = 0; oct < 8; oct++) {
+            castLight(startx, starty, 1, 1.0f, 0.0f,
+                    MULT[0][oct], MULT[1][oct], MULT[2][oct], MULT[3][oct], 0);
         }
         light[startx][starty] = force;
 
@@ -62,22 +44,21 @@ public class ShadowFOV implements FOVSolver {
     }
 
     private void castLight(int cx, int cy, int row, float start, float end,
-            int radius, int r2, int xx, int xy, int yx, int yy, int id, boolean light_walls) {
-        int j;
+            int xx, int xy, int yx, int yy, int id) {
         float new_start = 0.0f;
         if (start < end) {
             return;
         }
-        for (j = row; j <= radius; j++) {
-            int dx = -j - 1;
-            int dy = -j;
+        for (int distance = row; distance <= radius; distance++) {
+            int dx = -distance - 1;
+            int dy = -distance;
             boolean blocked = false;
             while (dx <= 0) {
-                int X, Y;
+                int currentX, currentY;
                 dx++;
-                X = cx + dx * xx + dy * xy;
-                Y = cy + dx * yx + dy * yy;
-                if (X >= 0 && Y >= 0 && X < this.width && Y < this.height) {
+                currentX = cx + dx * xx + dy * xy;
+                currentY = cy + dx * yx + dy * yy;
+                if (currentX >= 0 && currentY >= 0 && currentX < this.width && currentY < this.height) {
                     float l_slope, r_slope;
                     l_slope = (dx - 0.5f) / (dy + 0.5f);
                     r_slope = (dx + 0.5f) / (dy - 0.5f);
@@ -86,12 +67,12 @@ public class ShadowFOV implements FOVSolver {
                     } else if (end > l_slope) {
                         break;
                     }
-                    if (dx * dx + dy * dy <= r2 && (light_walls || map[X][Y] < 1)) {
+                    if (rStrat.radius(dx, dy) <= radius) {
                         float bright = (float) (1 - (decay * rStrat.radius(dx, dy) / force));
-                        light[X][Y] = bright;
+                        light[currentX][currentY] = bright;
                     }
                     if (blocked) {
-                        if (map[X][Y] >= 1) {
+                        if (map[currentX][currentY] >= 1) {
                             new_start = r_slope;
                             continue;
                         } else {
@@ -99,10 +80,10 @@ public class ShadowFOV implements FOVSolver {
                             start = new_start;
                         }
                     } else {
-                        if (map[X][Y] >= 1 && j < radius) {
+                        if (map[currentX][currentY] >= 1 && distance < radius) {
                             blocked = true;
-                            castLight(cx, cy, j + 1, start, l_slope, radius,
-                                    r2, xx, xy, yx, yy, id + 1, light_walls);
+                            castLight(cx, cy, distance + 1, start, l_slope,
+                                    xx, xy, yx, yy, id + 1);
                             new_start = r_slope;
                         }
                     }
