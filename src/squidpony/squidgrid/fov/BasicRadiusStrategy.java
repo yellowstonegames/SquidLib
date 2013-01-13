@@ -49,6 +49,8 @@ public enum BasicRadiusStrategy implements RadiusStrategy {
 
     @Override
     public float radius(float dx, float dy) {
+        dx = Math.abs(dx);
+        dy = Math.abs(dy);
         float radius = 0f;
         switch (this) {
             case SQUARE:
