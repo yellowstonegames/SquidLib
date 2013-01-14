@@ -210,12 +210,14 @@ public class FOVTranslator implements FOVSolver {
             lightMap = p.getFirst().calculateFOV(resistanceMap, startx, starty, force, decay, p.getSecond());
         } else {//multiple solvers, run them and take the average results for each cell
             lightMap = new float[width][height];
-            int quantity = solvers.size();
             for (Pair<? extends FOVSolver, ? extends RadiusStrategy> p : solvers.keySet()) {
                 float[][] tempMap = p.getFirst().calculateFOV(resistanceMap, startx, starty, force, decay, p.getSecond());
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
-                        lightMap[x][y] += tempMap[x][y] / quantity * (solvers.get(p) / totalWeight);//add portion to running average
+                        float weight = solvers.get(p) / totalWeight;
+                        float bright = lightMap[x][y];
+                        float tempbright = tempMap[x][y];
+                        lightMap[x][y] += tempMap[x][y] * weight;//add portion to running average
                     }
                 }
             }
@@ -313,7 +315,7 @@ public class FOVTranslator implements FOVSolver {
 
     public void add(Pair<FOVSolver, RadiusStrategy> pair, float weight) {
         totalWeight += weight;
-        solvers.put(pair, force);
+        solvers.put(pair, weight);
     }
 
     /**

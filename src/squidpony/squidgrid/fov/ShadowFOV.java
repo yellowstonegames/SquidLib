@@ -1,96 +1,88 @@
 package squidpony.squidgrid.fov;
 
+import squidpony.squidgrid.util.Direction;
+
 /**
  * Recursive shadowcasting FOV. Uses force * decay for the radius calculation
  * and treats all translucent cells as fully transparent.
  *
  * Performs bounds checking so edges are not required to be opaque.
  *
- * Does not function properly with strategies other than Circle.
- *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
 public class ShadowFOV implements FOVSolver {
 
-    private int width, height;
-    final private static int[][] MULT = {{1, 0, 0, -1, -1, 0, 0, 1},
-        {0, 1, -1, 0, 0, -1, 1, 0}, {0, 1, 1, 0, 0, -1, -1, 0},
-        {1, 0, 0, 1, -1, 0, 0, -1}};
-    private float[][] light;
-    private float[][] map;
+    private int width, height, startx, starty;
+    private float[][] lightMap;
+    private float[][] resistanceMap;
     private float force, decay, radius;
     private RadiusStrategy rStrat;
 
     @Override
     public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, RadiusStrategy rStrat) {
-        width = map.length;
-        height = map[0].length;
+        this.startx = startx;
+        this.starty = starty;
         this.force = force;
         this.decay = decay;
         this.rStrat = rStrat;
-        light = new float[width][height];
-        this.map = map;
+        this.resistanceMap = map;
 
+        width = map.length;
+        height = map[0].length;
+        lightMap = new float[width][height];
         radius = (force / decay);
 
-        // shadow casting each octant
-        for (int oct = 0; oct < 8; oct++) {
-            castLight(startx, starty, 1, 1.0f, 0.0f,
-                    MULT[0][oct], MULT[1][oct], MULT[2][oct], MULT[3][oct], 0);
+        lightMap[startx][starty] = force;//light the starting cell
+        for (Direction d : Direction.DIAGONALS) {
+            castLight(1, 1.0f, 0.0f, 0, d.deltaX, d.deltaY, 0);
+            castLight(1, 1.0f, 0.0f, d.deltaX, 0, 0, d.deltaY);
         }
-        light[startx][starty] = force;
 
-        return light;
+        return lightMap;
     }
 
-    private void castLight(int cx, int cy, int row, float start, float end,
-            int xx, int xy, int yx, int yy, int id) {
-        float new_start = 0.0f;
+    private void castLight(int row, float start, float end, int xx, int xy, int yx, int yy) {
+
+        float newStart = 0.0f;
         if (start < end) {
             return;
         }
-        for (int distance = row; distance <= radius; distance++) {
-            int dx = -distance - 1;
-            int dy = -distance;
-            boolean blocked = false;
-            while (dx <= 0) {
-                int currentX, currentY;
-                dx++;
-                currentX = cx + dx * xx + dy * xy;
-                currentY = cy + dx * yx + dy * yy;
-                if (currentX >= 0 && currentY >= 0 && currentX < this.width && currentY < this.height) {
-                    float l_slope, r_slope;
-                    l_slope = (dx - 0.5f) / (dy + 0.5f);
-                    r_slope = (dx + 0.5f) / (dy - 0.5f);
-                    if (start < r_slope) {
+        boolean blocked = false;
+        for (int distance = row; distance <= radius && !blocked; distance++) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; deltaX++) {
+                int currentX = startx + deltaX * xx + deltaY * xy;
+                int currentY = starty + deltaX * yx + deltaY * yy;
+                float leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
+                float rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
+
+                if (!(currentX >= 0 && currentY >= 0 && currentX < this.width && currentY < this.height) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+
+                //check if it's within the lightable area and light if needed
+                if (rStrat.radius(deltaX, deltaY) <= radius) {
+                    float bright = (float) (1 - (decay * rStrat.radius(deltaX, deltaY) / force));
+                    lightMap[currentX][currentY] = bright;
+                }
+
+                if (blocked) { //previous cell was a blocking one
+                    if (resistanceMap[currentX][currentY] >= 1) {//hit a wall
+                        newStart = rightSlope;
                         continue;
-                    } else if (end > l_slope) {
-                        break;
-                    }
-                    if (rStrat.radius(dx, dy) <= radius) {
-                        float bright = (float) (1 - (decay * rStrat.radius(dx, dy) / force));
-                        light[currentX][currentY] = bright;
-                    }
-                    if (blocked) {
-                        if (map[currentX][currentY] >= 1) {
-                            new_start = r_slope;
-                            continue;
-                        } else {
-                            blocked = false;
-                            start = new_start;
-                        }
                     } else {
-                        if (map[currentX][currentY] >= 1 && distance < radius) {
-                            blocked = true;
-                            castLight(cx, cy, distance + 1, start, l_slope,
-                                    xx, xy, yx, yy, id + 1);
-                            new_start = r_slope;
-                        }
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (resistanceMap[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
+                        blocked = true;
+                        castLight(distance + 1, start, leftSlope, xx, xy, yx, yy);
+                        newStart = rightSlope;
                     }
                 }
-            }
-            if (blocked) {
-                break;
             }
         }
     }
