@@ -459,7 +459,7 @@ public class TextCellFactory implements Cloneable {
             return true;
         }
 
-        for (Direction dir : Direction.cardinals) {
+        for (Direction dir : Direction.CARDINALS) {
             if (!testSlide(c, dir, image)) {
                 return false;
             }

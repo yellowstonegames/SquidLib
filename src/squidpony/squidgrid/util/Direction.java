@@ -16,7 +16,15 @@ public enum Direction {
     /**
      * An array which holds only the four cardinal directions.
      */
-    public static final Direction[] cardinals = new Direction[]{UP, DOWN, LEFT, RIGHT};
+    public static final Direction[] CARDINALS = {UP, DOWN, LEFT, RIGHT};
+    /**
+     * An array which holds only the four diagonal directions.
+     */
+    public static final Direction[] DIAGONALS = {UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+    /**
+     * An array which holds all eight OUTWARDS directions.
+     */
+    public static final Direction[] OUTWARDS = {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
     /**
      * The x coordinate difference for this direction.
      */

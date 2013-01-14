@@ -14,7 +14,10 @@ package squidpony.squidgrid.fov;
  * them in the direction of the source point. Such objects will be lit according
  * to the decay so a solid object at the edge of vision will not be lit if a
  * transparent object in the same cell would not be lit.
+ * 
+ * Currently a work in progress.
  *
+ * @deprecated 
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
 public class RayCastingFOV implements FOVSolver {
@@ -23,7 +26,7 @@ public class RayCastingFOV implements FOVSolver {
     private float step = 0.1f;//the size of step to take when walking out rays
     private float[][] lightMap;
     private float[][] map;
-    private float decay, force, startx, starty;
+    private float decay, force, fx, fy;
     private int width, height;
     private RadiusStrategy rStrat;
 
@@ -49,14 +52,14 @@ public class RayCastingFOV implements FOVSolver {
         this.map = map;
         this.force = force;
         this.decay = decay;
-        this.startx = startx + 0.5f;
-        this.starty = starty + 0.5f;
+        this.fx = startx + 0.5f;
+        this.fy = starty + 0.5f;
         this.rStrat = radiusStrategy;
         width = map.length;
         height = map[0].length;
         lightMap = new float[width][height];
 
-        float maxRadius = force / decay;
+        float maxRadius = force / decay + 1;
 
         int left = (int) Math.max(0, startx - maxRadius);
         int right = (int) Math.min(width - 1, startx + maxRadius);
@@ -67,14 +70,13 @@ public class RayCastingFOV implements FOVSolver {
 
         //run rays out to edges
         for (int x = left; x <= right; x++) {
-            runLine(startx, starty, x, top);
-            runLine(startx, starty, x, bottom);
+            runLineGroup(fx, fy, x, top);
+            runLineGroup(fx, fy, x, bottom);
         }
         for (int y = top; y <= bottom; y++) {
-            runLine(startx, starty, left, y);
-            runLine(startx, starty, right, y);
+            runLineGroup(fx, fy, left, y);
+            runLineGroup(fx, fy, right, y);
         }
-        lightObstacles();
 
         return lightMap;
     }
@@ -88,22 +90,20 @@ public class RayCastingFOV implements FOVSolver {
      * @param endx
      * @param endy
      */
-    private void runLine(int startx, int starty, int endx, int endy) {
-        //in order to cover all paths, each of the three nearest corners have to be run to each other
-        float x = startx + 0.05f;
-        float y = starty + 0.05f;
+    private void runLineGroup(float startx, float starty, int endx, int endy) {
 
         //build up arrays of points to run
-        float[] x1 = {x, x - gap, x + gap},
+        float[] x1 = {startx, startx - gap, startx + gap},
                 x2 = {endx + 0.5f},
-                y1 = {y, y - gap, y + gap},
+                y1 = {starty, starty - gap, starty + gap},
                 y2 = {endy + 0.5f};
 
         for (int i = 0; i < x1.length; i++) {
             for (int j = 0; j < y1.length; j++) {
                 for (int k = 0; k < x2.length; k++) {
                     for (int f = 0; f < y2.length; f++) {
-                        runLine(x1[i], y1[j], Math.atan2(x2[k] - x1[i], y2[f] - y1[j]), force);
+                        double angle = Math.atan2(y2[f] - y1[j], x2[k] - x1[i]);
+                        runLine(x1[i], y1[j], angle, force);
                     }
                 }
             }
@@ -119,67 +119,25 @@ public class RayCastingFOV implements FOVSolver {
      * @return true if end point reached
      */
     private void runLine(float x, float y, double angle, float currentLight) {
-        //check that still in range
-        float deltax = startx - x;
-        float deltay = starty - y;
-        float distance = rStrat.radius(Math.abs(deltax), Math.abs(deltay));
         if (currentLight <= 0) {
             return;//reached edge of vision
         }
 
-        int x2 = (int) Math.round(x);
-        int y2 = (int) Math.round(y);
+        int x2 = (int) x;
+        int y2 = (int) y;
+        lightMap[x2][y2] = Math.max(lightMap[x2][y2], currentLight);
         if (map[x2][y2] < 1f) {
-            lightMap[x2][y2] = (float) Math.max(lightMap[x2][y2], getNearLight(x2, y2));
-            runLine(x + step * (float) Math.cos(angle), y + step * (float) Math.sin(angle), angle, (force - decay * distance) * (1 - map[x2][y2]));
-        }
-    }
-
-    /**
-     * Find the light let through by the nearest square.
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    private float getNearLight(int x, int y) {
-        int x2 = (int) (x - Math.signum(x - (int) startx));
-        int y2 = (int) (y - Math.signum(y - (int) starty));
-
-        //clamp x2 and y2 to bound within map
-        x2 = Math.max(0, x2);
-        x2 = Math.min(width - 1, x2);
-        y2 = Math.max(0, y2);
-        y2 = Math.min(height - 1, y2);
-
-        //find largest emmitted light in direction of source
-        float light = Math.max(Math.max(lightMap[x2][y] * (1 - map[x2][y]),
-                lightMap[x][y2] * (1 - map[x][y2])),
-                lightMap[x2][y2] * (1 - map[x2][y2]));
-
-        float distance = rStrat.radius(x, y, x2, y2);//find radius for one square away
-        light = light - decay * distance;
-        return light;
-    }
-
-    /**
-     * Ensures that all cells that blocked vision are themselves lit up.
-     */
-    private void lightObstacles() {
-        float[][] wallMap = new float[width][height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (map[x][y] > 0f) {//only light up non-transparent objects at the edge of view
-                    wallMap[x][y] = getNearLight(x, y);
+            float nextX = x + step * (float) Math.cos(angle);
+            float nextY = y + step * (float) Math.sin(angle);
+            float bright = currentLight;//start with current amount of light
+            if (x2 != (int) nextX || y2 != (int) nextY) {//only change light level if actually moving out of the square
+                if (x2 != (int) fx || y2 != (int) fy) {//make sure not on starting point
+                    float distance = rStrat.radius(x2, y2, (int) nextX, (int) nextY);
+                    bright -= decay * distance;
+                    bright = bright * (1 - map[x2][y2]);//decrease it by the resistance of the cell
                 }
             }
-        }
-
-        //merge wallMap to lightMap
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                lightMap[x][y] = Math.max(wallMap[x][y], lightMap[x][y]);
-            }
+            runLine(nextX, nextY, angle, bright);
         }
     }
 
