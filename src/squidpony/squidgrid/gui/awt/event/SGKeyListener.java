@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.awt.event;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
@@ -19,10 +20,29 @@ import java.util.logging.Logger;
  *
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
-public class SGKeyListener implements KeyListener {
+public class SGKeyListener implements KeyListener, Iterable<KeyEvent>, Iterator<KeyEvent> {
 
+    /**
+     * Indicates when the capture should occur.
+     *
+     * If repeat keys should be captured when held down, then DOWN should be
+     * used.
+     *
+     * If complex character resolution is desired, such as 'A' or 'ctrl-alt-G'
+     * instead of seeing 'a' and a chain of 'ctrl' 'alt' 'shift' 'g' then TYPED
+     * should be used.
+     *
+     * Using UP only captures the individual keys when they are let go and in
+     * the order they are let go. This option is included for completion but is
+     * in most cases unlikely to have the desired behavior for reading input.
+     */
+    public enum CaptureType {
+
+        DOWN, UP, TYPED
+    };
+    private CaptureType type;
     private BlockingQueue<KeyEvent> queue = new LinkedBlockingQueue<>();
-    private boolean blockOnEmpty, captureOnKeyDown;
+    private boolean blockOnEmpty;
 
     /**
      * Creates a new listener which can optionally block when no input is
@@ -35,18 +55,56 @@ public class SGKeyListener implements KeyListener {
      * the key being pressed, if false then the key must be released before the
      * event is captured
      */
-    public SGKeyListener(boolean blockOnEmpty, boolean captureOnKeyDown) {
+    public SGKeyListener(boolean blockOnEmpty, CaptureType type) {
         this.blockOnEmpty = blockOnEmpty;
-        this.captureOnKeyDown = captureOnKeyDown;
+        this.type = type;
     }
 
     /**
-     * Returns the next KeyEvent. If the event queue is empty then a null is
-     * returned if not blocking or when blocking but an interrupt has occurred.
-     *
-     * @return
+     * Empties the backing queue of data.
      */
-    public KeyEvent getKeyEvent() {
+    public void flush() {
+        queue.clear();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        if (type == CaptureType.TYPED) {
+            queue.offer(e);
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (type == CaptureType.DOWN) {
+            queue.offer(e);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (type == CaptureType.UP) {
+            queue.offer(e);
+        }
+    }
+
+    @Override
+    public boolean hasNext() {
+        return !queue.isEmpty();
+    }
+
+    @Override
+    public Iterator<KeyEvent> iterator() {
+        return this;
+    }
+
+    /**
+     * Consumes the KeyEvent that is returned as it is returned.
+     *
+     * @return the next KeyEvent or null if there are no more
+     */
+    @Override
+    public KeyEvent next() {
         KeyEvent ret = null;
         if (blockOnEmpty) {
             try {
@@ -61,28 +119,10 @@ public class SGKeyListener implements KeyListener {
     }
 
     /**
-     * Empties the backing queue of data.
+     * The remove operation is not supported by this class.
      */
-    public void flush() {
-        queue.clear();
-    }
-
     @Override
-    public void keyTyped(KeyEvent e) {
-        //ignores this event type
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (captureOnKeyDown) {
-            queue.offer(e);
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (!captureOnKeyDown) {
-            queue.offer(e);
-        }
+    public void remove() {
+        throw new UnsupportedOperationException();
     }
 }
