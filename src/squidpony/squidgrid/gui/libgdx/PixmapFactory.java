@@ -23,10 +23,24 @@ public class PixmapFactory {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                pix.drawPixel(x, y, image.getRGB(x, y));
+                pix.drawPixel(x, y, getRGBA(image.getRGB(x, y)));
             }
         }
 
         return pix;
+    }
+
+    /**
+     * Shifts java.awt.Color ARGB values to gdx RGBA values.
+     *
+     * @param rgb
+     * @return
+     */
+    public static int getRGBA(int rgb) {
+        int a = rgb >> 24;
+        int rest = rgb & 0x00ffffff;//mask out the alpha channel
+        rest <<= 8;
+        rest += a;
+        return rest;
     }
 }
