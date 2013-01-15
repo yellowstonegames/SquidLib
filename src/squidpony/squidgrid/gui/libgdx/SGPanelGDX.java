@@ -25,8 +25,8 @@ public class SGPanelGDX extends Group implements SGPane {
     private int cellWidth, cellHeight, gridWidth, gridHeight;
     private boolean[][] imageChanged;
     private Font font;
-    private Color defaultBackColor = SColor.CHARTREUSE;
-    private Color defaultForeColor = SColor.ALIZARIN;
+    private Color defaultBackColor = SColor.BLACK;
+    private Color defaultForeColor = SColor.WHITE;
 
     @Override
     public int getCellHeight() {
@@ -113,7 +113,7 @@ public class SGPanelGDX extends Group implements SGPane {
         String key = textFactory.getStringRepresentationOf(' ', back, back);
         Pixmap background = imageMap.get(key);
         if (background == null) {
-            background = PixmapFactory.createPixmap(textFactory.getImageFor(' ', fore, back));
+            background = PixmapFactory.createPixmap(textFactory.getImageFor(' ', back, back));
             imageMap.put(key, background);
         }
         placeImage(x, y, background, false);

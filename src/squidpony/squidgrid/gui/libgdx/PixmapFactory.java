@@ -38,9 +38,10 @@ public class PixmapFactory {
      */
     public static int getRGBA(int rgb) {
         int a = rgb >> 24;
+        a &= 0x000000ff;
         int rest = rgb & 0x00ffffff;//mask out the alpha channel
         rest <<= 8;
-        rest += a;
+        rest |= a;
         return rest;
     }
 }
