@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.TreeMap;
-import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.util.Direction;
 import squidpony.squidutility.Pair;
 

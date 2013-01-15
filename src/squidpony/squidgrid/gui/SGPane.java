@@ -12,33 +12,34 @@ import java.awt.Font;
  * @author Eben Howard - http://squidpony.com - eben@squidpony.com
  */
 public interface SGPane {
-    
+
     /**
      * Returns the height of a single cell.
-     * @return 
+     *
+     * @return
      */
-    int getCellHeight();
-    
+    public int getCellHeight();
+
     /**
      * Returns the width of a single cell.
-     * 
-     * @return 
+     *
+     * @return
      */
-    int getCellWidth();
+    public int getCellWidth();
 
     /**
      * Returns the height of the grid. This is the number of rows in the grid.
      *
      * @return
      */
-    int getGridHeight();
+    public int getGridHeight();
 
     /**
      * Returns the width of the grid. This is the number of columns in the grid.
      *
      * @return
      */
-    int getGridWidth();
+    public int getGridWidth();
 
     /**
      * Initializes the component with the supplied values. The cells will be set
@@ -47,22 +48,39 @@ public interface SGPane {
      *
      * @param cellWidth in pixels
      * @param cellHeight in pixels
-     * @param panelWidth in cells
-     * @param panelHeight in cells
+     * @param gridWidth in cells
+     * @param gridHeight in cells
      * @param font
      */
-    void initialize(int cellWidth, int cellHeight, int panelWidth, int panelHeight, Font font);
+    public void initialize(int cellWidth, int cellHeight, int gridWidth, int gridHeight, Font font);
 
     /**
      * Initializes the component with the supplied number of rows and columns.
      * The size of the display will be adjusted to match the requested font size
      * as closely as possible.
      *
-     * @param panelWidth in cells
-     * @param panelHeight in cells
+     * @param gridWidth in cells
+     * @param gridHeight in cells
      * @param font
      */
-    void initialize(int panelWidth, int panelHeight, Font font);
+    public void initialize(int gridWidth, int gridHeight, Font font);
+
+    /**
+     * Clears the cell at the location given with the default background color.
+     *
+     * @param x
+     * @param y
+     */
+    public void clearCell(int x, int y);
+
+    /**
+     * Clears the cell at the location given with the provided color.
+     *
+     * @param x
+     * @param y
+     * @param color
+     */
+    public void clearCell(int x, int y, Color color);
 
     /**
      * Sets one specific block to the given character.
@@ -74,7 +92,7 @@ public interface SGPane {
      * @param y The y coordinate to set
      * @param c The character to be displayed
      */
-    void placeCharacter(int x, int y, char c);
+    public void placeCharacter(int x, int y, char c);
 
     /**
      * Sets one specific block to the given character with the given foreground
@@ -89,7 +107,7 @@ public interface SGPane {
      * @param fore The foreground color
      * @param back The background color
      */
-    void placeCharacter(int x, int y, char c, Color fore, Color back);
+    public void placeCharacter(int x, int y, char c, Color fore, Color back);
 
     /**
      * Sets the block at the given coordinates to contain the passed in
@@ -101,7 +119,7 @@ public interface SGPane {
      * @param c
      * @param fore
      */
-    void placeCharacter(int x, int y, char c, Color fore);
+    public void placeCharacter(int x, int y, char c, Color fore);
 
     /**
      * Prints out a string starting at the given offset position. Any portion of
@@ -111,7 +129,7 @@ public interface SGPane {
      * @param xOffset
      * @param yOffset
      */
-    void placeHorizontalString(int xOffset, int yOffset, String string);
+    public void placeHorizontalString(int xOffset, int yOffset, String string);
 
     /**
      * Prints out a string vertically starting at the given offset position and
@@ -123,7 +141,7 @@ public interface SGPane {
      * @param foreground
      * @param background
      */
-    void placeHorizontalString(int xOffset, int yOffset, String string, Color foreground, Color background);
+    public void placeHorizontalString(int xOffset, int yOffset, String string, Color foreground, Color background);
 
     /**
      * Places the image associated with the provided key at the given
@@ -136,7 +154,7 @@ public interface SGPane {
      * @param y
      * @param key
      */
-    void placeImage(int x, int y, String key);
+    public void placeImage(int x, int y, String key);
 
     /**
      * Places the image associated with the provided key at the given
@@ -153,7 +171,7 @@ public interface SGPane {
      * @param key
      * @param background
      */
-    void placeImage(int x, int y, String key, Color background);
+    public void placeImage(int x, int y, String key, Color background);
 
     /**
      * Sets the contents of the component to reflect the two dimensional
@@ -165,7 +183,7 @@ public interface SGPane {
      * @param xOffset
      * @param yOffset
      */
-    void placeText(int xOffset, int yOffset, char[][] chars);
+    public void placeText(int xOffset, int yOffset, char[][] chars);
 
     /**
      * Sets the contents of the component to reflect the two dimensional
@@ -177,7 +195,7 @@ public interface SGPane {
      * @param foreground
      * @param background
      */
-    void placeText(int xOffset, int yOffset, char[][] chars, Color foreground, Color background);
+    public void placeText(int xOffset, int yOffset, char[][] chars, Color foreground, Color background);
 
     /**
      * Prints out a string starting at the given offset position. Any portion of
@@ -189,7 +207,7 @@ public interface SGPane {
      * @param foreground
      * @param background
      */
-    void placeVerticalString(int xOffset, int yOffset, String string, Color foreground, Color background);
+    public void placeVerticalString(int xOffset, int yOffset, String string, Color foreground, Color background);
 
     /**
      * Prints out a string vertically starting at the given offset position and
@@ -199,12 +217,12 @@ public interface SGPane {
      * @param yOffset
      * @param string
      */
-    void placeVerticalString(int xOffset, int yOffset, String string);
+    public void placeVerticalString(int xOffset, int yOffset, String string);
 
     /**
      * Signals that this component should update its display image.
      */
-    void refresh();
+    public void refresh();
 
     /**
      * Sets the background color which will be used on all text and transparent
@@ -212,7 +230,7 @@ public interface SGPane {
      *
      * @param defaultBackground
      */
-    void setDefaultBackground(Color defaultBackground);
+    public void setDefaultBackground(Color defaultBackground);
 
     /**
      * Sets the background color which will be used on all text and transparent
@@ -220,7 +238,7 @@ public interface SGPane {
      *
      * @param defaultForeground
      */
-    void setDefaultForeground(Color defaultForeground);
+    public void setDefaultForeground(Color defaultForeground);
 
     /**
      * Sets the contents of the component to reflect the two dimensional
@@ -231,7 +249,7 @@ public interface SGPane {
      *
      * @param chars
      */
-    void setText(char[][] chars);
+    public void setText(char[][] chars);
 
     /**
      * Test if the given character will fit in the current cell dimension using
@@ -240,6 +258,5 @@ public interface SGPane {
      * @param character
      * @return true if it will fit, false otherwise.
      */
-    boolean willFit(char character);
-    
+    public boolean willFit(char character);
 }
