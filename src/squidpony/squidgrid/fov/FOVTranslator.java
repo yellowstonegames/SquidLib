@@ -1,8 +1,5 @@
 package squidpony.squidgrid.fov;
 
-import java.util.HashMap;
-import squidpony.squidutility.Pair;
-
 /**
  * An Adapter which wraps a FOVSolver and allows the input and output of
  * multiple types.
@@ -22,13 +19,16 @@ import squidpony.squidutility.Pair;
  * treated as unlit by the integer returning methods but may still be considered
  * lit under the boolean and float systems.
  *
+ * When using the boolean methods, true is equivalent to fully resistant on the
+ * input and fully lit on the output.
+ *
  * Regarding scale: floating point operations have an implicit scale of 1f and
  * boolean operations have an implicit infinitely small scale making any value
  * which indicates some light present be treated as fully lit. Using an integer
  * scale of 1 is the inverse of using the boolean scale because rounding will
  * make any value less than fully lit be considered unlit.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class FOVTranslator implements FOVSolver {
 
@@ -51,7 +51,7 @@ public class FOVTranslator implements FOVSolver {
 
     @Override
     public float[][] calculateFOV(float[][] map, int startx, int starty, float radius) {
-        lightMap = calculateFOV(map, startx, starty, 1, 1f / radius, BasicRadiusStrategy.CIRCLE);//don't need a radius strategy as it uses ones added from pairs
+        lightMap = solver.calculateFOV(map, startx, starty, 1, 1f / radius, BasicRadiusStrategy.CIRCLE);
         return lightMap;
     }
 
@@ -116,7 +116,10 @@ public class FOVTranslator implements FOVSolver {
     }
 
     /**
-     * Calculates the FOV using a boolean array.
+     * Calculates the FOV using a boolean array where true indicates that the
+     * location blocks all light.
+     *
+     * In the returned array, true indicates that the cell is lit.
      *
      * @param map
      * @param startx
@@ -146,7 +149,10 @@ public class FOVTranslator implements FOVSolver {
     }
 
     /**
-     * Calculates the FOV using a boolean array.
+     * Calculates the FOV using a boolean array where true indicates that the
+     * location blocks all light.
+     *
+     * In the returned array, true indicates that the cell is lit.
      *
      * @param map
      * @param startx
@@ -174,9 +180,9 @@ public class FOVTranslator implements FOVSolver {
     }
 
     /**
-     * Returns the last calculated light map as a boolean 2d array. Any cell
-     * with any amount of light > 0 is considered to be lit. Lit cells are
-     * marked true and unlit marked false;
+     * Returns the last calculated light map as a boolean 2d array.
+     *
+     * Lit cells are marked true and unlit marked false;
      *
      * @return
      */

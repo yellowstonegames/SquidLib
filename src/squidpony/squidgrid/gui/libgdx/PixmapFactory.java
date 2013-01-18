@@ -20,10 +20,12 @@ public class PixmapFactory {
         int width = image.getWidth();
         int height = image.getHeight();
         Pixmap pix = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        int[] pixels = image.getRGB(0, 0, width, height, null, 0, width);
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                pix.drawPixel(x, y, getRGBA(image.getRGB(x, y)));
+                int pixel = pixels[y * width + x];
+                pix.drawPixel(x, y, getRGBA(pixel));
             }
         }
 
