@@ -79,6 +79,16 @@ public interface SGPane {
     public void clearCell(int x, int y, Color color);
 
     /**
+     * Sets the background to the provided color. Does not change the
+     * foreground.
+     *
+     * @param x
+     * @param y
+     * @param color
+     */
+    public void setCellBackground(int x, int y, Color color);
+
+    /**
      * Sets one specific block to the given character.
      *
      * This block is not drawn immediately, refresh() must be called to update

@@ -185,6 +185,13 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     @Override
+    public void setCellBackground(int x, int y, Color color) {
+        BufferedImage fore = foregroundContents[x][y];
+        clearCell(x, y, color);
+        foregroundContents[x][y] = fore;
+    }
+
+    @Override
     public void placeCharacter(int x, int y, char c) {
         placeCharacter(x, y, c, defaultForeground);
     }
