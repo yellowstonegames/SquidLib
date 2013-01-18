@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package squidpony.squidgrid.gui;
 
 import java.awt.Color;
@@ -123,7 +119,8 @@ public interface SGPane {
 
     /**
      * Prints out a string starting at the given offset position. Any portion of
-     * the string that would cross the edge is ignored.
+     * the string that would cross the edge is ignored. The default foreground
+     * color is used and the background is not effected.
      *
      * @param string
      * @param xOffset
@@ -175,7 +172,8 @@ public interface SGPane {
 
     /**
      * Sets the contents of the component to reflect the two dimensional
-     * character array, starting at the given offset position.
+     * character array, starting at the given offset position. The default
+     * foreground color is used and the background is not effected.
      *
      * Any content that would be off the screen to the right or down is ignored.
      *
@@ -211,7 +209,8 @@ public interface SGPane {
 
     /**
      * Prints out a string vertically starting at the given offset position and
-     * traveling down.
+     * traveling down. The default foreground color is used and the background
+     * is not effected.
      *
      * @param xOffset
      * @param yOffset
