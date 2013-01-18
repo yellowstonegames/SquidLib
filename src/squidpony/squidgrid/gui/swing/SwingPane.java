@@ -132,7 +132,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
 
     @Override
     public void placeText(int xOffset, int yOffset, char[][] chars) {
-        placeText(xOffset, yOffset, chars, defaultForeground, defaultBackground);
+        placeText(xOffset, yOffset, chars, defaultForeground, null);
     }
 
     @Override
@@ -140,7 +140,11 @@ public class SwingPane extends JLayeredPane implements SGPane {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    placeCharacter(x, y, chars[x - xOffset][y - yOffset], foreground, background);
+                    if (background != null) {
+                        placeCharacter(x, y, chars[x - xOffset][y - yOffset], foreground, background);
+                    } else {
+                        placeCharacter(x, y, chars[x - xOffset][y - yOffset], foreground);
+                    }
                 }
             }
         }
@@ -148,7 +152,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
 
     @Override
     public void placeHorizontalString(int xOffset, int yOffset, String string) {
-        placeHorizontalString(xOffset, yOffset, string, defaultForeground, defaultBackground);
+        placeHorizontalString(xOffset, yOffset, string, defaultForeground, null);
     }
 
     @Override
@@ -167,7 +171,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
 
     @Override
     public void placeVerticalString(int xOffset, int yOffset, String string) {
-        placeVerticalString(xOffset, yOffset, string, defaultForeground, defaultBackground);
+        placeVerticalString(xOffset, yOffset, string, defaultForeground, null);
     }
 
     @Override
