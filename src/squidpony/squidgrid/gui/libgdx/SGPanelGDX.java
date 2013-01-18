@@ -6,10 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
 import java.util.TreeMap;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.gui.SGPane;
 import squidpony.squidgrid.gui.awt.TextCellFactory;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * A libGDX implementation of SPanel that allows both text and graphics.
@@ -104,6 +106,11 @@ public class SGPanelGDX extends Group implements SGPane {
     }
 
     @Override
+    public void setCellBackground(int x, int y, Color color) {
+        throw new NotImplementedException();
+    }
+
+    @Override
     public void placeCharacter(int x, int y, char c) {
         placeCharacter(x, y, c, defaultForeColor, defaultBackColor);
     }
@@ -131,7 +138,7 @@ public class SGPanelGDX extends Group implements SGPane {
 
     @Override
     public void placeCharacter(int x, int y, char c, Color fore) {
-        placeCharacter(x, y, c, fore, defaultBackColor);
+        placeCharacter(x, y, c, fore, null);
     }
 
     @Override
@@ -181,7 +188,11 @@ public class SGPanelGDX extends Group implements SGPane {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    placeCharacter(x, y, chars[x - xOffset][y - yOffset], foreground, background);
+                    if (background != null) {
+                        placeCharacter(x, y, chars[x - xOffset][y - yOffset], foreground, background);
+                    } else {
+                        placeCharacter(x, y, chars[x - xOffset][y - yOffset], foreground);
+                    }
                 }
             }
         }
