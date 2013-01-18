@@ -5166,6 +5166,11 @@ public class SColor extends Color implements Comparable {
      */
     public static final SColor ZINNWALDITE = new SColor(0xEBC2AF, "Zinnwaldite");
     /**
+     * A color constant that is fully transparent. The RGB portion is Black, but
+     * should not render when used in a method that respects alpha values.
+     */
+    public static final SColor TRANSPARENT = new SColor(0x00000000, "Transparent");
+    /**
      * This array is loaded with the colors found in the rainbow, in the
      * standard ROYGBIV order.
      */

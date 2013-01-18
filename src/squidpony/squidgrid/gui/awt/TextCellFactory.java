@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.util.Direction;
 import squidpony.squidutility.Pair;
 
@@ -616,6 +617,7 @@ public class TextCellFactory implements Cloneable {
     private BufferedImage makeImage(char c, Color foreground) {
         BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
+        g.setBackground(SColor.TRANSPARENT);
         drawForeground(g, c, foreground);
         return i;
     }

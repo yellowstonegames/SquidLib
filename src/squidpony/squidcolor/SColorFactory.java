@@ -29,13 +29,13 @@ public class SColorFactory {
      */
     private SColorFactory() {
     }
-    
+
     /**
      * Returns the number of SColor objects currently cached.
-     * 
-     * @return 
+     *
+     * @return
      */
-    public int getQuantityCached(){
+    public static int getQuantityCached() {
         return colorBag.size();
     }
 
@@ -122,14 +122,22 @@ public class SColorFactory {
      */
     public static SColor getSColor(int rgb) {
         if (flooring != 1) {//need to convert to floored values
-            int r = rgb >> 16;
+            int a = (rgb >> 24) & 0xff;
+            a -= a % flooring;
+            int r = (rgb >> 16) & 0xff;
             r -= r % flooring;
-            int g = rgb >> 8 & 0xFF;
+            int g = (rgb >> 8) & 0xff;
             g -= g % flooring;
-            int b = rgb & 0xFF;
+            int b = (rgb >> 0) & 0xff;
             b -= b % flooring;
-            rgb = r << 16 + g << 8 + b;//put the colors back in order
+
+            //put back together
+            rgb = ((a & 0xFF) << 24)
+                    | ((r & 0xFF) << 16)
+                    | ((g & 0xFF) << 8)
+                    | ((b & 0xFF) << 0);
         }
+
         if (colorBag.containsKey(rgb)) {
             return colorBag.get(rgb);
         } else {
