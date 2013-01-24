@@ -15,7 +15,7 @@ import squidpony.squidmath.Point3D;
 /**
  * This class animates an image sliding directly from one point to another.
  *
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class SlideAnimation implements Animation {
     private Queue<Point3D> moves;

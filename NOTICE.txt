@@ -18,8 +18,12 @@ SquidPony (http://squidpony.com)
 
 Thanks to TSMI of #rgrd for help in developing SquidLib.
 
-Portions of Bresenham methods are derived from Bob Pendletons C algorithm, which is in turn derived from Paul Heckberts algorithm ("Digital Line Drawing" from "Graphics Gems", Academic Press, 1990
+Portions of Bresenham methods are derived from Bob Pendletons C algorithm, which is in turn derived from Paul Heckberts algorithm ("Digital Line Drawing" from "Graphics Gems", Academic Press, 1990.
 
-Portions of FOV and LOS classes are derived from works by Steven Blacken originally distributed as part of the Blacken Library for roguelike games
+Portions of FOV and LOS classes are derived from works by Steven Blacken originally distributed as part of the Blacken Library for roguelike games.
 
 Portions of some classes are derived from works by Jice orginally distributed in the libtcod library.
+
+The @Beta annotation is from Google's Guava library.
+
+The JRotation class is Bbased on code by Savvas Dalkitsis on stackoverflow.com.

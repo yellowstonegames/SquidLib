@@ -15,32 +15,35 @@ import squidpony.squidmath.Point3D;
 /**
  * Animates an object moving smoothly in a direction and then bouncing back.
  *
- * @author Eben Howard http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class BumpAnimation implements Animation {
+
     private Queue<Point3D> moves;
     private JComponent component;
     private JLabel label;
     private Point start;
 
     /**
-     * Creates a bump animation that will travel one cell in the given direction.
-     * 
+     * Creates a bump animation that will travel one cell in the given
+     * direction.
+     *
      * @param image
      * @param start
      * @param cellSize
-     * @param direction 
+     * @param direction
      */
     public BumpAnimation(BufferedImage image, Point start, Dimension cellSize, Point direction) {
         this(image, start, new Point(start.x + direction.x * cellSize.width, start.y + direction.y * cellSize.height));
     }
 
     /**
-     * Creates a bump animation that will travel from the start to the end point and then back.
-     * 
+     * Creates a bump animation that will travel from the start to the end point
+     * and then back.
+     *
      * @param image
      * @param start
-     * @param end 
+     * @param end
      */
     public BumpAnimation(BufferedImage image, Point start, Point end) {
         this.start = start;

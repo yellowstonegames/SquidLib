@@ -1,13 +1,16 @@
 package squidpony.squidgrid.fov;
 
+import squidpony.annotation.Beta;
+
 /**
  * Performs FOV by pushing values outwards from the source location. It will
  * only go around corners slightly.
  *
  * This algorithm does perform bounds checking.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class RippleFOV implements FOVSolver {
 
     private float[][] lightMap;

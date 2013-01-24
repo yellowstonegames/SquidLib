@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.TreeMap;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.util.Direction;
-import squidpony.squidutility.Pair;
 
 /**
  * Class for creating text blocks.
@@ -17,7 +16,7 @@ import squidpony.squidutility.Pair;
  * The default characters guaranteed to fit are ASCII 33 through 125, which are
  * the commonly used symbols, numbers, and letters.
  *
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class TextCellFactory implements Cloneable {
 

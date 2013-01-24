@@ -2,11 +2,18 @@ package squidpony.squidgrid.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import squidpony.annotation.Beta;
 
 /**
+ * A basic interface for working with grids.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * This interface's Beta status is due to the libGDX version potentially
+ * becoming different enough that this interface is removed in favor of direct
+ * implementation of desired back end panels.
+ *
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public interface SGPane {
 
     /**

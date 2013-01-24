@@ -11,7 +11,7 @@ import javax.swing.event.MouseInputListener;
  * This class is meant to be used as a wrapper to your own mouse listener, it
  * simply converts the coordinates from UI Component x,y to Grid based x,y
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class SGMouseListener implements MouseInputListener {
 

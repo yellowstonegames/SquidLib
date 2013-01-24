@@ -1,5 +1,7 @@
 package squidpony.squidgrid.fov;
 
+import squidpony.annotation.Beta;
+
 /**
  * Simple raytracing algorithm for Field of View. In large areas will be
  * relatively inefficient due to repeated visiting of some cells.
@@ -17,9 +19,9 @@ package squidpony.squidgrid.fov;
  * 
  * Currently a work in progress.
  *
- * @deprecated 
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class RayCastingFOV implements FOVSolver {
 
     private float gap = 0.4f;//how much gap to leave from the edges when tracing rays

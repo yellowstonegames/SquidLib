@@ -6,7 +6,7 @@ import java.awt.Point;
  * Generic three dimensional coordinate class.
  *
  * @author Lewis Potter
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class Point3D extends Point {
     public int z;

@@ -8,16 +8,19 @@ import javax.swing.JComponent;
 /**
  * Controls animations of images. Intended to be used with a Timer to activate
  * the animation frames.
- * 
- * The component for the animation must be set before the animation will function properly.
- * All coordinates will be relative to the coordinate plane of the provided component.
  *
- * @author Eben Howard - http://squidpony.com
+ * The component for the animation must be set before the animation will
+ * function properly. All coordinates will be relative to the coordinate plane
+ * of the provided component.
+ *
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public interface Animation extends ActionListener {
+
     /**
-     * Returns true if the component should continue to be allowed to animate. Animations on a loop
-     * will always return true so some outside mechanism must decide when to terminate them.
+     * Returns true if the component should continue to be allowed to animate.
+     * Animations on a loop will always return true so some outside mechanism
+     * must decide when to terminate them.
      *
      * @return
      */
@@ -25,27 +28,27 @@ public interface Animation extends ActionListener {
 
     /**
      * Returns the number of milliseconds desired between frames of animation.
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getDelay();
 
     /**
-     * Returns the static image associated with this animation. Will typically be
-     * the ending image, but this may vary based on the animation style.
-     * 
-     * This method is intended to be called when converting an animation into a static
-     * image.
-     * 
-     * @return 
+     * Returns the static image associated with this animation. Will typically
+     * be the ending image, but this may vary based on the animation style.
+     *
+     * This method is intended to be called when converting an animation into a
+     * static image.
+     *
+     * @return
      */
     public BufferedImage getImage();
 
     /**
      * Sets the Component in which this animation will take place. This must be
      * set for the animation to function.
-     * 
-     * @param component 
+     *
+     * @param component
      */
     public void setComponent(JComponent component);
 
@@ -56,8 +59,8 @@ public interface Animation extends ActionListener {
 
     /**
      * Returns the coordinate of the top left corner of the animation.
-     * 
-     * @return 
+     *
+     * @return
      */
     public Point getLocation();
 }

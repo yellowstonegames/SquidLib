@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * regularly checks for user input. If your application is event driven then a
  * standard java.awt.even.KeyListener would be more appropriate to use;
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class SGKeyListener implements KeyListener, Iterable<KeyEvent>, Iterator<KeyEvent> {
 
