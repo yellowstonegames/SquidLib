@@ -6,7 +6,7 @@ import java.util.Random;
  * Customized extension of Random to allow for common roguelike operations.
  *
  * @author Lewis Potter
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class RNG extends Random {
 

@@ -4,7 +4,7 @@ package squidpony.squidgrid.fov;
  * Indicates which method of dealing with the radius during FOV and LOS solving
  * is preferred.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public interface RadiusStrategy {
 

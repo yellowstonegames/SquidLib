@@ -11,13 +11,13 @@ import java.util.TreeMap;
 /**
  * Class for managing tile images. All images must be the same dimensions.
  *
- * @author Eben Howard -- http://squidpony.com
+ * @author Eben Howard -- http://squidpony.com - howard@squidpony.com
  */
 public class ImageCellMap implements Map {
 
     private BufferedImage nullImage;
     int cellWidth, cellHeight;
-    TreeMap<String, BufferedImage> blocks = new TreeMap<String, BufferedImage>();
+    TreeMap<String, BufferedImage> blocks = new TreeMap<>();
 
     /**
      * A cached image set.

@@ -6,7 +6,7 @@ package squidpony.squidgrid.util;
  *
  * The grid referenced has x positive to the right and y positive downwards.
  *
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public enum Direction {
 

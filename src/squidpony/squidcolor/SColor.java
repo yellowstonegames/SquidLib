@@ -1,6 +1,7 @@
 package squidpony.squidcolor;
 
 import java.awt.Color;
+import java.util.Objects;
 
 /**
  * Allows for the use of custom colors with custom names.
@@ -8,12 +9,11 @@ import java.awt.Color;
  * These colors are comparable for equality but the ordering of them is based on
  * their hex values.
  *
- * Has some built in pallets available as SColor arrays.
+ * Has some built in palettes available as SColor arrays.
  *
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class SColor extends Color implements Comparable {
-
+public class SColor extends Color {
     private String name = "Unnamed";
     /**
      * Color constant<PRE><font style="background-color: #f0f8ff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #000000;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #888888;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #ffffff;" color=000000>&nbsp&nbsp&nbsp</font><font style="background-color: #f0f8ff;" color=000000>&nbsp@&nbsp</font>
@@ -5416,41 +5416,6 @@ public class SColor extends Color implements Comparable {
         this.name = name;
     }
 
-    /**
-     * Compares the current color to another color. Comparison is not guaranteed
-     * to lead to a logical color ordering that may be expected.
-     *
-     * @param color new color to compare with current color
-     * @return indicator of comparison between colors
-     */
-    public int compareTo(SColor color) {
-        int compare = 0;//default to being equal
-        if (getRGB() < color.getRGB()) {
-            compare = -1;
-        } else if (getRGB() > color.getRGB()) {
-            compare = 1;
-        }
-        return compare;
-    }
-
-    /**
-     * Compares the current color to another object of any type. If the second
-     * object is not a SColor object than an exception will be thrown.
-     *
-     * @throws UnsupportedOperationException if second object not a SColor
-     * object
-     * @param arg0 second object to be compared to
-     * @return indicator of comparison between colors
-     */
-    @Override
-    public int compareTo(Object arg0) {
-        try {
-            return compareTo((SColor) arg0);
-        } catch (Exception e) {
-            throw new UnsupportedOperationException("Incorrect Object Type");
-        }
-    }
-
     @Override
     public String toString() {
         return name + " " + super.toString();
@@ -5458,5 +5423,18 @@ public class SColor extends Color implements Comparable {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof SColor || other instanceof Color ? this.getRGB() == ((Color) other).getRGB() : false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 31 * hash + Objects.hashCode(this.name);
+        hash += 31 * hash + Objects.hashCode(this.getRGB());
+        return hash;
     }
 }

@@ -5,7 +5,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * @author Eben Howard - http://squidpony.com
+ * Provides a means to generate Bresenham lines in 2D and 3D.
+ * 
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Lewis Potter
  */
 public class Bresenham {

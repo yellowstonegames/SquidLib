@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.image.BufferedImage;
 import java.util.TreeMap;
+import squidpony.annotation.Beta;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.gui.SGPane;
 import squidpony.squidgrid.gui.awt.TextCellFactory;
@@ -16,8 +16,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 /**
  * A libGDX implementation of SPanel that allows both text and graphics.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class SGPanelGDX extends Group implements SGPane {
 
     private TextCellFactory textFactory = new TextCellFactory();

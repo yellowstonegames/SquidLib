@@ -3,10 +3,12 @@ package squidpony.squidutility;
 import java.util.Objects;
 
 /**
- * A Collection that stores two values related in some way. In additions to
- * having values accessible by key, they may also be accessed by value;
+ * A Collection that stores two values related in some way.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * In additions to having values accessible by key, they may also be accessed by
+ * value.
+ *
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class Pair<F, S> {
 

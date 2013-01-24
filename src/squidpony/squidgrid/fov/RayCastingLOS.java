@@ -3,6 +3,7 @@ package squidpony.squidgrid.fov;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.Queue;
+import squidpony.annotation.Beta;
 
 /**
  * Uses a series of rays internal to the start and end point to determine
@@ -10,6 +11,7 @@ import java.util.Queue;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class RayCastingLOS implements LOSSolver {
 
     Queue<Point> path;

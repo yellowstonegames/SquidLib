@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 /**
  * Provides methods for converting images to Pixmaps
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class PixmapFactory {
 

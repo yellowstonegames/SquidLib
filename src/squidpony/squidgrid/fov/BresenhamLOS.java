@@ -3,14 +3,16 @@ package squidpony.squidgrid.fov;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.Queue;
+import squidpony.annotation.Beta;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Point3D;
 
 /**
  * A Bresenham-based line-of-sight algorithm.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class BresenhamLOS implements LOSSolver {
 
     Queue<Point3D> lastPath = new LinkedList<>();
