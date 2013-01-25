@@ -246,15 +246,6 @@ public class TextCellFactory implements Cloneable {
         cellHeight *= 2;
         horizontalOffset = cellWidth / 2;
         verticalOffset = 0;
-
-        System.out.println("");
-        System.out.print("Sizing by:");
-        for (char c : largeCharacters) {
-            System.out.print(" " + c);
-        }
-        System.out.println("");
-        System.out.println("Found Size: (" + cellWidth + ", " + cellHeight + ")");
-
         trimCell();
     }
 
@@ -314,9 +305,6 @@ public class TextCellFactory implements Cloneable {
         //set cell sizes based on found best sizes
         cellWidth = bestWidth;
         cellHeight = bestHeight;
-
-        System.out.println("Trimmed Size: (" + bestWidth + ", " + bestHeight + ")");
-        System.out.println("Offests: (" + horizontalOffset + ", " + verticalOffset + ")");
     }
 
     private void sizeCellByDimension() {

@@ -10,7 +10,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import squidpony.squidmath.Bresenham;
-import squidpony.squidmath.Point3D;
 
 /**
  * This class animates an image sliding directly from one point to another.
@@ -18,7 +17,7 @@ import squidpony.squidmath.Point3D;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class SlideAnimation implements Animation {
-    private Queue<Point3D> moves;
+    private Queue<Point> moves;
     private JComponent component;
     private JLabel label;
     private int delay;

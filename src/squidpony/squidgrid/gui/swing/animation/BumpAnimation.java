@@ -10,7 +10,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import squidpony.squidmath.Bresenham;
-import squidpony.squidmath.Point3D;
 
 /**
  * Animates an object moving smoothly in a direction and then bouncing back.
@@ -19,7 +18,7 @@ import squidpony.squidmath.Point3D;
  */
 public class BumpAnimation implements Animation {
 
-    private Queue<Point3D> moves;
+    private Queue<Point> moves;
     private JComponent component;
     private JLabel label;
     private Point start;

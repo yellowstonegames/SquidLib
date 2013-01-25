@@ -50,15 +50,15 @@ public class RayCastingFOV implements FOVSolver {
     }
 
     @Override
-    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, RadiusStrategy radiusStrategy) {
-        this.map = map;
+    public float[][] calculateFOV(float[][] resistanceMap, int startx, int starty, float force, float decay, RadiusStrategy radiusStrategy) {
+        this.map = resistanceMap;
         this.force = force;
         this.decay = decay;
         this.fx = startx + 0.5f;
         this.fy = starty + 0.5f;
         this.rStrat = radiusStrategy;
-        width = map.length;
-        height = map[0].length;
+        width = resistanceMap.length;
+        height = resistanceMap[0].length;
         lightMap = new float[width][height];
 
         float maxRadius = force / decay + 1;
@@ -144,7 +144,7 @@ public class RayCastingFOV implements FOVSolver {
     }
 
     @Override
-    public float[][] calculateFOV(float[][] map, int startx, int starty, float radius) {
-        return calculateFOV(map, startx, starty, 1, 1 / radius, BasicRadiusStrategy.CIRCLE);
+    public float[][] calculateFOV(float[][] resistanceMap, int startx, int starty, float radius) {
+        return calculateFOV(resistanceMap, startx, starty, 1, 1 / radius, BasicRadiusStrategy.CIRCLE);
     }
 }

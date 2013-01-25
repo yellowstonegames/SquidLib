@@ -6,7 +6,7 @@ import java.util.Queue;
 
 /**
  * Provides a means to generate Bresenham lines in 2D and 3D.
- * 
+ *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Lewis Potter
  */
@@ -19,21 +19,13 @@ public class Bresenham {
     }
 
     /**
-     * Returns 0 for 0, -1 for negative parameters and 1 for positive
-     * parameters.
-     */
-    private static int zsgn(int a) {
-        return ((a < 0) ? -1 : (a > 0) ? 1 : 0);
-    }
-
-    /**
      * Generates a 2D Bresenham line between two points.
      *
      * @param a
      * @param b
      * @return
      */
-    public static Queue<Point3D> line2D(Point a, Point b) {
+    public static Queue<Point> line2D(Point a, Point b) {
         return line2D(a.x, a.y, b.x, b.y);
     }
 
@@ -46,8 +38,13 @@ public class Bresenham {
      * @param endY
      * @return
      */
-    public static Queue<Point3D> line2D(int startX, int startY, int endX, int endY) {
-        return line3D(startX, startY, 0, endX, endY, 0);
+    public static Queue<Point> line2D(int startX, int startY, int endX, int endY) {
+        Queue<Point> line = new LinkedList<>();
+        Queue<Point3D> found = line3D(startX, startY, 0, endX, endY, 0);
+        while (!found.isEmpty()) {
+            line.offer(found.poll());
+        }
+        return line;
     }
 
     /**
@@ -64,107 +61,102 @@ public class Bresenham {
     /**
      * Generates a 3D Bresenham line between the given coordinates.
      *
-     * @param x1
-     * @param y1
-     * @param z1
-     * @param x2
-     * @param y2
-     * @param z2
+     * @param startx
+     * @param starty
+     * @param startz
+     * @param endx
+     * @param endy
+     * @param endz
      * @return
      */
-    public static Queue<Point3D> line3D(int x1, int y1, int z1, int x2, int y2, int z2) {
-        Queue<Point3D> result = new LinkedList<Point3D>();
+    public static Queue<Point3D> line3D(int startx, int starty, int startz, int endx, int endy, int endz) {
+        Queue<Point3D> result = new LinkedList<>();
 
-        int xd, yd, zd;
-        int x, y, z;
-        int ax, ay, az;
-        int sx, sy, sz;
-        int dx, dy, dz;
+        int dx = endx - startx;
+        int dy = endy - starty;
+        int dz = endz - startz;
 
-        dx = x2 - x1;
-        dy = y2 - y1;
-        dz = z2 - z1;
+        int ax = Math.abs(dx) << 1;
+        int ay = Math.abs(dy) << 1;
+        int az = Math.abs(dz) << 1;
 
-        ax = Math.abs(dx) << 1;
-        ay = Math.abs(dy) << 1;
-        az = Math.abs(dz) << 1;
+        int signx = (int) Math.signum(dx);
+        int signy = (int) Math.signum(dy);
+        int signz = (int) Math.signum(dz);
 
-        sx = zsgn(dx);
-        sy = zsgn(dy);
-        sz = zsgn(dz);
+        int x = startx;
+        int y = starty;
+        int z = startz;
 
-        x = x1;
-        y = y1;
-        z = z1;
-
+        int deltax, deltay, deltaz;
         if (ax >= Math.max(ay, az)) /* x dominant */ {
-            yd = ay - (ax >> 1);
-            zd = az - (ax >> 1);
-            for (;;) {
+            deltay = ay - (ax >> 1);
+            deltaz = az - (ax >> 1);
+            while (true) {
                 result.offer(new Point3D(x, y, z));
-                if (x == x2) {
+                if (x == endx) {
                     return result;
                 }
 
-                if (yd >= 0) {
-                    y += sy;
-                    yd -= ax;
+                if (deltay >= 0) {
+                    y += signy;
+                    deltay -= ax;
                 }
 
-                if (zd >= 0) {
-                    z += sz;
-                    zd -= ax;
+                if (deltaz >= 0) {
+                    z += signz;
+                    deltaz -= ax;
                 }
 
-                x += sx;
-                yd += ay;
-                zd += az;
+                x += signx;
+                deltay += ay;
+                deltaz += az;
             }
         } else if (ay >= Math.max(ax, az)) /* y dominant */ {
-            xd = ax - (ay >> 1);
-            zd = az - (ay >> 1);
-            for (;;) {
+            deltax = ax - (ay >> 1);
+            deltaz = az - (ay >> 1);
+            while (true) {
                 result.offer(new Point3D(x, y, z));
-                if (y == y2) {
+                if (y == endy) {
                     return result;
                 }
 
-                if (xd >= 0) {
-                    x += sx;
-                    xd -= ay;
+                if (deltax >= 0) {
+                    x += signx;
+                    deltax -= ay;
                 }
 
-                if (zd >= 0) {
-                    z += sz;
-                    zd -= ay;
+                if (deltaz >= 0) {
+                    z += signz;
+                    deltaz -= ay;
                 }
 
-                y += sy;
-                xd += ax;
-                zd += az;
+                y += signy;
+                deltax += ax;
+                deltaz += az;
             }
         } else if (az >= Math.max(ax, ay)) /* z dominant */ {
-            xd = ax - (az >> 1);
-            yd = ay - (az >> 1);
-            for (;;) {
+            deltax = ax - (az >> 1);
+            deltay = ay - (az >> 1);
+            while (true) {
                 result.offer(new Point3D(x, y, z));
-                if (z == z2) {
+                if (z == endz) {
                     return result;
                 }
 
-                if (xd >= 0) {
-                    x += sx;
-                    xd -= az;
+                if (deltax >= 0) {
+                    x += signx;
+                    deltax -= az;
                 }
 
-                if (yd >= 0) {
-                    y += sy;
-                    yd -= az;
+                if (deltay >= 0) {
+                    y += signy;
+                    deltay -= az;
                 }
 
-                z += sz;
-                xd += ax;
-                yd += ay;
+                z += signz;
+                deltax += ax;
+                deltay += ay;
             }
         }
         return result;
