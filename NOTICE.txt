@@ -26,4 +26,6 @@ Portions of some classes are derived from works by Jice orginally distributed in
 
 The @Beta annotation is from Google's Guava library.
 
-The JRotation class is Bbased on code by Savvas Dalkitsis on stackoverflow.com.
+The JRotation class is based on code by Savvas Dalkitsis on stackoverflow.com.
+
+The RNG class is based on the Mersenne Twister implementation by Daniel Dyer as part of the Uncommons Maths library, which is in turn based on the original C algorithm by Makoto Matsumoto and Takuji Nishimura.
