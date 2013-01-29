@@ -30,6 +30,10 @@ public class RippleFOV implements FOVSolver {
      * @return
      */
     private float getNearLight(int x, int y) {
+        if (Math.abs(startx - x) <= 1 && Math.abs(starty - y) <= 1) {//if next to start cell, get full light
+            return lightMap[startx][starty];
+        }
+
         int x2 = x - (int) Math.signum(x - startx);
         int y2 = y - (int) Math.signum(y - starty);
 
@@ -51,9 +55,8 @@ public class RippleFOV implements FOVSolver {
 
         //find largest emmitted light in direction of source
         float light = 0f;
-        int close = rStrat.radius(startx, starty, x, y) <= 1 ? 0 : 1; //if next to start cell, don't apply start cell's resistance
         if (map[x2][y2] < 1f && lightMap[x2][y2] > 0) {
-            light = Math.max(light, lightMap[x2][y2] * (1 - close * map[x2][y2]));
+            light = Math.max(light, lightMap[x2][y2] * (1 - map[x2][y2]));
             mainLit = true;
         }
 
@@ -61,43 +64,43 @@ public class RippleFOV implements FOVSolver {
         if (x2 == x) {//add one left and right
             int dx1 = Math.max(0, x - 1);
             int dx2 = Math.min(width - 1, x + 1);
-            int dy = y2;
+            int dy = y;
             if (map[dx2][dy] < 1f && lightMap[dx2][dy] > 0) {
-                light = Math.max(light, lightMap[dx2][dy] * (1 - close * map[dx2][dy]));
+                light = Math.max(light, lightMap[dx2][dy] * (1 - map[dx2][dy]));
                 sideALit = true;
             }
             if (map[dx1][dy] < 1f && lightMap[dx1][dy] > 0) {
-                light = Math.max(light, lightMap[dx1][dy] * (1 - close * map[dx1][dy]));
+                light = Math.max(light, lightMap[dx1][dy] * (1 - map[dx1][dy]));
                 sideBLit = true;
             }
         } else if (y2 == y) {//add one up and one down
             int dy1 = Math.max(0, y - 1);
             int dy2 = Math.min(height - 1, y + 1);
-            int dx = x2;
+            int dx = x;
             if (map[dx][dy1] < 1f && lightMap[dx][dy1] > 0) {
-                light = Math.max(light, lightMap[dx][dy1] * (1 - close * map[dx][dy1]));
+                light = Math.max(light, lightMap[dx][dy1] * (1 - map[dx][dy1]));
                 sideALit = true;
             }
             if (map[dx][dy2] < 1f && lightMap[dx][dy2] > 0) {
-                light = Math.max(light, lightMap[dx][dy2] * (1 - close * map[dx][dy2]));
+                light = Math.max(light, lightMap[dx][dy2] * (1 - map[dx][dy2]));
                 sideBLit = true;
             }
         } else {
             if (xDominance > 0 && map[x2][y] < 1f && lightMap[x2][y] > 0) {
                 float tempLight = lightMap[x2][y];
                 if (tempLight > 0) {
-                    light = Math.max(light, tempLight * (1 - close * map[x2][y]));
+                    light = Math.max(light, tempLight * (1 - map[x2][y]));
                     sideALit = true;
                 }
             } else if (xDominance < 0 && map[x][y2] < 1f && lightMap[x][y2] > 0) {
                 float tempLight = lightMap[x][y2];
                 if (tempLight > 0) {
-                    light = Math.max(light, tempLight * (1 - close * map[x][y2]));
+                    light = Math.max(light, tempLight * (1 - map[x][y2]));
                     sideBLit = true;
                 }
             } else if (xDominance == 0 && (map[x2][y2] < 1f || (map[x][y2] < 1f && map[x2][y] < 1f))) {//on a diagonal 
-                float tempLight = Math.max(lightMap[x2][y2] * (1 - close * map[x2][y2]),
-                        Math.max(lightMap[x2][y] * (1 - close * map[x2][y]), lightMap[x][y2] * (1 - close * map[x][y2])));
+                float tempLight = Math.max(lightMap[x2][y2] * (1 - map[x2][y2]),
+                        Math.max(lightMap[x2][y] * (1 - map[x2][y]), lightMap[x][y2] * (1 - map[x][y2])));
                 if (tempLight > 0) {
                     light = Math.max(light, tempLight);
                     mainLit = true;//really it might be that both sides are lit, but that counts the same
@@ -114,7 +117,7 @@ public class RippleFOV implements FOVSolver {
             light = 0;
         }
 
-        light = light - decay * distance;
+        light -= decay * distance;
         return light;
     }
 
@@ -131,9 +134,9 @@ public class RippleFOV implements FOVSolver {
             width = map.length;
             height = map[0].length;
             lightMap = new float[width][height];
-        }else{
-            for(int x = 0;x<width;x++){
-                for(int y = 0;y<height;y++){
+        } else {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
                     lightMap[x][y] = 0f;//mark as unlit
                 }
             }
