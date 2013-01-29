@@ -1,18 +1,15 @@
 package squidpony.squidgrid.fov;
 
-import squidpony.annotation.Beta;
-import static squidpony.squidgrid.fov.PushFOV.RayType.*;
+import static squidpony.squidgrid.fov.TranslucenceWrapperFOV.RayType.*;
 import squidpony.squidgrid.util.Direction;
-import static squidpony.squidgrid.util.Direction.*;
 
 /**
- * Uses slight permissiveness based on transparency to allows solid objects to
- * be more easily seen at slight angles.
+ * Acts as a wrapper which fully respects translucency and lights based on
+ * another FOVSolver.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-@Beta
-public class PushFOV implements FOVSolver {
+public class TranslucenceWrapperFOV implements FOVSolver {
 
     static enum RayType {
 
@@ -23,7 +20,21 @@ public class PushFOV implements FOVSolver {
     private int width, height, startx, starty;
     private RadiusStrategy rStrat;
     private float decay;
-    private float threshhold = 0.1f;
+
+    /**
+     * Uses default ShadowFOV to create lit area mapping
+     */
+    public TranslucenceWrapperFOV() {
+    }
+
+    /**
+     * Uses provided FOVSolver to create lit area mapping
+     *
+     * @param fov
+     */
+    public TranslucenceWrapperFOV(FOVSolver fov) {
+        this.fov = fov;
+    }
 
     @Override
     public float[][] calculateFOV(float[][] resistanceMap, int startx, int starty, float force, float decay, RadiusStrategy radiusStrategy) {
@@ -36,8 +47,6 @@ public class PushFOV implements FOVSolver {
         this.rStrat = radiusStrategy;
         lightMap = new float[width][height];
         shadowMap = fov.calculateFOV(resistanceMap, startx, starty, force, decay, radiusStrategy);
-
-
 
         lightMap[startx][starty] = force;//start out at full force
         for (Direction dir : Direction.OUTWARDS) {
@@ -59,27 +68,11 @@ public class PushFOV implements FOVSolver {
      * @param tertiary whether the light coming in is tertiary
      */
     private void pushLight(int x, int y, float light, Direction dir, Direction previous, RayType type) {
-        if (light <= 0 || x < 0 || x >= width || y < 0 || y >= height) {
-            return;//ran off the edge or ran out of light
+        if (light <= 0 || x < 0 || x >= width || y < 0 || y >= height || shadowMap[x][y] <= 0 || lightMap[x][y] >= light) {
+            return;//out of light, off the edge, base fov not lit, or already well lit
         }
 
-        if (type != TERTIARY && shadowMap[x][y] <= 0) {
-            return;//if shadow didn't light it, it's not lit unless it's a tertiary ray
-        }
-
-        if (type == TERTIARY && resistanceMap[x][y] < 1 - light) {//if the light is strong enough even transparent tiles will be lit
-            return;//not opaque enough to be lit by tertiary light
-        }
-
-        if ((type == SECONDARY || type == TERTIARY) && lightMap[x][y] >= light) {
-            return;//already well lit
-        }
-
-        lightMap[x][y] = Math.max(lightMap[x][y], light);//apply passed in light
-
-        if (type == TERTIARY) {
-            return;//tertiary light isn't passed on
-        }
+        lightMap[x][y] = light;//apply passed in light
 
         if (type == PRIMARY) {
             //push primary ray
@@ -109,28 +102,20 @@ public class PushFOV implements FOVSolver {
             pushLight(x + pushing.deltaX, y + pushing.deltaY, brightness, dir, pushing, SECONDARY);
 
             //now push through tertiary rays, first just continues in direction passed in
-            RayType pushType;
-            if (shadowMap[x][y] > threshhold) {
-                pushType = SECONDARY;
-            } else {
-                pushType = TERTIARY;
-            }
             radius = rStrat.radius(x, y, x + dir.deltaX, y + dir.deltaY);
             brightness = light * (1 - resistanceMap[x][y]);//light is reduced by the portion of the square passed through
             brightness -= radius * decay;//reduce by the amount of decay from passing through
-            pushLight(x + dir.deltaX, y + dir.deltaY, brightness, dir, pushing, pushType);
-            if (previous == UP || previous == RIGHT || previous == LEFT || previous == DOWN) {//came from an edge, push further along general flow
-                if (previous.clockwise().equals(dir)) {
-                    pushing = previous.clockwise();
-                } else {
-                    pushing = previous.counterClockwise();
-                }
-
-                radius = rStrat.radius(x, y, x + pushing.deltaX, y + pushing.deltaY);
-                brightness = light * (1 - resistanceMap[x][y]);//light is reduced by the portion of the square passed through
-                brightness -= radius * decay;//reduce by the amount of decay from passing through
-                pushLight(x + pushing.deltaX, y + pushing.deltaY, brightness, dir, pushing, pushType);
+            pushLight(x + dir.deltaX, y + dir.deltaY, brightness, dir, pushing, SECONDARY);
+            if (previous.clockwise().equals(dir)) {
+                pushing = previous.clockwise();
+            } else {
+                pushing = previous.counterClockwise();
             }
+
+            radius = rStrat.radius(x, y, x + pushing.deltaX, y + pushing.deltaY);
+            brightness = light * (1 - resistanceMap[x][y]);//light is reduced by the portion of the square passed through
+            brightness -= radius * decay;//reduce by the amount of decay from passing through
+            pushLight(x + pushing.deltaX, y + pushing.deltaY, brightness, dir, pushing, SECONDARY);
         }
     }
 

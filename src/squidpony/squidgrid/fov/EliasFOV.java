@@ -1,18 +1,42 @@
 package squidpony.squidgrid.fov;
 
+import squidpony.annotation.Beta;
 import squidpony.squidmath.Elias;
 
 /**
  * Uses the Elias line running to raycast.
  *
+ * Does not currently support translucency.
+ * 
+ * For information on the sideview parameter, see the EliasLOS documentation.
+ *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class EliasFOV implements FOVSolver {
 
     private float[][] lightMap, resistanceMap;
     private float maxRadius, force, decay;
     private int width, height;
     private RadiusStrategy rStrat;
+    private float sideview = 0.75f;
+
+    /**
+     * Creates a solver which will use the default sideview on the internal
+     * EliasLOS solver.
+     */
+    public EliasFOV() {
+    }
+
+    /**
+     * Creates a solver which will use the provided sideview value on the
+     * internal EliasLOS solver.
+     *
+     * @param sideview
+     */
+    public EliasFOV(float sideview) {
+        this.sideview = sideview;
+    }
 
     @Override
     public float[][] calculateFOV(float[][] resistanceMap, int startx, int starty, float force, float decay, RadiusStrategy radiusStrategy) {
@@ -46,7 +70,7 @@ public class EliasFOV implements FOVSolver {
 
     private void runLineGroup(int startx, int starty, int endx, int endy) {
         float[][] tempMap = Elias.lightMap(startx, starty, endx, endy);
-        EliasLOS los = new EliasLOS();
+        EliasLOS los = new EliasLOS(sideview);
 //        boolean xpositive = endx > startx;
 //        boolean ypositive = endy > starty;
         for (int x = Math.min(startx, endx); x <= Math.max(startx, endx); x++) {

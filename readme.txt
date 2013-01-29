@@ -28,7 +28,7 @@ Current Features:
 	Can perform LIBTCOD style "dark", "light", and "desaturate" commands on any color
 	Can get an arbitrary amount of blend between two colors
 *Roguelike Specific Toolkit
-	Robust Field of View system
+	Robust Field of View and Line of Sight system
 *Fully Documented API
 	Each named color has a sample of its appearance in the Javadoc against multiple backgrounds
 	HTML browsing of the API shows these samples
