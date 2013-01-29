@@ -15,6 +15,7 @@ public class RippleFOV implements FOVSolver {
 
     private float[][] lightMap;
     private float[][] map;
+    private boolean[][] indirect;//marks when a tile is only indirectly lit
     private float radius, decay;
     private int startx, starty, width = 1, height = 1;
     private RadiusStrategy rStrat;
@@ -32,6 +33,10 @@ public class RippleFOV implements FOVSolver {
     private float getNearLight(int x, int y) {
         if (Math.abs(startx - x) <= 1 && Math.abs(starty - y) <= 1) {//if next to start cell, get full light
             return lightMap[startx][starty];
+        }
+
+        if (indirect[x][y]) {
+            return 0f;//no light if this one was only indirectly lit
         }
 
         int x2 = x - (int) Math.signum(x - startx);
@@ -55,7 +60,7 @@ public class RippleFOV implements FOVSolver {
 
         //find largest emmitted light in direction of source
         float light = 0f;
-        if (map[x2][y2] < 1f && lightMap[x2][y2] > 0) {
+        if (!indirect[x2][y2] && map[x2][y2] < 1f && lightMap[x2][y2] > 0) {
             light = Math.max(light, lightMap[x2][y2] * (1 - map[x2][y2]));
             mainLit = true;
         }
@@ -64,41 +69,45 @@ public class RippleFOV implements FOVSolver {
         if (x2 == x) {//add one left and right
             int dx1 = Math.max(0, x - 1);
             int dx2 = Math.min(width - 1, x + 1);
-            int dy = y;
-            if (map[dx2][dy] < 1f && lightMap[dx2][dy] > 0) {
+            int dy = y + (int) Math.signum(y - starty);//move one step further away from the source
+            dy = Math.max(dy, 0);
+            dy = Math.min(dy, height - 1);
+            if (!indirect[dx2][dy] && map[dx2][dy] < 1f && lightMap[dx2][dy] > 0) {
                 light = Math.max(light, lightMap[dx2][dy] * (1 - map[dx2][dy]));
                 sideALit = true;
             }
-            if (map[dx1][dy] < 1f && lightMap[dx1][dy] > 0) {
+            if (!indirect[dx1][dy] && map[dx1][dy] < 1f && lightMap[dx1][dy] > 0) {
                 light = Math.max(light, lightMap[dx1][dy] * (1 - map[dx1][dy]));
                 sideBLit = true;
             }
         } else if (y2 == y) {//add one up and one down
             int dy1 = Math.max(0, y - 1);
             int dy2 = Math.min(height - 1, y + 1);
-            int dx = x;
-            if (map[dx][dy1] < 1f && lightMap[dx][dy1] > 0) {
+            int dx = x + (int) Math.signum(x - startx);//move one step further away from the source
+            dx = Math.max(dx, 0);
+            dx = Math.min(dx, width - 1);
+            if (!indirect[dx][dy1] && map[dx][dy1] < 1f && lightMap[dx][dy1] > 0) {
                 light = Math.max(light, lightMap[dx][dy1] * (1 - map[dx][dy1]));
                 sideALit = true;
             }
-            if (map[dx][dy2] < 1f && lightMap[dx][dy2] > 0) {
+            if (!indirect[dx][dy2] && map[dx][dy2] < 1f && lightMap[dx][dy2] > 0) {
                 light = Math.max(light, lightMap[dx][dy2] * (1 - map[dx][dy2]));
                 sideBLit = true;
             }
         } else {
-            if (xDominance > 0 && map[x2][y] < 1f && lightMap[x2][y] > 0) {
+            if (!indirect[x2][y] && xDominance > 0 && map[x2][y] < 1f && lightMap[x2][y] > 0) {
                 float tempLight = lightMap[x2][y];
                 if (tempLight > 0) {
                     light = Math.max(light, tempLight * (1 - map[x2][y]));
                     sideALit = true;
                 }
-            } else if (xDominance < 0 && map[x][y2] < 1f && lightMap[x][y2] > 0) {
+            } else if (!indirect[x][y2] && xDominance < 0 && map[x][y2] < 1f && lightMap[x][y2] > 0) {
                 float tempLight = lightMap[x][y2];
                 if (tempLight > 0) {
                     light = Math.max(light, tempLight * (1 - map[x][y2]));
                     sideBLit = true;
                 }
-            } else if (xDominance == 0 && (map[x2][y2] < 1f || (map[x][y2] < 1f && map[x2][y] < 1f))) {//on a diagonal 
+            } else if (!indirect[x2][y2] && xDominance == 0 && (map[x2][y2] < 1f || (map[x][y2] < 1f && map[x2][y] < 1f))) {//on a diagonal 
                 float tempLight = Math.max(lightMap[x2][y2] * (1 - map[x2][y2]),
                         Math.max(lightMap[x2][y] * (1 - map[x2][y]), lightMap[x][y2] * (1 - map[x][y2])));
                 if (tempLight > 0) {
@@ -112,8 +121,11 @@ public class RippleFOV implements FOVSolver {
         boolean killLight = true;//broken out into steps for debugging
         if (mainLit || (sideALit && sideBLit) || corner) {
             killLight = false;
+            if (!mainLit) {
+                indirect[x][y] = true;
+            }
         }
-        if (killLight) {
+        if (killLight) {//not lit at all counts as indirectly lit
             light = 0;
         }
 
@@ -134,10 +146,12 @@ public class RippleFOV implements FOVSolver {
             width = map.length;
             height = map[0].length;
             lightMap = new float[width][height];
+            indirect = new boolean[width][height];
         } else {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     lightMap[x][y] = 0f;//mark as unlit
+                    indirect[x][y] = false;
                 }
             }
         }
@@ -150,7 +164,7 @@ public class RippleFOV implements FOVSolver {
     }
 
     private void lightSurroundings(int x, int y) {
-        if (lightMap[x][y] <= 0) {
+        if (lightMap[x][y] <= 0 || indirect[x][y]) {
             return;//no light to spread
         }
 
