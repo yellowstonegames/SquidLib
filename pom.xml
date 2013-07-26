@@ -3,7 +3,7 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib</artifactId>
-    <version>1.95-SNAPSHOT</version>
+    <version>1.95</version>
     <packaging>jar</packaging>
 
     <parent>
