@@ -22,7 +22,7 @@ package squidpony.squidgrid.fov;
  * are not opaque. Check the documentation for the individual solvers for more
  * details.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public interface FOVSolver {
 

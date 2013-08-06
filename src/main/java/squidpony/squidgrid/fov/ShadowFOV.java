@@ -8,7 +8,7 @@ import squidpony.squidgrid.util.Direction;
  *
  * Performs bounds checking so edges are not required to be opaque.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class ShadowFOV implements FOVSolver {
 
@@ -19,16 +19,16 @@ public class ShadowFOV implements FOVSolver {
     private RadiusStrategy rStrat;
 
     @Override
-    public float[][] calculateFOV(float[][] map, int startx, int starty, float force, float decay, RadiusStrategy rStrat) {
+    public float[][] calculateFOV(float[][] resistanceMap, int startx, int starty, float force, float decay, RadiusStrategy rStrat) {
         this.startx = startx;
         this.starty = starty;
         this.force = force;
         this.decay = decay;
         this.rStrat = rStrat;
-        this.resistanceMap = map;
+        this.resistanceMap = resistanceMap;
 
-        width = map.length;
-        height = map[0].length;
+        width = resistanceMap.length;
+        height = resistanceMap[0].length;
         lightMap = new float[width][height];
         radius = (force / decay);
 
@@ -88,7 +88,7 @@ public class ShadowFOV implements FOVSolver {
     }
 
     @Override
-    public float[][] calculateFOV(float[][] map, int startx, int starty, float radius) {
-        return calculateFOV(map, startx, starty, 1, 1 / radius, BasicRadiusStrategy.CIRCLE);
+    public float[][] calculateFOV(float[][] resistanceMap, int startx, int starty, float radius) {
+        return calculateFOV(resistanceMap, startx, starty, 1, 1 / radius, BasicRadiusStrategy.CIRCLE);
     }
 }

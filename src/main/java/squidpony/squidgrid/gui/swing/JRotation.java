@@ -13,9 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * A rotation selection widget.
- *
- * Based on code by Savvas Dalkitsis on stackoverflow.com
+ * A rotation selection widget for use in Swing applications.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */

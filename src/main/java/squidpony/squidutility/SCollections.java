@@ -7,7 +7,7 @@ import squidpony.squidmath.RNG;
 /**
  * This utility class contains functions for working with Collections.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class SCollections {
 
