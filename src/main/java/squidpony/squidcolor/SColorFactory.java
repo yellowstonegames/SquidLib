@@ -1,9 +1,17 @@
 package squidpony.squidcolor;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
+import java.util.TreeMap;
+import javax.swing.JColorChooser;
+import javax.swing.JDialog;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Point3D;
 import squidpony.squidmath.RNG;
@@ -15,14 +23,16 @@ import squidpony.squidmath.RNG;
  * All returned SColor objects are cached so multiple requests for the same
  * SColor will not create duplicate long term objects.
  *
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class SColorFactory {
 
+    private static final TreeMap<String, SColor> nameLookup = new TreeMap<>();
+    private static final TreeMap<Integer, SColor> valueLookup = new TreeMap<>();
     private static RNG rng = new RNG();
     private static Map<Integer, SColor> colorBag = new HashMap<>();
     private static Map<String, ArrayList<SColor>> pallets = new HashMap<>();
-    private static int flooring = 1;//what multiple to floor rgb values to in order to reduce total colors
+    private static int floor = 1;//what multiple to floor rgb values to in order to reduce total colors
 
     /**
      * Prevents any instances from being created.
@@ -31,11 +41,52 @@ public class SColorFactory {
     }
 
     /**
+     * Returns the SColor Constant who's name is the one provided. If one cannot
+     * be found then null is returned.
+     *
+     * This method constructs a list of the SColor constants the first time it
+     * is called.
+     *
+     * @param s
+     * @return
+     */
+    public static SColor colorForName(String s) {
+        if (nameLookup.isEmpty()) {
+            for (SColor sc : SColor.FULL_PALLET) {
+                nameLookup.put(sc.getName(), sc);
+            }
+        }
+
+        return nameLookup.get(s);
+    }
+
+    /**
+     * Returns the SColor who's value matches the one passed in. If no SColor
+     * Constant matches that value then a cached or new SColor is returned that
+     * matches the provided value.
+     *
+     * This method constructs a list of the SColor constants the first time it
+     * is called.
+     *
+     * @param rgb
+     * @return
+     */
+    public static SColor colorForValue(int rgb) {
+        if (valueLookup.isEmpty()) {
+            for (SColor sc : SColor.FULL_PALLET) {
+                valueLookup.put(sc.getRGB(), sc);
+            }
+        }
+
+        return valueLookup.containsKey(rgb) ? valueLookup.get(rgb) : asSColor(rgb);
+    }
+
+    /**
      * Returns the number of SColor objects currently cached.
      *
      * @return
      */
-    public static int getQuantityCached() {
+    public static int quantityCached() {
         return colorBag.size();
     }
 
@@ -64,7 +115,7 @@ public class SColorFactory {
      * @return
      */
     public static SColor blend(SColor color1, SColor color2, double coef) {
-        return getSColor(blend(color1.getRed(), color2.getRed(), coef),
+        return asSColor(blend(color1.getRed(), color2.getRed(), coef),
                 blend(color1.getGreen(), color2.getGreen(), coef),
                 blend(color1.getBlue(), color2.getBlue(), coef));
     }
@@ -107,8 +158,8 @@ public class SColorFactory {
      *
      * @param value
      */
-    public static void setRGBFloorValue(int value) {
-        flooring = Math.max(1, value);
+    public static void setFloor(int value) {
+        floor = Math.max(1, value);
     }
 
     /**
@@ -117,25 +168,29 @@ public class SColorFactory {
      * If the color is not already in the cache, it is created and added to the
      * cache.
      *
+     * This method does not check to see if the value is already available as a
+     * SColor constant. If such functionality is desired then please use
+     * colorForValue(int rgb) instead.
+     *
      * @param rgb
      * @return
      */
-    public static SColor getSColor(int rgb) {
-        if (flooring != 1) {//need to convert to floored values
+    public static SColor asSColor(int rgb) {
+        if (floor != 1) {//need to convert to floored values
             int a = (rgb >> 24) & 0xff;
-            a -= a % flooring;
+            a -= a % floor;
             int r = (rgb >> 16) & 0xff;
-            r -= r % flooring;
+            r -= r % floor;
             int g = (rgb >> 8) & 0xff;
-            g -= g % flooring;
-            int b = (rgb >> 0) & 0xff;
-            b -= b % flooring;
+            g -= g % floor;
+            int b = rgb & 0xff;
+            b -= b % floor;
 
             //put back together
             rgb = ((a & 0xFF) << 24)
                     | ((r & 0xFF) << 16)
                     | ((g & 0xFF) << 8)
-                    | ((b & 0xFF) << 0);
+                    | (b & 0xFF);
         }
 
         if (colorBag.containsKey(rgb)) {
@@ -156,14 +211,26 @@ public class SColorFactory {
      * @param b
      * @return
      */
-    public static SColor getSColor(int r, int g, int b) {
+    public static SColor asSColor(int r, int g, int b) {
         r = Math.min(r, 255);
         r = Math.max(r, 0);
         g = Math.min(g, 255);
         g = Math.max(g, 0);
         b = Math.min(b, 255);
         b = Math.max(b, 0);
-        return getSColor(r * 256 * 256 + g * 256 + b);
+        return asSColor(r * 256 * 256 + g * 256 + b);
+    }
+
+    /**
+     * Returns an SColor representation of the provided Color. If there is a
+     * named SColor constant that matches the value, then that constant is
+     * returned.
+     *
+     * @param color
+     * @return
+     */
+    public static SColor asSColor(Color color) {
+        return colorForValue(color.getRGB());
     }
 
     /**
@@ -243,7 +310,7 @@ public class SColorFactory {
         int b = color.getBlue();
         int average = (int) (r * 0.299 + g * 0.587 + b * 0.114);
 
-        return getSColor(average, average, average);
+        return asSColor(average, average, average);
     }
 
     /**
@@ -267,7 +334,7 @@ public class SColorFactory {
      * @param color2
      * @return
      */
-    public static ArrayList<SColor> getGradient(SColor color1, SColor color2) {
+    public static ArrayList<SColor> asGradient(SColor color1, SColor color2) {
         String name = palletNamer(color1, color2);
         if (pallets.containsKey(name)) {
             return pallets.get(name);
@@ -291,7 +358,7 @@ public class SColorFactory {
      * @param name
      * @return
      */
-    public static ArrayList<SColor> getPallet(String name) {
+    public static ArrayList<SColor> pallet(String name) {
         return pallets.get(name);
     }
 
@@ -307,7 +374,7 @@ public class SColorFactory {
      * @param percent
      * @return
      */
-    public static SColor getFromPallet(String name, float percent) {
+    public static SColor fromPallet(String name, float percent) {
         ArrayList<SColor> list = pallets.get(name);
         if (list == null) {
             return null;
@@ -320,6 +387,28 @@ public class SColorFactory {
     }
 
     /**
+     * Returns an SColor chosen from a pop-up JColorChooser dialog.
+     *
+     * @param parent The component which is the parent of this dialog
+     * @return
+     */
+    public static SColor showSColorChooser(Component parent) {
+        final JColorChooser chooser = new JColorChooser();
+        chooser.setChooserPanels(new AbstractColorChooserPanel[]{new SColorChooserPanel()});
+
+        JDialog dialog = JColorChooser.createDialog(parent, "Choose A Color", true, chooser, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                pickedColor = asSColor(chooser.getColor().getRGB());
+            }
+        }, null);
+        dialog.setLocationRelativeTo(parent);
+        dialog.setVisible(true);
+
+        return pickedColor;
+    }
+    private static SColor pickedColor;//needed for the color chooser
+
+    /**
      * Places the pallet into the cache, along with each of the member colors.
      *
      * @param name
@@ -330,7 +419,7 @@ public class SColorFactory {
 
         //make sure all the colors in the pallet are also in the general color cache
         for (SColor sc : pallet) {
-            temp.add(getSColor(sc.getRGB()));
+            temp.add(asSColor(sc.getRGB()));
         }
 
         pallets.put(name, temp);
@@ -355,7 +444,7 @@ public class SColorFactory {
      * @return
      */
     private static SColor coord3DToSColor(Point3D coord) {
-        return getSColor(coord.x, coord.y, coord.z);
+        return asSColor(coord.x, coord.y, coord.z);
     }
 
     private static String palletNamer(SColor color1, SColor color2) {

@@ -4,47 +4,43 @@ import java.awt.Point;
 import java.util.LinkedList;
 import java.util.Queue;
 import squidpony.squidmath.Bresenham;
-import squidpony.squidmath.Point3D;
 
 /**
  * A Bresenham-based line-of-sight algorithm.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class BresenhamLOS implements LOSSolver {
 
-    Queue<Point3D> lastPath = new LinkedList<>();
+    Queue<Point> lastPath = new LinkedList<>();
 
     @Override
-    public boolean isReachable(float[][] map, int x, int y, int targetX, int targetY, float force, float decay, RadiusStrategy radiusStrategy) {
-        Queue<Point3D> path = Bresenham.line2D(x, y, targetX, targetY);
+    public boolean isReachable(float[][] resistanceMap, int startx, int starty, int targetx, int targety, float force, float decay, RadiusStrategy radiusStrategy) {
+        Queue<Point> path = Bresenham.line2D(startx, starty, targetx, targety);
         lastPath = new LinkedList<>(path);//save path for later retreival
-        path.poll();//remove starting point
-        for (Point3D p : path) {
-            if (p.x == targetX && p.y == targetY) {
+        float currentForce = force;
+        for (Point p : path) {
+            if (p.x == targetx && p.y == targety) {
                 return true;//reached the end 
             }
-            force -= map[p.x][p.y];
-            double radius = radiusStrategy.radius(x, y, p.x, p.y);
-            if (force - (radius * decay) <= 0) {
+            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+                currentForce *= (1 - resistanceMap[p.x][p.y]);
+            }
+            double radius = radiusStrategy.radius(startx, starty, p.x, p.y);
+            if (currentForce - (radius * decay) <= 0) {
                 return false;//too much resistance
             }
         }
-        return true;//made it all the way to the target
+        return false;//never got to the target point
     }
 
     @Override
     public Queue<Point> getLastPath() {
-        //copy the Point3D elements into a 2D Point structure only if needed
-        Queue<Point> returnPath = new LinkedList<>();
-        for (Point3D p : lastPath) {
-            returnPath.add(new Point(p.x, p.y));
-        }
-        return returnPath;
+        return lastPath;
     }
 
     @Override
     public boolean isReachable(float[][] resistanceMap, int startx, int starty, int targetx, int targety) {
-        return isReachable(resistanceMap, startx, starty, targety, targety, Float.MAX_VALUE, 0f, BasicRadiusStrategy.CIRCLE);
+        return isReachable(resistanceMap, startx, starty, targetx, targety, Float.MAX_VALUE, 0f, BasicRadiusStrategy.CIRCLE);
     }
 }

@@ -11,7 +11,7 @@ import javax.swing.Timer;
  * This class manages a collection of animations and handles update drawing to
  * the provided BufferedImage.
  *
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class AnimationManager implements Runnable {
 

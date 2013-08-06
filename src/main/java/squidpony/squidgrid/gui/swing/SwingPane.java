@@ -23,7 +23,7 @@ import squidpony.squidgrid.util.Direction;
  * When text is placed, the background color is set separately from the
  * foreground character. When moved, only the foreground character is moved.
  *
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class SwingPane extends JLayeredPane implements SGPane {
 

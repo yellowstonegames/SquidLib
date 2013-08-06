@@ -1,5 +1,7 @@
 package squidpony.squidgrid.fov;
 
+import squidpony.annotation.Beta;
+
 /**
  * A threaded wrapper for an FOVSolver.
  *
@@ -14,6 +16,7 @@ package squidpony.squidgrid.fov;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class ThreadedFOVSolver implements FOVSolver, Runnable {
 
     private FOVSolver solver;

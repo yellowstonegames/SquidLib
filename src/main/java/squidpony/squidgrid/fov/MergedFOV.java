@@ -1,13 +1,15 @@
 package squidpony.squidgrid.fov;
 
+import squidpony.annotation.Beta;
+
 /**
  * This class merges the results from two or more FOVSolvers.
  * 
  * Currently a work in progress.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
- * @deprecated 
  */
+@Beta
 public class MergedFOV implements FOVSolver {
     
     private float totalWeight;

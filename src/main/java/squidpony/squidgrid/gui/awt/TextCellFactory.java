@@ -1,12 +1,14 @@
 package squidpony.squidgrid.gui.awt;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TreeMap;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.util.Direction;
-import squidpony.squidutility.Pair;
 
 /**
  * Class for creating text blocks.
@@ -14,7 +16,7 @@ import squidpony.squidutility.Pair;
  * The default characters guaranteed to fit are ASCII 33 through 125, which are
  * the commonly used symbols, numbers, and letters.
  *
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class TextCellFactory implements Cloneable {
 
@@ -181,8 +183,6 @@ public class TextCellFactory implements Cloneable {
         horizontalOffset = cellWidth / 2;
 
         findSize();
-        cullLargeCharacters();
-        trimCell();
 
         //restore cell sizes based on padding
         leftPadding = tempLeftPadding;
@@ -196,160 +196,64 @@ public class TextCellFactory implements Cloneable {
     }
 
     private void findSize() {
-        //size up with square cells, it's okay if we oversize since we'll shrink back down
-        int bestw = 1;
-        int besth = 1;
-        ArrayList<Character> testingList;
-        if (!largeCharacters.isEmpty()) {
-            testingList = largeCharacters;
-//            largeCharacters = new ArrayList<>();//TODO -- determine if there are any cases where changing font size would change which character is the widest or tallest
+        int left = Integer.MAX_VALUE, right = Integer.MIN_VALUE,
+                top = Integer.MAX_VALUE, bottom = Integer.MIN_VALUE;
+        HashMap<Direction, Character> larges = new HashMap<>();
+
+        BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g = image.createGraphics();
+        g.setFont(font);
+
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        if (antialias) {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         } else {
-            testingList = new ArrayList<>();
-            for (char c : fitting) {
-                testingList.add(c);
-            }
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
 
-        for (char c : testingList) {//try all requested characters
-            int largestw = 1;
-            int largesth = 1;
-            int smallestw = 1000;
-            int smallesth = 1000;
+        FontRenderContext context = g.getFontRenderContext();
 
-            //size up until part of the font is seen or size is maxed out, in second case don't change the width and heights
-            float factor = 2f;
-            int maxVal = (int) (1000 / factor);
-            BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
-            boolean visible = visible(c, image);
-            while (maxVal > cellWidth && maxVal > cellHeight && !visible) {
-                cellWidth *= factor;
-                cellHeight *= factor;
-                horizontalOffset = cellWidth / 2;
-                image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
-                visible = visible(c, image);
-            }
-
-            //certain at this point that the character is a printing character, find size that works
-            if (visible) {
-                smallestw = Math.min(smallestw, cellWidth);
-                smallesth = Math.min(smallesth, cellHeight);
-                boolean fits = willFit(c);
-
-                //size up until it fits
-                while (maxVal > cellWidth && maxVal > cellHeight && !fits) {
-                    cellWidth *= factor;
-                    cellHeight *= factor;
-                    horizontalOffset = cellWidth / 2;
-                    fits = willFit(c);
+        for (int i = 0; i < fitting.length; i++) {
+            GlyphVector vect = font.createGlyphVector(context, new char[]{fitting[i]});
+            if (vect.getGlyphCode(0) != font.getMissingGlyphCode()
+                    && !Character.isISOControl(fitting[i])
+                    && !Character.isWhitespace(fitting[i])
+                    && Character.getDirectionality(fitting[i]) == Character.DIRECTIONALITY_LEFT_TO_RIGHT) {
+                Rectangle rect = vect.getGlyphPixelBounds(0, context, 0, 0);
+                if (rect.x < left) {
+                    larges.put(Direction.LEFT, fitting[i]);
+                    left = rect.x;
                 }
-                if (fits) {//if it doesn't fit than the requested font is too large
-                    largestw = Math.max(largestw, cellWidth);
-                    largesth = Math.max(largesth, cellHeight);
-
-                    //binary search between smallest and largest to find right size
-                    do {
-                        cellWidth = (int) Math.floor((largestw + smallestw) / 2.0);
-                        cellHeight = (int) Math.floor((largesth + smallesth) / 2.0);//make sure to round up
-                        horizontalOffset = cellWidth / 2;
-
-                        fits = willFit(c);
-                        if (fits) {//enough room, size down
-                            largestw = cellWidth;
-                            largesth = cellHeight;
-                        } else {//not enough room, size up by 1 since we know those sizes didn't work
-                            smallestw = cellWidth + 1;
-                            smallesth = cellHeight + 1;
-                        }
-                    } while (smallestw < largestw && smallesth < largesth);//if equal need to size up once
-
-                    cellWidth = smallestw;
-                    cellHeight = smallesth;
-                    horizontalOffset = cellWidth / 2;
-                    bestw = Math.max(bestw, cellWidth);
-                    besth = Math.max(besth, cellHeight);
-
-                    if (bestw == cellWidth || besth == cellHeight) {//this character hit an edge and expanded the cell size requirement, log it
-                        largeCharacters.add(c);
-                    }
+                if (rect.y < top) {
+                    larges.put(Direction.UP, fitting[i]);
+                    top = rect.y;
                 }
-            } else {
-                cellWidth = largestw;
-                cellHeight = largesth;
+                if (rect.x + rect.width > right) {
+                    larges.put(Direction.RIGHT, fitting[i]);
+                    right = rect.x + rect.width;
+                }
+                if (rect.y + rect.height > bottom) {
+                    larges.put(Direction.DOWN, fitting[i]);
+                    bottom = rect.y + rect.height;
+                }
             }
         }
+        largeCharacters = new ArrayList<>(larges.values());
 
-        cellWidth = bestw;
-        cellHeight = besth;
+        cellWidth = right - left;
+        cellWidth *= 2;
+        cellHeight = bottom - top;
+        cellHeight *= 2;
         horizontalOffset = cellWidth / 2;
-    }
-
-    private void cullLargeCharacters() {
-        if (largeCharacters.isEmpty()) {
-            return;
-        }
-
-        Pair<Integer, Character> left = new Pair(Integer.MAX_VALUE, ' '),
-                right = new Pair(Integer.MIN_VALUE, ' '),
-                top = new Pair(Integer.MAX_VALUE, ' '),
-                bottom = new Pair(Integer.MIN_VALUE, ' ');
-        BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
-        for (char c : largeCharacters) {
-            BufferedImage tile = makeMonoImage(c, image);
-
-            leftCheck:
-            for (int x = 0; x < Math.min(left.getFirst(), cellWidth); x++) {
-                for (int y = 0; y < cellHeight; y++) {
-                    if (tile.getRGB(x, y) != Color.WHITE.getRGB()) {
-                        left = new Pair(x, c);//this character is further left than any so far so mark it
-                        break leftCheck;
-                    }
-                }
-            }
-
-            rightCheck:
-            for (int x = cellWidth - 1; x > Math.max(right.getFirst(), -1); x--) {
-                for (int y = 0; y < cellHeight; y++) {
-                    if (tile.getRGB(x, y) != Color.WHITE.getRGB()) {
-                        right = new Pair(x, c);//this character is further left than any so far so mark it
-                        break rightCheck;
-                    }
-                }
-            }
-
-            topCheck:
-            for (int y = 0; y < Math.min(top.getFirst(), cellHeight); y++) {
-                for (int x = 0; x < cellWidth; x++) {
-                    if (tile.getRGB(x, y) != Color.WHITE.getRGB()) {
-                        top = new Pair(y, c);//this character is further left than any so far so mark it
-                        break topCheck;
-                    }
-                }
-            }
-
-            bottomCheck:
-            for (int y = cellHeight - 1; y > Math.max(bottom.getFirst(), -1); y--) {
-                for (int x = 0; x < cellWidth; x++) {
-                    if (tile.getRGB(x, y) != Color.WHITE.getRGB()) {
-                        bottom = new Pair(y, c);//this character is further left than any so far so mark it
-                        break bottomCheck;
-                    }
-                }
-            }
-
-        }
-
-        largeCharacters = new ArrayList<>();
-        largeCharacters.add(left.getSecond());
-        largeCharacters.add(right.getSecond());
-        largeCharacters.add(top.getSecond());
-        largeCharacters.add(bottom.getSecond());
+        verticalOffset = 0;
+        trimCell();
     }
 
     private void trimCell() {
         BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
 
         //find best horizontal offset
-        int bestHorizontalOffset = 0;//worst case, already in position
+        int bestHorizontalOffset = Integer.MIN_VALUE;
         for (char c : largeCharacters) {
             int tempHorizontalOffset = horizontalOffset;
             if (visible(c, image)) {//only calculate on printable characters
@@ -363,7 +267,7 @@ public class TextCellFactory implements Cloneable {
         horizontalOffset = bestHorizontalOffset;
 
         //find best vertical offset
-        int bestVerticalOffset = -cellHeight;//worst case, already in position
+        int bestVerticalOffset = Integer.MIN_VALUE;
         for (char c : largeCharacters) {
             int tempVerticalOffset = verticalOffset;
             while (verticalOffset > -cellHeight && willFit(c)) {

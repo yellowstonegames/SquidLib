@@ -14,7 +14,7 @@ import java.util.Queue;
  * calculation of force, decay, and resistances prevent the line from reaching
  * the target.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public interface LOSSolver {
 

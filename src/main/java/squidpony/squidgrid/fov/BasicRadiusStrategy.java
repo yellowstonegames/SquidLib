@@ -3,7 +3,7 @@ package squidpony.squidgrid.fov;
 /**
  * Basic radius strategy implementations.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public enum BasicRadiusStrategy implements RadiusStrategy {
 

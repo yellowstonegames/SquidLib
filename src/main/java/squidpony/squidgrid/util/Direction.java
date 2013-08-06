@@ -6,7 +6,7 @@ package squidpony.squidgrid.util;
  *
  * The grid referenced has x positive to the right and y positive downwards.
  *
- * @author Eben Howard - http://squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public enum Direction {
 
@@ -66,6 +66,95 @@ public enum Direction {
             } else {
                 return DOWN_RIGHT;
             }
+        }
+    }
+
+    /**
+     * Returns the Direction one step clockwise including diagonals.
+     *
+     * @param dir
+     * @return
+     */
+    public Direction clockwise() {
+        switch (this) {
+            case UP:
+                return UP_RIGHT;
+            case DOWN:
+                return DOWN_LEFT;
+            case LEFT:
+                return UP_LEFT;
+            case RIGHT:
+                return DOWN_RIGHT;
+            case UP_LEFT:
+                return UP;
+            case UP_RIGHT:
+                return RIGHT;
+            case DOWN_LEFT:
+                return LEFT;
+            case DOWN_RIGHT:
+                return DOWN;
+            case NONE:
+            default:
+                return NONE;
+        }
+    }
+
+    /**
+     * Returns the Direction one step counterclockwise including diagonals.
+     *
+     * @param dir
+     * @return
+     */
+    public Direction counterClockwise() {
+        switch (this) {
+            case UP:
+                return UP_LEFT;
+            case DOWN:
+                return DOWN_RIGHT;
+            case LEFT:
+                return DOWN_LEFT;
+            case RIGHT:
+                return UP_RIGHT;
+            case UP_LEFT:
+                return LEFT;
+            case UP_RIGHT:
+                return UP;
+            case DOWN_LEFT:
+                return DOWN;
+            case DOWN_RIGHT:
+                return RIGHT;
+            case NONE:
+            default:
+                return NONE;
+        }
+    }
+
+    /**
+     * Returns the direction directly opposite of this one.
+     *
+     * @return
+     */
+    public Direction opposite() {
+        switch (this) {
+            case UP:
+                return DOWN;
+            case DOWN:
+                return UP;
+            case LEFT:
+                return RIGHT;
+            case RIGHT:
+                return LEFT;
+            case UP_LEFT:
+                return DOWN_RIGHT;
+            case UP_RIGHT:
+                return DOWN_LEFT;
+            case DOWN_LEFT:
+                return UP_RIGHT;
+            case DOWN_RIGHT:
+                return UP_LEFT;
+            case NONE:
+            default:
+                return NONE;
         }
     }
 

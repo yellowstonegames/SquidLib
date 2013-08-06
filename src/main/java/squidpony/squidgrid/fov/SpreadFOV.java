@@ -1,5 +1,7 @@
 package squidpony.squidgrid.fov;
 
+import squidpony.annotation.Beta;
+
 /**
  * Performs FOV by pushing values outwards from the source location. It will
  * spread around edges like smoke or water. This may not be the desired behavior
@@ -7,8 +9,9 @@ package squidpony.squidgrid.fov;
  *
  * This algorithm does perform bounds checking.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class SpreadFOV implements FOVSolver {
 
     private float[][] lightMap;
