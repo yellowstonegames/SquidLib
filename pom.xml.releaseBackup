@@ -3,7 +3,7 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib</artifactId>
-    <version>1.95-SNAPSHOT</version>
+    <version>1.95.1</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -47,9 +47,9 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:tommyettinger/SquidLib.git</connection>
-        <developerConnection>scm:git:git@github.com:tommyettinger/SquidLib.git</developerConnection>
-        <url>git@github.com:tommyettinger/SquidLib.git</url>
+        <connection>scm:git:git@github.com:SquidPony/SquidLib.git</connection>
+        <developerConnection>scm:git:git@github.com:SquidPony/SquidLib.git</developerConnection>
+        <url>git@github.com:SquidPony/SquidLib.git</url>
     </scm>
 
     <properties>
@@ -57,12 +57,6 @@
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
         <encoding>UTF-8</encoding>
     </properties>
-  <repositories>
-    <repository>
-      <id>gdx-nightlies</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-  </repositories>
     <build>
         <plugins>
             <plugin>
@@ -73,20 +67,6 @@
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
-            </plugin>
-            
-            <plugin>
-                <groupId>com.googlecode.mavennatives</groupId>
-                <artifactId>maven-nativedependencies-plugin</artifactId>
-                <version>0.0.7</version>
-                <executions>
-                    <execution>
-                        <id>unpacknatives</id>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             
       <plugin>
@@ -103,18 +83,69 @@
           </execution>
         </executions>
       </plugin>
+      
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1.2</version>
+                    <executions>
+                        <execution>
+                            <id>package-jars</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                                <goal>test-jar</goal>
+                            </goals>
+                            <configuration>
+                                <includePom>true</includePom>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <includePom>true</includePom>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.8</version>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <id>package-jars</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                                <goal>test-jar</goal>
+                            </goals>
+                            <configuration>
+                                <includePom>true</includePom>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <debug>true</debug>
+                        <minmemory>128m</minmemory>
+                        <maxmemory>1024m</maxmemory>
+                        <quiet>true</quiet>
+                        <doctitle>${project.name} ${project.version}</doctitle>
+                        <windowtitle>${project.name} ${project.version}</windowtitle>
+                        <testDoctitle>${project.name} ${project.version} (TEST API)</testDoctitle>
+                        <testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>
+                        <splitindex>true</splitindex>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <links>
+                            <link>http://java.sun.com/j2se/1.6.0/docs/api</link>
+                            <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+                            <link>http://java.sun.com/j2se/1.4.2/docs/api</link>
+                            <link>http://java.sun.com/j2ee/1.4/docs/api</link>
+                        </links>
+                        <linksource>true</linksource>
+                        <detectOfflineLinks>false</detectOfflineLinks>
+                    </configuration>
+                </plugin>
+      
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx</artifactId>
-            <version>0.9.9-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx-backend-lwjgl</artifactId>
-            <version>0.9.9-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>
