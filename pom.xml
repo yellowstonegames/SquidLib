@@ -47,9 +47,9 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:tommyettinger/SquidLib.git</connection>
-        <developerConnection>scm:git:git@github.com:tommyettinger/SquidLib.git</developerConnection>
-        <url>git@github.com:tommyettinger/SquidLib.git</url>
+        <connection>scm:git:git@github.com:SquidPony/SquidLib.git</connection>
+        <developerConnection>scm:git:git@github.com:SquidPony/SquidLib.git</developerConnection>
+        <url>git@github.com:SquidPony/SquidLib.git</url>
     </scm>
 
     <properties>
