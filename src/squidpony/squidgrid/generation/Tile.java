@@ -1,4 +1,4 @@
-package generation;
+package squidpony.squidgrid.generation;
 
 import squidpony.squidcolor.SColor;
 

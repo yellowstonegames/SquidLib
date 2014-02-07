@@ -1,4 +1,4 @@
-package squidpony.squidgrid.layout;
+package squidpony.squidgrid.shape;
 
 import java.util.Arrays;
 import squidpony.annotation.Beta;

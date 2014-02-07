@@ -1,14 +1,17 @@
 package squidpony.squidgrid.generation;
 
+import squidpony.squidgrid.shape.TiledShape;
 import java.awt.Shape;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import squidpony.squidgrid.shape.ShapeGenerator;
 
 /**
  *
@@ -17,10 +20,14 @@ import javax.imageio.ImageIO;
 public class MapGenerationTester {
 
     public static void main(String... args) {
-        new MapGenerationTester().go();
+        MapGenerationTester test = new MapGenerationTester();
+//        test.testHerringbone();
+//        test.testStackBond();
+//        test.testBrick();
+        test.testRunningBond();
     }
 
-    private void go() {
+    private void testTiledShapeBuilder() {
 //        printMap(TiledShape.buildRectangle(15, 9, 3), 0.9);
 //        printMap(TiledShape.buildRadialShape(BasicRadiusStrategy.CIRCLE, 10, 25, 25, 3, 0.5));
         Shape shape;
@@ -44,5 +51,48 @@ public class MapGenerationTester {
         }
 
         return new TiledShape(image);
+    }
+
+    public void testHerringbone() {
+        ArrayList<TiledShape> verts = new ArrayList<>();
+        ArrayList<TiledShape> horzs = new ArrayList<>();
+        verts.add(new TiledShape(loadShapeImage("tiles/herringbone small vertical test.png")));
+        horzs.add(new TiledShape(loadShapeImage("tiles/herringbone small horizontal test.png")));
+        System.out.println(ShapeGenerator.buildHerringboneShape(400, 100, verts, horzs));
+    }
+
+    public void testStackBond() {
+        ArrayList<TiledShape> tiles = new ArrayList<>();
+        tiles.add(new TiledShape(loadShapeImage("tiles/herringbone horizontal test.png")));
+        System.out.println(ShapeGenerator.buildStackBond(400, 100, tiles));
+    }
+
+    public void testBrick() {
+        ArrayList<TiledShape> tiles = new ArrayList<>();
+        tiles.add(new TiledShape(loadShapeImage("tiles/brick test.png")));
+        System.out.println(ShapeGenerator.buildBrick(400, 100, tiles, false, 3));
+    }
+
+    public void testRunningBond() {
+        ArrayList<TiledShape> verts = new ArrayList<>();
+        ArrayList<TiledShape> horzs = new ArrayList<>();
+        
+        verts.add(new TiledShape(loadShapeImage("tiles/herringbone vertical test.png")).invert());
+        horzs.add(new TiledShape(loadShapeImage("tiles/herringbone horizontal test.png")).invert());
+        System.out.println(ShapeGenerator.buildRunningBond(100, 100, verts, horzs));
+        System.out.println("");
+        
+        verts = new ArrayList<>();
+        horzs = new ArrayList<>();
+        verts.add(new TiledShape(loadShapeImage("tiles/herringbone small vertical test.png")).invert());
+        horzs.add(new TiledShape(loadShapeImage("tiles/herringbone small horizontal test.png")).invert());
+        System.out.println(ShapeGenerator.buildRunningBond(100, 100, verts, horzs));
+        System.out.println("");
+
+        verts = new ArrayList<>();
+        horzs = new ArrayList<>();
+        verts.add(new TiledShape(loadShapeImage("tiles/brick test.png")).rotateClockwise());
+        horzs.add(new TiledShape(loadShapeImage("tiles/brick test.png")));
+        System.out.println(ShapeGenerator.buildRunningBond(100, 100, verts, horzs));
     }
 }

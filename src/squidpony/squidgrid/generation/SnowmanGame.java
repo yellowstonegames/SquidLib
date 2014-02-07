@@ -1,4 +1,4 @@
-package generation;
+package squidpony.squidgrid.generation;
 
 import java.awt.Font;
 import java.awt.Point;
@@ -23,7 +23,7 @@ import squidpony.squidgrid.util.Direction;
  *
  * @author Eben Howard
  */
-public class Main {
+public class SnowmanGame {
 
     private static final int width = 50, height = 30, statWidth = 12, fontSize = 22, outputLines = 1;
     private static final int minimumRoomSize = 3;
@@ -44,7 +44,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new Main().go();
+        new SnowmanGame().go();
     }
 
     /**
