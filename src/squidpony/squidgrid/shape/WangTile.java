@@ -1,4 +1,4 @@
-package squidpony.squidgrid.layout;
+package squidpony.squidgrid.shape;
 
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.util.Direction;

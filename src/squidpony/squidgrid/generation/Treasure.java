@@ -1,4 +1,4 @@
-package generation;
+package squidpony.squidgrid.generation;
 
 /**
  * This class represents some item of treasure found in the game.

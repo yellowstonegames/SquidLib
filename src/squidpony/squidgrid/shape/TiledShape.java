@@ -1,4 +1,4 @@
-package squidpony.squidgrid.generation;
+package squidpony.squidgrid.shape;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import squidpony.annotation.Beta;
 
 /**
- * Represents a generic shape for dungeon generation.
+ * Represents a generic shape for tile map generation.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -60,8 +60,8 @@ public class TiledShape {
     }
 
     /**
-     * Builds a tiled shape based on the pixel colors of the image passed in.
-     * White pixels indicate filled spaces (ignoring alpha transparency values)
+     * Builds a tiled shape based on the pixel colors of the image passed in. White pixels indicate
+     * filled spaces (ignoring alpha transparency values)
      *
      * @param image
      */
@@ -93,8 +93,8 @@ public class TiledShape {
     }
 
     /**
-     * Merges the other tiled shape onto this one at the given offset,
-     * overwriting all information in the area where the two shapes overlap.
+     * Merges the other tiled shape onto this one at the given offset, overwriting all information
+     * in the area where the two shapes overlap.
      *
      * Negative offsets are allowed.
      *
@@ -113,8 +113,7 @@ public class TiledShape {
     }
 
     /**
-     * Builds and returns a mapping based on the template and sparsity of this
-     * shape.
+     * Builds and returns a new TiledShape based on the template of this shape.
      *
      * @param sparsity the chance for each fillable space to be filled
      * @return
@@ -126,6 +125,38 @@ public class TiledShape {
                 if (template[x][y] && Math.random() < sparsity) {
                     map[x][y] = true;
                 }
+            }
+        }
+
+        return new TiledShape(map);
+    }
+
+    /**
+     * Builds and returns a new TiledShape which has the opposite filled state as this one.
+     *
+     * @return
+     */
+    public TiledShape invert() {
+        boolean[][] map = new boolean[template.length][template[0].length];
+        for (int x = 0; x < template.length; x++) {
+            for (int y = 0; y < template[0].length; y++) {
+                map[x][y] = !template[x][y];
+            }
+        }
+
+        return new TiledShape(map);
+    }
+
+    /**
+     * Builds and returns a new TiledShape which is a clockwise rotation of this one.
+     *
+     * @return
+     */
+    public TiledShape rotateClockwise() {
+        boolean[][] map = new boolean[template[0].length][template.length];
+        for (int x = 0; x < template.length; x++) {
+            for (int y = 0; y < template[0].length; y++) {
+                map[y][x] = template[x][y];
             }
         }
 
@@ -151,8 +182,8 @@ public class TiledShape {
      * @param shape
      * @param borderThickness added in the java.awt standard border manner
      * @param filled true if the shape should be filled solid
-     * @param rounded true if the ends and joins should be rounded, false if
-     * they should be sharp edges
+     * @param rounded true if the ends and joins should be rounded, false if they should be sharp
+     * edges
      */
     private void initialize(Shape shape, double borderThickness, boolean filled, boolean rounded) {
         BufferedImage image = new BufferedImage((int) Math.ceil(shape.getBounds2D().getWidth() + borderThickness),
@@ -170,9 +201,8 @@ public class TiledShape {
     }
 
     /**
-     * Takes a provided image and builds a tiled shape where all white pixels
-     * are considered to be solid (boolean true) and all other color pixels to
-     * be considered empty (boolean false).
+     * Takes a provided image and builds a tiled shape where all white pixels are considered to be
+     * solid (boolean true) and all other color pixels to be considered empty (boolean false).
      *
      * Does not take alpha transparency values into account.
      *

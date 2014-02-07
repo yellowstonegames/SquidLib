@@ -1,4 +1,4 @@
-package generation;
+package squidpony.squidgrid.generation;
 
 /**
  * Holds a single level.
@@ -6,5 +6,5 @@ package generation;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class TiledLevel {
-    
+
 }
