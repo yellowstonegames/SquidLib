@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Home</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+<body>
+<!-- ================================================== -->
+<section name="Commons Lang">
+
+<p>
+The standard Java libraries fail to provide enough methods for
+manipulation of its core classes. Apache Commons Lang provides
+these extra methods. 
+</p>
+
+<p>
+Lang provides a host of helper utilities for the java.lang API, notably 
+String manipulation methods, basic numerical methods, object reflection, concurrency, creation and serialization 
+and System properties. Additionally it contains basic enhancements to java.util.Date and a series of utilities dedicated to help with 
+building methods, such as hashCode, toString and equals.
+</p>
+<p>
+Note that Lang 3.0 (and subsequent versions) use a different package (<i>org.apache.commons.lang3</i>) than the previous versions (<i>org.apache.commons.lang</i>), allowing it to be used at the same time as an earlier version.
+</p>
+</section>
+<!-- ================================================== -->
+<section name="Documentation">
+<p>
+A getting started <a href="userguide.html">user guide</a> is available
+together with various <a href="project-reports.html">project reports</a>.
+</p>
+<p>
+The JavaDoc API documents are available online:
+</p>
+<ul>
+<li>The <a href="api-3.1/index.html">current stable release 3.1</a> [Java 5.0+]</li>
+<li>The <a href="api-2.6/index.html">legacy release 2.6</a> [Java 1.2+]</li>
+<li>Older releases - see the <a href="release-history.html">Release History</a> page</li>
+</ul>
+<p>
+The <a href="source-repository.html">subversion repository</a> can be
+<a href="http://svn.apache.org/viewvc/commons/proper/lang/trunk/">browsed</a>.
+</p>
+</section>
+<!-- ================================================== -->
+<section name="Release Information">
+<p>The latest stable release of Lang is 3.1. You may: </p>
+<ul>
+<li>Download <a href="http://commons.apache.org/lang/download_lang.cgi">3.1</a></li>
+<li>Read the <a href="release-notes/RELEASE-NOTES-3.1.txt">3.1 release notes</a></li>
+<li>Examine the <a href="article3_0.html">2.x to 3.0 upgrade notes</a></li>
+<li>Compare major versions via the <a href="lang2-lang3-clirr-report.html">Lang2 to Lang3 Clirr report</a></li>
+</ul>
+
+<p>
+Alternatively you can pull it from the central Maven repositories:
+<pre>
+  &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+  &lt;artifactId&gt;commons-lang3&lt;/artifactId&gt;
+  &lt;version&gt;3.1&lt;/version&gt;
+</pre>
+</p>
+
+<p>
+For information on previous releases see the <a href="release-history.html">Release History</a>, and to download previous releases see the <a href="http://archive.apache.org/dist/commons/lang/">Commons Lang Archive</a>.
+</p>
+</section>
+<!-- ================================================== -->
+<section name="Support">
+<p>
+The <a href="mail-lists.html">commons mailing lists</a> act as the main support forum.
+The user list is suitable for most library usage queries.
+The dev list is intended for the development discussion.
+Please remember that the lists are shared between all commons components,
+so prefix your email by [lang].
+</p>
+<p>
+Bug reports and enhancements are also welcomed via the <a href="issue-tracking.html">JIRA</a> issue tracker.
+Please read the instructions carefully.
+</p>
+</section>
+<!-- ================================================== -->
+</body>
+</document>
