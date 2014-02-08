@@ -1,9 +1,8 @@
 package squidpony.squidgrid.generation;
 
+import java.awt.Font;
 import squidpony.squidgrid.shape.TiledShape;
 import java.awt.Shape;
-import java.awt.geom.QuadCurve2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +10,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import squidpony.squidcolor.SColorFactory;
+import squidpony.squidgrid.gui.swing.SwingPane;
 import squidpony.squidgrid.shape.ShapeGenerator;
 
 /**
@@ -41,7 +43,8 @@ public class MapGenerationTester {
 
     private void printMap(TiledShape shape, double sparsity) {
         System.out.println(shape);
-        System.out.println(shape.buildSparseShape(sparsity));
+        shape.deteriorate(sparsity, " ");
+        System.out.println(shape);
     }
 
     private static TiledShape loadShapeImage(String name) {
@@ -79,21 +82,23 @@ public class MapGenerationTester {
         ArrayList<TiledShape> verts = new ArrayList<>();
         ArrayList<TiledShape> horzs = new ArrayList<>();
 
-        verts.add(new TiledShape(loadShapeImage("tiles/herringbone vertical test.png")).invert());
-        horzs.add(new TiledShape(loadShapeImage("tiles/herringbone horizontal test.png")).invert());
+        verts.add(new TiledShape(loadShapeImage("tiles/herringbone vertical test.png")));
+        horzs.add(new TiledShape(loadShapeImage("tiles/herringbone horizontal test.png")));
         System.out.println(ShapeGenerator.buildRunningBond(100, 100, verts, horzs));
         System.out.println("");
 
         verts = new ArrayList<>();
         horzs = new ArrayList<>();
-        verts.add(new TiledShape(loadShapeImage("tiles/herringbone small vertical test.png")).invert());
-        horzs.add(new TiledShape(loadShapeImage("tiles/herringbone small horizontal test.png")).invert());
+        verts.add(new TiledShape(loadShapeImage("tiles/herringbone small vertical test.png")));
+        horzs.add(new TiledShape(loadShapeImage("tiles/herringbone small horizontal test.png")));
         System.out.println(ShapeGenerator.buildRunningBond(100, 100, verts, horzs));
         System.out.println("");
 
         verts = new ArrayList<>();
         horzs = new ArrayList<>();
-        verts.add(new TiledShape(loadShapeImage("tiles/brick test.png")).rotateClockwise());
+        TiledShape shape = new TiledShape(loadShapeImage("tiles/brick test.png"));
+        shape.rotateClockwise();
+        verts.add(shape);
         horzs.add(new TiledShape(loadShapeImage("tiles/brick test.png")));
         System.out.println(ShapeGenerator.buildRunningBond(100, 100, verts, horzs));
     }
@@ -101,7 +106,9 @@ public class MapGenerationTester {
     public void testBasketWeave() {
         ArrayList<TiledShape> verts = new ArrayList<>();
         ArrayList<TiledShape> horzs = new ArrayList<>();
-        verts.add(new TiledShape(loadShapeImage("tiles/brick test.png")).rotateClockwise());
+        TiledShape shape = new TiledShape(loadShapeImage("tiles/brick test.png"));
+        shape.rotateClockwise();
+        verts.add(shape);
         horzs.add(new TiledShape(loadShapeImage("tiles/brick test.png")));
         System.out.println(ShapeGenerator.buildBasketWeave(100, 100, verts, horzs, true));
         System.out.println("");
@@ -111,9 +118,26 @@ public class MapGenerationTester {
     public void testWindmill() {
         ArrayList<TiledShape> verts = new ArrayList<>();
         ArrayList<TiledShape> horzs = new ArrayList<>();
-        verts.add(new TiledShape(loadShapeImage("tiles/brick test.png")).rotateClockwise());
+        TiledShape shape = new TiledShape(loadShapeImage("tiles/brick test.png"));
+        shape.rotateClockwise();
+        verts.add(shape);
         horzs.add(new TiledShape(loadShapeImage("tiles/brick test.png")));
-        System.out.println(ShapeGenerator.buildWindmill(100, 100, verts, horzs, verts));
-        System.out.println("");
+        showColors(ShapeGenerator.buildWindmill(100, 100, verts, horzs, verts));
+    }
+
+    public void showColors(TiledShape shape) {
+        JFrame frame = new JFrame();
+        SwingPane pane = new SwingPane(shape.getWidth(), shape.getHeight(), new Font("Ariel", Font.PLAIN, 10));
+        frame.add(pane);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        for (int x = 0; x < shape.getWidth(); x++) {
+            for (int y = 0; y < shape.getHeight(); y++) {
+                pane.setCellBackground(x, y, SColorFactory.asSColor(Integer.parseInt(shape.getStringAt(x, y))));
+            }
+        }
+        pane.refresh();
     }
 }

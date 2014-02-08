@@ -12,19 +12,21 @@ import squidpony.annotation.Beta;
 /**
  * Represents a generic shape for tile map generation.
  *
+ * The toString() method simply prints out the first character in the string of each cell.
+ *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
 public class TiledShape {
 
-    private boolean[][] template;
+    private String[][] template;
 
     /**
-     * Builds the tiled shape directly from a boolean map.
+     * Builds the tiled shape directly from the provided template.
      *
      * @param template true indicates possible locations for filling
      */
-    public TiledShape(boolean[][] template) {
+    public TiledShape(String[][] template) {
         this.template = template;
     }
 
@@ -51,17 +53,22 @@ public class TiledShape {
     }
 
     /**
-     * Creates a new tiled shape using the same template.
+     * Creates a new tiled shape and deep copies the template.
      *
      * @param other
      */
     public TiledShape(TiledShape other) {
-        template = other.template;
+        template = new String[other.getWidth()][other.getHeight()];
+        for (int x = 0; x < other.getWidth(); x++) {
+            for (int y = 0; y < other.getHeight(); y++) {
+                template[x][y] = other.getStringAt(x, y);
+            }
+        }
     }
 
     /**
-     * Builds a tiled shape based on the pixel colors of the image passed in. White pixels indicate
-     * filled spaces (ignoring alpha transparency values)
+     * Builds a tiled shape based on the pixel colors of the image passed in. Values are stored as
+     * the ARGB values in hex code.
      *
      * @param image
      */
@@ -69,19 +76,32 @@ public class TiledShape {
         initialize(image, false);
     }
 
-    public boolean[][] getTemplate() {
+    public String[][] getTemplate() {
         return template;
     }
 
     /**
-     * Returns true if the provided location is considered filled.
+     * Returns the String at the provided location.
      *
      * @param x
      * @param y
      * @return
      */
-    public boolean getFilled(int x, int y) {
+    public String getStringAt(int x, int y) {
         return template[x][y];
+    }
+
+    /**
+     * Sets the location provided to contain the given string, replacing any content that may have
+     * previously existed.
+     *
+     * @param x
+     * @param y
+     * @param string
+     * @return
+     */
+    public void setStringAt(int x, int y, String string) {
+        template[x][y] = string;
     }
 
     public int getWidth() {
@@ -93,8 +113,8 @@ public class TiledShape {
     }
 
     /**
-     * Merges the other tiled shape onto this one at the given offset, overwriting all information
-     * in the area where the two shapes overlap.
+     * Overwrites this TiledShape at the given offset with the information in the provided
+     * TiledShape in the area where the two shapes overlap.
      *
      * Negative offsets are allowed.
      *
@@ -102,7 +122,7 @@ public class TiledShape {
      * @param xOffset
      * @param yOffset
      */
-    public void merge(TiledShape other, int xOffset, int yOffset) {
+    public void overwrite(TiledShape other, int xOffset, int yOffset) {
         for (int x = Math.max(xOffset, 0); x < getWidth() && x - xOffset < other.getWidth(); x++) {
             for (int y = Math.max(yOffset, 0); y < getHeight() && y - yOffset < other.getHeight(); y++) {
                 if (x - xOffset >= 0 && y - yOffset >= 0) {
@@ -113,54 +133,51 @@ public class TiledShape {
     }
 
     /**
-     * Builds and returns a new TiledShape based on the template of this shape.
+     * Deteriorates the given TiledShape on a per-cell random chance. If a cell is selected to be
+     * deteriorated, it's value is set to the provided string. Changes are made directly to the
+     * provided shape.
      *
-     * @param sparsity the chance for each fillable space to be filled
+     * @param deteriorationChance the chance for each fillable space to be filled
      * @return
      */
-    public TiledShape buildSparseShape(double sparsity) {
-        boolean[][] map = new boolean[template.length][template[0].length];
-        for (int x = 0; x < template.length; x++) {
-            for (int y = 0; y < template[0].length; y++) {
-                if (template[x][y] && Math.random() < sparsity) {
-                    map[x][y] = true;
+    public void deteriorate(double deteriorationChance, String deteriorationString) {
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
+                if (Math.random() < deteriorationChance) {
+                    setStringAt(x, y, deteriorationString);
                 }
             }
         }
-
-        return new TiledShape(map);
     }
 
     /**
-     * Builds and returns a new TiledShape which has the opposite filled state as this one.
+     * Replaces all cells whose contents match the "find" string with the "replace" string.
      *
      * @return
      */
-    public TiledShape invert() {
-        boolean[][] map = new boolean[template.length][template[0].length];
-        for (int x = 0; x < template.length; x++) {
-            for (int y = 0; y < template[0].length; y++) {
-                map[x][y] = !template[x][y];
+    public void replaceAll(String find, String replace) {
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
+                if (template[x][y].equals(find)) {
+                    template[x][y] = replace;
+                }
             }
         }
-
-        return new TiledShape(map);
     }
 
     /**
-     * Builds and returns a new TiledShape which is a clockwise rotation of this one.
+     * Rotates this shape clockwise 90 degrees.
      *
      * @return
      */
-    public TiledShape rotateClockwise() {
-        boolean[][] map = new boolean[template[0].length][template.length];
-        for (int x = 0; x < template.length; x++) {
-            for (int y = 0; y < template[0].length; y++) {
+    public void rotateClockwise() {
+        String[][] map = new String[getHeight()][getWidth()];
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
                 map[y][x] = template[x][y];
             }
         }
-
-        return new TiledShape(map);
+        template = map;
     }
 
     @Override
@@ -168,7 +185,7 @@ public class TiledShape {
         String out = "\n";
         for (int y = 0; y < template[0].length; y++) {
             for (int x = 0; x < template.length; x++) {
-                out += template[x][y] ? "#" : "·";
+                out += template[x][y] == null ? ' ' : template[x][y].charAt(0);
             }
             out += "\n";
         }
@@ -201,10 +218,8 @@ public class TiledShape {
     }
 
     /**
-     * Takes a provided image and builds a tiled shape where all white pixels are considered to be
-     * solid (boolean true) and all other color pixels to be considered empty (boolean false).
-     *
-     * Does not take alpha transparency values into account.
+     * Takes a provided image and builds a tiled shape encoding all colors into their ARGB integer
+     * as a string.
      *
      * @param image
      * @param shrink true if the image should be compressed to just the shape
@@ -254,10 +269,10 @@ public class TiledShape {
             }
         }
 
-        template = new boolean[xEnd - xStart][yEnd - yStart];
+        template = new String[xEnd - xStart][yEnd - yStart];
         for (int x = 0; x < xEnd - xStart; x++) {
             for (int y = 0; y < yEnd - yStart; y++) {
-                template[x][y] = image.getRGB(x + xStart, y + yStart) == Color.WHITE.getRGB();
+                template[x][y] = "" + image.getRGB(x + xStart, y + yStart);
             }
         }
     }

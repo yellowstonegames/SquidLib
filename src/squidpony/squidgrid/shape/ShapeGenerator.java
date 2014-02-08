@@ -44,11 +44,11 @@ public class ShapeGenerator {
             int y = -startY;
             while (y < height) {
                 TiledShape tile = SCollections.getRandomElement(verticalTiles);
-                result.merge(tile, x, y);
+                result.overwrite(tile, x, y);
                 x += tileWidth;
 
                 tile = SCollections.getRandomElement(horizontalTiles);
-                result.merge(tile, x, y);
+                result.overwrite(tile, x, y);
                 y += tileWidth;
             }
             startX += tileHeight + tileWidth;
@@ -63,11 +63,11 @@ public class ShapeGenerator {
             int y = startY;
             while (y < height) {
                 TiledShape tile = SCollections.getRandomElement(verticalTiles);
-                result.merge(tile, x, y);
+                result.overwrite(tile, x, y);
                 x += tileWidth;
 
                 tile = SCollections.getRandomElement(horizontalTiles);
-                result.merge(tile, x, y);
+                result.overwrite(tile, x, y);
                 y += tileWidth;
             }
             startY += tileHeight + tileWidth;
@@ -98,7 +98,7 @@ public class ShapeGenerator {
         for (int x = 0; x < width; x += tileWidth) {
             for (int y = 0; y < height; y += tileHeight) {
                 TiledShape tile = SCollections.getRandomElement(tiles);
-                result.merge(tile, x, y);
+                result.overwrite(tile, x, y);
             }
         }
 
@@ -128,7 +128,7 @@ public class ShapeGenerator {
         for (int x = 0; x < width; x += tileWidth) {
             for (int y = -tileHeight + currentOffset; y < height; y += tileHeight) {
                 TiledShape tile = SCollections.getRandomElement(tiles);
-                result.merge(tile, x, y);
+                result.overwrite(tile, x, y);
             }
             currentOffset += offset;
             currentOffset %= tileHeight;
@@ -168,22 +168,22 @@ public class ShapeGenerator {
         //do horizontal first so right-hand edge can overwrite extra bits
         for (int x = tileWidth; x < width; x += tileHeight) {
             TiledShape tile = SCollections.getRandomElement(horizontalTiles);
-            result.merge(tile, x, 0);
+            result.overwrite(tile, x, 0);
             tile = SCollections.getRandomElement(horizontalTiles);
-            result.merge(tile, x, height - tileWidth);
+            result.overwrite(tile, x, height - tileWidth);
         }
 
         for (int y = 0; y < height; y += tileHeight) {
             TiledShape tile = SCollections.getRandomElement(verticalTiles);
-            result.merge(tile, 0, y);
+            result.overwrite(tile, 0, y);
             tile = SCollections.getRandomElement(verticalTiles);
-            result.merge(tile, width - tileWidth, y);
+            result.overwrite(tile, width - tileWidth, y);
         }
 
         if (width > tileWidth || height > tileHeight) {
             TiledShape tile = buildRunningBond(width - 2 * tileWidth, height - 2 * tileWidth, verticalTiles, horizontalTiles);
             if (tile != null) {
-                result.merge(tile, tileWidth, tileWidth);
+                result.overwrite(tile, tileWidth, tileWidth);
             }
         }
 
@@ -226,14 +226,14 @@ public class ShapeGenerator {
                 for (int y = 0; y < height; y += tileHeight) {
                     if (alternate) {
                         tile = SCollections.getRandomElement(horizontalTiles);
-                        result.merge(tile, x, y);
+                        result.overwrite(tile, x, y);
                         tile = SCollections.getRandomElement(horizontalTiles);
-                        result.merge(tile, x, y + tileWidth);
+                        result.overwrite(tile, x, y + tileWidth);
                     } else {
                         tile = SCollections.getRandomElement(verticalTiles);
-                        result.merge(tile, x, y);
+                        result.overwrite(tile, x, y);
                         tile = SCollections.getRandomElement(verticalTiles);
-                        result.merge(tile, x + tileWidth, y);
+                        result.overwrite(tile, x + tileWidth, y);
                     }
                     alternate = !alternate;
                 }
@@ -243,18 +243,18 @@ public class ShapeGenerator {
                 for (int y = 0; y < height; y += tileHeight + tileWidth) {
                     if (alternate) {
                         tile = SCollections.getRandomElement(horizontalTiles);
-                        result.merge(tile, x, y + tileHeight);
+                        result.overwrite(tile, x, y + tileHeight);
                         tile = SCollections.getRandomElement(verticalTiles);
-                        result.merge(tile, x, y);
+                        result.overwrite(tile, x, y);
                         tile = SCollections.getRandomElement(verticalTiles);
-                        result.merge(tile, x + tileWidth, y);
+                        result.overwrite(tile, x + tileWidth, y);
                     } else {
                         tile = SCollections.getRandomElement(horizontalTiles);
-                        result.merge(tile, x, y);
+                        result.overwrite(tile, x, y);
                         tile = SCollections.getRandomElement(verticalTiles);
-                        result.merge(tile, x, y + tileWidth);
+                        result.overwrite(tile, x, y + tileWidth);
                         tile = SCollections.getRandomElement(verticalTiles);
-                        result.merge(tile, x + tileWidth, y + tileWidth);
+                        result.overwrite(tile, x + tileWidth, y + tileWidth);
                     }
                 }
                 alternate = !alternate;
@@ -296,15 +296,15 @@ public class ShapeGenerator {
         for (int x = 0; x < width; x += vertWidth + horzWidth) {
             for (int y = 0; y < height; y += vertHeight + horzHeight) {
                 tile = SCollections.getRandomElement(interiorTiles);
-                result.merge(tile, x + vertWidth, y + horzHeight);
+                result.overwrite(tile, x + vertWidth, y + horzHeight);
                 tile = SCollections.getRandomElement(verticalTiles);
-                result.merge(tile, x, y);
+                result.overwrite(tile, x, y);
                 tile = SCollections.getRandomElement(horizontalTiles);
-                result.merge(tile, x + vertWidth, y);
+                result.overwrite(tile, x + vertWidth, y);
                 tile = SCollections.getRandomElement(horizontalTiles);
-                result.merge(tile, x, y + vertHeight);
+                result.overwrite(tile, x, y + vertHeight);
                 tile = SCollections.getRandomElement(verticalTiles);
-                result.merge(tile, x + horzWidth, y + horzHeight);
+                result.overwrite(tile, x + horzWidth, y + horzHeight);
             }
         }
 
