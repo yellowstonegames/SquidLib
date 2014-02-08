@@ -24,7 +24,9 @@ public class MapGenerationTester {
 //        test.testHerringbone();
 //        test.testStackBond();
 //        test.testBrick();
-        test.testRunningBond();
+//        test.testRunningBond();
+//        test.testBasketWeave();
+        test.testWindmill();
     }
 
     private void testTiledShapeBuilder() {
@@ -70,18 +72,18 @@ public class MapGenerationTester {
     public void testBrick() {
         ArrayList<TiledShape> tiles = new ArrayList<>();
         tiles.add(new TiledShape(loadShapeImage("tiles/brick test.png")));
-        System.out.println(ShapeGenerator.buildBrick(400, 100, tiles, false, 3));
+        System.out.println(ShapeGenerator.buildBrick(400, 100, tiles, 3));
     }
 
     public void testRunningBond() {
         ArrayList<TiledShape> verts = new ArrayList<>();
         ArrayList<TiledShape> horzs = new ArrayList<>();
-        
+
         verts.add(new TiledShape(loadShapeImage("tiles/herringbone vertical test.png")).invert());
         horzs.add(new TiledShape(loadShapeImage("tiles/herringbone horizontal test.png")).invert());
         System.out.println(ShapeGenerator.buildRunningBond(100, 100, verts, horzs));
         System.out.println("");
-        
+
         verts = new ArrayList<>();
         horzs = new ArrayList<>();
         verts.add(new TiledShape(loadShapeImage("tiles/herringbone small vertical test.png")).invert());
@@ -94,5 +96,24 @@ public class MapGenerationTester {
         verts.add(new TiledShape(loadShapeImage("tiles/brick test.png")).rotateClockwise());
         horzs.add(new TiledShape(loadShapeImage("tiles/brick test.png")));
         System.out.println(ShapeGenerator.buildRunningBond(100, 100, verts, horzs));
+    }
+
+    public void testBasketWeave() {
+        ArrayList<TiledShape> verts = new ArrayList<>();
+        ArrayList<TiledShape> horzs = new ArrayList<>();
+        verts.add(new TiledShape(loadShapeImage("tiles/brick test.png")).rotateClockwise());
+        horzs.add(new TiledShape(loadShapeImage("tiles/brick test.png")));
+        System.out.println(ShapeGenerator.buildBasketWeave(100, 100, verts, horzs, true));
+        System.out.println("");
+        System.out.println(ShapeGenerator.buildBasketWeave(100, 100, verts, horzs, false));
+    }
+
+    public void testWindmill() {
+        ArrayList<TiledShape> verts = new ArrayList<>();
+        ArrayList<TiledShape> horzs = new ArrayList<>();
+        verts.add(new TiledShape(loadShapeImage("tiles/brick test.png")).rotateClockwise());
+        horzs.add(new TiledShape(loadShapeImage("tiles/brick test.png")));
+        System.out.println(ShapeGenerator.buildWindmill(100, 100, verts, horzs, verts));
+        System.out.println("");
     }
 }

@@ -107,46 +107,31 @@ public class ShapeGenerator {
 
     /**
      * Returns a TiledShape that is constructed out of randomly chosen pieces placed in a series of
-     * rows or columns with the provided offset for each subsequent row or column. End result looks
-     * like brickwork when the offset is applied per row.
+     * rows with the provided offset for each subsequent row. End result looks like brickwork when
+     * the offset is applied per row.
      *
      * The provided list of tiles must all have exactly the same dimensions.
      *
      * @param width the desired width of the returned TiledShape
      * @param height the desired height of the returned TiledShape
      * @param tiles the pool of tiles to randomly choose from
-     * @param offsetHorizontally true if each row should be offset from the previous (as in
-     * brickwork) or false if the offset should be applied inside the columns
-     * @param offset the distance to offset following row or column elements
+     * @param offset the distance to offset following row
      * @return
      */
-    public static TiledShape buildBrick(int width, int height, ArrayList<TiledShape> tiles, boolean offsetHorizontally, int offset) {
+    public static TiledShape buildBrick(int width, int height, ArrayList<TiledShape> tiles, int offset) {
         TiledShape result = new TiledShape(width, height);
 
         int tileWidth = tiles.get(0).getWidth();//TODO - replace this with robust validator
         int tileHeight = tiles.get(0).getHeight();
 
-        int currentOffset;
-        if (offsetHorizontally) {
-            currentOffset = tileWidth;
-            for (int y = 0; y < height; y += tileHeight) {
-                for (int x = -tileWidth + currentOffset; x < width; x += tileWidth) {
-                    TiledShape tile = SCollections.getRandomElement(tiles);
-                    result.merge(tile, x, y);
-                }
-                currentOffset += offset;
-                currentOffset %= tileWidth;
+        int currentOffset = tileHeight;
+        for (int x = 0; x < width; x += tileWidth) {
+            for (int y = -tileHeight + currentOffset; y < height; y += tileHeight) {
+                TiledShape tile = SCollections.getRandomElement(tiles);
+                result.merge(tile, x, y);
             }
-        } else {
-            currentOffset = tileHeight;
-            for (int x = 0; x < width; x += tileWidth) {
-                for (int y = -tileHeight + currentOffset; y < height; y += tileHeight) {
-                    TiledShape tile = SCollections.getRandomElement(tiles);
-                    result.merge(tile, x, y);
-                }
-                currentOffset += offset;
-                currentOffset %= tileHeight;
-            }
+            currentOffset += offset;
+            currentOffset %= tileHeight;
         }
 
         return result;
@@ -180,36 +165,147 @@ public class ShapeGenerator {
         int tileWidth = verticalTiles.get(0).getWidth();//TODO - replace this with robust validator
         int tileHeight = verticalTiles.get(0).getHeight();
 
-        int endY = height - tileWidth;
-        int ySpacers = (int) (endY / tileHeight);//get number of spacer tiles
-        endY = tileWidth + ySpacers * tileHeight;
-
-        int endX = width - tileWidth;
-        int xSpacers = (int) (endX / tileHeight);//get number of spacer tiles
-        endX = tileWidth + xSpacers * tileHeight;
-
-        if (width > tileWidth || height > tileHeight) {
-            TiledShape tile = buildRunningBond(xSpacers * tileHeight, ySpacers * tileHeight, verticalTiles, horizontalTiles);
-            if (tile != null) {
-                result.merge(tile, tileWidth, tileWidth);
-            }
-        }
-
         //do horizontal first so right-hand edge can overwrite extra bits
         for (int x = tileWidth; x < width; x += tileHeight) {
             TiledShape tile = SCollections.getRandomElement(horizontalTiles);
             result.merge(tile, x, 0);
             tile = SCollections.getRandomElement(horizontalTiles);
-            result.merge(tile, x, endY);
+            result.merge(tile, x, height - tileWidth);
         }
 
         for (int y = 0; y < height; y += tileHeight) {
             TiledShape tile = SCollections.getRandomElement(verticalTiles);
             result.merge(tile, 0, y);
-//            if (width - endX <= tileWidth) {
             tile = SCollections.getRandomElement(verticalTiles);
-            result.merge(tile, endX, y);
-//            }
+            result.merge(tile, width - tileWidth, y);
+        }
+
+        if (width > tileWidth || height > tileHeight) {
+            TiledShape tile = buildRunningBond(width - 2 * tileWidth, height - 2 * tileWidth, verticalTiles, horizontalTiles);
+            if (tile != null) {
+                result.merge(tile, tileWidth, tileWidth);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns a TiledShape that is constructed out of randomly chosen pieces placed in a basket
+     * weave pattern.
+     *
+     * A "regular" basket weave creates square subtiles, alternating between two horizontal tiles
+     * together and two vertical tiles together. A non-regular basket weave creates a rectangular
+     * subtile structure where two vertical tiles are placed together and then one horizontal tile
+     * is placed above or below, alternatingly.
+     *
+     * The provided tiles must have the same dimensions, with the vertical tiles having the same
+     * height as the width of the horizontal tiles and the horizontal tiles having the same height
+     * as the width of the vertical tiles.
+     *
+     * There do not need to be the same number of tiles in the two lists, but each list must contain
+     * at least one tile.
+     *
+     * @param width the desired width of the returned TiledShape
+     * @param height the desired height of the returned TiledShape
+     * @param verticalTiles the pool of tiles to randomly choose vertical tiles from
+     * @param horizontalTiles the pool of tiles to randomly choose horizontal tiles from
+     * @param regular true if a regular weave desired, false for a non-regular weave
+     * @return
+     */
+    public static TiledShape buildBasketWeave(int width, int height, ArrayList<TiledShape> verticalTiles, ArrayList<TiledShape> horizontalTiles, boolean regular) {
+        TiledShape result = new TiledShape(width, height);
+
+        int tileWidth = verticalTiles.get(0).getWidth();//TODO - replace this with robust validator
+        int tileHeight = verticalTiles.get(0).getHeight();
+        TiledShape tile;
+
+        boolean alternate = false;
+        if (regular) {
+            for (int x = 0; x < width; x += tileHeight) {
+                for (int y = 0; y < height; y += tileHeight) {
+                    if (alternate) {
+                        tile = SCollections.getRandomElement(horizontalTiles);
+                        result.merge(tile, x, y);
+                        tile = SCollections.getRandomElement(horizontalTiles);
+                        result.merge(tile, x, y + tileWidth);
+                    } else {
+                        tile = SCollections.getRandomElement(verticalTiles);
+                        result.merge(tile, x, y);
+                        tile = SCollections.getRandomElement(verticalTiles);
+                        result.merge(tile, x + tileWidth, y);
+                    }
+                    alternate = !alternate;
+                }
+            }
+        } else {
+            for (int x = 0; x < width; x += tileHeight) {
+                for (int y = 0; y < height; y += tileHeight + tileWidth) {
+                    if (alternate) {
+                        tile = SCollections.getRandomElement(horizontalTiles);
+                        result.merge(tile, x, y + tileHeight);
+                        tile = SCollections.getRandomElement(verticalTiles);
+                        result.merge(tile, x, y);
+                        tile = SCollections.getRandomElement(verticalTiles);
+                        result.merge(tile, x + tileWidth, y);
+                    } else {
+                        tile = SCollections.getRandomElement(horizontalTiles);
+                        result.merge(tile, x, y);
+                        tile = SCollections.getRandomElement(verticalTiles);
+                        result.merge(tile, x, y + tileWidth);
+                        tile = SCollections.getRandomElement(verticalTiles);
+                        result.merge(tile, x + tileWidth, y + tileWidth);
+                    }
+                }
+                alternate = !alternate;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns a TiledShape that is constructed out of randomly chosen pieces placed in a windmill
+     * pattern with vertical and horizontal pieces surround a smaller interior piece.
+     *
+     * The vertical and horizontal tiles do not need to have dimensions related to each other, but
+     * all tiles in each individual list must be the same size. The interior tiles must all have a
+     * width equal to the width of the horizontal tiles minus the width of the vertical tiles and
+     * the height equal to the height of the vertical tiles minus the height of the horizontal
+     * tiles.
+     *
+     * There do not need to be the same number of tiles in the lists, but each list must contain at
+     * least one tile.
+     *
+     * @param width the desired width of the returned TiledShape
+     * @param height the desired height of the returned TiledShape
+     * @param verticalTiles the pool of tiles to randomly choose vertical tiles from
+     * @param horizontalTiles the pool of tiles to randomly choose horizontal tiles from
+     * @param interiorTiles the pool of tiles to randomly choose interior tiles from
+     * @return
+     */
+    public static TiledShape buildWindmill(int width, int height, ArrayList<TiledShape> verticalTiles, ArrayList<TiledShape> horizontalTiles, ArrayList<TiledShape> interiorTiles) {
+        TiledShape result = new TiledShape(width, height);
+
+        int vertWidth = verticalTiles.get(0).getWidth();//TODO - replace this with robust validator
+        int vertHeight = verticalTiles.get(0).getHeight();
+        int horzWidth = horizontalTiles.get(0).getWidth();
+        int horzHeight = horizontalTiles.get(0).getHeight();
+        TiledShape tile;
+
+        for (int x = 0; x < width; x += vertWidth + horzWidth) {
+            for (int y = 0; y < height; y += vertHeight + horzHeight) {
+                tile = SCollections.getRandomElement(interiorTiles);
+                result.merge(tile, x + vertWidth, y + horzHeight);
+                tile = SCollections.getRandomElement(verticalTiles);
+                result.merge(tile, x, y);
+                tile = SCollections.getRandomElement(horizontalTiles);
+                result.merge(tile, x + vertWidth, y);
+                tile = SCollections.getRandomElement(horizontalTiles);
+                result.merge(tile, x, y + vertHeight);
+                tile = SCollections.getRandomElement(verticalTiles);
+                result.merge(tile, x + horzWidth, y + horzHeight);
+            }
         }
 
         return result;
