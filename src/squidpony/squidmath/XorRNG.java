@@ -1,12 +1,25 @@
 package squidpony.squidmath;
 
 import java.util.Random;
+import squidpony.annotation.Beta;
 
 /**
- * This is a XorShift* RNG written by Sebastiano Vigna.
+ * The following description is from the wikipedia page on xorshift
+ * 
+ * "Xorshift random number generators form a class of pseudorandom number generators that was
+ * discovered by George Marsaglia. They generate the next number in their sequence by repeatedly
+ * taking the exclusive or of a number with a bit shifted version of itself. This makes them
+ * extremely fast on modern computer architectures. The xor shift primitive is invertible. They
+ * are a subclass of linear feedback shift registers, but their simple implementation typically
+ * makes them faster and use less space. However, the parameters have to be chosen very carefully
+ * in order to achieve a long period. The xorshift generators have been described as being fast
+ * but not reliable."
+ * 
+ * The reliability and comparative speed of this implementation has not been fully tested.
  *
- * @author Sebastiano Vigna
+ * @author http://en.wikipedia.org/wiki/Xorshift
  */
+@Beta
 public class XorRNG extends Random {
 
     private static final long serialVersionUID = 2L;
@@ -93,8 +106,7 @@ public class XorRNG extends Random {
     }
 
     /**
-     * Sets the seed of this generator. Passing this 0 will just set it to -1
-     * instead.
+     * Sets the seed of this generator. Passing this 0 will just set it to -1 instead.
      */
     @Override
     public void setSeed(final long seed) {

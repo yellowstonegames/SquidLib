@@ -11,7 +11,7 @@ import java.util.Set;
 
 /**
  *
- * @author Eben Howard - http://www.vogella.com/articles/JavaAlgorithmsDijkstra/article.html
+ * @author Eben Howard adapted from http://www.vogella.com/articles/JavaAlgorithmsDijkstra/article.html
  */
 public class DijkstraAlgorithm {
 
