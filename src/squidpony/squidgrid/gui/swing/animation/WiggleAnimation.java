@@ -54,11 +54,6 @@ public class WiggleAnimation implements Animation {
     }
 
     @Override
-    public int getDelay() {
-        return 0;//no delay for this type of animation
-    }
-
-    @Override
     public BufferedImage getImage() {
         return (BufferedImage) ((ImageIcon) label.getIcon()).getImage();
     }

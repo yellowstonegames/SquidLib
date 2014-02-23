@@ -379,7 +379,8 @@ public class SwingPane extends JLayeredPane implements SGPane {
      */
     public void bump(Point location, Point direction) {
         if (foregroundContents[location.x][location.y] != null) {
-            Animation anim = new BumpAnimation(foregroundContents[location.x][location.y], new Point(location.x * cellDimension.width, location.y * cellDimension.height), new Dimension(cellDimension.width / 3, cellDimension.height / 3), direction);
+            int duration = 20;
+            Animation anim = new BumpAnimation(foregroundContents[location.x][location.y], new Point(location.x * cellDimension.width, location.y * cellDimension.height), new Dimension(cellDimension.width / 3, cellDimension.height / 3), direction, duration);
             foregroundContents[location.x][location.y] = null;
             imageChanged[location.x][location.y] = true;
             redraw();

@@ -26,12 +26,6 @@ public interface Animation extends ActionListener {
      */
     public boolean isActive();
 
-    /**
-     * Returns the number of milliseconds desired between frames of animation.
-     *
-     * @return
-     */
-    public int getDelay();
 
     /**
      * Returns the static image associated with this animation. Will typically
