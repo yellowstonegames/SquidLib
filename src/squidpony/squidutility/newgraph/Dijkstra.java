@@ -13,12 +13,10 @@ import squidpony.annotation.Beta;
 public class Dijkstra {
 
     /**
-     * Finds the closest node based on the cost in the provided graph. If there
-     * is no path from the start node to the end node, the start node is
-     * returned.
+     * Finds the closest node based on the cost in the provided graph. If there is no path from the
+     * start node to the end node, the start node is returned.
      *
-     * If either node is not in the graph then there is no path so the start
-     * node is returned.
+     * If either node is not in the graph then there is no path so the start node is returned.
      *
      * @param g
      * @param start
@@ -41,7 +39,7 @@ public class Dijkstra {
             HashMap<Node, Float> neighbors = g.edges.get(currentNode);
             for (Node n : neighbors.keySet()) {
                 if (unvisitedNodes.contains(n) && neighbors.get(n) > currentNode.cost + g.getCost(currentNode, n)) {
-                    
+
                     cheapest = n;
                 }
             }
@@ -63,5 +61,6 @@ public class Dijkstra {
          * Select the unvisited node that is marked with the smallest tentative distance, and set it as the new "current node" then go back to step 3.
 
          */
+        return null;//dummy code to allow compiled testing of other library components
     }
 }

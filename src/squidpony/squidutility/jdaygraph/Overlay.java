@@ -14,7 +14,7 @@ public class Overlay {
 
     private final JDayCell cells[];
 
-    public Overlay (Topology topology, JDayCell cellType) {
+    public Overlay(Topology topology, JDayCell cellType) {
         cells = new JDayCell[topology.size()];
     }
 

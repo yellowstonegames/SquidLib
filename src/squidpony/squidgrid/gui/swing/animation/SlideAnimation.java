@@ -62,11 +62,6 @@ public class SlideAnimation implements Animation {
     }
 
     @Override
-    public int getDelay() {
-        return delay;
-    }
-
-    @Override
     public BufferedImage getImage() {
         return (BufferedImage) ((ImageIcon) label.getIcon()).getImage();
     }
