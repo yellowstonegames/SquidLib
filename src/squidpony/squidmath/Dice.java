@@ -77,7 +77,7 @@ public class Dice {
         ArrayList<Integer> results = new ArrayList<>(dice);
 
         for (int i = 0; i < rolls; i++) {
-            results.add(guess(group));
+            results.add(rollGroup(group));
         }
 
         return bestOf(rolls, results);
@@ -138,7 +138,7 @@ public class Dice {
      * @param group string encoded roll grouping
      * @return random number
      */
-    public static int guess(String group) {
+    public static int rollGroup(String group) {//TODO -- rework to tokenize and allow multiple chained operations
         Matcher mat = guessPattern.matcher(group);
         int ret = 0;
 
