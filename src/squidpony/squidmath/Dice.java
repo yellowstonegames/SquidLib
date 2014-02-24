@@ -19,9 +19,20 @@ import squidpony.annotation.Beta;
 public class Dice {
 
     private static final Pattern guessPattern = Pattern.compile("\\s*(\\d+)?\\s*(?:([:])\\s*(\\d+))??\\s*(?:([d:])\\s*(\\d+))?\\s*(?:([+-/*])\\s*(\\d+))?\\s*");
-    private static final RNG rng = new RNG();
+    private static RNG rng = new RNG();
 
     private Dice() {
+    }
+
+    /**
+     * Sets the random number generator to be used.
+     *
+     * This method does not need to be called before using the methods of this class.
+     *
+     * @param rng
+     */
+    public static void setRandom(RNG rng) {
+        Dice.rng = rng;
     }
 
     /**
