@@ -12,11 +12,11 @@ import squidpony.squidgrid.util.Direction;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class Grid4 implements Topology<Grid4Cell, Direction> {
+public class Grid4<T> implements Overlay<T, Direction> {
 
     private int width, height;
-    private Grid4Cell[] map;
-    private final HashMap<Grid4Cell, Integer> cells = new HashMap<>();
+    private Object[] map;
+    private final HashMap<T, Integer> cells = new HashMap<>();
     private boolean wrapTop;
     private boolean wrapSide;
 
@@ -27,7 +27,7 @@ public class Grid4 implements Topology<Grid4Cell, Direction> {
     public Grid4(int width, int height, boolean wrapTop, boolean wrapSide) {
         this.width = width;
         this.height = height;
-        map = new Grid4Cell[width * height];
+        map = new Object[width * height];
         this.wrapTop = wrapTop;
         this.wrapSide = wrapSide;
     }
@@ -40,7 +40,7 @@ public class Grid4 implements Topology<Grid4Cell, Direction> {
      * @return
      */
     private int convert2d(int x, int y) {
-        return x * width + y;
+        return x + y * width;
     }
 
     /**
@@ -50,7 +50,7 @@ public class Grid4 implements Topology<Grid4Cell, Direction> {
      * @return
      */
     private int convertX(int i) {
-        return i / width;
+        return i % width;
     }
 
     /**
@@ -60,7 +60,7 @@ public class Grid4 implements Topology<Grid4Cell, Direction> {
      * @return
      */
     private int convertY(int i) {
-        return i - (convertX(i) * width);
+        return i / width;
     }
 
     /**
@@ -71,10 +71,10 @@ public class Grid4 implements Topology<Grid4Cell, Direction> {
      * @param y
      * @param cell
      */
-    public void put(int x, int y, Grid4Cell cell) {
+    public void put(int x, int y, T cell) {
         int index = convert2d(x, y);
         if (map[index] != null) {
-            cells.remove(map[index]);
+            cells.remove((T) map[index]);
         }
 
         map[index] = cell;
@@ -93,14 +93,14 @@ public class Grid4 implements Topology<Grid4Cell, Direction> {
      * @return
      */
     @Override
-    public int indexOf(Grid4Cell t) {
+    public int indexOf(T t) {
         Integer p = cells.get(t);
         return p == null ? -1 : p;
     }
 
     @Override
-    public Grid4Cell at(int index) {
-        return (index >= 0 && index < size()) ? map[index] : null;
+    public T at(int index) {
+        return (index >= 0 && index < size()) ? (T) map[index] : null;
     }
 
     @Override
@@ -142,27 +142,22 @@ public class Grid4 implements Topology<Grid4Cell, Direction> {
 
     @Override
     public float traversalCost(int index) {
-        return map[index] == null ? Float.POSITIVE_INFINITY : map[index].traversalCost();
+        return map[index] == null ? Float.POSITIVE_INFINITY : 1f;
     }
 
     @Override
     public float traversalCost(int index, Direction traversal) {
-        return map[index] == null ? Float.POSITIVE_INFINITY : map[index].traversalCost(traversal);
-    }
-
-    @Override
-    public int[] path(int indexA, int indexB) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public float pathCost(int indexA, int indexB) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Direction[] pathTraversals(int indexA, int indexB) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (traversal) {
+            case NONE:
+                return 0f;
+            case UP:
+            case LEFT:
+            case RIGHT:
+            case DOWN:
+                return 1f;
+            default:
+                return Float.POSITIVE_INFINITY;
+        }
     }
 
 }
