@@ -1,18 +1,18 @@
 package squidpony.squidgrid.util;
 
+import squidpony.squidutility.jdaygraph.CellTraversal;
+
 /**
- * Represents the eight grid directions and the deltaX, deltaY values associated
- * with those directions.
+ * Represents the eight grid directions and the deltaX, deltaY values associated with those
+ * directions.
  *
  * The grid referenced has x positive to the right and y positive downwards on screen.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public enum Direction {
+public enum Direction implements CellTraversal {
 
-    UP(0, -1), DOWN(0, 1), LEFT(-1, 0), RIGHT(1, 0),
-    UP_LEFT(-1, -1), UP_RIGHT(1, -1), DOWN_LEFT(-1, 1), DOWN_RIGHT(1, 1),
-    NONE(0, 0);
+    UP(0, -1), DOWN(0, 1), LEFT(-1, 0), RIGHT(1, 0), UP_LEFT(-1, -1), UP_RIGHT(1, -1), DOWN_LEFT(-1, 1), DOWN_RIGHT(1, 1), NONE(0, 0);
     /**
      * An array which holds only the four cardinal directions.
      */
@@ -28,11 +28,11 @@ public enum Direction {
     /**
      * The x coordinate difference for this direction.
      */
-    public int deltaX;
+    public final int deltaX;
     /**
      * The y coordinate difference for this direction.
      */
-    public int deltaY;
+    public final int deltaY;
 
     /**
      * Returns the direction that most closely matches the input.

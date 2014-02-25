@@ -3,7 +3,7 @@ package squidpony.squidutility.jdaygraph;
 import squidpony.annotation.Beta;
 
 /**
- * Utility class that stores a graph and performs calculations on it.
+ * This class stores a graph and performs calculations on it.
  *
  * Adapted from posts at http://paleoludic.com/
  *
