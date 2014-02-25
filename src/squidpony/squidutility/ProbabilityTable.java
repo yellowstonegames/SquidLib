@@ -16,8 +16,8 @@ import squidpony.squidmath.RNG;
 @Beta
 public class ProbabilityTable<T> {
 
-    private ArrayList<Pair<Integer, T>> table = new ArrayList<>();
-    private RNG rng = new RNG();
+    private final ArrayList<Pair<Integer, T>> table = new ArrayList<>();
+    private static final RNG rng = new RNG();
     private int total = 0;
 
     /**
