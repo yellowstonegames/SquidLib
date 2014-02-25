@@ -1,6 +1,6 @@
 package squidpony.squidgrid.util;
 
-import squidpony.squidutility.jdaygraph.CellTraversal;
+import squidpony.squidutility.jdaygraph.Topology;
 
 /**
  * Represents the eight grid directions and the deltaX, deltaY values associated with those
@@ -10,7 +10,7 @@ import squidpony.squidutility.jdaygraph.CellTraversal;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public enum Direction implements CellTraversal {
+public enum Direction implements Topology {
 
     UP(0, -1), DOWN(0, 1), LEFT(-1, 0), RIGHT(1, 0), UP_LEFT(-1, -1), UP_RIGHT(1, -1), DOWN_LEFT(-1, 1), DOWN_RIGHT(1, 1), NONE(0, 0);
     /**
