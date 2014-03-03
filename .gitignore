@@ -5,3 +5,5 @@ target
 .classpath
 *.iml
 .idea
+.build
+.private
