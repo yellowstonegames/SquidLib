@@ -67,6 +67,8 @@ public class SFrame implements SGPane {
     private final ArrayList<String> outputMessages = new ArrayList<>();
     private int displayedMessage = 0;
 
+    private Font font;
+
     /**
      * Builds and displays a top level GUI window with the provided grid width and height. The GUI
      * is guaranteed to fit within the screen resolution it is opened on.
@@ -98,7 +100,7 @@ public class SFrame implements SGPane {
             //don't do anything if it failed, the default Java icon will be used
         }
 
-        Font font = new Font("Lucidia", Font.PLAIN, 12);
+        font = new Font("Lucidia", Font.PLAIN, 12);
 
         keyListener = initKeyListener();
         frame.addKeyListener(keyListener);
@@ -118,7 +120,7 @@ public class SFrame implements SGPane {
         statsPanel.refresh();
         frame.add(statsPanel, BorderLayout.EAST);
 
-        outputPanel = new SwingPane(mapPanel.getGridWidth() + statsPanel.getGridWidth() - 1, outputLines, font);
+        outputPanel = new SwingPane(mapPanel.getGridWidth() + statsPanel.getGridWidth(), outputLines, font);
         outputPanel.setDefaultBackground(SColor.ALICE_BLUE);
         outputPanel.setDefaultForeground(SColor.BURNT_BAMBOO);
         outputPanel.placeCharacter(outputPanel.getGridWidth() - 1, 0, 'U', SColor.DARK_BLUE_DYE, SColor.ALICE_BLUE);
@@ -127,45 +129,7 @@ public class SFrame implements SGPane {
             outputPanel.clearCell(outputPanel.getGridWidth() - 1, y, SColor.ALICE_BLUE);
         }
         updateOutput();
-        outputPanel.addMouseListener(new SGMouseListener(outputPanel.getCellWidth(), outputPanel.getCellHeight(), new MouseInputListener() {
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getX() == width + statsWidth) {
-                    if (e.getY() == 0) {
-                        displayedMessage = Math.max(0, displayedMessage - 1);
-                        updateOutput();
-                    } else if (e.getY() == outputLines - 1) {
-                        displayedMessage = Math.min(outputMessages.size() - 1, displayedMessage + 1);
-                        updateOutput();
-                    }
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-            }
-        }));
+        outputPanel.addMouseListener(new SGMouseListener(outputPanel.getCellWidth(), outputPanel.getCellHeight(), new OutputMouseListener()));
 
         frame.add(outputPanel, BorderLayout.SOUTH);
 
@@ -438,6 +402,66 @@ public class SFrame implements SGPane {
     @Override
     public boolean willFit(char character) {
         return mapPanel.willFit(character);
+    }
+
+    private class OutputMouseListener implements MouseInputListener {
+
+        char upChar;
+        char downChar;
+
+        public OutputMouseListener() {
+            //find a good up character
+            if (testChar('▲')) {
+                upChar = '▲';
+            } else {
+                upChar = 'U';
+            }
+
+            downChar = testChar('▼') ? '▼' : 'D';
+            
+            outputPanel.getTextFactory().addFit(new char[]{upChar, downChar});
+        }
+
+        private boolean testChar(char c) {
+            return font.canDisplay(c);
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (e.getX() == width + statsWidth - 1) {
+                if (e.getY() == 0) {
+                    displayedMessage = Math.max(0, displayedMessage - 1);
+                    updateOutput();
+                } else if (e.getY() == outputLines - 1) {
+                    displayedMessage = Math.min(outputMessages.size() - 1, displayedMessage + 1);
+                    updateOutput();
+                }
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+        }
     }
 
 }

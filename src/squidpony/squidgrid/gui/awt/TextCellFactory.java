@@ -5,6 +5,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.TreeMap;
 import squidpony.squidcolor.SColor;
@@ -13,12 +14,12 @@ import squidpony.squidgrid.util.Direction;
 /**
  * Class for creating text blocks.
  *
- * The default characters guaranteed to fit are ASCII 33 through 125, which are
- * the commonly used symbols, numbers, and letters.
+ * The default characters guaranteed to fit are ASCII 33 through 125, which are the commonly used
+ * symbols, numbers, and letters.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class TextCellFactory implements Cloneable {
+public class TextCellFactory {
 
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
     private Font font;
@@ -31,13 +32,32 @@ public class TextCellFactory implements Cloneable {
     private TreeMap<String, BufferedImage> blocks = new TreeMap<>();
 
     /**
-     * Sets up this factory to ensure ASCII (or UTF-8) characters in the range
-     * 33 to 125 all fit and no padding on the cells.
+     * Sets up this factory to ensure ASCII (or UTF-8) characters in the range 33 to 125 all fit and
+     * no padding on the cells.
      *
-     * After this object is created one of the initialization methods must be
-     * called before it can be used.
+     * After this object is created one of the initialization methods must be called before it can
+     * be used.
      */
     public TextCellFactory() {
+    }
+
+    /**
+     * Creates a new TextCellFactory as a shallow copy of the provided one. If 
+     * @param other 
+     */
+    public TextCellFactory(TextCellFactory other) {
+        antialias = other.antialias;
+        blocks = new TreeMap<>(other.blocks);
+        bottomPadding = other.bottomPadding;
+        cellHeight = other.cellHeight;
+        cellWidth = other.cellWidth;
+        fitting = other.fitting;
+        font = other.font;
+        horizontalOffset = other.horizontalOffset;
+        leftPadding = other.leftPadding;
+        rightPadding = other.rightPadding;
+        topPadding = other.topPadding;
+        verticalOffset = other.verticalOffset;
     }
 
     /**
@@ -59,8 +79,8 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Clears out the backing cache. Should be used if a very large number of
-     * one-off cells are being made.
+     * Clears out the backing cache. Should be used if a very large number of one-off cells are
+     * being made.
      */
     public void emptyCache() {
         blocks.clear();
@@ -81,9 +101,8 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Sets the array of characters that will be checked to ensure they all fit
-     * in the text block. One of the provided initialization methods must be
-     * called to then make this take effect.
+     * Sets the array of characters that will be checked to ensure they all fit in the text block.
+     * One of the provided initialization methods must be called to then make this take effect.
      *
      * @param fit
      */
@@ -93,8 +112,23 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Sets the minimum amount of space between the characters and all four
-     * edges.
+     * Adds to the array of characters that will be checked to ensure they all fit in the text
+     * block. One of the provided initialization methods must be called to then make this take
+     * effect.
+     *
+     * @param c
+     */
+    public void addFit(char[] c) {
+        int oldLength = fitting.length;
+        fitting = Arrays.copyOf(fitting, oldLength + c.length);
+        for (int i = 0; i + oldLength < fitting.length; i++) {
+            fitting[i + oldLength] = c[i];
+        }
+        emptyCache();
+    }
+
+    /**
+     * Sets the minimum amount of space between the characters and all four edges.
      *
      * @param pad
      */
@@ -136,9 +170,8 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Sets up the factory to provide images based on the cell cellWidth and
-     * cellHeight passed in. The font size will be used as a starting point, and
-     * reduced as needed to fit within the cell.
+     * Sets up the factory to provide images based on the cell cellWidth and cellHeight passed in.
+     * The font size will be used as a starting point, and reduced as needed to fit within the cell.
      *
      * @param cellWidth
      * @param cellHeight
@@ -156,11 +189,10 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Makes the cell as small as possible with the basic plane printable ASCII
-     * characters still fitting inside.
+     * Makes the cell as small as possible with the basic plane printable ASCII characters still
+     * fitting inside.
      *
-     * @param whiteSpace true if an extra pixel should be ensured around the
-     * largest characters.
+     * @param whiteSpace true if an extra pixel should be ensured around the largest characters.
      */
     private void sizeCellByFont() {
         cellWidth = 1;
@@ -213,9 +245,8 @@ public class TextCellFactory implements Cloneable {
             GlyphVector vect = font.createGlyphVector(context, new char[]{fitting[i]});
             if (vect.getGlyphCode(0) != font.getMissingGlyphCode()
                     && !Character.isISOControl(fitting[i])
-                    && !Character.isWhitespace(fitting[i])
-              //      && Character.getDirectionality(fitting[i]) == Character.DIRECTIONALITY_LEFT_TO_RIGHT //TODO -- note in docs that right-to-left characters might break this... can't enforce since non-alphanumerics don't have directionality
-                    ){
+                    && !Character.isWhitespace(fitting[i]) //      && Character.getDirectionality(fitting[i]) == Character.DIRECTIONALITY_LEFT_TO_RIGHT //TODO -- note in docs that right-to-left characters might break this... can't enforce since non-alphanumerics don't have directionality
+                    ) {
                 Rectangle rect = vect.getGlyphPixelBounds(0, context, 0, 0);
                 if (rect.x < left) {
                     larges.put(Direction.LEFT, fitting[i]);
@@ -332,8 +363,7 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Checks if printing this character will place anything in the square at
-     * all.
+     * Checks if printing this character will place anything in the square at all.
      *
      * @param c
      * @return
@@ -371,9 +401,8 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Returns true if the given character will fit inside the current cell
-     * dimensions with the current font. ISO Control characters are considered
-     * to fit by definition.
+     * Returns true if the given character will fit inside the current cell dimensions with the
+     * current font. ISO Control characters are considered to fit by definition.
      *
      * @param c
      * @return
@@ -384,9 +413,8 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Slides the character on pixel in the provided direction and test if fully
-     * exposed the opposite edge. Returns true if opposite edge was fully
-     * exposed.
+     * Slides the character on pixel in the provided direction and test if fully exposed the
+     * opposite edge. Returns true if opposite edge was fully exposed.
      *
      * @param c
      * @param dir
@@ -453,8 +481,7 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Returns the image of the character provided with a transparent
-     * background.
+     * Returns the image of the character provided with a transparent background.
      *
      * @param c
      * @param foreground
@@ -472,8 +499,8 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Returns a string representation of the character and the hex value of the
-     * foreground and background argb values.
+     * Returns a string representation of the character and the hex value of the foreground and
+     * background argb values.
      *
      * @param c
      * @param foreground
@@ -486,8 +513,7 @@ public class TextCellFactory implements Cloneable {
     }
 
     /**
-     * Returns a string representation of the character and the hex value of the
-     * foreground.
+     * Returns a string representation of the character and the hex value of the foreground.
      *
      * @param c
      * @param foreground
@@ -539,21 +565,4 @@ public class TextCellFactory implements Cloneable {
         g.drawString(String.valueOf(c), x, y);
     }
 
-    @Override
-    public TextCellFactory clone() {
-        TextCellFactory ret = new TextCellFactory();
-        ret.antialias = antialias;
-        ret.blocks = new TreeMap<>(blocks);
-        ret.bottomPadding = bottomPadding;
-        ret.cellHeight = cellHeight;
-        ret.cellWidth = cellWidth;
-        ret.fitting = fitting;
-        ret.font = font;
-        ret.horizontalOffset = horizontalOffset;
-        ret.leftPadding = leftPadding;
-        ret.rightPadding = rightPadding;
-        ret.topPadding = topPadding;
-        ret.verticalOffset = verticalOffset;
-        return ret;
-    }
 }
