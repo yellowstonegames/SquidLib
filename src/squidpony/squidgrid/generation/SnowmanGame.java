@@ -380,7 +380,7 @@ public class SnowmanGame {
 
         mapPanel = new SwingPane(width, height, font);
 
-        TextCellFactory textFactory = mapPanel.getTextFactory();
+        TextCellFactory textFactory = mapPanel.getTextCellFactory();
         textFactory.setAntialias(true);
         textFactory.setFitCharacters(CHARS_USED);
         textFactory.initializeBySize(mapPanel.getCellWidth(), mapPanel.getCellHeight(), font);

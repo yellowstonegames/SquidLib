@@ -176,7 +176,6 @@ public class TextCellFactory {
      * @param cellWidth
      * @param cellHeight
      * @param font
-     * @param whiteSpace
      */
     public void initializeBySize(int cellWidth, int cellHeight, Font font) {
         this.cellWidth = cellWidth;

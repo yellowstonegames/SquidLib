@@ -11,11 +11,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
 import squidpony.annotation.Beta;
 import squidpony.squidcolor.SColor;
+import squidpony.squidcolor.SColorFactory;
 import squidpony.squidgrid.gui.SGPane;
 import squidpony.squidgrid.gui.awt.TextCellFactory;
 import squidpony.squidgrid.gui.awt.event.SGMouseListener;
@@ -35,7 +39,7 @@ import squidpony.squidgrid.util.Direction;
  * pair. If there are more pairs than vertical space, they will be displayed in a first come, first
  * server order. The stats area has enough width to support "STR: 19" output.
  *
- * The output display area has the following restrictions. It displays two lines of text at a time.
+ * The output display area has the following restrictions. It displays three lines of text at a time.
  * Because it runs under both the map and stats areas, it can display slightly more characters than
  * the width of the main map. It includes a clickable scroll function (on the right-hand side) to
  * display older messages. It does not include the --MORE-- functionality seen in many roguelikes.
@@ -55,13 +59,13 @@ import squidpony.squidgrid.util.Direction;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
-public class SFrame implements SGPane {
+public class BootStrapFrame implements SGPane {
 
     private JFrame frame;
     private SwingPane mapPanel, statsPanel, outputPanel;
     private final GameLogic logic;
     private KeyListener keyListener;
-    private final int outputLines = 2;
+    private final int outputLines = 3;
     private final int statsWidth = 8;
     private final int width, height;
     private final ArrayList<String> outputMessages = new ArrayList<>();
@@ -80,7 +84,7 @@ public class SFrame implements SGPane {
      * @param height
      * @param logic
      */
-    public SFrame(int width, int height, GameLogic logic) {
+    public BootStrapFrame(int width, int height, GameLogic logic) {
         this.width = width;
         this.height = height;
         this.logic = logic;
@@ -94,48 +98,70 @@ public class SFrame implements SGPane {
     private void initFrame() {
         frame = new JFrame("SquidLib Bootstrap");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setUndecorated(true);
         try {
             frame.setIconImage(ImageIO.read(new File("./icon.png")));
         } catch (IOException ex) {
             //don't do anything if it failed, the default Java icon will be used
         }
 
-        font = new Font("Lucidia", Font.PLAIN, 12);
+        frame.getContentPane().setBackground(SColorFactory.dimmest(SColor.DARK_INDIGO));
 
-        keyListener = initKeyListener();
-        frame.addKeyListener(keyListener);
-
-        mapPanel = new SwingPane(width, height, font);
-
-        TextCellFactory textFactory = mapPanel.getTextFactory();
+        font = new Font("Lucidia", Font.PLAIN, 72);
+        TextCellFactory textFactory = new TextCellFactory();
         textFactory.setAntialias(true);
-        textFactory.initializeBySize(mapPanel.getCellWidth(), mapPanel.getCellHeight(), font);
-        mapPanel.placeHorizontalString(width / 2 - 4, height / 2, "Loading");
+        char upChar = font.canDisplay('▲') ? '▲' : 'U';
+        char downChar = font.canDisplay('▼') ? '▼' : 'D';
+        textFactory.addFit(new char[]{upChar, downChar});
+
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
+
+        int pixelWidth = 0, pixelHeight = 0, lastWidth, lastHeight;
+        do {
+            lastWidth = pixelWidth;
+            lastHeight = pixelHeight;
+            try {
+                Thread.sleep(15);//give the OS time to display the frame fully
+            } catch (InterruptedException ex) {
+            }
+            pixelWidth = frame.getContentPane().getWidth();
+            pixelHeight = frame.getContentPane().getHeight();
+        } while (pixelWidth <= 0 || pixelHeight <= 0 || lastWidth != pixelWidth || lastHeight != pixelHeight);
+
+        pixelWidth = (int) Math.ceil(pixelWidth / (width + statsWidth));//convert to pixels per grid cell
+        pixelHeight = (int) Math.ceil(pixelHeight / (height + outputLines));//convert to pixels per grid cell
+        textFactory.initializeBySize(pixelWidth, pixelHeight, font);
+
+        mapPanel = new SwingPane(width, height, textFactory);
+        mapPanel.placeHorizontalString(width / 2 - 4, height / 2, "Loading...");
         mapPanel.refresh();
         frame.add(mapPanel, BorderLayout.WEST);
 
-        statsPanel = new SwingPane(mapPanel.getCellWidth(), mapPanel.getCellHeight(), statsWidth, mapPanel.getGridHeight(), font);
+        statsPanel = new SwingPane(statsWidth, mapPanel.getGridHeight(), textFactory);
         statsPanel.setDefaultBackground(SColor.DARK_GRAY);
         statsPanel.setDefaultForeground(SColor.RUST);
         statsPanel.refresh();
         frame.add(statsPanel, BorderLayout.EAST);
 
-        outputPanel = new SwingPane(mapPanel.getGridWidth() + statsPanel.getGridWidth(), outputLines, font);
+        outputPanel = new SwingPane(mapPanel.getGridWidth() + statsPanel.getGridWidth(), outputLines, textFactory);
         outputPanel.setDefaultBackground(SColor.ALICE_BLUE);
         outputPanel.setDefaultForeground(SColor.BURNT_BAMBOO);
-        outputPanel.placeCharacter(outputPanel.getGridWidth() - 1, 0, 'U', SColor.DARK_BLUE_DYE, SColor.ALICE_BLUE);
-        outputPanel.placeCharacter(outputPanel.getGridWidth() - 1, outputPanel.getGridHeight() - 1, 'D', SColor.DARK_BLUE_DYE, SColor.ALICE_BLUE);
+        outputPanel.placeCharacter(outputPanel.getGridWidth() - 1, 0, upChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
+        outputPanel.placeCharacter(outputPanel.getGridWidth() - 1, outputPanel.getGridHeight() - 1, downChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
         for (int y = 1; y < outputPanel.getGridHeight() - 1; y++) {//fill in vertical line between scroll arrowheads
-            outputPanel.clearCell(outputPanel.getGridWidth() - 1, y, SColor.ALICE_BLUE);
+            outputPanel.clearCell(outputPanel.getGridWidth() - 1, y, SColor.SILVER);
         }
         updateOutput();
         outputPanel.addMouseListener(new SGMouseListener(outputPanel.getCellWidth(), outputPanel.getCellHeight(), new OutputMouseListener()));
 
         frame.add(outputPanel, BorderLayout.SOUTH);
 
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        keyListener = initKeyListener();
+        frame.addKeyListener(keyListener);
+
+        frame.getContentPane().setBackground(SColor.BLACK);
+        frame.validate();
     }
 
     /**
@@ -146,7 +172,7 @@ public class SFrame implements SGPane {
     private KeyListener initKeyListener() {
 
         return new KeyListener() {
-            private HashMap<Integer, Direction> dirKeys;
+            private final HashMap<Integer, Direction> dirKeys;
 
             {
                 dirKeys = new HashMap<>();
@@ -405,26 +431,6 @@ public class SFrame implements SGPane {
     }
 
     private class OutputMouseListener implements MouseInputListener {
-
-        char upChar;
-        char downChar;
-
-        public OutputMouseListener() {
-            //find a good up character
-            if (testChar('▲')) {
-                upChar = '▲';
-            } else {
-                upChar = 'U';
-            }
-
-            downChar = testChar('▼') ? '▼' : 'D';
-            
-            outputPanel.getTextFactory().addFit(new char[]{upChar, downChar});
-        }
-
-        private boolean testChar(char c) {
-            return font.canDisplay(c);
-        }
 
         @Override
         public void mouseClicked(MouseEvent e) {
