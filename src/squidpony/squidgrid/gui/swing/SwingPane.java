@@ -20,8 +20,8 @@ import squidpony.squidgrid.util.Direction;
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
  *
- * When text is placed, the background color is set separately from the
- * foreground character. When moved, only the foreground character is moved.
+ * When text is placed, the background color is set separately from the foreground character. When
+ * moved, only the foreground character is moved.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -46,9 +46,8 @@ public class SwingPane extends JLayeredPane implements SGPane {
     private ImageCellMap imageCellMap;
 
     /**
-     * Builds a new panel with the desired traits. The size of the font will be
-     * used unless it's too large to fit, in which case it will be stepped down
-     * until the characters fit.
+     * Builds a new panel with the desired traits. The size of the font will be used unless it's too
+     * large to fit, in which case it will be stepped down until the characters fit.
      *
      * @param cellWidth cell width in pixels.
      * @param cellHeight cell height in pixels.
@@ -61,8 +60,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     /**
-     * Builds a panel with the given Font determining the size of the cell
-     * dimensions.
+     * Builds a panel with the given Font determining the size of the cell dimensions.
      *
      * @param gridWidth
      * @param gridHeight
@@ -73,8 +71,20 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     /**
-     * Empty constructor. One of the initialization methods must be called
-     * before this panel is used.
+     * Builds a panel with the given grid size and all other parameters determined by the factory.
+     *
+     * @param gridWidth
+     * @param gridHeight
+     * @param factory
+     */
+    public SwingPane(int gridWidth, int gridHeight, TextCellFactory factory) {
+        textFactory = factory;
+        initialize(gridWidth, gridHeight, textFactory);
+    }
+
+    /**
+     * Empty constructor. One of the initialization methods must be called before this panel is
+     * used.
      */
     public SwingPane() {
     }
@@ -113,7 +123,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
         textFactory = factory;
     }
 
-    public TextCellFactory getTextFactory() {
+    public TextCellFactory getTextCellFactory() {
         return textFactory;
     }
 
@@ -244,6 +254,21 @@ public class SwingPane extends JLayeredPane implements SGPane {
         imageChanged[x][y] = true;
     }
 
+    /**
+     * Initializes this pane using the provided TextCellFactory, including using the cell size
+     * defined in that factory.
+     *
+     * @param gridWidth
+     * @param gridHeight
+     * @param factory
+     */
+    public void initialize(int gridWidth, int gridHeight, TextCellFactory factory) {
+        textFactory = factory;
+        setFont(textFactory.getFont());
+        doInitialization(gridWidth, gridHeight);
+        imageCellMap = new ImageCellMap(cellDimension);
+    }
+
     @Override
     public void initialize(int cellWidth, int cellHeight, int gridWidth, int gridHeight, Font font) {
         textFactory.initializeBySize(cellWidth, cellHeight, font);
@@ -261,8 +286,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     /**
-     * Sets the character set that will be guaranteed to fit on the next
-     * initialization of the grid.
+     * Sets the character set that will be guaranteed to fit on the next initialization of the grid.
      *
      * @param characters
      */
@@ -276,8 +300,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     /**
-     * Clears backing arrays and sets fields to proper size for the new grid
-     * size.
+     * Clears backing arrays and sets fields to proper size for the new grid size.
      */
     private void doInitialization(int gridWidth, int gridHeight) {
         this.gridHeight = gridHeight;
@@ -393,8 +416,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     /**
-     * Starts a movement animation for the object at the given grid location at
-     * the default speed.
+     * Starts a movement animation for the object at the given grid location at the default speed.
      *
      * @param start
      * @param end
@@ -404,8 +426,8 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     /**
-     * Starts a movement animation for the object at the given grid location at
-     * the default speed for one grid square in the direction provided.
+     * Starts a movement animation for the object at the given grid location at the default speed
+     * for one grid square in the direction provided.
      *
      * @param start
      * @param direction
@@ -415,9 +437,8 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     /**
-     * Starts a sliding movement animation for the object at the given location
-     * at the provided speed. The speed is how many milliseconds should pass
-     * between movement steps.
+     * Starts a sliding movement animation for the object at the given location at the provided
+     * speed. The speed is how many milliseconds should pass between movement steps.
      *
      * @param start
      * @param end
@@ -479,11 +500,9 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     /**
-     * Causes the component to stop responding to input until all current
-     * animations are finished.
+     * Causes the component to stop responding to input until all current animations are finished.
      *
-     * Note that if an animation is set to not stop then this method will never
-     * return.
+     * Note that if an animation is set to not stop then this method will never return.
      */
     public void waitForAnimations() {
         while (!animations.isEmpty()) {
@@ -496,11 +515,10 @@ public class SwingPane extends JLayeredPane implements SGPane {
     /**
      * Returns true if there are animations running when this method is called.
      *
-     * Note that due to the nature of animations ending at various times, this
-     * result is not guaranteed to be accurate.
+     * Note that due to the nature of animations ending at various times, this result is not
+     * guaranteed to be accurate.
      *
-     * To fully ensure no animations are running, waitForAnimations() must be
-     * used.
+     * To fully ensure no animations are running, waitForAnimations() must be used.
      *
      * @return
      */

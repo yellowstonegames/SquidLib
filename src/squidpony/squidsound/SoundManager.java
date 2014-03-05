@@ -13,8 +13,8 @@ import javafx.scene.media.MediaPlayer.Status;
 /**
  * Simplified class for working with sound output.
  *
- * If fading is used, this class should be wrapped in a Thread to allow
- * automatic volume adjustments as needed.
+ * If fading is used, this class should be wrapped in a Thread to allow automatic volume adjustments
+ * as needed.
  *
  * @author Eben Howard - http://squidpony.com
  */
@@ -35,6 +35,10 @@ public class SoundManager implements Runnable {
             JFXPanel fxPanel = new JFXPanel();//needed only to initialize the Platform
             fxInitialized = true;
         }
+    }
+
+    public boolean isFading() {
+        return fading;
     }
 
     /**
@@ -71,8 +75,8 @@ public class SoundManager implements Runnable {
     }
 
     /**
-     * Plays the sound fx associated with the provided key. The key is the
-     * filename of the sound without its extension.
+     * Plays the sound fx associated with the provided key. The key is the filename of the sound
+     * without its extension.
      *
      * @param key
      */
@@ -88,8 +92,8 @@ public class SoundManager implements Runnable {
     }
 
     /**
-     * Plays the music associated with the key. Keys for music are the filenames
-     * of the tracks without their extension.
+     * Plays the music associated with the key. Keys for music are the filenames of the tracks
+     * without their extension.
      *
      * @param key
      */
@@ -129,8 +133,7 @@ public class SoundManager implements Runnable {
     }
 
     /**
-     * Sets the music to play at the provided volume, with 0 being off and 1
-     * being full volume.
+     * Sets the music to play at the provided volume, with 0 being off and 1 being full volume.
      *
      * @param volume
      */
