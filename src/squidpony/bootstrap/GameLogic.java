@@ -31,11 +31,19 @@ public interface GameLogic {
     public void acceptDirectionInput(Direction dir);
 
     /**
-     * Sends the grid coordinates of a mouse click. Will not send clicks that originated in the message
-     * and stat panels.
+     * Sends the grid coordinates of a mouse click. Will not send clicks that originated in the
+     * message and stat panels.
      *
      * @param x
      * @param y
      */
     public void acceptMoustInput(int x, int y);
+
+    /**
+     * Called once the GUI is completely displayed and ready for input.
+     *
+     * The initial visual representation of the game should be created here. After this all visual
+     * updates will need to be in response to mouse or keyboard input.
+     */
+    public void beginGame();
 }

@@ -3,6 +3,7 @@ package squidpony.bootstrap;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -10,12 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
 import squidpony.annotation.Beta;
 import squidpony.squidcolor.SColor;
@@ -39,14 +38,14 @@ import squidpony.squidgrid.util.Direction;
  * pair. If there are more pairs than vertical space, they will be displayed in a first come, first
  * server order. The stats area has enough width to support "STR: 19" output.
  *
- * The output display area has the following restrictions. It displays three lines of text at a time.
- * Because it runs under both the map and stats areas, it can display slightly more characters than
- * the width of the main map. It includes a clickable scroll function (on the right-hand side) to
- * display older messages. It does not include the --MORE-- functionality seen in many roguelikes.
- * When a new message is output, the view is automatically scrolled to the bottom. For best use,
- * ensure that either only short messages are used or that messages no longer (in characters) than
- * two times the width of the map are used. This will allow all output to be visible when it is
- * output.
+ * The output display area has the following restrictions. It displays three lines of text at a
+ * time. Because it runs under both the map and stats areas, it can display slightly more characters
+ * than the width of the main map. It includes a clickable scroll function (on the right-hand side)
+ * to display older messages. It does not include the --MORE-- functionality seen in many
+ * roguelikes. When a new message is output, the view is automatically scrolled to the bottom. For
+ * best use, ensure that either only short messages are used or that messages no longer (in
+ * characters) than two times the width of the map are used. This will allow all output to be
+ * visible when it is output.
  *
  * This is purposefully a bare-bones GUI. For more control over appearance and things such as
  * multiple panels, a custom JFrame and direct use of SwingPane objects should be used.
@@ -70,7 +69,7 @@ public class BootStrapFrame implements SGPane {
     private final int width, height;
     private final ArrayList<String> outputMessages = new ArrayList<>();
     private int displayedMessage = 0;
-
+    private LinkedHashMap<String, Integer> stats = new LinkedHashMap<>();
     private Font font;
 
     /**
@@ -88,14 +87,12 @@ public class BootStrapFrame implements SGPane {
         this.width = width;
         this.height = height;
         this.logic = logic;
-
-        initFrame();
     }
 
     /**
      * Sets up a JFrame and internal panels for a basic roguelike experience.
      */
-    private void initFrame() {
+    public void initFrame() {
         frame = new JFrame("SquidLib Bootstrap");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setUndecorated(true);
@@ -145,8 +142,8 @@ public class BootStrapFrame implements SGPane {
         frame.add(statsPanel, BorderLayout.EAST);
 
         outputPanel = new SwingPane(mapPanel.getGridWidth() + statsPanel.getGridWidth(), outputLines, textFactory);
-        outputPanel.setDefaultBackground(SColor.ALICE_BLUE);
-        outputPanel.setDefaultForeground(SColor.BURNT_BAMBOO);
+        outputPanel.setDefaultBackground(SColor.BLACK);
+        outputPanel.setDefaultForeground(SColor.DODGER_BLUE);
         outputPanel.placeCharacter(outputPanel.getGridWidth() - 1, 0, upChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
         outputPanel.placeCharacter(outputPanel.getGridWidth() - 1, outputPanel.getGridHeight() - 1, downChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
         for (int y = 1; y < outputPanel.getGridHeight() - 1; y++) {//fill in vertical line between scroll arrowheads
@@ -162,6 +159,8 @@ public class BootStrapFrame implements SGPane {
 
         frame.getContentPane().setBackground(SColor.BLACK);
         frame.validate();
+        
+        logic.beginGame();
     }
 
     /**
@@ -275,14 +274,39 @@ public class BootStrapFrame implements SGPane {
             }
         }
 
+        boolean recent = displayedMessage == 0;//only the recent message is message 0
         for (int y = 0; y < outputLines; y++) {
             int i = displayedMessage + y;
             if (outputMessages.size() > i) {
-                outputPanel.placeHorizontalString(0, y, outputMessages.get(i));
+                String output = outputMessages.get(i);
+                if (recent && (output == null || output == "")) {//after the first empty string all messages are old
+                    recent = false;
+                }
+                outputPanel.placeHorizontalString(0, y, output, recent ? SColor.DODGER_BLUE : SColorFactory.dimmest(SColor.PALE_CORNFLOWER_BLUE), SColor.BLACK);
             }
         }
 
         outputPanel.refresh();
+    }
+
+    public void setStats(LinkedHashMap<String, Integer> statsMap) {
+        stats = statsMap;
+        updateStats();
+    }
+
+    public void updateStat(String stat, Integer value) {
+        stats.put(stat, value);
+        updateStats();
+    }
+
+    private void updateStats() {
+        int i = 0;
+        for (String s : stats.keySet()) {
+            statsPanel.placeHorizontalString(0, i, s);
+            String value = stats.get(s).toString();
+            statsPanel.placeHorizontalString(statsWidth - 1 - value.length(), i, value);
+            i += 2;
+        }
     }
 
     @Override
@@ -428,6 +452,91 @@ public class BootStrapFrame implements SGPane {
     @Override
     public boolean willFit(char character) {
         return mapPanel.willFit(character);
+    }
+
+    /**
+     * Starts a bumping animation in the direction provided.
+     *
+     * @param location
+     * @param direction
+     */
+    public void bump(Point location, Direction direction) {
+        mapPanel.bump(location, new Point(direction.deltaX, direction.deltaY));
+    }
+
+    /**
+     * Starts a bumping animation in the direction provided.
+     *
+     * @param location
+     * @param direction
+     */
+    public void bump(Point location, Point direction) {
+        mapPanel.bump(location, Direction.UP);
+    }
+
+    /**
+     * Starts a movement animation for the object at the given grid location at the default speed.
+     *
+     * @param start
+     * @param end
+     */
+    public void slide(Point start, Point end) {
+        mapPanel.slide(start, end);
+    }
+
+    /**
+     * Starts a movement animation for the object at the given grid location at the default speed
+     * for one grid square in the direction provided.
+     *
+     * @param start
+     * @param direction
+     */
+    public void slide(Point start, Direction direction) {
+        mapPanel.slide(start, direction);
+    }
+
+    /**
+     * Starts a sliding movement animation for the object at the given location at the provided
+     * speed. The speed is how many milliseconds should pass between movement steps.
+     *
+     * @param start
+     * @param end
+     * @param speed
+     */
+    public void slide(Point start, Point end, int speed) {
+        mapPanel.slide(start, end, speed);
+    }
+
+    /**
+     * Starts an wiggling animation for the object at the given location.
+     *
+     * @param location
+     */
+    public void wiggle(Point location) {
+        mapPanel.wiggle(location);
+    }
+
+    /**
+     * Causes the component to stop responding to input until all current animations are finished.
+     *
+     * Note that if an animation is set to not stop then this method will never return.
+     */
+    public void waitForAnimations() {
+        mapPanel.waitForAnimations();
+    }
+
+    /**
+     * Returns true if there are animations running when this method is called.
+     *
+     * Note that due to the nature of animations ending at various times, this result is not
+     * guaranteed to be accurate.
+     *
+     * To fully ensure no animations are running, waitForAnimations() must be used.
+     *
+     * @return
+     */
+    public boolean hasActiveAnimations() {
+        return mapPanel.hasActiveAnimations();
     }
 
     private class OutputMouseListener implements MouseInputListener {
