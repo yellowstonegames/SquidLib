@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -34,13 +32,13 @@ import squidpony.squidgrid.util.Direction;
  * construction of a GUI for use with SquidLib. Includes a 2-line text output area and side bar for
  * stats.
  *
- * The stats bar accepts input as a LinkedHashMap<String, Integer> and displays each entry on its
- * own line with the following restrictions. The String value is left justified. The Integer value
- * is right justified. If there is not enough space to display both, the Integer will take
- * precedence. In any case there will be at least one empty space between each String and Integer.
- * If there is enough vertical room, there will also be one empty horizontal space between each
- * pair. If there are more pairs than vertical space, they will be displayed in a first come, first
- * server order. The stats area has enough width to support "STR: 19" output.
+ * The stats bar accepts input as a LinkedHashMap with a String as a key and Integer as value and
+ * displays each entry on its own line with the following restrictions. The String value is left
+ * justified. The Integer value is right justified. If there is not enough space to display both,
+ * the Integer will take precedence. In any case there will be at least one empty space between each
+ * String and Integer. If there is enough vertical room, there will also be one empty horizontal
+ * space between each pair. If there are more pairs than vertical space, they will be displayed in a
+ * first come, first server order. The stats area has enough width to support "STR: 19" output.
  *
  * The output display area has the following restrictions. It displays three lines of text at a
  * time. Because it runs under both the map and stats areas, it can display slightly more characters
@@ -103,7 +101,7 @@ public class BootStrapFrame implements SGPane {
                 initFrame();
             }
         });
-        
+
         logic.beginGame();
     }
 
@@ -285,7 +283,7 @@ public class BootStrapFrame implements SGPane {
             int i = displayedMessage + y;
             if (outputMessages.size() > i) {
                 String output = outputMessages.get(i);
-                if (recent && (output == null || output == "")) {//after the first empty string all messages are old
+                if (recent && (output == null || "".equals(output))) {//after the first empty string all messages are old
                     recent = false;
                 }
                 outputPanel.placeHorizontalString(0, y, output, recent ? SColor.DODGER_BLUE : SColorFactory.dimmest(SColor.PALE_CORNFLOWER_BLUE), SColor.BLACK);

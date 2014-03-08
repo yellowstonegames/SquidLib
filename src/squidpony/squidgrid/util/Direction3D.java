@@ -99,7 +99,6 @@ public enum Direction3D {
     /**
      * Returns the Direction one step clockwise including diagonals.
      *
-     * @param dir
      * @return
      */
     public Direction3D clockwise() {
@@ -129,7 +128,6 @@ public enum Direction3D {
     /**
      * Returns the Direction one step counterclockwise including diagonals.
      *
-     * @param dir
      * @return
      */
     public Direction3D counterClockwise() {

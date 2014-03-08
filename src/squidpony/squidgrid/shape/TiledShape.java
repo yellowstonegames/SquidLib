@@ -98,7 +98,6 @@ public class TiledShape {
      * @param x
      * @param y
      * @param string
-     * @return
      */
     public void setStringAt(int x, int y, String string) {
         template[x][y] = string;
@@ -138,7 +137,7 @@ public class TiledShape {
      * provided shape.
      *
      * @param deteriorationChance the chance for each fillable space to be filled
-     * @return
+     * @param deteriorationString
      */
     public void deteriorate(double deteriorationChance, String deteriorationString) {
         for (int x = 0; x < getWidth(); x++) {
@@ -152,8 +151,8 @@ public class TiledShape {
 
     /**
      * Replaces all cells whose contents match the "find" string with the "replace" string.
-     *
-     * @return
+     * @param find
+     * @param replace
      */
     public void replaceAll(String find, String replace) {
         for (int x = 0; x < getWidth(); x++) {
@@ -167,8 +166,6 @@ public class TiledShape {
 
     /**
      * Rotates this shape clockwise 90 degrees.
-     *
-     * @return
      */
     public void rotateClockwise() {
         String[][] map = new String[getHeight()][getWidth()];

@@ -27,7 +27,7 @@ public class AnimationManager implements Runnable {
      * Creates a new AnimationManager that will draw to the provided component and then starts it in
      * a daemon worker thread to manage the animations.
      *
-     * @param image
+     * @param component
      * @return the created AnimationManager
      */
     public static AnimationManager startNewAnimationManager(JComponent component) {
@@ -85,7 +85,6 @@ public class AnimationManager implements Runnable {
      * Stops the given animation if it is in the current list of running animations.
      *
      * @param animation
-     * @param speed
      */
     public synchronized void stopAnimation(Animation animation) {
         if (animations.containsKey(animation)) {

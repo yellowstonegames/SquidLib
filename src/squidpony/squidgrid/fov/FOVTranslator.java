@@ -210,7 +210,7 @@ public class FOVTranslator implements FOVSolver {
      * Returns an integer array representation of the last calculated FOV light
      * map.
      *
-     * @param multiplyer
+     * @param scale
      * @return
      */
     public int[][] getIntArray(float scale) {

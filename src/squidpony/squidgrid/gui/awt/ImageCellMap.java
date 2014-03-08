@@ -21,6 +21,7 @@ public class ImageCellMap implements Map {
 
     /**
      * A cached image set.
+     * @param size
      */
     public ImageCellMap(Dimension size) {
         cellWidth = size.width;
@@ -31,7 +32,7 @@ public class ImageCellMap implements Map {
     /**
      * Sets the size of a single cell.
      *
-     * @param dimension
+     * @param dim
      */
     public void setDimensions(Dimension dim) {
         cellWidth = dim.width;

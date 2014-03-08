@@ -72,7 +72,6 @@ public enum Direction implements Topology {
     /**
      * Returns the Direction one step clockwise including diagonals.
      *
-     * @param dir
      * @return
      */
     public Direction clockwise() {
@@ -102,7 +101,6 @@ public enum Direction implements Topology {
     /**
      * Returns the Direction one step counterclockwise including diagonals.
      *
-     * @param dir
      * @return
      */
     public Direction counterClockwise() {

@@ -127,24 +127,18 @@ public class Dice {
     /**
      * Turn the string to a randomized number.
      *
-     * <p>
-     * We support the following types of strings:
-     * <ul>
-     * <li>"42": simple absolute string</li>
-     * <li>"10:20": simple random range (inclusive between 10 and 20)</li>
-     * <li>"d6": synonym for "1d6"</li>
-     * <li>"3d6": sum of 3 6-sided dice</li>
-     * <li>"3:4d6": best 3 of 4 6-sided dice</li>
-     * </ul></p>
+     * The following types of strings are supported
+     * "42": simple absolute string
+     * "10:20": simple random range (inclusive between 10 and 20)
+     * "d6": synonym for "1d6"
+     * "3d6": sum of 3 6-sided dice
+     * "3:4d6": best 3 of 4 6-sided dice
      *
-     * <p>
-     * We support the following suffixes for the supported types:
-     * <ul>
-     * <li> "+4": add 4 to the value
-     * <li> "-3": subtract 3 from the value
-     * <li> "*100": multiply value by 100
-     * <li> "/8": divide value by 8
-     * </ul></p>
+     * The following types of suffixes are supported
+     * "+4": add 4 to the value
+     *  "-3": subtract 3 from the value
+     * "*100": multiply value by 100
+     * "/8": divide value by 8
      *
      * @param group string encoded roll grouping
      * @return random number
