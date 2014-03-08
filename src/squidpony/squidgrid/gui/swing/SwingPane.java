@@ -27,7 +27,7 @@ import squidpony.squidgrid.util.Direction;
  */
 public class SwingPane extends JLayeredPane implements SGPane {
 
-    private static int DEFAULT_MOVEMENT_SPEED = 0; //one move step per x milliseconds
+    private static int DEFAULT_ANIMATION_DURATION = 2000; 
     private AnimationManager animationManager;//don't instantiate until an animation is needed
     private ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<>();
     private BufferedImage[][] backgroundContents, foregroundContents;
@@ -422,7 +422,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
      * @param end
      */
     public void slide(Point start, Point end) {
-        slide(start, end, DEFAULT_MOVEMENT_SPEED);
+        slide(start, end, DEFAULT_ANIMATION_DURATION);
     }
 
     /**
@@ -433,20 +433,20 @@ public class SwingPane extends JLayeredPane implements SGPane {
      * @param direction
      */
     public void slide(Point start, Direction direction) {
-        slide(start, new Point(direction.deltaX + start.x, direction.deltaY + start.y), DEFAULT_MOVEMENT_SPEED);
+        slide(start, new Point(direction.deltaX + start.x, direction.deltaY + start.y), DEFAULT_ANIMATION_DURATION);
     }
 
     /**
      * Starts a sliding movement animation for the object at the given location at the provided
-     * speed. The speed is how many milliseconds should pass between movement steps.
+     * speed. The duration is how many milliseconds should pass for the entire animation.
      *
      * @param start
      * @param end
-     * @param speed
+     * @param duration
      */
-    public void slide(Point start, Point end, int speed) {
+    public void slide(Point start, Point end, int duration) {
         if (foregroundContents[start.x][start.y] != null) {
-            Animation anim = new SlideAnimation(foregroundContents[start.x][start.y], new Point(start.x * cellDimension.width, start.y * cellDimension.height), new Point(end.x * cellDimension.width, end.y * cellDimension.height), speed);
+            Animation anim = new SlideAnimation(foregroundContents[start.x][start.y], new Point(start.x * cellDimension.width, start.y * cellDimension.height), new Point(end.x * cellDimension.width, end.y * cellDimension.height), duration);
             foregroundContents[start.x][start.y] = null;
             imageChanged[start.x][start.y] = true;
             redraw();

@@ -2,6 +2,7 @@ package squidpony.bootstrap;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -13,8 +14,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
 import squidpony.annotation.Beta;
 import squidpony.squidcolor.SColor;
@@ -71,6 +75,7 @@ public class BootStrapFrame implements SGPane {
     private int displayedMessage = 0;
     private LinkedHashMap<String, Integer> stats = new LinkedHashMap<>();
     private Font font;
+    private char upChar, downChar;
 
     /**
      * Builds and displays a top level GUI window with the provided grid width and height. The GUI
@@ -87,6 +92,19 @@ public class BootStrapFrame implements SGPane {
         this.width = width;
         this.height = height;
         this.logic = logic;
+        font = new Font("Lucidia", Font.PLAIN, 72);
+        upChar = font.canDisplay('▲') ? '▲' : 'U';
+        downChar = font.canDisplay('▼') ? '▼' : 'D';
+
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                initFrame();
+            }
+        });
+        
+        logic.beginGame();
     }
 
     /**
@@ -102,30 +120,18 @@ public class BootStrapFrame implements SGPane {
             //don't do anything if it failed, the default Java icon will be used
         }
 
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         frame.getContentPane().setBackground(SColorFactory.dimmest(SColor.DARK_INDIGO));
 
-        font = new Font("Lucidia", Font.PLAIN, 72);
         TextCellFactory textFactory = new TextCellFactory();
         textFactory.setAntialias(true);
-        char upChar = font.canDisplay('▲') ? '▲' : 'U';
-        char downChar = font.canDisplay('▼') ? '▼' : 'D';
         textFactory.addFit(new char[]{upChar, downChar});
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
 
-        int pixelWidth = 0, pixelHeight = 0, lastWidth, lastHeight;
-        do {
-            lastWidth = pixelWidth;
-            lastHeight = pixelHeight;
-            try {
-                Thread.sleep(15);//give the OS time to display the frame fully
-            } catch (InterruptedException ex) {
-            }
-            pixelWidth = frame.getContentPane().getWidth();
-            pixelHeight = frame.getContentPane().getHeight();
-        } while (pixelWidth <= 0 || pixelHeight <= 0 || lastWidth != pixelWidth || lastHeight != pixelHeight);
-
+        int pixelWidth = frame.getContentPane().getWidth();
+        int pixelHeight = frame.getContentPane().getHeight();
         pixelWidth = (int) Math.ceil(pixelWidth / (width + statsWidth));//convert to pixels per grid cell
         pixelHeight = (int) Math.ceil(pixelHeight / (height + outputLines));//convert to pixels per grid cell
         textFactory.initializeBySize(pixelWidth, pixelHeight, font);
@@ -159,8 +165,8 @@ public class BootStrapFrame implements SGPane {
 
         frame.getContentPane().setBackground(SColor.BLACK);
         frame.validate();
-        
-        logic.beginGame();
+
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
     /**
