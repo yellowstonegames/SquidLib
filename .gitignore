@@ -1,9 +1,6 @@
 # Build and Release Folders
-target
-.settings
-.project
-.classpath
-*.iml
-.idea
-.build
-.private
+nbproject/private/
+build/
+
+# Class Files #
+*.class

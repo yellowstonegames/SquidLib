@@ -1,6 +1,6 @@
 SquidLib is a Java library that provides a full featured toolbox for working with turn based games in Swing and libGDX.
 
-SquidLib is used for Wyrm, Attack The Geth, and Epigon.
+SquidLib is used for Wyrm and Epigon.
 
 Current Features:
 *Ease Of Use

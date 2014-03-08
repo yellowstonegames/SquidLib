@@ -6,8 +6,13 @@
         <group>
             <file>file:/D:/Projects%20-%20Git/SquidLib/src/squidpony/squidgrid/gui/swing/SwingPane.java</file>
             <file>file:/D:/Projects%20-%20Git/SquidLib/src/squidpony/squidgrid/gui/awt/TextCellFactory.java</file>
+            <file>file:/D:/Projects%20-%20Git/SquidLib/src/squidpony/squidgrid/gui/swing/animation/BumpAnimation.java</file>
             <file>file:/D:/Projects%20-%20Git/SquidLib/src/squidpony/bootstrap/GameLogic.java</file>
             <file>file:/D:/Projects%20-%20Git/SquidLib/src/squidpony/bootstrap/BootStrapFrame.java</file>
+            <file>file:/D:/Projects%20-%20Git/SquidLib/src/squidpony/squidgrid/gui/swing/animation/WiggleAnimation.java</file>
+            <file>file:/D:/Projects%20-%20Git/SquidLib/src/squidpony/squidgrid/gui/swing/animation/SlideAnimation.java</file>
+            <file>file:/D:/Projects%20-%20Git/SquidLib/src/squidpony/squidgrid/gui/swing/animation/AbstractAnimation.java</file>
+            <file>file:/D:/Projects%20-%20Git/SquidLib/src/apachecommons/concurrent/AtomicInitializer.java</file>
         </group>
     </open-files>
 </project-private>
