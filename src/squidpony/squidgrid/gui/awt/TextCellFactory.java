@@ -516,7 +516,6 @@ public class TextCellFactory {
      *
      * @param c
      * @param foreground
-     * @param background
      * @return
      */
     public String getStringRepresentationOf(char c, Color foreground) {
