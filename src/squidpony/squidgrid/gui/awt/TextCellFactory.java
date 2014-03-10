@@ -5,7 +5,6 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.TreeMap;
 import squidpony.squidcolor.SColor;
@@ -23,8 +22,8 @@ public class TextCellFactory {
 
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
     private Font font;
-    private char[] fitting = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/".toCharArray();
-    private ArrayList<Character> largeCharacters;//size on only the largest characters, determined as sizing is performed
+    private String fitting = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/";
+    private ArrayList<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
     private boolean antialias = false;
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     private int cellHeight = 10;
@@ -42,8 +41,9 @@ public class TextCellFactory {
     }
 
     /**
-     * Creates a new TextCellFactory as a shallow copy of the provided one. If 
-     * @param other 
+     * Creates a new TextCellFactory as a shallow copy of the provided one. If
+     *
+     * @param other
      */
     public TextCellFactory(TextCellFactory other) {
         antialias = other.antialias;
@@ -107,6 +107,20 @@ public class TextCellFactory {
      * @param fit
      */
     public void setFitCharacters(char[] fit) {
+        fitting = "";
+        for (char c : fit) {
+            fitting += c;
+        }
+        emptyCache();
+    }
+
+    /**
+     * Sets the characters that will be checked to be the ones in the provided string. One of the
+     * provided initialization methods must be called to then make this take effect.
+     *
+     * @param fit
+     */
+    public void setFitCharacters(String fit) {
         fitting = fit;
         emptyCache();
     }
@@ -116,14 +130,34 @@ public class TextCellFactory {
      * block. One of the provided initialization methods must be called to then make this take
      * effect.
      *
+     * @param fit
+     */
+    public void addFit(char[] fit) {
+        for (char c : fit) {
+            fitting += c;
+        }
+        emptyCache();
+    }
+
+    /**
+     * Adds to the set of characters to be checked for fitting. One of the provided initialization
+     * methods must be called to then make this take effect.
+     *
      * @param c
      */
-    public void addFit(char[] c) {
-        int oldLength = fitting.length;
-        fitting = Arrays.copyOf(fitting, oldLength + c.length);
-        for (int i = 0; i + oldLength < fitting.length; i++) {
-            fitting[i + oldLength] = c[i];
-        }
+    public void addFit(char c) {
+        fitting += c;
+        emptyCache();
+    }
+
+    /**
+     * Adds the string to the list of character that will be guaranteed to fit. One of the provided
+     * initialization methods must be called to then make this take effect.
+     *
+     * @param fit
+     */
+    public void addFit(String fit) {
+        fitting += fit;
         emptyCache();
     }
 
@@ -225,7 +259,7 @@ public class TextCellFactory {
     private void findSize() {
         int left = Integer.MAX_VALUE, right = Integer.MIN_VALUE,
                 top = Integer.MAX_VALUE, bottom = Integer.MIN_VALUE;
-        HashMap<Direction, Character> larges = new HashMap<>();
+        HashMap<Direction, Integer> larges = new HashMap<>();
 
         BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = image.createGraphics();
@@ -240,30 +274,32 @@ public class TextCellFactory {
 
         FontRenderContext context = g.getFontRenderContext();
 
-        for (int i = 0; i < fitting.length; i++) {
-            GlyphVector vect = font.createGlyphVector(context, new char[]{fitting[i]});
+        for (int i = 0; i < fitting.length();) {
+            int code = fitting.codePointAt(i);
+            GlyphVector vect = font.createGlyphVector(context, Character.toChars(code));
             if (vect.getGlyphCode(0) != font.getMissingGlyphCode()
-                    && !Character.isISOControl(fitting[i])
-                    && !Character.isWhitespace(fitting[i]) //      && Character.getDirectionality(fitting[i]) == Character.DIRECTIONALITY_LEFT_TO_RIGHT //TODO -- note in docs that right-to-left characters might break this... can't enforce since non-alphanumerics don't have directionality
-                    ) {
+                    && Character.isValidCodePoint(code)
+                    && !Character.isISOControl(code)
+                    && !Character.isWhitespace(code)) {
                 Rectangle rect = vect.getGlyphPixelBounds(0, context, 0, 0);
                 if (rect.x < left) {
-                    larges.put(Direction.LEFT, fitting[i]);
+                    larges.put(Direction.LEFT, code);
                     left = rect.x;
                 }
                 if (rect.y < top) {
-                    larges.put(Direction.UP, fitting[i]);
+                    larges.put(Direction.UP, code);
                     top = rect.y;
                 }
                 if (rect.x + rect.width > right) {
-                    larges.put(Direction.RIGHT, fitting[i]);
+                    larges.put(Direction.RIGHT, code);
                     right = rect.x + rect.width;
                 }
                 if (rect.y + rect.height > bottom) {
-                    larges.put(Direction.DOWN, fitting[i]);
+                    larges.put(Direction.DOWN, code);
                     bottom = rect.y + rect.height;
                 }
             }
+            i += Character.charCount(code);
         }
         largeCharacters = new ArrayList<>(larges.values());
 
@@ -281,7 +317,7 @@ public class TextCellFactory {
 
         //find best horizontal offset
         int bestHorizontalOffset = Integer.MIN_VALUE;
-        for (char c : largeCharacters) {
+        for (int c : largeCharacters) {
             int tempHorizontalOffset = horizontalOffset;
             if (visible(c, image)) {//only calculate on printable characters
                 while (horizontalOffset > -cellWidth && willFit(c)) {
@@ -295,9 +331,9 @@ public class TextCellFactory {
 
         //find best vertical offset
         int bestVerticalOffset = Integer.MIN_VALUE;
-        for (char c : largeCharacters) {
+        for (int code : largeCharacters) {
             int tempVerticalOffset = verticalOffset;
-            while (verticalOffset > -cellHeight && willFit(c)) {
+            while (verticalOffset > -cellHeight && willFit(code)) {
                 verticalOffset--;
             }
             bestVerticalOffset = Math.max(bestVerticalOffset, Math.min(tempVerticalOffset, verticalOffset + 1));//slide back down one if slid up
@@ -310,11 +346,11 @@ public class TextCellFactory {
         int bestHeight = 1;
 
         //squeeze back down to rectangle cell
-        for (char c : largeCharacters) {
+        for (int code : largeCharacters) {
 
             //squeeze width
             int tempWidth = cellWidth;
-            while (cellWidth > 0 && willFit(c)) {//TODO -- determine if single pixel on right edge is a bug here or some other place
+            while (cellWidth > 0 && willFit(code)) {//TODO -- determine if single pixel on right edge is a bug here or some other place
                 cellWidth--;
             }
             bestWidth = Math.max(bestWidth, cellWidth + 1);//take whatever the largest needed width so far is
@@ -322,7 +358,7 @@ public class TextCellFactory {
 
             //squeeze height
             int tempHeight = cellHeight;
-            while (cellHeight > 0 && willFit(c)) {
+            while (cellHeight > 0 && willFit(code)) {
                 cellHeight--;
             }
             bestHeight = Math.max(bestHeight, cellHeight + 1);//take whatever the largest needed height so far is
@@ -364,11 +400,11 @@ public class TextCellFactory {
     /**
      * Checks if printing this character will place anything in the square at all.
      *
-     * @param c
+     * @param code
      * @return
      */
-    private boolean visible(char c, BufferedImage i) {
-        BufferedImage testImage = makeMonoImage(c, i);
+    private boolean visible(int code, BufferedImage i) {
+        BufferedImage testImage = makeMonoImage(code, i);
         //work from middle out to maximize chance of finding visilble bit
         int startx = testImage.getWidth() / 2;
         for (int x = 0; x <= startx; x++) {
@@ -384,7 +420,7 @@ public class TextCellFactory {
         return false;//no pixels found
     }
 
-    private boolean willFit(char c, BufferedImage image) {
+    private boolean willFit(int c, BufferedImage image) {
         if (Character.isISOControl(c)) {//make sure it's a printable character
             return true;
         }
@@ -398,7 +434,6 @@ public class TextCellFactory {
         //all the needed space was clear!
         return true;
     }
-
     /**
      * Returns true if the given character will fit inside the current cell dimensions with the
      * current font. ISO Control characters are considered to fit by definition.
@@ -412,19 +447,37 @@ public class TextCellFactory {
     }
 
     /**
+     * Returns true if the given character will fit inside the current cell dimensions with the
+     * current font.
+     * 
+     * ISO Control characters, non-printing characters and invalid unicode characters are all
+     * considered by definition to fit.
+     *
+     * @param codepoint
+     * @return
+     */
+    public boolean willFit(int codepoint) {
+        if(!Character.isValidCodePoint(codepoint) || Character.isISOControl(codepoint)){
+            return true;
+        }
+        
+        return willFit(codepoint, new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY));
+    }
+
+    /**
      * Slides the character on pixel in the provided direction and test if fully exposed the
      * opposite edge. Returns true if opposite edge was fully exposed.
      *
-     * @param c
+     * @param code
      * @param dir
      * @return
      */
-    private boolean testSlide(char c, Direction dir, BufferedImage image) {
+    private boolean testSlide(int code, Direction dir, BufferedImage image) {
         //set offsets in a direction to test if it cleared the space
         horizontalOffset += dir.deltaX;
         verticalOffset += dir.deltaY;
 
-        BufferedImage testImage = makeMonoImage(c, image);
+        BufferedImage testImage = makeMonoImage(code, image);
 
         //reset offsets to actual values
         horizontalOffset -= dir.deltaX;
@@ -522,7 +575,7 @@ public class TextCellFactory {
         return c + " " + foreground.getClass().getSimpleName() + ": " + Integer.toHexString(foreground.getRGB());
     }
 
-    private BufferedImage makeMonoImage(char c, BufferedImage i) {
+    private BufferedImage makeMonoImage(int c, BufferedImage i) {
         Graphics2D g = i.createGraphics();
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, cellWidth, cellHeight);
@@ -547,7 +600,7 @@ public class TextCellFactory {
         return i;
     }
 
-    private void drawForeground(Graphics2D g, char c, Color foreground) {
+    private void drawForeground(Graphics2D g, int code, Color foreground) {
         g.setColor(foreground);
         g.setFont(font);
 
@@ -558,9 +611,9 @@ public class TextCellFactory {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
 
-        int x = horizontalOffset - g.getFontMetrics().charWidth(c) / 2;//start with half of the character's width
+        int x = horizontalOffset - g.getFontMetrics().charWidth(code) / 2;//start with half of the character's width
         int y = g.getFontMetrics().getMaxAscent() + verticalOffset;
-        g.drawString(String.valueOf(c), x, y);
+        g.drawString(new String(Character.toChars(code)), x, y);
     }
 
 }

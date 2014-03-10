@@ -27,7 +27,7 @@ import squidpony.squidgrid.util.Direction;
  */
 public class SwingPane extends JLayeredPane implements SGPane {
 
-    private static int DEFAULT_ANIMATION_DURATION = 2000; 
+    private static int DEFAULT_ANIMATION_DURATION = 2000;
     private AnimationManager animationManager;//don't instantiate until an animation is needed
     private ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<>();
     private BufferedImage[][] backgroundContents, foregroundContents;
@@ -359,9 +359,11 @@ public class SwingPane extends JLayeredPane implements SGPane {
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 if (imageChanged[x][y]) {
-                    //clear to background color
-                    g.setColor(defaultBackground);
-                    g.fillRect(x * cellDimension.width, y * cellDimension.height, cellDimension.width, cellDimension.height);
+                    //clear to background color if not transparent
+                    if (!defaultBackground.equals(SColor.TRANSPARENT)) {
+                        g.setColor(defaultBackground);
+                        g.fillRect(x * cellDimension.width, y * cellDimension.height, cellDimension.width, cellDimension.height);
+                    }
                     if (backgroundContents[x][y] != null) {
                         g.drawImage(backgroundContents[x][y], null, x * cellDimension.width, y * cellDimension.height);
                     }

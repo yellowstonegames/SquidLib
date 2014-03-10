@@ -40,7 +40,7 @@ public class SGKeyListener implements KeyListener, Iterable<KeyEvent>, Iterator<
     };
     private final CaptureType type;
     private final BlockingQueue<KeyEvent> queue = new LinkedBlockingQueue<>();
-    private final boolean blockOnEmpty;
+    private boolean blockOnEmpty;
 
     /**
      * Creates a new listener which can optionally block when no input is currently available and
@@ -53,6 +53,18 @@ public class SGKeyListener implements KeyListener, Iterable<KeyEvent>, Iterator<
     public SGKeyListener(boolean blockOnEmpty, CaptureType type) {
         this.blockOnEmpty = blockOnEmpty;
         this.type = type;
+    }
+    
+    /**
+     * Will set the blocking behavior to the provided block type.
+     * 
+     * Flushes anything currently in the queue.
+     * 
+     * @param block 
+     */
+    public void blockOnEmpty(boolean block){
+        blockOnEmpty = block;
+        flush();
     }
 
     /**
