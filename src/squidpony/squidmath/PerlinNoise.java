@@ -4,10 +4,11 @@ import squidpony.annotation.Beta;
 
 /**
  * This is Ken Perlin's third revision of his noise function. It is sometimes referred to as
- * "Simplex Noise". It is significantly faster than his earlier versions. This particular version
- * was originally from Stefan Gustavson.
- *
- * This is much preferred to the earlier versions of Perlin Noise due to the reasons noted in the
+ * "Simplex Noise". Results are bound by (-1, 1) inclusive.
+ * 
+ * 
+ * It is significantly faster than his earlier versions. This particular version
+ * was originally from Stefan Gustavson. This is much preferred to the earlier versions of Perlin Noise due to the reasons noted in the
  * articles:
  * <ul>
  * <li>http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf</li>
@@ -111,7 +112,7 @@ public class PerlinNoise {
     }
 
     /**
-     * 2D simplex noise
+     * 2D simplex noise.
      *
      * @param xin x input
      * @param yin y input
@@ -185,7 +186,7 @@ public class PerlinNoise {
     }
 
     /**
-     * 3D simplex noise
+     * 3D simplex noise.
      *
      * @param xin X input
      * @param yin Y input
@@ -327,7 +328,7 @@ public class PerlinNoise {
     }
 
     /**
-     * 4D simplex noise
+     * 4D simplex noise.
      *
      * @param x X position
      * @param y Y position
