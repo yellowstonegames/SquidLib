@@ -36,12 +36,11 @@ public class SwingPane extends JLayeredPane implements SGPane {
     private Point highlightLocation;
     private Dimension cellDimension;
     private BufferedImage contentsImage = new BufferedImage(20, 20, BufferedImage.TYPE_4BYTE_ABGR);
-    private Color defaultBackground = SColor.BLACK;
+    private Color defaultBackground = SColor.TRANSPARENT;
     private Color defaultForeground = SColor.WHITE;
     private int gridHeight;
     private int gridWidth;
     private Dimension panelDimension;
-    private BufferedImage worldBackgroundImage = null;
     private TextCellFactory textFactory = new TextCellFactory();
     private ImageCellMap imageCellMap;
 
@@ -99,9 +98,6 @@ public class SwingPane extends JLayeredPane implements SGPane {
 
     @Override
     public void paintComponent(Graphics g) {
-        if (worldBackgroundImage != null) {
-            g.drawImage(worldBackgroundImage, 0, 0, null);
-        }
         g.drawImage(contentsImage, 0, 0, null);
         if (highlight != null) {
             g.drawImage(highlight, highlightLocation.x - 1, highlightLocation.y - 1, null);
@@ -201,6 +197,16 @@ public class SwingPane extends JLayeredPane implements SGPane {
         placeVerticalString(xOffset, yOffset, string, defaultForeground, null);
     }
 
+    /**
+     * Removes the cell entirely, leaving a transparent area.
+     *
+     * @param x
+     * @param y
+     */
+    public void deleteCell(int x, int y) {
+        placeCharacter(x, y, ' ', SColor.TRANSPARENT, SColor.TRANSPARENT);
+    }
+
     @Override
     public void clearCell(int x, int y) {
         clearCell(x, y, defaultBackground);
@@ -231,13 +237,13 @@ public class SwingPane extends JLayeredPane implements SGPane {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
-        if (c != ' ') {
-            foregroundContents[x][y] = textFactory.getImageFor(c, fore);
-        } else {
+        if (c == ' ') {
             foregroundContents[x][y] = null;
+        } else {
+            foregroundContents[x][y] = textFactory.getImageFor(c, fore);
         }
 
-        if (back.equals(defaultBackground)) {
+        if (back.equals(SColor.TRANSPARENT)) {
             backgroundContents[x][y] = null;
         } else {
             backgroundContents[x][y] = textFactory.getImageFor(' ', defaultForeground, back);
@@ -303,6 +309,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
      * Clears backing arrays and sets fields to proper size for the new grid size.
      */
     private void doInitialization(int gridWidth, int gridHeight) {
+        setOpaque(false);
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
         backgroundContents = new BufferedImage[gridWidth][gridHeight];
@@ -348,22 +355,12 @@ public class SwingPane extends JLayeredPane implements SGPane {
 
     private void redraw() {
         Graphics2D g = contentsImage.createGraphics();
-        if (worldBackgroundImage != null) {
-            Composite backup = g.getComposite();
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.0f));
-            g.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
-            g.setComposite(backup);
-        } else {
-            //TODO -- display background image
-        }
+
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 if (imageChanged[x][y]) {
-                    //clear to background color if not transparent
-                    if (!defaultBackground.equals(SColor.TRANSPARENT)) {
-                        g.setColor(defaultBackground);
-                        g.fillRect(x * cellDimension.width, y * cellDimension.height, cellDimension.width, cellDimension.height);
-                    }
+                    g.setColor(defaultBackground);
+                    g.fillRect(x * cellDimension.width, y * cellDimension.height, cellDimension.width, cellDimension.height);
                     if (backgroundContents[x][y] != null) {
                         g.drawImage(backgroundContents[x][y], null, x * cellDimension.width, y * cellDimension.height);
                     }

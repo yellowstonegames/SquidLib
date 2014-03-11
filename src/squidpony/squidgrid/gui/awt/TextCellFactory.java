@@ -41,7 +41,7 @@ public class TextCellFactory {
     }
 
     /**
-     * Creates a new TextCellFactory as a shallow copy of the provided one. If
+     * Creates a new TextCellFactory as a deep copy of the provided one.
      *
      * @param other
      */
@@ -434,6 +434,7 @@ public class TextCellFactory {
         //all the needed space was clear!
         return true;
     }
+
     /**
      * Returns true if the given character will fit inside the current cell dimensions with the
      * current font. ISO Control characters are considered to fit by definition.
@@ -449,7 +450,7 @@ public class TextCellFactory {
     /**
      * Returns true if the given character will fit inside the current cell dimensions with the
      * current font.
-     * 
+     *
      * ISO Control characters, non-printing characters and invalid unicode characters are all
      * considered by definition to fit.
      *
@@ -457,10 +458,10 @@ public class TextCellFactory {
      * @return
      */
     public boolean willFit(int codepoint) {
-        if(!Character.isValidCodePoint(codepoint) || Character.isISOControl(codepoint)){
+        if (!Character.isValidCodePoint(codepoint) || Character.isISOControl(codepoint)) {
             return true;
         }
-        
+
         return willFit(codepoint, new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY));
     }
 
@@ -595,7 +596,8 @@ public class TextCellFactory {
     private BufferedImage makeImage(char c, Color foreground) {
         BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
-        g.setBackground(SColor.TRANSPARENT);
+//        g.setBackground(SColor.TRANSPARENT);
+
         drawForeground(g, c, foreground);
         return i;
     }

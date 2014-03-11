@@ -7,10 +7,9 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Customized extension of Random to allow for common roguelike operations.
  *
- * Uses the Mersenne Twister algorithm to provide superior results. Because of
- * the seed requirements for the MT, the seed setting methods and constructors
- * that take a long do not set the seed. The methods that use a byte[] to set
- * the seed must be used instead if a custom seed is desired.
+ * Uses the Mersenne Twister algorithm to provide superior results. Because of the seed requirements
+ * for the MT, the seed setting methods and constructors that take a long do not set the seed. The
+ * methods that use a byte[] to set the seed must be used instead if a custom seed is desired.
  *
  * @author Daniel Dyer (Java Port)
  * @author Makoto Matsumoto and Takuji Nishimura (original C version)
@@ -48,8 +47,8 @@ public class RNG extends Random {
     }
 
     /**
-     * Ignores the seed parameter. For setting the seed, please use the
-     * constructor that takes a byte[]
+     * Ignores the seed parameter. For setting the seed, please use the constructor that takes a
+     * byte[]
      *
      * @param seed
      */
@@ -105,8 +104,8 @@ public class RNG extends Random {
     }
 
     /**
-     * Take four bytes from the specified position in the specified block and
-     * convert them into a 32-bit int, using the big-endian convention.
+     * Take four bytes from the specified position in the specified block and convert them into a
+     * 32-bit int, using the big-endian convention.
      *
      * @param bytes The data to read from.
      * @param offset The position to start reading the 4-byte int from.
@@ -120,8 +119,8 @@ public class RNG extends Random {
     }
 
     /**
-     * Convert an array of bytes into an array of ints. 4 bytes from the input
-     * data map to a single int in the output data.
+     * Convert an array of bytes into an array of ints. 4 bytes from the input data map to a single
+     * int in the output data.
      *
      * @param bytes The data to read from.
      * @return An array of 32-bit integers constructed from the data.
@@ -189,8 +188,7 @@ public class RNG extends Random {
     }
 
     /**
-     * Returns a value from a even distribution from min (inclusive) to max
-     * (exclusive).
+     * Returns a value from a even distribution from min (inclusive) to max (exclusive).
      *
      * @param min
      * @param max
@@ -201,20 +199,26 @@ public class RNG extends Random {
     }
 
     /**
-     * Returns a value between min and max inclusive.
+     * Returns a value between min (inclusive) and max (exclusive).
+     *
+     * The inclusive and exclusive behavior is to match the behavior of the similar method that
+     * deals with floating point values.
      *
      * @param min
      * @param max
      * @return
      */
     public int between(int min, int max) {
-        return nextInt(max - min + 1) + min;
+        return nextInt(max - min) + min;
     }
 
     /**
-     * Returns the average of a number of randomly selected numbers from the
-     * provided range. It will sample the number of times passed in as the third
-     * parameter.
+     * Returns the average of a number of randomly selected numbers from the provided range, with
+     * min being inclusive and max being exclusive. It will sample the number of times passed in as
+     * the third parameter.
+     *
+     * The inclusive and exclusive behavior is to match the behavior of the similar method that
+     * deals with floating point values.
      *
      * This can be used to weight RNG calls to the average between min and max.
      *

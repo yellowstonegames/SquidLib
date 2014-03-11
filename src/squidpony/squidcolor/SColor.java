@@ -6,14 +6,14 @@ import java.util.Objects;
 /**
  * Allows for the use of custom colors with custom names.
  *
- * These colors are comparable for equality but the ordering of them is based on
- * their hex values.
+ * These colors are comparable for equality but the ordering of them is based on their hex values.
  *
  * Has some built in palettes available as SColor arrays.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class SColor extends Color {
+
     private String name = "Unnamed";
     /**
      * Color constant<PRE><font style="background-color: #f0f8ff;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #f0f8ff;" color=000000>&nbsp;@&nbsp;</font>
@@ -284,7 +284,7 @@ public class SColor extends Color {
      *<font style="background-color: #ff0000;" color=000000>&nbsp;@&nbsp;</font><font style="background-color: #ffff00;" color=000000>&nbsp;@&nbsp;</font><font style="background-color: #00ff00;" color=000000>&nbsp;@&nbsp;</font><font style="background-color: #0000ff;" color=000000>&nbsp;@&nbsp;</font><font style="background-color: #964B00;" color=000000>&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00;" color=000000>&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public static final SColor BLACK = new SColor(0xFF000000, "Black");//specifically opaque to prevent matching with TRANSPARENT
+    public static final SColor BLACK = new SColor(0x000000, "Black");
     /**
      * Color constant<PRE><font style="background-color: #252321;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff;" color=000000>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #252321;" color=000000>&nbsp;@&nbsp;</font>
      *<font style="background-color: #252321;" color=252321>&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #252321;" color=888888>&nbsp;@&nbsp;</font>
@@ -5166,27 +5166,24 @@ public class SColor extends Color {
      */
     public static final SColor ZINNWALDITE = new SColor(0xEBC2AF, "Zinnwaldite");
     /**
-     * A color constant that is fully transparent. The RGB portion is Black, but
-     * should not render when used in a method that respects alpha values.
+     * A color constant that is fully transparent. The RGB portion is Black, but should not render
+     * when used in a method that respects alpha values.
      */
-    public static final SColor TRANSPARENT = new SColor(0x00000000, "Transparent");
+    public static final SColor TRANSPARENT = new SColor(0x00000000, "Transparent", true);
     /**
-     * This array is loaded with the colors found in the rainbow, in the
-     * standard ROYGBIV order.
+     * This array is loaded with the colors found in the rainbow, in the standard ROYGBIV order.
      */
     public static SColor[] RAINBOW = {
         RED_PIGMENT, ORANGE_PEEL, YELLOW, GREEN, BLUE, INDIGO_DYE, VIOLET};
     /**
-     * This array is loaded with the colors from the traditional Japanese
-     * Red-Violet Series found at the wikipedia site here:
-     * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
+     * This array is loaded with the colors from the traditional Japanese Red-Violet Series found at
+     * the wikipedia site here: http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
     public static SColor[] RED_VIOLET_SERIES = {
         ONE_KIN_DYE, RED_PLUM, CHERRY_BLOSSOM_DYE, PALE_CRIMSON, PEACH_DYE, MEDIUM_CRIMSON, WASHED_OUT_CRIMSON};
     /**
-     * This array is loaded with the colors from the traditional Japanese Red
-     * Series found at the wikipedia site here:
-     * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
+     * This array is loaded with the colors from the traditional Japanese Red Series found at the
+     * wikipedia site here: http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
     public static SColor[] RED_SERIES = {
         IBIS_WING, LONG_SPRING, COCHINEAL_RED, THRICE_DYED_CRIMSON, PLUM_BLOSSOM_MOUSE, PURE_CRIMSON, RED_BEAN,
@@ -5197,9 +5194,8 @@ public class SColor extends Color {
         CYPRESS_BARK_RED, BLOOD_RED, BLOOD, BENI_DYE, MEAT, RED_INCENSE, EARTHEN_YELLOW_RED_BROWN, DISTANT_RIVER_BROWN,
         BIRCH_BROWN, SPARROW_BROWN, BOILED_RED_BEAN_BROWN};
     /**
-     * This array is loaded with the colors from the traditional Japanese Yellow
-     * Red Series found at the wikipedia site here:
-     * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
+     * This array is loaded with the colors from the traditional Japanese Yellow Red Series found at
+     * the wikipedia site here: http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
     public static SColor[] YELLOW_RED_SERIES = {
         WALNUT, SUMAC, RICH_GARDENIA, RED_OCHRE, POLISHED_BROWN, STYLISH_PERSIMMON, DAYLILY, RED_DYE_TURMERIC,
@@ -5208,9 +5204,8 @@ public class SColor extends Color {
         CLOVE_BROWN, LOQUAT_BROWN, PALE_INCENSE, GOLDEN_BROWN_DYE, FOX, ALOEWOOD, WHITE_TEA_DYE,
         DRIED_WEATHERED_BAMBOO, FLATTERY_BROWN};
     /**
-     * This array is loaded with the colors from the traditional Japanese Yellow
-     * Series found at the wikipedia site here:
-     * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
+     * This array is loaded with the colors from the traditional Japanese Yellow Series found at the
+     * wikipedia site here: http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
     public static SColor[] YELLOW_SERIES = {
         LIGHT_YELLOW_DYE, EGG_DYE, BRIGHT_GOLD_BROWN, UNDRIED_WALL, CORN_DYE, GOLDEN_OAK, FLORAL_LEAF, TURMERIC,
@@ -5219,18 +5214,16 @@ public class SColor extends Color {
         WHITE_OAK, GAMBOGE_DYE, EGGSHELL_PAPER, GOLDEN_FALLEN_LEAVES, SEN_NO_RIKYUS_TEA, JAPANESE_IRIS,
         SIMMERED_SEAWEED, YELLOW_SEA_PINE_BROWN, RAPEBLOSSOM_BROWN, AMUR_CORK_TREE, PALE_FALLEN_LEAVES, PATRINIA_FLOWER};
     /**
-     * This array is loaded with the colors from the traditional Japanese Yellow
-     * Green Series found at the wikipedia site here:
-     * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
+     * This array is loaded with the colors from the traditional Japanese Yellow Green Series found
+     * at the wikipedia site here: http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
     public static SColor[] YELLOW_GREEN_SERIES = {
         GREENFINCH, WILLOW_TEA, FLIRTATIOUS_INDIGO_TEA, DEAD_MANS_FINGERS_SEAWEED, BAIKO_BROWN, SISKIN_SPROUT_YELLOW,
         WILLOW_LEAVES_UNDERSIDE, WILLOW_DYE, BLUE_BLACK_CRAYFISH, PALE_OAK, RIKAN_BROWN, MOSS, THOUSAND_YEAR_OLD_BROWN,
         IWAI_BROWN, SOOTY_WILLOW_BAMBOO, PALE_YOUNG_GREEN_ONION, FRESH_ONION, PINE_NEEDLE};
     /**
-     * This array is loaded with the colors from the traditional Japanese Blue
-     * Green Series found at the wikipedia site here:
-     * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
+     * This array is loaded with the colors from the traditional Japanese Blue Green Series found at
+     * the wikipedia site here: http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
     public static SColor[] BLUE_GREEN_SERIES = {
         JAPANESE_PALE_BLUE, WILLOW_GREY, THOUSAND_YEAR_OLD_GREEN, WHITISH_GREEN, PATINA, STOREROOM_BROWN, GREYISH_DARK_GREEN,
@@ -5238,9 +5231,8 @@ public class SColor extends Color {
         MIDORI, RUSTY_CELADON, HORSETAIL, GREEN_BAMBOO, VELVET, FRAGILE_SEAWEED_BROWN, PALE_GREEN_ONION, BLUE_GREEN_DYE,
         IRON, GORYEO_STOREROOM};
     /**
-     * This array is loaded with the colors from the traditional Japanese Blue
-     * Violet Series found at the wikipedia site here:
-     * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
+     * This array is loaded with the colors from the traditional Japanese Blue Violet Series found
+     * at the wikipedia site here: http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
     public static SColor[] BLUE_VIOLET_SERIES = {
         HARBOR_RAT, IRON_STORAGE, RUSTED_LIGHT_BLUE, LIGHT_BLUE_DYE, RUSTY_STORAGE, JAPANESE_INDIGO, LIGHT_BLUE_FLOWER,
@@ -5249,9 +5241,8 @@ public class SColor extends Color {
         KIMONO_STORAGE, BLACK_CHESTNUT_OAK, DARK_BLUE_DYE, LAPIS_LAZULI, DARK_BLUE_LAPIS_LAZULI, NAVY_BLUE_BELLFLOWER,
         SAFFLOWER, DARK_INDIGO};
     /**
-     * This array is loaded with the colors from the traditional Japanese Violet
-     * Series found at the wikipedia site here:
-     * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
+     * This array is loaded with the colors from the traditional Japanese Violet Series found at the
+     * wikipedia site here: http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
     public static SColor[] VIOLET_SERIES = {
         WISTERIA_PURPLE, TATARIAN_ASTER, BLUE_VIOLET_DYE, THIN_VIOLET, VIOLET_DYE, DARK_RED_DYE, RED_WISTERIA,
@@ -5259,16 +5250,14 @@ public class SColor extends Color {
         DISAPPEARING_PURPLE, DEEP_PURPLE, HALF_PURPLE, PURPLE_DYE, IRIS, RABBIT_EAR_IRIS, GRAPE_MOUSE, BURNT_BAMBOO,
         PLUM_PURPLE, PURPLE_KITE, MULBERRY};
     /**
-     * This array is loaded with the colors from the traditional Japanese
-     * Achromatic Series found at the wikipedia site here:
-     * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
+     * This array is loaded with the colors from the traditional Japanese Achromatic Series found at
+     * the wikipedia site here: http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
     public static SColor[] ACHROMATIC_SERIES = {
         UNBLEACHED_SILK, SILVER_GREY, BROWN_RAT_GREY, BETEL_NUT_DYE, BLACK_DYE, WHITE_MOUSE, PLAIN_MOUSE,
         INDIGO_INK_BROWN, INK, INDIGO_WHITE};
     /**
-     * This array is loaded with all of the colors defined in SColor, in
-     * arbitrary order.
+     * This array is loaded with all of the colors defined in SColor, in arbitrary order.
      */
     public static SColor[] FULL_PALLET = {ALICE_BLUE, ALIZARIN, ALOEWOOD, ALOEWOOD_BROWN, AMARANTH, AMBER,
         AMBER_DYE, AMETHYST, AMUR_CORK_TREE, APRICOT, AQUA, AQUAMARINE, ARMY_GREEN, ASPARAGUS, ATOMIC_TANGERINE,
@@ -5342,8 +5331,7 @@ public class SColor extends Color {
         YELLOW_GREEN, YELLOW_SEA_PINE_BROWN, YOUNG_BAMBOO, ZINNWALDITE};
 
     /**
-     * A constructor with no passed values. Builds a white (opaque all channels)
-     * object.
+     * A constructor with no passed values. Builds a white (opaque all channels) object.
      */
     public SColor() { //builds white
         this(Color.WHITE.getRGB());
@@ -5359,8 +5347,7 @@ public class SColor extends Color {
     }
 
     /**
-     * Creates a new color that's the same value as the passed in color and
-     * given the provided name.
+     * Creates a new color that's the same value as the passed in color and given the provided name.
      *
      * @param color
      * @param name
@@ -5380,14 +5367,36 @@ public class SColor extends Color {
     }
 
     /**
-     * Creates a new color that has the given combined RGB value and the
-     * provided name.
+     * Creates a new color that has the given RGB value. If hasAlpha is false then alpha defaults to
+     * 255.
+     *
+     * @param colorValue
+     * @param hasAlpha
+     */
+    public SColor(int colorValue, boolean hasAlpha) {
+        this(colorValue, Integer.toHexString(colorValue), hasAlpha);
+    }
+
+    /**
+     * Creates a new color that has the given combined RGB value and the provided name.
      *
      * @param colorValue
      * @param name
      */
     public SColor(int colorValue, String name) {
-        super(colorValue);
+        this(colorValue, name, false);
+    }
+
+    /**
+     * Creates a new color that has the given RGB value and name. If hasAlpha is false then alpha
+     * defaults to 255.
+     *
+     * @param colorValue
+     * @param name
+     * @param hasAlpha
+     */
+    public SColor(int colorValue, String name, boolean hasAlpha) {
+        super(colorValue, hasAlpha);
         this.name = name;
     }
 
@@ -5404,6 +5413,19 @@ public class SColor extends Color {
     }
 
     /**
+     * Creates a new color that has the given ARGB values.
+     *
+     * @param r
+     * @param g
+     * @param b
+     * @param a
+     */
+    public SColor(int r, int g, int b, int a) {
+        super(r, g, b, a);
+        name = Integer.toHexString(getRGB());
+    }
+
+    /**
      * Creates a new color that has the given RGB values and the provided name.
      *
      * @param r
@@ -5413,6 +5435,20 @@ public class SColor extends Color {
      */
     public SColor(int r, int g, int b, String name) {
         super(r, g, b);
+        this.name = name;
+    }
+
+    /**
+     * Creates a new color that has the given ARGB values and the provided name.
+     *
+     * @param r
+     * @param g
+     * @param b
+     * @param a
+     * @param name
+     */
+    public SColor(int r, int g, int b, int a, String name) {
+        super(r, g, b, a);
         this.name = name;
     }
 

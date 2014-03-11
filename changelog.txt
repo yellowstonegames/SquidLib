@@ -1,0 +1,5 @@
+in-progress changes
+
+RNG between() methods changed to be (inclusive, exclusive) when dealing with both integers and doubles.
+
+SwingPane defaults to transparent background now. Suggested to make parent JFrame (or other component) have a specific background color to prevent the default L&F from showing up
