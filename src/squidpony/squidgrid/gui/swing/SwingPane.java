@@ -209,7 +209,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
 
     @Override
     public void clearCell(int x, int y) {
-        clearCell(x, y, defaultBackground);
+       placeCharacter(x, y, ' ');
     }
 
     @Override
@@ -237,17 +237,8 @@ public class SwingPane extends JLayeredPane implements SGPane {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
-        if (c == ' ') {
-            foregroundContents[x][y] = null;
-        } else {
-            foregroundContents[x][y] = textFactory.getImageFor(c, fore);
-        }
-
-        if (back.equals(SColor.TRANSPARENT)) {
-            backgroundContents[x][y] = null;
-        } else {
-            backgroundContents[x][y] = textFactory.getImageFor(' ', defaultForeground, back);
-        }
+        foregroundContents[x][y] = textFactory.getImageFor(c, fore);
+        backgroundContents[x][y] = textFactory.getImageFor(' ', defaultForeground, back);
         imageChanged[x][y] = true;
     }
 
@@ -359,6 +350,11 @@ public class SwingPane extends JLayeredPane implements SGPane {
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 if (imageChanged[x][y]) {
+                    Composite c = g.getComposite();
+                    g.setComposite(AlphaComposite.Clear);
+                    g.fillRect(x * cellDimension.width, y * cellDimension.height, cellDimension.width, cellDimension.height);
+                    g.setComposite(c);
+                    
                     g.setColor(defaultBackground);
                     g.fillRect(x * cellDimension.width, y * cellDimension.height, cellDimension.width, cellDimension.height);
                     if (backgroundContents[x][y] != null) {
