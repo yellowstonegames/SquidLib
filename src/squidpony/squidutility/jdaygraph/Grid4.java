@@ -2,7 +2,7 @@ package squidpony.squidutility.jdaygraph;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.Direction; 
 
 /**
  * A topology in which cells are only consider connected by the four main directions. All cells are

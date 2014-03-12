@@ -10,7 +10,7 @@ import squidpony.squidgrid.util.Direction;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
-public interface GameLogic {
+public interface GameLogic { 
 
     /**
      * Sends a single character that was pressed. Accounts for the shift key state.

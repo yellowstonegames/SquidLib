@@ -1,5 +1,5 @@
 package squidpony.squidtext;
-
+ 
 import squidpony.annotation.Beta;
 
 /**
