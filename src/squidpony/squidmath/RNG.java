@@ -1,6 +1,8 @@
 package squidpony.squidmath;
 
 import java.security.SecureRandom;
+import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -235,5 +237,41 @@ public class RNG extends Random {
 
         int answer = Math.round((float) sum / samples);
         return answer;
+    }
+
+    public <T> T getRandomElement(T[] array) {
+        if (array.length < 1) {
+            return null;
+        }
+        return array[nextInt(array.length)];
+    }
+
+    /**
+     * Returns a random element from the provided list. If the list is empty then null is returned.
+     *
+     * @param <T>
+     * @param list
+     * @return
+     */
+    public <T> T getRandomElement(List<T> list) {
+        if (list.size() <= 0) {
+            return null;
+        }
+        return list.get(nextInt(list.size()));
+    }
+
+    /**
+     * Returns a random elements from the provided queue. If the queue is empty then null is
+     * returned.
+     *
+     * @param <T>
+     * @param list
+     * @return
+     */
+    public <T> T getRandomElement(Queue<T> list) {
+        if (list.isEmpty()) {
+            return null;
+        }
+        return (T) list.toArray()[nextInt(list.size())];
     }
 }

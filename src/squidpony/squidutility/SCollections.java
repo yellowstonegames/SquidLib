@@ -14,9 +14,9 @@ public class SCollections {
     private static final RNG rng = new RNG();
 
     /**
-     * Returns a random element from the provided list. If the list is empty
-     * then null is returned.
+     * Returns a random element from the provided list. If the list is empty then null is returned.
      *
+     * @param <T>
      * @param list
      * @return
      */
@@ -28,9 +28,10 @@ public class SCollections {
     }
 
     /**
-     * Returns a random elements from the provided queue. If the queue is empty
-     * then null is returned.
+     * Returns a random elements from the provided queue. If the queue is empty then null is
+     * returned.
      *
+     * @param <T>
      * @param list
      * @return
      */
