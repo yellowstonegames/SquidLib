@@ -1,6 +1,6 @@
 package squidpony.squidutility.jdaygraph;
 
-import squidpony.annotation.Beta;
+import squidpony.annotation.Beta; 
 
 /**
  * This marker interface allows a class to be used as an indication of a way of traversing a cell.

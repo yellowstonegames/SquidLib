@@ -1,6 +1,6 @@
 package squidpony.squidutility.jdaygraph;
 
-import squidpony.annotation.Beta;
+import squidpony.annotation.Beta; 
 
 /**
  * Describes a geometric area in a way useful to the Overlay class.

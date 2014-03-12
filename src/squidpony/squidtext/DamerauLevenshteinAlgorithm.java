@@ -1,6 +1,6 @@
 package squidpony.squidtext;
 
-import java.util.HashMap;
+import java.util.HashMap; 
 import java.util.Map;
 import squidpony.annotation.Beta;
 
