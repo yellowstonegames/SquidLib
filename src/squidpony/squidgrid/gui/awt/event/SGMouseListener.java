@@ -15,8 +15,8 @@ import javax.swing.event.MouseInputListener;
  */
 public class SGMouseListener implements MouseInputListener {
 
-    private int cellWidth, cellHeight;
-    private MouseInputListener listener;
+    private final int cellWidth, cellHeight;
+    private final MouseInputListener listener;
 
     /**
      * Sets the size of the cell so that all mouse input can be evaluated as
@@ -25,6 +25,7 @@ public class SGMouseListener implements MouseInputListener {
      *
      * @param cellWidth
      * @param cellHeight
+     * @param listener
      */
     public SGMouseListener(int cellWidth, int cellHeight, MouseInputListener listener) {
         this.cellWidth = cellWidth;

@@ -207,9 +207,23 @@ public class SwingPane extends JLayeredPane implements SGPane {
         placeCharacter(x, y, ' ', SColor.TRANSPARENT, SColor.TRANSPARENT);
     }
 
+    /**
+     * Erases the entire panel, leaving only a transparent space.
+     */
+    public void erase() {
+        Graphics2D g = contentsImage.createGraphics();
+
+        Composite c = g.getComposite();
+        g.setComposite(AlphaComposite.Clear);
+        g.fillRect(0, 0, getWidth(), getHeight());
+        g.setComposite(c);
+
+        redraw();
+    }
+
     @Override
     public void clearCell(int x, int y) {
-       placeCharacter(x, y, ' ');
+        placeCharacter(x, y, ' ');
     }
 
     @Override
@@ -354,7 +368,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
                     g.setComposite(AlphaComposite.Clear);
                     g.fillRect(x * cellDimension.width, y * cellDimension.height, cellDimension.width, cellDimension.height);
                     g.setComposite(c);
-                    
+
                     g.setColor(defaultBackground);
                     g.fillRect(x * cellDimension.width, y * cellDimension.height, cellDimension.width, cellDimension.height);
                     if (backgroundContents[x][y] != null) {
