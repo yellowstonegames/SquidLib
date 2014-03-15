@@ -53,8 +53,7 @@ public class SoundManager implements Runnable {
                 return Pattern.matches(".*\\.(" + validExtensions + ")", name);
             }
         })) {
-            File file = new File(fileName);
-            System.out.println("loading: " + file.toURI().toString());
+            File file = new File(directory.getName() + "\\" + fileName);
             String key = fileName.substring(0, fileName.lastIndexOf('.'));
             loadMediaFile(key, file, isMusic);
         }
@@ -62,6 +61,7 @@ public class SoundManager implements Runnable {
 
     public void loadMediaFile(String key, File file, boolean isMusic) {
         String uri = file.toURI().toString();
+            System.out.println("loading: " + file.toURI().toString() + " keyed as " + key);
         if (isMusic) {
             mediaMap.put(key, new Media(uri));
         } else {
@@ -101,6 +101,7 @@ public class SoundManager implements Runnable {
         if (musicVolume > 0) {
             Media temp = (mediaMap.get(key));
             if (temp == null) {
+                System.out.println("Track key not found: " + key);
                 return;//track not found, continue current music selection
             }
 
