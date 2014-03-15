@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.los.EliasLOS;
+import squidpony.squidgrid.los.EliasConcurrentLOS;
 import squidpony.squidgrid.util.BasicRadiusStrategy;
 
 /**
@@ -113,7 +113,7 @@ public class EliasFOV implements FOVSolver {
 
         @Override
         public void run() {
-            EliasLOS los = new EliasLOS();
+            EliasConcurrentLOS los = new EliasConcurrentLOS();
             los.isReachable(resistanceMap, startx, starty, testx, testy, force, decay, radiusStrategy);
             path = los.getLastPath();
         }

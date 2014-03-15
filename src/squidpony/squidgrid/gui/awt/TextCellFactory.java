@@ -29,6 +29,11 @@ public class TextCellFactory {
     private int cellHeight = 10;
     private int cellWidth = 10;
     private TreeMap<String, BufferedImage> blocks = new TreeMap<>();
+    private BufferedImage whiteRectangle;
+
+    {
+        initWhite();
+    }
 
     /**
      * Sets up this factory to ensure ASCII (or UTF-8) characters in the range 33 to 125 all fit and
@@ -58,6 +63,14 @@ public class TextCellFactory {
         rightPadding = other.rightPadding;
         topPadding = other.topPadding;
         verticalOffset = other.verticalOffset;
+        whiteRectangle = other.whiteRectangle;
+    }
+
+    private void initWhite() {
+        whiteRectangle = new BufferedImage(100, 100, BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g = whiteRectangle.createGraphics();
+        g.setColor(SColor.WHITE);
+        g.fillRect(0, 0, whiteRectangle.getWidth(), whiteRectangle.getHeight());
     }
 
     /**
@@ -578,8 +591,9 @@ public class TextCellFactory {
 
     private BufferedImage makeMonoImage(int c, BufferedImage i) {
         Graphics2D g = i.createGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, cellWidth, cellHeight);
+        g.drawImage(whiteRectangle, 0, 0, null);
+//        g.setColor(Color.WHITE);
+//        g.fillRect(0, 0, cellWidth, cellHeight);
         drawForeground(g, c, Color.BLACK);
         return i;
     }
@@ -587,6 +601,7 @@ public class TextCellFactory {
     private BufferedImage makeImage(char c, Color foreground, Color background) {
         BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
+//        g.drawImage(blackRectangle, 0, 0, null);//TODO -- replace with cached clearing rectangles for the color
         g.setColor(background);
         g.fillRect(0, 0, cellWidth, cellHeight);
         drawForeground(g, c, foreground);
@@ -596,8 +611,6 @@ public class TextCellFactory {
     private BufferedImage makeImage(char c, Color foreground) {
         BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
-//        g.setBackground(SColor.TRANSPARENT);
-
         drawForeground(g, c, foreground);
         return i;
     }

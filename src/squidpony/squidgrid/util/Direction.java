@@ -42,30 +42,32 @@ public enum Direction implements Topology {
      * @return
      */
     static public Direction getDirection(int x, int y) {
-        if (x < 0) {
-            if (y < 0) {
-                return UP_LEFT;
-            } else if (y == 0) {
-                return LEFT;
-            } else {
-                return DOWN_LEFT;
-            }
-        } else if (x == 0) {
-            if (y < 0) {
-                return UP;
-            } else if (y == 0) {
-                return NONE;
-            } else {
-                return DOWN;
-            }
-        } else {
-            if (y < 0) {
-                return UP_RIGHT;
-            } else if (y == 0) {
-                return RIGHT;
-            } else {
-                return DOWN_RIGHT;
-            }
+        if (x == 0 && y == 0) {
+            return NONE;
+        }
+
+        double angle = Math.atan2(y, x);
+        double degree = Math.toDegrees(angle);
+        degree += 90 + 360;//rotate to all positive and 0 is up
+        degree %= 360;//normalize
+        if (degree < 22.5){
+            return UP;
+        }else if (degree < 67.5){
+            return UP_RIGHT;
+        }else if (degree < 112.5){
+            return RIGHT;
+        }else if (degree < 157.5){
+            return DOWN_RIGHT;
+        }else if (degree < 202.5){
+            return DOWN;
+        }else if (degree < 247.5){
+            return DOWN_LEFT;
+        }else if (degree < 292.5){
+            return LEFT;
+        }else if (degree < 337.5){
+            return UP_LEFT;
+        }else{
+            return UP;
         }
     }
 

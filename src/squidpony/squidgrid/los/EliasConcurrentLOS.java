@@ -14,7 +14,7 @@ import squidpony.squidmath.Elias;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class EliasLOS implements LOSSolver {
+public class EliasConcurrentLOS implements LOSSolver {
 
     private Queue<Point> lastPath = new LinkedList<>();
     private float[][] resistanceMap;
