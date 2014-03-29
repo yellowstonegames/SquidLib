@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import squidpony.squidgrid.util.RadiusStrategy;
 import squidpony.squidgrid.util.BasicRadiusStrategy;
 import static squidpony.squidgrid.fov.TranslucenceWrapperFOV.RayType.*;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * Acts as a wrapper which fully respects translucency and lights based on
@@ -20,7 +20,7 @@ public class TranslucenceWrapperFOV implements FOVSolver {
     };
     private FOVSolver fov = new ShadowFOV();
     private float[][] lightMap, resistanceMap, shadowMap;
-    private ArrayList<Direction>[][] litFrom;
+    private ArrayList<DirectionIntercardinal>[][] litFrom;
     private int width, height, startx, starty;
     private RadiusStrategy rStrat;
     private float decay;
@@ -45,7 +45,7 @@ public class TranslucenceWrapperFOV implements FOVSolver {
      *
      * @return
      */
-    public ArrayList<Direction>[][] getLitFrom() {
+    public ArrayList<DirectionIntercardinal>[][] getLitFrom() {
         return litFrom;
     }
 
@@ -70,7 +70,7 @@ public class TranslucenceWrapperFOV implements FOVSolver {
         shadowMap = fov.calculateFOV(resistanceMap, startx, starty, force, decay, radiusStrategy);
 
         lightMap[startx][starty] = force;//start out at full force
-        for (Direction dir : Direction.OUTWARDS) {
+        for (DirectionIntercardinal dir : DirectionIntercardinal.OUTWARDS) {
             pushLight(startx + dir.deltaX, starty + dir.deltaY, force + decay, dir, dir, PRIMARY);
         }
 
@@ -88,7 +88,7 @@ public class TranslucenceWrapperFOV implements FOVSolver {
      * @param light the amount of light coming into this tile
      * @param type
      */
-    private void pushLight(int x, int y, float light, Direction dir, Direction previous, RayType type) {
+    private void pushLight(int x, int y, float light, DirectionIntercardinal dir, DirectionIntercardinal previous, RayType type) {
         if (light <= 0 || x < 0 || x >= width || y < 0 || y >= height || shadowMap[x][y] <= 0) {
             return;//out of light, off the edge, base fov not lit, or already well lit
         }
@@ -108,7 +108,7 @@ public class TranslucenceWrapperFOV implements FOVSolver {
             brightness -= radius * decay;//reduce by the amount of decay from passing through
             pushLight(x + dir.deltaX, y + dir.deltaY, brightness, dir, dir, PRIMARY);
 
-            Direction pushing = dir.clockwise();
+            DirectionIntercardinal pushing = dir.clockwise();
             radius = rStrat.radius(x, y, x + pushing.deltaX, y + pushing.deltaY);
             brightness = light  - resistanceMap[x][y];//light is reduced by the portion of the square passed through
             brightness -= radius * decay;//reduce by the amount of decay from passing through
@@ -121,7 +121,7 @@ public class TranslucenceWrapperFOV implements FOVSolver {
             pushLight(x + pushing.deltaX, y + pushing.deltaY, brightness, dir, pushing, SECONDARY);
         } else {//type == SECONDARY at this point
             //push pass-through secondary ray
-            Direction pushing = previous;//redirect to previous' previous direction
+            DirectionIntercardinal pushing = previous;//redirect to previous' previous direction
             float radius = rStrat.radius(x, y, x + pushing.deltaX, y + pushing.deltaY);
             float brightness = light  - resistanceMap[x][y];//light is reduced by the portion of the square passed through
             brightness -= radius * decay;//reduce by the amount of decay from passing through

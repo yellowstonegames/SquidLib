@@ -2,7 +2,7 @@ package squidpony.squidgrid.fov;
 
 import squidpony.squidgrid.util.RadiusStrategy;
 import squidpony.squidgrid.util.BasicRadiusStrategy;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * Recursive shadowcasting FOV. Uses force * decay for the radius calculation
@@ -35,7 +35,7 @@ public class ShadowFOV implements FOVSolver {
         radius = (force / decay);
 
         lightMap[startx][starty] = force;//light the starting cell
-        for (Direction d : Direction.DIAGONALS) {
+        for (DirectionIntercardinal d : DirectionIntercardinal.DIAGONALS) {
             castLight(1, 1.0f, 0.0f, 0, d.deltaX, d.deltaY, 0);
             castLight(1, 1.0f, 0.0f, d.deltaX, 0, 0, d.deltaY);
         }

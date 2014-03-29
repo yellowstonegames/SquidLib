@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 import squidpony.squidcolor.SColor;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * Class for creating text blocks.
@@ -272,7 +272,7 @@ public class TextCellFactory {
     private void findSize() {
         int left = Integer.MAX_VALUE, right = Integer.MIN_VALUE,
                 top = Integer.MAX_VALUE, bottom = Integer.MIN_VALUE;
-        HashMap<Direction, Integer> larges = new HashMap<>();
+        HashMap<DirectionIntercardinal, Integer> larges = new HashMap<>();
 
         BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = image.createGraphics();
@@ -296,19 +296,19 @@ public class TextCellFactory {
                     && !Character.isWhitespace(code)) {
                 Rectangle rect = vect.getGlyphPixelBounds(0, context, 0, 0);
                 if (rect.x < left) {
-                    larges.put(Direction.LEFT, code);
+                    larges.put(DirectionIntercardinal.LEFT, code);
                     left = rect.x;
                 }
                 if (rect.y < top) {
-                    larges.put(Direction.UP, code);
+                    larges.put(DirectionIntercardinal.UP, code);
                     top = rect.y;
                 }
                 if (rect.x + rect.width > right) {
-                    larges.put(Direction.RIGHT, code);
+                    larges.put(DirectionIntercardinal.RIGHT, code);
                     right = rect.x + rect.width;
                 }
                 if (rect.y + rect.height > bottom) {
-                    larges.put(Direction.DOWN, code);
+                    larges.put(DirectionIntercardinal.DOWN, code);
                     bottom = rect.y + rect.height;
                 }
             }
@@ -438,7 +438,7 @@ public class TextCellFactory {
             return true;
         }
 
-        for (Direction dir : Direction.CARDINALS) {
+        for (DirectionIntercardinal dir : DirectionIntercardinal.CARDINALS) {
             if (!testSlide(c, dir, image)) {
                 return false;
             }
@@ -486,7 +486,7 @@ public class TextCellFactory {
      * @param dir
      * @return
      */
-    private boolean testSlide(int code, Direction dir, BufferedImage image) {
+    private boolean testSlide(int code, DirectionIntercardinal dir, BufferedImage image) {
         //set offsets in a direction to test if it cleared the space
         horizontalOffset += dir.deltaX;
         verticalOffset += dir.deltaY;

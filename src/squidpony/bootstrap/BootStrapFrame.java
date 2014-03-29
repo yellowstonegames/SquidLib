@@ -25,7 +25,7 @@ import squidpony.squidgrid.gui.SGPane;
 import squidpony.squidgrid.gui.awt.TextCellFactory;
 import squidpony.squidgrid.gui.awt.event.SGMouseListener;
 import squidpony.squidgrid.gui.swing.SwingPane;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * Builds, manages, and displays a JFrame with a SwingPane in it allowing for a minimal-effort
@@ -175,32 +175,32 @@ public class BootStrapFrame implements SGPane {
     private KeyListener initKeyListener() {
 
         return new KeyListener() {
-            private final HashMap<Integer, Direction> dirKeys;
+            private final HashMap<Integer, DirectionIntercardinal> dirKeys;
 
             {
                 dirKeys = new HashMap<>();
-                dirKeys.put(KeyEvent.VK_LEFT, Direction.LEFT);
-                dirKeys.put(KeyEvent.VK_RIGHT, Direction.RIGHT);
-                dirKeys.put(KeyEvent.VK_DOWN, Direction.DOWN);
-                dirKeys.put(KeyEvent.VK_UP, Direction.UP);
-                dirKeys.put(KeyEvent.VK_NUMPAD4, Direction.LEFT);
-                dirKeys.put(KeyEvent.VK_NUMPAD6, Direction.RIGHT);
-                dirKeys.put(KeyEvent.VK_NUMPAD2, Direction.DOWN);
-                dirKeys.put(KeyEvent.VK_NUMPAD8, Direction.UP);
-                dirKeys.put(KeyEvent.VK_NUMPAD1, Direction.DOWN_LEFT);
-                dirKeys.put(KeyEvent.VK_NUMPAD3, Direction.DOWN_RIGHT);
-                dirKeys.put(KeyEvent.VK_NUMPAD7, Direction.UP_LEFT);
-                dirKeys.put(KeyEvent.VK_NUMPAD9, Direction.UP_RIGHT);
-                dirKeys.put(KeyEvent.VK_NUMPAD5, Direction.NONE);
-                dirKeys.put(KeyEvent.VK_4, Direction.LEFT);
-                dirKeys.put(KeyEvent.VK_6, Direction.RIGHT);
-                dirKeys.put(KeyEvent.VK_2, Direction.DOWN);
-                dirKeys.put(KeyEvent.VK_8, Direction.UP);
-                dirKeys.put(KeyEvent.VK_1, Direction.DOWN_LEFT);
-                dirKeys.put(KeyEvent.VK_3, Direction.DOWN_RIGHT);
-                dirKeys.put(KeyEvent.VK_7, Direction.UP_LEFT);
-                dirKeys.put(KeyEvent.VK_9, Direction.UP_RIGHT);
-                dirKeys.put(KeyEvent.VK_5, Direction.NONE);
+                dirKeys.put(KeyEvent.VK_LEFT, DirectionIntercardinal.LEFT);
+                dirKeys.put(KeyEvent.VK_RIGHT, DirectionIntercardinal.RIGHT);
+                dirKeys.put(KeyEvent.VK_DOWN, DirectionIntercardinal.DOWN);
+                dirKeys.put(KeyEvent.VK_UP, DirectionIntercardinal.UP);
+                dirKeys.put(KeyEvent.VK_NUMPAD4, DirectionIntercardinal.LEFT);
+                dirKeys.put(KeyEvent.VK_NUMPAD6, DirectionIntercardinal.RIGHT);
+                dirKeys.put(KeyEvent.VK_NUMPAD2, DirectionIntercardinal.DOWN);
+                dirKeys.put(KeyEvent.VK_NUMPAD8, DirectionIntercardinal.UP);
+                dirKeys.put(KeyEvent.VK_NUMPAD1, DirectionIntercardinal.DOWN_LEFT);
+                dirKeys.put(KeyEvent.VK_NUMPAD3, DirectionIntercardinal.DOWN_RIGHT);
+                dirKeys.put(KeyEvent.VK_NUMPAD7, DirectionIntercardinal.UP_LEFT);
+                dirKeys.put(KeyEvent.VK_NUMPAD9, DirectionIntercardinal.UP_RIGHT);
+                dirKeys.put(KeyEvent.VK_NUMPAD5, DirectionIntercardinal.NONE);
+                dirKeys.put(KeyEvent.VK_4, DirectionIntercardinal.LEFT);
+                dirKeys.put(KeyEvent.VK_6, DirectionIntercardinal.RIGHT);
+                dirKeys.put(KeyEvent.VK_2, DirectionIntercardinal.DOWN);
+                dirKeys.put(KeyEvent.VK_8, DirectionIntercardinal.UP);
+                dirKeys.put(KeyEvent.VK_1, DirectionIntercardinal.DOWN_LEFT);
+                dirKeys.put(KeyEvent.VK_3, DirectionIntercardinal.DOWN_RIGHT);
+                dirKeys.put(KeyEvent.VK_7, DirectionIntercardinal.UP_LEFT);
+                dirKeys.put(KeyEvent.VK_9, DirectionIntercardinal.UP_RIGHT);
+                dirKeys.put(KeyEvent.VK_5, DirectionIntercardinal.NONE);
             }
 
             @Override
@@ -464,7 +464,7 @@ public class BootStrapFrame implements SGPane {
      * @param location
      * @param direction
      */
-    public void bump(Point location, Direction direction) {
+    public void bump(Point location, DirectionIntercardinal direction) {
         mapPanel.bump(location, new Point(direction.deltaX, direction.deltaY));
     }
 
@@ -475,7 +475,7 @@ public class BootStrapFrame implements SGPane {
      * @param direction
      */
     public void bump(Point location, Point direction) {
-        mapPanel.bump(location, Direction.UP);
+        mapPanel.bump(location, DirectionIntercardinal.UP);
     }
 
     /**
@@ -495,7 +495,7 @@ public class BootStrapFrame implements SGPane {
      * @param start
      * @param direction
      */
-    public void slide(Point start, Direction direction) {
+    public void slide(Point start, DirectionIntercardinal direction) {
         mapPanel.slide(start, direction);
     }
 

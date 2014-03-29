@@ -2,7 +2,7 @@ package squidpony.squidgrid.fov.edgeaware;
 
 import java.util.HashMap;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * A minimal implementation of EdgeAwareCell.
@@ -12,21 +12,21 @@ import squidpony.squidgrid.util.Direction;
 @Beta
 public class BasicEdgeAwareCell implements EdgeAwareCell {
 
-    HashMap<String, HashMap<Direction, Float>> resistances = new HashMap<>();
+    HashMap<String, HashMap<DirectionIntercardinal, Float>> resistances = new HashMap<>();
 
     @Override
-    public float resistance(String key, Direction edge) {
+    public float resistance(String key, DirectionIntercardinal edge) {
         return resistances.get(key).get(edge);
     }
 
     @Override
-    public float resistance(Direction edge) {
+    public float resistance(DirectionIntercardinal edge) {
         return resistances.get(null).get(edge);
     }
 
     @Override
-    public void setResistance(String key, Direction edge, float resistance) {
-        HashMap<Direction, Float> map = resistances.get(key);
+    public void setResistance(String key, DirectionIntercardinal edge, float resistance) {
+        HashMap<DirectionIntercardinal, Float> map = resistances.get(key);
         if (map == null){
             map = new HashMap<>();
         }
@@ -35,7 +35,7 @@ public class BasicEdgeAwareCell implements EdgeAwareCell {
     }
 
     @Override
-    public void setResistance(Direction edge, float resistance) {
+    public void setResistance(DirectionIntercardinal edge, float resistance) {
         setResistance(null, edge, resistance);
     }
 }

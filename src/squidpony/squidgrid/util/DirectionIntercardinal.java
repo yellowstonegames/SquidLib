@@ -10,21 +10,21 @@ import squidpony.squidutility.jdaygraph.Topology;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public enum Direction implements Topology {
+public enum DirectionIntercardinal implements Topology {
 
     UP(0, -1), DOWN(0, 1), LEFT(-1, 0), RIGHT(1, 0), UP_LEFT(-1, -1), UP_RIGHT(1, -1), DOWN_LEFT(-1, 1), DOWN_RIGHT(1, 1), NONE(0, 0);
     /**
      * An array which holds only the four cardinal directions.
      */
-    public static final Direction[] CARDINALS = {UP, DOWN, LEFT, RIGHT};
+    public static final DirectionIntercardinal[] CARDINALS = {UP, DOWN, LEFT, RIGHT};
     /**
      * An array which holds only the four diagonal directions.
      */
-    public static final Direction[] DIAGONALS = {UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+    public static final DirectionIntercardinal[] DIAGONALS = {UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
     /**
      * An array which holds all eight OUTWARDS directions.
      */
-    public static final Direction[] OUTWARDS = {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+    public static final DirectionIntercardinal[] OUTWARDS = {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
     /**
      * The x coordinate difference for this direction.
      */
@@ -41,7 +41,7 @@ public enum Direction implements Topology {
      * @param y
      * @return
      */
-    static public Direction getDirection(int x, int y) {
+    static public DirectionIntercardinal getDirection(int x, int y) {
         if (x == 0 && y == 0) {
             return NONE;
         }
@@ -76,7 +76,7 @@ public enum Direction implements Topology {
      *
      * @return
      */
-    public Direction clockwise() {
+    public DirectionIntercardinal clockwise() {
         switch (this) {
             case UP:
                 return UP_RIGHT;
@@ -105,7 +105,7 @@ public enum Direction implements Topology {
      *
      * @return
      */
-    public Direction counterClockwise() {
+    public DirectionIntercardinal counterClockwise() {
         switch (this) {
             case UP:
                 return UP_LEFT;
@@ -134,7 +134,7 @@ public enum Direction implements Topology {
      *
      * @return
      */
-    public Direction opposite() {
+    public DirectionIntercardinal opposite() {
         switch (this) {
             case UP:
                 return DOWN;
@@ -158,7 +158,7 @@ public enum Direction implements Topology {
         }
     }
 
-    private Direction(int x, int y) {
+    private DirectionIntercardinal(int x, int y) {
         this.deltaX = x;
         this.deltaY = y;
     }

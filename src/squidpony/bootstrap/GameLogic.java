@@ -1,7 +1,7 @@
 package squidpony.bootstrap;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * This interface indicates the ability to perform the game logic associated with GUI input.
@@ -28,7 +28,7 @@ public interface GameLogic {
      *
      * @param dir
      */
-    public void acceptDirectionInput(Direction dir);
+    public void acceptDirectionInput(DirectionIntercardinal dir);
 
     /**
      * Sends the grid coordinates of a mouse click. Will not send clicks that originated in the
