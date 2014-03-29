@@ -2,7 +2,7 @@ package squidpony.squidutility.jdaygraph;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import squidpony.squidgrid.util.Direction; 
+import squidpony.squidgrid.util.DirectionIntercardinal; 
 
 /**
  * A topology in which cells are only consider connected by the four main directions. All cells are
@@ -12,7 +12,7 @@ import squidpony.squidgrid.util.Direction;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class Grid4<T> implements Overlay<T, Direction> {
+public class Grid4<T> implements Overlay<T, DirectionIntercardinal> {
 
     private int width, height;
     private Object[] map;
@@ -105,9 +105,9 @@ public class Grid4<T> implements Overlay<T, Direction> {
 
     @Override
     public int[] neighbors(int index) {
-        int[] ret = new int[Direction.CARDINALS.length];//most number of neighbors possible
+        int[] ret = new int[DirectionIntercardinal.CARDINALS.length];//most number of neighbors possible
         int i = 0;
-        for (Direction dir : Direction.CARDINALS) {
+        for (DirectionIntercardinal dir : DirectionIntercardinal.CARDINALS) {
             int n = neighbor(index, dir);
             if (n >= 0) {
                 ret[i] = n;
@@ -118,7 +118,7 @@ public class Grid4<T> implements Overlay<T, Direction> {
     }
 
     @Override
-    public int neighbor(int i, Direction dir) {
+    public int neighbor(int i, DirectionIntercardinal dir) {
         switch (dir) {
             case UP:
             case DOWN:
@@ -146,7 +146,7 @@ public class Grid4<T> implements Overlay<T, Direction> {
     }
 
     @Override
-    public float traversalCost(int index, Direction traversal) {
+    public float traversalCost(int index, DirectionIntercardinal traversal) {
         switch (traversal) {
             case NONE:
                 return 0f;

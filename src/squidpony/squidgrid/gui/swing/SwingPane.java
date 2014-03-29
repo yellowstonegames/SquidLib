@@ -15,7 +15,7 @@ import squidpony.squidgrid.gui.swing.animation.AnimationManager;
 import squidpony.squidgrid.gui.swing.animation.BumpAnimation;
 import squidpony.squidgrid.gui.swing.animation.SlideAnimation;
 import squidpony.squidgrid.gui.swing.animation.WiggleAnimation;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -399,7 +399,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
      * @param location
      * @param direction
      */
-    public void bump(Point location, Direction direction) {
+    public void bump(Point location, DirectionIntercardinal direction) {
         bump(location, new Point(direction.deltaX, direction.deltaY));
     }
 
@@ -441,7 +441,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
      * @param start
      * @param direction
      */
-    public void slide(Point start, Direction direction) {
+    public void slide(Point start, DirectionIntercardinal direction) {
         slide(start, new Point(direction.deltaX + start.x, direction.deltaY + start.y), DEFAULT_ANIMATION_DURATION);
     }
 

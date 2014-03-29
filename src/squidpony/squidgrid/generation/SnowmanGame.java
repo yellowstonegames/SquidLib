@@ -16,7 +16,7 @@ import squidpony.squidgrid.fov.ShadowFOV;
 import squidpony.squidgrid.gui.awt.TextCellFactory;
 import squidpony.squidgrid.gui.awt.event.SGKeyListener;
 import squidpony.squidgrid.gui.swing.SwingPane;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * This class starts up the game.
@@ -73,7 +73,7 @@ public class SnowmanGame {
         int key = keyListener.next().getExtendedKeyCode();
         boolean success = false;
         if (key == KeyEvent.VK_RIGHT) {
-            success = tryToMove(Direction.RIGHT);
+            success = tryToMove(DirectionIntercardinal.RIGHT);
         }
 
         //update all end of turn items
@@ -96,7 +96,7 @@ public class SnowmanGame {
      * @param dir
      * @return
      */
-    private boolean tryToMove(Direction dir) {
+    private boolean tryToMove(DirectionIntercardinal dir) {
         Tile tile = map[player.x + dir.deltaX][player.y + dir.deltaY];
         if (tile.isWall()) {
             return false;
@@ -333,7 +333,7 @@ public class SnowmanGame {
      * @param monster
      */
     private void moveMonster(Monster monster) {
-        Direction dir = Direction.CARDINALS[rng.nextInt(Direction.CARDINALS.length)];//get a random direction
+        DirectionIntercardinal dir = DirectionIntercardinal.CARDINALS[rng.nextInt(DirectionIntercardinal.CARDINALS.length)];//get a random direction
         Tile tile = map[monster.x + dir.deltaX][monster.y + dir.deltaY];
         if (!tile.isWall() && tile.getMonster() == null) {
             map[monster.x][monster.y].setMonster(null);

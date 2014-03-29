@@ -1,7 +1,7 @@
 package squidpony.squidgrid.fov.edgeaware;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * A cell which can report resistance values based on edges.
@@ -20,7 +20,7 @@ public interface EdgeAwareCell {
      * @param edge
      * @return
      */
-    public float resistance(String key, Direction edge);
+    public float resistance(String key, DirectionIntercardinal edge);
 
     /**
      * Gets the resistance associated with a null key.
@@ -31,7 +31,7 @@ public interface EdgeAwareCell {
      * @param edge
      * @return
      */
-    public float resistance(Direction edge);
+    public float resistance(DirectionIntercardinal edge);
 
     /**
      * Sets the resistance value to associate with the provided key.
@@ -43,7 +43,7 @@ public interface EdgeAwareCell {
      * @param edge
      * @param resistance
      */
-    public void setResistance(String key, Direction edge, float resistance);
+    public void setResistance(String key, DirectionIntercardinal edge, float resistance);
 
     /**
      * Sets the resistance value to associate with a null key.
@@ -54,5 +54,5 @@ public interface EdgeAwareCell {
      * @param edge
      * @param resistance
      */
-    public void setResistance(Direction edge, float resistance);
+    public void setResistance(DirectionIntercardinal edge, float resistance);
 }

@@ -1,7 +1,7 @@
 package squidpony.squidgrid.fov;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.Direction;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * A cell which contains the information needed to process FOV and LOS.
@@ -29,7 +29,7 @@ public interface FOVCell {
      * @param direction
      * @return
      */
-    public float resistance(String key, Direction direction);
+    public float resistance(String key, DirectionIntercardinal direction);
 
     /**
      * Allows the FOV algorithm to store the result of its computations directly
@@ -48,5 +48,5 @@ public interface FOVCell {
      * @param direction
      * @param value
      */
-    public void setFOVResult(String key, Direction direction, float value);
+    public void setFOVResult(String key, DirectionIntercardinal direction, float value);
 }
