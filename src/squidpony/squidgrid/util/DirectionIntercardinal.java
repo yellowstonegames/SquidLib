@@ -3,16 +3,17 @@ package squidpony.squidgrid.util;
 import squidpony.squidutility.jdaygraph.Topology;
 
 /**
- * Represents the eight grid directions and the deltaX, deltaY values associated with those
- * directions.
+ * Represents the eight grid directions and the deltaX, deltaY values associated
+ * with those directions.
  *
- * The grid referenced has x positive to the right and y positive downwards on screen.
+ * The grid referenced has x positive to the right and y positive downwards on
+ * screen.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public enum DirectionIntercardinal implements Topology {
 
-    UP(0, -1), DOWN(0, 1), LEFT(-1, 0), RIGHT(1, 0), UP_LEFT(-1, -1), UP_RIGHT(1, -1), DOWN_LEFT(-1, 1), DOWN_RIGHT(1, 1), NONE(0, 0);
+    UP(0, -1, '↑'), DOWN(0, 1, '↓'), LEFT(-1, 0, '←'), RIGHT(1, 0, '→'), UP_LEFT(-1, -1, '↖'), UP_RIGHT(1, -1, '↗'), DOWN_LEFT(-1, 1, '↙'), DOWN_RIGHT(1, 1, '↘'), NONE(0, 0, '•');
     /**
      * An array which holds only the four cardinal directions.
      */
@@ -34,6 +35,8 @@ public enum DirectionIntercardinal implements Topology {
      */
     public final int deltaY;
 
+    public final char symbol;
+
     /**
      * Returns the direction that most closely matches the input.
      *
@@ -50,25 +53,41 @@ public enum DirectionIntercardinal implements Topology {
         double degree = Math.toDegrees(angle);
         degree += 90 + 360;//rotate to all positive and 0 is up
         degree %= 360;//normalize
-        if (degree < 22.5){
+        if (degree < 22.5) {
             return UP;
-        }else if (degree < 67.5){
+        } else if (degree < 67.5) {
             return UP_RIGHT;
-        }else if (degree < 112.5){
+        } else if (degree < 112.5) {
             return RIGHT;
-        }else if (degree < 157.5){
+        } else if (degree < 157.5) {
             return DOWN_RIGHT;
-        }else if (degree < 202.5){
+        } else if (degree < 202.5) {
             return DOWN;
-        }else if (degree < 247.5){
+        } else if (degree < 247.5) {
             return DOWN_LEFT;
-        }else if (degree < 292.5){
+        } else if (degree < 292.5) {
             return LEFT;
-        }else if (degree < 337.5){
+        } else if (degree < 337.5) {
             return UP_LEFT;
-        }else{
+        } else {
             return UP;
         }
+    }
+
+    /**
+     * Gets the direction associated with the passed in character. If there is
+     * no direction associated then null is returned.
+     *
+     * @param c
+     * @return
+     */
+    static public DirectionIntercardinal getDirection(char c) {
+        for (DirectionIntercardinal d : values()) {
+            if (d.symbol == c) {
+                return d;
+            }
+        }
+        return null;
     }
 
     /**
@@ -158,8 +177,9 @@ public enum DirectionIntercardinal implements Topology {
         }
     }
 
-    private DirectionIntercardinal(int x, int y) {
+    private DirectionIntercardinal(int x, int y, char symbol) {
         this.deltaX = x;
         this.deltaY = y;
+        this.symbol = symbol;
     }
 }

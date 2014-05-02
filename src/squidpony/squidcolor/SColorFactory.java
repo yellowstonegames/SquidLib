@@ -116,7 +116,8 @@ public class SColorFactory {
      * @return
      */
     public static SColor blend(SColor color1, SColor color2, double coef) {
-        return asSColor(blend(color1.getRed(), color2.getRed(), coef),
+        return asSColor(blend(color1.getAlpha(), color2.getAlpha(), coef),
+                blend(color1.getRed(), color2.getRed(), coef),
                 blend(color1.getGreen(), color2.getGreen(), coef),
                 blend(color1.getBlue(), color2.getBlue(), coef));
     }
@@ -143,7 +144,7 @@ public class SColorFactory {
      * @return
      */
     public static SColor add(SColor color1, SColor color2) {
-        return asSColor(color1.getRed() + color2.getRed(), color1.getGreen() + color2.getGreen(), color1.getBlue() + color2.getBlue());
+        return asSColor(color1.getAlpha() + color2.getAlpha(), color1.getRed() + color2.getRed(), color1.getGreen() + color2.getGreen(), color1.getBlue() + color2.getBlue());
     }
 
     /**
@@ -156,7 +157,7 @@ public class SColorFactory {
      * @return
      */
     public static SColor lightWith(SColor color, SColor light) {
-        return asSColor((int) (color.getRed() * light.getRed() / 255f), (int) (color.getGreen() * light.getGreen() / 255f), (int) (color.getBlue() * light.getBlue() / 255f));
+        return asSColor((int) (color.getAlpha() * light.getAlpha() / 255f), (int) (color.getRed() * light.getRed() / 255f), (int) (color.getGreen() * light.getGreen() / 255f), (int) (color.getBlue() * light.getBlue() / 255f));
     }
 
     /**
@@ -228,23 +229,30 @@ public class SColorFactory {
         }
     }
 
+    public static SColor asSColor(int r, int g, int b) {
+        return asSColor(0, r, g, b);
+    }
+
     /**
      * Returns an SColor with the given values, with those values clamped
      * between 0 and 255.
      *
+     * @param a
      * @param r
      * @param g
      * @param b
      * @return
      */
-    public static SColor asSColor(int r, int g, int b) {
+    public static SColor asSColor(int a, int r, int g, int b) {
+        a = Math.min(a, 255);
+        a = Math.max(a, 0);
         r = Math.min(r, 255);
         r = Math.max(r, 0);
         g = Math.min(g, 255);
         g = Math.max(g, 0);
         b = Math.min(b, 255);
         b = Math.max(b, 0);
-        return asSColor(r * 256 * 256 + g * 256 + b);
+        return asSColor(a * 256 * 256 * 256 + r * 256 * 256 + g * 256 + b);
     }
 
     /**
