@@ -48,6 +48,8 @@ Current Features:
   
 GitHub repository: https://github.com/SquidPony/SquidLib
 
+JavaDoc: http://squidpony.com/docs/squidlib/1.9.1/
+
 Blog updates: http://squidpony.com/not-games/squidlib/
 
 Developed by Eben Howard - howard@squidpony.com
