@@ -44,6 +44,21 @@ public class TextCellFactory implements Cloneable {
         }
     }
 
+    public TextCellFactory(TextCellFactory other) {
+        antialias = other.antialias;
+        blocks = new TreeMap<>(blocks);
+        bottomPadding = other.bottomPadding;
+        cellHeight = other.cellHeight;
+        cellWidth = other.cellWidth;
+        fitting = other.fitting;
+        font = other.font;
+        horizontalOffset = other.horizontalOffset;
+        leftPadding = other.leftPadding;
+        rightPadding = other.rightPadding;
+        topPadding = other.topPadding;
+        verticalOffset = other.verticalOffset;
+    }
+
     /**
      * Returns the dimension of a single grid cell.
      *
@@ -147,7 +162,6 @@ public class TextCellFactory implements Cloneable {
      * @param cellWidth
      * @param cellHeight
      * @param font
-     * @param whiteSpace
      */
     public void initializeBySize(int cellWidth, int cellHeight, Font font) {
         this.cellWidth = cellWidth;
@@ -494,7 +508,6 @@ public class TextCellFactory implements Cloneable {
      *
      * @param c
      * @param foreground
-     * @param background
      * @return
      */
     public String getStringRepresentationOf(char c, Color foreground) {
@@ -540,23 +553,5 @@ public class TextCellFactory implements Cloneable {
         int x = horizontalOffset - g.getFontMetrics().charWidth(c) / 2;//start with half of the character's width
         int y = g.getFontMetrics().getMaxAscent() + verticalOffset;
         g.drawString(String.valueOf(c), x, y);
-    }
-
-    @Override
-    public TextCellFactory clone() {
-        TextCellFactory ret = new TextCellFactory();
-        ret.antialias = antialias;
-        ret.blocks = new TreeMap<>(blocks);
-        ret.bottomPadding = bottomPadding;
-        ret.cellHeight = cellHeight;
-        ret.cellWidth = cellWidth;
-        ret.fitting = fitting;
-        ret.font = font;
-        ret.horizontalOffset = horizontalOffset;
-        ret.leftPadding = leftPadding;
-        ret.rightPadding = rightPadding;
-        ret.topPadding = topPadding;
-        ret.verticalOffset = verticalOffset;
-        return ret;
     }
 }
