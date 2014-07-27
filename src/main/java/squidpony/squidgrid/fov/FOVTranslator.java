@@ -32,12 +32,13 @@ package squidpony.squidgrid.fov;
  */
 public class FOVTranslator implements FOVSolver {
 
-    private FOVSolver solver;
+    private final FOVSolver solver;
     private float[][] lightMap;//backing map for results
 
     /**
      * Creates an empty instance. At least one FOVSolver must be added through
      * an add method before FOV calculations can be performed with this object.
+     * @param solver
      */
     public FOVTranslator(FOVSolver solver) {
         this.solver = solver;
@@ -207,7 +208,7 @@ public class FOVTranslator implements FOVSolver {
      * Returns an integer array representation of the last calculated FOV light
      * map.
      *
-     * @param multiplyer
+     * @param scale
      * @return
      */
     public int[][] getIntArray(float scale) {

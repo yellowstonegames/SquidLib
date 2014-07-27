@@ -11,7 +11,7 @@ import squidpony.squidmath.RNG;
  */
 public class SCollections {
 
-    private static RNG rng = new RNG();
+    private static final RNG rng = new RNG();
 
     /**
      * Returns a random element from the provided list. If the list is empty

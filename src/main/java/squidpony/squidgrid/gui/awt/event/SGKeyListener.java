@@ -40,9 +40,9 @@ public class SGKeyListener implements KeyListener, Iterable<KeyEvent>, Iterator<
 
         DOWN, UP, TYPED
     };
-    private CaptureType type;
-    private BlockingQueue<KeyEvent> queue = new LinkedBlockingQueue<>();
-    private boolean blockOnEmpty;
+    private final CaptureType type;
+    private final BlockingQueue<KeyEvent> queue = new LinkedBlockingQueue<>();
+    private final boolean blockOnEmpty;
 
     /**
      * Creates a new listener which can optionally block when no input is
@@ -51,7 +51,7 @@ public class SGKeyListener implements KeyListener, Iterable<KeyEvent>, Iterator<
      *
      * @param blockOnEmpty if true then this object will wait until there is
      * input before returning from a request for the next event
-     * @param captureOnKeyDown if true then will capture events immediately upon
+     * @param type if true then will capture events immediately upon
      * the key being pressed, if false then the key must be released before the
      * event is captured
      */

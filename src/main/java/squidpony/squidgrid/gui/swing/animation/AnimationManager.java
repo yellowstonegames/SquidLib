@@ -15,14 +15,14 @@ import javax.swing.Timer;
  */
 public class AnimationManager implements Runnable {
 
-    private ConcurrentHashMap<Animation, Timer> animations = new ConcurrentHashMap<>();
-    private JComponent component;
+    private final ConcurrentHashMap<Animation, Timer> animations = new ConcurrentHashMap<>();
+    private final JComponent component;
 
     /**
      * Creates a new AnimationManager that will draw to the provided image and
      * then starts it in a daemon worker thread to manage the animations.
      *
-     * @param image
+     * @param component
      * @return the created AnimationManager
      */
     public static AnimationManager startNewAnimationManager(JComponent component) {
@@ -46,7 +46,6 @@ public class AnimationManager implements Runnable {
      * component.
      *
      * @param animation
-     * @param speed
      */
     public void add(Animation animation) {
         if (!animations.containsKey(animation)) {
@@ -62,7 +61,6 @@ public class AnimationManager implements Runnable {
      * animations.
      *
      * @param animation
-     * @param speed
      */
     public synchronized void stopAnimation(Animation animation) {
         if (animations.containsKey(animation)) {
