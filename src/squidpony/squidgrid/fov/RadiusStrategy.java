@@ -1,8 +1,8 @@
 package squidpony.squidgrid.fov;
 
 /**
- * Indicates which method of dealing with the radius during FOV and LOS solving
- * is preferred.
+ * Defines a set of methods for determining the distance between points in various
+ * geometries.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -18,13 +18,13 @@ public interface RadiusStrategy {
      * @return
      */
     public float radius(int startx, int starty, int endx, int endy);
-    
+
     /**
      * Returns the radius calculated using the two distances provided.
-     * 
+     *
      * @param dx
      * @param dy
-     * @return 
+     * @return
      */
     public float radius(int dx, int dy);
 
@@ -38,13 +38,13 @@ public interface RadiusStrategy {
      * @return
      */
     public float radius(float startx, float starty, float endx, float endy);
-    
+
     /**
      * Returns the radius calculated based on the two distances provided.
-     * 
+     *
      * @param dx
      * @param dy
-     * @return 
+     * @return
      */
     public float radius(float dx, float dy);
 }

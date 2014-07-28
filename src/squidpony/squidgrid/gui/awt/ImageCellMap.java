@@ -1,6 +1,5 @@
 package squidpony.squidgrid.gui.awt;
 
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,40 +12,22 @@ import java.util.TreeMap;
  *
  * @author Eben Howard -- http://squidpony.com - howard@squidpony.com
  */
-public class ImageCellMap implements Map {
+public class ImageCellMap implements Map<String, BufferedImage> {
 
     private BufferedImage nullImage;
-    int cellWidth, cellHeight;
-    TreeMap<String, BufferedImage> blocks = new TreeMap<>();
+    private final int width, height;
+    private final TreeMap<String, BufferedImage> blocks = new TreeMap<>();
 
     /**
      * A cached image set.
-     * @param size
-     */
-    public ImageCellMap(Dimension size) {
-        cellWidth = size.width;
-        cellHeight = size.height;
-        nullImage = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
-    }
-
-    /**
-     * Sets the size of a single cell.
      *
-     * @param dim
+     * @param width
+     * @param height
      */
-    public void setDimensions(Dimension dim) {
-        cellWidth = dim.width;
-        cellHeight = dim.height;
-        clear();
-    }
-
-    /**
-     * Returns the dimension of a single grid cell.
-     *
-     * @return
-     */
-    public Dimension getCellDimension() {
-        return new Dimension(cellWidth, cellHeight);
+    public ImageCellMap(int width, int height) {
+        this.width = width;
+        this.height = height;
+        nullImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
     }
 
     /**
@@ -57,6 +38,14 @@ public class ImageCellMap implements Map {
      */
     public BufferedImage getNullImage() {
         return nullImage;
+    }
+
+    public int width() {
+        return width;
+    }
+
+    public int height() {
+        return height;
     }
 
     /**
@@ -156,7 +145,7 @@ public class ImageCellMap implements Map {
     }
 
     @Override
-    public Object get(Object key) {
+    public BufferedImage get(Object key) {
         if (key instanceof String && blocks.containsKey((String) key)) {
             return (BufferedImage) blocks.get(key);
         } else {
@@ -165,18 +154,14 @@ public class ImageCellMap implements Map {
     }
 
     @Override
-    public Object put(Object key, Object value) {
-        if (key instanceof String && value instanceof BufferedImage) {
-            BufferedImage ret = getImage((String) key);
-            addImage((String) key, (BufferedImage) value);
-            return ret;
-        } else {
-            return null;
-        }
+    public BufferedImage put(String key, BufferedImage value) {
+        BufferedImage ret = getImage((String) key);
+        addImage((String) key, (BufferedImage) value);
+        return ret;
     }
 
     @Override
-    public Object remove(Object key) {
+    public BufferedImage remove(Object key) {
         if (key instanceof String) {
             return blocks.remove((String) key);
         }
@@ -185,12 +170,12 @@ public class ImageCellMap implements Map {
 
     @Override
     public void putAll(Map m) {
-        for (Object k : m.keySet()) {
+        m.keySet().stream().forEach((k) -> {
             Object v = m.get(k);
             if (k instanceof String && v instanceof BufferedImage) {
                 addImage((String) k, (BufferedImage) v);
             }
-        }
+        });
     }
 
     @Override

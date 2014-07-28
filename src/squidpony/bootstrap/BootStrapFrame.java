@@ -148,10 +148,10 @@ public class BootStrapFrame implements SGPane {
         outputPanel = new SwingPane(mapPanel.getGridWidth() + statsPanel.getGridWidth(), outputLines, textFactory);
         outputPanel.setDefaultBackground(SColor.BLACK);
         outputPanel.setDefaultForeground(SColor.DODGER_BLUE);
-        outputPanel.placeCharacter(outputPanel.getGridWidth() - 1, 0, upChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
-        outputPanel.placeCharacter(outputPanel.getGridWidth() - 1, outputPanel.getGridHeight() - 1, downChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
+        outputPanel.put(outputPanel.getGridWidth() - 1, 0, upChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
+        outputPanel.put(outputPanel.getGridWidth() - 1, outputPanel.getGridHeight() - 1, downChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
         for (int y = 1; y < outputPanel.getGridHeight() - 1; y++) {//fill in vertical line between scroll arrowheads
-            outputPanel.clearCell(outputPanel.getGridWidth() - 1, y, SColor.SILVER);
+            outputPanel.clear(outputPanel.getGridWidth() - 1, y, SColor.SILVER);
         }
         updateOutput();
         outputPanel.addMouseListener(new SGMouseListener(outputPanel.getCellWidth(), outputPanel.getCellHeight(), new OutputMouseListener()));
@@ -274,7 +274,7 @@ public class BootStrapFrame implements SGPane {
     private void updateOutput() {
         for (int x = 0; x < outputPanel.getGridWidth() - 1; x++) {//clear everything but the scroll arrows
             for (int y = 0; y < outputPanel.getGridHeight(); y++) {
-                outputPanel.clearCell(x, y);
+                outputPanel.clear(x, y);
             }
         }
 
@@ -364,13 +364,13 @@ public class BootStrapFrame implements SGPane {
     }
 
     @Override
-    public void clearCell(int x, int y) {
-        mapPanel.clearCell(x, y);
+    public void clear(int x, int y) {
+        mapPanel.clear(x, y);
     }
 
     @Override
-    public void clearCell(int x, int y, Color color) {
-        mapPanel.clearCell(x, y, color);
+    public void clear(int x, int y, Color color) {
+        mapPanel.clear(x, y, color);
     }
 
     @Override
@@ -379,18 +379,18 @@ public class BootStrapFrame implements SGPane {
     }
 
     @Override
-    public void placeCharacter(int x, int y, char c) {
-        mapPanel.placeCharacter(x, y, c);
+    public void put(int x, int y, char c) {
+        mapPanel.put(x, y, c);
     }
 
     @Override
-    public void placeCharacter(int x, int y, char c, Color fore, Color back) {
-        mapPanel.placeCharacter(x, y, c, fore, back);
+    public void put(int x, int y, char c, Color fore, Color back) {
+        mapPanel.put(x, y, c, fore, back);
     }
 
     @Override
-    public void placeCharacter(int x, int y, char c, Color fore) {
-        mapPanel.placeCharacter(x, y, c, fore);
+    public void put(int x, int y, char c, Color fore) {
+        mapPanel.put(x, y, c, fore);
     }
 
     @Override
@@ -414,13 +414,13 @@ public class BootStrapFrame implements SGPane {
     }
 
     @Override
-    public void placeText(int xOffset, int yOffset, char[][] chars) {
-        mapPanel.placeText(xOffset, yOffset, chars);
+    public void put(int xOffset, int yOffset, char[][] chars) {
+        mapPanel.put(xOffset, yOffset, chars);
     }
 
     @Override
-    public void placeText(int xOffset, int yOffset, char[][] chars, Color foreground, Color background) {
-        mapPanel.placeText(xOffset, yOffset, chars, foreground, background);
+    public void put(int xOffset, int yOffset, char[][] chars, Color foreground, Color background) {
+        mapPanel.put(xOffset, yOffset, chars, foreground, background);
     }
 
     @Override

@@ -17,33 +17,6 @@ import squidpony.annotation.Beta;
 public interface SGPane {
 
     /**
-     * Highlights the cell at the given location.
-     *
-     * Replaces any previous highlight.
-     *
-     * @param x
-     * @param y
-     */
-    public void highlight(int x, int y);
-
-    /**
-     * Highlights the cells in the given area.
-     *
-     * Replaces any previous highlight.
-     *
-     * @param startx
-     * @param starty
-     * @param endx
-     * @param endy
-     */
-    public void highlight(int startx, int starty, int endx, int endy);
-
-    /**
-     * Removes highlights from all cells.
-     */
-    public void removeHighlight();
-
-    /**
      * Returns the height of a single cell.
      *
      * @return
@@ -71,19 +44,6 @@ public interface SGPane {
      */
     public int getGridWidth();
 
-    /**
-     * Sets the display to the given size. The same grid size is used, but the
-     * cell dimensions will be changed to fit the grid within the given
-     * parameters. Can be called on an active panel, causing the panel to
-     * resize.
-     *
-     * The input to the display must be provided again, all data regarding the
-     * output is removed.
-     *
-     * @param width
-     * @param height
-     */
-    public void setMaxDisplaySize(int width, int height);
 
     /**
      * Initializes the component with the supplied values. The cells will be set
@@ -115,7 +75,7 @@ public interface SGPane {
      * @param x
      * @param y
      */
-    public void clearCell(int x, int y);
+    public void clear(int x, int y);
 
     /**
      * Clears the cell at the location given with the provided color.
@@ -124,7 +84,7 @@ public interface SGPane {
      * @param y
      * @param color
      */
-    public void clearCell(int x, int y, Color color);
+    public void clear(int x, int y, Color color);
 
     /**
      * Sets the background to the provided color. Does not change the
@@ -146,7 +106,7 @@ public interface SGPane {
      * @param y The y coordinate to set
      * @param c The character to be displayed
      */
-    public void placeCharacter(int x, int y, char c);
+    public void put(int x, int y, char c);
 
     /**
      * Sets one specific block to the given character with the given foreground
@@ -161,7 +121,7 @@ public interface SGPane {
      * @param fore The foreground color
      * @param back The background color
      */
-    public void placeCharacter(int x, int y, char c, Color fore, Color back);
+    public void put(int x, int y, char c, Color fore, Color back);
 
     /**
      * Sets the block at the given coordinates to contain the passed in
@@ -173,7 +133,7 @@ public interface SGPane {
      * @param c
      * @param fore
      */
-    public void placeCharacter(int x, int y, char c, Color fore);
+    public void put(int x, int y, char c, Color fore);
 
     /**
      * Prints out a string starting at the given offset position. Any portion of
@@ -181,10 +141,10 @@ public interface SGPane {
      * color is used and the background is not effected.
      *
      * @param string
-     * @param xOffset
-     * @param yOffset
+     * @param x
+     * @param y
      */
-    public void placeHorizontalString(int xOffset, int yOffset, String string);
+    public void placeHorizontalString(int x, int y, String string);
 
     /**
      * Prints out a string vertically starting at the given offset position and
@@ -239,7 +199,7 @@ public interface SGPane {
      * @param xOffset
      * @param yOffset
      */
-    public void placeText(int xOffset, int yOffset, char[][] chars);
+    public void put(int xOffset, int yOffset, char[][] chars);
 
     /**
      * Sets the contents of the component to reflect the two dimensional
@@ -251,7 +211,7 @@ public interface SGPane {
      * @param foreground
      * @param background
      */
-    public void placeText(int xOffset, int yOffset, char[][] chars, Color foreground, Color background);
+    public void put(int xOffset, int yOffset, char[][] chars, Color foreground, Color background);
 
     /**
      * Prints out a string starting at the given offset position. Any portion of
