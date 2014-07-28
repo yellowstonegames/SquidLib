@@ -6,7 +6,6 @@ import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.util.DirectionIntercardinal;
 
@@ -22,13 +21,13 @@ public class TextCellFactory {
 
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
     private Font font;
-    private String fitting = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/";
+    private String fitting = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\";
     private ArrayList<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
     private boolean antialias = false;
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     private int cellHeight = 10;
     private int cellWidth = 10;
-    private TreeMap<String, BufferedImage> blocks = new TreeMap<>();
+    private ImageCellMap blocks = new ImageCellMap(cellWidth, cellHeight);
     private BufferedImage whiteRectangle;
 
     {
@@ -52,10 +51,10 @@ public class TextCellFactory {
      */
     public TextCellFactory(TextCellFactory other) {
         antialias = other.antialias;
-        blocks = new TreeMap<>(other.blocks);
         bottomPadding = other.bottomPadding;
         cellHeight = other.cellHeight;
         cellWidth = other.cellWidth;
+        blocks = new ImageCellMap(cellWidth, cellHeight);
         fitting = other.fitting;
         font = other.font;
         horizontalOffset = other.horizontalOffset;

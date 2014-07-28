@@ -1,7 +1,6 @@
 package squidpony.squidgrid.gui.swing;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -108,7 +107,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
 
     @Override
     public void setText(char[][] chars) {
-        placeText(0, 0, chars);
+        put(0, 0, chars);
     }
 
     public void setImageCellMap(ImageCellMap map) {
@@ -154,19 +153,19 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     @Override
-    public void placeText(int xOffset, int yOffset, char[][] chars) {
-        placeText(xOffset, yOffset, chars, defaultForeground, null);
+    public void put(int xOffset, int yOffset, char[][] chars) {
+        put(xOffset, yOffset, chars, defaultForeground, null);
     }
 
     @Override
-    public void placeText(int xOffset, int yOffset, char[][] chars, Color foreground, Color background) {
+    public void put(int xOffset, int yOffset, char[][] chars, Color foreground, Color background) {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
                     if (background != null) {
-                        placeCharacter(x, y, chars[x - xOffset][y - yOffset], foreground, background);
+                        put(x, y, chars[x - xOffset][y - yOffset], foreground, background);
                     } else {
-                        placeCharacter(x, y, chars[x - xOffset][y - yOffset], foreground);
+                        put(x, y, chars[x - xOffset][y - yOffset], foreground);
                     }
                 }
             }
@@ -184,12 +183,12 @@ public class SwingPane extends JLayeredPane implements SGPane {
         for (int i = 0; i < string.length(); i++) {
             temp[i][0] = string.charAt(i);
         }
-        placeText(xOffset, yOffset, temp, foreground, background);
+        put(xOffset, yOffset, temp, foreground, background);
     }
 
     @Override
     public void placeVerticalString(int xOffset, int yOffset, String string, Color foreground, Color background) {
-        placeText(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground, background);
+        put(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground, background);
     }
 
     @Override
@@ -204,7 +203,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
      * @param y
      */
     public void deleteCell(int x, int y) {
-        placeCharacter(x, y, ' ', SColor.TRANSPARENT, SColor.TRANSPARENT);
+        put(x, y, ' ', SColor.TRANSPARENT, SColor.TRANSPARENT);
     }
 
     /**
@@ -222,13 +221,13 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     @Override
-    public void clearCell(int x, int y) {
-        placeCharacter(x, y, ' ');
+    public void clear(int x, int y) {
+        put(x, y, ' ');
     }
 
     @Override
-    public void clearCell(int x, int y, Color color) {
-        placeCharacter(x, y, ' ', color, color);
+    public void clear(int x, int y, Color color) {
+        put(x, y, ' ', color, color);
     }
 
     @Override
@@ -237,17 +236,17 @@ public class SwingPane extends JLayeredPane implements SGPane {
             return;//skip if out of bounds
         }
         BufferedImage fore = foregroundContents[x][y];
-        clearCell(x, y, color);
+        clear(x, y, color);
         foregroundContents[x][y] = fore;
     }
 
     @Override
-    public void placeCharacter(int x, int y, char c) {
-        placeCharacter(x, y, c, defaultForeground);
+    public void put(int x, int y, char c) {
+        put(x, y, c, defaultForeground);
     }
 
     @Override
-    public void placeCharacter(int x, int y, char c, Color fore, Color back) {
+    public void put(int x, int y, char c, Color fore, Color back) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
@@ -257,7 +256,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
     }
 
     @Override
-    public void placeCharacter(int x, int y, char c, Color fore) {
+    public void put(int x, int y, char c, Color fore) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
@@ -277,7 +276,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
         textFactory = factory;
         setFont(textFactory.getFont());
         doInitialization(gridWidth, gridHeight);
-        imageCellMap = new ImageCellMap(cellDimension);
+        imageCellMap = new ImageCellMap(cellDimension.width, cellDimension.height);
     }
 
     @Override
@@ -285,7 +284,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
         textFactory.initializeBySize(cellWidth, cellHeight, font);
         setFont(textFactory.getFont());
         doInitialization(gridWidth, gridHeight);
-        imageCellMap = new ImageCellMap(cellDimension);
+        imageCellMap = new ImageCellMap(cellDimension.width, cellDimension.height);
     }
 
     @Override
@@ -293,7 +292,7 @@ public class SwingPane extends JLayeredPane implements SGPane {
         textFactory.initializeByFont(font);
         setFont(textFactory.getFont());
         doInitialization(gridWidth, gridHeight);
-        imageCellMap = new ImageCellMap(cellDimension);
+        imageCellMap = new ImageCellMap(cellDimension.width, cellDimension.height);
     }
 
     /**
@@ -494,18 +493,22 @@ public class SwingPane extends JLayeredPane implements SGPane {
             return;//no manager means nothing to trim
         }
         LinkedList<Animation> removals = new LinkedList<>();
-        for (Animation anim : animations) {
-            if (!anim.isActive()) {
-                removals.add(anim);
-            }
-        }
+        animations.stream().filter((anim) -> (!anim.isActive())).forEach((anim) -> {
+            removals.add(anim);
+        });
         animations.removeAll(removals);
-        for (Animation anim : removals) {
+        removals.stream().map((anim) -> {
             animationManager.stopAnimation(anim);
+            return anim;
+        }).map((anim) -> {
             anim.remove();
+            return anim;
+        }).map((anim) -> {
             foregroundContents[anim.getLocation().x / cellDimension.width][anim.getLocation().y / cellDimension.height] = anim.getImage();
+            return anim;
+        }).forEach((anim) -> {
             imageChanged[anim.getLocation().x / cellDimension.width][anim.getLocation().y / cellDimension.height] = true;
-        }
+        });
     }
 
     /**
@@ -545,44 +548,4 @@ public class SwingPane extends JLayeredPane implements SGPane {
         return cellDimension.width;
     }
 
-    @Override
-    public void highlight(int x, int y) {
-        highlight(x, y, x, y);
-    }
-
-    @Override
-    public void highlight(int startx, int starty, int endx, int endy) {
-        highlight = new BufferedImage((cellDimension.width * (endx - startx + 1)) + 2, cellDimension.height * (endy - starty + 1) + 2, BufferedImage.TYPE_4BYTE_ABGR);
-        highlightLocation = new Point(startx * cellDimension.width, starty * cellDimension.height);
-        Graphics2D g = highlight.createGraphics();
-//        g.setStroke(new BasicStroke(1));
-        g.setColor(SColor.ALIZARIN);
-        g.drawRect(0, 0, (endx - startx + 1) * cellDimension.width + 1, (endy - starty + 1) * cellDimension.height + 1);
-        g.setColor(SColor.FADED_SEN_NO_RIKYUS_TEA);
-        g.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[]{3.0f}, 0.0f));
-        g.drawRect(0, 0, (endx - startx + 1) * cellDimension.width + 1, (endy - starty + 1) * cellDimension.height + 1);
-    }
-
-    @Override
-    public void removeHighlight() {
-        highlight = null;
-    }
-
-    @Override
-    public void setMaxDisplaySize(int width, int height) {
-//        boolean changed = false;
-        while (getWidth() > width || getHeight() > height) {//down size by font until an acceptable size is reached
-            initialize(gridWidth, gridHeight, new Font(getFont().getFamily(), getFont().getStyle(), getFont().getSize() - 1));
-//            changed = true;
-        }
-//        if (changed) {
-//            for (int x = 0; x < cellDimension.width; x++) {
-//                for (int y = 0; y < cellDimension.height; y++) {
-//                    imageChanged[x][y] = true;//mark everything as changed
-//                    clearCell(x, y);
-//                }
-//            }
-//            refresh();
-//        }
-    }
 }
