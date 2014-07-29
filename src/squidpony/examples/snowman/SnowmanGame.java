@@ -1,7 +1,6 @@
-package squidpony.squidgrid.generation;
+package squidpony.examples.snowman;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -375,6 +374,7 @@ public class SnowmanGame {
         frame.addKeyListener(keyListener);
 
         panel = new JPanel();
+        panel.setBackground(SColor.BLACK);
         panel.setLayout(new BorderLayout());
 
         TextCellFactory textFactory = new TextCellFactory(font, cellWidth, cellHeight, true, 0, CHARS_USED);

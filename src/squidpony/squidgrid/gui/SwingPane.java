@@ -27,7 +27,7 @@ public class SwingPane extends JLayeredPane {
     private static Font DEFAULT_FONT = new Font("Helvetica", Font.PLAIN, 22);
     private AnimationManager animationManager;
     private final ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<>();
-    private BufferedImage[][] foregroundContents;
+    private BufferedImage[][] contents;
     private boolean[][] imageChanged;
     private BufferedImage contentsImage = new BufferedImage(20, 20, BufferedImage.TYPE_4BYTE_ABGR);
     private Color defaultForeground = SColor.WHITE;
@@ -74,7 +74,7 @@ public class SwingPane extends JLayeredPane {
         }
 
         setOpaque(false);
-        foregroundContents = new BufferedImage[gridWidth][gridHeight];
+        contents = new BufferedImage[gridWidth][gridHeight];
         imageChanged = new boolean[gridWidth][gridHeight];
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
@@ -101,7 +101,7 @@ public class SwingPane extends JLayeredPane {
      * @return
      */
     public BufferedImage getImage(int x, int y) {
-        return foregroundContents[x][y];
+        return contents[x][y];
     }
 
     @Override
@@ -121,7 +121,7 @@ public class SwingPane extends JLayeredPane {
     }
 
     public void put(int x, int y, BufferedImage image) {
-        foregroundContents[x][y] = image;
+        contents[x][y] = image;
         imageChanged[x][y] = true;
     }
 
@@ -130,7 +130,7 @@ public class SwingPane extends JLayeredPane {
         if (image == null) {
             image = imageCellMap.getNullImage();
         }
-        foregroundContents[x][y] = image;
+        contents[x][y] = image;
         imageChanged[x][y] = true;
     }
 
@@ -221,16 +221,6 @@ public class SwingPane extends JLayeredPane {
     }
 
     /**
-     * Removes the cell entirely, leaving a transparent area.
-     *
-     * @param x
-     * @param y
-     */
-    public void deleteCell(int x, int y) {
-        SwingPane.this.put(x, y, ' ', SColor.TRANSPARENT);
-    }
-
-    /**
      * Erases the entire panel, leaving only a transparent space.
      */
     public void erase() {
@@ -244,23 +234,53 @@ public class SwingPane extends JLayeredPane {
         redraw();
     }
 
+    /**
+     * Removes the contents of this cell, leaving a transparent space.
+     * 
+     * @param x
+     * @param y 
+     */
     public void clear(int x, int y) {
-        this.put(x, y, ' ');
+        this.put(x, y, SColor.TRANSPARENT);
     }
 
     public void put(int x, int y, SColor color) {
-        SwingPane.this.put(x, y, textFactory.getSolid(color));
+        put(x, y, textFactory.getSolid(color));
     }
 
     public void put(int x, int y, char c) {
-        SwingPane.this.put(x, y, c, defaultForeground);
+        put(x, y, c, defaultForeground);
+    }
+    
+    /**
+     * Takes a unicode codepoint for input.
+     * 
+     * @param x
+     * @param y
+     * @param code 
+     */
+    public void put(int x, int y, int code){
+        put(x, y, code, defaultForeground);
     }
 
-    public void put(int x, int y, char c, Color fore) {
+    public void put(int x, int y, char c, Color color) {
+        put(x, y, (int)c, color);
+    }
+    
+    
+    /**
+     * Takes a unicode codepoint for input.
+     * 
+     * @param x
+     * @param y
+     * @param code
+     * @param color 
+     */
+    public void put(int x, int y, int code, Color color) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
-        foregroundContents[x][y] = textFactory.get(c, fore);
+        contents[x][y] = textFactory.get(code, color);
         imageChanged[x][y] = true;
     }
 
@@ -297,8 +317,8 @@ public class SwingPane extends JLayeredPane {
                     g.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
                     g.setComposite(c);
 
-                    if (foregroundContents[x][y] != null) {
-                        g.drawImage(foregroundContents[x][y], null, x * cellWidth, y * cellHeight);
+                    if (contents[x][y] != null) {
+                        g.drawImage(contents[x][y], null, x * cellWidth, y * cellHeight);
                     }
                     imageChanged[x][y] = false;
                 }
@@ -327,10 +347,10 @@ public class SwingPane extends JLayeredPane {
      * @param direction
      */
     public void bump(Point location, Point direction) {
-        if (foregroundContents[location.x][location.y] != null) {
+        if (contents[location.x][location.y] != null) {
             int duration = 20;
-            Animation anim = new BumpAnimation(foregroundContents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), new Dimension(cellWidth / 3, cellHeight / 3), direction, duration);
-            foregroundContents[location.x][location.y] = null;
+            Animation anim = new BumpAnimation(contents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), new Dimension(cellWidth / 3, cellHeight / 3), direction, duration);
+            contents[location.x][location.y] = null;
             imageChanged[location.x][location.y] = true;
             redraw();
             animations.add(anim);
@@ -371,9 +391,9 @@ public class SwingPane extends JLayeredPane {
      * @param duration
      */
     public void slide(Point start, Point end, int duration) {
-        if (foregroundContents[start.x][start.y] != null) {
-            Animation anim = new SlideAnimation(foregroundContents[start.x][start.y], new Point(start.x * cellWidth, start.y * cellHeight), new Point(end.x * cellWidth, end.y * cellHeight), duration);
-            foregroundContents[start.x][start.y] = null;
+        if (contents[start.x][start.y] != null) {
+            Animation anim = new SlideAnimation(contents[start.x][start.y], new Point(start.x * cellWidth, start.y * cellHeight), new Point(end.x * cellWidth, end.y * cellHeight), duration);
+            contents[start.x][start.y] = null;
             imageChanged[start.x][start.y] = true;
             redraw();
             animations.add(anim);
@@ -390,9 +410,9 @@ public class SwingPane extends JLayeredPane {
      * @param location
      */
     public void wiggle(Point location) {
-        if (foregroundContents[location.x][location.y] != null) {
-            Animation anim = new WiggleAnimation(foregroundContents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), 0.3, new Point(cellWidth / 4, cellHeight / 4), 160);
-            foregroundContents[location.x][location.y] = null;
+        if (contents[location.x][location.y] != null) {
+            Animation anim = new WiggleAnimation(contents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), 0.3, new Point(cellWidth / 4, cellHeight / 4), 160);
+            contents[location.x][location.y] = null;
             imageChanged[location.x][location.y] = true;
             redraw();
             animations.add(anim);
@@ -422,7 +442,7 @@ public class SwingPane extends JLayeredPane {
             anim.remove();
             return anim;
         }).map((anim) -> {
-            foregroundContents[anim.getLocation().x / cellWidth][anim.getLocation().y / cellHeight] = anim.getImage();
+            contents[anim.getLocation().x / cellWidth][anim.getLocation().y / cellHeight] = anim.getImage();
             return anim;
         }).forEach((anim) -> {
             imageChanged[anim.getLocation().x / cellWidth][anim.getLocation().y / cellHeight] = true;
