@@ -22,9 +22,9 @@ import squidpony.annotation.Beta;
 import squidpony.squidcolor.SColor;
 import squidpony.squidcolor.SColorFactory;
 import squidpony.squidgrid.gui.SGPane;
-import squidpony.squidgrid.gui.awt.TextCellFactory;
-import squidpony.squidgrid.gui.awt.event.SGMouseListener;
-import squidpony.squidgrid.gui.swing.SwingPane;
+import squidpony.squidgrid.gui.TextCellFactory;
+import squidpony.squidgrid.gui.SGMouseListener;
+import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
@@ -139,22 +139,22 @@ public class BootStrapFrame implements SGPane {
         mapPanel.refresh();
         frame.add(mapPanel, BorderLayout.WEST);
 
-        statsPanel = new SwingPane(statsWidth, mapPanel.getGridHeight(), textFactory);
+        statsPanel = new SwingPane(statsWidth, mapPanel.gridHeight(), textFactory);
         statsPanel.setDefaultBackground(SColor.DARK_GRAY);
         statsPanel.setDefaultForeground(SColor.RUST);
         statsPanel.refresh();
         frame.add(statsPanel, BorderLayout.EAST);
 
-        outputPanel = new SwingPane(mapPanel.getGridWidth() + statsPanel.getGridWidth(), outputLines, textFactory);
+        outputPanel = new SwingPane(mapPanel.gridWidth() + statsPanel.gridWidth(), outputLines, textFactory);
         outputPanel.setDefaultBackground(SColor.BLACK);
         outputPanel.setDefaultForeground(SColor.DODGER_BLUE);
-        outputPanel.put(outputPanel.getGridWidth() - 1, 0, upChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
-        outputPanel.put(outputPanel.getGridWidth() - 1, outputPanel.getGridHeight() - 1, downChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
-        for (int y = 1; y < outputPanel.getGridHeight() - 1; y++) {//fill in vertical line between scroll arrowheads
-            outputPanel.clear(outputPanel.getGridWidth() - 1, y, SColor.SILVER);
+        outputPanel.put(outputPanel.gridWidth() - 1, 0, upChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
+        outputPanel.put(outputPanel.gridWidth() - 1, outputPanel.gridHeight() - 1, downChar, SColor.DARK_BLUE_DYE, SColor.SILVER);
+        for (int y = 1; y < outputPanel.gridHeight() - 1; y++) {//fill in vertical line between scroll arrowheads
+            outputPanel.clear(outputPanel.gridWidth() - 1, y, SColor.SILVER);
         }
         updateOutput();
-        outputPanel.addMouseListener(new SGMouseListener(outputPanel.getCellWidth(), outputPanel.getCellHeight(), new OutputMouseListener()));
+        outputPanel.addMouseListener(new SGMouseListener(outputPanel.cellWidth(), outputPanel.cellHeight(), new OutputMouseListener()));
 
         frame.add(outputPanel, BorderLayout.SOUTH);
 
@@ -272,8 +272,8 @@ public class BootStrapFrame implements SGPane {
     }
 
     private void updateOutput() {
-        for (int x = 0; x < outputPanel.getGridWidth() - 1; x++) {//clear everything but the scroll arrows
-            for (int y = 0; y < outputPanel.getGridHeight(); y++) {
+        for (int x = 0; x < outputPanel.gridWidth() - 1; x++) {//clear everything but the scroll arrows
+            for (int y = 0; y < outputPanel.gridHeight(); y++) {
                 outputPanel.clear(x, y);
             }
         }
@@ -329,23 +329,23 @@ public class BootStrapFrame implements SGPane {
     }
 
     @Override
-    public int getCellHeight() {
-        return mapPanel.getCellHeight();
+    public int cellHeight() {
+        return mapPanel.cellHeight();
     }
 
     @Override
-    public int getCellWidth() {
-        return mapPanel.getCellWidth();
+    public int cellWidth() {
+        return mapPanel.cellWidth();
     }
 
     @Override
-    public int getGridHeight() {
-        return mapPanel.getGridHeight();
+    public int gridHeight() {
+        return mapPanel.gridHeight();
     }
 
     @Override
-    public int getGridWidth() {
-        return mapPanel.getGridHeight();
+    public int gridWidth() {
+        return mapPanel.gridHeight();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package squidpony.squidgrid.gui.awt.event;
+package squidpony.squidgrid.gui;
 
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputListener;

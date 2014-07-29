@@ -1,5 +1,7 @@
 package squidpony.squidgrid.generation;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -13,9 +15,9 @@ import javax.swing.JPanel;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.fov.FOVTranslator;
 import squidpony.squidgrid.fov.ShadowFOV;
-import squidpony.squidgrid.gui.awt.TextCellFactory;
-import squidpony.squidgrid.gui.awt.event.SGKeyListener;
-import squidpony.squidgrid.gui.swing.SwingPane;
+import squidpony.squidgrid.gui.TextCellFactory;
+import squidpony.squidgrid.gui.SGKeyListener;
+import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
@@ -25,9 +27,10 @@ import squidpony.squidgrid.util.DirectionIntercardinal;
  */
 public class SnowmanGame {
 
+    private static final int cellWidth = 22, cellHeight = 22;
     private static final int width = 50, height = 30, statWidth = 12, fontSize = 22, outputLines = 1;
     private static final int minimumRoomSize = 3;
-    private static final char[] CHARS_USED = new char[]{'☃', '☺', '▒', '.', 'X', 'y'};
+    private static final String CHARS_USED = "☃☺.,Xy";//even though '▒' is used, it makes sizing weird and it's okay if it doesn't all fit in the cell so it's not in this list
     private final FOVTranslator fov = new FOVTranslator(new ShadowFOV());
     private final Random rng = new squidpony.squidmath.RNG();
     private JFrame frame;
@@ -66,8 +69,7 @@ public class SnowmanGame {
     }
 
     /**
-     * This is the main game loop method that takes input and process the
-     * results. Right now it doesn't loop!
+     * This is the main game loop method that takes input and process the results. Right now it doesn't loop!
      */
     private void runTurn() {
         int key = keyListener.next().getExtendedKeyCode();
@@ -87,11 +89,9 @@ public class SnowmanGame {
     }
 
     /**
-     * Attempts to move in the given direction. If a monster is in that
-     * direction then the player attacks the monster.
+     * Attempts to move in the given direction. If a monster is in that direction then the player attacks the monster.
      *
-     * Returns false if there was a wall in the direction and so no action was
-     * taken.
+     * Returns false if there was a wall in the direction and so no action was taken.
      *
      * @param dir
      * @return
@@ -146,11 +146,11 @@ public class SnowmanGame {
     private void updateStats() {
         int y = 0;
         String info = "STATS";
-        statsPanel.placeHorizontalString((statWidth - info.length()) / 2, y, info);
+        statsPanel.put((statWidth - info.length()) / 2, y, info);
 
         y += 2;
         info = "Health " + player.getHealth();
-        statsPanel.placeHorizontalString((statWidth - info.length()) / 2, y, info);
+        statsPanel.put((statWidth - info.length()) / 2, y, info);
         statsPanel.refresh();
     }
 
@@ -160,7 +160,7 @@ public class SnowmanGame {
      * @param message
      */
     private void printOut(String message) {
-        outputPanel.placeHorizontalString(0, 0, message);
+        outputPanel.put(0, 0, message);
         outputPanel.refresh();
     }
 
@@ -273,8 +273,7 @@ public class SnowmanGame {
     }
 
     /**
-     * Randomly places a group of walls in the map. This replaces whatever was
-     * in that location previously.
+     * Randomly places a group of walls in the map. This replaces whatever was in that location previously.
      */
     private void placeWallChunk() {
         int spread = 5;
@@ -327,8 +326,7 @@ public class SnowmanGame {
     }
 
     /**
-     * Moves the monster given if possible. Monsters will not move into walls,
-     * other monsters, or the player.
+     * Moves the monster given if possible. Monsters will not move into walls, other monsters, or the player.
      *
      * @param monster
      */
@@ -377,28 +375,23 @@ public class SnowmanGame {
         frame.addKeyListener(keyListener);
 
         panel = new JPanel();
+        panel.setLayout(new BorderLayout());
 
-        mapPanel = new SwingPane(width, height, font);
-
-        TextCellFactory textFactory = mapPanel.getTextCellFactory();
-        textFactory.setAntialias(true);
-        textFactory.setFitCharacters(CHARS_USED);
-        textFactory.initializeBySize(mapPanel.getCellWidth(), mapPanel.getCellHeight(), font);
-        mapPanel.placeHorizontalString(width / 2 - 4, height / 2, "Loading");
+        TextCellFactory textFactory = new TextCellFactory(font, cellWidth, cellHeight, true, 0, CHARS_USED);
+        mapPanel = new SwingPane(width, height, textFactory, null);
+        mapPanel.put(width / 2 - 4, height / 2, "Loading");
         mapPanel.refresh();
-        panel.add(mapPanel);
+        panel.add(mapPanel, BorderLayout.WEST);
 
-        statsPanel = new SwingPane(mapPanel.getCellWidth(), mapPanel.getCellHeight(), statWidth, mapPanel.getGridHeight(), font);
-        statsPanel.setDefaultBackground(SColor.DARK_GRAY);
+        statsPanel = new SwingPane(statWidth, mapPanel.gridHeight(), textFactory, null);
         statsPanel.setDefaultForeground(SColor.RUST);
         statsPanel.refresh();
-        panel.add(statsPanel);
+        panel.add(statsPanel, BorderLayout.EAST);
 
-        outputPanel = new SwingPane(mapPanel.getGridWidth() + statsPanel.getGridWidth(), outputLines, font);
-        outputPanel.setDefaultBackground(SColor.ALICE_BLUE);
+        outputPanel = new SwingPane(mapPanel.gridWidth() + statsPanel.gridWidth(), outputLines, textFactory, null);
         outputPanel.setDefaultForeground(SColor.BURNT_BAMBOO);
         outputPanel.refresh();
-        panel.add(outputPanel);
+        panel.add(outputPanel, BorderLayout.SOUTH);
 
         frame.add(panel);
         frame.pack();
