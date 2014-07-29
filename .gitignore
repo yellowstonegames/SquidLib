@@ -1,8 +1,6 @@
 # Build and Release Folders
-nbproject/private/
+nbproject/
 build/
 
 # Class Files #
 *.class
-nbproject/private/private.xml
-nbproject/private/private.xml
