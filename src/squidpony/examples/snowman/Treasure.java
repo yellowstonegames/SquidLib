@@ -1,4 +1,4 @@
-package squidpony.squidgrid.generation;
+package squidpony.examples.snowman;
 
 /**
  * This class represents some item of treasure found in the game.

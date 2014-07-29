@@ -35,14 +35,9 @@ public class TextCellFactory {
     private ArrayList<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
     private boolean antialias = false;
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
-    private BufferedImage whiteRectangle;
     private int cellWidth = 1, cellHeight = 1;
     private final int width, height;
     private ImageCellMap map;
-
-    {
-        initWhite();
-    }
 
     /**
      * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but does
@@ -146,15 +141,7 @@ public class TextCellFactory {
         this.rightPadding = rightPadding;
         this.fitting = fitting;
         map = new ImageCellMap(width, height);
-        initWhite();
         initializeBySize(width, height, font);
-    }
-
-    private void initWhite() {
-        whiteRectangle = new BufferedImage(width * 2 + 2, height * 2 + 2, BufferedImage.TYPE_4BYTE_ABGR);
-        Graphics2D g = whiteRectangle.createGraphics();
-        g.setColor(SColor.WHITE);
-        g.fillRect(0, 0, whiteRectangle.getWidth(), whiteRectangle.getHeight());
     }
 
     /**
@@ -274,7 +261,9 @@ public class TextCellFactory {
         cellHeight *= 2;
         horizontalOffset = cellWidth / 2;
         verticalOffset = 0;
-        trimCell();
+        if (cellWidth > 0 && cellHeight > 0) {
+            trimCell();
+        }
     }
 
     private void trimCell() {
@@ -345,20 +334,21 @@ public class TextCellFactory {
         //try all font sizes and take largest that fits if passed in font is too large
         int fontSize = font.getSize();
         int largeSide = Math.max(cellWidth, cellHeight);
-        int largeDesiredSide = Math.max(desiredWidth, desiredHeight);
-        fontSize = largeDesiredSide * fontSize / largeSide;//approximately the right ratio
-        fontSize *= 1.2;//pad just a bit
-        while (cellWidth > desiredWidth || cellHeight > desiredHeight) {
-            font = new Font(font.getFontName(), font.getStyle(), fontSize);
-            initializeByFont(font);
-            fontSize--;
+        if (largeSide > 0) {
+            int largeDesiredSide = Math.max(desiredWidth, desiredHeight);
+            fontSize = largeDesiredSide * fontSize / largeSide;//approximately the right ratio
+            fontSize *= 1.2;//pad just a bit
+            while (cellWidth > desiredWidth || cellHeight > desiredHeight) {
+                font = new Font(font.getFontName(), font.getStyle(), fontSize);
+                initializeByFont(font);
+                fontSize--;
+            }
+
+            horizontalOffset += (desiredWidth - cellWidth) / 2;//increase by added width, error on the side of one pixel left of center
+            verticalOffset += (desiredHeight - cellHeight) / 2;
+            cellWidth = desiredWidth;
+            cellHeight = desiredHeight;
         }
-
-        horizontalOffset += (desiredWidth - cellWidth) / 2;//increase by added width, error on the side of one pixel left of center
-        verticalOffset += (desiredHeight - cellHeight) / 2;
-        cellWidth = desiredWidth;
-        cellHeight = desiredHeight;
-
         map.clear();
     }
 
@@ -468,7 +458,7 @@ public class TextCellFactory {
      * @return
      */
     public BufferedImage get(int code, Color color) {
-        String search = code + " " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
+        String search = new String(Character.toChars(code)) + " " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
         BufferedImage block = map.get(search);
 
         if (block == null) {
@@ -489,7 +479,7 @@ public class TextCellFactory {
         BufferedImage block = map.get(search);
 
         if (block == null) {
-            block = new BufferedImage(width * 2 + 2, height * 2 + 2, BufferedImage.TYPE_4BYTE_ABGR);
+            block = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
             Graphics2D g = block.createGraphics();
             g.setColor(color);
             g.fillRect(0, 0, block.getWidth(), block.getHeight());
@@ -500,7 +490,8 @@ public class TextCellFactory {
 
     private BufferedImage makeMonoImage(int code, BufferedImage i) {
         Graphics2D g = i.createGraphics();
-        g.drawImage(whiteRectangle, 0, 0, null);
+        g.setColor(SColor.WHITE);
+        g.fillRect(0, 0, i.getWidth(), i.getHeight());
         drawForeground(g, code, Color.BLACK);
         return i;
     }
