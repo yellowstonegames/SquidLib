@@ -12,7 +12,8 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import squidpony.squidcolor.SColorFactory;
-import squidpony.squidgrid.gui.swing.SwingPane;
+import squidpony.squidgrid.gui.SwingPane;
+import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.shape.ShapeGenerator;
 
 /**
@@ -127,7 +128,7 @@ public class MapGenerationTester {
 
     public void showColors(TiledShape shape) {
         JFrame frame = new JFrame();
-        SwingPane pane = new SwingPane(shape.getWidth(), shape.getHeight(), new Font("Ariel", Font.PLAIN, 10));
+        SwingPane pane = new SwingPane(shape.getWidth(), shape.getHeight(), new TextCellFactory(new Font("Ariel", Font.PLAIN, 10), 12, 12), null);
         frame.add(pane);
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -135,7 +136,7 @@ public class MapGenerationTester {
         frame.setVisible(true);
         for (int x = 0; x < shape.getWidth(); x++) {
             for (int y = 0; y < shape.getHeight(); y++) {
-                pane.setCellBackground(x, y, SColorFactory.asSColor(Integer.parseInt(shape.getStringAt(x, y))));
+                pane.put(x, y, SColorFactory.asSColor(Integer.parseInt(shape.getStringAt(x, y))));
             }
         }
         pane.refresh();

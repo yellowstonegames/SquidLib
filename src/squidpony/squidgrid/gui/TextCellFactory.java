@@ -1,4 +1,4 @@
-package squidpony.squidgrid.gui.awt;
+package squidpony.squidgrid.gui;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -12,73 +12,149 @@ import squidpony.squidgrid.util.DirectionIntercardinal;
 /**
  * Class for creating text blocks.
  *
- * The default characters guaranteed to fit are ASCII 33 through 125, which are the commonly used
- * symbols, numbers, and letters.
+ * The size of the Font used during construction is considered an upper limit. If needed, the font size will be reduced
+ * until all characters can fit within the specified cell size. If all character fit in the specified cell size at the
+ * passed in Font size, no change to the Font size will occur.
+ *
+ * The default characters guaranteed to fit are ASCII 33 through 125, which are the commonly used symbols, numbers, and
+ * letters.
+ *
+ * In order to easily support Unicode, code points are used.
+ *
+ * All images have transparent backgrounds.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class TextCellFactory {
 
+    private static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\";
+
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
     private Font font;
-    private String fitting = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\";
+    private String fitting = DEFAULT_FITTING;
     private ArrayList<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
     private boolean antialias = false;
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
-    private int cellHeight = 10;
-    private int cellWidth = 10;
-    private ImageCellMap blocks = new ImageCellMap(cellWidth, cellHeight);
     private BufferedImage whiteRectangle;
+    private int cellWidth = 1, cellHeight = 1;
+    private final int width, height;
+    private ImageCellMap map;
 
     {
         initWhite();
     }
 
     /**
-     * Sets up this factory to ensure ASCII (or UTF-8) characters in the range 33 to 125 all fit and
-     * no padding on the cells.
+     * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but does
+     * not size up.
      *
-     * After this object is created one of the initialization methods must be called before it can
-     * be used.
+     * The font will be rendered using antialias hinting. The default set of characters common to roguelikes will be
+     * used as the ones which will be guaranteed to fit.
+     *
+     * @param font the Font that the cells will be based on
+     * @param width the width of each cell
+     * @param height the height of each cell
      */
-    public TextCellFactory() {
+    public TextCellFactory(Font font, int width, int height) {
+        this(font, width, height, true);
     }
 
     /**
-     * Creates a new TextCellFactory as a deep copy of the provided one.
+     * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but does
+     * not size up.
      *
-     * @param other
+     * The default set of characters common to roguelikes will be used as the ones which will be guaranteed to fit.
+     *
+     * @param font the Font that the cells will be based on
+     * @param width the width of each cell
+     * @param height the height of each cell
+     * @param antialias true for using antialias hints during rendering
      */
-    public TextCellFactory(TextCellFactory other) {
-        antialias = other.antialias;
-        bottomPadding = other.bottomPadding;
-        cellHeight = other.cellHeight;
-        cellWidth = other.cellWidth;
-        blocks = new ImageCellMap(cellWidth, cellHeight);
-        fitting = other.fitting;
-        font = other.font;
-        horizontalOffset = other.horizontalOffset;
-        leftPadding = other.leftPadding;
-        rightPadding = other.rightPadding;
-        topPadding = other.topPadding;
-        verticalOffset = other.verticalOffset;
-        whiteRectangle = other.whiteRectangle;
+    public TextCellFactory(Font font, int width, int height, boolean antialias) {
+        this(font, width, height, antialias, 0);
+    }
+
+    /**
+     * * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but
+     * does not size up.
+     *
+     * @param font the Font that the cells will be based on
+     * @param width the width of each cell
+     * @param height the height of each cell
+     * @param antialias true for using antialias hints during rendering
+     * @param padding the minimum number of empty pixels on all sides of the cell
+     */
+    public TextCellFactory(Font font, int width, int height, boolean antialias, int padding) {
+        this(font, width, height, antialias, padding, DEFAULT_FITTING);
+    }
+
+    /**
+     * * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but
+     * does not size up.
+     *
+     * @param font the Font that the cells will be based on
+     * @param width the width of each cell
+     * @param height the height of each cell
+     * @param antialias true for using antialias hints during rendering
+     * @param padding the minimum number of empty pixels on all sides of the cell
+     * @param fitting a String containing all characters that will be guaranteed to fit
+     */
+    public TextCellFactory(Font font, int width, int height, boolean antialias, int padding, String fitting) {
+        this(font, width, height, antialias, padding, padding, padding, padding, fitting);
+
+    }
+
+    /**
+     * * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but
+     * does not size up.
+     *
+     * @param font the Font that the cells will be based on
+     * @param width the width of each cell
+     * @param height the height of each cell
+     * @param antialias true for using antialias hints during rendering
+     * @param topPadding the minimum number of empty pixels at the top of the cell
+     * @param bottomPadding the minimum number of empty pixels at the bottom of the cell
+     * @param leftPadding the minimum number of empty pixels at the left of the cell
+     * @param rightPadding the minimum number of empty pixels at the right of the cell
+     */
+    public TextCellFactory(Font font, int width, int height, boolean antialias, int topPadding, int bottomPadding, int leftPadding, int rightPadding) {
+        this(font, width, height, antialias, topPadding, bottomPadding, leftPadding, rightPadding, DEFAULT_FITTING);
+    }
+
+    /**
+     * * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but
+     * does not size up.
+     *
+     * @param font the Font that the cells will be based on
+     * @param width the width of each cell
+     * @param height the height of each cell
+     * @param antialias true for using antialias hints during rendering
+     * @param topPadding the minimum number of empty pixels at the top of the cell
+     * @param bottomPadding the minimum number of empty pixels at the bottom of the cell
+     * @param leftPadding the minimum number of empty pixels at the left of the cell
+     * @param rightPadding the minimum number of empty pixels at the right of the cell
+     * @param fitting a String containing all characters that will be guaranteed to fit
+     */
+    public TextCellFactory(Font font, int width, int height, boolean antialias, int topPadding, int bottomPadding, int leftPadding, int rightPadding, String fitting) {
+        this.font = font;
+        this.width = width;
+        this.height = height;
+        this.antialias = antialias;
+        this.topPadding = topPadding;
+        this.bottomPadding = bottomPadding;
+        this.leftPadding = leftPadding;
+        this.rightPadding = rightPadding;
+        this.fitting = fitting;
+        map = new ImageCellMap(width, height);
+        initWhite();
+        initializeBySize(width, height, font);
     }
 
     private void initWhite() {
-        whiteRectangle = new BufferedImage(100, 100, BufferedImage.TYPE_4BYTE_ABGR);
+        whiteRectangle = new BufferedImage(width * 2 + 2, height * 2 + 2, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = whiteRectangle.createGraphics();
         g.setColor(SColor.WHITE);
         g.fillRect(0, 0, whiteRectangle.getWidth(), whiteRectangle.getHeight());
-    }
-
-    /**
-     * Returns the dimension of a single grid cell.
-     *
-     * @return
-     */
-    public Dimension getCellDimension() {
-        return new Dimension(cellWidth, cellHeight);
     }
 
     /**
@@ -86,159 +162,36 @@ public class TextCellFactory {
      *
      * @return
      */
-    public Font getFont() {
+    public Font font() {
         return font;
     }
 
-    /**
-     * Clears out the backing cache. Should be used if a very large number of one-off cells are
-     * being made.
-     */
-    public void emptyCache() {
-        blocks.clear();
+    public int width() {
+        return width;
     }
 
-    /**
-     * Sets whether or not characters should be drawn with antialiasing.
-     *
-     * @param set
-     */
-    public void setAntialias(boolean set) {
-        if (set == antialias) {
-            return;//nothing to do
-        }
-
-        emptyCache();//since rendering is changed everything has to be cleared out
-        antialias = set;
+    public int height() {
+        return height;
     }
 
-    /**
-     * Sets the array of characters that will be checked to ensure they all fit in the text block.
-     * One of the provided initialization methods must be called to then make this take effect.
-     *
-     * @param fit
-     */
-    public void setFitCharacters(char[] fit) {
-        fitting = "";
-        for (char c : fit) {
-            fitting += c;
-        }
-        emptyCache();
-    }
-
-    /**
-     * Sets the characters that will be checked to be the ones in the provided string. One of the
-     * provided initialization methods must be called to then make this take effect.
-     *
-     * @param fit
-     */
-    public void setFitCharacters(String fit) {
-        fitting = fit;
-        emptyCache();
-    }
-
-    /**
-     * Adds to the array of characters that will be checked to ensure they all fit in the text
-     * block. One of the provided initialization methods must be called to then make this take
-     * effect.
-     *
-     * @param fit
-     */
-    public void addFit(char[] fit) {
-        for (char c : fit) {
-            fitting += c;
-        }
-        emptyCache();
-    }
-
-    /**
-     * Adds to the set of characters to be checked for fitting. One of the provided initialization
-     * methods must be called to then make this take effect.
-     *
-     * @param c
-     */
-    public void addFit(char c) {
-        fitting += c;
-        emptyCache();
-    }
-
-    /**
-     * Adds the string to the list of character that will be guaranteed to fit. One of the provided
-     * initialization methods must be called to then make this take effect.
-     *
-     * @param fit
-     */
-    public void addFit(String fit) {
-        fitting += fit;
-        emptyCache();
-    }
-
-    /**
-     * Sets the minimum amount of space between the characters and all four edges.
-     *
-     * @param pad
-     */
-    public void setPadding(int pad) {
-        leftPadding = pad;
-        rightPadding = pad;
-        topPadding = pad;
-        bottomPadding = pad;
-        emptyCache();
-    }
-
-    /**
-     * Sets the minimum amount of space between the characters and the edges.
-     *
-     * @param left
-     * @param right
-     * @param top
-     * @param bottom
-     */
-    public void setPadding(int left, int right, int top, int bottom) {
-        leftPadding = left;
-        rightPadding = right;
-        topPadding = top;
-        bottomPadding = bottom;
-        emptyCache();
-    }
-
-    /**
-     * Sets up the factory to provide images based on the font's size.
-     *
-     * @param font
-     */
-    public void initializeByFont(Font font) {
+    private void initializeByFont(Font font) {
         this.font = font;
         largeCharacters = new ArrayList<>();
-        emptyCache();
+        map.clear();
         sizeCellByFont();
-        emptyCache();
+        map.clear();
     }
 
-    /**
-     * Sets up the factory to provide images based on the cell cellWidth and cellHeight passed in.
-     * The font size will be used as a starting point, and reduced as needed to fit within the cell.
-     *
-     * @param cellWidth
-     * @param cellHeight
-     * @param font
-     */
-    public void initializeBySize(int cellWidth, int cellHeight, Font font) {
+    private void initializeBySize(int cellWidth, int cellHeight, Font font) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.font = font;
         largeCharacters = new ArrayList<>();
-        emptyCache();
+        map.clear();
         sizeCellByDimension();
-        emptyCache();
+        map.clear();
     }
 
-    /**
-     * Makes the cell as small as possible with the basic plane printable ASCII characters still
-     * fitting inside.
-     *
-     * @param whiteSpace true if an extra pixel should be ensured around the largest characters.
-     */
     private void sizeCellByFont() {
         cellWidth = 1;
         cellHeight = 1;
@@ -406,15 +359,9 @@ public class TextCellFactory {
         cellWidth = desiredWidth;
         cellHeight = desiredHeight;
 
-        this.emptyCache();
+        map.clear();
     }
 
-    /**
-     * Checks if printing this character will place anything in the square at all.
-     *
-     * @param code
-     * @return
-     */
     private boolean visible(int code, BufferedImage i) {
         BufferedImage testImage = makeMonoImage(code, i);
         //work from middle out to maximize chance of finding visilble bit
@@ -432,13 +379,13 @@ public class TextCellFactory {
         return false;//no pixels found
     }
 
-    private boolean willFit(int c, BufferedImage image) {
-        if (Character.isISOControl(c)) {//make sure it's a printable character
+    private boolean willFit(int code, BufferedImage image) {
+        if (Character.isISOControl(code)) {//make sure it's a printable character
             return true;
         }
 
         for (DirectionIntercardinal dir : DirectionIntercardinal.CARDINALS) {
-            if (!testSlide(c, dir, image)) {
+            if (!testSlide(code, dir, image)) {
                 return false;
             }
         }
@@ -448,23 +395,10 @@ public class TextCellFactory {
     }
 
     /**
-     * Returns true if the given character will fit inside the current cell dimensions with the
-     * current font. ISO Control characters are considered to fit by definition.
+     * Returns true if the given character will fit inside the current cell dimensions with the current font.
      *
-     * @param c
-     * @return
-     */
-    public boolean willFit(char c) {
-        BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
-        return willFit(c, image);
-    }
-
-    /**
-     * Returns true if the given character will fit inside the current cell dimensions with the
-     * current font.
-     *
-     * ISO Control characters, non-printing characters and invalid unicode characters are all
-     * considered by definition to fit.
+     * ISO Control characters, non-printing characters and invalid unicode characters are all considered by definition
+     * to fit.
      *
      * @param codepoint
      * @return
@@ -478,8 +412,8 @@ public class TextCellFactory {
     }
 
     /**
-     * Slides the character on pixel in the provided direction and test if fully exposed the
-     * opposite edge. Returns true if opposite edge was fully exposed.
+     * Slides the character on pixel in the provided direction and test if fully exposed the opposite edge. Returns true
+     * if opposite edge was fully exposed.
      *
      * @param code
      * @param dir
@@ -527,95 +461,59 @@ public class TextCellFactory {
     }
 
     /**
-     * Returns the image for the given character.
+     * Returns the image of the character represented by the passed in code point.
      *
-     * @param c
-     * @param foreground
-     * @param background
+     * @param code
+     * @param color
      * @return
      */
-    public BufferedImage getImageFor(char c, Color foreground, Color background) {
-        String search = getStringRepresentationOf(c, foreground, background);
-        BufferedImage block = (BufferedImage) blocks.get(search);
+    public BufferedImage get(int code, Color color) {
+        String search = code + " " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
+        BufferedImage block = map.get(search);
 
         if (block == null) {
-            block = makeImage(c, foreground, background);
-            blocks.put(search, block);
+            block = makeImage(code, color);
+            map.put(search, block);
         }
         return block;
     }
 
     /**
-     * Returns the image of the character provided with a transparent background.
+     * Returns a solid block of the provided color.
      *
-     * @param c
-     * @param foreground
+     * @param color
      * @return
      */
-    public BufferedImage getImageFor(char c, Color foreground) {
-        String search = getStringRepresentationOf(c, foreground);
-        BufferedImage block = (BufferedImage) blocks.get(search);
+    public BufferedImage getSolid(SColor color) {
+        String search = "Solid " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
+        BufferedImage block = map.get(search);
 
         if (block == null) {
-            block = makeImage(c, foreground);
-            blocks.put(search, block);
+            block = new BufferedImage(width * 2 + 2, height * 2 + 2, BufferedImage.TYPE_4BYTE_ABGR);
+            Graphics2D g = block.createGraphics();
+            g.setColor(color);
+            g.fillRect(0, 0, block.getWidth(), block.getHeight());
+            map.put(search, block);
         }
         return block;
     }
 
-    /**
-     * Returns a string representation of the character and the hex value of the foreground and
-     * background argb values.
-     *
-     * @param c
-     * @param foreground
-     * @param background
-     * @return
-     */
-    public String getStringRepresentationOf(char c, Color foreground, Color background) {
-        return c + " " + foreground.getClass().getSimpleName() + ": " + Integer.toHexString(foreground.getRGB())
-                + " " + background.getClass().getSimpleName() + ": " + Integer.toHexString(background.getRGB());
-    }
-
-    /**
-     * Returns a string representation of the character and the hex value of the foreground.
-     *
-     * @param c
-     * @param foreground
-     * @return
-     */
-    public String getStringRepresentationOf(char c, Color foreground) {
-        return c + " " + foreground.getClass().getSimpleName() + ": " + Integer.toHexString(foreground.getRGB());
-    }
-
-    private BufferedImage makeMonoImage(int c, BufferedImage i) {
+    private BufferedImage makeMonoImage(int code, BufferedImage i) {
         Graphics2D g = i.createGraphics();
         g.drawImage(whiteRectangle, 0, 0, null);
-//        g.setColor(Color.WHITE);
-//        g.fillRect(0, 0, cellWidth, cellHeight);
-        drawForeground(g, c, Color.BLACK);
+        drawForeground(g, code, Color.BLACK);
         return i;
     }
 
-    private BufferedImage makeImage(char c, Color foreground, Color background) {
+    private BufferedImage makeImage(int code, Color color) {
         BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
-//        g.drawImage(blackRectangle, 0, 0, null);//TODO -- replace with cached clearing rectangles for the color
-        g.setColor(background);
-        g.fillRect(0, 0, cellWidth, cellHeight);
-        drawForeground(g, c, foreground);
+        drawForeground(g, code, color);
         return i;
     }
 
-    private BufferedImage makeImage(char c, Color foreground) {
-        BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
-        Graphics2D g = i.createGraphics();
-        drawForeground(g, c, foreground);
-        return i;
-    }
-
-    private void drawForeground(Graphics2D g, int code, Color foreground) {
-        g.setColor(foreground);
+    private void drawForeground(Graphics2D g, int code, Color color) {
+        g.setColor(color);
         g.setFont(font);
 
         g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);

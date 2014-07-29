@@ -1,4 +1,4 @@
-package squidpony.squidgrid.gui.swing.animation;
+package squidpony.squidgrid.gui.animation;
 
 import java.awt.Dimension;
 import java.awt.Point;
