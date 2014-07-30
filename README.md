@@ -1,14 +1,14 @@
 SquidLib is a Java library that provides a full featured toolbox for working with turn based games in Swing and libGDX.
 --  
 
-SquidLib is used for Wyrm, Epigon, Attack the Geth, and other projects.
+SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, and other projects.
     
 
 Current Features:
 --
 ###Ease Of Use
 -	Standard GUI notation of (x,y) locations within the grid.
--	Uses Swing or libGDX
+-	Uses Swing components
 -	Any Font can be used
 -	Images may be used alongside characters in same panel
 --		Characters can be used as a drop-in fallback mechanism!
@@ -18,8 +18,8 @@ Current Features:
 --		Set size of the cell, number of cells in the grid, and Font to be used
 ---			Font is dynamically resized to fit optimally within the cell
 -	Font size and style can be changed on the fly
--	Standard JComponent that meets JavaBean requirements for use with NetBeans built-in GUI Builder
 -	Multiple grids of different configurations can be used simultaneously in the same display
+-   Multiple grids of different configurations can be overlayed allowing for transparency effects
 -	Basic Swing animation support
 
 ###Lots of Color
@@ -44,6 +44,8 @@ Current Features:
 ###Math Toolkit
 -	Custom extension of Random allows drop-in replacement with added features
 -	Able to find Bresenham Line for 2D and 3D coordinates.
+--      Also can use Wu or Elias Lines (antialiased Bresenham Lines)
+-   Perlin noise implementation
   
   
 GitHub repository: https://github.com/SquidPony/SquidLib
