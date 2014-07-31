@@ -62,7 +62,7 @@ public class FontChoiceDemo {
         display = new SwingPane(width, height, textFactory, null);
         back = new SwingPane(width, height, textFactory, null);
 
-        JLayeredPane layers = new JLayeredPane();
+        final JLayeredPane layers = new JLayeredPane();
         layers.setLayer(display, JLayeredPane.PALETTE_LAYER);
         layers.setLayer(back, JLayeredPane.DEFAULT_LAYER);
         layers.add(display);

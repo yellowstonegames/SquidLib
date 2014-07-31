@@ -431,22 +431,18 @@ public class SwingPane extends JLayeredPane {
             return;//no manager means nothing to trim
         }
         LinkedList<Animation> removals = new LinkedList<>();
-        animations.stream().filter((anim) -> (!anim.isActive())).forEach((anim) -> {
-            removals.add(anim);
-        });
+        for(Animation anim : animations){
+            if (!anim.isActive()){
+                removals.add(anim);
+            }
+        }
         animations.removeAll(removals);
-        removals.stream().map((anim) -> {
+        for(Animation anim : removals){
             animationManager.stopAnimation(anim);
-            return anim;
-        }).map((anim) -> {
             anim.remove();
-            return anim;
-        }).map((anim) -> {
             contents[anim.getLocation().x / cellWidth][anim.getLocation().y / cellHeight] = anim.getImage();
-            return anim;
-        }).forEach((anim) -> {
             imageChanged[anim.getLocation().x / cellWidth][anim.getLocation().y / cellHeight] = true;
-        });
+        }
     }
 
     /**
