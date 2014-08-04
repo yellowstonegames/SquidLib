@@ -1,5 +1,5 @@
 # Build and Release Folders
-nbproject/
+nbproject/private/
 build/
 
 # Class Files #
