@@ -3,8 +3,7 @@ package squidpony.squidgrid.util;
 import squidpony.squidutility.jdaygraph.Topology;
 
 /**
- * Represents the eight grid directions and the deltaX, deltaY values associated
- * with those directions. Only the four primary edges are represented, along
+ * Represents the four primary edges are represented, along
  * with NONE.
  *
  * The grid referenced has x positive to the right and y positive downwards on

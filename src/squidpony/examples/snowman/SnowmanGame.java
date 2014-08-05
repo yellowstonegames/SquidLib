@@ -1,6 +1,7 @@
 package squidpony.examples.snowman;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.fov.FOVTranslator;
 import squidpony.squidgrid.fov.ShadowFOV;
@@ -33,8 +34,7 @@ public class SnowmanGame {
     private final FOVTranslator fov = new FOVTranslator(new ShadowFOV());
     private final Random rng = new squidpony.squidmath.RNG();
     private JFrame frame;
-    private JPanel panel;
-    private SwingPane mapPanel, statsPanel, outputPanel;
+    private SwingPane mapPanel, mapBackPanel, statsPanel, outputPanel;
     private SGKeyListener keyListener;
     private Monster player;
     private int playerStrength = 7;
@@ -68,7 +68,8 @@ public class SnowmanGame {
     }
 
     /**
-     * This is the main game loop method that takes input and process the results. Right now it doesn't loop!
+     * This is the main game loop method that takes input and process the
+     * results. Right now it doesn't loop!
      */
     private void runTurn() {
         int key = keyListener.next().getExtendedKeyCode();
@@ -88,9 +89,11 @@ public class SnowmanGame {
     }
 
     /**
-     * Attempts to move in the given direction. If a monster is in that direction then the player attacks the monster.
+     * Attempts to move in the given direction. If a monster is in that
+     * direction then the player attacks the monster.
      *
-     * Returns false if there was a wall in the direction and so no action was taken.
+     * Returns false if there was a wall in the direction and so no action was
+     * taken.
      *
      * @param dir
      * @return
@@ -129,13 +132,18 @@ public class SnowmanGame {
      */
     private void updateMap() {
         doFOV();
+        mapBackPanel.erase();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
 //                map[x][y].setSeen(true);//uncomment this to see the fully generated map rather than the player's view
                 mapPanel.put(x, y, map[x][y].getSymbol(), map[x][y].getColor());
+                if (map[x][y].isSeen()) {
+                    mapBackPanel.put(x, y, SColor.DARK_SLATE_GRAY);
+                }
             }
         }
 
+        mapBackPanel.refresh();
         mapPanel.refresh();
     }
 
@@ -205,74 +213,30 @@ public class SnowmanGame {
         }
 
         //randomly place some chunks of wall
-        placeWallChunk();
-        placeWallChunk();
-        placeWallChunk();
-        placeWallChunk();
-        placeWallChunk();
-        placeWallChunk();
-        placeWallChunk();
-        placeWallChunk();
-        placeWallChunk();
+        for (int i = 0; i < 8; i++) {
+            placeWallChunk();
+        }
 
         //randomly place the player
         placeMonster(player);
 
         //randomly place some monsters
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
-        placeMonster(new Monster(Monster.SNOWMAN));
+        for (int i = 0; i < 20; i++) {
+            placeMonster(new Monster(Monster.SNOWMAN));
+        }
 
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Chocolate Coin", 1));
-        placeTreasure(new Treasure("Coal", 0));
-        placeTreasure(new Treasure("Coal", 0));
-        placeTreasure(new Treasure("Coal", 0));
-        placeTreasure(new Treasure("Coal", 0));
+        for (int i = 0; i < 10; i++) {
+            placeTreasure(new Treasure("Chocolate Coin", 1));
+        }
 
+        for (int i = 0; i < 5; i++) {
+            placeTreasure(new Treasure("Coal", 0));
+        }
     }
 
     /**
-     * Randomly places a group of walls in the map. This replaces whatever was in that location previously.
+     * Randomly places a group of walls in the map. This replaces whatever was
+     * in that location previously.
      */
     private void placeWallChunk() {
         int spread = 5;
@@ -325,7 +289,8 @@ public class SnowmanGame {
     }
 
     /**
-     * Moves the monster given if possible. Monsters will not move into walls, other monsters, or the player.
+     * Moves the monster given if possible. Monsters will not move into walls,
+     * other monsters, or the player.
      *
      * @param monster
      */
@@ -373,15 +338,25 @@ public class SnowmanGame {
         keyListener = new SGKeyListener(true, SGKeyListener.CaptureType.DOWN);
         frame.addKeyListener(keyListener);
 
-        panel = new JPanel();
+        Container panel = frame.getContentPane();
         panel.setBackground(SColor.BLACK);
         panel.setLayout(new BorderLayout());
 
+        JLayeredPane layers = new JLayeredPane();
         TextCellFactory textFactory = new TextCellFactory(font, cellWidth, cellHeight, true, 0, CHARS_USED);
         mapPanel = new SwingPane(width, height, textFactory, null);
         mapPanel.put(width / 2 - 4, height / 2, "Loading");
         mapPanel.refresh();
-        panel.add(mapPanel, BorderLayout.WEST);
+        mapBackPanel = new SwingPane(width, height, textFactory, null);
+        mapBackPanel.refresh();
+        layers.setLayer(mapPanel, JLayeredPane.PALETTE_LAYER);
+        layers.setLayer(mapBackPanel, JLayeredPane.DEFAULT_LAYER);
+        layers.add(mapPanel);
+        layers.add(mapBackPanel);
+
+        layers.setSize(mapPanel.getPreferredSize());
+        layers.setPreferredSize(mapPanel.getPreferredSize());
+        panel.add(layers, BorderLayout.WEST);
 
         statsPanel = new SwingPane(statWidth, mapPanel.gridHeight(), textFactory, null);
         statsPanel.setDefaultForeground(SColor.RUST);
@@ -393,7 +368,6 @@ public class SnowmanGame {
         outputPanel.refresh();
         panel.add(outputPanel, BorderLayout.SOUTH);
 
-        frame.add(panel);
         frame.pack();
     }
 
