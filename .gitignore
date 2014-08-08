@@ -1,6 +1,6 @@
 # Build and Release Folders
 nbproject/private/
 build/
-
-# Class Files #
+libgdx libraries/
 *.class
+dist/README.TXT

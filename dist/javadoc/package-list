@@ -13,6 +13,7 @@ squidpony.squidgrid.fov.threed
 squidpony.squidgrid.generation
 squidpony.squidgrid.gui
 squidpony.squidgrid.gui.animation
+squidpony.squidgrid.libgdx
 squidpony.squidgrid.los
 squidpony.squidgrid.shape
 squidpony.squidgrid.util
