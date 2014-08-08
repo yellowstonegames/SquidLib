@@ -12,9 +12,14 @@ import squidpony.squidgrid.util.DirectionIntercardinal;
 /**
  * Class for creating text blocks.
  *
- * The size of the Font used during construction is considered an upper limit. If needed, the font size will be reduced
- * until all characters can fit within the specified cell size. If all character fit in the specified cell size at the
- * passed in Font size, no change to the Font size will occur.
+ * The default options are antialias on and padding size 0 on all sides. If more vertical padding is needed, it is
+ * recommended to try adding it mostly to the top. Often a padding of 1 on top can give a good appearance.
+ *
+ * When a cell size is not defined in the constructor, the cell will be sized to fit the font as tightly as possible.
+ *
+ * When defining a cell size in the constructor, the size of the Font used during construction is considered an upper
+ * limit. If needed, the font size will be reduced until all characters can fit within the specified cell size. If all
+ * character fit in the specified cell size at the passed in Font size, no change to the Font size will occur.
  *
  * The default characters guaranteed to fit are ASCII 33 through 125, which are the commonly used symbols, numbers, and
  * letters.
@@ -38,9 +43,74 @@ public class TextCellFactory {
     private ArrayList<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
     private boolean antialias = false;
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
-    private int cellWidth = 1, cellHeight = 1;
-    private final int width, height;
+    private int width = 1, height = 1;
     private ImageCellMap map;
+
+    /**
+     * Creates a factory that will fit the given font as tightly as possible.
+     *
+     * @param font the font to build the cell size on
+     */
+    public TextCellFactory(Font font) {
+        this(font, true);
+    }
+
+    /**
+     * Creates a factory that will fit the given font as tightly as possible.
+     *
+     * @param font the font to build the cell size on
+     * @param antialias if true then the font edges will be smoothed when drawn
+     */
+    public TextCellFactory(Font font, boolean antialias) {
+        this(font, antialias, 0);
+    }
+
+    /**
+     * Creates a factory that will fit the given font as tightly as possible.
+     *
+     * @param font the font to build the cell size on
+     * @param antialias if true then the font edges will be smoothed when drawn
+     * @param padding the padding at each edge of each cell
+     */
+    public TextCellFactory(Font font, boolean antialias, int padding) {
+        this(font, antialias, padding, DEFAULT_FITTING);
+    }
+
+    /**
+     * Creates a factory that will fit the given font as tightly as possible.
+     *
+     * @param font the font to build the cell size on
+     * @param antialias if true then the font edges will be smoothed when drawn
+     * @param padding the padding at each edge of each cell
+     * @param fitting the String of unicode points that will be made to fit
+     */
+    public TextCellFactory(Font font, boolean antialias, int padding, String fitting) {
+        this(font, antialias, padding, padding, padding, padding, fitting);
+    }
+
+    /**
+     * Creates a factory that will fit the given font as tightly as possible.
+     *
+     * @param font the font to build the cell size on
+     * @param antialias if true then the font edges will be smoothed when drawn
+     * @param topPadding the padding at the top of each cell
+     * @param bottomPadding the padding at the bottom of each cell
+     * @param leftPadding the padding at the left of each cell
+     * @param rightPadding the padding at the right of each cell
+     * @param fitting the String of unicode points that will be made to fit
+     */
+    public TextCellFactory(Font font, boolean antialias, int topPadding, int bottomPadding, int leftPadding, int rightPadding, String fitting) {
+        this.font = font;
+        this.antialias = antialias;
+        this.topPadding = topPadding;
+        this.bottomPadding = bottomPadding;
+        this.leftPadding = leftPadding;
+        this.rightPadding = rightPadding;
+        this.fitting = fitting;
+        map = new ImageCellMap();
+        initializeByFont(font);
+        map = new ImageCellMap(width, height);
+    }
 
     /**
      * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but does
@@ -156,10 +226,20 @@ public class TextCellFactory {
         return font;
     }
 
+    /**
+     * Returns the width of a single cell.
+     *
+     * @return
+     */
     public int width() {
         return width;
     }
 
+    /**
+     * Returns the height of a single cell.
+     *
+     * @return
+     */
     public int height() {
         return height;
     }
@@ -173,8 +253,8 @@ public class TextCellFactory {
     }
 
     private void initializeBySize(int cellWidth, int cellHeight, Font font) {
-        this.cellWidth = cellWidth;
-        this.cellHeight = cellHeight;
+        this.width = cellWidth;
+        this.height = cellHeight;
         this.font = font;
         largeCharacters = new ArrayList<>();
         map.clear();
@@ -183,8 +263,8 @@ public class TextCellFactory {
     }
 
     private void sizeCellByFont() {
-        cellWidth = 1;
-        cellHeight = 1;
+        width = 1;
+        height = 1;
 
         //temporarily remove padding values
         int tempLeftPadding = leftPadding;
@@ -196,7 +276,7 @@ public class TextCellFactory {
         topPadding = 0;
         bottomPadding = 0;
         verticalOffset = 0;
-        horizontalOffset = cellWidth / 2;
+        horizontalOffset = width / 2;
 
         findSize();
 
@@ -207,8 +287,8 @@ public class TextCellFactory {
         bottomPadding = tempBottomPadding;
         verticalOffset += topPadding;
         horizontalOffset += leftPadding;
-        cellWidth += leftPadding + rightPadding;
-        cellHeight += topPadding + bottomPadding;
+        width += leftPadding + rightPadding;
+        height += topPadding + bottomPadding;
     }
 
     private void findSize() {
@@ -216,7 +296,7 @@ public class TextCellFactory {
                 top = Integer.MAX_VALUE, bottom = Integer.MIN_VALUE;
         HashMap<DirectionIntercardinal, Integer> larges = new HashMap<>();
 
-        BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = image.createGraphics();
         g.setFont(font);
 
@@ -258,26 +338,26 @@ public class TextCellFactory {
         }
         largeCharacters = new ArrayList<>(larges.values());
 
-        cellWidth = right - left;
-        cellWidth *= 2;
-        cellHeight = bottom - top;
-        cellHeight *= 2;
-        horizontalOffset = cellWidth / 2;
+        width = right - left;
+        width *= 2;
+        height = bottom - top;
+        height *= 2;
+        horizontalOffset = width / 2;
         verticalOffset = 0;
-        if (cellWidth > 0 && cellHeight > 0) {
+        if (width > 0 && height > 0) {
             trimCell();
         }
     }
 
     private void trimCell() {
-        BufferedImage image = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
 
         //find best horizontal offset
         int bestHorizontalOffset = Integer.MIN_VALUE;
         for (int c : largeCharacters) {
             int tempHorizontalOffset = horizontalOffset;
             if (visible(c, image)) {//only calculate on printable characters
-                while (horizontalOffset > -cellWidth && willFit(c)) {
+                while (horizontalOffset > -width && willFit(c)) {
                     horizontalOffset--;
                 }
             }
@@ -290,7 +370,7 @@ public class TextCellFactory {
         int bestVerticalOffset = Integer.MIN_VALUE;
         for (int code : largeCharacters) {
             int tempVerticalOffset = verticalOffset;
-            while (verticalOffset > -cellHeight && willFit(code)) {
+            while (verticalOffset > -height && willFit(code)) {
                 verticalOffset--;
             }
             bestVerticalOffset = Math.max(bestVerticalOffset, Math.min(tempVerticalOffset, verticalOffset + 1));//slide back down one if slid up
@@ -306,51 +386,51 @@ public class TextCellFactory {
         for (int code : largeCharacters) {
 
             //squeeze width
-            int tempWidth = cellWidth;
-            while (cellWidth > 0 && willFit(code)) {//TODO -- determine if single pixel on right edge is a bug here or some other place
-                cellWidth--;
+            int tempWidth = width;
+            while (width > 0 && willFit(code)) {//TODO -- determine if single pixel on right edge is a bug here or some other place
+                width--;
             }
-            bestWidth = Math.max(bestWidth, cellWidth + 1);//take whatever the largest needed width so far is
-            cellWidth = tempWidth;
+            bestWidth = Math.max(bestWidth, width + 1);//take whatever the largest needed width so far is
+            width = tempWidth;
 
             //squeeze height
-            int tempHeight = cellHeight;
-            while (cellHeight > 0 && willFit(code)) {
-                cellHeight--;
+            int tempHeight = height;
+            while (height > 0 && willFit(code)) {
+                height--;
             }
-            bestHeight = Math.max(bestHeight, cellHeight + 1);//take whatever the largest needed height so far is
-            cellHeight = tempHeight;
+            bestHeight = Math.max(bestHeight, height + 1);//take whatever the largest needed height so far is
+            height = tempHeight;
         }
 
         //set cell sizes based on found best sizes
-        cellWidth = bestWidth;
-        cellHeight = bestHeight;
+        width = bestWidth;
+        height = bestHeight;
     }
 
     private void sizeCellByDimension() {
-        int desiredWidth = cellWidth;
-        int desiredHeight = cellHeight;
+        int desiredWidth = width;
+        int desiredHeight = height;
 
         //try provided font size first
         initializeByFont(font);
 
         //try all font sizes and take largest that fits if passed in font is too large
         int fontSize = font.getSize();
-        int largeSide = Math.max(cellWidth, cellHeight);
+        int largeSide = Math.max(width, height);
         if (largeSide > 0) {
             int largeDesiredSide = Math.max(desiredWidth, desiredHeight);
             fontSize = largeDesiredSide * fontSize / largeSide;//approximately the right ratio
             fontSize *= 1.2;//pad just a bit
-            while (cellWidth > desiredWidth || cellHeight > desiredHeight) {
+            while (width > desiredWidth || height > desiredHeight) {
                 font = new Font(font.getFontName(), font.getStyle(), fontSize);
                 initializeByFont(font);
                 fontSize--;
             }
 
-            horizontalOffset += (desiredWidth - cellWidth) / 2;//increase by added width, error on the side of one pixel left of center
-            verticalOffset += (desiredHeight - cellHeight) / 2;
-            cellWidth = desiredWidth;
-            cellHeight = desiredHeight;
+            horizontalOffset += (desiredWidth - width) / 2;//increase by added width, error on the side of one pixel left of center
+            verticalOffset += (desiredHeight - height) / 2;
+            width = desiredWidth;
+            height = desiredHeight;
         }
         map.clear();
     }
@@ -401,7 +481,7 @@ public class TextCellFactory {
             return true;
         }
 
-        return willFit(codepoint, new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_BYTE_GRAY));
+        return willFit(codepoint, new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY));
     }
 
     /**
@@ -426,20 +506,20 @@ public class TextCellFactory {
         int startx = 0, starty = 0, endx = 0, endy = 0;//end points should be included in check
         switch (dir) {//set values to check edge opposite of movement
             case RIGHT:
-                endy = cellHeight - 1;
+                endy = height - 1;
                 break;
             case LEFT:
-                startx = cellWidth - 1;
+                startx = width - 1;
                 endx = startx;
-                endy = cellHeight - 1;
+                endy = height - 1;
                 break;
             case UP:
-                endx = cellWidth - 1;
-                starty = cellHeight - 1;
+                endx = width - 1;
+                starty = height - 1;
                 endy = starty;
                 break;
             case DOWN:
-                endx = cellWidth - 1;
+                endx = width - 1;
         }
 
         //test for edge hit
@@ -456,12 +536,12 @@ public class TextCellFactory {
     /**
      * Returns the image of the character represented by the passed in code point.
      *
-     * @param code
-     * @param color
+     * @param code the unicode code point for the character to draw
+     * @param color the color to draw
      * @return
      */
     public BufferedImage get(int code, Color color) {
-        String search = new String(Character.toChars(code)) + " " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
+        String search = asKey(code, color);
         BufferedImage block = map.get(search);
 
         if (block == null) {
@@ -472,12 +552,23 @@ public class TextCellFactory {
     }
 
     /**
+     * Returns the string used as a key for hash mapping. Useful for drop-in replacement of text and images.
+     * 
+     * @param code the unicode code point for the character to draw
+     * @param color the color to draw
+     * @return 
+     */
+    public String asKey(int code, Color color) {
+        return new String(Character.toChars(code)) + " " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
+    }
+
+    /**
      * Returns a solid block of the provided color.
      *
      * @param color
      * @return
      */
-    public BufferedImage getSolid(SColor color) {
+    public BufferedImage getSolid(Color color) {
         String search = "Solid " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
         BufferedImage block = map.get(search);
 
@@ -500,7 +591,7 @@ public class TextCellFactory {
     }
 
     private BufferedImage makeImage(int code, Color color) {
-        BufferedImage i = new BufferedImage(cellWidth, cellHeight, BufferedImage.TYPE_4BYTE_ABGR);
+        BufferedImage i = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = i.createGraphics();
         drawForeground(g, code, color);
         return i;

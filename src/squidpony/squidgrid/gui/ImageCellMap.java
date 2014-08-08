@@ -16,6 +16,15 @@ public class ImageCellMap {
     private final TreeMap<String, BufferedImage> blocks = new TreeMap<>();
 
     /**
+     * Sets width and height to 1. Useful if width, height, and null image is never used.
+     */
+    public ImageCellMap() {
+        width = 1;
+        height = 1;
+        nullImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+    }
+
+    /**
      * A cached image set.
      *
      * @param width
