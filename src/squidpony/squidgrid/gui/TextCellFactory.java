@@ -27,6 +27,9 @@ import squidpony.squidgrid.util.DirectionIntercardinal;
  */
 public class TextCellFactory {
 
+    /**
+     * The commonly used symbols in roguelike games.
+     */
     public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\";
 
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
