@@ -1,0 +1,74 @@
+textures.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+default action
+  rotate: false
+  xy: 2, 171
+  size: 161, 173
+  orig: 161, 173
+  offset: 0, 0
+  index: -1
+health bars
+  rotate: false
+  xy: 2, 639
+  size: 1088, 411
+  orig: 1088, 411
+  offset: 0, 0
+  index: -1
+dragon
+  rotate: false
+  xy: 1092, 639
+  size: 482, 481
+  orig: 482, 481
+  offset: 0, 0
+  index: -1
+avatar
+  rotate: false
+  xy: 36, 2
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+equipment dummies
+  rotate: false
+  xy: 2, 405
+  size: 1074, 232
+  orig: 1074, 232
+  offset: 0, 0
+  index: -1
+cat
+  rotate: false
+  xy: 2, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+action bar
+  rotate: false
+  xy: 98, 2
+  size: 1566, 167
+  orig: 1566, 167
+  offset: 0, 0
+  index: -1
+multiview selection
+  rotate: false
+  xy: 165, 171
+  size: 1080, 232
+  orig: 1080, 232
+  offset: 0, 0
+  index: -1
+view
+  rotate: false
+  xy: 2, 2185
+  size: 1751, 1730
+  orig: 1751, 1730
+  offset: 0, 0
+  index: -1
+multiview
+  rotate: false
+  xy: 2, 1122
+  size: 1076, 1061
+  orig: 1076, 1061
+  offset: 0, 0
+  index: -1
