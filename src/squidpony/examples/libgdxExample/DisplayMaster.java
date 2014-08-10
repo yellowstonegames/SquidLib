@@ -15,7 +15,7 @@ import squidpony.squidgrid.libgdx.SGPanelGDX;
 /**
  * Controls what is on screen at any given time.
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class DisplayMaster implements Screen {
 
