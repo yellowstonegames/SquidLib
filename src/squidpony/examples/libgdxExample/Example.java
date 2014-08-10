@@ -11,7 +11,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class Epigon {
+public class Example {
 
     public static void main(String... args) {
         //start independant creators
