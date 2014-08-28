@@ -1,4 +1,3 @@
-
 package squidpony.squidutility.graph;
 
 import java.util.LinkedList;
