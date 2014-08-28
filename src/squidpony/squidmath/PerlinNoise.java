@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 /**
  * This is Ken Perlin's third revision of his noise function. It is sometimes referred to as
  * "Simplex Noise". Results are bound by (-1, 1) inclusive.
@@ -16,7 +14,6 @@ import squidpony.annotation.Beta;
  * </ul>
  *
  */
-@Beta
 public class PerlinNoise {
 
     private static final int grad3[][] = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0},
@@ -482,8 +479,5 @@ public class PerlinNoise {
         }
         // Sum up and scale the result to cover the range [-1,1]
         return 27.0 * (n0 + n1 + n2 + n3 + n4);
-    }
-
-    private PerlinNoise() {
     }
 }

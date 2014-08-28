@@ -10,8 +10,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * adapted from http://www.vogella.com/articles/JavaAlgorithmsDijkstra/article.html
  *
- * @author Eben Howard adapted from http://www.vogella.com/articles/JavaAlgorithmsDijkstra/article.html
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class DijkstraAlgorithm {
 
@@ -68,7 +69,7 @@ public class DijkstraAlgorithm {
     }
 
     private List<Vertex> getNeighbors(Vertex node) {
-        List<Vertex> neighbors = new ArrayList<Vertex>();
+        List<Vertex> neighbors = new ArrayList<>();
         for (Edge edge : edges) {
             if (edge.getSource().equals(node)
                     && !isSettled(edge.getDestination())) {
@@ -110,7 +111,7 @@ public class DijkstraAlgorithm {
      * NULL if no path exists
      */
     public LinkedList<Vertex> getPath(Vertex target) {
-        LinkedList<Vertex> path = new LinkedList<Vertex>();
+        LinkedList<Vertex> path = new LinkedList<>();
         Vertex step = target;
         // Check if a path exists
         if (predecessors.get(step) == null) {

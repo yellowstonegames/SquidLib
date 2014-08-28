@@ -16,7 +16,7 @@ public class GameFrame extends Game {
     public void create() {
         System.out.println("Creating new game.");
         System.out.println("Working in folder: " + System.getProperty("user.dir"));
-        super.setScreen(new DisplayMaster());
+//        super.setScreen(new DisplayMaster());
     }
     
     @Override
