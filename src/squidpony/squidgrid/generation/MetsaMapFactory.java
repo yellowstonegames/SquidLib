@@ -4,8 +4,12 @@ import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
+import squidpony.squidcolor.SColor;
+import squidpony.squidcolor.SColorFactory;
+import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidmath.PerlinNoise;
+import squidpony.squidmath.RNG;
 
 /**
  * A map generation factory using perlin noise to make island chain style maps.
@@ -15,202 +19,221 @@ import squidpony.squidmath.PerlinNoise;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class MetsaMapFactory {
-//    //HEIGHT LIMITS
-//
-//    static private double SEALEVEL = 0,
-//            BEACHLEVEL = 0.05,
-//            PLAINSLEVEL = 0.3,
-//            MOUNTAINLEVEL = 0.45,
-//            SNOWLEVEL = 0.63,
-//            DEEPSEA = -0.1;
-////BIOMESTUFF
-//    static private final double POLARLIMIT = 0.5,
-//            DESERTLIMIT = 0.1;
-//
-////SHADOW
-//    static private final double SHADOWLIMIT = 0.01;
-////COLORORDER
-///*
-//     0 = deepsea
-//     1 = beach
-//     2 = low
-//     3 = high
-//     4 = mountain
-//     5 = snowcap
-//     6 = lowsea
-//     */
-//    static private final double colors[] = new double[]{0x006994, 0xfee8d6, 0x5b5, 0x171, 0xaaa, 0xeee, 0x0ea1aa};
-//    static private final double polarcolors[] = new double[]{0xd4f0ff, 0xe0ffff, 0xeee9e9, 0xeeeaea, 0xaaa, 0xf00, 0xe0ffff};
-//    static private final double desertcolors[] = new double[]{0x006994, 0xfee8d6, 0xfee8d6, 0xeed8c6, 0xaaa, 0xeee, 0x0ea1aa};
-//
-//    static private final int SIZEX = 512 + 256;
-//    static private final int SIZEY = 512;
-//    static private final int SCALE = 1;
-//    static private final int ROADS = 64;
-//    static private final int CITYAMOUNT = 64;
-//
-//    private JFrame frame;
-//    private static final int width = SIZEX * SCALE;
-//    private static final int height = SIZEY * SCALE;
-//    private JPanel context;
-//    private double map[][] = new double[SIZEX][SIZEY];
-//    private List<Point> cities = new LinkedList<>();
-//
-//    private int getRandomInt(int min, int max) {
-//        return (int) (Math.floor(Math.random() * (max - min)) + min);
-//    }
-//
-//    private String rgba(int r, int g, int b, int a) {
-//        return "rgba(" + r + "," + g + "," + b + "," + a + ")";
-//    }
-//
-//    private double getShadow(int x, int y) {
-//        if (x == 0 || y == 0) {
-//            return 0;
-//        }
-//        double up = map[x][y - 1];
-//        double left = map[x - 1][y];
-//        double upleft = map[x - 1][y - 1];
-//        double cur = map[x][y];
-//        if (cur < 0) {
-//            return 0;
-//        }
-//        //var slope = (cur - up) - (cur - left);
-//        double slope = cur - (upleft + up + left) / 3;
-//        if (slope < SHADOWLIMIT && slope > -SHADOWLIMIT) {
-//            return 0;
-//        }
-//        if (slope >= SHADOWLIMIT) {
-//            return 1; //"alpha"
-//        }
-////        if (slope <= -SHADOWLIMIT) {
-//        return -1;
-////        }
-//    }
-//
-//    /**
-//     * Finds and returns the closest point containing a city to the given point. Does
-//     * not include provided point as a possible city location.
-//     * 
-//     * If there are no cities, null is returned.
-//     * 
-//     * @param point
-//     * @return 
-//     */
-//    private Point closestCity(Point point) {
-//        double dist = 999999999, newdist;
-//        Point  closest = null;
-//        for (Point c : cities) {
-//            if (c.equals(point)) {
-//                continue;//skip the one being tested for
-//            }
-//            newdist = Math.pow(point.x - c.x, 2) + Math.pow(point.y - c.y, 2);
-//            if (newdist < dist) {
-//                dist = newdist;
-//                closest = c;
-//            }
-//        }
-//        return closest;
-//    }
-//
-//    public static void main(String... args) {
-//        new MetsaMapFactory().go();
-//    }
-//
-//    private void go() {
-//        double n, dist;
-//        map = new double[SIZEX][SIZEY];
-//        double highn = 0;
-//        int perldivisors[] = new int[]{1, 1, 2, 4, 8, 16, 64};
-////Heightmap
-//        for (int i = 0; i < SIZEX; i++) {
-//            for (int j = 0; j < SIZEY; j++) {
-//                //Get noise
-//                n = //noise.perlin2(i/256,j/256) / perldivisors[0]
-//                        PerlinNoise.noise(i / 128, j / 128) / perldivisors[1]
-//                        + PerlinNoise.noise(i / 64, j / 64) / perldivisors[2]
-//                        + PerlinNoise.noise(i / 32, j / 32) / perldivisors[3]
-//                        + PerlinNoise.noise(i / 16, j / 16) / perldivisors[4]
-//                        + PerlinNoise.noise(i / 8, j / 8) / perldivisors[5]
-//                        + PerlinNoise.noise(i / 4, j / 4) / perldivisors[6];
-//                //+ noise.perlin2(i / 2, j / 2) / 32;
-//
-//                dist = Math.sqrt(Math.pow(Math.abs(i - SIZEX / 2), 2) + Math.pow(Math.abs(j * (SIZEX / SIZEY) - SIZEX / 2), 2));
-//                n -= Math.max(0, Math.pow(dist / (SIZEX / 2), 2) - 0.4);
-//
-//                //Corresponding tiletypes
-//                map[i][j] = n;
-//                if (n > highn) {
-//                    highn = n;
-//                }
-//            }
-//        }
-//
-//        System.out.println("highest point is " + highn);
-//        SNOWLEVEL = highn - 0.05;
-//
-////biomes 0 normal 1 snow
-//        int biomemap[][] = new int[SIZEX][SIZEY];
-//        for (int i = 0;                i < SIZEX;                i++) {
-//    for (int j = 0; j < SIZEY; j++) {
-//                biomemap[i][j] = 0;
-//                double distEq = Math.abs(j - SIZEY / 2) / (SIZEY / 2);
-//                distEq = distEq + PerlinNoise.noise(i / 32, j / 32) / 8 + map[i][j] / 32;
-//                if (distEq > POLARLIMIT) {
-//                    biomemap[i][j] = 1;
-//                }
-//                if (distEq < DESERTLIMIT) {
-//                    biomemap[i][j] = 2;
-//                }
-//                if (distEq > POLARLIMIT + 0.25) {
-//                    biomemap[i][j] = 3;
-//                }
-//            }
-//        }
-////NATIONS
-///*
-//         nationmap, 4 times less accurate map used for nations
-//         -1 no nation
-//         */
-//        int nationmap[][] = new int[SIZEX][SIZEY];
-//for (int i = 0;                i < SIZEX / 4; i++) {
-//    for (int j = 0; j < SIZEY / 4; j++) {
-//                if (map[i * 4][j * 4] < 0) {
-//                    nationmap[i][j] = -1;
-//                }else{
-//                    nationmap[i][j] = 0;
-//                }
-//            }
-//        }
-//
-////END OF NATIONS :D
-////Weighed map for road
-//        double weighedMap[][] = new double[SIZEX][SIZEY];
-//for (int i = 0;                i < SIZEX                / 4; i++) {
-//    for (int j = 0; j < SIZEY / 4; j++) {
-//                weighedMap[i][j] = 0;
-//                if (map[i * 4][j * 4] > BEACHLEVEL) {
-//                    weighedMap[i][j] = 2 + (map[i * 4][j * 4] - PLAINSLEVEL) * 8;
-//                }
-//                if (map[i][j] <= BEACHLEVEL && map[i * 4][j * 4] >= SEALEVEL) {
-//                    weighedMap[i][j] = 2 - (map[i * 4][j * 4]) * 2;
-//                }
-//            }
-//        }
-//        int px = 0,                py = 0;
-//
-//for (int i = 0;                i < CITYAMOUNT;                i++) {
-//                px = getRandomInt(0, SIZEX - 1);
-//                py = getRandomInt(0, SIZEY - 1);
-//                while (map[px][py] < SEALEVEL || map[px][py] > BEACHLEVEL) {
-//                    px = getRandomInt(0, SIZEX - 1);
-//                    py = getRandomInt(0, SIZEY - 1);
-//                }
-//                cities.add(new Point(    4 * Math.round(px / 4)   ,    4 * Math.round(py / 4) ));
-//              }
-//
-////Generate a road
-//        results = [];
+    //HEIGHT LIMITS
+
+    static private double SEALEVEL = 0,
+            BEACHLEVEL = 0.05,
+            PLAINSLEVEL = 0.3,
+            MOUNTAINLEVEL = 0.45,
+            SNOWLEVEL = 0.63,
+            DEEPSEA = -0.1;
+//BIOMESTUFF
+    static private final double POLARLIMIT = 0.5, DESERTLIMIT = 0.1;
+    static private final SColor CITY_COLOR = new SColor(0x444);
+
+//SHADOW
+    static private final double SHADOWLIMIT = 0.01;
+//COLORORDER
+/*
+     0 = deepsea
+     1 = beach
+     2 = low
+     3 = high
+     4 = mountain
+     5 = snowcap
+     6 = lowsea
+     */
+    static private final SColor[] colors = new SColor[]{SColor.DENIM, SColor.TAN, SColor.ASPARAGUS,
+        SColor.FOREST_GREEN, SColor.SLATE_GRAY, SColor.ALICE_BLUE, SColor.AZUL};
+    static private final SColor[] polarcolors = colors;
+//            new SColor[]{SColor.DARK_SLATE_GRAY, SColor.SCHOOL_BUS_YELLOW, SColor.YELLOW_GREEN,
+//        SColor.GREEN_BAMBOO, SColorFactory.lighter(SColor.LIGHT_BLUE_SILK), SColor.ALICE_BLUE, SColor.AZUL};
+    static private final SColor[] desertcolors = colors;
+//            new SColor[]{SColor.DARK_SLATE_GRAY, SColor.SCHOOL_BUS_YELLOW, SColor.YELLOW_GREEN,
+//        SColor.GREEN_BAMBOO, SColorFactory.lighter(SColor.LIGHT_BLUE_SILK), SColor.ALICE_BLUE, SColor.AZUL};
+
+    static private final int width = 1500;
+    static private final int height = 1000;
+    static private final int scale = 1;
+    static private final int ROADS = 64;
+    static private final int CITYAMOUNT = 14;
+
+    private JFrame frame;
+    private SwingPane back, front;
+    private List<Point> cities = new LinkedList<>();
+    private final RNG rng = new RNG();
+    private double highn = 0;
+
+    public static void main(String... args) {
+        new MetsaMapFactory().go();
+    }
+
+    private void go() {
+        back = new SwingPane(width, height, scale, scale);
+        front = new SwingPane(width, height, scale, scale);
+        double[][] map = makeHeightMap();
+        int[][] biomeMap = makeBiomeMap(map);
+        int[][] nationMap = makeNationMap(map);
+        double[][] weighedMap = makeWeighedMap(map);
+//        generateRoads();
+
+        paint(map, biomeMap);
+    }
+
+    private int getShadow(int x, int y, double[][] map) {
+        if (x >= width - 1 || y <= 0) {
+            return 0;
+        }
+        double upRight = map[x + 1][y - 1];
+        double right = map[x + 1][y];
+        double up = map[x][y - 1];
+        double cur = map[x][y];
+        if (cur <= 0) {
+            return 0;
+        }
+        double slope = cur - (upRight + up + right) / 3;
+        if (slope < SHADOWLIMIT && slope > -SHADOWLIMIT) {
+            return 0;
+        }
+        if (slope >= SHADOWLIMIT) {
+            return -1; //"alpha"
+        }
+        if (slope <= -SHADOWLIMIT) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Finds and returns the closest point containing a city to the given point. Does not include provided point as a
+     * possible city location.
+     *
+     * If there are no cities, null is returned.
+     *
+     * @param point
+     * @return
+     */
+    private Point closestCity(Point point) {
+        double dist = 999999999, newdist;
+        Point closest = null;
+        for (Point c : cities) {
+            if (c.equals(point)) {
+                continue;//skip the one being tested for
+            }
+            newdist = Math.pow(point.x - c.x, 2) + Math.pow(point.y - c.y, 2);
+            if (newdist < dist) {
+                dist = newdist;
+                closest = c;
+            }
+        }
+        return closest;
+    }
+
+    private double[][] makeHeightMap() {
+        double[][] heightMap = new double[width][height];
+        int perldivisors[] = new int[]{1, 1, 2, 4, 8, 16, 64};
+
+        double offset = rng.nextInt();
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                //Get noise
+                double n = 0;
+                double i = Math.max(width, height);
+
+//                double i = 128;
+                for (int p = 0; p < perldivisors.length; p++) {
+                    n += (PerlinNoise.noise((x + offset) / i, (y + offset) / i)) / perldivisors[p];
+                    i /= 2;
+                }
+                double xdist = x - width / 2.0;
+                xdist *= xdist;
+                double ydist = y - height / 2.0;
+                ydist *= ydist;
+                double dist = Math.sqrt(xdist + ydist);
+                n -= Math.max(0, Math.pow(dist / (width / 2), 2) - 0.4);
+
+                //Corresponding tiletypes
+                heightMap[x][y] = n;
+                if (n > highn) {
+                    highn = n;
+                }
+            }
+        }
+
+        System.out.println("highest point is " + highn);
+        SNOWLEVEL = highn - 0.05;
+
+        return heightMap;
+    }
+
+    private int[][] makeBiomeMap(double[][] map) {
+        //biomes 0 normal 1 snow
+        int biomeMap[][] = new int[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                biomeMap[x][y] = 0;
+                double distanceFromEquator = Math.abs(y - height / 2) / (height / 2);
+                distanceFromEquator += PerlinNoise.noise(x / 32, y / 32) / 8 + map[x][y] / 32;
+                if (distanceFromEquator > POLARLIMIT) {
+                    biomeMap[x][y] = 1;
+                }
+                if (distanceFromEquator < DESERTLIMIT) {
+                    biomeMap[x][y] = 2;
+                }
+                if (distanceFromEquator > POLARLIMIT + 0.25) {
+                    biomeMap[x][y] = 3;
+                }
+            }
+        }
+        return biomeMap;
+    }
+
+    private int[][] makeNationMap(double[][] map) {
+        // nationmap, 4 times less accurate map used for nations -1 no nation
+        int nationMap[][] = new int[width][height];
+        for (int i = 0; i < width / 4; i++) {
+            for (int j = 0; j < height / 4; j++) {
+                if (map[i * 4][j * 4] < 0) {
+                    nationMap[i][j] = -1;
+                } else {
+                    nationMap[i][j] = 0;
+                }
+            }
+        }
+        return nationMap;
+    }
+
+    private double[][] makeWeighedMap(double[][] map) {
+        //Weighed map for road
+        double weighedMap[][] = new double[width][height];
+        for (int i = 0; i < width / 4; i++) {
+            for (int j = 0; j < height / 4; j++) {
+                weighedMap[i][j] = 0;
+                if (map[i * 4][j * 4] > BEACHLEVEL) {
+                    weighedMap[i][j] = 2 + (map[i * 4][j * 4] - PLAINSLEVEL) * 8;
+                }
+                if (map[i][j] <= BEACHLEVEL && map[i * 4][j * 4] >= SEALEVEL) {
+                    weighedMap[i][j] = 2 - (map[i * 4][j * 4]) * 2;
+                }
+            }
+        }
+
+        for (int i = 0; i < CITYAMOUNT; i++) {
+            int px = rng.between(0, width);
+            int py = rng.between(0, height);
+            while (map[px][py] < SEALEVEL || map[px][py] > BEACHLEVEL) {
+                px = rng.between(0, width);
+                py = rng.between(0, height);
+            }
+            cities.add(new Point(4 * Math.round(px / 4), 4 * Math.round(py / 4)));
+        }
+        return weighedMap;
+    }
+
+    private void generateRoads() {
+        ////Generate a road
+//Queue results
 //if (ROADS > 0) {
 //            var graph = new Graph(weighedMap, {
 //                diagonal
@@ -233,115 +256,97 @@ public class MetsaMapFactory {
 //            }
 //
 //        }
-////DRAW
-//
-//        for (i = 0;
-//                i < SIZEX;
-//                i++) {
-//            for (j = 0; j < SIZEY; j++) {
-//                //context.fillStyle = colors[map[i][j]];
-//                n = map[i][j];
-//                var curcolor = colors;
-//                if (biomemap[i][j] == 1 || biomemap[i][j] == 3) {
-//                    curcolor = polarcolors;
-//                }
-//                if (biomemap[i][j] == 2) {
-//                    curcolor = desertcolors;
-//                }
-//                context.fillStyle = curcolor[6];
-//                if (n > SEALEVEL) {
-//                    context.fillStyle = curcolor[1];
-//                }
-//                if (n > BEACHLEVEL) {
-//                    context.fillStyle = curcolor[2];
-//                }
-//                if (n > PLAINSLEVEL) {
-//                    context.fillStyle = curcolor[3];
-//                }
-//                if (n > MOUNTAINLEVEL) {
-//                    context.fillStyle = curcolor[4];
-//                }
-//                if (n > SNOWLEVEL) {
-//                    context.fillStyle = curcolor[5];
-//                }
-//
-//                //Polar ice
-//                if (n < DEEPSEA) {
-//                    if (biomemap[i][j] == 3) {
-//                        context.fillStyle = polarcolors[0];
-//                    } else {
-//                        context.fillStyle = colors[0];
-//                    }
-//                }
-//                //context.fillStyle = colors[map[i][j]];
-//                context.fillRect(i * SCALE, j * SCALE, SCALE, SCALE);
-//                if (n > 0) {
-//                    //Elevation, very slight
-//
-//                    context.fillStyle = rgba(200, 200, 150, Math.pow(n / highn, 2) / 2);
-//                    context.fillRect(i * SCALE, j * SCALE, SCALE, SCALE);
-//                    context.fillStyle = rgba(25, 25, 100, 0.2 - n * n);
-//                    context.fillRect(i * SCALE, j * SCALE, SCALE, SCALE);
-//                    //SNOWAREA VOLCANO CASE
-//                    if (n > SNOWLEVEL && (biomemap[i][j] == 1 || biomemap[i][j] == 3)) {
-//                        //shadow side INVERSE
-//                        if (getShadow(i, j) == -1) {
-//                            context.fillStyle = rgba(0, 0, 90, 0.2);
-//                            context.fillRect(i * SCALE, j * SCALE, SCALE, SCALE);
-//                        }
-//                        //sun side INVERSE
-//                        if (getShadow(i, j) == 1) {
-//                            context.fillStyle = rgba(255, 255, 0, 0.1);
-//                            context.fillRect(i * SCALE, j * SCALE, SCALE, SCALE);
-//                        }
-//
-//                    } else {
-//                        //shadow side
-//                        if (getShadow(i, j) == 1) {
-//                            context.fillStyle = rgba(0, 0, 90, 0.2);
-//                            context.fillRect(i * SCALE, j * SCALE, SCALE, SCALE);
-//                        }
-//                        //sun side
-//                        if (getShadow(i, j) == -1) {
-//                            context.fillStyle = rgba(220, 220, 100, 0.2);
-//                            context.fillRect(i * SCALE, j * SCALE, SCALE, SCALE);
-//                        }
-//                    }
-//
-//                } else {
-//
-//                }
-//            }
-//
-//        }
-////draw cities.
-//        for (i = 0;
-//                i < cities.length;
-//                i++) {
-//            var city = cities[i];
-//            context.fillStyle = "#444";
-//            context.fillRect(city.x * SCALE - SCALE * 2, city.y * SCALE - SCALE * 2, SCALE * 4, SCALE * 4);
-//        }
-//        context.strokeStyle = rgba(0, 0, 0, 0.5);
-////draw roads
-//        for (i = 0;
-//                i < results.length;
-//                i++) {
-//            var node;
-//            var a = results[i].length;
-//            context.beginPath();
-//            node = results[i][0];
-//            context.moveTo(node.x * 4 * SCALE, node.y * 4 * SCALE);
-//            for (j = 0; j < a; j++) {
-//                node = results[i][j];
-//                context.lineTo(node.x * SCALE * 4 + noise.perlin2(node.x / 5, node.y / 5) * 8, node.y * SCALE * 4 + noise.perlin2(node.y / 5, node.x / 5) * 8);
-//            }
-//            //node = results[i].end;
-//            //context.moveTo(node.x*SCALE, node.y*SCALE);
-//
-//            context.stroke();
-//            context.closePath();
-//        }
-//    }
-////Sphere
+    }
+
+    private void paint(double[][] map, int[][] biomeMap) {
+        //DRAW
+        double n;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                n = map[x][y];
+                SColor[] curcolor = colors;
+                if (biomeMap[x][y] == 1 || biomeMap[x][y] == 3) {
+                    curcolor = polarcolors;
+                }
+                if (biomeMap[x][y] == 2) {
+                    curcolor = desertcolors;
+                }
+                SColor color = curcolor[6];
+                if (n > SEALEVEL) {
+                    color = curcolor[1];
+                }
+                if (n > BEACHLEVEL) {
+                    color = curcolor[2];
+                }
+                if (n > PLAINSLEVEL) {
+                    color = curcolor[3];
+                }
+                if (n > MOUNTAINLEVEL) {
+                    color = curcolor[4];
+                }
+                if (n > SNOWLEVEL) {
+                    color = curcolor[5];
+                }
+
+                //Polar ice
+                if (n < DEEPSEA) {
+                    if (biomeMap[x][y] == 3) {
+                        color = polarcolors[0];
+                    } else {
+                        color = colors[0];
+                    }
+                }
+
+//                use alpha to blend
+                if (n > 0) {
+                    color = SColorFactory.blend(color, SColor.ALICE_BLUE, Math.pow(n / highn, 2) / 2);//hight stuff gets lighter
+                    color = SColorFactory.blend(color, SColor.DARK_BLUE_DYE, 0.2 - n * n);//low stuff gets darker
+
+                    int shadow = getShadow(x, y, map);
+                    if (n > SNOWLEVEL && (biomeMap[x][y] == 1 || biomeMap[x][y] == 3)) {//SNOWAREA VOLCANO CASE
+                        if (shadow == -1) {//shadow side INVERSE
+//                            color = SColorFactory.blend(color, new SColor(0, 0, 90), 0.2);
+                            color = SColorFactory.blend(color, SColor.DENIM, 0.2 * n / 2);
+                        }
+                        if (shadow == 1) {//sun side INVERSE
+//                            color = SColorFactory.blend(color, new SColor(255, 255, 0), 0.1);
+                            color = SColorFactory.blend(color, SColor.BRASS, 0.1 * n / 2);
+                        }
+                    } else {
+                        if (shadow == 1) { //shadow side
+//                            color = SColorFactory.blend(color, new SColor(0, 0, 90), 0.2);
+                            color = SColorFactory.blend(color, SColor.ONANDO, 0.2 * n / 2);
+                        }
+                        if (shadow == -1) {//sun side
+//                            color = SColorFactory.blend(color, new SColor(220, 220, 100), 0.2);
+                            color = SColorFactory.blend(color, SColor.YELLOW, 0.2 * n / 2);
+                        }
+                    }
+                }
+                back.put(x, y, color);
+            }
+        }
+
+        for (Point city : cities) {
+            front.put(city.x, city.y, 'C', CITY_COLOR);
+        }
+
+        back.refresh();
+        front.refresh();
+
+        frame = new JFrame();
+        JLayeredPane layer = new JLayeredPane();
+        layer.setLayer(back, JLayeredPane.DEFAULT_LAYER);
+        layer.setLayer(front, JLayeredPane.PALETTE_LAYER);
+        layer.add(back);
+        layer.add(front);
+        layer.setPreferredSize(back.getPreferredSize());
+        layer.setSize(back.getPreferredSize());
+        frame.add(layer);
+
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
 }
