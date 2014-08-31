@@ -131,40 +131,19 @@ public class MetsaMapFactory {
     }
 
     private double[][] makeHeightMap() {
-        double[][] heightMap = new double[width][height];
-        int perldivisors[] = new int[]{1, 1, 2, 4, 8, 16, 64};
+        double[][] map = MapFactory.hightMap(width, height);
 
-        double offset = rng.nextInt();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                //Get noise
-                double n = 0;
-                double i = Math.max(width, height);
-
-//                double i = 128;
-                for (int p = 0; p < perldivisors.length; p++) {
-                    n += (PerlinNoise.noise((x + offset) / i, (y + offset) / i)) / perldivisors[p];
-                    i /= 2;
-                }
-                double xdist = x - width / 2.0;
-                xdist *= xdist;
-                double ydist = y - height / 2.0;
-                ydist *= ydist;
-                double dist = Math.sqrt(xdist + ydist);
-                n -= Math.max(0, Math.pow(dist / (width / 2), 2) - 0.4);
-
-                //Corresponding tiletypes
-                heightMap[x][y] = n;
+                double n = map[x][y];
                 if (n > highn) {
                     highn = n;
                 }
             }
         }
-
-        System.out.println("highest point is " + highn);
         SNOWLEVEL = highn - 0.05;
-
-        return heightMap;
+        
+        return map;
     }
 
     private int[][] makeBiomeMap(double[][] map) {
