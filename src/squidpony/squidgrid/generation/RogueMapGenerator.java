@@ -4,20 +4,20 @@ import java.awt.Point;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import squidpony.annotation.Beta;
 import squidpony.squidgrid.util.DirectionCardinal;
 import squidpony.squidmath.RNG;
 import squidpony.squidutility.Pair;
 
 /**
- * This dungeon generator is a port of the rot.js version.
+ * This dungeon generator is based on a port of the rot.js version.
  *
  * @author hyakugei
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class RogueMapGenerator {
 
     public class Room {
@@ -32,6 +32,32 @@ public class RogueMapGenerator {
             this.height = height;
             this.cellx = cellx;
             this.celly = celly;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 89 * hash + this.cellx;
+            hash = 89 * hash + this.celly;
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Room other = (Room) obj;
+            if (this.cellx != other.cellx) {
+                return false;
+            }
+            if (this.celly != other.celly) {
+                return false;
+            }
+            return true;
         }
     }
 
@@ -68,12 +94,9 @@ public class RogueMapGenerator {
         initRooms();
         connectRooms();
         connectUnconnectedRooms();
+        fullyConnect();
         createRooms();
         createCorridors();
-        while (!fullyConnected()) {
-            System.out.println("Not yet fully connected.");
-            createRandomRoomConnections();
-        }
         return map;
     }
 
@@ -93,48 +116,39 @@ public class RogueMapGenerator {
     }
 
     private void connectRooms() {
-        int x = rng.nextInt(cellWidth);
-        int y = rng.nextInt(cellHeight);
+        List<Room> unconnected = new LinkedList<>();
+        for (int x = 0; x < cellWidth; x++) {
+            for (int y = 0; y < cellHeight; y++) {
+                unconnected.add(rooms[x][y]);
+            }
+        }
+        Collections.shuffle(unconnected, rng);
 
-        boolean found;
-        List<DirectionCardinal> dirToCheck = new LinkedList<>();
-        do {
-            dirToCheck.addAll(Arrays.asList(DirectionCardinal.CARDINALS));
+        List<DirectionCardinal> dirToCheck;
+        for (Room room : unconnected) {
+            dirToCheck = Arrays.asList(DirectionCardinal.CARDINALS);
             Collections.shuffle(dirToCheck, rng);
-
-            do {
-                found = false;
-                DirectionCardinal dir = dirToCheck.remove(0);
-                int nextX = x + dir.deltaX;
-                if (nextX < 0 || nextX >= cellWidth) {
+            for (DirectionCardinal dir : dirToCheck) {
+                int nextX = room.x + dir.deltaX;
+                int nextY = room.y + dir.deltaY;
+                if (nextX < 0 || nextX >= cellWidth || nextY < 0 || nextY >= cellHeight) {
                     continue;
                 }
-                int nextY = y + dir.deltaY;
-                if (nextY < 0 || nextY >= cellHeight) {
-                    continue;
-                }
-
-                Room room = rooms[x][y];
                 Room otherRoom = rooms[nextX][nextY];
 
-                if (room.connections.contains(otherRoom) ) {
+                if (room.connections.contains(otherRoom)) {
                     break;//already connected to this room
                 }
 
                 if (!otherRoom.connections.isEmpty()) {
-                    otherRoom.connections.add(room);
-                    connectedCells.add(otherRoom);
-                    x = nextX;
-                    y = nextY;
-                    found = true;
+                    room.connections.add(otherRoom);
+                    break;
                 }
-            } while (!dirToCheck.isEmpty() && found == false);
-        } while (!dirToCheck.isEmpty());
+            }
+        }
     }
 
     private void connectUnconnectedRooms() {
-        Collections.shuffle(connectedCells, rng);
-
         for (int x = 0; x < cellWidth; x++) {
             for (int y = 0; y < cellHeight; y++) {
                 Room room = rooms[x][y];
@@ -162,10 +176,9 @@ public class RogueMapGenerator {
                         otherRoom = rooms[nextX][nextY];
                         validRoom = true;
 
-                        if (otherRoom.connections.isEmpty()) {
-                            break;
-                        }
-
+//                        if (otherRoom.connections.isEmpty()) {
+//                            break;
+//                        }
                         if (otherRoom.connections.contains(room)) {
                             validRoom = false;
                             continue;
@@ -180,76 +193,62 @@ public class RogueMapGenerator {
                     if (validRoom) {
                         room.connections.add(otherRoom);
                     } else {
-                        System.out.println("-- Unable to connect room.");
+//                        System.out.println("-- Unable to connect room " + room.cellx + ", " + room.celly);
                     }
                 }
             }
         }
     }
 
-    private boolean fullyConnected() {
-        boolean[][] marked = new boolean[width][height];
-        int startx = 0, starty = 0;
-
-        findStart:
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (map[x][y] != Terrain.WALL) {
-                    startx = x;
-                    starty = y;
-                    break findStart;
+    private void fullyConnect() {
+        boolean[][] marked = new boolean[cellWidth][cellHeight];
+        Deque<Room> deq = new LinkedList<>();
+        for (int x = 0; x < cellWidth; x++) {
+            for (int y = 0; y < cellHeight; y++) {
+                deq.offer(rooms[x][y]);
+            }
+        }
+        Deque<Room> connected = new LinkedList<>();
+        connected.add(deq.pop());
+        boolean changed = true;
+        testing:
+        while (changed) {
+            changed = false;
+            for (Room test : deq) {
+                for (Room r : connected) {
+                    if (test.connections.contains(r) || r.connections.contains(test)) {
+                        connected.offer(test);
+                        deq.remove(test);
+                        changed = true;
+                        continue testing;
+                    }
                 }
             }
         }
 
-        Deque<Point> points = new LinkedList<>();
-        points.offer(new Point(startx, starty));
-        while (!points.isEmpty()) {
-            Point p = points.pop();
-            if (marked[p.x][p.y]) {
-                continue;//already been here
-            }
-            marked[p.x][p.y] = true;
-            for (DirectionCardinal dir : DirectionCardinal.CARDINALS) {
-                int dx = p.x + dir.deltaX;
-                int dy = p.y + dir.deltaY;
-                if (dx < 0 || dx >= width || dy < 0 || dy >= height) {
-                    continue;
-                }
-
-                if (!marked[dx][dy] && map[dx][dy] != Terrain.WALL) {
-                    points.offer(new Point(dx, dy));
-                }
-            }
-        }
-
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (map[x][y] != Terrain.WALL && !marked[x][y]) {
-                    return false;
+        boolean allGood = true;
+        if (!deq.isEmpty()) {
+//            System.out.println("Disconnected: " + deq.size());
+            testing:
+            for (Room room : deq) {
+                for (DirectionCardinal dir : DirectionCardinal.CARDINALS) {
+                    int x = room.cellx + dir.deltaX;
+                    int y = room.celly + dir.deltaY;
+                    if (x >= 0 && y >= 0 && x < cellWidth && y < cellHeight) {
+                        Room otherRoom = rooms[x][y];
+                        if (connected.contains(otherRoom)) {
+                            room.connections.add(otherRoom);
+                            allGood = false;
+                            break testing;
+                        }
+                    }
                 }
             }
         }
-        return true;//all tests passed
-    }
-
-    private void createRandomRoomConnections() {
-        //find a random open spot
-        int x = 0, y = 0;
-        while (map[x][y] != Terrain.FLOOR) {
-            x = rng.nextInt(width);
-            y = rng.nextInt(height);
+        
+        if (!allGood){
+            fullyConnect();
         }
-        Point start = new Point(x, y);
-
-        x = 0;
-        y = 0;
-        while (map[x][y] != Terrain.FLOOR) {
-            x = rng.nextInt(width);
-            y = rng.nextInt(height);
-        }
-        Point end = new Point(x, y);
-        drawCorridor(start, end);
     }
 
     private void createRooms() {
@@ -319,38 +318,53 @@ public class RogueMapGenerator {
         }
     }
 
+    /**
+     * Returns a random position on the wall of the room in the given direction.
+     *
+     * @param room
+     * @param dir
+     * @return
+     */
     private Point getWallPosition(Room room, DirectionCardinal dir) {
-        int rx, ry;
+        int x, y;
         Point p = null;
 
         switch (dir) {
             case LEFT:
+                y = rng.between(room.y + 1, room.y + room.height);
+                x = room.x - 1;
+                map[x][y] = Terrain.DOOR;
+                p = new Point(x - 1, y);
+                break;
             case RIGHT:
-                rx = rng.between(room.x + 1, room.x + room.width - 1);
-                if (dir == DirectionCardinal.LEFT) {
-                    ry = room.y - 2;
-                } else {
-                    ry = room.y + room.height + 1;
-                }
-                map[rx][ry - dir.deltaX] = Terrain.DOOR;
-                p = new Point(rx, ry);
+                y = rng.between(room.y + 1, room.y + room.height);
+                x = room.x + room.width;
+                map[x][y] = Terrain.DOOR;
+                p = new Point(x + 1, y);
                 break;
             case UP:
+                x = rng.between(room.x + 1, room.x + room.width);
+                y = room.y - 1;
+                map[x][y] = Terrain.DOOR;
+                p = new Point(x, y - 1);
+                break;
             case DOWN:
-                ry = rng.between(room.y + 1, room.y + room.height - 1);
-                if (dir == DirectionCardinal.DOWN) {
-                    rx = room.x + room.width + 1;
-                } else {
-                    rx = room.x - 2;
-                }
-                map[rx - dir.deltaY][ry] = Terrain.DOOR;
-                p = new Point(rx, ry);
+                x = rng.between(room.x + 1, room.x + room.width);
+                y = room.y + room.height;
+                map[x][y] = Terrain.DOOR;
+                p = new Point(x, y + 1);
                 break;
         }
 
         return p;
     }
 
+    /**
+     * Draws a corridor between the two points with a zig-zag in between.
+     *
+     * @param start
+     * @param end
+     */
     private void drawCorridor(Point start, Point end) {
         int xOffset = end.x - start.x;
         int yOffset = end.y - start.y;
@@ -402,7 +416,7 @@ public class RogueMapGenerator {
             for (int y = 0; y < cellHeight; y++) {
                 Room room = rooms[x][y];
                 for (Room otherRoom : room.connections) {
-                    DirectionCardinal dir = DirectionCardinal.getDirection(room.cellx - otherRoom.cellx, room.celly - otherRoom.celly);
+                    DirectionCardinal dir = DirectionCardinal.getDirection(otherRoom.cellx - room.cellx, otherRoom.celly - room.celly);
                     drawCorridor(getWallPosition(room, dir), getWallPosition(otherRoom, dir.opposite()));
                 }
             }

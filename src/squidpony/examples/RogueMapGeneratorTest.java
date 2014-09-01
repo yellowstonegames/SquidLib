@@ -1,5 +1,7 @@
 package squidpony.examples;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.squidcolor.SColor;
@@ -18,23 +20,58 @@ public class RogueMapGeneratorTest {
     private JFrame frame;
     private SwingPane back, front;
     private final RNG rng = new RNG();
+    private RogueMapGenerator gen;
 
     public static void main(String... args) {
         new RogueMapGeneratorTest().go();
     }
 
     private void go() {
-        RogueMapGenerator gen = new RogueMapGenerator(5, 4, width, height, 3, 15, 4, 15);
-        RogueMapGenerator.Terrain[][] map = gen.create();
+        gen = new RogueMapGenerator(5, 4, width, height, 3, 15, 4, 15);
 
         back = new SwingPane(width, height, scale, scale);
         front = new SwingPane(width, height, scale, scale);
+
+        frame = new JFrame();
+        JLayeredPane layer = new JLayeredPane();
+        layer.setLayer(back, JLayeredPane.DEFAULT_LAYER);
+        layer.setLayer(front, JLayeredPane.PALETTE_LAYER);
+        layer.add(back);
+        layer.add(front);
+        layer.setPreferredSize(back.getPreferredSize());
+        layer.setSize(back.getPreferredSize());
+        frame.add(layer);
+
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        paint();
+        frame.setVisible(true);
+
+        frame.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                paint();
+            }
+
+        });
+    }
+
+    private void paint() {
+        RogueMapGenerator.Terrain[][] map;
+        try {
+            map = gen.create();
+        } catch (Exception e) {
+            System.out.println("Error in map gen.\n" + e.getLocalizedMessage());
+            return;//skip drawing
+        }
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 back.put(x, y, SColor.BLACK);
                 SColor color;
-                switch(map[x][y]){
+                switch (map[x][y]) {
                     case DOOR:
                         color = SColor.BROWNER;
                         break;
@@ -50,20 +87,5 @@ public class RogueMapGeneratorTest {
 
         back.refresh();
         front.refresh();
-
-        frame = new JFrame();
-        JLayeredPane layer = new JLayeredPane();
-        layer.setLayer(back, JLayeredPane.DEFAULT_LAYER);
-        layer.setLayer(front, JLayeredPane.PALETTE_LAYER);
-        layer.add(back);
-        layer.add(front);
-        layer.setPreferredSize(back.getPreferredSize());
-        layer.setSize(back.getPreferredSize());
-        frame.add(layer);
-
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }
