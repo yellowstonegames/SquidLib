@@ -117,72 +117,22 @@ public enum BasicRadiusStrategy implements RadiusStrategy3D {
     }
 
     @Override
-    public double minZ(double distance) {
-        double radius = 0;
-        switch (this) {
-            case CUBE:
-            case SPHERE:
-            case OCTAHEDRON:
-                radius = -distance;
-                break;
-        }
-        return radius;
-    }
-
-    @Override
-    public double maxZ(double distance) {
-        double radius = 0;
-        switch (this) {
-            case CUBE:
-            case SPHERE:
-            case OCTAHEDRON:
-                radius = distance;
-                break;
-        }
-        return radius;
-    }
-
-    @Override
-    public double minX(double distance) {
-        return -distance;
-    }
-
-    @Override
-    public double maxX(double distance) {
-        return distance;
-    }
-
-    @Override
-    public double minY(double distance) {
-        return -distance;
-    }
-
-    @Override
-    public double maxY(double distance) {
-        return distance;
-    }
-
-    @Override
     public Point onUnitShape(double distance) {
         if (rng == null) {
             rng = new RNG();
         }
-        return onUnitShape(distance, rng);
-    }
 
-    @Override
-    public Point onUnitShape(double distance, RNG random) {
         int x = 0, y = 0;
         switch (this) {
             case SQUARE:
             case CUBE:
-                x = random.between((int) -distance, (int) distance + 1);
-                y = random.between((int) -distance, (int) distance + 1);
+                x = rng.between((int) -distance, (int) distance + 1);
+                y = rng.between((int) -distance, (int) distance + 1);
                 break;
             case DIAMOND:
             case OCTAHEDRON:
-                x = random.between((int) -distance, (int) distance + 1);
-                y = random.between((int) -distance, (int) distance + 1);
+                x = rng.between((int) -distance, (int) distance + 1);
+                y = rng.between((int) -distance, (int) distance + 1);
                 if (radius(x, y) > distance) {
                     if (x > 0) {
                         if (y > 0) {
@@ -205,8 +155,8 @@ public enum BasicRadiusStrategy implements RadiusStrategy3D {
                 break;
             case CIRCLE:
             case SPHERE:
-                double radius = distance * Math.sqrt(random.between(0.0, 1.0));
-                double theta = random.between(0, 2 * Math.PI);
+                double radius = distance * Math.sqrt(rng.between(0.0, 1.0));
+                double theta = rng.between(0, 2 * Math.PI);
                 x = (int) (Math.cos(theta) * radius);
                 y = (int) (Math.sin(theta) * radius);
         }
