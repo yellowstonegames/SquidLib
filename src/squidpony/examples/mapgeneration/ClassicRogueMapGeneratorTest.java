@@ -8,6 +8,7 @@ import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.mapping.ClassicRogueMapGenerator;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.mapping.Terrain;
+import squidpony.squidgrid.util.DirectionIntercardinal;
 
 /**
  * Displays randomly built maps from the ClassicRogueMapGenerator.
@@ -64,6 +65,8 @@ public class ClassicRogueMapGeneratorTest {
     }
 
     private void paint() {
+        back.erase();
+        front.erase();
         Terrain[][] map;
         map = gen.create();
 
@@ -81,7 +84,18 @@ public class ClassicRogueMapGeneratorTest {
                     default:
                         color = SColor.LIGHT_GRAY;
                 }
-                front.put(x, y, map[x][y].symbol, color);
+                boolean hasNeighbor = false;
+                for (DirectionIntercardinal dir : DirectionIntercardinal.OUTWARDS) {
+                    int x2 = x + dir.deltaX;
+                    int y2 = y + dir.deltaY;
+                    if (x2 >= 0 && y2 >= 0 && x2 < width && y2 < height && map[x2][y2] != Terrain.WALL) {
+                        hasNeighbor = true;
+                        break;
+                    }
+                }
+                if (hasNeighbor) {
+                    front.put(x, y, map[x][y].symbol, color);
+                }
             }
         }
 

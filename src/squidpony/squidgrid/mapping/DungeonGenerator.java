@@ -8,15 +8,16 @@ import squidpony.squidgrid.shape.TiledShape;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class DungeonGenerator {
+
     private TiledShape[] layers;
     private String[] layerNames;
-    
+
     /**
-     * 
-     * 
-     * @param layers 
+     *
+     *
+     * @param layers
      */
-    public DungeonGenerator(TiledShape[] layers){
+    public DungeonGenerator(TiledShape[] layers) {
         this(layers, null);
     }
 
@@ -24,6 +25,5 @@ public class DungeonGenerator {
         this.layers = layers;
         this.layerNames = layerNames;
     }
-        
-    
+
 }
