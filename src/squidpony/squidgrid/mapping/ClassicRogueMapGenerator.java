@@ -1,4 +1,4 @@
-package squidpony.squidgrid.generation;
+package squidpony.squidgrid.mapping;
 
 import java.awt.Point;
 import java.util.Arrays;
@@ -64,16 +64,6 @@ public class ClassicRogueMapGenerator {
                 return false;
             }
             return true;
-        }
-    }
-
-    public enum Terrain {
-
-        FLOOR('.'), WALL('#'), DOOR('+');
-        public char symbol;
-
-        private Terrain(char symbol) {
-            this.symbol = symbol;
         }
     }
 
@@ -360,25 +350,25 @@ public class ClassicRogueMapGenerator {
             case LEFT:
                 y = rng.between(room.y + 1, room.y + room.height);
                 x = room.x - 1;
-                map[x][y] = Terrain.DOOR;
+                map[x][y] = Terrain.CLOSED_DOOR;
                 p = new Point(x - 1, y);
                 break;
             case RIGHT:
                 y = rng.between(room.y + 1, room.y + room.height);
                 x = room.x + room.width;
-                map[x][y] = Terrain.DOOR;
+                map[x][y] = Terrain.CLOSED_DOOR;
                 p = new Point(x + 1, y);
                 break;
             case UP:
                 x = rng.between(room.x + 1, room.x + room.width);
                 y = room.y - 1;
-                map[x][y] = Terrain.DOOR;
+                map[x][y] = Terrain.CLOSED_DOOR;
                 p = new Point(x, y - 1);
                 break;
             case DOWN:
                 x = rng.between(room.x + 1, room.x + room.width);
                 y = room.y + room.height;
-                map[x][y] = Terrain.DOOR;
+                map[x][y] = Terrain.CLOSED_DOOR;
                 p = new Point(x, y + 1);
                 break;
         }

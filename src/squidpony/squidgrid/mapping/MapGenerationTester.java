@@ -1,4 +1,4 @@
-package squidpony.squidgrid.generation;
+package squidpony.squidgrid.mapping;
 
 import java.awt.Font;
 import squidpony.squidgrid.shape.TiledShape;

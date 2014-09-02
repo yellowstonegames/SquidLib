@@ -1,4 +1,4 @@
-package squidpony.squidgrid.generation;
+package squidpony.squidgrid.mapping;
 
 import java.awt.Point;
 import java.util.LinkedList;

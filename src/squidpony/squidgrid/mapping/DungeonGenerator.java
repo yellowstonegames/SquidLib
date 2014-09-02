@@ -1,4 +1,4 @@
-package squidpony.squidgrid.generation;
+package squidpony.squidgrid.mapping;
 
 import squidpony.squidgrid.shape.TiledShape;
 
