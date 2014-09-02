@@ -3,8 +3,7 @@ package squidpony.squidgrid.util;
 import squidpony.annotation.Beta;
 
 /**
- * Indicates which method of dealing with the radius during FOV and LOS solving
- * is preferred.
+ * Indicates which method of dealing with the radius during FOV and LOS solving is preferred.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -56,4 +55,20 @@ public interface RadiusStrategy3D extends RadiusStrategy {
      * @return
      */
     public float radius(float dx, float dy, float dz);
+
+    /**
+     * Returns the minimum z value this strategy will return with the given radius distance.
+     *
+     * @param distance
+     * @return
+     */
+    public double minZ(double distance);
+
+    /**
+     * Returns the maximum z value this strategy will return with the given radius distance.
+     *
+     * @param distance
+     * @return
+     */
+    public double maxZ(double distance);
 }

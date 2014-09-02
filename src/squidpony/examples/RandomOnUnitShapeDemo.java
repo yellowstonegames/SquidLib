@@ -1,35 +1,33 @@
-package squidpony.examples.mapgeneration;
+package squidpony.examples;
 
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.gui.SwingPane;
-import squidpony.squidgrid.mapping.DividedMazeGenerator;
+import squidpony.squidgrid.util.BasicRadiusStrategy;
+import squidpony.squidmath.RNG;
 
 /**
- * Displays randomly built maps from the Divided Maze Generator.
- *
- * A new dungeon is generated every time the mouse is clicked.
+ * Shows some examples of getting random points in a shape.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class DividedMazeTest {
+public class RandomOnUnitShapeDemo {
 
-    private static final int width = 100, height = 80, scale = 10;
+    private static final RNG rng = new RNG();
+    private static final int width = 900, height = 600, scale = 1;
 
     private JFrame frame;
     private SwingPane back, front;
-    private DividedMazeGenerator gen;
 
     public static void main(String... args) {
-        new DividedMazeTest().go();
+        new RandomOnUnitShapeDemo().go();
     }
 
     private void go() {
-        gen = new DividedMazeGenerator(width, height);
-
         back = new SwingPane(width, height, scale, scale);
         front = new SwingPane(width, height, scale, scale);
 
@@ -62,13 +60,26 @@ public class DividedMazeTest {
     private void paint() {
         back.erase();
         front.erase();
-        boolean[][] map;
-        map = gen.create();
+
+        boolean[][] map = new boolean[width][height];
+        int offset = width / 3 - 3;
+        for (int i = 0; i < width * height / 10; i++) {
+            Point p = BasicRadiusStrategy.CIRCLE.onUnitShape(offset / 2);
+            map[p.x + 1 + offset / 2][p.y + (height) / 2] = true;
+
+            p = BasicRadiusStrategy.DIAMOND.onUnitShape(offset / 2);
+            map[p.x + 3 + 3 * offset / 2][p.y + (height) / 2] = true;
+
+            p = BasicRadiusStrategy.SQUARE.onUnitShape(offset / 2);
+            map[p.x + 5 + 5 * offset / 2][p.y + (height) / 2] = true;
+        }
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 back.put(x, y, SColor.BLACK);
-                front.put(x, y, map[x][y] ? SColor.ATOMIC_TANGERINE : SColor.DULL_BLUE);
+                if (map[x][y]) {
+                    front.put(x, y, rng.getRandomElement(SColor.RED_SERIES));
+                }
             }
         }
 
