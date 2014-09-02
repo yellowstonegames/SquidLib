@@ -55,20 +55,4 @@ public interface RadiusStrategy3D extends RadiusStrategy {
      * @return
      */
     public float radius(float dx, float dy, float dz);
-
-    /**
-     * Returns the minimum z value this strategy will return with the given radius distance.
-     *
-     * @param distance
-     * @return
-     */
-    public double minZ(double distance);
-
-    /**
-     * Returns the maximum z value this strategy will return with the given radius distance.
-     *
-     * @param distance
-     * @return
-     */
-    public double maxZ(double distance);
 }

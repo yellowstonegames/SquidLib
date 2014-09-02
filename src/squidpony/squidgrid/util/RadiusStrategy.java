@@ -1,7 +1,6 @@
 package squidpony.squidgrid.util;
 
 import java.awt.Point;
-import squidpony.squidmath.RNG;
 
 /**
  * Indicates which method of dealing with the radius during FOV and LOS solving is preferred.
@@ -51,38 +50,6 @@ public interface RadiusStrategy {
     public float radius(float dx, float dy);
 
     /**
-     * Returns the minimum y value this strategy will return with the given radius distance.
-     *
-     * @param distance
-     * @return
-     */
-    public double minX(double distance);
-
-    /**
-     * Returns the maximum x value this strategy will return with the given radius distance.
-     *
-     * @param distance
-     * @return
-     */
-    public double maxX(double distance);
-
-    /**
-     * Returns the minimum y value this strategy will return with the given radius distance.
-     *
-     * @param distance
-     * @return
-     */
-    public double minY(double distance);
-
-    /**
-     * Returns the maximum y value this strategy will return with the given radius distance.
-     *
-     * @param distance
-     * @return
-     */
-    public double maxY(double distance);
-
-    /**
      * Returns a random point within the unit distance provided for this radius strategy.
      *
      * @param distance
@@ -90,12 +57,4 @@ public interface RadiusStrategy {
      */
     public Point onUnitShape(double distance);
 
-    /**
-     * Returns a random point within the unit distance provided for this radius strategy.
-     *
-     * @param distance
-     * @param random The source of randomness for this operation.
-     * @return
-     */
-    public Point onUnitShape(double distance, RNG random);
 }
