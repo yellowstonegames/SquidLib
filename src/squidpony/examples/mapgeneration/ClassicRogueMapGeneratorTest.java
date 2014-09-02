@@ -1,33 +1,37 @@
-package squidpony.examples;
+package squidpony.examples.mapgeneration;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.squidcolor.SColor;
-import squidpony.squidgrid.generation.RogueMapGenerator;
+import squidpony.squidgrid.generation.ClassicRogueMapGenerator;
 import squidpony.squidgrid.gui.SwingPane;
-import squidpony.squidmath.RNG;
 
 /**
+ * Displays randomly built maps from the ClassicRogueMapGenerator.
+ *
+ * A new dungeon is generated every time the mouse is clicked.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class RogueMapGeneratorTest {
+public class ClassicRogueMapGeneratorTest {
 
-    private static final int width = 100, height = 80, scale = 10;
+    private static final int width = 100, height = 80, scale = 10,
+            horizontalRooms = 5, verticalRooms = 4,
+            minRoomWidth = 3, maxRoomWidth = 15,
+            minRoomHeight = 4, maxRoomHeight = 15;
 
     private JFrame frame;
     private SwingPane back, front;
-    private final RNG rng = new RNG();
-    private RogueMapGenerator gen;
+    private ClassicRogueMapGenerator gen;
 
     public static void main(String... args) {
-        new RogueMapGeneratorTest().go();
+        new ClassicRogueMapGeneratorTest().go();
     }
 
     private void go() {
-        gen = new RogueMapGenerator(5, 4, width, height, 3, 15, 4, 15);
+        gen = new ClassicRogueMapGenerator(horizontalRooms, verticalRooms, width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight);
 
         back = new SwingPane(width, height, scale, scale);
         front = new SwingPane(width, height, scale, scale);
@@ -59,13 +63,8 @@ public class RogueMapGeneratorTest {
     }
 
     private void paint() {
-        RogueMapGenerator.Terrain[][] map;
-        try {
-            map = gen.create();
-        } catch (Exception e) {
-            System.out.println("Error in map gen.\n" + e.getLocalizedMessage());
-            return;//skip drawing
-        }
+        ClassicRogueMapGenerator.Terrain[][] map;
+        map = gen.create();
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {

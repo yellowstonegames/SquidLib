@@ -17,6 +17,8 @@ import squidpony.squidutility.astar.GridSearch;
 /**
  * This program tests GridSearch for correctness. It's visual to make the weighting easy to see along with the path
  * found.
+ * 
+ * A new grid and random search start and end will be generated when the mouse is clicked.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
