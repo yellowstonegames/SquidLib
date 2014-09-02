@@ -12,20 +12,26 @@ import squidpony.squidmath.RNG;
 import squidpony.squidutility.Pair;
 
 /**
+ * Creates a dungeon in the style of the original Rogue game. It will always make a grid style of rooms where there are
+ * a certain number horizontally and vertically and it will link them only next to each other.
+ *
  * This dungeon generator is based on a port of the rot.js version.
  *
  * @author hyakugei
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
-public class RogueMapGenerator {
+public class ClassicRogueMapGenerator {
 
-    public class Room {
+    /**
+     * Holds the information needed to track rooms in the classic rogue generation algorithm.
+     */
+    private class ClassicRogueRoom {
 
-        public int x, y, width, height, cellx, celly;
-        public List<Room> connections = new LinkedList<>();
+        private int x, y, width, height, cellx, celly;
+        private final List<ClassicRogueRoom> connections = new LinkedList<>();
 
-        public Room(int x, int y, int width, int height, int cellx, int celly) {
+        ClassicRogueRoom(int x, int y, int width, int height, int cellx, int celly) {
             this.x = x;
             this.y = y;
             this.width = width;
@@ -50,7 +56,7 @@ public class RogueMapGenerator {
             if (getClass() != obj.getClass()) {
                 return false;
             }
-            final Room other = (Room) obj;
+            final ClassicRogueRoom other = (ClassicRogueRoom) obj;
             if (this.cellx != other.cellx) {
                 return false;
             }
@@ -73,23 +79,58 @@ public class RogueMapGenerator {
 
     private static final RNG rng = new RNG();
 
-    private int cellWidth, cellHeight, width, height,
+    private int horizontalRooms, verticalRooms, dungeonWidth, dungeonHeight,
             minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight;
-    private Room[][] rooms;
+    private ClassicRogueRoom[][] rooms;
     private Terrain[][] map;
-    private List<Room> connectedCells = new LinkedList<>();
 
-    public RogueMapGenerator(int cellWidth, int cellHeight, int width, int height, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight) {
-        this.cellWidth = cellWidth;
-        this.cellHeight = cellHeight;
-        this.width = width;
-        this.height = height;
+    /**
+     * Initializes the generator to turn out random dungeons within the specific parameters.
+     *
+     * Will size down the room width and height parameters if needed to ensure the desired number of rooms will fit both
+     * horizontally and vertically.
+     *
+     * @param horizontalRooms How many rooms will be made horizontally
+     * @param verticalRooms How many rooms will be made vertically
+     * @param dungeonWidth How wide the total dungeon will be
+     * @param dungeonHeight How high the total dungeon will be
+     * @param minRoomWidth The minimum width a room can be
+     * @param maxRoomWidth The maximum width a room can be
+     * @param minRoomHeight The minimum height a room can be
+     * @param maxRoomHeight The maximum height a room can be
+     */
+    public ClassicRogueMapGenerator(int horizontalRooms, int verticalRooms, int dungeonWidth, int dungeonHeight, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight) {
+        this.horizontalRooms = horizontalRooms;
+        this.verticalRooms = verticalRooms;
+        this.dungeonWidth = dungeonWidth;
+        this.dungeonHeight = dungeonHeight;
         this.minRoomWidth = minRoomWidth;
         this.maxRoomWidth = maxRoomWidth;
         this.minRoomHeight = minRoomHeight;
         this.maxRoomHeight = maxRoomHeight;
+
+        sanitizeRoomDimensions();
     }
 
+    private void sanitizeRoomDimensions() {
+        int test = (dungeonWidth - 3 * horizontalRooms) / horizontalRooms ;//have to leave space for hallways
+        maxRoomWidth = Math.min(test, maxRoomWidth);
+        minRoomWidth = Math.max(minRoomWidth, 2);
+        minRoomWidth = Math.min(minRoomWidth, maxRoomWidth);
+
+        test = (dungeonHeight - 3 * verticalRooms) / (verticalRooms);//have to leave space for hallways
+        maxRoomHeight = Math.min(test, maxRoomHeight);
+        minRoomHeight = Math.max(minRoomHeight, 2);
+        minRoomHeight = Math.min(minRoomHeight, maxRoomHeight);
+    }
+
+    /**
+     * Builds and returns a map in the Classic Rogue style.
+     *
+     * Only includes rooms, corridors and doors.
+     *
+     * @return
+     */
     public Terrain[][] create() {
         initRooms();
         connectRooms();
@@ -101,40 +142,40 @@ public class RogueMapGenerator {
     }
 
     private void initRooms() {
-        rooms = new Room[cellWidth][cellHeight];
-        map = new Terrain[width][height];
-        for (int x = 0; x < cellWidth; x++) {
-            for (int y = 0; y < cellHeight; y++) {
-                rooms[x][y] = new Room(0, 0, 0, 0, x, y);
+        rooms = new ClassicRogueRoom[horizontalRooms][verticalRooms];
+        map = new Terrain[dungeonWidth][dungeonHeight];
+        for (int x = 0; x < horizontalRooms; x++) {
+            for (int y = 0; y < verticalRooms; y++) {
+                rooms[x][y] = new ClassicRogueRoom(0, 0, 0, 0, x, y);
             }
         }
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int x = 0; x < dungeonWidth; x++) {
+            for (int y = 0; y < dungeonHeight; y++) {
                 map[x][y] = Terrain.WALL;
             }
         }
     }
 
     private void connectRooms() {
-        List<Room> unconnected = new LinkedList<>();
-        for (int x = 0; x < cellWidth; x++) {
-            for (int y = 0; y < cellHeight; y++) {
+        List<ClassicRogueRoom> unconnected = new LinkedList<>();
+        for (int x = 0; x < horizontalRooms; x++) {
+            for (int y = 0; y < verticalRooms; y++) {
                 unconnected.add(rooms[x][y]);
             }
         }
         Collections.shuffle(unconnected, rng);
 
         List<DirectionCardinal> dirToCheck;
-        for (Room room : unconnected) {
+        for (ClassicRogueRoom room : unconnected) {
             dirToCheck = Arrays.asList(DirectionCardinal.CARDINALS);
             Collections.shuffle(dirToCheck, rng);
             for (DirectionCardinal dir : dirToCheck) {
                 int nextX = room.x + dir.deltaX;
                 int nextY = room.y + dir.deltaY;
-                if (nextX < 0 || nextX >= cellWidth || nextY < 0 || nextY >= cellHeight) {
+                if (nextX < 0 || nextX >= horizontalRooms || nextY < 0 || nextY >= verticalRooms) {
                     continue;
                 }
-                Room otherRoom = rooms[nextX][nextY];
+                ClassicRogueRoom otherRoom = rooms[nextX][nextY];
 
                 if (room.connections.contains(otherRoom)) {
                     break;//already connected to this room
@@ -149,9 +190,9 @@ public class RogueMapGenerator {
     }
 
     private void connectUnconnectedRooms() {
-        for (int x = 0; x < cellWidth; x++) {
-            for (int y = 0; y < cellHeight; y++) {
-                Room room = rooms[x][y];
+        for (int x = 0; x < horizontalRooms; x++) {
+            for (int y = 0; y < verticalRooms; y++) {
+                ClassicRogueRoom room = rooms[x][y];
 
                 if (room.connections.isEmpty()) {
                     List<DirectionCardinal> dirToCheck = new LinkedList<>();
@@ -159,26 +200,23 @@ public class RogueMapGenerator {
                     Collections.shuffle(dirToCheck, rng);
 
                     boolean validRoom = false;
-                    Room otherRoom = null;
+                    ClassicRogueRoom otherRoom = null;
 
                     do {
                         DirectionCardinal dir = dirToCheck.remove(0);
 
                         int nextX = x + dir.deltaX;
-                        if (nextX < 0 || nextX >= cellWidth) {
+                        if (nextX < 0 || nextX >= horizontalRooms) {
                             continue;
                         }
                         int nextY = y + dir.deltaY;
-                        if (nextY < 0 || nextY >= cellHeight) {
+                        if (nextY < 0 || nextY >= verticalRooms) {
                             continue;
                         }
 
                         otherRoom = rooms[nextX][nextY];
                         validRoom = true;
 
-//                        if (otherRoom.connections.isEmpty()) {
-//                            break;
-//                        }
                         if (otherRoom.connections.contains(room)) {
                             validRoom = false;
                             continue;
@@ -192,8 +230,6 @@ public class RogueMapGenerator {
 
                     if (validRoom) {
                         room.connections.add(otherRoom);
-                    } else {
-//                        System.out.println("-- Unable to connect room " + room.cellx + ", " + room.celly);
                     }
                 }
             }
@@ -201,64 +237,62 @@ public class RogueMapGenerator {
     }
 
     private void fullyConnect() {
-        boolean[][] marked = new boolean[cellWidth][cellHeight];
-        Deque<Room> deq = new LinkedList<>();
-        for (int x = 0; x < cellWidth; x++) {
-            for (int y = 0; y < cellHeight; y++) {
-                deq.offer(rooms[x][y]);
-            }
-        }
-        Deque<Room> connected = new LinkedList<>();
-        connected.add(deq.pop());
-        boolean changed = true;
-        testing:
-        while (changed) {
-            changed = false;
-            for (Room test : deq) {
-                for (Room r : connected) {
-                    if (test.connections.contains(r) || r.connections.contains(test)) {
-                        connected.offer(test);
-                        deq.remove(test);
-                        changed = true;
-                        continue testing;
-                    }
+        boolean allGood;
+        do {
+            Deque<ClassicRogueRoom> deq = new LinkedList<>();
+            for (int x = 0; x < horizontalRooms; x++) {
+                for (int y = 0; y < verticalRooms; y++) {
+                    deq.offer(rooms[x][y]);
                 }
             }
-        }
-
-        boolean allGood = true;
-        if (!deq.isEmpty()) {
-//            System.out.println("Disconnected: " + deq.size());
+            Deque<ClassicRogueRoom> connected = new LinkedList<>();
+            connected.add(deq.pop());
+            boolean changed = true;
             testing:
-            for (Room room : deq) {
-                for (DirectionCardinal dir : DirectionCardinal.CARDINALS) {
-                    int x = room.cellx + dir.deltaX;
-                    int y = room.celly + dir.deltaY;
-                    if (x >= 0 && y >= 0 && x < cellWidth && y < cellHeight) {
-                        Room otherRoom = rooms[x][y];
-                        if (connected.contains(otherRoom)) {
-                            room.connections.add(otherRoom);
-                            allGood = false;
-                            break testing;
+            while (changed) {
+                changed = false;
+                for (ClassicRogueRoom test : deq) {
+                    for (ClassicRogueRoom r : connected) {
+                        if (test.connections.contains(r) || r.connections.contains(test)) {
+                            connected.offer(test);
+                            deq.remove(test);
+                            changed = true;
+                            continue testing;
                         }
                     }
                 }
             }
-        }
-        
-        if (!allGood){
-            fullyConnect();
-        }
+
+            allGood = true;
+            if (!deq.isEmpty()) {
+                testing:
+                for (ClassicRogueRoom room : deq) {
+                    for (DirectionCardinal dir : DirectionCardinal.CARDINALS) {
+                        int x = room.cellx + dir.deltaX;
+                        int y = room.celly + dir.deltaY;
+                        if (x >= 0 && y >= 0 && x < horizontalRooms && y < verticalRooms) {
+                            ClassicRogueRoom otherRoom = rooms[x][y];
+                            if (connected.contains(otherRoom)) {
+                                room.connections.add(otherRoom);
+                                allGood = false;
+                                break testing;
+                            }
+                        }
+                    }
+                }
+            }
+
+        } while (!allGood);
     }
 
     private void createRooms() {
-        int cwp = width / cellWidth;
-        int chp = height / cellHeight;
+        int cwp = dungeonWidth / horizontalRooms;
+        int chp = dungeonHeight / verticalRooms;
 
-        Room otherRoom;
+        ClassicRogueRoom otherRoom;
 
-        for (int x = 0; x < cellWidth; x++) {
-            for (int y = 0; y < cellHeight; y++) {
+        for (int x = 0; x < horizontalRooms; x++) {
+            for (int y = 0; y < verticalRooms; y++) {
                 int sx = cwp * x;
                 int sy = chp * y;
 
@@ -285,14 +319,14 @@ public class RogueMapGenerator {
                 int sxOffset = Math.round(rng.nextInt(cwp - roomw) / 2);
                 int syOffset = Math.round(rng.nextInt(chp - roomh) / 2);
 
-                while (sx + sxOffset + roomw >= width) {
+                while (sx + sxOffset + roomw >= dungeonWidth) {
                     if (sxOffset > 0) {
                         sxOffset--;
                     } else {
                         roomw--;
                     }
                 }
-                while (sy + syOffset + roomh >= height) {
+                while (sy + syOffset + roomh >= dungeonHeight) {
                     if (syOffset > 0) {
                         syOffset--;
                     } else {
@@ -303,7 +337,7 @@ public class RogueMapGenerator {
                 sx += sxOffset;
                 sy += syOffset;
 
-                Room r = rooms[x][y];
+                ClassicRogueRoom r = rooms[x][y];
                 r.x = sx;
                 r.y = sy;
                 r.width = roomw;
@@ -318,14 +352,7 @@ public class RogueMapGenerator {
         }
     }
 
-    /**
-     * Returns a random position on the wall of the room in the given direction.
-     *
-     * @param room
-     * @param dir
-     * @return
-     */
-    private Point getWallPosition(Room room, DirectionCardinal dir) {
+    private Point randomWallPosition(ClassicRogueRoom room, DirectionCardinal dir) {
         int x, y;
         Point p = null;
 
@@ -365,7 +392,7 @@ public class RogueMapGenerator {
      * @param start
      * @param end
      */
-    private void drawCorridor(Point start, Point end) {
+    private void digPath(Point start, Point end) {
         int xOffset = end.x - start.x;
         int yOffset = end.y - start.y;
         int xpos = start.x;
@@ -412,12 +439,12 @@ public class RogueMapGenerator {
     }
 
     private void createCorridors() {
-        for (int x = 0; x < cellWidth; x++) {
-            for (int y = 0; y < cellHeight; y++) {
-                Room room = rooms[x][y];
-                for (Room otherRoom : room.connections) {
+        for (int x = 0; x < horizontalRooms; x++) {
+            for (int y = 0; y < verticalRooms; y++) {
+                ClassicRogueRoom room = rooms[x][y];
+                for (ClassicRogueRoom otherRoom : room.connections) {
                     DirectionCardinal dir = DirectionCardinal.getDirection(otherRoom.cellx - room.cellx, otherRoom.celly - room.celly);
-                    drawCorridor(getWallPosition(room, dir), getWallPosition(otherRoom, dir.opposite()));
+                    digPath(randomWallPosition(room, dir), randomWallPosition(otherRoom, dir.opposite()));
                 }
             }
         }
