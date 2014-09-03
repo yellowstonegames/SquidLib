@@ -1,11 +1,11 @@
 package squidpony.squidgrid.util;
 
 import java.awt.Point;
-import java.util.Random;
+import squidpony.squidmath.Point3D;
 import squidpony.squidmath.RNG;
 
 /**
- * Basic radius strategy implementations.
+ * Basic radius strategy implementations likely to be used for roguelikes.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -162,5 +162,55 @@ public enum BasicRadiusStrategy implements RadiusStrategy3D {
         }
 
         return new Point(x, y);
+    }
+
+    public Point3D onUnitShape3D(double distance) {
+        if (rng == null) {
+            rng = new RNG();
+        }
+
+        int x = 0, y = 0, z = 0;
+        switch (this) {
+            case SQUARE:
+            case DIAMOND:
+            case CIRCLE:
+                Point p = onUnitShape(distance);
+                return new Point3D(p.x, p.y, 0);//2D strategies
+            case CUBE:
+                x = rng.between((int) -distance, (int) distance + 1);
+                y = rng.between((int) -distance, (int) distance + 1);
+                z = rng.between((int) -distance, (int) distance + 1);
+                break;
+            case OCTAHEDRON:
+                x = rng.between((int) -distance, (int) distance + 1);
+                y = rng.between((int) -distance, (int) distance + 1);
+                z = rng.between((int) -distance, (int) distance + 1);
+                if (radius(x, y, z) > distance) {
+                    if (x > 0) {
+                        x = (int) (distance - x);
+                    } else {
+                        x = (int) (-distance - x);
+                    }
+                    if (y > 0) {
+                        y = (int) (distance - y);
+                    } else {
+                        y = (int) (-distance - y);
+                    }
+                    if (z > 0) {
+                        z = (int) (distance - z);
+                    } else {
+                        z = (int) (-distance - z);
+                    }
+                }
+                break;
+            case SPHERE:
+                do {
+                    x = rng.between((int) -distance, (int) distance + 1);
+                    y = rng.between((int) -distance, (int) distance + 1);
+                    z = rng.between((int) -distance, (int) distance + 1);
+                } while (radius(x, y, z) > distance);
+        }
+
+        return new Point3D(x, y, z);
     }
 }

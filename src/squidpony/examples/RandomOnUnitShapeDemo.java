@@ -8,6 +8,7 @@ import javax.swing.JLayeredPane;
 import squidpony.squidcolor.SColor;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.util.BasicRadiusStrategy;
+import squidpony.squidmath.Point3D;
 import squidpony.squidmath.RNG;
 
 /**
@@ -64,13 +65,13 @@ public class RandomOnUnitShapeDemo {
         boolean[][] map = new boolean[width][height];
         int offset = width / 3 - 3;
         for (int i = 0; i < width * height / 10; i++) {
-            Point p = BasicRadiusStrategy.CIRCLE.onUnitShape(offset / 2);
+            Point3D p = BasicRadiusStrategy.SPHERE.onUnitShape3D(offset / 2);
             map[p.x + 1 + offset / 2][p.y + (height) / 2] = true;
 
-            p = BasicRadiusStrategy.DIAMOND.onUnitShape(offset / 2);
+            p = BasicRadiusStrategy.OCTAHEDRON.onUnitShape3D(offset / 2);
             map[p.x + 3 + 3 * offset / 2][p.y + (height) / 2] = true;
 
-            p = BasicRadiusStrategy.SQUARE.onUnitShape(offset / 2);
+            p = BasicRadiusStrategy.CUBE.onUnitShape3D(offset / 2);
             map[p.x + 5 + 5 * offset / 2][p.y + (height) / 2] = true;
         }
 
