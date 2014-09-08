@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -19,6 +18,7 @@ import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.gui.SGKeyListener;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidmath.RNG;
 
 /**
  * This class starts up the game.
@@ -32,7 +32,7 @@ public class SnowmanGame {
     private static final int minimumRoomSize = 3;
     private static final String CHARS_USED = "☃☺.,Xy";//even though '▒' is used, it makes sizing weird and it's okay if it doesn't all fit in the cell so it's not in this list
     private final FOVTranslator fov = new FOVTranslator(new ShadowFOV());
-    private final Random rng = new squidpony.squidmath.RNG();
+    private final RNG rng = new RNG();
     private JFrame frame;
     private SwingPane mapPanel, mapBackPanel, statsPanel, outputPanel;
     private SGKeyListener keyListener;
@@ -68,8 +68,7 @@ public class SnowmanGame {
     }
 
     /**
-     * This is the main game loop method that takes input and process the
-     * results. Right now it doesn't loop!
+     * This is the main game loop method that takes input and process the results. Right now it doesn't loop!
      */
     private void runTurn() {
         int key = keyListener.next().getExtendedKeyCode();
@@ -89,11 +88,9 @@ public class SnowmanGame {
     }
 
     /**
-     * Attempts to move in the given direction. If a monster is in that
-     * direction then the player attacks the monster.
+     * Attempts to move in the given direction. If a monster is in that direction then the player attacks the monster.
      *
-     * Returns false if there was a wall in the direction and so no action was
-     * taken.
+     * Returns false if there was a wall in the direction and so no action was taken.
      *
      * @param dir
      * @return
@@ -235,8 +232,7 @@ public class SnowmanGame {
     }
 
     /**
-     * Randomly places a group of walls in the map. This replaces whatever was
-     * in that location previously.
+     * Randomly places a group of walls in the map. This replaces whatever was in that location previously.
      */
     private void placeWallChunk() {
         int spread = 5;
@@ -289,8 +285,7 @@ public class SnowmanGame {
     }
 
     /**
-     * Moves the monster given if possible. Monsters will not move into walls,
-     * other monsters, or the player.
+     * Moves the monster given if possible. Monsters will not move into walls, other monsters, or the player.
      *
      * @param monster
      */

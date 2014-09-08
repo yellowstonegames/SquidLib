@@ -3,7 +3,6 @@ package squidpony.squidgrid.shape;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Random;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.RNG;
 
@@ -15,14 +14,14 @@ import squidpony.squidmath.RNG;
 public class BrickDungeon {
 
     private Scanner vertScanner;
-    public ArrayList<char[][]> tilesVert = new ArrayList<char[][]>(128);
+    public ArrayList<char[][]> tilesVert = new ArrayList<>(128);
     private Scanner horizScanner;
-    public ArrayList<char[][]> tilesHoriz = new ArrayList<char[][]>(128);
+    public ArrayList<char[][]> tilesHoriz = new ArrayList<>(128);
     private char[][] shown;
     public int wide;
     public int high;
     public boolean colorful;
-    private Random rng;
+    private RNG rng;
     public static ArrayList<char[][]> tilesVertShared = null,
             tilesHorizShared = null;
 
@@ -77,7 +76,7 @@ public class BrickDungeon {
         this(wide, high, new RNG());
     }
 
-    public BrickDungeon(int wide, int high, Random random) {
+    public BrickDungeon(int wide, int high, RNG random) {
         this(wide, high, random, null, null);
     }
 
@@ -86,12 +85,12 @@ public class BrickDungeon {
         this(wide, high, new RNG(), horizStream, vertStream);
     }
 
-    public BrickDungeon(int wide, int high, Random random,
+    public BrickDungeon(int wide, int high, RNG random,
             InputStream horizStream, InputStream vertStream) {
         this(wide, high, random, horizStream, vertStream, false);
     }
 
-    public BrickDungeon(int wide, int high, Random random,
+    public BrickDungeon(int wide, int high, RNG random,
             InputStream horizStream, InputStream vertStream, boolean colorful) {
 
         if ((tilesVertShared == null && tilesVertShared == null) || (horizStream != null || vertStream != null)) {
