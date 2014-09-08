@@ -182,27 +182,6 @@ public enum BasicRadiusStrategy implements RadiusStrategy3D {
                 z = rng.between((int) -distance, (int) distance + 1);
                 break;
             case OCTAHEDRON:
-                x = rng.between((int) -distance, (int) distance + 1);
-                y = rng.between((int) -distance, (int) distance + 1);
-                z = rng.between((int) -distance, (int) distance + 1);
-                if (radius(x, y, z) > distance) {
-                    if (x > 0) {
-                        x = (int) (distance - x);
-                    } else {
-                        x = (int) (-distance - x);
-                    }
-                    if (y > 0) {
-                        y = (int) (distance - y);
-                    } else {
-                        y = (int) (-distance - y);
-                    }
-                    if (z > 0) {
-                        z = (int) (distance - z);
-                    } else {
-                        z = (int) (-distance - z);
-                    }
-                }
-                break;
             case SPHERE:
                 do {
                     x = rng.between((int) -distance, (int) distance + 1);

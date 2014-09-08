@@ -2,7 +2,6 @@ package squidpony.squidgrid.shape;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.RNG;
@@ -24,7 +23,7 @@ public class RunningBondDungeon {
     public int wide;
     public int high;
     public boolean colorful;
-    private Random rng;
+    private RNG rng;
 
     private void loadStreams(InputStream horizStream, InputStream vertStream) {
         if (horizStream == null) {
@@ -77,7 +76,7 @@ public class RunningBondDungeon {
         this(wide, high, new RNG());
     }
 
-    public RunningBondDungeon(int wide, int high, Random random) {
+    public RunningBondDungeon(int wide, int high, RNG random) {
         this(wide, high, random, null, null);
     }
 
@@ -86,12 +85,12 @@ public class RunningBondDungeon {
         this(wide, high, new RNG(), horizStream, vertStream);
     }
 
-    public RunningBondDungeon(int wide, int high, Random random,
+    public RunningBondDungeon(int wide, int high, RNG random,
             InputStream horizStream, InputStream vertStream) {
         this(wide, high, random, horizStream, vertStream, false);
     }
 
-    public RunningBondDungeon(int wide, int high, Random random,
+    public RunningBondDungeon(int wide, int high, RNG random,
             InputStream horizStream, InputStream vertStream, boolean colorful) {
         if ((tilesVertShared == null && tilesVertShared == null) || (horizStream != null || vertStream != null)) {
             loadStreams(horizStream, vertStream);

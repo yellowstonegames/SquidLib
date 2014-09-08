@@ -1,6 +1,5 @@
 package squidpony.examples;
 
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
@@ -10,6 +9,7 @@ import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.util.BasicRadiusStrategy;
 import squidpony.squidmath.Point3D;
 import squidpony.squidmath.RNG;
+import squidpony.squidmath.XorRNG;
 
 /**
  * Shows some examples of getting random points in a shape.
@@ -18,7 +18,7 @@ import squidpony.squidmath.RNG;
  */
 public class RandomOnUnitShapeDemo {
 
-    private static final RNG rng = new RNG();
+    private static final RNG rng = new RNG(new XorRNG());
     private static final int width = 900, height = 600, scale = 1;
 
     private JFrame frame;
