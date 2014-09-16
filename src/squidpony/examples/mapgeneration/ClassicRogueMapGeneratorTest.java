@@ -74,16 +74,6 @@ public class ClassicRogueMapGeneratorTest {
             for (int y = 0; y < height; y++) {
                 back.put(x, y, SColor.BLACK);
                 SColor color;
-                switch (map[x][y]) {
-                    case CLOSED_DOOR:
-                        color = SColor.BROWNER;
-                        break;
-                    case FLOOR:
-                        color = SColor.ALOEWOOD_BROWN;
-                        break;
-                    default:
-                        color = SColor.LIGHT_GRAY;
-                }
                 boolean hasNeighbor = false;
                 for (DirectionIntercardinal dir : DirectionIntercardinal.OUTWARDS) {
                     int x2 = x + dir.deltaX;
@@ -94,7 +84,7 @@ public class ClassicRogueMapGeneratorTest {
                     }
                 }
                 if (hasNeighbor) {
-                    front.put(x, y, map[x][y].symbol, color);
+                    front.put(x, y, map[x][y].symbol(), map[x][y].color());
                 }
             }
         }
