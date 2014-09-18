@@ -9,34 +9,160 @@ import squidpony.squidtext.StringUtils;
 import squidpony.squidutility.SCollections;
 
 /**
- * Based on work by Nolithius available at the following two sites
- * https://github.com/Nolithius/weighted-letter-namegen
+ * Based on work by Nolithius available at the following two sites https://github.com/Nolithius/weighted-letter-namegen
  * http://code.google.com/p/weighted-letter-namegen/
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
 public class WeightedLetterNamegen {
+//<editor-fold defaultstate="collapsed" desc="Viking Style static name list">
 
-    public static int LAST_LETTER_CANDIDATES_MAX = 5;
+    public static final String[] VIKING_STYLE_NAMES = new String[]{
+        "Andor",
+        "Baatar",
+        "Drogo",
+        "Grog",
+        "Gruumsh",
+        "Grunt",
+        "Hodor",
+        "Hrothgar",
+        "Hrun",
+        "Korg",
+        "Lothar",
+        "Odin",
+        "Thor",
+        "Yngvar",
+        "Xandor"
+    };
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Star Wars Style static name list">
+    public static final String[] STAR_WARS_STYLE_NAMES = new String[]{
+        "Lutoif Vap",
+        "Nasoi Seert",
+        "Bispai Sose",
+        "Vainau Brairkau",
+        "Tirka Kist",
+        "Boush Wofe",
+        "Vouxoin Voges",
+        "Koux Boiti",
+        "Loim Gaungu",
+        "Mut Tep",
+        "Foimo Saispi",
+        "Toneeg Vaiba",
+        "Nix Nast",
+        "Gup Dangisp",
+        "Distark Toonausp",
+        "Tex Brirki",
+        "Kat Tosha",
+        "Tauna Foip",
+        "Frip Cex",
+        "Fexa Lun",
+        "Tafa Zeesheerk",
+        "Cremoim Kixoop",
+        "Tago"
+    };
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="USA male names static name list">
+    public static final String[] COMMON_USA_MALE_NAMES = new String[]{
+        "James",
+        "John",
+        "Robert",
+        "Michael",
+        "William",
+        "David",
+        "Richard",
+        "Charles",
+        "Joseph",
+        "Tomas",
+        "Christopher",
+        "Daniel",
+        "Paul",
+        "Mark",
+        "Donald",
+        "George",
+        "Kenneth",
+        "Steven",
+        "Edward",
+        "Brian",
+        "Ronald",
+        "Anthony",
+        "Kevin",
+        "Jason",
+        "Matthew",
+        "Gary",
+        "Timothy",
+        "Jose",
+        "Larry",
+        "Jeffrey",
+        "Frank",
+        "Scott",
+        "Eric",
+        "Stephen",
+        "Andrew",
+        "Raymond",
+        "Gregory",
+        "Joshua",
+        "Jerry",
+        "Dennis",
+        "Walter",
+        "Patrick",
+        "Peter",
+        "Harold",
+        "Douglas",
+        "Henry",
+        "Carl",
+        "Arthur",
+        "Ryan",
+        "Roger"
+    };
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="USA last nams static name list">
+    public static final String[] COMMON_USA_LAST_NAMES = new String[]{
+        "Smith",
+        "Johnson",
+        "Williams",
+        "Brown",
+        "Jones",
+        "Miller",
+        "Davis",
+        "Wilson",
+        "Anderson",
+        "Taylor",
+        "Thomas",
+        "Moore",
+        "Martin",
+        "Jackson",
+        "Thompson",
+        "White",
+        "Clark",
+        "Lewis",
+        "Robinson",
+        "Walker"
+    };
+//</editor-fold>
+
     private static final RNG rng = new RNG();
+    private static final Character[] vowels = new Character[]{'a', 'e', 'i', 'o'};//not using y because it looks strange as a vowel in names
 
+    private static final int LAST_LETTER_CANDIDATES_MAX = 52;
     private boolean initialized = false;
 
     private String[] names;
+    private int consonantLimit;
     private ArrayList<Integer> sizes;
 
     private TreeMap<Character, WeightedLetter> letters;
     private ArrayList<Character> firstLetterSamples;
     private ArrayList<Character> lastLetterSamples;
 
-    public WeightedLetterNamegen(String[] names) {
+    public WeightedLetterNamegen(String[] names, int consonantLimit) {
         this.names = names;
+        this.consonantLimit = consonantLimit;
     }
 
     /**
-     * Initialization, statistically measures letter likelyhood. Called by generate() the first
-     * time.
+     * Initialization, statistically measures letter likelyhood. Called by generate() the first time.
      */
     private void init() {
         sizes = new ArrayList<>();
@@ -138,7 +264,7 @@ public class WeightedLetterNamegen {
             String nameString = name;
 
             // Check that the word has no triple letter sequences, and that the Levenshtein distance is kosher
-            if (tripleLetterCheck(name) && checkLevenshtein(nameString)) {
+            if (validateGrouping(name) && checkLevenshtein(nameString)) {
                 result.add(nameString);
 
                 // Only increase the counter if we've successfully added a name
@@ -150,8 +276,8 @@ public class WeightedLetterNamegen {
     }
 
     /**
-     * Searches for the best fit letter between the letter before and the letter after (non-random).
-     * Used to determine penultimate letters in names.
+     * Searches for the best fit letter between the letter before and the letter after (non-random). Used to determine
+     * penultimate letters in names.
      *
      * @param	letterBefore	The letter before the desired letter.
      * @param	letterAfter	The letter after the desired letter.
@@ -160,6 +286,10 @@ public class WeightedLetterNamegen {
     private char getIntermediateLetter(char letterBefore, char letterAfter) {
         if (Character.isLetter(letterBefore) && Character.isLetter(letterAfter)) {
             // First grab all letters that come after the 'letterBefore'
+            WeightedLetter wl = letters.get(letterBefore);
+            if (wl == null) {
+                return getRandomNextLetter(letterBefore);
+            }
             LinkedHashMap<Character, Integer> letterCandidates = letters.get(letterBefore).nextLetters.sequences;
 
             char bestFitLetter = '\'';
@@ -167,7 +297,11 @@ public class WeightedLetterNamegen {
 
             // Step through candidates, and return best scoring letter
             for (char letter : letterCandidates.keySet()) {
-                WeightedLetterGroup weightedLetterGroup = letters.get(letter).nextLetters;
+                wl = letters.get(letter);
+                if (wl == null) {
+                    continue;
+                }
+                WeightedLetterGroup weightedLetterGroup = wl.nextLetters;
                 Integer letterCounter = weightedLetterGroup.sequences.get(letterAfter);
 
                 if (letterCounter != null && letterCounter > bestFitScore) {
@@ -188,19 +322,38 @@ public class WeightedLetterNamegen {
      * @param	name	The name array (easier to iterate)
      * @return	True if no triple letter sequence is found.
      */
-    private boolean tripleLetterCheck(String name) {
+    private boolean validateGrouping(String name) {
         for (int i = 2; i < name.length(); i++) {
             if (name.charAt(i) == name.charAt(i - 1) && name.charAt(i) == name.charAt(i - 2)) {
                 return false;
             }
         }
+        int consonants = 0;
+        for (int i = 0; i < name.length(); i++) {
+            if (isVowel(name.charAt(i))) {
+                consonants = 0;
+            } else {
+                consonants++;
+            }
 
+            if (consonants > consonantLimit) {
+                return false;
+            }
+        }
         return true;
     }
 
+    private boolean isVowel(char c) {
+        for (char v : vowels) {
+            if (c == v) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
-     * Checks that the Damerau-Levenshtein distance of this name is within a given bias from a name
-     * on the master list.
+     * Checks that the Damerau-Levenshtein distance of this name is within a given bias from a name on the master list.
      *
      * @param	name	The name string.
      * @return	True if a name is found that is within the bias.
@@ -230,8 +383,13 @@ public class WeightedLetterNamegen {
     }
 
     private char getRandomNextLetter(char letter) {
-        WeightedLetter weightedLetter = letters.get(letter);
-        char[] samples = weightedLetter.nextLetters.expandSamples();
-        return samples[rng.nextInt(samples.length)];// pickRandomElementFromArray(weightedLetter.nextLetters.letterSamples);
+        if (letters.containsKey(letter)) {
+            WeightedLetter weightedLetter = letters.get(letter);
+            char[] samples = weightedLetter.nextLetters.expandSamples();
+            return samples[rng.nextInt(samples.length)];// pickRandomElementFromArray(weightedLetter.nextLetters.letterSamples);
+        } else {
+//            return '\'';
+            return rng.getRandomElement(vowels);
+        }
     }
 }

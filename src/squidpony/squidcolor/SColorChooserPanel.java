@@ -2,6 +2,7 @@ package squidpony.squidcolor;
 
 import java.awt.AWTException;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -21,8 +22,7 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.MouseInputListener;
 
 /**
- * This class provides a way to interact with the pre-defined SColor constants
- * in a Swing GUI.
+ * This class provides a way to interact with the pre-defined SColor constants in a Swing GUI.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -36,6 +36,7 @@ public class SColorChooserPanel extends AbstractColorChooserPanel {
     private JScrollPane scrollPane = new JScrollPane();
     private JComboBox colorComboBox = new JComboBox();
     private JTextField colorName = new JTextField();
+    private boolean initialized = false;
 
     @Override
     public void updateChooser() {
@@ -73,6 +74,8 @@ public class SColorChooserPanel extends AbstractColorChooserPanel {
         colorName.setEditable(false);
         colorName.setHorizontalAlignment(JTextField.CENTER);
         add(colorName, BorderLayout.SOUTH);
+
+        initialized = true;
     }
 
     private void refreshPanel() {
@@ -137,10 +140,26 @@ public class SColorChooserPanel extends AbstractColorChooserPanel {
         return null;
     }
 
+    @Override
+    public void setBackground(Color bg) {
+        super.setBackground(bg);
+        if (initialized) {
+            displayPanel.setBackground(bg);
+            scrollPane.setBackground(bg);
+            colorComboBox.setBackground(bg);
+            colorName.setBackground(bg);
+        }
+    }
+
     private class ColorPanel extends JPanel implements Scrollable, MouseInputListener {
 
         ColorPanel() {
             super(new FlowLayout());
+        }
+
+        @Override
+        public void setBackground(Color bg) {
+            super.setBackground(bg);
         }
 
         @Override
@@ -175,7 +194,6 @@ public class SColorChooserPanel extends AbstractColorChooserPanel {
                 g.setColor(SColorFactory.lighter(color));
                 g.fillRect(x, y, colorWidth, colorHeight);
                 x += colorWidth;
-
 
                 g.setColor(SColorFactory.light(color));
                 g.fillRect(x, y, colorWidth, colorHeight);
