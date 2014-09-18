@@ -421,16 +421,18 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor chosen from a pop-up JColorChooser dialog.
+     * Presents a pop-up JColorChooser dialog showing all of the SColor constants along with examples of what the various
+     * dimming and lightening methods change them to..
      *
      * @param parent The component which is the parent of this dialog
-     * @return
+     * @return the SColor that is chosen in the dialog
      */
     public static SColor showSColorChooser(Component parent) {
         final JColorChooser chooser = new JColorChooser();
         chooser.setChooserPanels(new AbstractColorChooserPanel[]{new SColorChooserPanel()});
 
         JDialog dialog = JColorChooser.createDialog(parent, "Choose A Color", true, chooser, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 pickedColor = asSColor(chooser.getColor().getRGB());
             }
