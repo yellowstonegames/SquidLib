@@ -29,7 +29,7 @@ public class Dice {
      *
      * This method does not need to be called before using the methods of this class.
      *
-     * @param rng
+     * @param rng the source of randomness
      */
     public static void setRandom(RNG rng) {
         Dice.rng = rng;
@@ -59,9 +59,9 @@ public class Dice {
     /**
      * Totals the highest n numbers in the pool.
      *
-     * @param n
-     * @param pool
-     * @return sum
+     * @param n the number of dice to be totaled
+     * @param pool the dice to pick from
+     * @return the sum
      */
     public static int bestOf(int n, List<Integer> pool) {
         int rolls = Math.min(n, pool.size());
@@ -81,7 +81,7 @@ public class Dice {
      * @param n number of roll groups to total
      * @param dice number of roll groups to roll
      * @param group string encoded roll grouping
-     * @return sum
+     * @return the sum
      */
     public static int bestOf(int n, int dice, String group) {
         int rolls = Math.min(n, dice);

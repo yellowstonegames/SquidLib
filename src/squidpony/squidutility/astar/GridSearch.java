@@ -58,11 +58,11 @@ public class GridSearch {
     /**
      * Finds an A* path to the target from the start. If no path is possible, returns null.
      *
-     * @param startx
-     * @param starty
-     * @param targetx
-     * @param targety
-     * @return
+     * @param startx the x coordinate of the start location
+     * @param starty the y coordinate of the start location
+     * @param targetx the x coordinate of the target location
+     * @param targety the y coordinate of the target location
+     * @return the shortest path, or null
      */
     public Queue<Point> path(int startx, int starty, int targetx, int targety) {
         start = new Point(startx, starty);
@@ -120,8 +120,8 @@ public class GridSearch {
      *
      * If the given location is not valid or not attached to the pathfinding then Double.MAX_VALUE is returned.
      *
-     * @param x
-     * @param y
+     * @param x coordinate
+     * @param y coordinate
      */
     private double g(int x, int y) {
         if (x == start.x && y == start.y) {
@@ -137,9 +137,9 @@ public class GridSearch {
     /**
      * Returns the distance to the goal location using the current calculation type.
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x coordinate
+     * @param y coordinate
+     * @return distance
      */
     private double h(int x, int y) {
         switch (type) {
@@ -165,9 +165,7 @@ public class GridSearch {
     }
 
     /**
-     * Returns the current open point with the smallest F.
-     *
-     * @return
+     * @return the current open point with the smallest F
      */
     private Point smallestF() {
         Point smallest = null;

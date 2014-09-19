@@ -10,12 +10,14 @@ import squidpony.squidmath.RNG;
  */
 public class MapFactory {
 
-    private static RNG rng = new RNG();
+    private static final RNG rng = new RNG();
 
     /**
      * Returns a randomly generated map of doubles. Commonly referred to as a Height Map.
      *
-     * @return
+     * @param width in cells
+     * @param height in cells
+     * @return the created map
      */
     public static double[][] hightMap(int width, int height) {
         double[][] heightMap = new double[width][height];

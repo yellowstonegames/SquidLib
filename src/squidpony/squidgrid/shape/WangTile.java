@@ -13,10 +13,10 @@ import squidpony.squidgrid.util.DirectionIntercardinal;
 public interface WangTile {
 
     /**
-     * Returns the patter of the edge at the given direction.
+     * Returns the pattern of the edge at the given direction.
      *
-     * @param dir
-     * @return
+     * @param dir the edge to check
+     * @return the edge found
      */
     public WangEdge getEdge(DirectionIntercardinal dir);
 }

@@ -21,8 +21,8 @@ public class Bresenham {
     /**
      * Generates a 2D Bresenham line between two points.
      *
-     * @param a
-     * @param b
+     * @param a the starting point
+     * @param b the ending point
      * @return
      */
     public static Queue<Point> line2D(Point a, Point b) {
@@ -32,10 +32,10 @@ public class Bresenham {
     /**
      * Generates a 2D Bresenham line between two points.
      *
-     * @param startX
-     * @param startY
-     * @param endX
-     * @param endY
+     * @param startX the x coordinate of the starting point
+     * @param startY the y coordinate of the starting point
+     * @param endX the x coordinate of the ending point
+     * @param endY the y coordinate of the ending point
      * @return
      */
     public static Queue<Point> line2D(int startX, int startY, int endX, int endY) {
@@ -61,12 +61,12 @@ public class Bresenham {
     /**
      * Generates a 3D Bresenham line between the given coordinates.
      *
-     * @param startx
-     * @param starty
-     * @param startz
-     * @param endx
-     * @param endy
-     * @param endz
+     * @param startx the x coordinate of the starting point
+     * @param starty the y coordinate of the starting point
+     * @param startz the z coordinate of the starting point
+     * @param endx the x coordinate of the starting point
+     * @param endy the y coordinate of the starting point
+     * @param endz the z coordinate of the starting point
      * @return
      */
     public static Queue<Point3D> line3D(int startx, int starty, int startz, int endx, int endy, int endz) {

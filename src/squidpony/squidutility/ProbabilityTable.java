@@ -25,7 +25,7 @@ public class ProbabilityTable<T> {
      *
      * Returns null if no elements have been put in the table.
      *
-     * @return
+     * @return the chosen object or null
      */
     public T random() {
         if (table.isEmpty()) {
@@ -46,8 +46,8 @@ public class ProbabilityTable<T> {
      *
      * Weight must be greater than 0.
      *
-     * @param item
-     * @param weight
+     * @param item the object to be added
+     * @param weight the weight to be given to the added object
      */
     public void add(T item, int weight) {
         table.add(new Pair(weight, item));

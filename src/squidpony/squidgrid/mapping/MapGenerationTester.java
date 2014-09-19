@@ -128,14 +128,14 @@ public class MapGenerationTester {
 
     public void showColors(TiledShape shape) {
         JFrame frame = new JFrame();
-        SwingPane pane = new SwingPane(shape.getWidth(), shape.getHeight(), new TextCellFactory(new Font("Ariel", Font.PLAIN, 10), 12, 12), null);
+        SwingPane pane = new SwingPane(shape.width(), shape.height(), new TextCellFactory(new Font("Ariel", Font.PLAIN, 10), 12, 12), null);
         frame.add(pane);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        for (int x = 0; x < shape.getWidth(); x++) {
-            for (int y = 0; y < shape.getHeight(); y++) {
+        for (int x = 0; x < shape.width(); x++) {
+            for (int y = 0; y < shape.height(); y++) {
                 pane.put(x, y, SColorFactory.asSColor(Integer.parseInt(shape.getStringAt(x, y))));
             }
         }

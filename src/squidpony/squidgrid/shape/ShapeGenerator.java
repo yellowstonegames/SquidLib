@@ -2,7 +2,7 @@ package squidpony.squidgrid.shape;
 
 import java.util.ArrayList;
 import squidpony.annotation.Beta;
-import squidpony.squidutility.SCollections;
+import squidpony.squidmath.RNG;
 
 /**
  * Creates various shapes from rectangular tiles.
@@ -12,6 +12,7 @@ import squidpony.squidutility.SCollections;
  */
 @Beta
 public class ShapeGenerator {
+    private static final RNG rng = new RNG();
 
     /**
      * Returns a TiledShape that is constructed out of randomly chosen pieces placed in a
@@ -34,8 +35,8 @@ public class ShapeGenerator {
     public static TiledShape buildHerringboneShape(int width, int height, ArrayList<TiledShape> verticalTiles, ArrayList<TiledShape> horizontalTiles) {
         TiledShape result = new TiledShape(width, height);
 
-        int tileWidth = verticalTiles.get(0).getWidth();//TODO - replace this with robust validator
-        int tileHeight = verticalTiles.get(0).getHeight();
+        int tileWidth = verticalTiles.get(0).width();//TODO - replace this with robust validator
+        int tileHeight = verticalTiles.get(0).height();
 
         int startX = 0;
         int startY = 0;
@@ -43,11 +44,11 @@ public class ShapeGenerator {
             int x = startX;
             int y = -startY;
             while (y < height) {
-                TiledShape tile = SCollections.getRandomElement(verticalTiles);
+                TiledShape tile = rng.getRandomElement(verticalTiles);
                 result.overwrite(tile, x, y);
                 x += tileWidth;
 
-                tile = SCollections.getRandomElement(horizontalTiles);
+                tile = rng.getRandomElement(horizontalTiles);
                 result.overwrite(tile, x, y);
                 y += tileWidth;
             }
@@ -62,11 +63,11 @@ public class ShapeGenerator {
             int x = -startX;
             int y = startY;
             while (y < height) {
-                TiledShape tile = SCollections.getRandomElement(verticalTiles);
+                TiledShape tile = rng.getRandomElement(verticalTiles);
                 result.overwrite(tile, x, y);
                 x += tileWidth;
 
-                tile = SCollections.getRandomElement(horizontalTiles);
+                tile = rng.getRandomElement(horizontalTiles);
                 result.overwrite(tile, x, y);
                 y += tileWidth;
             }
@@ -92,12 +93,12 @@ public class ShapeGenerator {
     public static TiledShape buildStackBond(int width, int height, ArrayList<TiledShape> tiles) {
         TiledShape result = new TiledShape(width, height);
 
-        int tileWidth = tiles.get(0).getWidth();//TODO - replace this with robust validator
-        int tileHeight = tiles.get(0).getHeight();
+        int tileWidth = tiles.get(0).width();//TODO - replace this with robust validator
+        int tileHeight = tiles.get(0).height();
 
         for (int x = 0; x < width; x += tileWidth) {
             for (int y = 0; y < height; y += tileHeight) {
-                TiledShape tile = SCollections.getRandomElement(tiles);
+                TiledShape tile = rng.getRandomElement(tiles);
                 result.overwrite(tile, x, y);
             }
         }
@@ -121,13 +122,13 @@ public class ShapeGenerator {
     public static TiledShape buildBrick(int width, int height, ArrayList<TiledShape> tiles, int offset) {
         TiledShape result = new TiledShape(width, height);
 
-        int tileWidth = tiles.get(0).getWidth();//TODO - replace this with robust validator
-        int tileHeight = tiles.get(0).getHeight();
+        int tileWidth = tiles.get(0).width();//TODO - replace this with robust validator
+        int tileHeight = tiles.get(0).height();
 
         int currentOffset = tileHeight;
         for (int x = 0; x < width; x += tileWidth) {
             for (int y = -tileHeight + currentOffset; y < height; y += tileHeight) {
-                TiledShape tile = SCollections.getRandomElement(tiles);
+                TiledShape tile = rng.getRandomElement(tiles);
                 result.overwrite(tile, x, y);
             }
             currentOffset += offset;
@@ -162,21 +163,21 @@ public class ShapeGenerator {
         }
         TiledShape result = new TiledShape(width, height);
 
-        int tileWidth = verticalTiles.get(0).getWidth();//TODO - replace this with robust validator
-        int tileHeight = verticalTiles.get(0).getHeight();
+        int tileWidth = verticalTiles.get(0).width();//TODO - replace this with robust validator
+        int tileHeight = verticalTiles.get(0).height();
 
         //do horizontal first so right-hand edge can overwrite extra bits
         for (int x = tileWidth; x < width; x += tileHeight) {
-            TiledShape tile = SCollections.getRandomElement(horizontalTiles);
+            TiledShape tile = rng.getRandomElement(horizontalTiles);
             result.overwrite(tile, x, 0);
-            tile = SCollections.getRandomElement(horizontalTiles);
+            tile = rng.getRandomElement(horizontalTiles);
             result.overwrite(tile, x, height - tileWidth);
         }
 
         for (int y = 0; y < height; y += tileHeight) {
-            TiledShape tile = SCollections.getRandomElement(verticalTiles);
+            TiledShape tile = rng.getRandomElement(verticalTiles);
             result.overwrite(tile, 0, y);
-            tile = SCollections.getRandomElement(verticalTiles);
+            tile = rng.getRandomElement(verticalTiles);
             result.overwrite(tile, width - tileWidth, y);
         }
 
@@ -216,8 +217,8 @@ public class ShapeGenerator {
     public static TiledShape buildBasketWeave(int width, int height, ArrayList<TiledShape> verticalTiles, ArrayList<TiledShape> horizontalTiles, boolean regular) {
         TiledShape result = new TiledShape(width, height);
 
-        int tileWidth = verticalTiles.get(0).getWidth();//TODO - replace this with robust validator
-        int tileHeight = verticalTiles.get(0).getHeight();
+        int tileWidth = verticalTiles.get(0).width();//TODO - replace this with robust validator
+        int tileHeight = verticalTiles.get(0).height();
         TiledShape tile;
 
         boolean alternate = false;
@@ -225,14 +226,14 @@ public class ShapeGenerator {
             for (int x = 0; x < width; x += tileHeight) {
                 for (int y = 0; y < height; y += tileHeight) {
                     if (alternate) {
-                        tile = SCollections.getRandomElement(horizontalTiles);
+                        tile = rng.getRandomElement(horizontalTiles);
                         result.overwrite(tile, x, y);
-                        tile = SCollections.getRandomElement(horizontalTiles);
+                        tile = rng.getRandomElement(horizontalTiles);
                         result.overwrite(tile, x, y + tileWidth);
                     } else {
-                        tile = SCollections.getRandomElement(verticalTiles);
+                        tile = rng.getRandomElement(verticalTiles);
                         result.overwrite(tile, x, y);
-                        tile = SCollections.getRandomElement(verticalTiles);
+                        tile = rng.getRandomElement(verticalTiles);
                         result.overwrite(tile, x + tileWidth, y);
                     }
                     alternate = !alternate;
@@ -242,18 +243,18 @@ public class ShapeGenerator {
             for (int x = 0; x < width; x += tileHeight) {
                 for (int y = 0; y < height; y += tileHeight + tileWidth) {
                     if (alternate) {
-                        tile = SCollections.getRandomElement(horizontalTiles);
+                        tile = rng.getRandomElement(horizontalTiles);
                         result.overwrite(tile, x, y + tileHeight);
-                        tile = SCollections.getRandomElement(verticalTiles);
+                        tile = rng.getRandomElement(verticalTiles);
                         result.overwrite(tile, x, y);
-                        tile = SCollections.getRandomElement(verticalTiles);
+                        tile = rng.getRandomElement(verticalTiles);
                         result.overwrite(tile, x + tileWidth, y);
                     } else {
-                        tile = SCollections.getRandomElement(horizontalTiles);
+                        tile = rng.getRandomElement(horizontalTiles);
                         result.overwrite(tile, x, y);
-                        tile = SCollections.getRandomElement(verticalTiles);
+                        tile = rng.getRandomElement(verticalTiles);
                         result.overwrite(tile, x, y + tileWidth);
-                        tile = SCollections.getRandomElement(verticalTiles);
+                        tile = rng.getRandomElement(verticalTiles);
                         result.overwrite(tile, x + tileWidth, y + tileWidth);
                     }
                 }
@@ -287,23 +288,23 @@ public class ShapeGenerator {
     public static TiledShape buildWindmill(int width, int height, ArrayList<TiledShape> verticalTiles, ArrayList<TiledShape> horizontalTiles, ArrayList<TiledShape> interiorTiles) {
         TiledShape result = new TiledShape(width, height);
 
-        int vertWidth = verticalTiles.get(0).getWidth();//TODO - replace this with robust validator
-        int vertHeight = verticalTiles.get(0).getHeight();
-        int horzWidth = horizontalTiles.get(0).getWidth();
-        int horzHeight = horizontalTiles.get(0).getHeight();
+        int vertWidth = verticalTiles.get(0).width();//TODO - replace this with robust validator
+        int vertHeight = verticalTiles.get(0).height();
+        int horzWidth = horizontalTiles.get(0).width();
+        int horzHeight = horizontalTiles.get(0).height();
         TiledShape tile;
 
         for (int x = 0; x < width; x += vertWidth + horzWidth) {
             for (int y = 0; y < height; y += vertHeight + horzHeight) {
-                tile = SCollections.getRandomElement(interiorTiles);
+                tile = rng.getRandomElement(interiorTiles);
                 result.overwrite(tile, x + vertWidth, y + horzHeight);
-                tile = SCollections.getRandomElement(verticalTiles);
+                tile = rng.getRandomElement(verticalTiles);
                 result.overwrite(tile, x, y);
-                tile = SCollections.getRandomElement(horizontalTiles);
+                tile = rng.getRandomElement(horizontalTiles);
                 result.overwrite(tile, x + vertWidth, y);
-                tile = SCollections.getRandomElement(horizontalTiles);
+                tile = rng.getRandomElement(horizontalTiles);
                 result.overwrite(tile, x, y + vertHeight);
-                tile = SCollections.getRandomElement(verticalTiles);
+                tile = rng.getRandomElement(verticalTiles);
                 result.overwrite(tile, x + horzWidth, y + horzHeight);
             }
         }

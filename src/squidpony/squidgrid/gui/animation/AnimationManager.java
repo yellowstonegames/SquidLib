@@ -27,7 +27,7 @@ public class AnimationManager implements Runnable {
      * Creates a new AnimationManager that will draw to the provided component and then starts it in
      * a daemon worker thread to manage the animations.
      *
-     * @param component
+     * @param component the part of the GUI to be drawn on
      * @return the created AnimationManager
      */
     public static AnimationManager startNewAnimationManager(JComponent component) {
@@ -45,7 +45,7 @@ public class AnimationManager implements Runnable {
     /**
      * Sets the minimum amount of time between updates for this animation manager.
      *
-     * @param delay
+     * @param delay the minimum update time
      */
     public synchronized void setDefaultUpdateDelay(int delay) {
         this.defaultDelay = delay;
@@ -57,7 +57,7 @@ public class AnimationManager implements Runnable {
      *
      * Additionally sets the animations component to be this animation manager's component.
      *
-     * @param animation
+     * @param animation the animation object to be added
      */
     public void add(Animation animation) {
         add(animation, defaultDelay);
@@ -69,8 +69,8 @@ public class AnimationManager implements Runnable {
      *
      * Additionally sets the animations component to be this animation manager's component.
      *
-     * @param animation
-     * @param delay
+     * @param animation the animation object to be added
+     * @param delay the delay specific to this animation
      */
     public void add(Animation animation, int delay) {
         if (!animations.containsKey(animation)) {
@@ -84,7 +84,7 @@ public class AnimationManager implements Runnable {
     /**
      * Stops the given animation if it is in the current list of running animations.
      *
-     * @param animation
+     * @param animation the animation to be stopped
      */
     public synchronized void stopAnimation(Animation animation) {
         if (animations.containsKey(animation)) {

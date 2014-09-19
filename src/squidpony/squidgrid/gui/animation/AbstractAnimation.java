@@ -43,7 +43,7 @@ public abstract class AbstractAnimation implements Animation {
     /**
      * Returns true if the component is still being moved.
      *
-     * @return
+     * @return true if animation still operating
      */
     @Override
     public boolean isActive() {

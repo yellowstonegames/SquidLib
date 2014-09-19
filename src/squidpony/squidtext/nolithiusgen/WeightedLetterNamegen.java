@@ -6,7 +6,6 @@ import java.util.TreeMap;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.RNG;
 import squidpony.squidtext.StringUtils;
-import squidpony.squidutility.SCollections;
 
 /**
  * Based on work by Nolithius available at the following two sites https://github.com/Nolithius/weighted-letter-namegen
@@ -237,10 +236,10 @@ public class WeightedLetterNamegen {
             String name = "";
 
             // Pick size
-            int size = SCollections.getRandomElement(sizes);
+            int size = rng.getRandomElement(sizes);
 
             // Pick first letter
-            char firstLetter = SCollections.getRandomElement(firstLetterSamples);
+            char firstLetter = rng.getRandomElement(firstLetterSamples);
 
             name += firstLetter;
 
@@ -250,7 +249,7 @@ public class WeightedLetterNamegen {
 
             // Attempt to find a last letter
             for (int lastLetterFits = 0; lastLetterFits < LAST_LETTER_CANDIDATES_MAX; lastLetterFits++) {
-                char lastLetter = SCollections.getRandomElement(lastLetterSamples);
+                char lastLetter = rng.getRandomElement(lastLetterSamples);
                 char intermediateLetterCandidate = getIntermediateLetter(name.charAt(name.length() - 1), lastLetter);
 
                 // Only attach last letter if the candidate is valid (if no candidate, the antepenultimate letter always occurs at the end)
