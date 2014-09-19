@@ -58,17 +58,17 @@ public class TiledShape {
      * @param other
      */
     public TiledShape(TiledShape other) {
-        template = new String[other.getWidth()][other.getHeight()];
-        for (int x = 0; x < other.getWidth(); x++) {
-            for (int y = 0; y < other.getHeight(); y++) {
+        template = new String[other.width()][other.height()];
+        for (int x = 0; x < other.width(); x++) {
+            for (int y = 0; y < other.height(); y++) {
                 template[x][y] = other.getStringAt(x, y);
             }
         }
     }
 
     /**
-     * Builds a tiled shape based on the pixel colors of the image passed in. Values are stored as
-     * the ARGB values in hex code.
+     * Builds a tiled shape based on the pixel colors of the image passed in. Values are stored as the ARGB values in
+     * hex code.
      *
      * @param image
      */
@@ -81,49 +81,46 @@ public class TiledShape {
     }
 
     /**
-     * Returns the String at the provided location.
-     *
-     * @param x
-     * @param y
-     * @return
+     * @param x the x coordinate to check
+     * @param y the y coordinate to check
+     * @return the String at the provided location
      */
     public String getStringAt(int x, int y) {
         return template[x][y];
     }
 
     /**
-     * Sets the location provided to contain the given string, replacing any content that may have
-     * previously existed.
+     * Sets the location provided to contain the given string, replacing any content that may have previously existed.
      *
-     * @param x
-     * @param y
-     * @param string
+     * @param x the x coordinate to contain the string
+     * @param y the y coordinate to contain the string
+     * @param string the string to place
      */
     public void setStringAt(int x, int y, String string) {
         template[x][y] = string;
     }
 
-    public int getWidth() {
+    public int width() {
         return template.length;
     }
 
-    public int getHeight() {
+    public int height() {
         return template.length > 0 ? template[0].length : 0;
     }
 
     /**
-     * Overwrites this TiledShape at the given offset with the information in the provided
-     * TiledShape in the area where the two shapes overlap.
+     * Overwrites this TiledShape at the given offset with the information in the provided TiledShape in the area where
+     * the two shapes overlap.
      *
      * Negative offsets are allowed.
      *
-     * @param other
-     * @param xOffset
-     * @param yOffset
+     * @param other the other TiledShape
+     * @param xOffset the distance the other shape is shifted on the x axis
+     * @param yOffset the distance the other shape is shifted on the y axis
      */
     public void overwrite(TiledShape other, int xOffset, int yOffset) {
-        for (int x = Math.max(xOffset, 0); x < getWidth() && x - xOffset < other.getWidth(); x++) {
-            for (int y = Math.max(yOffset, 0); y < getHeight() && y - yOffset < other.getHeight(); y++) {
+        for (int x = Math.max(xOffset, 0); x < width() && x - xOffset < other.width(); x++) {
+            for (int y = Math.max(yOffset, 0); y < height() && y - yOffset < other.height(); y++) {
                 if (x - xOffset >= 0 && y - yOffset >= 0) {
                     template[x][y] = other.template[x - xOffset][y - yOffset];
                 }
@@ -132,16 +129,15 @@ public class TiledShape {
     }
 
     /**
-     * Deteriorates the given TiledShape on a per-cell random chance. If a cell is selected to be
-     * deteriorated, it's value is set to the provided string. Changes are made directly to the
-     * provided shape.
+     * Deteriorates the given TiledShape on a per-cell random chance. If a cell is selected to be deteriorated, it's
+     * value is set to the provided string. Changes are made directly to the provided shape.
      *
      * @param deteriorationChance the chance for each fillable space to be filled
-     * @param deteriorationString
+     * @param deteriorationString the string to place in the deteriorated cell
      */
     public void deteriorate(double deteriorationChance, String deteriorationString) {
-        for (int x = 0; x < getWidth(); x++) {
-            for (int y = 0; y < getHeight(); y++) {
+        for (int x = 0; x < width(); x++) {
+            for (int y = 0; y < height(); y++) {
                 if (Math.random() < deteriorationChance) {
                     setStringAt(x, y, deteriorationString);
                 }
@@ -151,12 +147,13 @@ public class TiledShape {
 
     /**
      * Replaces all cells whose contents match the "find" string with the "replace" string.
-     * @param find
-     * @param replace
+     *
+     * @param find the string searched for
+     * @param replace the replacement string
      */
     public void replaceAll(String find, String replace) {
-        for (int x = 0; x < getWidth(); x++) {
-            for (int y = 0; y < getHeight(); y++) {
+        for (int x = 0; x < width(); x++) {
+            for (int y = 0; y < height(); y++) {
                 if (template[x][y].equals(find)) {
                     template[x][y] = replace;
                 }
@@ -168,9 +165,9 @@ public class TiledShape {
      * Rotates this shape clockwise 90 degrees.
      */
     public void rotateClockwise() {
-        String[][] map = new String[getHeight()][getWidth()];
-        for (int x = 0; x < getWidth(); x++) {
-            for (int y = 0; y < getHeight(); y++) {
+        String[][] map = new String[height()][width()];
+        for (int x = 0; x < width(); x++) {
+            for (int y = 0; y < height(); y++) {
                 map[y][x] = template[x][y];
             }
         }
@@ -193,11 +190,10 @@ public class TiledShape {
     /**
      * Builds a tiled shape based on a java.awt.Shape object.
      *
-     * @param shape
+     * @param shape java.awt.Shape object to build on
      * @param borderThickness added in the java.awt standard border manner
      * @param filled true if the shape should be filled solid
-     * @param rounded true if the ends and joins should be rounded, false if they should be sharp
-     * edges
+     * @param rounded true if the ends and joins should be rounded, false if they should be sharp edges
      */
     private void initialize(Shape shape, double borderThickness, boolean filled, boolean rounded) {
         BufferedImage image = new BufferedImage((int) Math.ceil(shape.getBounds2D().getWidth() + borderThickness),
@@ -215,12 +211,10 @@ public class TiledShape {
     }
 
     /**
-     * Takes a provided image and builds a tiled shape encoding all colors into their ARGB integer
-     * as a string.
+     * Takes a provided image and builds a tiled shape encoding all colors into their ARGB integer as a string.
      *
-     * @param image
+     * @param image the image to process
      * @param shrink true if the image should be compressed to just the shape
-     * @return
      */
     private void initialize(BufferedImage image, boolean shrink) {
         int xStart = 0;

@@ -29,7 +29,7 @@ public interface EdgeAwareFOVSolver {
      * results directly. False causes a new data structure with the results to
      * be returned placed in the new structure.
      *
-     * @param write
+     * @param write true to overwrite passed in object array
      */
     public void writeToResistanceMap(boolean write);
 }

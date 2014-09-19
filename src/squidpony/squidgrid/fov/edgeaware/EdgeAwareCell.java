@@ -16,43 +16,41 @@ public interface EdgeAwareCell {
     /**
      * Gets the resistance associated with the provided key.
      *
-     * @param key
-     * @param edge
-     * @return
+     * @param key the key to check for
+     * @param edge the directional edge to check
+     * @return the resistance this edge has
      */
     public float resistance(String key, DirectionIntercardinal edge);
 
     /**
      * Gets the resistance associated with a null key.
      *
-     * Provided as a convenience where the FOV is only being used in one
-     * specific way.
+     * Provided as a convenience where the FOV is only being used in one specific way.
      *
-     * @param edge
-     * @return
+     * @param edge the edge to check
+     * @return the resistance this edge has
      */
     public float resistance(DirectionIntercardinal edge);
 
     /**
      * Sets the resistance value to associate with the provided key.
      *
-     * If a resistance value was previously associated with the key, then that
-     * value is overwritten with the new value.
+     * If a resistance value was previously associated with the key, then that value is overwritten with the new value.
      *
-     * @param key
-     * @param edge
-     * @param resistance
+     * @param key the key to check for
+     * @param edge the directional edge to check
+     * @param resistance the amount of degradation from passing through this edge
      */
     public void setResistance(String key, DirectionIntercardinal edge, float resistance);
 
     /**
      * Sets the resistance value to associate with a null key.
      *
-     * If a resistance value was previously associated with the null key, then
-     * that value is overwritten with the new value.
+     * If a resistance value was previously associated with the null key, then that value is overwritten with the new
+     * value.
      *
-     * @param edge
-     * @param resistance
+     * @param edge the directional edge to check
+     * @param resistance the amount of degradation from passing through this edge
      */
     public void setResistance(DirectionIntercardinal edge, float resistance);
 }

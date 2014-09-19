@@ -30,16 +30,14 @@ public class RNG {
      * Uses the provided source of randomness for all calculations. This constructor should be used if setting the seed
      * is needed as the provided source of randomness can be seeded as desired before passing it in.
      *
-     * @param random
+     * @param random the source of randomness
      */
     public RNG(RandomnessSource random) {
         this.random = random;
     }
 
     /**
-     * Returns a Random instance that can be used for legacy compatability.
-     *
-     * @return
+     * @return a Random instance that can be used for legacy compatability
      */
     public Random asRandom() {
         if (ran == null) {
@@ -56,9 +54,9 @@ public class RNG {
     /**
      * Returns a value from a even distribution from min (inclusive) to max (exclusive).
      *
-     * @param min
-     * @param max
-     * @return
+     * @param min the minimum bound on the return value (inclusive)
+     * @param max the maximum bound on the return value (exclusive)
+     * @return the found value
      */
     public double between(double min, double max) {
         return min + (max - min) * nextDouble();
@@ -70,9 +68,9 @@ public class RNG {
      * The inclusive and exclusive behavior is to match the behavior of the similar method that deals with floating
      * point values.
      *
-     * @param min
-     * @param max
-     * @return
+     * @param min the minimum bound on the return value (inclusive)
+     * @param max the maximum bound on the return value (exclusive)
+     * @return the found value
      */
     public int between(int min, int max) {
         return nextInt(max - min) + min;
@@ -87,10 +85,10 @@ public class RNG {
      *
      * This can be used to weight RNG calls to the average between min and max.
      *
-     * @param min
-     * @param max
-     * @param samples
-     * @return
+     * @param min the minimum bound on the return value (inclusive)
+     * @param max the maximum bound on the return value (exclusive)
+     * @param samples the number of samples to take
+     * @return the found value
      */
     public int betweenWeighted(int min, int max, int samples) {
         int sum = 0;
@@ -102,6 +100,13 @@ public class RNG {
         return answer;
     }
 
+    /**
+     * Returns a random element from the provided array and maintains object type.
+     *
+     * @param <T> the type of the returned object
+     * @param array the array to get an element from
+     * @return the randomly selected element
+     */
     public <T> T getRandomElement(T[] array) {
         if (array.length < 1) {
             return null;
@@ -112,9 +117,9 @@ public class RNG {
     /**
      * Returns a random element from the provided list. If the list is empty then null is returned.
      *
-     * @param <T>
-     * @param list
-     * @return
+     * @param <T> the type of the returned object
+     * @param list the list to get an element from
+     * @return the randomly selected element
      */
     public <T> T getRandomElement(List<T> list) {
         if (list.size() <= 0) {
@@ -126,9 +131,9 @@ public class RNG {
     /**
      * Returns a random elements from the provided queue. If the queue is empty then null is returned.
      *
-     * @param <T>
-     * @param list
-     * @return
+     * @param <T> the type of the returned object
+     * @param list the list to get an element from
+     * @return the randomly selected element
      */
     public <T> T getRandomElement(Queue<T> list) {
         if (list.isEmpty()) {
@@ -137,6 +142,9 @@ public class RNG {
         return (T) list.toArray()[nextInt(list.size())];
     }
 
+    /**
+     * @return a value from the gaussian distribution
+     */
     public synchronized double nextGaussian() {
         if (haveNextNextGaussian) {
             haveNextNextGaussian = false;
@@ -155,10 +163,20 @@ public class RNG {
         }
     }
 
+    /**
+     * This returns a maximum of 0.9999999999999999 because that is the largest Double value that is less than 1.0
+     *
+     * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)
+     */
     public double nextDouble() {
         return (((long) (next(26)) << 27) + next(27)) * DOUBLE_UNIT;
     }
 
+    /**
+     * This returns a maximum of 0.99999994 because that is the largest Float value that is less than 1.0f
+     *
+     * @return a value between 0 (inclusive) and 0.99999994 (inclusive)
+     */
     public float nextFloat() {
         return next(24) / ((float) (1 << 24));
     }
@@ -174,8 +192,8 @@ public class RNG {
     /**
      * Returns a random integer below the given bound, or 0 if the bound is 0 or negative.
      *
-     * @param bound
-     * @return
+     * @param bound the upper bound (exclusive)
+     * @return the found number
      */
     public int nextInt(int bound) {
         if (bound <= 0) {

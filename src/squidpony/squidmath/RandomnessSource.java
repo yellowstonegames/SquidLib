@@ -12,8 +12,8 @@ public interface RandomnessSource {
      * Using this method, any algorithm that might use the built-in Java Random can interface with this randomness
      * source.
      *
-     * @param bits
-     * @return
+     * @param bits the number of bits to be returned
+     * @return the integer containing the appropriate number of bits
      */
     public int next(int bits);
 

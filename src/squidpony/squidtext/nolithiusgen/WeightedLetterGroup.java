@@ -6,7 +6,7 @@ import squidpony.annotation.Beta;
 /**
  * Keeps track of what letter occurs after some other letter.
  *
- * Based on work by Nolithius available at the following two sites
+ * Based on work by Nolithius available at the following two sites 
  * https://github.com/Nolithius/weighted-letter-namegen
  * http://code.google.com/p/weighted-letter-namegen/
  *
@@ -30,6 +30,8 @@ public class WeightedLetterGroup {
 
     /**
      * Turn the letter set into a single array.
+     * 
+     * @return the created array
      */
     public char[] expandSamples() {
         if (expanded) {

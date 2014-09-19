@@ -32,12 +32,12 @@ public class ThreadedFOVSolver implements FOVSolver, Runnable {
      * Builds a FOVSolver which will use the full information for calculations
      * when run as a Thread.
      *
-     * @param solver
-     * @param startx
-     * @param starty
-     * @param force
-     * @param decay
-     * @param strategy
+     * @param solver the wrapped FOVSolver
+     * @param startx the grid x location to start from
+     * @param starty the grid y location to start from
+     * @param force the amount of initial energy to push
+     * @param decay the amount of energy lost for every push step
+     * @param strategy the RadiusStrategy that determines decay step size
      */
     public ThreadedFOVSolver(FOVSolver solver, int startx, int starty, float force, float decay, RadiusStrategy strategy) {
         this.solver = solver;
@@ -52,10 +52,10 @@ public class ThreadedFOVSolver implements FOVSolver, Runnable {
      * Builds a FOVSolver which will use the default RadiusStrategy for
      * calculations when used as a standard Thread.
      *
-     * @param solver
-     * @param startx
-     * @param starty
-     * @param radius
+     * @param solver the wrapped FOVSolver
+     * @param startx the grid x location to start from
+     * @param starty the grid y location to start from
+     * @param radius the RadiusStrategy that determines the size of each step
      */
     public ThreadedFOVSolver(FOVSolver solver, int startx, int starty, float radius) {
         this.solver = solver;
@@ -69,7 +69,7 @@ public class ThreadedFOVSolver implements FOVSolver, Runnable {
      * Simply wraps a solver in order to thread it. If this constructor is used
      * then the standard FOVSolver methods should be used.
      *
-     * @param solver
+     * @param solver the wrapped FOVSolver
      */
     public ThreadedFOVSolver(FOVSolver solver) {
         this.solver = solver;
@@ -114,6 +114,10 @@ public class ThreadedFOVSolver implements FOVSolver, Runnable {
         calculating = false;
     }
 
+    /**
+     * 
+     * @return true if the threads have not completed
+     */
     public boolean isCalculating() {
         return calculating;
     }
@@ -126,7 +130,7 @@ public class ThreadedFOVSolver implements FOVSolver, Runnable {
      * to check if this object is calculating and once it's finished take the
      * result directly from the inner solver, if it allows for it.
      *
-     * @return
+     * @return the calculated lightmap or null if not finished calculating
      */
     public float[][] getLightMap() {
         if (calculating) {

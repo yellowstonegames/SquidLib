@@ -336,18 +336,7 @@ public class SwingPane extends JLayeredPane {
      * @param location
      * @param direction
      */
-    public void bump(Point location, DirectionIntercardinal direction) {
-        bump(location, new Point(direction.deltaX, direction.deltaY));
-    }
-
-    /**
-     * Starts a bumping animation in the direction provided.
-     *
-     * @param location
-     * @param direction
-     */
-    public void bump(Point location, Point direction) {
-        if (contents[location.x][location.y] != null) {
+    public void bump(Point location, DirectionIntercardinal direction) {        if (contents[location.x][location.y] != null) {
             int duration = 20;
             Animation anim = new BumpAnimation(contents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), new Dimension(cellWidth / 3, cellHeight / 3), direction, duration);
             contents[location.x][location.y] = null;

@@ -26,7 +26,7 @@ public interface GameLogic {
      * Sends a single direction that was pressed. This is from the arrow keys and the numpad arrow
      * keys. Ignores numpad lock state so number mode will still return directions.
      *
-     * @param dir
+     * @param dir the direction to be worked
      */
     public void acceptDirectionInput(DirectionIntercardinal dir);
 
@@ -34,8 +34,8 @@ public interface GameLogic {
      * Sends the grid coordinates of a mouse click. Will not send clicks that originated in the
      * message and stat panels.
      *
-     * @param x
-     * @param y
+     * @param x the x coordinate of the clicked location
+     * @param y the y coordinate of the clicked location
      */
     public void acceptMoustInput(int x, int y);
 

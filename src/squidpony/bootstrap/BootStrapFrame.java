@@ -74,9 +74,9 @@ public class BootStrapFrame {
      * The GameLogic class passed in is where a program should respond to input. Any resulting visual changes from that
      * input can then be made on this SFrame.
      *
-     * @param width
-     * @param height
-     * @param logic
+     * @param width the number of cells horizontally
+     * @param height the number of cells vertically
+     * @param logic the object that controls the game
      */
     public BootStrapFrame(int width, int height, GameLogic logic) {
         this.width = width;
@@ -156,7 +156,7 @@ public class BootStrapFrame {
     /**
      * Builds a KeyListener with some directional input defaults.
      *
-     * @return
+     * @return the built KeyListener
      */
     private KeyListener initKeyListener() {
 
@@ -218,7 +218,7 @@ public class BootStrapFrame {
      *
      * When this method is called, the output area is automatically scrolled to the bottom of the output queue.
      *
-     * @param message
+     * @param message the string to be output
      */
     public void output(String message) {
         Scanner scan = new Scanner(message);
@@ -277,11 +277,21 @@ public class BootStrapFrame {
         outputPanel.refresh();
     }
 
+    /**
+     * 
+     * @param statsMap the previously built stats mapping
+     */
     public void setStats(LinkedHashMap<String, Integer> statsMap) {
         stats = statsMap;
         updateStats();
     }
 
+    /**
+     * Adds the provided values to the stats mapping.
+     * 
+     * @param stat the stat to be changed or added
+     * @param value the value to be associated with the stat
+     */
     public void updateStat(String stat, Integer value) {
         stats.put(stat, value);
         updateStats();

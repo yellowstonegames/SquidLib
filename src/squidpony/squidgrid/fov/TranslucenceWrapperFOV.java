@@ -34,7 +34,7 @@ public class TranslucenceWrapperFOV implements FOVSolver {
     /**
      * Uses provided FOVSolver to create lit area mapping
      *
-     * @param fov
+     * @param fov the FOVSolver to wrap
      */
     public TranslucenceWrapperFOV(FOVSolver fov) {
         this.fov = fov;
@@ -43,7 +43,7 @@ public class TranslucenceWrapperFOV implements FOVSolver {
     /**
      * Returns the last calculated set of directions the area was lit from.
      *
-     * @return
+     * @return the set calculated set
      */
     public ArrayList<DirectionIntercardinal>[][] getLitFrom() {
         return litFrom;
@@ -83,10 +83,12 @@ public class TranslucenceWrapperFOV implements FOVSolver {
      * Tertiary light should only light up opaque objects, with more opaque
      * objects requiring less light to be lit up.
      *
-     * @param x
-     * @param y
+     * @param x the grid x location to push into
+     * @param y the grid y location to push into
      * @param light the amount of light coming into this tile
-     * @param type
+     * @param dir the direction to push now
+     * @param previous the direction last pushed
+     * @param type the type of ray to push
      */
     private void pushLight(int x, int y, float light, DirectionIntercardinal dir, DirectionIntercardinal previous, RayType type) {
         if (light <= 0 || x < 0 || x >= width || y < 0 || y >= height || shadowMap[x][y] <= 0) {

@@ -98,7 +98,7 @@ public class XorRNG implements RandomnessSource {
     /**
      * Sets the seed of this generator. Passing this 0 will just set it to -1 instead.
      *
-     * @param seed
+     * @param seed the number to use as the seed
      */
     public void setSeed(final long seed) {
         state = seed == 0 ? -1 : seed;

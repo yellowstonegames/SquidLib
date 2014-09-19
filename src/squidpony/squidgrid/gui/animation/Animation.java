@@ -22,7 +22,7 @@ public interface Animation extends ActionListener {
      * Animations on a loop will always return true so some outside mechanism
      * must decide when to terminate them.
      *
-     * @return
+     * @return true if the animation is still in action
      */
     public boolean isActive();
 
@@ -34,7 +34,7 @@ public interface Animation extends ActionListener {
      * This method is intended to be called when converting an animation into a
      * static image.
      *
-     * @return
+     * @return the image of the animation's final state
      */
     public BufferedImage getImage();
 
@@ -42,7 +42,7 @@ public interface Animation extends ActionListener {
      * Sets the Component in which this animation will take place. This must be
      * set for the animation to function.
      *
-     * @param component
+     * @param component the GUI element to display in
      */
     public void setComponent(JComponent component);
 
@@ -54,7 +54,7 @@ public interface Animation extends ActionListener {
     /**
      * Returns the coordinate of the top left corner of the animation.
      *
-     * @return
+     * @return the location coordinate
      */
     public Point getLocation();
 }
