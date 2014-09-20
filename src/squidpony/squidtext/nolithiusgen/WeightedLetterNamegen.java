@@ -1,6 +1,7 @@
 package squidpony.squidtext.nolithiusgen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 import squidpony.annotation.Beta;
@@ -151,7 +152,7 @@ public class WeightedLetterNamegen {
     private int consonantLimit;
     private ArrayList<Integer> sizes;
 
-    private TreeMap<Character, WeightedLetter> letters;
+    private TreeMap<Character, HashMap<Character, WeightedLetterGroup>> letters;
     private ArrayList<Character> firstLetterSamples;
     private ArrayList<Character> lastLetterSamples;
 
@@ -190,30 +191,40 @@ public class WeightedLetterNamegen {
                 char nextLetter = name.charAt(n + 1);
 
                 // Create letter if it doesn't exist
-                WeightedLetter wl = letters.get(letter);
+                HashMap<Character, WeightedLetterGroup> wl = letters.get(letter);
                 if (wl == null) {
-                    wl = new WeightedLetter(letter);
+                    wl = new HashMap<Character, WeightedLetterGroup>();
                     letters.put(letter, wl);
                 }
-                wl.addNextLetter(nextLetter);
+                WeightedLetterGroup wlg = wl.get(letter);
+                if (wlg == null) {
+                    wlg = new WeightedLetterGroup();
+                    wl.put(letter, wlg);
+                }
+                wlg.add(nextLetter);
 
                 // If letter was uppercase (beginning of name), also add a lowercase entry
                 if (Character.isUpperCase(letter)) {
                     letter = Character.toLowerCase(letter);
 
-                    wl = letters.get(letter);
                     if (wl == null) {
-                        wl = new WeightedLetter(letter);
+                        wl = new HashMap<Character, WeightedLetterGroup>();
                         letters.put(letter, wl);
                     }
-                    wl.addNextLetter(nextLetter);
+                    wlg = wl.get(letter);
+                    if (wlg == null) {
+                        wlg = new WeightedLetterGroup();
+                        wl.put(letter, wlg);
+                    }
+                    wlg.add(nextLetter);
                 }
             }
         }
 
-        for (WeightedLetter weightedLetter : letters.values()) {
-            // Expand letters into samples
-            weightedLetter.nextLetters.expandSamples();
+        for (HashMap<Character, WeightedLetterGroup> weightedLetter : letters.values()) {
+            for (WeightedLetterGroup wlg : weightedLetter.values()) {
+                wlg.expandSamples();
+            }
         }
 
         initialized = true;
@@ -285,11 +296,11 @@ public class WeightedLetterNamegen {
     private char getIntermediateLetter(char letterBefore, char letterAfter) {
         if (Character.isLetter(letterBefore) && Character.isLetter(letterAfter)) {
             // First grab all letters that come after the 'letterBefore'
-            WeightedLetter wl = letters.get(letterBefore);
+            HashMap<Character, WeightedLetterGroup> wl = letters.get(letterBefore);
             if (wl == null) {
                 return getRandomNextLetter(letterBefore);
             }
-            LinkedHashMap<Character, Integer> letterCandidates = letters.get(letterBefore).nextLetters.sequences;
+            LinkedHashMap<Character, Integer> letterCandidates = wl.get(letterBefore).sequences;
 
             char bestFitLetter = '\'';
             int bestFitScore = 0;
@@ -300,12 +311,13 @@ public class WeightedLetterNamegen {
                 if (wl == null) {
                     continue;
                 }
-                WeightedLetterGroup weightedLetterGroup = wl.nextLetters;
-                Integer letterCounter = weightedLetterGroup.sequences.get(letterAfter);
-
-                if (letterCounter != null && letterCounter > bestFitScore) {
-                    bestFitLetter = letter;
-                    bestFitScore = letterCounter;
+                WeightedLetterGroup weightedLetterGroup = wl.get(letterBefore);
+                if (weightedLetterGroup != null) {
+                    Integer letterCounter = weightedLetterGroup.sequences.get(letterAfter);
+                    if (letterCounter != null && letterCounter > bestFitScore) {
+                        bestFitLetter = letter;
+                        bestFitScore = letterCounter;
+                    }
                 }
             }
 
@@ -383,8 +395,8 @@ public class WeightedLetterNamegen {
 
     private char getRandomNextLetter(char letter) {
         if (letters.containsKey(letter)) {
-            WeightedLetter weightedLetter = letters.get(letter);
-            char[] samples = weightedLetter.nextLetters.expandSamples();
+            HashMap<Character, WeightedLetterGroup> weightedLetter = letters.get(letter);
+            char[] samples = weightedLetter.get(letter).expandSamples();
             return samples[rng.nextInt(samples.length)];// pickRandomElementFromArray(weightedLetter.nextLetters.letterSamples);
         } else {
 //            return '\'';
