@@ -17,12 +17,12 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
 import squidpony.annotation.Beta;
-import squidpony.squidcolor.SColor;
-import squidpony.squidcolor.SColorFactory;
+import squidpony.SColor;
+import squidpony.SColorFactory;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.gui.SGMouseListener;
 import squidpony.squidgrid.gui.SwingPane;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * Builds, manages, and displays a JFrame with a SwingPane in it allowing for a minimal-effort construction of a GUI for

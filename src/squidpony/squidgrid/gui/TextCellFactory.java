@@ -6,8 +6,8 @@ import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
-import squidpony.squidcolor.SColor;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.SColor;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * Class for creating text blocks.

@@ -3,7 +3,7 @@ package squidpony.squidgrid.fov;
 
 import squidpony.squidgrid.fov.threed.FOVSolver3D;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.RadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
 
 /**
  * Uses BresenhamLOS to run lines out to the edges.

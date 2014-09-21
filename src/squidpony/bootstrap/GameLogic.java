@@ -1,7 +1,7 @@
 package squidpony.bootstrap;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * This interface indicates the ability to perform the game logic associated with GUI input.

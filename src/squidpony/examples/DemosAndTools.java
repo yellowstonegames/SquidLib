@@ -7,7 +7,7 @@ import squidpony.examples.squidgrid.fov.FieldOfViewDemo;
 import squidpony.examples.squidgrid.gui.FontChoiceDemo;
 import squidpony.examples.squidgrid.gui.swing.animation.MovingCharactersDemo;
 import squidpony.examples.squidgrid.gui.swing.listener.SGKeyEchoDemo;
-import squidpony.squidcolor.SColorChooserPanel;
+import squidpony.SColorChooserPanel;
 
 /**
  * Launcher for various demos and utilities associated with the SquidLib library suite.

@@ -13,16 +13,16 @@ import java.util.Queue;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.event.MouseInputListener;
-import squidpony.squidcolor.SColor;
-import squidpony.squidcolor.SColorFactory;
+import squidpony.SColor;
+import squidpony.SColorFactory;
 import squidpony.squidgrid.fov.FOVDemoPanel;
 import squidpony.squidgrid.gui.SGMouseListener;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.los.LOSSolver;
-import squidpony.squidgrid.util.DirectionCardinal;
-import squidpony.squidgrid.util.DirectionIntercardinal;
-import static squidpony.squidgrid.util.DirectionIntercardinal.*;
+import squidpony.squidgrid.DirectionCardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
+import static squidpony.squidgrid.DirectionIntercardinal.*;
 
 /**
  * Demonstrates the use of the Field of View and Line of Sight algorithms.

@@ -1,7 +1,7 @@
 package squidpony.squidgrid.fov.edgeaware;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * A cell which can report resistance values based on edges.

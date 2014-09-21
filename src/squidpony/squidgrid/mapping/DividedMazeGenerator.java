@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.DirectionCardinal;
+import squidpony.squidgrid.DirectionCardinal;
 import squidpony.squidmath.RNG;
 
 /**

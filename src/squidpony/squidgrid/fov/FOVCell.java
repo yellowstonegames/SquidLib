@@ -1,7 +1,7 @@
 package squidpony.squidgrid.fov;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * A cell which contains the information needed to process FOV and LOS.

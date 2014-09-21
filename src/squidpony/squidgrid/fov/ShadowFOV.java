@@ -1,8 +1,8 @@
 package squidpony.squidgrid.fov;
 
-import squidpony.squidgrid.util.RadiusStrategy;
-import squidpony.squidgrid.util.BasicRadiusStrategy;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.RadiusStrategy;
+import squidpony.squidgrid.BasicRadiusStrategy;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * Recursive shadowcasting FOV. Uses force * decay for the radius calculation

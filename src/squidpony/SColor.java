@@ -1,4 +1,4 @@
-package squidpony.squidcolor;
+package squidpony;
 
 import java.awt.Color;
 import java.util.Objects;

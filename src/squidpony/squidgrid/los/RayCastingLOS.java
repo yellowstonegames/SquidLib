@@ -5,8 +5,8 @@ import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.Queue;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.RadiusStrategy;
-import squidpony.squidgrid.util.BasicRadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
+import squidpony.squidgrid.BasicRadiusStrategy;
 
 /**
  * Uses a series of rays internal to the start and end point to determine

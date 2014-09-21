@@ -1,60 +1,55 @@
-package squidpony.squidgrid.util;
-
-import java.awt.Point;
+package squidpony.squidgrid;
 
 /**
  * Indicates which method of dealing with the radius during FOV and LOS solving is preferred.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public interface RadiusStrategy {
+public interface RadiusStrategy3D extends RadiusStrategy {
 
     /**
      * Returns the radius between the two points provided.
      *
      * @param startx
      * @param starty
+     * @param startz
      * @param endx
      * @param endy
+     * @param endz
      * @return
      */
-    public float radius(int startx, int starty, int endx, int endy);
+    public float radius(int startx, int starty, int startz, int endx, int endy, int endz);
 
     /**
      * Returns the radius calculated using the two distances provided.
      *
      * @param dx
      * @param dy
+     * @param dz
      * @return
      */
-    public float radius(int dx, int dy);
+    public float radius(int dx, int dy, int dz);
 
     /**
      * Returns the radius between the two points provided.
      *
      * @param startx
      * @param starty
+     * @param startz
      * @param endx
      * @param endy
+     * @param endz
      * @return
      */
-    public float radius(float startx, float starty, float endx, float endy);
+    public float radius(float startx, float starty, float startz, float endx, float endy, float endz);
 
     /**
      * Returns the radius calculated based on the two distances provided.
      *
      * @param dx
      * @param dy
+     * @param dz
      * @return
      */
-    public float radius(float dx, float dy);
-
-    /**
-     * Returns a random point within the unit distance provided for this radius strategy.
-     *
-     * @param distance
-     * @return
-     */
-    public Point onUnitShape(double distance);
-
+    public float radius(float dx, float dy, float dz);
 }

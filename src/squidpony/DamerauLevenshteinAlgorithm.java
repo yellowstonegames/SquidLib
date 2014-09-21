@@ -1,4 +1,4 @@
-package squidpony.squidtext;
+package squidpony;
 
 import java.util.HashMap; 
 import java.util.Map;

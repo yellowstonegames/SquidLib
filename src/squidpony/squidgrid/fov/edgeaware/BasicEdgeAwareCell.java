@@ -2,7 +2,7 @@ package squidpony.squidgrid.fov.edgeaware;
 
 import java.util.HashMap;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * A minimal implementation of EdgeAwareCell.

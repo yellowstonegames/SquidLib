@@ -1,13 +1,13 @@
 package squidpony.squidgrid.fov;
 
-import squidpony.squidgrid.util.RadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
 import java.util.TreeMap;
-import squidpony.squidcolor.SColorFactory;
+import squidpony.SColorFactory;
 import squidpony.squidgrid.los.BresenhamLOS;
 import squidpony.squidgrid.los.EliasConcurrentLOS;
 import squidpony.squidgrid.los.LOSSolver;
 import squidpony.squidgrid.los.RayCastingLOS;
-import squidpony.squidgrid.util.BasicRadiusStrategy;
+import squidpony.squidgrid.BasicRadiusStrategy;
 
 /**
  *

@@ -5,13 +5,13 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.JLayeredPane;
-import squidpony.squidcolor.SColor;
+import squidpony.SColor;
 import squidpony.squidgrid.gui.animation.Animation;
 import squidpony.squidgrid.gui.animation.AnimationManager;
 import squidpony.squidgrid.gui.animation.BumpAnimation;
 import squidpony.squidgrid.gui.animation.SlideAnimation;
 import squidpony.squidgrid.gui.animation.WiggleAnimation;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.

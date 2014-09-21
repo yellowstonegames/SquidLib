@@ -11,7 +11,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import squidpony.squidtext.nolithiusgen.WeightedLetterNamegen;
+import squidpony.WeightedLetterNamegen;
 
 /**
  *
