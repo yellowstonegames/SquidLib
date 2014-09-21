@@ -1,4 +1,4 @@
-package squidpony.squidgrid.util;
+package squidpony.squidgrid;
 
 import java.awt.Point;
 import squidpony.squidmath.Point3D;

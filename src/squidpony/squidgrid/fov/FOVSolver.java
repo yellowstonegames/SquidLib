@@ -1,6 +1,6 @@
 package squidpony.squidgrid.fov;
 
-import squidpony.squidgrid.util.RadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
 
 /**
  * An interface for Field of View algorithms.

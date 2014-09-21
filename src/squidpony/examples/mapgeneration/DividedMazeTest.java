@@ -4,7 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import squidpony.squidcolor.SColor;
+import squidpony.SColor;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.mapping.DividedMazeGenerator;
 

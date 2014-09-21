@@ -1,10 +1,10 @@
 package squidpony.squidgrid.fov;
 
 import java.util.ArrayList;
-import squidpony.squidgrid.util.RadiusStrategy;
-import squidpony.squidgrid.util.BasicRadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
+import squidpony.squidgrid.BasicRadiusStrategy;
 import static squidpony.squidgrid.fov.TranslucenceWrapperFOV.RayType.*;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * Acts as a wrapper which fully respects translucency and lights based on

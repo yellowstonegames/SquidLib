@@ -7,9 +7,9 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.DirectionCardinal;
+import squidpony.squidgrid.DirectionCardinal;
 import squidpony.squidmath.RNG;
-import squidpony.squidutility.Pair;
+import squidpony.Pair;
 
 /**
  * Creates a dungeon in the style of the original Rogue game. It will always make a grid style of rooms where there are

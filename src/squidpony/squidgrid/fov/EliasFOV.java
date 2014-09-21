@@ -1,6 +1,6 @@
 package squidpony.squidgrid.fov;
 
-import squidpony.squidgrid.util.RadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
 import java.awt.Point;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.los.EliasConcurrentLOS;
-import squidpony.squidgrid.util.BasicRadiusStrategy;
+import squidpony.squidgrid.BasicRadiusStrategy;
 
 /**
  * Uses the Elias line running to raycast.

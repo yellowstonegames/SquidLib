@@ -1,6 +1,6 @@
 package squidpony.squidgrid.fov.threed;
 
-import squidpony.squidgrid.util.RadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.fov.FOVSolver;
 

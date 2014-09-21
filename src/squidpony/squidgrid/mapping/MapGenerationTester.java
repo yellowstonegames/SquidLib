@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import squidpony.squidcolor.SColorFactory;
+import squidpony.SColorFactory;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.shape.ShapeGenerator;

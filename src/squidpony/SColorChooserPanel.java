@@ -1,5 +1,6 @@
-package squidpony.squidcolor;
+package squidpony;
 
+import squidpony.SColor;
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;

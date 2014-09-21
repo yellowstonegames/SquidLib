@@ -1,17 +1,13 @@
-package squidpony.squidgrid.util;
-
-import squidpony.squidutility.jdaygraph.Topology;
+package squidpony.squidgrid;
 
 /**
- * Represents the eight grid directions and the deltaX, deltaY values associated
- * with those directions.
+ * Represents the eight grid directions and the deltaX, deltaY values associated with those directions.
  *
- * The grid referenced has x positive to the right and y positive downwards on
- * screen.
+ * The grid referenced has x positive to the right and y positive downwards on screen.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public enum DirectionIntercardinal implements Topology {
+public enum DirectionIntercardinal {
 
     UP(0, -1, '↑'), DOWN(0, 1, '↓'), LEFT(-1, 0, '←'), RIGHT(1, 0, '→'), UP_LEFT(-1, -1, '↖'), UP_RIGHT(1, -1, '↗'), DOWN_LEFT(-1, 1, '↙'), DOWN_RIGHT(1, 1, '↘'), NONE(0, 0, '•');
     /**
@@ -75,8 +71,8 @@ public enum DirectionIntercardinal implements Topology {
     }
 
     /**
-     * Gets the direction associated with the passed in character. If there is
-     * no direction associated then null is returned.
+     * Gets the direction associated with the passed in character. If there is no direction associated then null is
+     * returned.
      *
      * @param c
      * @return

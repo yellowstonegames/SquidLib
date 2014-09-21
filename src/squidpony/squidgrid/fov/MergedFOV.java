@@ -1,6 +1,6 @@
 package squidpony.squidgrid.fov;
 
-import squidpony.squidgrid.util.RadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
 import squidpony.annotation.Beta;
 
 /**

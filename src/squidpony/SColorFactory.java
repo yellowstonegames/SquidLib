@@ -1,5 +1,7 @@
-package squidpony.squidcolor;
+package squidpony;
 
+import squidpony.SColorChooserPanel;
+import squidpony.SColor;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;

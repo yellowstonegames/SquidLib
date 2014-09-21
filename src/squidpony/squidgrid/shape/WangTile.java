@@ -1,7 +1,7 @@
 package squidpony.squidgrid.shape;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * Represents a tile that is edge and corner (which are considered edges

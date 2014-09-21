@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import squidpony.squidgrid.util.RadiusStrategy;
-import squidpony.squidgrid.util.BasicRadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
+import squidpony.squidgrid.BasicRadiusStrategy;
 import squidpony.squidmath.Elias;
 
 /**

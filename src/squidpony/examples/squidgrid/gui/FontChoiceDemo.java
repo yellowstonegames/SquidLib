@@ -16,7 +16,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import squidpony.squidcolor.SColor;
+import squidpony.SColor;
 import squidpony.squidgrid.gui.FontChoiceControlPanel;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.gui.TextCellFactory;

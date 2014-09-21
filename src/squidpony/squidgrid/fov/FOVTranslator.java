@@ -1,7 +1,7 @@
 package squidpony.squidgrid.fov;
 
-import squidpony.squidgrid.util.RadiusStrategy;
-import squidpony.squidgrid.util.BasicRadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
+import squidpony.squidgrid.BasicRadiusStrategy;
 
 /**
  * An Adapter which wraps a FOVSolver and allows the input and output of multiple types.

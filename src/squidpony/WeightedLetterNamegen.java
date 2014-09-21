@@ -1,12 +1,13 @@
-package squidpony.squidtext.nolithiusgen;
+package squidpony;
 
+import squidpony.DamerauLevenshteinAlgorithm;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.Set;
 import java.util.TreeMap;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.RNG;
-import squidpony.squidtext.StringUtils;
+import squidpony.squidmath.ProbabilityTable;
 
 /**
  * Based on work by Nolithius available at the following two sites https://github.com/Nolithius/weighted-letter-namegen
@@ -142,27 +143,54 @@ public class WeightedLetterNamegen {
     };
 //</editor-fold>
 
-    private static final RNG rng = new RNG();
     private static final Character[] vowels = new Character[]{'a', 'e', 'i', 'o'};//not using y because it looks strange as a vowel in names
-
     private static final int LAST_LETTER_CANDIDATES_MAX = 52;
-    private boolean initialized = false;
 
+    private RNG rng;
     private String[] names;
     private int consonantLimit;
     private ArrayList<Integer> sizes;
 
-    private TreeMap<Character, HashMap<Character, WeightedLetterGroup>> letters;
+    private TreeMap<Character, HashMap<Character, ProbabilityTable<Character>>> letters;
     private ArrayList<Character> firstLetterSamples;
     private ArrayList<Character> lastLetterSamples;
+    private DamerauLevenshteinAlgorithm dla = new DamerauLevenshteinAlgorithm(1, 1, 1, 1);
 
-    public WeightedLetterNamegen(String[] names, int consonantLimit) {
-        this.names = names;
-        this.consonantLimit = consonantLimit;
+    /**
+     * Creates the generator by seeding the provided list of names.
+     *
+     * @param names an array of Strings that are typical names to be emulated
+     */
+    public WeightedLetterNamegen(String[] names) {
+        this(names, 2);
     }
 
     /**
-     * Initialization, statistically measures letter likelyhood. Called by generate() the first time.
+     * Creates the generator by seeding the provided list of names.
+     *
+     * @param names an array of Strings that are typical names to be emulated
+     * @param consonantLimit the maximum allowed consonants in a row
+     */
+    public WeightedLetterNamegen(String[] names, int consonantLimit) {
+        this(names, consonantLimit, new RNG());
+    }
+
+    /**
+     * Creates the generator by seeding the provided list of names.
+     *
+     * @param names an array of Strings that are typical names to be emulated
+     * @param consonantLimit the maximum allowed consonants in a row
+     * @param rng the source of randomness to be used
+     */
+    public WeightedLetterNamegen(String[] names, int consonantLimit, RNG rng) {
+        this.names = names;
+        this.consonantLimit = consonantLimit;
+        this.rng = rng;
+        init();
+    }
+
+    /**
+     * Initialization, statistically measures letter likelyhood.
      */
     private void init() {
         sizes = new ArrayList<>();
@@ -191,43 +219,31 @@ public class WeightedLetterNamegen {
                 char nextLetter = name.charAt(n + 1);
 
                 // Create letter if it doesn't exist
-                HashMap<Character, WeightedLetterGroup> wl = letters.get(letter);
+                HashMap<Character, ProbabilityTable<Character>> wl = letters.get(letter);
                 if (wl == null) {
-                    wl = new HashMap<Character, WeightedLetterGroup>();
+                    wl = new HashMap<>();
                     letters.put(letter, wl);
                 }
-                WeightedLetterGroup wlg = wl.get(letter);
+                ProbabilityTable<Character> wlg = wl.get(letter);
                 if (wlg == null) {
-                    wlg = new WeightedLetterGroup();
+                    wlg = new ProbabilityTable<>();
                     wl.put(letter, wlg);
                 }
-                wlg.add(nextLetter);
+                wlg.add(nextLetter, 1);
 
                 // If letter was uppercase (beginning of name), also add a lowercase entry
                 if (Character.isUpperCase(letter)) {
                     letter = Character.toLowerCase(letter);
 
-                    if (wl == null) {
-                        wl = new HashMap<Character, WeightedLetterGroup>();
-                        letters.put(letter, wl);
-                    }
                     wlg = wl.get(letter);
                     if (wlg == null) {
-                        wlg = new WeightedLetterGroup();
+                        wlg = new ProbabilityTable<>();
                         wl.put(letter, wlg);
                     }
-                    wlg.add(nextLetter);
+                    wlg.add(nextLetter, 1);
                 }
             }
         }
-
-        for (HashMap<Character, WeightedLetterGroup> weightedLetter : letters.values()) {
-            for (WeightedLetterGroup wlg : weightedLetter.values()) {
-                wlg.expandSamples();
-            }
-        }
-
-        initialized = true;
     }
 
     public String[] generate() {
@@ -235,11 +251,6 @@ public class WeightedLetterNamegen {
     }
 
     public String[] generate(int amountToGenerate) {
-        // Initialize if called for the first time
-        if (!initialized) {
-            init();
-        }
-
         ArrayList<String> result = new ArrayList<>();
 
         int nameCount = 0;
@@ -296,25 +307,25 @@ public class WeightedLetterNamegen {
     private char getIntermediateLetter(char letterBefore, char letterAfter) {
         if (Character.isLetter(letterBefore) && Character.isLetter(letterAfter)) {
             // First grab all letters that come after the 'letterBefore'
-            HashMap<Character, WeightedLetterGroup> wl = letters.get(letterBefore);
+            HashMap<Character, ProbabilityTable<Character>> wl = letters.get(letterBefore);
             if (wl == null) {
                 return getRandomNextLetter(letterBefore);
             }
-            LinkedHashMap<Character, Integer> letterCandidates = wl.get(letterBefore).sequences;
+            Set<Character> letterCandidates = wl.get(letterBefore).items();
 
             char bestFitLetter = '\'';
             int bestFitScore = 0;
 
             // Step through candidates, and return best scoring letter
-            for (char letter : letterCandidates.keySet()) {
+            for (char letter : letterCandidates) {
                 wl = letters.get(letter);
                 if (wl == null) {
                     continue;
                 }
-                WeightedLetterGroup weightedLetterGroup = wl.get(letterBefore);
+                ProbabilityTable<Character> weightedLetterGroup = wl.get(letterBefore);
                 if (weightedLetterGroup != null) {
-                    Integer letterCounter = weightedLetterGroup.sequences.get(letterAfter);
-                    if (letterCounter != null && letterCounter > bestFitScore) {
+                    Integer letterCounter = weightedLetterGroup.weight(letterAfter);
+                    if (letterCounter > bestFitScore) {
                         bestFitLetter = letter;
                         bestFitScore = letterCounter;
                     }
@@ -372,19 +383,8 @@ public class WeightedLetterNamegen {
     private boolean checkLevenshtein(String name) {
         int levenshteinBias = name.length() / 2;
 
-        // Grab the closest matches, just for fun
-        String closestName = "";
-        int closestDistance = Integer.MAX_VALUE;
-
-        for (int i = 0; i < names.length; i++) {
-            int levenshteinDistance = StringUtils.damerau(name, names[i]);
-
-            // This is just to get an idea of what is failing
-            if (levenshteinDistance < closestDistance) {
-                closestDistance = levenshteinDistance;
-                closestName = names[i];
-            }
-
+        for (String name1 : names) {
+            int levenshteinDistance = dla.execute(name, name1);
             if (levenshteinDistance <= levenshteinBias) {
                 return true;
             }
@@ -395,11 +395,8 @@ public class WeightedLetterNamegen {
 
     private char getRandomNextLetter(char letter) {
         if (letters.containsKey(letter)) {
-            HashMap<Character, WeightedLetterGroup> weightedLetter = letters.get(letter);
-            char[] samples = weightedLetter.get(letter).expandSamples();
-            return samples[rng.nextInt(samples.length)];// pickRandomElementFromArray(weightedLetter.nextLetters.letterSamples);
+            return letters.get(letter).get(letter).random();
         } else {
-//            return '\'';
             return rng.getRandomElement(vowels);
         }
     }

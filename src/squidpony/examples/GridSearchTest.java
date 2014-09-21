@@ -7,12 +7,12 @@ import java.awt.event.MouseEvent;
 import java.util.Queue;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import squidpony.squidcolor.SColor;
-import squidpony.squidcolor.SColorFactory;
+import squidpony.SColor;
+import squidpony.SColorFactory;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidmath.RNG;
-import squidpony.squidutility.astar.GridSearch;
+import squidpony.squidmath.AStarSearch;
 
 /**
  * This program tests GridSearch for correctness. It's visual to make the weighting easy to see along with the path
@@ -28,7 +28,7 @@ public class GridSearchTest {
     private int height = 50;
     private double[][] map;
     private RNG rng = new RNG();
-    private GridSearch search;
+    private AStarSearch search;
     private Queue<Point> path;
     private Point start, target;
     private float weight = 10;
@@ -108,7 +108,7 @@ public class GridSearchTest {
                 map[x][y] = rng.nextInt((int) weight);//randomly set some areas as harder to walk
             }
         }
-        search = new GridSearch(map, GridSearch.SearchType.CHEBYSHEV);
+        search = new AStarSearch(map, AStarSearch.SearchType.CHEBYSHEV);
         start = new Point(rng.nextInt(width), rng.nextInt(height));
         target = new Point(rng.nextInt(width), rng.nextInt(height));
         path = search.path(start.x, start.y, target.x, target.y);

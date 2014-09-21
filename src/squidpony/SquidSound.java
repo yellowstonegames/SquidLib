@@ -1,4 +1,4 @@
-package squidpony.squidsound;
+package squidpony;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -18,19 +18,19 @@ import javafx.scene.media.MediaPlayer.Status;
  *
  * @author Eben Howard - http://squidpony.com
  */
-public class SoundManager implements Runnable {
+public class SquidSound implements Runnable {
 
     final static private String validExtensions = "aif|aiff|fxm|flv|m3u8|mp3|mp4|m4a|m4v|wav";
     private static boolean fxInitialized = false;
 
     public volatile float maxMusicVolume = 0.7f, musicVolume = 0.7f, soundfxVolume = 0.7f, fadeVolume = 0.7f;
     private boolean fading = false;
-    private TreeMap<String, AudioClip> clipMap = new TreeMap<>();
-    private TreeMap<String, Media> mediaMap = new TreeMap<>();
+    private final TreeMap<String, AudioClip> clipMap = new TreeMap<>();
+    private final TreeMap<String, Media> mediaMap = new TreeMap<>();
     private Media nowPlaying;
     private MediaPlayer player;
 
-    public SoundManager() {
+    public SquidSound() {
         if (!fxInitialized) {
             JFXPanel fxPanel = new JFXPanel();//needed only to initialize the Platform
             fxInitialized = true;

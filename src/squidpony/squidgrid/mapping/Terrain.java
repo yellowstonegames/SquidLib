@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidcolor.SColor;
+import squidpony.SColor;
 
 /**
  * A base class for cell level features common to roguelike dungeons.

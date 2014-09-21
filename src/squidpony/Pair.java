@@ -1,4 +1,4 @@
-package squidpony.squidutility;
+package squidpony;
 
 import java.util.Objects;
 

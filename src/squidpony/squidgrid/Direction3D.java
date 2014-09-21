@@ -1,4 +1,4 @@
-package squidpony.squidgrid.util;
+package squidpony.squidgrid;
 
 import squidpony.annotation.Beta;
 

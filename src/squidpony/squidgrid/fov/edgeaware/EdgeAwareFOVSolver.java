@@ -1,7 +1,7 @@
 package squidpony.squidgrid.fov.edgeaware;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.util.RadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
 
 /**
  * A 2D Field of View solver that understands cells having edges and will return

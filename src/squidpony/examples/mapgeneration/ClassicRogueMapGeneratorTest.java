@@ -4,11 +4,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import squidpony.squidcolor.SColor;
+import squidpony.SColor;
 import squidpony.squidgrid.mapping.ClassicRogueMapGenerator;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.mapping.Terrain;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * Displays randomly built maps from the ClassicRogueMapGenerator.

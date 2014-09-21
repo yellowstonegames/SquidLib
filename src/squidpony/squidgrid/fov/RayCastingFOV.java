@@ -1,6 +1,6 @@
 package squidpony.squidgrid.fov;
 
-import squidpony.squidgrid.util.RadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.los.LOSSolver;
 import squidpony.squidgrid.los.RayCastingLOS;
-import squidpony.squidgrid.util.BasicRadiusStrategy;
+import squidpony.squidgrid.BasicRadiusStrategy;
 
 /**
  * Simple raytracing algorithm for Field of View. In large areas will be

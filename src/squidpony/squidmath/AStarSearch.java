@@ -1,11 +1,11 @@
-package squidpony.squidutility.astar;
+package squidpony.squidmath;
 
 import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Queue;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
  * Performs A* search.
@@ -15,7 +15,7 @@ import squidpony.squidgrid.util.DirectionIntercardinal;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class GridSearch {
+public class AStarSearch {
 
     /**
      * The type of heuristic to use.
@@ -48,7 +48,7 @@ public class GridSearch {
     private Point start, target;
     private SearchType type;
 
-    public GridSearch(double[][] map, SearchType type) {
+    public AStarSearch(double[][] map, SearchType type) {
         this.map = map;
         width = map.length;
         height = map[0].length;

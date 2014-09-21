@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import squidpony.squidcolor.SColor;
+import squidpony.SColor;
 import squidpony.squidgrid.fov.FOVTranslator;
 import squidpony.squidgrid.fov.ShadowFOV;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.gui.SGKeyListener;
 import squidpony.squidgrid.gui.SwingPane;
-import squidpony.squidgrid.util.DirectionIntercardinal;
+import squidpony.squidgrid.DirectionIntercardinal;
 import squidpony.squidmath.RNG;
 
 /**

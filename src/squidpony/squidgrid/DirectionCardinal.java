@@ -1,17 +1,13 @@
-package squidpony.squidgrid.util;
-
-import squidpony.squidutility.jdaygraph.Topology;
+package squidpony.squidgrid;
 
 /**
- * Represents the four primary edges are represented, along
- * with NONE.
+ * Represents the four primary edges are represented, along with NONE.
  *
- * The grid referenced has x positive to the right and y positive downwards on
- * screen.
+ * The grid referenced has x positive to the right and y positive downwards on screen.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public enum DirectionCardinal implements Topology {
+public enum DirectionCardinal {
 
     UP(0, -1, '↑'), DOWN(0, 1, '↓'), LEFT(-1, 0, '←'), RIGHT(1, 0, '→'), NONE(0, 0, '•');
     /**
@@ -59,8 +55,8 @@ public enum DirectionCardinal implements Topology {
     }
 
     /**
-     * Gets the direction associated with the passed in character. If there is
-     * no direction associated then null is returned.
+     * Gets the direction associated with the passed in character. If there is no direction associated then null is
+     * returned.
      *
      * @param c
      * @return

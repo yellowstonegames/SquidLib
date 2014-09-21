@@ -2,7 +2,7 @@ package squidpony.squidgrid.los;
 
 import java.awt.Point;
 import java.util.Queue;
-import squidpony.squidgrid.util.RadiusStrategy;
+import squidpony.squidgrid.RadiusStrategy;
 
 /**
  * An interface for Line of Sight algorithms.
