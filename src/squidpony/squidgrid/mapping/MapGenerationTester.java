@@ -1,7 +1,7 @@
 package squidpony.squidgrid.mapping;
 
 import java.awt.Font;
-import squidpony.squidgrid.shape.TiledShape;
+import squidpony.squidgrid.mapping.shape.TiledShape;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import squidpony.SColorFactory;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.shape.ShapeGenerator;
+import squidpony.squidgrid.mapping.shape.ShapeGenerator;
 
 /**
  *

@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidgrid.shape.TiledShape;
+import squidpony.squidgrid.mapping.shape.TiledShape;
 
 /**
  * Creates a map for use in creating adventure areas.

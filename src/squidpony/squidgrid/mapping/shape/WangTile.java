@@ -1,4 +1,4 @@
-package squidpony.squidgrid.shape;
+package squidpony.squidgrid.mapping.shape;
 
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.DirectionIntercardinal;
