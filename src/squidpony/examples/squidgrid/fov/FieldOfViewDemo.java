@@ -15,12 +15,10 @@ import javax.swing.JLayeredPane;
 import javax.swing.event.MouseInputListener;
 import squidpony.SColor;
 import squidpony.SColorFactory;
-import squidpony.squidgrid.fov.FOVDemoPanel;
 import squidpony.squidgrid.gui.SGMouseListener;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.los.LOSSolver;
-import squidpony.squidgrid.DirectionCardinal;
 import squidpony.squidgrid.DirectionIntercardinal;
 import static squidpony.squidgrid.DirectionIntercardinal.*;
 
@@ -31,9 +29,9 @@ import static squidpony.squidgrid.DirectionIntercardinal.*;
  */
 public class FieldOfViewDemo {
 
-    private SwingPane display, back;//uses SGTextAndImagePanel instead of SGTextPanel in order to show it's usable as an in-place replacement/extension
+    private SwingPane display, back;
     private JFrame frame;
-    private static final String[] DEFAULT_MAP = new String[]{//in order to be in line with GUI coordinate pairs, this appears to be sideways in this style constructor.
+    private static final String[] DEFAULT_MAP = new String[]{
         "øøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøø########################################øøøøøøøøøøøøøøøøøøøøøøøøø",
         "øøøøøøøøøøøøøøøøøø#########øøøøøøøø#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#..m.mmmmmmmmmmmmmm..m...ø",
         "øøøøøøøøøøø########.......##øøøøøøø#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#.mmTmmmmmmmmmmmmmm......ø",

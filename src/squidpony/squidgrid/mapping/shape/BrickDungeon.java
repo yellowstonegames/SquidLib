@@ -1,4 +1,4 @@
-package squidpony.squidgrid.shape;
+package squidpony.squidgrid.mapping.shape;
 
 import java.io.InputStream;
 import java.util.ArrayList;

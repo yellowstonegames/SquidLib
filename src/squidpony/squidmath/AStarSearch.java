@@ -46,7 +46,7 @@ public class AStarSearch {
     private boolean[][] finished;
     private Point[][] parent;
     private Point start, target;
-    private SearchType type;
+    private final SearchType type;
 
     public AStarSearch(double[][] map, SearchType type) {
         this.map = map;

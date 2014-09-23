@@ -1,4 +1,4 @@
-package squidpony.squidgrid.shape;
+package squidpony.squidgrid.mapping.shape;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
