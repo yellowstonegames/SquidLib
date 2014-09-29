@@ -20,11 +20,10 @@ import squidpony.squidmath.Point3D;
 import squidpony.squidmath.RNG;
 
 /**
- * Provides utilities for working with colors as well as caching operations for
- * color creation.
+ * Provides utilities for working with colors as well as caching operations for color creation.
  *
- * All returned SColor objects are cached so multiple requests for the same
- * SColor will not create duplicate long term objects.
+ * All returned SColor objects are cached so multiple requests for the same SColor will not create duplicate long term
+ * objects.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -44,11 +43,9 @@ public class SColorFactory {
     }
 
     /**
-     * Returns the SColor Constant who's name is the one provided. If one cannot
-     * be found then null is returned.
+     * Returns the SColor Constant who's name is the one provided. If one cannot be found then null is returned.
      *
-     * This method constructs a list of the SColor constants the first time it
-     * is called.
+     * This method constructs a list of the SColor constants the first time it is called.
      *
      * @param s
      * @return
@@ -64,12 +61,10 @@ public class SColorFactory {
     }
 
     /**
-     * Returns the SColor who's value matches the one passed in. If no SColor
-     * Constant matches that value then a cached or new SColor is returned that
-     * matches the provided value.
+     * Returns the SColor who's value matches the one passed in. If no SColor Constant matches that value then a cached
+     * or new SColor is returned that matches the provided value.
      *
-     * This method constructs a list of the SColor constants the first time it
-     * is called.
+     * This method constructs a list of the SColor constants the first time it is called.
      *
      * @param rgb
      * @return
@@ -94,8 +89,7 @@ public class SColorFactory {
     }
 
     /**
-     * Utility method to blend the two colors by the amount passed in as the
-     * coefficient.
+     * Utility method to blend the two colors by the amount passed in as the coefficient.
      *
      * @param a
      * @param b
@@ -109,8 +103,7 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is the given distance from the first color to the
-     * second color.
+     * Returns an SColor that is the given distance from the first color to the second color.
      *
      * @param color1 The first color
      * @param color2 The second color
@@ -125,8 +118,8 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is randomly chosen from the color line between the
-     * two provided colors from the two provided points.
+     * Returns an SColor that is randomly chosen from the color line between the two provided colors from the two
+     * provided points.
      *
      * @param color1
      * @param color2
@@ -150,9 +143,8 @@ public class SColorFactory {
     }
 
     /**
-     * Uses the second color as a light source, meaning that each of the red,
-     * green, and blue values of the first color are multiplied by the lighting
-     * color's percentage of full value (255).
+     * Uses the second color as a light source, meaning that each of the red, green, and blue values of the first color
+     * are multiplied by the lighting color's percentage of full value (255).
      *
      * @param color
      * @param light
@@ -165,24 +157,20 @@ public class SColorFactory {
     /**
      * Clears the backing cache.
      *
-     * Should only be used if an extreme number of colors are being created and
-     * then not reused, such as when blending different colors in different
-     * areas that will not be revisited.
+     * Should only be used if an extreme number of colors are being created and then not reused, such as when blending
+     * different colors in different areas that will not be revisited.
      */
     public static void emptyCache() {
         colorBag = new HashMap<>();
     }
 
     /**
-     * Sets the value at which each of the red, green, and blue values will be
-     * set to the nearest lower multiple of.
+     * Sets the value at which each of the red, green, and blue values will be set to the nearest lower multiple of.
      *
-     * For example, a floor value of 5 would mean that each of those values
-     * would be considered the nearest lower multiple of 5 when building the
-     * colors.
+     * For example, a floor value of 5 would mean that each of those values would be considered the nearest lower
+     * multiple of 5 when building the colors.
      *
-     * If the value passed in is less than 1, then the flooring value is set at
-     * 1.
+     * If the value passed in is less than 1, then the flooring value is set at 1.
      *
      * @param value
      */
@@ -193,26 +181,24 @@ public class SColorFactory {
     /**
      * Returns the cached color that matches the desired rgb value.
      *
-     * If the color is not already in the cache, it is created and added to the
-     * cache.
+     * If the color is not already in the cache, it is created and added to the cache.
      *
-     * This method does not check to see if the value is already available as a
-     * SColor constant. If such functionality is desired then please use
-     * colorForValue(int rgb) instead.
+     * This method does not check to see if the value is already available as a SColor constant. If such functionality
+     * is desired then please use colorForValue(int rgb) instead.
      *
-     * @param rgb
+     * @param argb
      * @return
      */
-    public static SColor asSColor(int rgb) {
-        int working = rgb;
+    public static SColor asSColor(int argb) {
+        int working = argb;
         if (floor != 1) {//need to convert to floored values
-            int a = (rgb >> 24) & 0xff;
+            int a = (argb >> 24) & 0xff;
             a -= a % floor;
-            int r = (rgb >> 16) & 0xff;
+            int r = (argb >> 16) & 0xff;
             r -= r % floor;
-            int g = (rgb >> 8) & 0xff;
+            int g = (argb >> 8) & 0xff;
             g -= g % floor;
-            int b = rgb & 0xff;
+            int b = argb & 0xff;
             b -= b % floor;
 
             //put back together
@@ -231,13 +217,20 @@ public class SColorFactory {
         }
     }
 
+    /**
+     * Returns an SColor that is opaque.
+     *
+     * @param r
+     * @param g
+     * @param b
+     * @return
+     */
     public static SColor asSColor(int r, int g, int b) {
-        return asSColor(0, r, g, b);
+        return asSColor(255, r, g, b);
     }
 
     /**
-     * Returns an SColor with the given values, with those values clamped
-     * between 0 and 255.
+     * Returns an SColor with the given values, with those values clamped between 0 and 255.
      *
      * @param a
      * @param r
@@ -258,9 +251,8 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor representation of the provided Color. If there is a
-     * named SColor constant that matches the value, then that constant is
-     * returned.
+     * Returns an SColor representation of the provided Color. If there is a named SColor constant that matches the
+     * value, then that constant is returned.
      *
      * @param color
      * @return
@@ -270,8 +262,7 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is a slightly dimmer version of the provided
-     * color.
+     * Returns an SColor that is a slightly dimmer version of the provided color.
      *
      * @param color
      * @return
@@ -281,8 +272,7 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is a somewhat dimmer version of the provided
-     * color.
+     * Returns an SColor that is a somewhat dimmer version of the provided color.
      *
      * @param color
      * @return
@@ -302,8 +292,7 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is a slightly lighter version of the provided
-     * color.
+     * Returns an SColor that is a slightly lighter version of the provided color.
      *
      * @param color
      * @return
@@ -313,8 +302,7 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is a somewhat lighter version of the provided
-     * color.
+     * Returns an SColor that is a somewhat lighter version of the provided color.
      *
      * @param color
      * @return
@@ -334,8 +322,7 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is the fully desaturated (greyscale) version of
-     * the provided color.
+     * Returns an SColor that is the fully desaturated (greyscale) version of the provided color.
      *
      * @param color
      * @return
@@ -350,12 +337,10 @@ public class SColorFactory {
     }
 
     /**
-     * Returns an SColor that is the version of the provided color desaturated
-     * the given amount.
+     * Returns an SColor that is the version of the provided color desaturated the given amount.
      *
      * @param color
-     * @param percent The percent to desaturate, from 0.0 for none to 1.0 for
-     * fully desaturated
+     * @param percent The percent to desaturate, from 0.0 for none to 1.0 for fully desaturated
      * @return
      */
     public static SColor desaturate(SColor color, double percent) {
@@ -363,8 +348,8 @@ public class SColorFactory {
     }
 
     /**
-     * Returns a list of colors starting at the first color and moving to the
-     * second color. The end point colors are included in the list.
+     * Returns a list of colors starting at the first color and moving to the second color. The end point colors are
+     * included in the list.
      *
      * @param color1
      * @param color2
@@ -388,8 +373,7 @@ public class SColorFactory {
     }
 
     /**
-     * Returns the pallet associate with the provided name, or null if there is
-     * no such pallet.
+     * Returns the pallet associate with the provided name, or null if there is no such pallet.
      *
      * @param name
      * @return
@@ -399,10 +383,9 @@ public class SColorFactory {
     }
 
     /**
-     * Returns the SColor that is the provided percent towards the end of the
-     * pallet. Bounds are checked so as long as there is at least one color in
-     * the palette, values below 0 will return the first element and values
-     * above 1 will return the last element;
+     * Returns the SColor that is the provided percent towards the end of the pallet. Bounds are checked so as long as
+     * there is at least one color in the palette, values below 0 will return the first element and values above 1 will
+     * return the last element;
      *
      * If there is no pallette keyed to the provided name, null is returned.
      *
@@ -423,8 +406,8 @@ public class SColorFactory {
     }
 
     /**
-     * Presents a pop-up JColorChooser dialog showing all of the SColor constants along with examples of what the various
-     * dimming and lightening methods change them to..
+     * Presents a pop-up JColorChooser dialog showing all of the SColor constants along with examples of what the
+     * various dimming and lightening methods change them to..
      *
      * @param parent The component which is the parent of this dialog
      * @return the SColor that is chosen in the dialog
@@ -464,8 +447,7 @@ public class SColorFactory {
     }
 
     /**
-     * Converts the provided color into a three dimensional coordinate point for
-     * use in the Bresenham algorithms.
+     * Converts the provided color into a three dimensional coordinate point for use in the Bresenham algorithms.
      *
      * @param color
      * @return
@@ -475,8 +457,7 @@ public class SColorFactory {
     }
 
     /**
-     * Converts the provided three dimensional coordinate into a color for use
-     * in the Bresenham algorithms.
+     * Converts the provided three dimensional coordinate into a color for use in the Bresenham algorithms.
      *
      * @param coord
      * @return

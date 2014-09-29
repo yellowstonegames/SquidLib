@@ -15,22 +15,23 @@ import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 
 /**
- * This class is a scratchpad area to test things out.
+ * Displays a large grid with randomly determined radius to show off the Neural Particle algorithm
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class Playground {
+public class NeuralParticleDemo {
 
     private static final RNG rng = new RNG();
-    private static final int width = 1000, height = 600;
-    private static final int iterations = (int) Math.sqrt(width * height) * 4;
-    private static final int seeds = 5;
-    private static final int maxRadius = 15;
+    private static final int width = 600, height = 600;
+    private static final int maxIterations = (int) Math.sqrt(width * height) * 4,
+            minIterations = maxIterations / 10,
+            maxSeeds = 7,
+            maxRadius = 15;
     private SwingPane back, front;
     private NeuralParticle np;
 
     public static void main(String... args) {
-        new Playground().go();
+        new NeuralParticleDemo().go();
     }
 
     private void go() {
@@ -56,15 +57,15 @@ public class Playground {
 
         frame.setVisible(true);
 
-        SColorFactory.addPallet("colors", SColorFactory.asGradient(SColor.ALICE_BLUE, SColor.BRIGHT_PINK));
-
         frame.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     back.erase();
+                    front.erase();
                     back.refresh();
+                    front.refresh();
                 } else {
                     calculate();
                 }
@@ -87,22 +88,26 @@ public class Playground {
 
                 int radius = rng.between(1, maxRadius);
                 front.put(2, 1, "Radius: " + radius, SColor.WHITE);
+                int iterations = rng.between(minIterations, maxIterations);
+                iterations /= 100;
+                iterations *= 100;
+                front.put(2, 2, "Iterations: " + iterations, SColor.WHITE);
+                int seeds = rng.between(1, maxSeeds);
+                front.put(2, 3, "Seed Points: " + seeds, SColor.WHITE);
                 front.refresh();
 
                 np = new NeuralParticle(width, height, radius, rng);
                 for (int i = 0; i < seeds; i++) {
-                    np.add(new Point(rng.nextInt(width), rng.nextInt(height)));
+                    Point p = new Point(rng.nextInt(width), rng.nextInt(height));
+                    np.add(p);
+                    back.put(p.x, p.y, SColor.SCARLET);
+                    back.refresh();
                 }
 
                 for (int i = 0; i < iterations; i++) {
                     Point pip = np.createPoint();
                     np.add(pip);
-
-//                    try {
-//                        Thread.sleep(4);
-//                    } catch (InterruptedException ex) {
-//                    }
-                    back.put((int) pip.x, (int) pip.y, SColorFactory.fromPallet("colors", (float) PerlinNoise.noise(i, Math.sin(i))));
+                    back.put(pip.x, pip.y, SColor.GREEN);
                     back.refresh();
                 }
             }
