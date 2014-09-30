@@ -100,8 +100,8 @@ public class NeuralParticle {
             // Calculate unit vector
             double unitX = (randomPoint.x - nearestPoint.x) / pointDistance;
             double unitY = (randomPoint.y - nearestPoint.y) / pointDistance;
-            randomPoint.x = (int) (rng.between(minDistance, maxDistance) * unitX + nearestPoint.x);
-            randomPoint.y = (int) (rng.between(minDistance, maxDistance) * unitY + nearestPoint.y);
+            randomPoint.x = (int) (rng.between(minDistance, maxDistance + 1) * unitX + nearestPoint.x);
+            randomPoint.y = (int) (rng.between(minDistance, maxDistance + 1) * unitY + nearestPoint.y);
         }
         return randomPoint;
     }

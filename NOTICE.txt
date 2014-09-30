@@ -32,6 +32,7 @@ The JRotation class is based on code by Savvas Dalkitsis on stackoverflow.com.
 
 The RNG class is based on the Mersenne Twister implementation by Daniel Dyer as part of the Uncommons Maths library, which is in turn based on the original C algorithm by Makoto Matsumoto and Takuji Nishimura.
 
+The NeuralParticle and WeightedLetterNamegen classes are based on work by Ebyan Alvarez-Buylla
 
 libtcod 1.5.2 license text:
 Copyright (c) 2008,2009,2010,2012 Jice & Mingos

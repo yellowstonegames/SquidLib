@@ -3,7 +3,6 @@ package squidpony.examples;
 import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
-import squidpony.examples.squidgrid.fov.FieldOfViewDemo;
 import squidpony.examples.squidgrid.gui.FontChoiceDemo;
 import squidpony.examples.squidgrid.gui.swing.animation.MovingCharactersDemo;
 import squidpony.examples.squidgrid.gui.swing.listener.SGKeyEchoDemo;

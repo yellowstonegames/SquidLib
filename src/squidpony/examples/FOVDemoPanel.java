@@ -1,4 +1,4 @@
-package squidpony.examples.squidgrid.fov;
+package squidpony.examples;
 
 import squidpony.squidgrid.RadiusStrategy;
 import java.util.TreeMap;
@@ -8,12 +8,8 @@ import squidpony.squidgrid.los.EliasConcurrentLOS;
 import squidpony.squidgrid.los.LOSSolver;
 import squidpony.squidgrid.los.RayCastingLOS;
 import squidpony.squidgrid.BasicRadiusStrategy;
-import squidpony.squidgrid.fov.FOVSolver;
-import squidpony.squidgrid.fov.RippleFOV;
-import squidpony.squidgrid.fov.ShadowFOV;
-import squidpony.squidgrid.fov.SpreadFOV;
-import squidpony.squidgrid.fov.TightShadowFOV;
-import squidpony.squidgrid.fov.TranslucenceWrapperFOV;
+import squidpony.FOVSolver;
+import squidpony.FOVSolver.FOVType;
 
 /**
  *
@@ -34,17 +30,17 @@ public class FOVDemoPanel extends javax.swing.JPanel {
 //        merged.add(new Pair<FOVSolver, RadiusStrategy>(new ShadowFOV(), BasicRadiusStrategy.DIAMOND), 1f);
 //        merged.add(new Pair<FOVSolver, RadiusStrategy>(new ShadowFOV(), BasicRadiusStrategy.SQUARE), 0.2f);
 //        fovs.put("Merged", merged);
-        fovs.put("Ripple", new RippleFOV());
-        fovs.put("Shadow Casting", new ShadowFOV());
-        fovs.put("Spread", new SpreadFOV());
-        fovs.put("Translucence Wrapper", new TranslucenceWrapperFOV());
-        fovs.put("Tight Shadow Casting", new TightShadowFOV());
+        fovs.put("Ripple", new FOVSolver(FOVType.RIPPLE));
+        fovs.put("Shadow Casting", new FOVSolver(FOVType.SHADOW));
+        fovs.put("Loose Ripple", new FOVSolver(FOVType.RIPPLE_LOOSE));
+        fovs.put("Very Loose Ripple", new FOVSolver(FOVType.RIPPLE_VERY_LOOSE));
+        fovs.put("Tight Ripple", new FOVSolver(FOVType.RIPPLE_TIGHT));
 
         fovComboBox.removeAllItems();
         for (String s : fovs.keySet()) {
             fovComboBox.addItem(s);
         }
-        fovComboBox.setSelectedItem("Tight Shadow Casting");
+        fovComboBox.setSelectedItem("Shadow Casting");
 
         loss.put("Bresenham", new BresenhamLOS());
         loss.put("Elias", new EliasConcurrentLOS());

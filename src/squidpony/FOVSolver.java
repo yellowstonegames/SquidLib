@@ -1,148 +1,88 @@
-package squidpony.examples;
+package squidpony;
 
-import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import squidpony.FOVSolver.FOVType;
-import squidpony.SColor;
-import squidpony.SColorFactory;
 import squidpony.squidgrid.BasicRadiusStrategy;
 import squidpony.squidgrid.DirectionIntercardinal;
 import squidpony.squidgrid.RadiusStrategy;
-import squidpony.squidgrid.gui.SwingPane;
-import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidmath.RNG;
 
 /**
- * This class is a scratchpad area to test things out.
+ * This class provides methods for calculating Field of View in grids. Field of View (FOV) algorithms determine how much
+ * area surrounding a point can be seen. They return a two dimensional array of doubles, representing the amount of view
+ * (typically sight, but perhaps sound, smell, etc.) which the origin has of each cell.
+ *
+ * After a calculation has been run, the resulting light map is saved in the class. This allows the values to be checked
+ * on individual cells without being required to work with the returned light map. If no calculation has been performed,
+ * all value checking methods will return their version of "unlit".
+ *
+ * The input resistanceMap is considered the percent of opacity. This resistance is on top of the resistance applied
+ * from the light spreading out.
+ *
+ * The returned light map is considered the percent of light in the cells.
+ *
+ * Not all implementations are required to provide percentage levels of light. In such cases the returned values will be
+ * 0 for no light and 1.0 for fully lit. Implementations that return this way note so in their documentation.
+ *
+ * All solvers perform bounds checking so solid borders in the map are not required.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class Playground {
-
-    private static final RNG rng = new RNG();
-    private static final int cellSize = 15;
-    private int width, height;
-    private SwingPane back, front;
+public class FOVSolver {
 
     private double lightMap[][], map[][];
     private boolean indirect[][];//marks indirect lighting for Ripple FOV
-    private FOVType type = FOVType.RIPPLE;
-    private double radius, decay;
-    private int startx, starty;
+    private FOVType type = FOVType.SHADOW;
     private int rippleNeighbors;
+    private double radius, decay;
+    private int startx, starty, width, height;
     private RadiusStrategy radiusStrategy;
-    private TestMap testMap = new TestMap();
 
-    public static void main(String... args) {
-        new Playground().go();
+    /**
+     * Indicates the type of algorithm to be used in calculating Field of View.
+     */
+    public enum FOVType {
+
+        /**
+         * Performs FOV by pushing values outwards from the source location. It will go around corners a bit.
+         */
+        RIPPLE,
+        /**
+         * Performs FOV by pushing values outwards from the source location. It will spread around edges like smoke or
+         * water, but maintain a tendency to curl towards the start position when going around edges.
+         */
+        RIPPLE_LOOSE,
+        /**
+         * Performs FOV by pushing values outwards from the source location. It will only go around corners slightly.
+         */
+        RIPPLE_TIGHT,
+        /**
+         * Performs FOV by pushing values outwards from the source location. It will only go around corners massively.
+         */
+        RIPPLE_VERY_LOOSE,
+        /**
+         * Uses Shadow Casting FOV algorithm. Treats all translucent cells as fully transparent. Returns only that the
+         * cell is fully lit or not lit, does not do percentages.
+         */
+        SHADOW
+    };
+
+    /**
+     * Creates a solver which will use the default TRANSLUCENT_SHADOW solver.
+     */
+    public FOVSolver() {
+        lightMap = null;
+        map = null;
     }
 
-    private void go() {
-        width = testMap.width();
-        height = testMap.height();
-
-        JFrame frame = new JFrame("FOV In Action");
-        frame.getContentPane().setBackground(SColor.BLACK);
-        TextCellFactory factory = new TextCellFactory(new Font("Arial", Font.BOLD, 26), cellSize, cellSize, true);
-        back = new SwingPane(width, height, factory, null);
-        front = new SwingPane(width, height, factory, null);
-
-        JLayeredPane layers = new JLayeredPane();
-        layers.setLayer(back, JLayeredPane.DEFAULT_LAYER);
-        layers.setLayer(front, JLayeredPane.PALETTE_LAYER);
-        layers.add(back);
-        layers.add(front);
-        layers.setPreferredSize(back.getPreferredSize());
-        layers.setSize(back.getPreferredSize());
-
-        frame.add(layers);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        frame.setVisible(true);
-
-        SColorFactory.addPallet("colors", SColorFactory.asGradient(SColor.ALICE_BLUE, SColor.BRIGHT_PINK));
-
-        back.addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    back.erase();
-                    back.refresh();
-                } else {
-                    calculate(e.getX() / cellSize, e.getY() / cellSize);
-                }
-            }
-
-        });
-
-        front.erase();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                front.put(x, y, testMap.symbol(x, y), testMap.color(x, y));
-            }
-        }
-        front.refresh();
-
-        map = testMap.resistances();
-//        calculate();
-    }
-
-    private void calculate(final int x, final int y) {
-        Thread t = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                back.erase();
-                back.refresh();
-//                startx = rng.between(width / 5, (width * 4) / 5);
-//                starty = rng.between(height / 5, (height * 4) / 5);
-                startx = x;
-                starty = y;
-
-                mark(startx, starty, SColor.CRIMSON);
-                calculateFOV(map, startx, starty, 10, BasicRadiusStrategy.CIRCLE);
-            }
-        });
-
-        t.setDaemon(true);
-        t.start();
-    }
-
-    private void mark(int x, int y, double strength) {
-        mark(x, y, SColorFactory.desaturate(SColor.LIME, 1 - strength));
-    }
-
-    private void mark(int x, int y, SColor color) {
-        mark(x, y, color, false);
-    }
-
-    private void mark(int x, int y, SColor color, boolean temporary) {
-        BufferedImage old = back.getImage(x, y);
-        back.put(x, y, color);
-        back.refresh();
-//        try {
-//            Thread.sleep(10);
-//        } catch (InterruptedException ex) {
-//        }
-        if (temporary) {
-//            try {
-//                Thread.sleep(10);
-//            } catch (InterruptedException ex) {
-//            }
-            back.put(x, y, old);
-            back.refresh();
-        }
+    /**
+     * Creates a solver which will use the provided FOV solver type.
+     *
+     * @param type
+     */
+    public FOVSolver(FOVType type) {
+        this.type = type;
     }
 
     /**
@@ -241,6 +181,9 @@ public class Playground {
         this.radiusStrategy = radiusStrategy;
         decay = 1.0 / radius;
 
+        width = resistanceMap.length;
+        height = resistanceMap[0].length;
+
         lightMap = new double[width][height];
         lightMap[startx][starty] = 1;//make the starting space full power
 
@@ -309,10 +252,8 @@ public class Playground {
             return 1;
         }
 
-        mark(x, y, SColor.LILAC);
-
         List<Point> neighbors = new LinkedList<>();
-        for (DirectionIntercardinal di : DirectionIntercardinal.OUTWARDS) {
+        for (DirectionIntercardinal di :  DirectionIntercardinal.OUTWARDS) {
             int x2 = x + di.deltaX;
             int y2 = y + di.deltaY;
             if (x2 >= 0 && x2 < width && y2 >= 0 && y2 < height) {
@@ -346,15 +287,11 @@ public class Playground {
                 }
                 double dist = radiusStrategy.radius(x, y, p.x, p.y);
                 light = Math.max(light, lightMap[p.x][p.y] - dist * decay - map[p.x][p.y]);
-                mark(p.x, p.y, SColor.YELLOW, true);
             }
         }
 
         if (map[x][y] >= 1 || indirects >= lit) {
             indirect[x][y] = true;
-            mark(x, y, SColor.SAFETY_ORANGE);
-        } else {
-            mark(x, y, light);
         }
         return light;
     }
@@ -384,7 +321,6 @@ public class Playground {
                 if (radiusStrategy.radius(deltaX, deltaY) <= radius) {
                     double bright = 1 - decay * radiusStrategy.radius(deltaX, deltaY);
                     lightMap[currentX][currentY] = bright;
-                    mark(currentX, currentY, bright);
                 }
 
                 if (blocked) { //previous cell was a blocking one
@@ -404,50 +340,4 @@ public class Playground {
             }
         }
     }
-
-    private void doSpreadFOV(int x, int y) {
-        if (lightMap[x][y] <= 0) {
-            return;//no light to spread
-        }
-
-        for (int dx = x - 1; dx <= x + 1; dx++) {
-            for (int dy = y - 1; dy <= y + 1; dy++) {
-                //ensure in bounds
-                if (dx < 0 || dx >= width || dy < 0 || dy >= height) {
-                    continue;
-                }
-
-                double r2 = radiusStrategy.radius(startx, starty, dx, dy);
-                if (r2 <= radius) {
-                    double surroundingLight = nearSpreadLight(dx, dy);
-                    if (lightMap[dx][dy] < surroundingLight) {
-                        lightMap[dx][dy] = surroundingLight;
-                        mark(dx, dy, surroundingLight);
-                        doSpreadFOV(dx, dy);//redo neighbors since this one's light changed
-                    }
-                }
-            }
-        }
-    }
-
-    private double nearSpreadLight(int x, int y) {
-        DirectionIntercardinal dir = DirectionIntercardinal.getDirection(startx - x, starty - y);
-        int x2 = x + dir.deltaX;
-        int y2 = y + dir.deltaY;
-        mark(x2, y2, SColor.YELLOW, true);
-
-        if (x2 < 0 || x2 >= width || y2 < 0 || y2 >= height) {
-            return 0;//no light from off the map
-        }
-
-        //find largest emmitted light in direction of source
-        double light = Math.max(Math.max(lightMap[x2][y] - map[x2][y],
-                lightMap[x][y2] - map[x][y2]),
-                lightMap[x2][y2] - map[x2][y2]);
-
-        double distance = radiusStrategy.radius(x, y, x2, y2);
-        light -= decay * distance;
-        return light;
-    }
-
 }
