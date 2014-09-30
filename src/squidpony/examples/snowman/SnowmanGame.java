@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import squidpony.FOVSolver;
 import squidpony.SColor;
-import squidpony.squidgrid.fov.FOVTranslator;
-import squidpony.squidgrid.fov.ShadowFOV;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.gui.SGKeyListener;
 import squidpony.squidgrid.gui.SwingPane;
@@ -31,7 +30,7 @@ public class SnowmanGame {
     private static final int width = 50, height = 30, statWidth = 12, fontSize = 22, outputLines = 1;
     private static final int minimumRoomSize = 3;
     private static final String CHARS_USED = "☃☺.,Xy";//even though '▒' is used, it makes sizing weird and it's okay if it doesn't all fit in the cell so it's not in this list
-    private final FOVTranslator fov = new FOVTranslator(new ShadowFOV());
+    private final FOVSolver fov = new FOVSolver();
     private final RNG rng = new RNG();
     private JFrame frame;
     private SwingPane mapPanel, mapBackPanel, statsPanel, outputPanel;
@@ -172,10 +171,10 @@ public class SnowmanGame {
      * Calculates the Field of View and marks the maps spots seen appropriately.
      */
     private void doFOV() {
-        boolean[][] walls = new boolean[width][height];
+        double[][] walls = new double[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                walls[x][y] = map[x][y].isWall();
+                walls[x][y] = map[x][y].isWall() ? 1.0 : 0.0;
             }
         }
         fov.calculateFOV(walls, player.x, player.y, width + height);

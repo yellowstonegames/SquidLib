@@ -5,10 +5,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import squidpony.FOVSolver;
+import squidpony.FOVSolver.FOVType;
 import squidpony.SColor;
-import squidpony.squidgrid.fov.FOVTranslator;
-import squidpony.squidgrid.fov.RippleFOV;
-import squidpony.squidgrid.fov.ShadowFOV;
 import squidpony.squidgrid.gui.SwingPane;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidmath.RNG;
@@ -23,11 +22,10 @@ public class FOVComparisonTest {
     private static final RNG rng = new RNG();
     private static final int width = 25, height = 25;
     private static final int translucence = 0xFF;
-    boolean map[][] = new boolean[width][height];
-    private SwingPane back, shadowcasting, ripple, rotatedShadow;
-    private FOVTranslator shadowFov = new FOVTranslator(new ShadowFOV());
-    private FOVTranslator rippleFov = new FOVTranslator(new RippleFOV());
-//    private FOVTranslator rotatedShadowFOV = new FOVTranslator(new RotatedShadowFOV());
+    private double map[][] = new double[width][height];
+    private SwingPane front, back;
+    private FOVSolver shadowFov = new FOVSolver(FOVType.SHADOW);
+    private FOVSolver rippleFov = new FOVSolver(FOVType.RIPPLE);
 
     public static void main(String... args) {
         new FOVComparisonTest().go();
@@ -39,20 +37,14 @@ public class FOVComparisonTest {
 
         JLayeredPane layers = new JLayeredPane();
         TextCellFactory factory = new TextCellFactory(new Font("Arial", Font.BOLD, 40), 30, 30, true);
+        front = new SwingPane(width, height, factory, null);
         back = new SwingPane(width, height, factory, null);
-        shadowcasting = new SwingPane(width, height, factory, null);
-        ripple = new SwingPane(width, height, factory, null);
-        rotatedShadow = new SwingPane(width, height, factory, null);
-        layers.setLayer(back, JLayeredPane.POPUP_LAYER);
-        layers.setLayer(shadowcasting, JLayeredPane.PALETTE_LAYER);
-        layers.setLayer(ripple, JLayeredPane.PALETTE_LAYER + 1);
-        layers.setLayer(rotatedShadow, JLayeredPane.PALETTE_LAYER + 2);
+        layers.setLayer(front, JLayeredPane.POPUP_LAYER);
+        layers.setLayer(back, JLayeredPane.PALETTE_LAYER + 2);
+        layers.add(front);
         layers.add(back);
-        layers.add(shadowcasting);
-        layers.add(ripple);
-        layers.add(rotatedShadow);
-        layers.setPreferredSize(back.getPreferredSize());
-        layers.setSize(back.getPreferredSize());
+        layers.setPreferredSize(front.getPreferredSize());
+        layers.setSize(front.getPreferredSize());
 
         frame.add(layers);
         frame.pack();
@@ -73,18 +65,15 @@ public class FOVComparisonTest {
     }
 
     private void draw() {
+        front.erase();
         back.erase();
-        shadowcasting.erase();
-        ripple.erase();
-        rotatedShadow.erase();
 
-        shadowFov.calculateFOV(map, width / 2, height / 2, Integer.max(width, height));
-        rippleFov.calculateFOV(map, width / 2, height / 2, Integer.max(width, height));
-//        rotatedShadowFOV.calculateFOV(map, width / 2, height / 2, Integer.max(width, height));
+        shadowFov.calculateFOV(map, width / 2, height / 2);
+        rippleFov.calculateFOV(map, width / 2, height / 2);
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                back.put(x, y, !map[x][y] ? '.' : '#', SColor.DARK_SLATE_GRAY);
+                front.put(x, y, map[x][y] < 1 ? '.' : '#', SColor.DARK_SLATE_GRAY);
 
                 int r = 0, g = 0, b = 0;
                 if (shadowFov.isLit(x, y)) {
@@ -94,38 +83,28 @@ public class FOVComparisonTest {
 
                 if (rippleFov.isLit(x, y)) {
 //                    ripple.put(x, y, new SColor(0, 255, 0, translucence));
-//                    g = 255;
+                    g = 255;
                 }
-
-//                if (rotatedShadowFOV.isLit(x, y)) {
-//                    spread.put(x, y, new SColor(0, 0, 255, translucence));
-//                    b = 255;
-//                }
-                rotatedShadow.put(x, y, new SColor(r, g, b, translucence));
+                back.put(x, y, new SColor(r, g, b, translucence));
             }
         }
 
-        back.put(width / 2, height / 2, '@', SColor.GREEN_YELLOW);
-        back.put(1, height - 1, "Shadowcasting FOV", new SColor(255, 0, 0, translucence));
-//        back.put(1, height - 2, "Ripple FOV", new SColor(0, 255, 0, translucence));
-        back.put(1, height - 3, "Rotated Shadowcasting FOV", new SColor(0, 0, 255, translucence));
+        front.put(width / 2, height / 2, '@', SColor.GREEN_YELLOW);
+        front.put(1, height - 1, "Shadowcasting FOV", new SColor(255, 0, 0, translucence));
+        front.put(1, height - 2, "Ripple FOV", new SColor(0, 255, 0, translucence));
 
+        front.refresh();
         back.refresh();
-        shadowcasting.refresh();
-        ripple.refresh();
-        rotatedShadow.refresh();
     }
 
     private void calculate() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                map[x][y] = rng.nextBoolean();
+                map[x][y] = rng.nextInt(2);
             }
         }
 
-        map[width / 2][height / 2] = false;
-
-//        print();
+        map[width / 2][height / 2] = 0;
         draw();
     }
 

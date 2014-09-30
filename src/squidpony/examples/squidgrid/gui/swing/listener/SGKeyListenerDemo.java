@@ -8,7 +8,7 @@ import squidpony.squidgrid.gui.SGKeyListener.CaptureType;
 /**
  * Demonstrates the use of SGKeyListener
  *
- * @author Eben Howard - http://squidpony.com - eben@squidpony.com
+ * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class SGKeyListenerDemo {
 

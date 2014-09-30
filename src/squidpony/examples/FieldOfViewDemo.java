@@ -1,15 +1,13 @@
-package squidpony.examples.squidgrid.fov;
+package squidpony.examples;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.*;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.util.Queue;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.event.MouseInputListener;
@@ -71,23 +69,23 @@ public class FieldOfViewDemo {
         "#..................................#.....#..........................#.....#AAAAuuuu≈≈≈≈≈≈≈≈≈AAuuuAAø",
         "#..................................#.....####+#.....##..........###/#.....#AAAAAAAuu..≈≈≈≈≈AAAAuAAAø",
         "#..................................#.....#E.+.#.....##..........#.........#AAAAAAAAA.AAA≈≈AAAAAAAAAø",
-        "#............................##.....#.....####.#.....##..........#tttt+#...#AAAAAAAA..AAAuuu.uAAAAAAø",
+        "#............................##....#.....####.#.....##..........#tttt+#...#AAAAAAAA..AAAuuu.uAAAAAAø",
         "#...................#..............#.....#E.+.#.....#...........#..c..#...#AAAAAAA....AAAAu..uAAAAAø",
         "#...................#..............#.....####.#.....#...........###..E#...#AAAAAA...AAAAAuuu.uAAAAAø",
         "#..................................#.....#E.+.#.....#...........#E+.EE#...#AAAAAAAAAAAAAAAAAuuAAAAAø",
         "###########################################################################AAAAAAAAAAAAAAAAAAAAAAAAø"
     };
     private DemoCell[][] map;
-    private float[][] incomingLight;
+    private double[][] incomingLight;
     private SColor[][] lighting, playerLight;
-    private float[][] resistances;
+    private double[][] resistances;
     private boolean[][] clean, lightSource, visible;
-    float[][] visbilityMap;
+    private double[][] visbilityMap;
     private int width = DEFAULT_MAP[0].length(), height = DEFAULT_MAP.length;
     private int cellWidth, cellHeight, locx, locy;
     private LOSSolver los;
     private SColor litNear, litFar;
-    private float lightForce; //controls how far the light will spread
+    private int lightForce; //controls how far the light will spread
     private FOVDemoPanel panel;
 
     public static void main(String... args) {
@@ -105,13 +103,13 @@ public class FieldOfViewDemo {
 
     private FieldOfViewDemo() {
         map = new DemoCell[width][height];
-        resistances = new float[width][height];
+        resistances = new double[width][height];
         lighting = new SColor[width][height];
         playerLight = new SColor[width][height];
         clean = new boolean[width][height];
         lightSource = new boolean[width][height];
         visible = new boolean[width][height];
-        visbilityMap = new float[width][height];
+        visbilityMap = new double[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 char c = DEFAULT_MAP[y].charAt(x);
@@ -321,7 +319,7 @@ public class FieldOfViewDemo {
         lightForce = panel.radiusSlider.getValue();
         litNear = SColorFactory.asSColor(panel.castColorPanel.getBackground().getRGB());
         litFar = SColorFactory.asSColor(panel.fadeColorPanel.getBackground().getRGB());
-        incomingLight = panel.getFOVSolver().calculateFOV(resistances, startx, starty, 1f, 1 / lightForce, panel.getStrategy());
+        incomingLight = panel.getFOVSolver().calculateFOV(resistances, startx, starty, lightForce, panel.getStrategy());
         SColorFactory.addPallet("light", SColorFactory.asGradient(litNear, litFar));
 
         if (panel.placeLightSourceBox.isSelected()) {
@@ -344,8 +342,8 @@ public class FieldOfViewDemo {
                     if (incomingLight[x][y] > 0) {
                         clean[x][y] = false;
                         if (!lightSource[x][y]) {//don't add extra light to light sources
-                            float bright = 1 - incomingLight[x][y];
-                            lighting[x][y] = SColorFactory.add(lighting[x][y], SColorFactory.fromPallet("light", bright));
+                            double bright = 1 - incomingLight[x][y];
+                            lighting[x][y] = SColorFactory.add(lighting[x][y], SColorFactory.fromPallet("light", (float) bright));
                         }
                         if (x == startx && y == starty) {//light source is given it's full light
                             lighting[x][y] = litNear;
@@ -354,8 +352,8 @@ public class FieldOfViewDemo {
                 } else {
                     if (panel.playerCastsLightBox.isSelected()) {
                         if (incomingLight[x][y] > 0) {
-                            float bright = 1 - incomingLight[x][y];
-                            playerLight[x][y] = SColorFactory.fromPallet("light", bright);
+                            double bright = 1 - incomingLight[x][y];
+                            playerLight[x][y] = SColorFactory.fromPallet("light", (float) bright);
                             clean[x][y] = false;
                         } else if (!playerLight[x][y].equals(SColor.BLACK)) {
                             playerLight[x][y] = SColor.BLACK;
@@ -379,31 +377,31 @@ public class FieldOfViewDemo {
      * @param endy
      */
     private void doLOS(int startx, int starty, int endx, int endy) {//TODO -- figure out why this does strange things if dragged and released in same cell
-        los = panel.getLOSSolver();
-
-        //run the LOS calculation
-        boolean seen = los.isReachable(resistances, startx, starty, endx, endy);
-        Queue<Point> path = los.getLastPath();
-
-        //draw out background for path followed
-        for (Point p : path) {
-            back.put(p.x, p.y, SColorFactory.blend(SColor.BLUE_GREEN_DYE, SColor.DARK_INDIGO, panel.getStrategy().radius(startx, starty, p.x, p.y) / panel.getStrategy().radius(startx, starty, endx, endy)));
-        }
-
-        //mark the start location
-        if (startx >= 0 && startx < width && starty >= 0 && starty < height) {
-            back.put(startx, starty, SColor.AMBER_DYE);
-        }
-
-        //mark end point
-        if (endx >= 0 && endx < width && endy >= 0 && endy < height) {
-            if (seen) {
-                back.put(endx, endy, SColor.BRIGHT_GREEN);
-            } else {
-                back.put(endx, endy, SColor.RED_PIGMENT);
-            }
-            back.refresh();
-        }
+//        los = panel.getLOSSolver();
+//
+//        //run the LOS calculation
+//        boolean seen = los.isReachable(resistances, startx, starty, endx, endy);
+//        Queue<Point> path = los.getLastPath();
+//
+//        //draw out background for path followed
+//        for (Point p : path) {
+//            back.put(p.x, p.y, SColorFactory.blend(SColor.BLUE_GREEN_DYE, SColor.DARK_INDIGO, panel.getStrategy().radius(startx, starty, p.x, p.y) / panel.getStrategy().radius(startx, starty, endx, endy)));
+//        }
+//
+//        //mark the start location
+//        if (startx >= 0 && startx < width && starty >= 0 && starty < height) {
+//            back.put(startx, starty, SColor.AMBER_DYE);
+//        }
+//
+//        //mark end point
+//        if (endx >= 0 && endx < width && endy >= 0 && endy < height) {
+//            if (seen) {
+//                back.put(endx, endy, SColor.BRIGHT_GREEN);
+//            } else {
+//                back.put(endx, endy, SColor.RED_PIGMENT);
+//            }
+//            back.refresh();
+//        }
     }
 
     /**
