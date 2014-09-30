@@ -1,15 +1,10 @@
 package squidpony.examples;
 
-import squidpony.squidgrid.RadiusStrategy;
 import java.util.TreeMap;
 import squidpony.SColorFactory;
-import squidpony.squidgrid.los.BresenhamLOS;
-import squidpony.squidgrid.los.EliasConcurrentLOS;
-import squidpony.squidgrid.los.LOSSolver;
-import squidpony.squidgrid.los.RayCastingLOS;
-import squidpony.squidgrid.BasicRadiusStrategy;
-import squidpony.FOVSolver;
-import squidpony.FOVSolver.FOVType;
+import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.FOV;
 
 /**
  *
@@ -17,9 +12,9 @@ import squidpony.FOVSolver.FOVType;
  */
 public class FOVDemoPanel extends javax.swing.JPanel {
 
-    private TreeMap<String, FOVSolver> fovs = new TreeMap<>();
-    private TreeMap<String, LOSSolver> loss = new TreeMap<>();
-    private TreeMap<String, RadiusStrategy> strats = new TreeMap<>();
+    private TreeMap<String, FOV> fovs = new TreeMap<>();
+    private TreeMap<String, LOS> loss = new TreeMap<>();
+    private TreeMap<String, Radius> strats = new TreeMap<>();
 
     /**
      * Creates new form FOVDemoPanel
@@ -30,11 +25,11 @@ public class FOVDemoPanel extends javax.swing.JPanel {
 //        merged.add(new Pair<FOVSolver, RadiusStrategy>(new ShadowFOV(), BasicRadiusStrategy.DIAMOND), 1f);
 //        merged.add(new Pair<FOVSolver, RadiusStrategy>(new ShadowFOV(), BasicRadiusStrategy.SQUARE), 0.2f);
 //        fovs.put("Merged", merged);
-        fovs.put("Ripple", new FOVSolver(FOVType.RIPPLE));
-        fovs.put("Shadow Casting", new FOVSolver(FOVType.SHADOW));
-        fovs.put("Loose Ripple", new FOVSolver(FOVType.RIPPLE_LOOSE));
-        fovs.put("Very Loose Ripple", new FOVSolver(FOVType.RIPPLE_VERY_LOOSE));
-        fovs.put("Tight Ripple", new FOVSolver(FOVType.RIPPLE_TIGHT));
+        fovs.put("Ripple", new FOV(FOV.RIPPLE));
+        fovs.put("Shadow Casting", new FOV(FOV.SHADOW));
+        fovs.put("Loose Ripple", new FOV(FOV.RIPPLE_LOOSE));
+        fovs.put("Very Loose Ripple", new FOV(FOV.RIPPLE_VERY_LOOSE));
+        fovs.put("Tight Ripple", new FOV(FOV.RIPPLE_TIGHT));
 
         fovComboBox.removeAllItems();
         for (String s : fovs.keySet()) {
@@ -42,9 +37,9 @@ public class FOVDemoPanel extends javax.swing.JPanel {
         }
         fovComboBox.setSelectedItem("Shadow Casting");
 
-        loss.put("Bresenham", new BresenhamLOS());
-        loss.put("Elias", new EliasConcurrentLOS());
-        loss.put("Ray Casting", new RayCastingLOS());
+        loss.put("Bresenham", new LOS(LOS.BRESENHAM));
+        loss.put("Elias", new LOS(LOS.ELIAS));
+        loss.put("Ray Casting", new LOS(LOS.RAY));
 
         losComboBox.removeAllItems();
         for (String s : loss.keySet()) {
@@ -52,9 +47,9 @@ public class FOVDemoPanel extends javax.swing.JPanel {
         }
         losComboBox.setSelectedItem("Elias");
 
-        strats.put("Circle", BasicRadiusStrategy.CIRCLE);
-        strats.put("Diamond", BasicRadiusStrategy.DIAMOND);
-        strats.put("Square", BasicRadiusStrategy.SQUARE);
+        strats.put("Circle", Radius.CIRCLE);
+        strats.put("Diamond", Radius.DIAMOND);
+        strats.put("Square", Radius.SQUARE);
 
         stratComboBox.removeAllItems();
         for (String s : strats.keySet()) {
@@ -63,15 +58,15 @@ public class FOVDemoPanel extends javax.swing.JPanel {
         stratComboBox.setSelectedItem("Circle");
     }
 
-    public FOVSolver getFOVSolver() {
+    public FOV getFOVSolver() {
         return fovs.get((String) fovComboBox.getSelectedItem());
     }
 
-    public LOSSolver getLOSSolver() {
+    public LOS getLOSSolver() {
         return loss.get((String) losComboBox.getSelectedItem());
     }
 
-    public RadiusStrategy getStrategy() {
+    public Radius getStrategy() {
         return strats.get((String) stratComboBox.getSelectedItem());
     }
 

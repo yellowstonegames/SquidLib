@@ -1,4 +1,4 @@
-package squidpony.examples.squidgrid.gui;
+package squidpony.examples;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
@@ -17,8 +17,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import squidpony.SColor;
-import squidpony.squidgrid.gui.FontChoiceControlPanel;
-import squidpony.squidgrid.gui.SwingPane;
+import squidpony.examples.FontChoiceControlPanel;
+import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 
 /**
@@ -28,7 +28,7 @@ import squidpony.squidgrid.gui.TextCellFactory;
  */
 public class FontChoiceDemo {
 
-    private SwingPane display, back;
+    private SquidPanel display, back;
     private JMenu menu;
     private JFrame frame;
     private FontChoiceControlPanel control;
@@ -55,12 +55,12 @@ public class FontChoiceDemo {
         menu.add(tempItem);
         frame.setJMenuBar(bar);
 
-        control = new squidpony.squidgrid.gui.FontChoiceControlPanel(width, height);
+        control = new squidpony.examples.FontChoiceControlPanel(width, height);
         frame.getContentPane().add(control, BorderLayout.NORTH);
 
         textFactory = new TextCellFactory(control.getFontFace(), control.getCellWidth(), control.getCellHeight());
-        display = new SwingPane(width, height, textFactory, null);
-        back = new SwingPane(width, height, textFactory, null);
+        display = new SquidPanel(width, height, textFactory, null);
+        back = new SquidPanel(width, height, textFactory, null);
 
         final JLayeredPane layers = new JLayeredPane();
         layers.setLayer(display, JLayeredPane.PALETTE_LAYER);
@@ -89,8 +89,8 @@ public class FontChoiceDemo {
                 textFactory = new TextCellFactory(control.getFontFace(), control.getCellWidth(), control.getCellHeight(),
                         control.antialiasBox.isSelected(), control.getTopPad(), control.getBottomPad(), control.getLeftPad(), control.getRightPad(),
                         control.inputTextArea.getText());
-                display = new SwingPane(width, height, textFactory, null);
-                back = new SwingPane(width, height, textFactory, null);
+                display = new SquidPanel(width, height, textFactory, null);
+                back = new SquidPanel(width, height, textFactory, null);
                 
                 layers.setLayer(display, JLayeredPane.PALETTE_LAYER);
                 layers.setLayer(back, JLayeredPane.DEFAULT_LAYER);

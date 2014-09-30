@@ -21,7 +21,7 @@ import squidpony.squidgrid.DirectionIntercardinal;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class SwingPane extends JLayeredPane {
+public class SquidPanel extends JLayeredPane {
 
     private static int DEFAULT_ANIMATION_DURATION = 2000;
     private static Font DEFAULT_FONT = new Font("Helvetica", Font.PLAIN, 22);
@@ -44,7 +44,7 @@ public class SwingPane extends JLayeredPane {
      * @param cellWidth
      * @param cellHeight
      */
-    public SwingPane(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
+    public SquidPanel(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
         this(gridWidth, gridHeight, new TextCellFactory(DEFAULT_FONT, cellWidth, cellHeight), null);
     }
 
@@ -60,7 +60,7 @@ public class SwingPane extends JLayeredPane {
      * @param factory
      * @param imageMap can be null if no explicit images will be used
      */
-    public SwingPane(int gridWidth, int gridHeight, TextCellFactory factory, ImageCellMap imageMap) {
+    public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, ImageCellMap imageMap) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         textFactory = factory;
@@ -117,7 +117,7 @@ public class SwingPane extends JLayeredPane {
      * @param chars
      */
     public void put(char[][] chars) {//TODO - convert this to work with code points
-        SwingPane.this.put(0, 0, chars);
+        SquidPanel.this.put(0, 0, chars);
     }
 
     public void put(int x, int y, BufferedImage image) {
@@ -135,14 +135,14 @@ public class SwingPane extends JLayeredPane {
     }
 
     public void put(int xOffset, int yOffset, char[][] chars) {
-        SwingPane.this.put(xOffset, yOffset, chars, defaultForeground);
+        SquidPanel.this.put(xOffset, yOffset, chars, defaultForeground);
     }
 
     public void put(int xOffset, int yOffset, char[][] chars, Color foreground) {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    SwingPane.this.put(x, y, chars[x - xOffset][y - yOffset], foreground);
+                    SquidPanel.this.put(x, y, chars[x - xOffset][y - yOffset], foreground);
                 }
             }
         }
@@ -161,7 +161,7 @@ public class SwingPane extends JLayeredPane {
      * @param string the characters to be displayed
      */
     public void put(int xOffset, int yOffset, String string) {
-        SwingPane.this.put(xOffset, yOffset, string, defaultForeground);
+        SquidPanel.this.put(xOffset, yOffset, string, defaultForeground);
     }
 
     /**
@@ -180,7 +180,7 @@ public class SwingPane extends JLayeredPane {
         for (int i = 0; i < string.length(); i++) {
             temp[i][0] = string.charAt(i);
         }
-        SwingPane.this.put(xOffset, yOffset, temp, foreground);
+        SquidPanel.this.put(xOffset, yOffset, temp, foreground);
     }
 
     /**
@@ -197,7 +197,7 @@ public class SwingPane extends JLayeredPane {
      * @param vertical true if the text should be written vertically, from top to bottom
      */
     public void placeVerticalString(int xOffset, int yOffset, String string, boolean vertical) {
-        SwingPane.this.put(xOffset, yOffset, string, defaultForeground, vertical);
+        SquidPanel.this.put(xOffset, yOffset, string, defaultForeground, vertical);
     }
 
     /**
@@ -214,9 +214,9 @@ public class SwingPane extends JLayeredPane {
      */
     public void put(int xOffset, int yOffset, String string, Color foreground, boolean vertical) {//TODO - make this use any Direction
         if (vertical) {
-            SwingPane.this.put(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground);
+            SquidPanel.this.put(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground);
         } else {
-            SwingPane.this.put(xOffset, yOffset, string, foreground);
+            SquidPanel.this.put(xOffset, yOffset, string, foreground);
         }
     }
 

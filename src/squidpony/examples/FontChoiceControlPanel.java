@@ -1,4 +1,4 @@
-package squidpony.squidgrid.gui;
+package squidpony.examples;
 
 /*
  * FontChoiceControlPanel.java

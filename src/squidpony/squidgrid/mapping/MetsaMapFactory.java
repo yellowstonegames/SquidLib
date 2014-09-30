@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.SColor;
 import squidpony.SColorFactory;
-import squidpony.squidgrid.gui.SwingPane;
+import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 
@@ -59,7 +59,7 @@ public class MetsaMapFactory {
     static private final int CITYAMOUNT = 14;
 
     private JFrame frame;
-    private SwingPane back, front;
+    private SquidPanel back, front;
     private List<Point> cities = new LinkedList<>();
     private final RNG rng = new RNG();
     private double highn = 0;
@@ -69,8 +69,8 @@ public class MetsaMapFactory {
     }
 
     private void go() {
-        back = new SwingPane(width, height, scale, scale);
-        front = new SwingPane(width, height, scale, scale);
+        back = new SquidPanel(width, height, scale, scale);
+        front = new SquidPanel(width, height, scale, scale);
         double[][] map = makeHeightMap();
         int[][] biomeMap = makeBiomeMap(map);
         int[][] nationMap = makeNationMap(map);

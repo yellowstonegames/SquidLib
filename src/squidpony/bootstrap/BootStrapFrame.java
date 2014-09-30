@@ -20,8 +20,8 @@ import squidpony.annotation.Beta;
 import squidpony.SColor;
 import squidpony.SColorFactory;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.gui.SGMouseListener;
-import squidpony.squidgrid.gui.SwingPane;
+import squidpony.squidgrid.gui.SquidMouse;
+import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.DirectionIntercardinal;
 
 /**
@@ -55,7 +55,7 @@ import squidpony.squidgrid.DirectionIntercardinal;
 public class BootStrapFrame {
 
     private JFrame frame;
-    private SwingPane mapPanel, statsPanel, outputPanel;
+    private SquidPanel mapPanel, statsPanel, outputPanel;
     private final GameLogic logic;
     private KeyListener keyListener;
     private final int outputLines = 3;
@@ -122,17 +122,17 @@ public class BootStrapFrame {
         pixelHeight = (int) Math.ceil(pixelHeight / (height + outputLines));//convert to pixels per grid cell
         TextCellFactory textFactory = new TextCellFactory(font, pixelWidth, pixelHeight, true, 0, TextCellFactory.DEFAULT_FITTING + upChar + downChar);
 
-        mapPanel = new SwingPane(width, height, textFactory, null);
+        mapPanel = new SquidPanel(width, height, textFactory, null);
         mapPanel.put(width / 2 - 4, height / 2, "Loading...");
         mapPanel.refresh();
         frame.add(mapPanel, BorderLayout.WEST);
 
-        statsPanel = new SwingPane(statsWidth, mapPanel.gridHeight(), textFactory, null);
+        statsPanel = new SquidPanel(statsWidth, mapPanel.gridHeight(), textFactory, null);
         statsPanel.setDefaultForeground(SColor.RUST);
         statsPanel.refresh();
         frame.add(statsPanel, BorderLayout.EAST);
 
-        outputPanel = new SwingPane(mapPanel.gridWidth() + statsPanel.gridWidth(), outputLines, textFactory, null);
+        outputPanel = new SquidPanel(mapPanel.gridWidth() + statsPanel.gridWidth(), outputLines, textFactory, null);
         outputPanel.setDefaultForeground(SColor.DODGER_BLUE);
         outputPanel.put(outputPanel.gridWidth() - 1, 0, upChar, SColor.DARK_BLUE_DYE);
         outputPanel.put(outputPanel.gridWidth() - 1, outputPanel.gridHeight() - 1, downChar, SColor.DARK_BLUE_DYE);
@@ -140,7 +140,7 @@ public class BootStrapFrame {
             outputPanel.put(outputPanel.gridWidth() - 1, y, SColor.SILVER);
         }
         updateOutput();
-        outputPanel.addMouseListener(new SGMouseListener(outputPanel.cellWidth(), outputPanel.cellHeight(), new OutputMouseListener()));
+        outputPanel.addMouseListener(new SquidMouse(outputPanel.cellWidth(), outputPanel.cellHeight(), new OutputMouseListener()));
 
         frame.add(outputPanel, BorderLayout.SOUTH);
 

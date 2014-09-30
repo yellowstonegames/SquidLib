@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class SGKeyListener implements KeyListener, Iterable<KeyEvent>, Iterator<KeyEvent> {
+public class SquidKey implements KeyListener, Iterable<KeyEvent>, Iterator<KeyEvent> {
 
     /**
      * Indicates when the capture should occur.
@@ -50,7 +50,7 @@ public class SGKeyListener implements KeyListener, Iterable<KeyEvent>, Iterator<
      * from a request for the next event
      * @param type
      */
-    public SGKeyListener(boolean blockOnEmpty, CaptureType type) {
+    public SquidKey(boolean blockOnEmpty, CaptureType type) {
         this.blockOnEmpty = blockOnEmpty;
         this.type = type;
     }
@@ -117,7 +117,7 @@ public class SGKeyListener implements KeyListener, Iterable<KeyEvent>, Iterator<
             try {
                 ret = queue.take();
             } catch (InterruptedException ex) {
-                Logger.getLogger(SGKeyListener.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SquidKey.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             ret = queue.poll();

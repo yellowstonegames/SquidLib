@@ -9,7 +9,7 @@ import squidpony.squidmath.RNG;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public enum BasicRadiusStrategy implements RadiusStrategy3D {
+public enum Radius{
 
     /**
      * In an unobstructed area the FOV would be a square.
@@ -54,30 +54,26 @@ public enum BasicRadiusStrategy implements RadiusStrategy3D {
 
     private static RNG rng = null;//lazy instantiation
 
-    @Override
-    public float radius(int startx, int starty, int startz, int endx, int endy, int endz) {
-        return radius((float) startx, (float) starty, (float) startz, (float) endx, (float) endy, (float) endz);
+    public double radius(int startx, int starty, int startz, int endx, int endy, int endz) {
+        return radius((double) startx, (double) starty, (double) startz, (double) endx, (double) endy, (double) endz);
     }
 
-    @Override
-    public float radius(float startx, float starty, float startz, float endx, float endy, float endz) {
-        float dx = Math.abs(startx - endx);
-        float dy = Math.abs(starty - endy);
-        float dz = Math.abs(startz - endz);
+    public double radius(double startx, double starty, double startz, double endx, double endy, double endz) {
+        double dx = Math.abs(startx - endx);
+        double dy = Math.abs(starty - endy);
+        double dz = Math.abs(startz - endz);
         return radius(dx, dy, dz);
     }
 
-    @Override
-    public float radius(int dx, int dy, int dz) {
+    public double radius(int dx, int dy, int dz) {
         return radius((float) dx, (float) dy, (float) dz);
     }
 
-    @Override
-    public float radius(float dx, float dy, float dz) {
+    public double radius(double dx, double dy, double dz) {
         dx = Math.abs(dx);
         dy = Math.abs(dy);
         dz = Math.abs(dz);
-        float radius = 0f;
+        double radius = 0;
         switch (this) {
             case SQUARE:
             case CUBE:
@@ -89,34 +85,29 @@ public enum BasicRadiusStrategy implements RadiusStrategy3D {
                 break;
             case CIRCLE:
             case SPHERE:
-                radius = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);//standard spherical radius
+                radius =  Math.sqrt(dx * dx + dy * dy + dz * dz);//standard spherical radius
         }
         return radius;
     }
 
-    @Override
-    public float radius(int startx, int starty, int endx, int endy) {
-        return radius((float) startx, (float) starty, (float) endx, (float) endy);
+    public double radius(int startx, int starty, int endx, int endy) {
+        return radius((double) startx, (double) starty, (double) endx, (double) endy);
     }
 
-    @Override
-    public float radius(float startx, float starty, float endx, float endy) {
-        float dx = Math.abs(startx - endx);
-        float dy = Math.abs(starty - endy);
+    public double radius(double startx, double starty, double endx, double endy) {
+        double dx = Math.abs(startx - endx);
+        double dy = Math.abs(starty - endy);
         return radius(dx, dy);
     }
 
-    @Override
-    public float radius(int dx, int dy) {
-        return radius((float) dx, (float) dy);
+    public double radius(int dx, int dy) {
+        return radius((double) dx, (double) dy);
     }
 
-    @Override
-    public float radius(float dx, float dy) {
-        return radius(dx, dy, 0f);
+    public double radius(double dx, double dy) {
+        return radius(dx, dy, 0);
     }
 
-    @Override
     public Point onUnitShape(double distance) {
         if (rng == null) {
             rng = new RNG();

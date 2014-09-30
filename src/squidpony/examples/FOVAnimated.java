@@ -29,7 +29,7 @@ import squidpony.squidmath.RNG;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class Playground {
+public class FOVAnimated {
 
     private static final RNG rng = new RNG();
     private static final int cellSize = 15;
@@ -46,7 +46,7 @@ public class Playground {
     private TestMap testMap = new TestMap();
 
     public static void main(String... args) {
-        new Playground().go();
+        new FOVAnimated().go();
     }
 
     private void go() {
