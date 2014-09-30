@@ -42,7 +42,6 @@ public class MapFactory {
                 double dist = Math.sqrt(xdist + ydist);
                 n -= Math.max(0, Math.pow(dist / (width / 2), 2) - 0.4);
 
-                //Corresponding tiletypes
                 heightMap[x][y] = n;
             }
         }

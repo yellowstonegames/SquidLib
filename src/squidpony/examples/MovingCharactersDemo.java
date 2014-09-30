@@ -1,10 +1,11 @@
-package squidpony.examples.squidgrid.gui.swing.animation;
+package squidpony.examples;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
 import javax.swing.JFrame;
@@ -12,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 import squidpony.SColor;
-import squidpony.squidgrid.gui.SwingPane;
+import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.DirectionIntercardinal;
 
@@ -26,7 +27,7 @@ import squidpony.squidgrid.DirectionIntercardinal;
  */
 public class MovingCharactersDemo {
 
-    private SwingPane display;//uses SGTextAndImagePanel instead of SGTextPanel in order to show it's usable as an in-place replacement/extension
+    private SquidPanel display;//uses SGTextAndImagePanel instead of SGTextPanel in order to show it's usable as an in-place replacement/extension
     private JFrame frame;
     private static char[][] map = new char[][]{//in order to be in line with GUI coordinate pairs, this appears to be sideways in this style constructor.
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
@@ -61,7 +62,7 @@ public class MovingCharactersDemo {
         frame = new JFrame("SquidGrid Moving Objects Demonstration");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        display = new SwingPane(width, height, new TextCellFactory(new Font("Ariel", Font.BOLD, 20), 24, 24), null);
+        display = new SquidPanel(width, height, new TextCellFactory(new Font("Ariel", Font.BOLD, 20), 24, 24), null);
         display.put(map);
         display.refresh();
         frame.getContentPane().add(display, BorderLayout.SOUTH);
@@ -117,35 +118,11 @@ public class MovingCharactersDemo {
         display.refresh();
     }
 
-    private class DemoInputListener implements MouseInputListener {
+    private class DemoInputListener extends MouseAdapter {
 
         @Override
         public void mouseClicked(MouseEvent me) {
             spawning = !spawning;
-        }
-
-        @Override
-        public void mousePressed(MouseEvent me) {
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent me) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent me) {
-        }
-
-        @Override
-        public void mouseExited(MouseEvent me) {
-        }
-
-        @Override
-        public void mouseDragged(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseMoved(MouseEvent e) {
         }
     }
 

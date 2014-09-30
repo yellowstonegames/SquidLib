@@ -5,8 +5,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.SColor;
-import squidpony.squidgrid.gui.SwingPane;
-import squidpony.squidgrid.BasicRadiusStrategy;
+import squidpony.squidgrid.gui.SquidPanel;
+import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Point3D;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.XorRNG;
@@ -22,15 +22,15 @@ public class RandomOnUnitShapeDemo {
     private static final int width = 900, height = 600, scale = 1;
 
     private JFrame frame;
-    private SwingPane back, front;
+    private SquidPanel back, front;
 
     public static void main(String... args) {
         new RandomOnUnitShapeDemo().go();
     }
 
     private void go() {
-        back = new SwingPane(width, height, scale, scale);
-        front = new SwingPane(width, height, scale, scale);
+        back = new SquidPanel(width, height, scale, scale);
+        front = new SquidPanel(width, height, scale, scale);
 
         frame = new JFrame();
         JLayeredPane layer = new JLayeredPane();
@@ -65,13 +65,13 @@ public class RandomOnUnitShapeDemo {
         boolean[][] map = new boolean[width][height];
         int offset = width / 3 - 3;
         for (int i = 0; i < width * height / 10; i++) {
-            Point3D p = BasicRadiusStrategy.SPHERE.onUnitShape3D(offset / 2);
+            Point3D p = Radius.SPHERE.onUnitShape3D(offset / 2);
             map[p.x + 1 + offset / 2][p.y + (height) / 2] = true;
 
-            p = BasicRadiusStrategy.OCTAHEDRON.onUnitShape3D(offset / 2);
+            p = Radius.OCTAHEDRON.onUnitShape3D(offset / 2);
             map[p.x + 3 + 3 * offset / 2][p.y + (height) / 2] = true;
 
-            p = BasicRadiusStrategy.CUBE.onUnitShape3D(offset / 2);
+            p = Radius.CUBE.onUnitShape3D(offset / 2);
             map[p.x + 5 + 5 * offset / 2][p.y + (height) / 2] = true;
         }
 

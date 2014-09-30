@@ -2,21 +2,23 @@ package squidpony.examples;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.*;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.util.Queue;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.event.MouseInputListener;
 import squidpony.SColor;
 import squidpony.SColorFactory;
-import squidpony.squidgrid.gui.SGMouseListener;
-import squidpony.squidgrid.gui.SwingPane;
+import squidpony.squidgrid.gui.SquidMouse;
+import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.los.LOSSolver;
+import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.DirectionIntercardinal;
 import static squidpony.squidgrid.DirectionIntercardinal.*;
 
@@ -27,7 +29,7 @@ import static squidpony.squidgrid.DirectionIntercardinal.*;
  */
 public class FieldOfViewDemo {
 
-    private SwingPane display, back;
+    private SquidPanel display, back;
     private JFrame frame;
     private static final String[] DEFAULT_MAP = new String[]{
         "øøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøøø########################################øøøøøøøøøøøøøøøøøøøøøøøøø",
@@ -83,7 +85,7 @@ public class FieldOfViewDemo {
     private double[][] visbilityMap;
     private int width = DEFAULT_MAP[0].length(), height = DEFAULT_MAP.length;
     private int cellWidth, cellHeight, locx, locy;
-    private LOSSolver los;
+    private LOS los;
     private SColor litNear, litFar;
     private int lightForce; //controls how far the light will spread
     private FOVDemoPanel panel;
@@ -141,8 +143,8 @@ public class FieldOfViewDemo {
         cellWidth = 18;
         cellHeight = 18;
         TextCellFactory text = new TextCellFactory(new Font("Ariel", Font.BOLD, 18), cellWidth, cellHeight);
-        display = new SwingPane(width, height, text, null);
-        back = new SwingPane(width, height, text, null);
+        display = new SquidPanel(width, height, text, null);
+        back = new SquidPanel(width, height, text, null);
         clear();
 
         JLayeredPane layers = new JLayeredPane();
@@ -163,7 +165,7 @@ public class FieldOfViewDemo {
         frame.repaint();
 
         DemoInputListener dil = new DemoInputListener();
-        MouseInputListener mil = new SGMouseListener(cellWidth, cellHeight, dil);
+        MouseInputListener mil = new SquidMouse(cellWidth, cellHeight, dil);
         display.addMouseListener(mil);//listens for clicks and releases
         display.addMouseMotionListener(mil);//listens for movement based events
         frame.addKeyListener(dil);
@@ -377,31 +379,31 @@ public class FieldOfViewDemo {
      * @param endy
      */
     private void doLOS(int startx, int starty, int endx, int endy) {//TODO -- figure out why this does strange things if dragged and released in same cell
-//        los = panel.getLOSSolver();
-//
-//        //run the LOS calculation
-//        boolean seen = los.isReachable(resistances, startx, starty, endx, endy);
-//        Queue<Point> path = los.getLastPath();
-//
-//        //draw out background for path followed
-//        for (Point p : path) {
-//            back.put(p.x, p.y, SColorFactory.blend(SColor.BLUE_GREEN_DYE, SColor.DARK_INDIGO, panel.getStrategy().radius(startx, starty, p.x, p.y) / panel.getStrategy().radius(startx, starty, endx, endy)));
-//        }
-//
-//        //mark the start location
-//        if (startx >= 0 && startx < width && starty >= 0 && starty < height) {
-//            back.put(startx, starty, SColor.AMBER_DYE);
-//        }
-//
-//        //mark end point
-//        if (endx >= 0 && endx < width && endy >= 0 && endy < height) {
-//            if (seen) {
-//                back.put(endx, endy, SColor.BRIGHT_GREEN);
-//            } else {
-//                back.put(endx, endy, SColor.RED_PIGMENT);
-//            }
-//            back.refresh();
-//        }
+        los = panel.getLOSSolver();
+
+        //run the LOS calculation
+        boolean seen = los.isReachable(resistances, startx, starty, endx, endy);
+        Queue<Point> path = los.getLastPath();
+
+        //draw out background for path followed
+        for (Point p : path) {
+            back.put(p.x, p.y, SColorFactory.blend(SColor.BLUE_GREEN_DYE, SColor.DARK_INDIGO, panel.getStrategy().radius(startx, starty, p.x, p.y) / panel.getStrategy().radius(startx, starty, endx, endy)));
+        }
+
+        //mark the start location
+        if (startx >= 0 && startx < width && starty >= 0 && starty < height) {
+            back.put(startx, starty, SColor.AMBER_DYE);
+        }
+
+        //mark end point
+        if (endx >= 0 && endx < width && endy >= 0 && endy < height) {
+            if (seen) {
+                back.put(endx, endy, SColor.BRIGHT_GREEN);
+            } else {
+                back.put(endx, endy, SColor.RED_PIGMENT);
+            }
+            back.refresh();
+        }
     }
 
     /**

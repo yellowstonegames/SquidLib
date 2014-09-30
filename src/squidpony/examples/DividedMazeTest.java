@@ -1,11 +1,11 @@
-package squidpony.examples.mapgeneration;
+package squidpony.examples;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.SColor;
-import squidpony.squidgrid.gui.SwingPane;
+import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.mapping.DividedMazeGenerator;
 
 /**
@@ -20,7 +20,7 @@ public class DividedMazeTest {
     private static final int width = 100, height = 80, scale = 10;
 
     private JFrame frame;
-    private SwingPane back, front;
+    private SquidPanel back, front;
     private DividedMazeGenerator gen;
 
     public static void main(String... args) {
@@ -30,8 +30,8 @@ public class DividedMazeTest {
     private void go() {
         gen = new DividedMazeGenerator(width, height);
 
-        back = new SwingPane(width, height, scale, scale);
-        front = new SwingPane(width, height, scale, scale);
+        back = new SquidPanel(width, height, scale, scale);
+        front = new SquidPanel(width, height, scale, scale);
 
         frame = new JFrame();
         JLayeredPane layer = new JLayeredPane();

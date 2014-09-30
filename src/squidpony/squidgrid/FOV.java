@@ -1,12 +1,11 @@
-package squidpony;
+package squidpony.squidgrid;
 
 import java.awt.Point;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import squidpony.squidgrid.BasicRadiusStrategy;
+import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.DirectionIntercardinal;
-import squidpony.squidgrid.RadiusStrategy;
 
 /**
  * This class provides methods for calculating Field of View in grids. Field of View (FOV) algorithms determine how much
@@ -29,49 +28,46 @@ import squidpony.squidgrid.RadiusStrategy;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class FOVSolver {
+public class FOV {
+
+    public static final int//
+            /**
+             * Performs FOV by pushing values outwards from the source location. It will go around corners a bit.
+             */
+            RIPPLE = 1,
+            /**
+             * Performs FOV by pushing values outwards from the source location. It will spread around edges like smoke
+             * or water, but maintain a tendency to curl towards the start position when going around edges.
+             */
+            RIPPLE_LOOSE = 2,
+            /**
+             * Performs FOV by pushing values outwards from the source location. It will only go around corners
+             * slightly.
+             */
+            RIPPLE_TIGHT = 3,
+            /**
+             * Performs FOV by pushing values outwards from the source location. It will only go around corners
+             * massively.
+             */
+            RIPPLE_VERY_LOOSE = 4,
+            /**
+             * Uses Shadow Casting FOV algorithm. Treats all translucent cells as fully transparent. Returns only that
+             * the cell is fully lit or not lit, does not do percentages.
+             */
+            SHADOW = 5;
 
     private double lightMap[][], map[][];
     private boolean indirect[][];//marks indirect lighting for Ripple FOV
-    private FOVType type = FOVType.SHADOW;
+    private int type = SHADOW;
     private int rippleNeighbors;
     private double radius, decay;
     private int startx, starty, width, height;
-    private RadiusStrategy radiusStrategy;
+    private Radius radiusStrategy;
 
     /**
-     * Indicates the type of algorithm to be used in calculating Field of View.
+     * Creates a solver which will use the default SHADOW solver.
      */
-    public enum FOVType {
-
-        /**
-         * Performs FOV by pushing values outwards from the source location. It will go around corners a bit.
-         */
-        RIPPLE,
-        /**
-         * Performs FOV by pushing values outwards from the source location. It will spread around edges like smoke or
-         * water, but maintain a tendency to curl towards the start position when going around edges.
-         */
-        RIPPLE_LOOSE,
-        /**
-         * Performs FOV by pushing values outwards from the source location. It will only go around corners slightly.
-         */
-        RIPPLE_TIGHT,
-        /**
-         * Performs FOV by pushing values outwards from the source location. It will only go around corners massively.
-         */
-        RIPPLE_VERY_LOOSE,
-        /**
-         * Uses Shadow Casting FOV algorithm. Treats all translucent cells as fully transparent. Returns only that the
-         * cell is fully lit or not lit, does not do percentages.
-         */
-        SHADOW
-    };
-
-    /**
-     * Creates a solver which will use the default TRANSLUCENT_SHADOW solver.
-     */
-    public FOVSolver() {
+    public FOV() {
         lightMap = null;
         map = null;
     }
@@ -81,7 +77,7 @@ public class FOVSolver {
      *
      * @param type
      */
-    public FOVSolver(FOVType type) {
+    public FOV(int type) {
         this.type = type;
     }
 
@@ -156,7 +152,7 @@ public class FOVSolver {
      * @return the computed light grid
      */
     public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, int radius) {
-        return calculateFOV(resistanceMap, startx, starty, radius, BasicRadiusStrategy.CIRCLE);
+        return calculateFOV(resistanceMap, startx, starty, radius, Radius.CIRCLE);
     }
 
     /**
@@ -173,7 +169,7 @@ public class FOVSolver {
      * @param radiusStrategy provides a means to calculate the radius as desired
      * @return the computed light grid
      */
-    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius, RadiusStrategy radiusStrategy) {
+    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius, Radius radiusStrategy) {
         this.map = resistanceMap;
         this.startx = startx;
         this.starty = starty;
@@ -253,7 +249,7 @@ public class FOVSolver {
         }
 
         List<Point> neighbors = new LinkedList<>();
-        for (DirectionIntercardinal di :  DirectionIntercardinal.OUTWARDS) {
+        for (DirectionIntercardinal di : DirectionIntercardinal.OUTWARDS) {
             int x2 = x + di.deltaX;
             int y2 = y + di.deltaY;
             if (x2 >= 0 && x2 < width && y2 >= 0 && y2 < height) {

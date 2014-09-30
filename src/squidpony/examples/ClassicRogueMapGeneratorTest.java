@@ -1,4 +1,4 @@
-package squidpony.examples.mapgeneration;
+package squidpony.examples;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.SColor;
 import squidpony.squidgrid.mapping.ClassicRogueMapGenerator;
-import squidpony.squidgrid.gui.SwingPane;
+import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.mapping.Terrain;
 import squidpony.squidgrid.DirectionIntercardinal;
 
@@ -25,7 +25,7 @@ public class ClassicRogueMapGeneratorTest {
             minRoomHeight = 4, maxRoomHeight = 15;
 
     private JFrame frame;
-    private SwingPane back, front;
+    private SquidPanel back, front;
     private ClassicRogueMapGenerator gen;
 
     public static void main(String... args) {
@@ -35,8 +35,8 @@ public class ClassicRogueMapGeneratorTest {
     private void go() {
         gen = new ClassicRogueMapGenerator(horizontalRooms, verticalRooms, width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight);
 
-        back = new SwingPane(width, height, scale, scale);
-        front = new SwingPane(width, height, scale, scale);
+        back = new SquidPanel(width, height, scale, scale);
+        front = new SquidPanel(width, height, scale, scale);
 
         frame = new JFrame();
         JLayeredPane layer = new JLayeredPane();

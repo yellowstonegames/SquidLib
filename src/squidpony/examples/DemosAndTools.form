@@ -32,7 +32,7 @@
                   <Component id="jButton3" alignment="0" max="32767" attributes="0"/>
                   <Component id="jButton2" alignment="0" max="32767" attributes="0"/>
                   <Component id="jButton1" alignment="0" pref="252" max="32767" attributes="0"/>
-                  <Component id="jButton6" max="32767" attributes="0"/>
+                  <Component id="weightedLetterNamegenButton" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="demoPanel" pref="491" max="32767" attributes="0"/>
@@ -60,7 +60,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jButton5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jButton6" min="-2" max="-2" attributes="0"/>
+                      <Component id="weightedLetterNamegenButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="484" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -109,12 +109,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton6">
+    <Component class="javax.swing.JButton" name="weightedLetterNamegenButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Weighted Letter Namegen Demo"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton6ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="weightedLetterNamegenButtonActionPerformed"/>
       </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="demoPanel">

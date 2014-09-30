@@ -13,7 +13,7 @@ import javax.swing.event.MouseInputListener;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class SGMouseListener implements MouseInputListener {
+public class SquidMouse implements MouseInputListener {
 
     private final int cellWidth, cellHeight;
     private final MouseInputListener listener;
@@ -27,7 +27,7 @@ public class SGMouseListener implements MouseInputListener {
      * @param cellHeight
      * @param listener
      */
-    public SGMouseListener(int cellWidth, int cellHeight, MouseInputListener listener) {
+    public SquidMouse(int cellWidth, int cellHeight, MouseInputListener listener) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.listener = listener;

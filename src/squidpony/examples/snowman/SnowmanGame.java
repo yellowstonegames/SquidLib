@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import squidpony.FOVSolver;
+import squidpony.squidgrid.FOV;
 import squidpony.SColor;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.gui.SGKeyListener;
-import squidpony.squidgrid.gui.SwingPane;
+import squidpony.squidgrid.gui.SquidKey;
+import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.DirectionIntercardinal;
 import squidpony.squidmath.RNG;
 
@@ -30,11 +30,11 @@ public class SnowmanGame {
     private static final int width = 50, height = 30, statWidth = 12, fontSize = 22, outputLines = 1;
     private static final int minimumRoomSize = 3;
     private static final String CHARS_USED = "☃☺.,Xy";//even though '▒' is used, it makes sizing weird and it's okay if it doesn't all fit in the cell so it's not in this list
-    private final FOVSolver fov = new FOVSolver();
+    private final FOV fov = new FOV();
     private final RNG rng = new RNG();
     private JFrame frame;
-    private SwingPane mapPanel, mapBackPanel, statsPanel, outputPanel;
-    private SGKeyListener keyListener;
+    private SquidPanel mapPanel, mapBackPanel, statsPanel, outputPanel;
+    private SquidKey keyListener;
     private Monster player;
     private int playerStrength = 7;
     private ArrayList<Monster> monsters = new ArrayList<>();
@@ -329,7 +329,7 @@ public class SnowmanGame {
 
         Font font = new Font("Lucidia", Font.PLAIN, fontSize);
 
-        keyListener = new SGKeyListener(true, SGKeyListener.CaptureType.DOWN);
+        keyListener = new SquidKey(true, SquidKey.CaptureType.DOWN);
         frame.addKeyListener(keyListener);
 
         Container panel = frame.getContentPane();
@@ -338,10 +338,10 @@ public class SnowmanGame {
 
         JLayeredPane layers = new JLayeredPane();
         TextCellFactory textFactory = new TextCellFactory(font, cellWidth, cellHeight, true, 0, CHARS_USED);
-        mapPanel = new SwingPane(width, height, textFactory, null);
+        mapPanel = new SquidPanel(width, height, textFactory, null);
         mapPanel.put(width / 2 - 4, height / 2, "Loading");
         mapPanel.refresh();
-        mapBackPanel = new SwingPane(width, height, textFactory, null);
+        mapBackPanel = new SquidPanel(width, height, textFactory, null);
         mapBackPanel.refresh();
         layers.setLayer(mapPanel, JLayeredPane.PALETTE_LAYER);
         layers.setLayer(mapBackPanel, JLayeredPane.DEFAULT_LAYER);
@@ -352,12 +352,12 @@ public class SnowmanGame {
         layers.setPreferredSize(mapPanel.getPreferredSize());
         panel.add(layers, BorderLayout.WEST);
 
-        statsPanel = new SwingPane(statWidth, mapPanel.gridHeight(), textFactory, null);
+        statsPanel = new SquidPanel(statWidth, mapPanel.gridHeight(), textFactory, null);
         statsPanel.setDefaultForeground(SColor.RUST);
         statsPanel.refresh();
         panel.add(statsPanel, BorderLayout.EAST);
 
-        outputPanel = new SwingPane(mapPanel.gridWidth() + statsPanel.gridWidth(), outputLines, textFactory, null);
+        outputPanel = new SquidPanel(mapPanel.gridWidth() + statsPanel.gridWidth(), outputLines, textFactory, null);
         outputPanel.setDefaultForeground(SColor.BURNT_BAMBOO);
         outputPanel.refresh();
         panel.add(outputPanel, BorderLayout.SOUTH);

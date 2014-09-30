@@ -1,12 +1,15 @@
 package squidpony.examples;
 
+import java.awt.Font;
 import javax.swing.JColorChooser;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
-import squidpony.examples.squidgrid.gui.FontChoiceDemo;
-import squidpony.examples.squidgrid.gui.swing.animation.MovingCharactersDemo;
-import squidpony.examples.squidgrid.gui.swing.listener.SGKeyEchoDemo;
+import squidpony.SColor;
 import squidpony.SColorChooserPanel;
+import squidpony.squidgrid.gui.SquidKey;
+import squidpony.squidgrid.gui.SquidPanel;
+import squidpony.squidgrid.gui.TextCellFactory;
 
 /**
  * Launcher for various demos and utilities associated with the SquidLib library suite.
@@ -37,7 +40,7 @@ public class DemosAndTools extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        weightedLetterNamegenButton = new javax.swing.JButton();
         demoPanel = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -78,10 +81,10 @@ public class DemosAndTools extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("Weighted Letter Namegen Demo");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        weightedLetterNamegenButton.setText("Weighted Letter Namegen Demo");
+        weightedLetterNamegenButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                weightedLetterNamegenButtonActionPerformed(evt);
             }
         });
 
@@ -100,7 +103,7 @@ public class DemosAndTools extends javax.swing.JFrame {
                     .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(weightedLetterNamegenButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(demoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
                 .addContainerGap())
@@ -124,7 +127,7 @@ public class DemosAndTools extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton6)
+                        .addComponent(weightedLetterNamegenButton)
                         .addGap(0, 484, Short.MAX_VALUE))))
         );
 
@@ -153,13 +156,72 @@ public class DemosAndTools extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        SGKeyEchoDemo.main(new String[]{});
-        setVisible(false);
+        final int width = 20, height = 20;
+        final SquidPanel display = new SquidPanel(width, height, new TextCellFactory(new Font("Sans Serif", Font.BOLD, 18), 18, 18), null);
+        final JPanel jp = new JPanel();
+        jp.setBackground(SColor.BLACK);
+        jp.add(display);
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int x = 0, y = 1;
+                String input = "";
+                display.put(0, 0, "Type input please.");
+                display.refresh();
+                SquidKey keys = new SquidKey(true, SquidKey.CaptureType.TYPED);
+                jp.addKeyListener(keys);
+
+                while (true) {
+                    char c = keys.next().getKeyChar();
+                    if (c == '\n' || c == '\r') {//cover both windows and unix style line returns
+                        display.erase();
+                        display.refresh();
+                        display.put(0, 0, "Text: " + input);
+                        display.refresh();
+                        input = "";
+                        x = 0;
+                        y = 1;
+                    } else if (c == '\b') {//backspace character
+                        if (input.length() > 0) {
+                            input = input.substring(0, input.length() - 1);
+                        }
+                        if (x > 0) {
+                            x--;
+                        } else if (y > 1) {
+                            y--;
+                            x = width - 1;
+                        }
+
+                        display.put(x, y, ' ');//clear space
+                        display.refresh();
+                    } else {
+                        input += c;
+                        if (x >= width) {
+                            x = 0;
+                            y++;
+                        }
+
+                        if (y < height) {
+                            //everything's fine, print the character
+                            display.put(x, y, c);
+                            x++;
+                            display.refresh();
+                        }
+                    }
+                }
+
+            }
+        });
+        t.setDaemon(true);
+        t.start();
+
+        showComponent(jp);
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void weightedLetterNamegenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weightedLetterNamegenButtonActionPerformed
         showComponent(new NamegenPanel());
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_weightedLetterNamegenButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -196,6 +258,7 @@ public class DemosAndTools extends javax.swing.JFrame {
         demoPanel.setViewportView(comp);
         demoPanel.revalidate();
         demoPanel.repaint();
+        comp.requestFocus();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -205,6 +268,6 @@ public class DemosAndTools extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton weightedLetterNamegenButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.SColor;
 import squidpony.SColorFactory;
-import squidpony.squidgrid.gui.SwingPane;
+import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.AStarSearch;
@@ -32,7 +32,7 @@ public class GridSearchTest {
     private Queue<Point> path;
     private Point start, target;
     private float weight = 10;
-    private SwingPane back, front;
+    private SquidPanel back, front;
 
     public static void main(String... args) {
         new GridSearchTest().go();
@@ -49,8 +49,8 @@ public class GridSearchTest {
 
         JLayeredPane layers = new JLayeredPane();
         TextCellFactory factory = new TextCellFactory(new Font("Arial", Font.BOLD, 22), 12, 16, true);
-        back = new SwingPane(width, height, factory, null);
-        front = new SwingPane(width, height, factory, null);
+        back = new SquidPanel(width, height, factory, null);
+        front = new SquidPanel(width, height, factory, null);
         layers.setLayer(back, JLayeredPane.DEFAULT_LAYER);
         layers.setLayer(front, JLayeredPane.PALETTE_LAYER);
         layers.add(back);
