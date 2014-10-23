@@ -4,8 +4,9 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import squidpony.SColor;
 import squidpony.squidgrid.DirectionIntercardinal;
 
@@ -40,7 +41,7 @@ public class TextCellFactory {
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
     private Font font;
     private String fitting = DEFAULT_FITTING;
-    private ArrayList<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
+    private Set<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
     private boolean antialias = false;
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     private int width = 1, height = 1;
@@ -246,7 +247,7 @@ public class TextCellFactory {
 
     private void initializeByFont(Font font) {
         this.font = font;
-        largeCharacters = new ArrayList<>();
+        largeCharacters = new HashSet<>();
         map.clear();
         sizeCellByFont();
         map.clear();
@@ -256,7 +257,7 @@ public class TextCellFactory {
         this.width = cellWidth;
         this.height = cellHeight;
         this.font = font;
-        largeCharacters = new ArrayList<>();
+        largeCharacters = new HashSet<>();
         map.clear();
         sizeCellByDimension();
         map.clear();
@@ -336,7 +337,7 @@ public class TextCellFactory {
             }
             i += Character.charCount(code);
         }
-        largeCharacters = new ArrayList<>(larges.values());
+        largeCharacters = new HashSet<>(larges.values());
 
         width = right - left;
         width *= 2;
@@ -354,10 +355,10 @@ public class TextCellFactory {
 
         //find best horizontal offset
         int bestHorizontalOffset = Integer.MIN_VALUE;
-        for (int c : largeCharacters) {
+        for (int code : largeCharacters) {
             int tempHorizontalOffset = horizontalOffset;
-            if (visible(c, image)) {//only calculate on printable characters
-                while (horizontalOffset > -width && willFit(c)) {
+            if (visible(code, image)) {//only calculate on printable characters
+                while (horizontalOffset > -width && willFit(code)) {
                     horizontalOffset--;
                 }
             }
@@ -378,7 +379,6 @@ public class TextCellFactory {
         }
         verticalOffset = bestVerticalOffset;
 
-        //variables to hold value for best fitting cell sizes
         int bestWidth = 1;
         int bestHeight = 1;
 
@@ -414,24 +414,27 @@ public class TextCellFactory {
         //try provided font size first
         initializeByFont(font);
 
-        //try all font sizes and take largest that fits if passed in font is too large
-        int fontSize = font.getSize();
-        int largeSide = Math.max(width, height);
-        if (largeSide > 0) {
-            int largeDesiredSide = Math.max(desiredWidth, desiredHeight);
-            fontSize = largeDesiredSide * fontSize / largeSide;//approximately the right ratio
-            fontSize *= 1.2;//pad just a bit
-            while (width > desiredWidth || height > desiredHeight) {
-                font = new Font(font.getFontName(), font.getStyle(), fontSize);
-                initializeByFont(font);
-                fontSize--;
-            }
+        if (width > desiredWidth || height > desiredHeight) {//try font sizes and take largest that fits if passed in font is too large
+            int largeSide = Math.max(width, height);
+            if (largeSide > 0) {
+                int fontSize = font.getSize();
+                int largeDesiredSide = Math.max(desiredWidth, desiredHeight);
+                fontSize = largeDesiredSide * fontSize / largeSide;//approximately the right ratio
+                fontSize *= 1.2;//pad just a bit
+                
+                do {
+                    font = new Font(font.getFontName(), font.getStyle(), fontSize);
+                    initializeByFont(font);
+                    fontSize--;
+                } while (width > desiredWidth || height > desiredHeight);
 
-            horizontalOffset += (desiredWidth - width) / 2;//increase by added width, error on the side of one pixel left of center
-            verticalOffset += (desiredHeight - height) / 2;
-            width = desiredWidth;
-            height = desiredHeight;
+                horizontalOffset += (desiredWidth - width) / 2;//increase by added width, err on the side of one pixel left of center
+                verticalOffset += (desiredHeight - height) / 2;
+                width = desiredWidth;
+                height = desiredHeight;
+            }
         }
+
         map.clear();
     }
 
@@ -485,7 +488,7 @@ public class TextCellFactory {
     }
 
     /**
-     * Slides the character on pixel in the provided direction and test if fully exposed the opposite edge. Returns true
+     * Slides the character one pixel in the provided direction and test if fully exposed the opposite edge. Returns true
      * if opposite edge was fully exposed.
      *
      * @param code
@@ -553,10 +556,10 @@ public class TextCellFactory {
 
     /**
      * Returns the string used as a key for hash mapping. Useful for drop-in replacement of text and images.
-     * 
+     *
      * @param code the unicode code point for the character to draw
      * @param color the color to draw
-     * @return 
+     * @return
      */
     public String asKey(int code, Color color) {
         return new String(Character.toChars(code)) + " " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
