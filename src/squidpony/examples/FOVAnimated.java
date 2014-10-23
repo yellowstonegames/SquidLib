@@ -33,12 +33,13 @@ public class FOVAnimated {
 
     private static final RNG rng = new RNG();
     private static final int cellSize = 15;
+    private static final int viewDistance = 20;
     private int width, height;
     private SquidPanel back, front;
 
     private double lightMap[][], map[][];
     private boolean indirect[][];//marks indirect lighting for Ripple FOV
-    private int type = FOV.RIPPLE;
+    private int type = FOV.RIPPLE_TIGHT;
     private double radius, decay;
     private int startx, starty;
     private int rippleNeighbors;
@@ -115,7 +116,7 @@ public class FOVAnimated {
                 starty = y;
 
                 mark(startx, starty, SColor.CRIMSON);
-                calculateFOV(map, startx, starty, 10, Radius.CIRCLE);
+                calculateFOV(map, startx, starty, viewDistance, Radius.CIRCLE);
             }
         });
 
@@ -313,7 +314,7 @@ public class FOVAnimated {
             return 1;
         }
 
-        mark(x, y, SColor.LILAC);
+//        mark(x, y, SColor.LILAC);
 
         List<Point> neighbors = new LinkedList<>();
         for (DirectionIntercardinal di : DirectionIntercardinal.OUTWARDS) {
@@ -356,7 +357,7 @@ public class FOVAnimated {
 
         if (map[x][y] >= 1 || indirects >= lit) {
             indirect[x][y] = true;
-            mark(x, y, SColor.SAFETY_ORANGE);
+//            mark(x, y, SColor.SAFETY_ORANGE);
         } else {
             mark(x, y, light);
         }

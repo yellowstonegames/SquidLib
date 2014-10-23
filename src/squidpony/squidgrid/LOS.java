@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Elias;
 

@@ -17,7 +17,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import squidpony.SColor;
-import squidpony.examples.FontChoiceControlPanel;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 
@@ -85,13 +84,13 @@ public class FontChoiceDemo {
                 control.validateInput();
                 layers.remove(display);
                 layers.remove(back);
-                
+
                 textFactory = new TextCellFactory(control.getFontFace(), control.getCellWidth(), control.getCellHeight(),
                         control.antialiasBox.isSelected(), control.getTopPad(), control.getBottomPad(), control.getLeftPad(), control.getRightPad(),
                         control.inputTextArea.getText());
                 display = new SquidPanel(width, height, textFactory, null);
                 back = new SquidPanel(width, height, textFactory, null);
-                
+
                 layers.setLayer(display, JLayeredPane.PALETTE_LAYER);
                 layers.setLayer(back, JLayeredPane.DEFAULT_LAYER);
                 layers.add(display);
