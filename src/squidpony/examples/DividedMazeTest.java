@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.SColor;
+import squidpony.annotation.Beta;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.mapping.DividedMazeGenerator;
 
@@ -15,6 +16,7 @@ import squidpony.squidgrid.mapping.DividedMazeGenerator;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class DividedMazeTest {
 
     private static final int width = 100, height = 80, scale = 10;
