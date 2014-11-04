@@ -22,6 +22,7 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.DirectionIntercardinal;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
+import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 import squidpony.squidmath.RNG;
 
 /**
@@ -56,7 +57,9 @@ public class FOVAnimated {
 
         JFrame frame = new JFrame("FOV In Action");
         frame.getContentPane().setBackground(SColor.BLACK);
-        TextCellFactory factory = new TextCellFactory(new Font("Arial", Font.BOLD, 26), cellSize, cellSize, true);
+        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
+        build.font(new Font("Arial", Font.BOLD, 26)).width(cellSize).height(cellSize);
+        TextCellFactory factory = new TextCellFactory(build);
         back = new SquidPanel(width, height, factory, null);
         front = new SquidPanel(width, height, factory, null);
 

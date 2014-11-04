@@ -5,7 +5,7 @@ import java.awt.Font;
 /**
  * This class is used to set the properties desired in a TextCellFactory object on creation.
  *
- * The builder defaults to using the JVM's default Serif font at size 12, no padding, and antialias off. If more
+ * The builder defaults to using the JVM's default Serif font at size 12, no padding, and antialias on. If more
  * vertical padding is needed, it is recommended to try adding it mostly to the top. Often a padding of 1 on top
  * can give a good appearance.
  *
@@ -26,7 +26,7 @@ public class TextCellFactoryBuilder {
     public TextCellFactoryBuilder() {
         font(Font.decode("Serif"));
         fit(TextCellFactory.DEFAULT_FITTING);
-        antialias(false);
+        antialias(true);
         padding(0);
         width(0);
         height(0);
