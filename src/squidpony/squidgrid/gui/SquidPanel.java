@@ -45,7 +45,7 @@ public class SquidPanel extends JLayeredPane {
      * @param cellHeight
      */
     public SquidPanel(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
-        this(gridWidth, gridHeight, new TextCellFactory(DEFAULT_FONT, cellWidth, cellHeight), null);
+        this(gridWidth, gridHeight, new TextCellFactory(new TextCellFactoryBuilder().font(DEFAULT_FONT).width(cellWidth).height(cellHeight)), null);
     }
 
     /**
@@ -236,9 +236,9 @@ public class SquidPanel extends JLayeredPane {
 
     /**
      * Removes the contents of this cell, leaving a transparent space.
-     * 
+     *
      * @param x
-     * @param y 
+     * @param y
      */
     public void clear(int x, int y) {
         this.put(x, y, SColor.TRANSPARENT);
@@ -251,30 +251,29 @@ public class SquidPanel extends JLayeredPane {
     public void put(int x, int y, char c) {
         put(x, y, c, defaultForeground);
     }
-    
+
     /**
      * Takes a unicode codepoint for input.
-     * 
+     *
      * @param x
      * @param y
-     * @param code 
+     * @param code
      */
-    public void put(int x, int y, int code){
+    public void put(int x, int y, int code) {
         put(x, y, code, defaultForeground);
     }
 
     public void put(int x, int y, char c, Color color) {
-        put(x, y, (int)c, color);
+        put(x, y, (int) c, color);
     }
-    
-    
+
     /**
      * Takes a unicode codepoint for input.
-     * 
+     *
      * @param x
      * @param y
      * @param code
-     * @param color 
+     * @param color
      */
     public void put(int x, int y, int code, Color color) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
@@ -336,7 +335,8 @@ public class SquidPanel extends JLayeredPane {
      * @param location
      * @param direction
      */
-    public void bump(Point location, DirectionIntercardinal direction) {        if (contents[location.x][location.y] != null) {
+    public void bump(Point location, DirectionIntercardinal direction) {
+        if (contents[location.x][location.y] != null) {
             int duration = 20;
             Animation anim = new BumpAnimation(contents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), new Dimension(cellWidth / 3, cellHeight / 3), direction, duration);
             contents[location.x][location.y] = null;
@@ -420,13 +420,13 @@ public class SquidPanel extends JLayeredPane {
             return;//no manager means nothing to trim
         }
         LinkedList<Animation> removals = new LinkedList<>();
-        for(Animation anim : animations){
-            if (!anim.isActive()){
+        for (Animation anim : animations) {
+            if (!anim.isActive()) {
                 removals.add(anim);
             }
         }
         animations.removeAll(removals);
-        for(Animation anim : removals){
+        for (Animation anim : removals) {
             animationManager.stopAnimation(anim);
             anim.remove();
             contents[anim.getLocation().x / cellWidth][anim.getLocation().y / cellHeight] = anim.getImage();

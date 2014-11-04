@@ -13,19 +13,10 @@ import squidpony.squidgrid.DirectionIntercardinal;
 /**
  * Class for creating text blocks.
  *
- * The default options are antialias on and padding size 0 on all sides. If more vertical padding is needed, it is
- * recommended to try adding it mostly to the top. Often a padding of 1 on top can give a good appearance.
+ * Please refer to the {@link squidpony.squidgrid.gui.TextCellFactoryBuilder} class documentation regarding the 
+ * defaults and sizing options for TextCellFactory objects.
  *
- * When a cell size is not defined in the constructor, the cell will be sized to fit the font as tightly as possible.
- *
- * When defining a cell size in the constructor, the size of the Font used during construction is considered an upper
- * limit. If needed, the font size will be reduced until all characters can fit within the specified cell size. If all
- * character fit in the specified cell size at the passed in Font size, no change to the Font size will occur.
- *
- * The default characters guaranteed to fit are ASCII 33 through 125, which are the commonly used symbols, numbers, and
- * letters.
- *
- * In order to easily support Unicode, code points are used.
+ * In order to easily support Unicode, strings are treated as a series of code points.
  *
  * All images have transparent backgrounds.
  *
@@ -40,182 +31,31 @@ public class TextCellFactory {
 
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
     private Font font;
-    private String fitting = DEFAULT_FITTING;
+    private String fitting;
     private Set<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
     private boolean antialias = false;
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     private int width = 1, height = 1;
     private ImageCellMap map;
 
-    /**
-     * Creates a factory that will fit the given font as tightly as possible.
-     *
-     * @param font the font to build the cell size on
-     */
-    public TextCellFactory(Font font) {
-        this(font, true);
-    }
-
-    /**
-     * Creates a factory that will fit the given font as tightly as possible.
-     *
-     * @param font the font to build the cell size on
-     * @param antialias if true then the font edges will be smoothed when drawn
-     */
-    public TextCellFactory(Font font, boolean antialias) {
-        this(font, antialias, 0);
-    }
-
-    /**
-     * Creates a factory that will fit the given font as tightly as possible.
-     *
-     * @param font the font to build the cell size on
-     * @param antialias if true then the font edges will be smoothed when drawn
-     * @param padding the padding at each edge of each cell
-     */
-    public TextCellFactory(Font font, boolean antialias, int padding) {
-        this(font, antialias, padding, DEFAULT_FITTING);
-    }
-
-    /**
-     * Creates a factory that will fit the given font as tightly as possible.
-     *
-     * @param font the font to build the cell size on
-     * @param antialias if true then the font edges will be smoothed when drawn
-     * @param padding the padding at each edge of each cell
-     * @param fitting the String of unicode points that will be made to fit
-     */
-    public TextCellFactory(Font font, boolean antialias, int padding, String fitting) {
-        this(font, antialias, padding, padding, padding, padding, fitting);
-    }
-
-    /**
-     * Creates a factory that will fit the given font as tightly as possible.
-     *
-     * @param font the font to build the cell size on
-     * @param antialias if true then the font edges will be smoothed when drawn
-     * @param topPadding the padding at the top of each cell
-     * @param bottomPadding the padding at the bottom of each cell
-     * @param leftPadding the padding at the left of each cell
-     * @param rightPadding the padding at the right of each cell
-     * @param fitting the String of unicode points that will be made to fit
-     */
-    public TextCellFactory(Font font, boolean antialias, int topPadding, int bottomPadding, int leftPadding, int rightPadding, String fitting) {
-        this.font = font;
-        this.antialias = antialias;
-        this.topPadding = topPadding;
-        this.bottomPadding = bottomPadding;
-        this.leftPadding = leftPadding;
-        this.rightPadding = rightPadding;
-        this.fitting = fitting;
-        map = new ImageCellMap();
-        initializeByFont(font);
-        map = new ImageCellMap(width, height);
-    }
-
-    /**
-     * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but does
-     * not size up.
-     *
-     * The font will be rendered using antialias hinting. The default set of characters common to roguelikes will be
-     * used as the ones which will be guaranteed to fit.
-     *
-     * @param font the Font that the cells will be based on
-     * @param width the width of each cell
-     * @param height the height of each cell
-     */
-    public TextCellFactory(Font font, int width, int height) {
-        this(font, width, height, true);
-    }
-
-    /**
-     * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but does
-     * not size up.
-     *
-     * The default set of characters common to roguelikes will be used as the ones which will be guaranteed to fit.
-     *
-     * @param font the Font that the cells will be based on
-     * @param width the width of each cell
-     * @param height the height of each cell
-     * @param antialias true for using antialias hints during rendering
-     */
-    public TextCellFactory(Font font, int width, int height, boolean antialias) {
-        this(font, width, height, antialias, 0);
-    }
-
-    /**
-     * * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but
-     * does not size up.
-     *
-     * @param font the Font that the cells will be based on
-     * @param width the width of each cell
-     * @param height the height of each cell
-     * @param antialias true for using antialias hints during rendering
-     * @param padding the minimum number of empty pixels on all sides of the cell
-     */
-    public TextCellFactory(Font font, int width, int height, boolean antialias, int padding) {
-        this(font, width, height, antialias, padding, DEFAULT_FITTING);
-    }
-
-    /**
-     * * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but
-     * does not size up.
-     *
-     * @param font the Font that the cells will be based on
-     * @param width the width of each cell
-     * @param height the height of each cell
-     * @param antialias true for using antialias hints during rendering
-     * @param padding the minimum number of empty pixels on all sides of the cell
-     * @param fitting a String containing all characters that will be guaranteed to fit
-     */
-    public TextCellFactory(Font font, int width, int height, boolean antialias, int padding, String fitting) {
-        this(font, width, height, antialias, padding, padding, padding, padding, fitting);
-
-    }
-
-    /**
-     * * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but
-     * does not size up.
-     *
-     * @param font the Font that the cells will be based on
-     * @param width the width of each cell
-     * @param height the height of each cell
-     * @param antialias true for using antialias hints during rendering
-     * @param topPadding the minimum number of empty pixels at the top of the cell
-     * @param bottomPadding the minimum number of empty pixels at the bottom of the cell
-     * @param leftPadding the minimum number of empty pixels at the left of the cell
-     * @param rightPadding the minimum number of empty pixels at the right of the cell
-     */
-    public TextCellFactory(Font font, int width, int height, boolean antialias, int topPadding, int bottomPadding, int leftPadding, int rightPadding) {
-        this(font, width, height, antialias, topPadding, bottomPadding, leftPadding, rightPadding, DEFAULT_FITTING);
-    }
-
-    /**
-     * * Builds the factory with the font fitting in the given size cell. Sizes down the font if needed to fit, but
-     * does not size up.
-     *
-     * @param font the Font that the cells will be based on
-     * @param width the width of each cell
-     * @param height the height of each cell
-     * @param antialias true for using antialias hints during rendering
-     * @param topPadding the minimum number of empty pixels at the top of the cell
-     * @param bottomPadding the minimum number of empty pixels at the bottom of the cell
-     * @param leftPadding the minimum number of empty pixels at the left of the cell
-     * @param rightPadding the minimum number of empty pixels at the right of the cell
-     * @param fitting a String containing all characters that will be guaranteed to fit
-     */
-    public TextCellFactory(Font font, int width, int height, boolean antialias, int topPadding, int bottomPadding, int leftPadding, int rightPadding, String fitting) {
-        this.font = font;
-        this.width = width;
-        this.height = height;
-        this.antialias = antialias;
-        this.topPadding = topPadding;
-        this.bottomPadding = bottomPadding;
-        this.leftPadding = leftPadding;
-        this.rightPadding = rightPadding;
-        this.fitting = fitting;
-        map = new ImageCellMap(width, height);
-        initializeBySize(width, height, font);
+    public TextCellFactory(TextCellFactoryBuilder builder) {
+        font = builder.font;
+        fitting = builder.fitting;
+        antialias = builder.antialias;
+        leftPadding = builder.leftPadding;
+        rightPadding = builder.rightPadding;
+        topPadding = builder.topPadding;
+        bottomPadding = builder.bottomPadding;
+        width = builder.width;
+        height = builder.height;
+        if (width <= 0 || height <= 0) {
+            map = new ImageCellMap();
+            initializeByFont(font);
+            map = new ImageCellMap(width, height);
+        } else {
+            map = new ImageCellMap(width, height);
+            initializeBySize(width, height, font);
+        }
     }
 
     /**
@@ -387,7 +227,7 @@ public class TextCellFactory {
 
             //squeeze width
             int tempWidth = width;
-            while (width > 0 && willFit(code)) {//TODO -- determine if single pixel on right edge is a bug here or some other place
+            while (width > 0 && willFit(code)) {
                 width--;
             }
             bestWidth = Math.max(bestWidth, width + 1);//take whatever the largest needed width so far is
@@ -421,7 +261,7 @@ public class TextCellFactory {
                 int largeDesiredSide = Math.max(desiredWidth, desiredHeight);
                 fontSize = largeDesiredSide * fontSize / largeSide;//approximately the right ratio
                 fontSize *= 1.2;//pad just a bit
-                
+
                 do {
                     font = new Font(font.getFontName(), font.getStyle(), fontSize);
                     initializeByFont(font);
