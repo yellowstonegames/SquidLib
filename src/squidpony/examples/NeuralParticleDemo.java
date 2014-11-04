@@ -40,7 +40,6 @@ public class NeuralParticleDemo {
         build.font(new Font("Arial", Font.BOLD, 6));
         build.width(2);
         build.height(2);
-        build.antialias(true);
         TextCellFactory factory = new TextCellFactory(build);
         back = new SquidPanel(width, height, factory, null);
 

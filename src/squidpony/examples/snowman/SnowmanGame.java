@@ -17,6 +17,7 @@ import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.gui.SquidKey;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.DirectionIntercardinal;
+import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 import squidpony.squidmath.RNG;
 
 /**
@@ -337,7 +338,9 @@ public class SnowmanGame {
         panel.setLayout(new BorderLayout());
 
         JLayeredPane layers = new JLayeredPane();
-        TextCellFactory textFactory = new TextCellFactory(font, cellWidth, cellHeight, true, 0, CHARS_USED);
+        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
+        build.font(font).width(cellWidth).height(cellHeight).fit(CHARS_USED);
+        TextCellFactory textFactory = new TextCellFactory(build);
         mapPanel = new SquidPanel(width, height, textFactory, null);
         mapPanel.put(width / 2 - 4, height / 2, "Loading");
         mapPanel.refresh();
