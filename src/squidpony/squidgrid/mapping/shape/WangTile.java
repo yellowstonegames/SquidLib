@@ -1,7 +1,7 @@
 package squidpony.squidgrid.mapping.shape;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.DirectionIntercardinal;
+import squidpony.squidgrid.Direction;
 
 /**
  * Represents a tile that is edge and corner (which are considered edges
@@ -18,5 +18,5 @@ public interface WangTile {
      * @param dir the edge to check
      * @return the edge found
      */
-    public WangEdge getEdge(DirectionIntercardinal dir);
+    public WangEdge getEdge(Direction dir);
 }

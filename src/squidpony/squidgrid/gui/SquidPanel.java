@@ -11,7 +11,7 @@ import squidpony.squidgrid.gui.animation.AnimationManager;
 import squidpony.squidgrid.gui.animation.BumpAnimation;
 import squidpony.squidgrid.gui.animation.SlideAnimation;
 import squidpony.squidgrid.gui.animation.WiggleAnimation;
-import squidpony.squidgrid.DirectionIntercardinal;
+import squidpony.squidgrid.Direction;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -335,7 +335,7 @@ public class SquidPanel extends JLayeredPane {
      * @param location
      * @param direction
      */
-    public void bump(Point location, DirectionIntercardinal direction) {
+    public void bump(Point location, Direction direction) {
         if (contents[location.x][location.y] != null) {
             int duration = 20;
             Animation anim = new BumpAnimation(contents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), new Dimension(cellWidth / 3, cellHeight / 3), direction, duration);
@@ -367,7 +367,7 @@ public class SquidPanel extends JLayeredPane {
      * @param start
      * @param direction
      */
-    public void slide(Point start, DirectionIntercardinal direction) {
+    public void slide(Point start, Direction direction) {
         slide(start, new Point(direction.deltaX + start.x, direction.deltaY + start.y), DEFAULT_ANIMATION_DURATION);
     }
 

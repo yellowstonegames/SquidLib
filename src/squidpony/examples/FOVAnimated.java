@@ -19,7 +19,7 @@ import static squidpony.squidgrid.FOV.SHADOW;
 import squidpony.SColor;
 import squidpony.SColorFactory;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.DirectionIntercardinal;
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.gui.TextCellFactoryBuilder;
@@ -274,7 +274,7 @@ public class FOVAnimated {
                 doRippleFOV(startx, starty);
                 break;
             case SHADOW:
-                for (DirectionIntercardinal d : DirectionIntercardinal.DIAGONALS) {
+                for (Direction d : Direction.DIAGONALS) {
                     shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0);
                     shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY);
                 }
@@ -293,7 +293,7 @@ public class FOVAnimated {
                 continue;//no light to spread
             }
 
-            for (DirectionIntercardinal dir : DirectionIntercardinal.OUTWARDS) {
+            for (Direction dir : Direction.OUTWARDS) {
                 int x2 = p.x + dir.deltaX;
                 int y2 = p.y + dir.deltaY;
                 if (x2 < 0 || x2 >= width || y2 < 0 || y2 >= height //out of bounds
@@ -320,7 +320,7 @@ public class FOVAnimated {
 //        mark(x, y, SColor.LILAC);
 
         List<Point> neighbors = new LinkedList<>();
-        for (DirectionIntercardinal di : DirectionIntercardinal.OUTWARDS) {
+        for (Direction di : Direction.OUTWARDS) {
             int x2 = x + di.deltaX;
             int y2 = y + di.deltaY;
             if (x2 >= 0 && x2 < width && y2 >= 0 && y2 < height) {
@@ -439,7 +439,7 @@ public class FOVAnimated {
     }
 
     private double nearSpreadLight(int x, int y) {
-        DirectionIntercardinal dir = DirectionIntercardinal.getDirection(startx - x, starty - y);
+        Direction dir = Direction.getDirection(startx - x, starty - y);
         int x2 = x + dir.deltaX;
         int y2 = y + dir.deltaY;
         mark(x2, y2, SColor.YELLOW, true);

@@ -16,7 +16,7 @@ import squidpony.SColor;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.gui.SquidKey;
 import squidpony.squidgrid.gui.SquidPanel;
-import squidpony.squidgrid.DirectionIntercardinal;
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 import squidpony.squidmath.RNG;
 
@@ -74,7 +74,7 @@ public class SnowmanGame {
         int key = keyListener.next().getExtendedKeyCode();
         boolean success = false;
         if (key == KeyEvent.VK_RIGHT) {
-            success = tryToMove(DirectionIntercardinal.RIGHT);
+            success = tryToMove(Direction.RIGHT);
         }
 
         //update all end of turn items
@@ -95,7 +95,7 @@ public class SnowmanGame {
      * @param dir
      * @return
      */
-    private boolean tryToMove(DirectionIntercardinal dir) {
+    private boolean tryToMove(Direction dir) {
         Tile tile = map[player.x + dir.deltaX][player.y + dir.deltaY];
         if (tile.isWall()) {
             return false;
@@ -290,7 +290,7 @@ public class SnowmanGame {
      * @param monster
      */
     private void moveMonster(Monster monster) {
-        DirectionIntercardinal dir = DirectionIntercardinal.CARDINALS[rng.nextInt(DirectionIntercardinal.CARDINALS.length)];//get a random direction
+        Direction dir = Direction.CARDINALS[rng.nextInt(Direction.CARDINALS.length)];//get a random direction
         Tile tile = map[monster.x + dir.deltaX][monster.y + dir.deltaY];
         if (!tile.isWall() && tile.getMonster() == null) {
             map[monster.x][monster.y].setMonster(null);

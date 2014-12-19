@@ -19,8 +19,8 @@ import squidpony.squidgrid.gui.SquidMouse;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.LOS;
-import squidpony.squidgrid.DirectionIntercardinal;
-import static squidpony.squidgrid.DirectionIntercardinal.*;
+import squidpony.squidgrid.Direction;
+import static squidpony.squidgrid.Direction.*;
 import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 
 /**
@@ -302,7 +302,7 @@ public class FieldOfViewDemo {
         return new DemoCell(resistance, c, color);
     }
 
-    private void move(DirectionIntercardinal dir) {
+    private void move(Direction dir) {
         int x = locx + dir.deltaX;
         int y = locy + dir.deltaY;
 
@@ -489,7 +489,7 @@ public class FieldOfViewDemo {
         public void keyReleased(KeyEvent e) {
         }
 
-        private DirectionIntercardinal getDirection(int code) {
+        private Direction getDirection(int code) {
             switch (code) {
                 case VK_LEFT:
                 case VK_NUMPAD4:
