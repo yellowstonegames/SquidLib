@@ -4,7 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import squidpony.squidgrid.DirectionIntercardinal;
+import squidpony.squidgrid.Direction;
 
 /**
  * Animates an object moving smoothly in a direction and then bouncing back.
@@ -23,7 +23,7 @@ public class BumpAnimation extends AbstractAnimation {
      * @param direction the direction the bump will happen in
      * @param duration the number of milliseconds the animation should take in total
      */
-    public BumpAnimation(BufferedImage image, Point start, Dimension cellSize, DirectionIntercardinal direction, long duration) {
+    public BumpAnimation(BufferedImage image, Point start, Dimension cellSize, Direction direction, long duration) {
         this(image, start, new Point(start.x + direction.deltaX * cellSize.width, start.y + direction.deltaY * cellSize.height), duration);
     }
 

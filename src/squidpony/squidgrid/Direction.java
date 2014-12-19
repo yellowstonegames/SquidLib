@@ -1,27 +1,29 @@
 package squidpony.squidgrid;
 
 /**
- * Represents the eight grid directions and the deltaX, deltaY values associated with those directions.
+ * Represents the eight grid directions and the deltaX, deltaY values associated
+ * with those directions.
  *
- * The grid referenced has x positive to the right and y positive downwards on screen.
+ * The grid referenced has x positive to the right and y positive downwards on
+ * screen.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public enum DirectionIntercardinal {
+public enum Direction {
 
-    UP(0, -1, '↑'), DOWN(0, 1, '↓'), LEFT(-1, 0, '←'), RIGHT(1, 0, '→'), UP_LEFT(-1, -1, '↖'), UP_RIGHT(1, -1, '↗'), DOWN_LEFT(-1, 1, '↙'), DOWN_RIGHT(1, 1, '↘'), NONE(0, 0, '•');
+    UP(0, -1), DOWN(0, 1), LEFT(-1, 0), RIGHT(1, 0), UP_LEFT(-1, -1), UP_RIGHT(1, -1), DOWN_LEFT(-1, 1), DOWN_RIGHT(1, 1), NONE(0, 0);
     /**
      * An array which holds only the four cardinal directions.
      */
-    public static final DirectionIntercardinal[] CARDINALS = {UP, DOWN, LEFT, RIGHT};
+    public static final Direction[] CARDINALS = {UP, DOWN, LEFT, RIGHT};
     /**
      * An array which holds only the four diagonal directions.
      */
-    public static final DirectionIntercardinal[] DIAGONALS = {UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+    public static final Direction[] DIAGONALS = {UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
     /**
      * An array which holds all eight OUTWARDS directions.
      */
-    public static final DirectionIntercardinal[] OUTWARDS = {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+    public static final Direction[] OUTWARDS = {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
     /**
      * The x coordinate difference for this direction.
      */
@@ -31,16 +33,20 @@ public enum DirectionIntercardinal {
      */
     public final int deltaY;
 
-    public final char symbol;
-
     /**
      * Returns the direction that most closely matches the input.
+     *
+     * This can be used to get the primary magnitude intercardinal direction
+     * from an origin point to an event point, such as a mouse click on a grid.
+     *
+     * If the point given is exactly on a boundary between directions then the
+     * direction clockwise is returned.
      *
      * @param x
      * @param y
      * @return
      */
-    static public DirectionIntercardinal getDirection(int x, int y) {
+    static public Direction getDirection(int x, int y) {
         if (x == 0 && y == 0) {
             return NONE;
         }
@@ -71,27 +77,58 @@ public enum DirectionIntercardinal {
     }
 
     /**
-     * Gets the direction associated with the passed in character. If there is no direction associated then null is
+     * Returns the direction that most closely matches the input.
+     *
+     * This can be used to get the primary magnitude cardinal direction from an
+     * origin point to an event point, such as a mouse click on a grid.
+     *
+     * If the point given is directly diagonal then the direction clockwise is
      * returned.
      *
-     * @param c
+     * @param x
+     * @param y
      * @return
      */
-    static public DirectionIntercardinal getDirection(char c) {
-        for (DirectionIntercardinal d : values()) {
-            if (d.symbol == c) {
-                return d;
-            }
+    static public Direction getCardinalDirection(int x, int y) {
+        if (x == 0 && y == 0) {
+            return NONE;
         }
-        return null;
+
+        int absx = Math.abs(x);
+
+        if (y > absx) {
+            return UP;
+        }
+
+        int absy = Math.abs(y);
+
+        if (absy > absx) {
+            return DOWN;
+        }
+
+        if (x > 0) {
+            if (-y == x){//on diagonal
+                return DOWN;
+            }
+            return RIGHT;
+        }
+
+        if (y == x) {//on diagonal
+            return UP;
+        }
+        return LEFT;
+
     }
 
     /**
      * Returns the Direction one step clockwise including diagonals.
      *
+     * If considering only Cardinal directions, calling this twice will get the
+     * next clockwise cardinal direction.
+     *
      * @return
      */
-    public DirectionIntercardinal clockwise() {
+    public Direction clockwise() {
         switch (this) {
             case UP:
                 return UP_RIGHT;
@@ -118,9 +155,12 @@ public enum DirectionIntercardinal {
     /**
      * Returns the Direction one step counterclockwise including diagonals.
      *
+     * If considering only Cardinal directions, calling this twice will get the
+     * next counterclockwise cardinal direction.
+     *
      * @return
      */
-    public DirectionIntercardinal counterClockwise() {
+    public Direction counterClockwise() {
         switch (this) {
             case UP:
                 return UP_LEFT;
@@ -149,7 +189,7 @@ public enum DirectionIntercardinal {
      *
      * @return
      */
-    public DirectionIntercardinal opposite() {
+    public Direction opposite() {
         switch (this) {
             case UP:
                 return DOWN;
@@ -173,9 +213,8 @@ public enum DirectionIntercardinal {
         }
     }
 
-    private DirectionIntercardinal(int x, int y, char symbol) {
+    private Direction(int x, int y) {
         this.deltaX = x;
         this.deltaY = y;
-        this.symbol = symbol;
     }
 }

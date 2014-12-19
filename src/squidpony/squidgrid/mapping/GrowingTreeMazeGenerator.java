@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.DirectionCardinal;
+import squidpony.squidgrid.Direction;
 import squidpony.squidmath.RNG;
 
 /**
@@ -39,14 +39,14 @@ public class GrowingTreeMazeGenerator {
         ArrayList<Point> deck = new ArrayList<>();
         deck.add(new Point(x, y));
 
-        List<DirectionCardinal> dirs = Arrays.asList(DirectionCardinal.CARDINALS);
+        List<Direction> dirs = Arrays.asList(Direction.CARDINALS);
         while (!deck.isEmpty()) {
             int i = choosing.chooseIndex(deck.size());
             Point p = deck.get(i);
             Collections.shuffle(dirs, rng.asRandom());
 
             boolean foundNeighbor = false;
-            for (DirectionCardinal dir : dirs) {
+            for (Direction dir : dirs) {
                 x = p.x + dir.deltaX * 2;
                 y = p.y + dir.deltaY * 2;
                 if (x >= 0 && x < width && y >= 0 && y < height) {

@@ -14,7 +14,7 @@ import javax.swing.Timer;
 import squidpony.SColor;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.DirectionIntercardinal;
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 
 /**
@@ -115,7 +115,7 @@ public class MovingCharactersDemo {
         start.y = rng.nextInt(display.gridHeight());
         display.put(start.x, start.y, '@', getRandomColor());
 
-        display.bump(start, DirectionIntercardinal.values()[rng.nextInt(DirectionIntercardinal.values().length)]);
+        display.bump(start, Direction.values()[rng.nextInt(Direction.values().length)]);
 
         display.refresh();
     }

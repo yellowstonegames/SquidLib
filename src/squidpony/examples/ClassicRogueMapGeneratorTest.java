@@ -8,7 +8,7 @@ import squidpony.SColor;
 import squidpony.squidgrid.mapping.ClassicRogueMapGenerator;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.mapping.Terrain;
-import squidpony.squidgrid.DirectionIntercardinal;
+import squidpony.squidgrid.Direction;
 
 /**
  * Displays randomly built maps from the ClassicRogueMapGenerator.
@@ -75,7 +75,7 @@ public class ClassicRogueMapGeneratorTest {
                 back.put(x, y, SColor.BLACK);
                 SColor color;
                 boolean hasNeighbor = false;
-                for (DirectionIntercardinal dir : DirectionIntercardinal.OUTWARDS) {
+                for (Direction dir : Direction.OUTWARDS) {
                     int x2 = x + dir.deltaX;
                     int y2 = y + dir.deltaY;
                     if (x2 >= 0 && y2 >= 0 && x2 < width && y2 < height && map[x2][y2] != Terrain.WALL) {

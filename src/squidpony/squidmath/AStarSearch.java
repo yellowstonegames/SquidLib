@@ -5,7 +5,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Queue;
-import squidpony.squidgrid.DirectionIntercardinal;
+import squidpony.squidgrid.Direction;
 
 /**
  * Performs A* search.
@@ -77,7 +77,7 @@ public class AStarSearch {
         while (!p.equals(target)) {
             finished[p.x][p.y] = true;
             open.remove(p);
-            for (DirectionIntercardinal dir : DirectionIntercardinal.OUTWARDS) {
+            for (Direction dir : Direction.OUTWARDS) {
 
                 int x = p.x + dir.deltaX;
                 if (x < 0 || x >= width) {

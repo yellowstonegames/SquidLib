@@ -7,7 +7,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.DirectionCardinal;
+import squidpony.squidgrid.Direction;
 import squidpony.squidmath.RNG;
 import squidpony.Pair;
 
@@ -155,11 +155,11 @@ public class ClassicRogueMapGenerator {
         }
         Collections.shuffle(unconnected, rng.asRandom());
 
-        List<DirectionCardinal> dirToCheck;
+        List<Direction> dirToCheck;
         for (ClassicRogueRoom room : unconnected) {
-            dirToCheck = Arrays.asList(DirectionCardinal.CARDINALS);
+            dirToCheck = Arrays.asList(Direction.CARDINALS);
             Collections.shuffle(dirToCheck, rng.asRandom());
-            for (DirectionCardinal dir : dirToCheck) {
+            for (Direction dir : dirToCheck) {
                 int nextX = room.x + dir.deltaX;
                 int nextY = room.y + dir.deltaY;
                 if (nextX < 0 || nextX >= horizontalRooms || nextY < 0 || nextY >= verticalRooms) {
@@ -185,15 +185,15 @@ public class ClassicRogueMapGenerator {
                 ClassicRogueRoom room = rooms[x][y];
 
                 if (room.connections.isEmpty()) {
-                    List<DirectionCardinal> dirToCheck = new LinkedList<>();
-                    dirToCheck.addAll(Arrays.asList(DirectionCardinal.CARDINALS));
+                    List<Direction> dirToCheck = new LinkedList<>();
+                    dirToCheck.addAll(Arrays.asList(Direction.CARDINALS));
                     Collections.shuffle(dirToCheck, rng.asRandom());
 
                     boolean validRoom = false;
                     ClassicRogueRoom otherRoom = null;
 
                     do {
-                        DirectionCardinal dir = dirToCheck.remove(0);
+                        Direction dir = dirToCheck.remove(0);
 
                         int nextX = x + dir.deltaX;
                         if (nextX < 0 || nextX >= horizontalRooms) {
@@ -257,7 +257,7 @@ public class ClassicRogueMapGenerator {
             if (!deq.isEmpty()) {
                 testing:
                 for (ClassicRogueRoom room : deq) {
-                    for (DirectionCardinal dir : DirectionCardinal.CARDINALS) {
+                    for (Direction dir : Direction.CARDINALS) {
                         int x = room.cellx + dir.deltaX;
                         int y = room.celly + dir.deltaY;
                         if (x >= 0 && y >= 0 && x < horizontalRooms && y < verticalRooms) {
@@ -342,7 +342,7 @@ public class ClassicRogueMapGenerator {
         }
     }
 
-    private Point randomWallPosition(ClassicRogueRoom room, DirectionCardinal dir) {
+    private Point randomWallPosition(ClassicRogueRoom room, Direction dir) {
         int x, y;
         Point p = null;
 
@@ -388,7 +388,7 @@ public class ClassicRogueMapGenerator {
         int xpos = start.x;
         int ypos = start.y;
 
-        List<Pair<DirectionCardinal, Integer>> moves = new LinkedList<>();
+        List<Pair<Direction, Integer>> moves = new LinkedList<>();
 
         int xAbs = Math.abs(xOffset);
         int yAbs = Math.abs(yOffset);
@@ -396,8 +396,8 @@ public class ClassicRogueMapGenerator {
         double firstHalf = rng.nextDouble();
         double secondHalf = 1 - firstHalf;
 
-        DirectionCardinal xDir = xOffset < 0 ? DirectionCardinal.LEFT : DirectionCardinal.RIGHT;
-        DirectionCardinal yDir = yOffset > 0 ? DirectionCardinal.DOWN : DirectionCardinal.UP;
+        Direction xDir = xOffset < 0 ? Direction.LEFT : Direction.RIGHT;
+        Direction yDir = yOffset > 0 ? Direction.DOWN : Direction.UP;
 
         if (xAbs < yAbs) {
             int tempDist = (int) Math.ceil(yAbs * firstHalf);
@@ -416,8 +416,8 @@ public class ClassicRogueMapGenerator {
         map[xpos][ypos] = Terrain.FLOOR;
 
         while (!moves.isEmpty()) {
-            Pair<DirectionCardinal, Integer> move = moves.remove(0);
-            DirectionCardinal dir = move.getFirst();
+            Pair<Direction, Integer> move = moves.remove(0);
+            Direction dir = move.getFirst();
             int dist = move.getSecond();
             while (dist > 0) {
                 xpos += dir.deltaX;
@@ -433,7 +433,7 @@ public class ClassicRogueMapGenerator {
             for (int y = 0; y < verticalRooms; y++) {
                 ClassicRogueRoom room = rooms[x][y];
                 for (ClassicRogueRoom otherRoom : room.connections) {
-                    DirectionCardinal dir = DirectionCardinal.getDirection(otherRoom.cellx - room.cellx, otherRoom.celly - room.celly);
+                    Direction dir = Direction.getCardinalDirection(otherRoom.cellx - room.cellx, otherRoom.celly - room.celly);
                     digPath(randomWallPosition(room, dir), randomWallPosition(otherRoom, dir.opposite()));
                 }
             }

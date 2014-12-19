@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.DirectionCardinal;
+import squidpony.squidgrid.Direction;
 import squidpony.squidmath.RNG;
 
 /**
@@ -96,7 +96,7 @@ public class DividedMazeGenerator {
 
             map[x2][y2] = true;
 
-            for (DirectionCardinal dir : DirectionCardinal.CARDINALS) {
+            for (Direction dir : Direction.CARDINALS) {
                 switch (dir) {
                     case LEFT:
                         for (int x = room.left; x < x2; x++) {
@@ -121,11 +121,11 @@ public class DividedMazeGenerator {
                 }
             }
 
-            Deque<DirectionCardinal> dirs = new ArrayDeque<>();
-            dirs.addAll(Arrays.asList(DirectionCardinal.CARDINALS));
+            Deque<Direction> dirs = new ArrayDeque<>();
+            dirs.addAll(Arrays.asList(Direction.CARDINALS));
             dirs.remove(rng.getRandomElement(dirs));
 
-            for (DirectionCardinal dir : dirs) {
+            for (Direction dir : dirs) {
                 switch (dir) {
                     case LEFT:
                         map[rng.between(room.left, x2)][y2] = false;
