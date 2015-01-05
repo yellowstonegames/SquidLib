@@ -84,7 +84,7 @@ public class GridSearchTest {
         front.erase();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                back.put(x, y, SColorFactory.fromPallet("floor", ((float) map[x][y] / weight) / 2));
+                back.put(x, y, SColorFactory.fromPallet("floor", ((float) (map[x][y] + weight) / weight) / 2));
             }
         }
         back.refresh();
@@ -108,10 +108,10 @@ public class GridSearchTest {
     private void calculate() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                map[x][y] = rng.nextInt((int) weight);//randomly set some areas as harder to walk
+                map[x][y] = rng.nextDouble() > 0.1 ? weight : -weight; // rng.nextInt((int) weight);//randomly set some areas as harder to walk
             }
         }
-        search = new AStarSearch(map, AStarSearch.SearchType.CHEBYSHEV);
+        search = new AStarSearch(map, AStarSearch.SearchType.MANHATTAN);
         start = new Point(rng.nextInt(width), rng.nextInt(height));
         target = new Point(rng.nextInt(width), rng.nextInt(height));
         path = search.path(start.x, start.y, target.x, target.y);
