@@ -48,6 +48,18 @@ public class AStarSearch {
     private Point start, target;
     private final SearchType type;
 
+    /**
+     * Builds a pathing object to run searches on.
+     *
+     * Values in the map are treated as positive values (and 0) being legal weights, with higher values
+     * being harder to pass through. Any negative value is treated as being an impassible space.
+     *
+     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return results
+     * based on intercardinal and cardinal pathing.
+     *
+     * @param map the search map
+     * @param type the manner of search
+     */
     public AStarSearch(double[][] map, SearchType type) {
         this.map = map;
         width = map.length;
@@ -71,13 +83,26 @@ public class AStarSearch {
         finished = new boolean[width][height];
         parent = new Point[width][height];
 
+        Direction[] dirs;
+        switch (type) {
+            case MANHATTAN:
+                dirs = Direction.CARDINALS;
+                break;
+            case CHEBYSHEV:
+            case EUCLIDIAN:
+            case DJIKSTRA:
+            default:
+                dirs = Direction.OUTWARDS;
+                break;
+        }
+
         Point p = start;
         open.add(p);
 
         while (!p.equals(target)) {
             finished[p.x][p.y] = true;
             open.remove(p);
-            for (Direction dir : Direction.OUTWARDS) {
+            for (Direction dir : dirs) {
 
                 int x = p.x + dir.deltaX;
                 if (x < 0 || x >= width) {
@@ -92,7 +117,15 @@ public class AStarSearch {
                 if (!finished[x][y]) {
                     Point test = new Point(x, y);
                     if (open.contains(test)) {
-                        if (parent[x][y] == null || g(parent[x][y].x, parent[x][y].y) > g(p.x, p.y)) {
+                        double parentG = g(parent[x][y].x, parent[x][y].y);
+                        if (parentG < 0) {
+                            continue;//not a valid point so skip ahead
+                        }
+                        double g = g(p.x, p.y);
+                        if (g < 0) {
+                            continue;//not a valid point so skip ahead
+                        }
+                        if (parent[x][y] == null || parentG > g) {
                             parent[x][y] = new Point(p);
                         }
                     } else {
@@ -118,7 +151,7 @@ public class AStarSearch {
     /**
      * Finds the g value for the given location.
      *
-     * If the given location is not valid or not attached to the pathfinding then Double.MAX_VALUE is returned.
+     * If the given location is not valid or not attached to the pathfinding then -1 is returned.
      *
      * @param x coordinate
      * @param y coordinate
@@ -127,15 +160,20 @@ public class AStarSearch {
         if (x == start.x && y == start.y) {
             return 0;
         }
-        if (x < 0 || y < 0 || x >= width || y >= height || parent[x][y] == null) {
-            return Double.MAX_VALUE;
+        if (x < 0 || y < 0 || x >= width || y >= height || map[x][y] < 0 || parent[x][y] == null) {
+            return -1;//not a valid location
         }
 
-        return map[x][y] + g(parent[x][y].x, parent[x][y].y) + 1;//follow path back to start
+        double parentG = g(parent[x][y].x, parent[x][y].y);
+        if (parentG < 0) {
+            return -1;//if any part of the path is not valid, this part is not valid
+        }
+
+        return map[x][y] + parentG + 1;//follow path back to start
     }
 
     /**
-     * Returns the distance to the goal location using the current calculation type.
+     * Returns the heuristic distance to the goal location using the current calculation type.
      *
      * @param x coordinate
      * @param y coordinate
@@ -144,9 +182,9 @@ public class AStarSearch {
     private double h(int x, int y) {
         switch (type) {
             case MANHATTAN:
-                return Math.abs(x - target.x) + Math.abs(y - target.y);//Manhattan
+                return Math.abs(x - target.x) + Math.abs(y - target.y);
             case CHEBYSHEV:
-                return Math.max(Math.abs(x - target.x), Math.abs(y - target.y));//Chebyshev
+                return Math.max(Math.abs(x - target.x), Math.abs(y - target.y));
             case EUCLIDIAN:
                 int xDist = Math.abs(x - target.x);
                 xDist *= xDist;
@@ -160,8 +198,20 @@ public class AStarSearch {
         }
     }
 
+    /**
+     * Returns the current known shortest distance to the start position from the given position.
+     * If the current position cannot reach the start position or is invalid, -1 is returned.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     private double f(int x, int y) {
-        return h(x, y) + g(x, y);
+        double foundG = g(x, y);
+        if (foundG < 0) {
+            return -1;
+        }
+        return h(x, y) + foundG;
     }
 
     /**
@@ -169,12 +219,16 @@ public class AStarSearch {
      */
     private Point smallestF() {
         Point smallest = null;
-        double smallF = Double.MAX_VALUE;
+        double smallF = Double.POSITIVE_INFINITY;
+        double f;
         for (Point p : open) {
-            double f = f(p.x, p.y);
+            f = f(p.x, p.y);
+            if (f < 0) {
+                continue;//current tested point is not valid so skip it
+            }
             if (smallest == null || f < smallF) {
                 smallest = p;
-                smallF = f(p.x, p.y);
+                smallF = f;
             }
         }
 

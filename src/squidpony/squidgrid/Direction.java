@@ -53,7 +53,7 @@ public enum Direction {
 
         double angle = Math.atan2(y, x);
         double degree = Math.toDegrees(angle);
-        degree += 90 + 360;//rotate to all positive and 0 is up
+        degree += 450;//rotate to all positive and 0 is up
         degree %= 360;//normalize
         if (degree < 22.5) {
             return UP;
