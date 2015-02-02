@@ -1,6 +1,7 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.SColor;
+import squidpony.annotation.Beta;
 
 /**
  * A base class for cell level features common to roguelike dungeons.
@@ -8,6 +9,7 @@ import squidpony.SColor;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class Terrain {
 
     public static final Terrain FLOOR = new Terrain('.', SColor.SLATE_GRAY),
@@ -27,8 +29,9 @@ public class Terrain {
     }
 
     /**
-     * Returns the character representation for this terrain. This is meant to be for display purposes and should not be
-     * used to check for equality since multiple different terrains may return the same symbol.
+     * Returns the character representation for this terrain. This is meant to
+     * be for display purposes and should not be used to check for equality
+     * since multiple different terrains may return the same symbol.
      *
      * @return
      */

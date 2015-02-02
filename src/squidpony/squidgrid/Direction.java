@@ -107,7 +107,7 @@ public enum Direction {
         }
 
         if (x > 0) {
-            if (-y == x){//on diagonal
+            if (-y == x) {//on diagonal
                 return DOWN;
             }
             return RIGHT;

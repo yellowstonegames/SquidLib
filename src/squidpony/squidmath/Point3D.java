@@ -9,14 +9,15 @@ import java.awt.Point;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class Point3D extends Point {
+
     public int z;
 
     /**
      * Creates a three dimensional coordinate with the given location.
-     * 
+     *
      * @param x
      * @param y
-     * @param z 
+     * @param z
      */
     public Point3D(int x, int y, int z) {
         super(x, y);
@@ -24,21 +25,22 @@ public class Point3D extends Point {
     }
 
     /**
-     * Returns the linear distance between this coordinate point and the provided one.
-     * 
+     * Returns the linear distance between this coordinate point and the
+     * provided one.
+     *
      * @param other
-     * @return 
+     * @return
      */
     public double distance(Point3D other) {
         return Math.sqrt(squareDistance(other));
     }
 
     /**
-     * Returns the square of the linear distance between this coordinate
-     * point and the provided one.
-     * 
+     * Returns the square of the linear distance between this coordinate point
+     * and the provided one.
+     *
      * @param other
-     * @return 
+     * @return
      */
     public double squareDistance(Point3D other) {
         double dx = x - other.x;
@@ -49,11 +51,11 @@ public class Point3D extends Point {
 
     /**
      * Returns the Manhattan distance between this point and the provided one.
-     * The Manhattan distance is the distance between each point on each separate
-     * axis all added together.
-     * 
+     * The Manhattan distance is the distance between each point on each
+     * separate axis all added together.
+     *
      * @param other
-     * @return 
+     * @return
      */
     public int manhattanDistance(Point3D other) {
         int distance = Math.abs(x - other.x);
@@ -64,9 +66,9 @@ public class Point3D extends Point {
 
     /**
      * Returns the largest difference between the two points along any one axis.
-     * 
+     *
      * @param other
-     * @return 
+     * @return
      */
     public int maxAxisDistance(Point3D other) {
         return Math.max(Math.max(Math.abs(x - other.x), Math.abs(y - other.y)), Math.abs(z - other.z));

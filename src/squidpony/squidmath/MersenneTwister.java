@@ -1,20 +1,15 @@
 package squidpony.squidmath;
 
 import java.security.SecureRandom;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 /**
  * Customized extension of Random to allow for common roguelike operations.
  *
- * Uses the Mersenne Twister algorithm to provide superior results. Because of the seed requirements for the MT, the
- * seed setting methods and constructors that take a long do not set the seed. The methods that use a byte[] to set the
- * seed must be used instead if a custom seed is desired.
+ * Uses the Mersenne Twister algorithm to provide superior results. Because of
+ * the seed requirements for the MT, the seed setting methods and constructors
+ * that take a long do not set the seed. The methods that use a byte[] to set
+ * the seed must be used instead if a custom seed is desired.
  *
  * @author Daniel Dyer (Java Port)
  * @author Makoto Matsumoto and Takuji Nishimura (original C version)
@@ -99,8 +94,8 @@ public class MersenneTwister implements RandomnessSource {
     }
 
     /**
-     * Take four bytes from the specified position in the specified block and convert them into a 32-bit int, using the
-     * big-endian convention.
+     * Take four bytes from the specified position in the specified block and
+     * convert them into a 32-bit int, using the big-endian convention.
      *
      * @param bytes The data to read from.
      * @param offset The position to start reading the 4-byte int from.
@@ -114,8 +109,8 @@ public class MersenneTwister implements RandomnessSource {
     }
 
     /**
-     * Convert an array of bytes into an array of ints. 4 bytes from the input data map to a single int in the output
-     * data.
+     * Convert an array of bytes into an array of ints. 4 bytes from the input
+     * data map to a single int in the output data.
      *
      * @param bytes The data to read from.
      * @return An array of 32-bit integers constructed from the data.

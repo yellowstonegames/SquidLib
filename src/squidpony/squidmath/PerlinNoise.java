@@ -1,12 +1,13 @@
 package squidpony.squidmath;
 
 /**
- * This is Ken Perlin's third revision of his noise function. It is sometimes referred to as "Simplex Noise". Results
- * are bound by (-1, 1) inclusive.
+ * This is Ken Perlin's third revision of his noise function. It is sometimes
+ * referred to as "Simplex Noise". Results are bound by (-1, 1) inclusive.
  *
  *
- * It is significantly faster than his earlier versions. This particular version was originally from Stefan Gustavson.
- * This is much preferred to the earlier versions of Perlin Noise due to the reasons noted in the articles:
+ * It is significantly faster than his earlier versions. This particular version
+ * was originally from Stefan Gustavson. This is much preferred to the earlier
+ * versions of Perlin Noise due to the reasons noted in the articles:
  * <ul>
  * <li>http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf</li>
  * <li>http://webstaff.itn.liu.se/~stegu/TNM022-2005/perlinnoiselinks/ch02.pdf</li>

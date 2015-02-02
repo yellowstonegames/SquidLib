@@ -28,7 +28,7 @@ public class Elias {
     private Elias() {
     }
 
-    public synchronized  static float[][] lightMap(double startx, double starty, double endx, double endy) {
+    public synchronized static float[][] lightMap(double startx, double starty, double endx, double endy) {
         line(startx, starty, endx, endy);
         return lightMap;
     }

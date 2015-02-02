@@ -5,9 +5,11 @@ import java.util.Queue;
 import java.util.Random;
 
 /**
- * A wrapper class for working with random number generators in a more friendly way.
+ * A wrapper class for working with random number generators in a more friendly
+ * way.
  *
- * Includes methods for getting values between two numbers and for getting random elements from a collection or array.
+ * Includes methods for getting values between two numbers and for getting
+ * random elements from a collection or array.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -20,15 +22,17 @@ public class RNG {
     private Random ran = null;
 
     /**
-     * Default constructor uses Mersenne Twister, which is of high quality and fairly high speed.
+     * Default constructor uses Mersenne Twister, which is of high quality and
+     * fairly high speed.
      */
     public RNG() {
         this(new MersenneTwister());
     }
 
     /**
-     * Uses the provided source of randomness for all calculations. This constructor should be used if setting the seed
-     * is needed as the provided source of randomness can be seeded as desired before passing it in.
+     * Uses the provided source of randomness for all calculations. This
+     * constructor should be used if setting the seed is needed as the provided
+     * source of randomness can be seeded as desired before passing it in.
      *
      * @param random the source of randomness
      */
@@ -52,7 +56,8 @@ public class RNG {
     }
 
     /**
-     * Returns a value from a even distribution from min (inclusive) to max (exclusive).
+     * Returns a value from a even distribution from min (inclusive) to max
+     * (exclusive).
      *
      * @param min the minimum bound on the return value (inclusive)
      * @param max the maximum bound on the return value (exclusive)
@@ -65,8 +70,8 @@ public class RNG {
     /**
      * Returns a value between min (inclusive) and max (exclusive).
      *
-     * The inclusive and exclusive behavior is to match the behavior of the similar method that deals with floating
-     * point values.
+     * The inclusive and exclusive behavior is to match the behavior of the
+     * similar method that deals with floating point values.
      *
      * @param min the minimum bound on the return value (inclusive)
      * @param max the maximum bound on the return value (exclusive)
@@ -77,11 +82,12 @@ public class RNG {
     }
 
     /**
-     * Returns the average of a number of randomly selected numbers from the provided range, with min being inclusive
-     * and max being exclusive. It will sample the number of times passed in as the third parameter.
+     * Returns the average of a number of randomly selected numbers from the
+     * provided range, with min being inclusive and max being exclusive. It will
+     * sample the number of times passed in as the third parameter.
      *
-     * The inclusive and exclusive behavior is to match the behavior of the similar method that deals with floating
-     * point values.
+     * The inclusive and exclusive behavior is to match the behavior of the
+     * similar method that deals with floating point values.
      *
      * This can be used to weight RNG calls to the average between min and max.
      *
@@ -101,7 +107,8 @@ public class RNG {
     }
 
     /**
-     * Returns a random element from the provided array and maintains object type.
+     * Returns a random element from the provided array and maintains object
+     * type.
      *
      * @param <T> the type of the returned object
      * @param array the array to get an element from
@@ -115,7 +122,8 @@ public class RNG {
     }
 
     /**
-     * Returns a random element from the provided list. If the list is empty then null is returned.
+     * Returns a random element from the provided list. If the list is empty
+     * then null is returned.
      *
      * @param <T> the type of the returned object
      * @param list the list to get an element from
@@ -129,7 +137,8 @@ public class RNG {
     }
 
     /**
-     * Returns a random elements from the provided queue. If the queue is empty then null is returned.
+     * Returns a random elements from the provided queue. If the queue is empty
+     * then null is returned.
      *
      * @param <T> the type of the returned object
      * @param list the list to get an element from
@@ -164,7 +173,8 @@ public class RNG {
     }
 
     /**
-     * This returns a maximum of 0.9999999999999999 because that is the largest Double value that is less than 1.0
+     * This returns a maximum of 0.9999999999999999 because that is the largest
+     * Double value that is less than 1.0
      *
      * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)
      */
@@ -173,7 +183,8 @@ public class RNG {
     }
 
     /**
-     * This returns a maximum of 0.99999994 because that is the largest Float value that is less than 1.0f
+     * This returns a maximum of 0.99999994 because that is the largest Float
+     * value that is less than 1.0f
      *
      * @return a value between 0 (inclusive) and 0.99999994 (inclusive)
      */
@@ -190,7 +201,8 @@ public class RNG {
     }
 
     /**
-     * Returns a random integer below the given bound, or 0 if the bound is 0 or negative.
+     * Returns a random integer below the given bound, or 0 if the bound is 0 or
+     * negative.
      *
      * @param bound the upper bound (exclusive)
      * @return the found number

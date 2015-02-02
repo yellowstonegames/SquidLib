@@ -6,24 +6,24 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.RNG;
 
 /**
- * Creates a dungeon in the style of the original Rogue game. It will always make a grid style of rooms where there are
- * a certain number horizontally and vertically and it will link them only next to each other.
+ * Creates a dungeon in the style of the original Rogue game. It will always
+ * make a grid style of rooms where there are a certain number horizontally and
+ * vertically and it will link them only next to each other.
  *
  * This dungeon generator is based on a port of the rot.js version.
  *
  * @author hyakugei
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-@Beta
 public class ClassicRogueMapGenerator {
 
     /**
-     * Holds the information needed to track rooms in the classic rogue generation algorithm.
+     * Holds the information needed to track rooms in the classic rogue
+     * generation algorithm.
      */
     private class ClassicRogueRoom {
 
@@ -74,10 +74,11 @@ public class ClassicRogueMapGenerator {
     private Terrain[][] map;
 
     /**
-     * Initializes the generator to turn out random dungeons within the specific parameters.
+     * Initializes the generator to turn out random dungeons within the specific
+     * parameters.
      *
-     * Will size down the room width and height parameters if needed to ensure the desired number of rooms will fit both
-     * horizontally and vertically.
+     * Will size down the room width and height parameters if needed to ensure
+     * the desired number of rooms will fit both horizontally and vertically.
      *
      * @param horizontalRooms How many rooms will be made horizontally
      * @param verticalRooms How many rooms will be made vertically
@@ -102,7 +103,7 @@ public class ClassicRogueMapGenerator {
     }
 
     private void sanitizeRoomDimensions() {
-        int test = (dungeonWidth - 3 * horizontalRooms) / horizontalRooms ;//have to leave space for hallways
+        int test = (dungeonWidth - 3 * horizontalRooms) / horizontalRooms;//have to leave space for hallways
         maxRoomWidth = Math.min(test, maxRoomWidth);
         minRoomWidth = Math.max(minRoomWidth, 2);
         minRoomWidth = Math.min(minRoomWidth, maxRoomWidth);
@@ -438,8 +439,9 @@ public class ClassicRogueMapGenerator {
             }
         }
     }
-    
-    private class Magnitude{
+
+    private class Magnitude {
+
         public Direction dir;
         public int distance;
 

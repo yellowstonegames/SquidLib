@@ -1,6 +1,5 @@
 package squidpony;
 
-import squidpony.SColor;
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,7 +22,8 @@ import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.MouseInputListener;
 
 /**
- * This class provides a way to interact with the pre-defined SColor constants in a Swing GUI.
+ * This class provides a way to interact with the pre-defined SColor constants
+ * in a Swing GUI.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */

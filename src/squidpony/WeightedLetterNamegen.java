@@ -1,6 +1,5 @@
 package squidpony;
 
-import squidpony.DamerauLevenshteinAlgorithm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -10,7 +9,8 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.ProbabilityTable;
 
 /**
- * Based on work by Nolithius available at the following two sites https://github.com/Nolithius/weighted-letter-namegen
+ * Based on work by Nolithius available at the following two sites
+ * https://github.com/Nolithius/weighted-letter-namegen
  * http://code.google.com/p/weighted-letter-namegen/
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
@@ -297,8 +297,8 @@ public class WeightedLetterNamegen {
     }
 
     /**
-     * Searches for the best fit letter between the letter before and the letter after (non-random). Used to determine
-     * penultimate letters in names.
+     * Searches for the best fit letter between the letter before and the letter
+     * after (non-random). Used to determine penultimate letters in names.
      *
      * @param	letterBefore	The letter before the desired letter.
      * @param	letterAfter	The letter after the desired letter.
@@ -375,7 +375,8 @@ public class WeightedLetterNamegen {
     }
 
     /**
-     * Checks that the Damerau-Levenshtein distance of this name is within a given bias from a name on the master list.
+     * Checks that the Damerau-Levenshtein distance of this name is within a
+     * given bias from a name on the master list.
      *
      * @param	name	The name string.
      * @return	True if a name is found that is within the bias.

@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.annotation.Beta;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 
@@ -8,18 +9,20 @@ import squidpony.squidmath.RNG;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class MapFactory {
 
     private static final RNG rng = new RNG();
 
     /**
-     * Returns a randomly generated map of doubles. Commonly referred to as a Height Map.
+     * Returns a randomly generated map of doubles. Commonly referred to as a
+     * Height Map.
      *
      * @param width in cells
      * @param height in cells
      * @return the created map
      */
-    public static double[][] hightMap(int width, int height) {
+    public static double[][] heightMap(int width, int height) {
         double[][] heightMap = new double[width][height];
         int perldivisors[] = new int[]{1, 1, 2, 4, 8, 16, 64};
 

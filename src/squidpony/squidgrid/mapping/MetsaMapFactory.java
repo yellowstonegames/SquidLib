@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import squidpony.SColor;
 import squidpony.SColorFactory;
+import squidpony.annotation.Beta;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
@@ -18,6 +19,7 @@ import squidpony.squidmath.RNG;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
+@Beta
 public class MetsaMapFactory {
     //HEIGHT LIMITS
 
@@ -106,8 +108,8 @@ public class MetsaMapFactory {
     }
 
     /**
-     * Finds and returns the closest point containing a city to the given point. Does not include provided point as a
-     * possible city location.
+     * Finds and returns the closest point containing a city to the given point.
+     * Does not include provided point as a possible city location.
      *
      * If there are no cities, null is returned.
      *
@@ -131,7 +133,7 @@ public class MetsaMapFactory {
     }
 
     private double[][] makeHeightMap() {
-        double[][] map = MapFactory.hightMap(width, height);
+        double[][] map = MapFactory.heightMap(width, height);
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -142,7 +144,7 @@ public class MetsaMapFactory {
             }
         }
         SNOWLEVEL = highn - 0.05;
-        
+
         return map;
     }
 

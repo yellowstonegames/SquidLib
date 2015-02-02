@@ -6,23 +6,28 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * This class provides methods for calculating Field of View in grids. Field of View (FOV) algorithms determine how much
- * area surrounding a point can be seen. They return a two dimensional array of doubles, representing the amount of view
- * (typically sight, but perhaps sound, smell, etc.) which the origin has of each cell.
+ * This class provides methods for calculating Field of View in grids. Field of
+ * View (FOV) algorithms determine how much area surrounding a point can be
+ * seen. They return a two dimensional array of doubles, representing the amount
+ * of view (typically sight, but perhaps sound, smell, etc.) which the origin
+ * has of each cell.
  *
- * After a calculation has been run, the resulting light map is saved in the class. This allows the values to be checked
- * on individual cells without being required to work with the returned light map. If no calculation has been performed,
- * all value checking methods will return their version of "unlit".
+ * After a calculation has been run, the resulting light map is saved in the
+ * class. This allows the values to be checked on individual cells without being
+ * required to work with the returned light map. If no calculation has been
+ * performed, all value checking methods will return their version of "unlit".
  *
- * The input resistanceMap is considered the percent of opacity. This resistance is on top of the resistance applied
- * from the light spreading out.
+ * The input resistanceMap is considered the percent of opacity. This resistance
+ * is on top of the resistance applied from the light spreading out.
  *
  * The returned light map is considered the percent of light in the cells.
  *
- * Not all implementations are required to provide percentage levels of light. In such cases the returned values will be
- * 0 for no light and 1.0 for fully lit. Implementations that return this way note so in their documentation.
+ * Not all implementations are required to provide percentage levels of light.
+ * In such cases the returned values will be 0 for no light and 1.0 for fully
+ * lit. Implementations that return this way note so in their documentation.
  *
- * All solvers perform bounds checking so solid borders in the map are not required.
+ * All solvers perform bounds checking so solid borders in the map are not
+ * required.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -30,27 +35,31 @@ public class FOV {
 
     public static final int//
             /**
-             * Performs FOV by pushing values outwards from the source location. It will go around corners a bit.
+             * Performs FOV by pushing values outwards from the source location.
+             * It will go around corners a bit.
              */
             RIPPLE = 1,
             /**
-             * Performs FOV by pushing values outwards from the source location. It will spread around edges like smoke
-             * or water, but maintain a tendency to curl towards the start position when going around edges.
+             * Performs FOV by pushing values outwards from the source location.
+             * It will spread around edges like smoke or water, but maintain a
+             * tendency to curl towards the start position when going around
+             * edges.
              */
             RIPPLE_LOOSE = 2,
             /**
-             * Performs FOV by pushing values outwards from the source location. It will only go around corners
-             * slightly.
+             * Performs FOV by pushing values outwards from the source location.
+             * It will only go around corners slightly.
              */
             RIPPLE_TIGHT = 3,
             /**
-             * Performs FOV by pushing values outwards from the source location. It will only go around corners
-             * massively.
+             * Performs FOV by pushing values outwards from the source location.
+             * It will only go around corners massively.
              */
             RIPPLE_VERY_LOOSE = 4,
             /**
-             * Uses Shadow Casting FOV algorithm. Treats all translucent cells as fully transparent. Returns only that
-             * the cell is fully lit or not lit, does not do percentages.
+             * Uses Shadow Casting FOV algorithm. Treats all translucent cells
+             * as fully transparent. Returns only that the cell is fully lit or
+             * not lit, does not do percentages.
              */
             SHADOW = 5;
 
@@ -106,7 +115,8 @@ public class FOV {
     }
 
     /**
-     * Returns the initial resistance value at the given point. If no calculation has yet been run, it returns 0.
+     * Returns the initial resistance value at the given point. If no
+     * calculation has yet been run, it returns 0.
      *
      * @param x
      * @param y
@@ -121,11 +131,14 @@ public class FOV {
     }
 
     /**
-     * Calculates the Field Of View for the provided map from the given x, y coordinates. Returns a light map where the
-     * values represent a percentage of fully lit.
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values represent a percentage
+     * of fully lit.
      *
-     * The starting point for the calculation is considered to be at the center of the origin cell. Radius
-     * determinations based on Euclidian calculations. The light will be treated as having infinite possible radius.
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations based on Euclidian
+     * calculations. The light will be treated as having infinite possible
+     * radius.
      *
      * @param resistanceMap the grid of cells to calculate on
      * @param startx the horizontal component of the starting location
@@ -137,11 +150,13 @@ public class FOV {
     }
 
     /**
-     * Calculates the Field Of View for the provided map from the given x, y coordinates. Returns a light map where the
-     * values represent a percentage of fully lit.
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values represent a percentage
+     * of fully lit.
      *
-     * The starting point for the calculation is considered to be at the center of the origin cell. Radius
-     * determinations based on Euclidian calculations.
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations based on Euclidian
+     * calculations.
      *
      * @param resistanceMap the grid of cells to calculate on
      * @param startx the horizontal component of the starting location
@@ -154,11 +169,13 @@ public class FOV {
     }
 
     /**
-     * Calculates the Field Of View for the provided map from the given x, y coordinates. Returns a light map where the
-     * values represent a percentage of fully lit.
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values represent a percentage
+     * of fully lit.
      *
-     * The starting point for the calculation is considered to be at the center of the origin cell. Radius
-     * determinations are determined by the provided RadiusStrategy.
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are determined by the provided
+     * RadiusStrategy.
      *
      * @param resistanceMap the grid of cells to calculate on
      * @param startx the horizontal component of the starting location
