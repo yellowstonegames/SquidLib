@@ -23,7 +23,7 @@ import squidpony.squidgrid.Direction;
  */
 public class SquidPanel extends JLayeredPane {
 
-    private static int DEFAULT_ANIMATION_DURATION = 2000;
+    private static int DEFAULT_ANIMATION_DURATION = 200;
     private static Font DEFAULT_FONT = new Font("Helvetica", Font.PLAIN, 22);
     private AnimationManager animationManager;
     private final ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<>();

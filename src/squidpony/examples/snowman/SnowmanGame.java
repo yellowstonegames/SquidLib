@@ -105,10 +105,10 @@ public class SnowmanGame {
         if (monster == null) {//move the player
             map[player.x][player.y].setMonster(null);
             mapPanel.slide(new Point(player.x, player.y), dir);
-            mapPanel.waitForAnimations();
             player.x += dir.deltaX;
             player.y += dir.deltaY;
             map[player.x][player.y].setMonster(player);
+            mapPanel.waitForAnimations();
             return true;
         } else {//attack!
             mapPanel.bump(new Point(player.x, player.y), dir);
@@ -121,7 +121,6 @@ public class SnowmanGame {
             }
             return true;
         }
-
     }
 
     /**

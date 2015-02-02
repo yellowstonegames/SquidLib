@@ -75,6 +75,10 @@ public abstract class AbstractAnimation implements Animation {
 
     @Override
     public Point getLocation() {
+        if (!isActive()){//assume a finished animation is at its expected end point
+            return end;
+        }
+        
         return label.getLocation();
     }
 
