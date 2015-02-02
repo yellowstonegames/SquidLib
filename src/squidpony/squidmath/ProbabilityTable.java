@@ -3,12 +3,13 @@ package squidpony.squidmath;
 import java.util.HashMap;
 import java.util.Set;
 import squidpony.annotation.Beta;
-import squidpony.squidmath.RNG;
 
 /**
- * A generic method of holding a probability table to determine weighted random outcomes.
+ * A generic method of holding a probability table to determine weighted random
+ * outcomes.
  *
- * The weights do not need to add up to any particular value, they will be normalized when choosing a random entry.
+ * The weights do not need to add up to any particular value, they will be
+ * normalized when choosing a random entry.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  *
@@ -29,7 +30,8 @@ public class ProbabilityTable<T> {
     }
 
     /**
-     * Creates a new probability table with the provided source of randomness used.
+     * Creates a new probability table with the provided source of randomness
+     * used.
      *
      * @param rng the source of randomness
      */
@@ -78,7 +80,8 @@ public class ProbabilityTable<T> {
     }
 
     /**
-     * Returns the weight of the item if the item is in the table. Returns zero of the item is not in the table.
+     * Returns the weight of the item if the item is in the table. Returns zero
+     * of the item is not in the table.
      *
      * @param item the item searched for
      * @return the weight of the item, or zero
@@ -89,7 +92,8 @@ public class ProbabilityTable<T> {
     }
 
     /**
-     * Provides a set of the items in this table, without reference to their weight.
+     * Provides a set of the items in this table, without reference to their
+     * weight.
      *
      * @return a set of all items stored
      */

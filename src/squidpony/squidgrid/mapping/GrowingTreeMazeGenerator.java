@@ -27,6 +27,12 @@ public class GrowingTreeMazeGenerator {
         this.height = height;
     }
 
+    /**
+     * Builds and returns a boolean mapping of a maze using the provided chooser method object.
+     * 
+     * @param choosing the callback object for making the split decision
+     * @return 
+     */
     public boolean[][] create(ChoosingMethod choosing) {
         boolean[][] map = new boolean[width][height];
         boolean[][] visited = new boolean[width][height];

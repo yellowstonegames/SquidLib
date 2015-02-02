@@ -27,7 +27,8 @@ public class Dice {
     /**
      * Sets the random number generator to be used.
      *
-     * This method does not need to be called before using the methods of this class.
+     * This method does not need to be called before using the methods of this
+     * class.
      *
      * @param rng the source of randomness
      */
@@ -36,8 +37,8 @@ public class Dice {
     }
 
     /**
-     * Rolls the given number of dice with the given number of sides and returns the total of the
-     * best n dice.
+     * Rolls the given number of dice with the given number of sides and returns
+     * the total of the best n dice.
      *
      * @param n number of best dice to total
      * @param dice total number of dice to roll
@@ -75,8 +76,8 @@ public class Dice {
     }
 
     /**
-     * Find the best n totals from the provided number of dice rolled according to the roll group
-     * string.
+     * Find the best n totals from the provided number of dice rolled according
+     * to the roll group string.
      *
      * @param n number of roll groups to total
      * @param dice number of roll groups to roll
@@ -110,7 +111,8 @@ public class Dice {
     }
 
     /**
-     * Get a list of the independent results of n rolls of dice with the given number of sides.
+     * Get a list of the independent results of n rolls of dice with the given
+     * number of sides.
      *
      * @param n number of dice used
      * @param sides number of sides on each die
@@ -127,18 +129,13 @@ public class Dice {
     /**
      * Turn the string to a randomized number.
      *
-     * The following types of strings are supported
-     * "42": simple absolute string
-     * "10:20": simple random range (inclusive between 10 and 20)
-     * "d6": synonym for "1d6"
-     * "3d6": sum of 3 6-sided dice
-     * "3:4d6": best 3 of 4 6-sided dice
+     * The following types of strings are supported "42": simple absolute string
+     * "10:20": simple random range (inclusive between 10 and 20) "d6": synonym
+     * for "1d6" "3d6": sum of 3 6-sided dice "3:4d6": best 3 of 4 6-sided dice
      *
-     * The following types of suffixes are supported
-     * "+4": add 4 to the value
-     *  "-3": subtract 3 from the value
-     * "*100": multiply value by 100
-     * "/8": divide value by 8
+     * The following types of suffixes are supported "+4": add 4 to the value
+     * "-3": subtract 3 from the value "*100": multiply value by 100 "/8":
+     * divide value by 8
      *
      * @param group string encoded roll grouping
      * @return random number

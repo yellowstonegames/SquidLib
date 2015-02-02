@@ -5,14 +5,19 @@ import squidpony.annotation.Beta;
 /**
  * The following description is from the wikipedia page on xorshift
  *
- * "Xorshift random number generators form a class of pseudorandom number generators that was discovered by George
- * Marsaglia. They generate the next number in their sequence by repeatedly taking the exclusive or of a number with a
- * bit shifted version of itself. This makes them extremely fast on modern computer architectures. The xor shift
- * primitive is invertible. They are a subclass of linear feedback shift registers, but their simple implementation
- * typically makes them faster and use less space. However, the parameters have to be chosen very carefully in order to
- * achieve a long period. The xorshift generators have been described as being fast but not reliable."
+ * "Xorshift random number generators form a class of pseudorandom number
+ * generators that was discovered by George Marsaglia. They generate the next
+ * number in their sequence by repeatedly taking the exclusive or of a number
+ * with a bit shifted version of itself. This makes them extremely fast on
+ * modern computer architectures. The xor shift primitive is invertible. They
+ * are a subclass of linear feedback shift registers, but their simple
+ * implementation typically makes them faster and use less space. However, the
+ * parameters have to be chosen very carefully in order to achieve a long
+ * period. The xorshift generators have been described as being fast but not
+ * reliable."
  *
- * The reliability and comparative speed of this implementation has not been fully tested.
+ * The reliability and comparative speed of this implementation has not been
+ * fully tested.
  *
  * @author http://en.wikipedia.org/wiki/Xorshift
  */
@@ -90,13 +95,14 @@ public class XorRNG implements RandomnessSource {
         while (i != 0) {
             n = Math.min(i, 8);
             for (long bits = nextLong(); n-- != 0; bits >>= 8) {
-                bytes[ --i] = (byte) bits;
+                bytes[--i] = (byte) bits;
             }
         }
     }
 
     /**
-     * Sets the seed of this generator. Passing this 0 will just set it to -1 instead.
+     * Sets the seed of this generator. Passing this 0 will just set it to -1
+     * instead.
      *
      * @param seed the number to use as the seed
      */

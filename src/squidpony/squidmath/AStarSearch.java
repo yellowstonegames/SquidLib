@@ -10,8 +10,9 @@ import squidpony.squidgrid.Direction;
 /**
  * Performs A* search.
  *
- * A* is a best-first search algorithm for pathfinding. It uses a heuristic value to reduce the total search space. If
- * the heuristic is too large then the optimal path is not guaranteed to be returned.
+ * A* is a best-first search algorithm for pathfinding. It uses a heuristic
+ * value to reduce the total search space. If the heuristic is too large then
+ * the optimal path is not guaranteed to be returned.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -23,11 +24,13 @@ public class AStarSearch {
     public enum SearchType {
 
         /**
-         * The distance it takes when only the four primary directions can be moved in.
+         * The distance it takes when only the four primary directions can be
+         * moved in.
          */
         MANHATTAN,
         /**
-         * The distance it takes when diagonal movement costs the same as cardinal movement.
+         * The distance it takes when diagonal movement costs the same as
+         * cardinal movement.
          */
         CHEBYSHEV,
         /**
@@ -35,7 +38,8 @@ public class AStarSearch {
          */
         EUCLIDIAN,
         /**
-         * Full space search. Least efficient but guaranteed to return a path if one exists.
+         * Full space search. Least efficient but guaranteed to return a path if
+         * one exists.
          */
         DJIKSTRA
     };
@@ -51,11 +55,13 @@ public class AStarSearch {
     /**
      * Builds a pathing object to run searches on.
      *
-     * Values in the map are treated as positive values (and 0) being legal weights, with higher values
-     * being harder to pass through. Any negative value is treated as being an impassible space.
+     * Values in the map are treated as positive values (and 0) being legal
+     * weights, with higher values being harder to pass through. Any negative
+     * value is treated as being an impassible space.
      *
-     * If the type is Manhattan, only the cardinal directions will be used. All other search types will return results
-     * based on intercardinal and cardinal pathing.
+     * If the type is Manhattan, only the cardinal directions will be used. All
+     * other search types will return results based on intercardinal and
+     * cardinal pathing.
      *
      * @param map the search map
      * @param type the manner of search
@@ -68,7 +74,8 @@ public class AStarSearch {
     }
 
     /**
-     * Finds an A* path to the target from the start. If no path is possible, returns null.
+     * Finds an A* path to the target from the start. If no path is possible,
+     * returns null.
      *
      * @param startx the x coordinate of the start location
      * @param starty the y coordinate of the start location
@@ -151,7 +158,8 @@ public class AStarSearch {
     /**
      * Finds the g value for the given location.
      *
-     * If the given location is not valid or not attached to the pathfinding then -1 is returned.
+     * If the given location is not valid or not attached to the pathfinding
+     * then -1 is returned.
      *
      * @param x coordinate
      * @param y coordinate
@@ -173,7 +181,8 @@ public class AStarSearch {
     }
 
     /**
-     * Returns the heuristic distance to the goal location using the current calculation type.
+     * Returns the heuristic distance to the goal location using the current
+     * calculation type.
      *
      * @param x coordinate
      * @param y coordinate
@@ -199,8 +208,9 @@ public class AStarSearch {
     }
 
     /**
-     * Returns the current known shortest distance to the start position from the given position.
-     * If the current position cannot reach the start position or is invalid, -1 is returned.
+     * Returns the current known shortest distance to the start position from
+     * the given position. If the current position cannot reach the start
+     * position or is invalid, -1 is returned.
      *
      * @param x
      * @param y

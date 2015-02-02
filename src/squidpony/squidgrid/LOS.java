@@ -10,10 +10,11 @@ import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Elias;
 
 /**
- * Line of Site (LOS) algorithms find if there is or is not a path between two given points.
+ * Line of Site (LOS) algorithms find if there is or is not a path between two
+ * given points.
  *
- * The line found between two points will end at either the target, the obstruction closest to the start, or the edge of
- * the map.
+ * The line found between two points will end at either the target, the
+ * obstruction closest to the start, or the edge of the map.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -25,13 +26,14 @@ public class LOS {
              */
             BRESENHAM = 1,
             /**
-             * Uses Wu's Algorithm as modified by Elias to draw the line. Does not end at an obstruction but rather
-             * returns one of the possible attempted paths in full.
+             * Uses Wu's Algorithm as modified by Elias to draw the line. Does
+             * not end at an obstruction but rather returns one of the possible
+             * attempted paths in full.
              */
             ELIAS = 2,
             /**
-             * Uses a series of rays internal to the start and end point to determine visibility. Does not respect
-             * translucency.
+             * Uses a series of rays internal to the start and end point to
+             * determine visibility. Does not respect translucency.
              */
             RAY = 3;
     private Queue<Point> lastPath = new LinkedList<>();
@@ -49,7 +51,8 @@ public class LOS {
     }
 
     /**
-     * Returns true if a line can be drawn from the start point to the target point without intervening obstructions.
+     * Returns true if a line can be drawn from the start point to the target
+     * point without intervening obstructions.
      *
      * Does not take into account resistance less than opaque or distance cost.
      *
@@ -67,7 +70,8 @@ public class LOS {
     }
 
     /**
-     * Returns true if a line can be drawn from the start point to the target point without intervening obstructions.
+     * Returns true if a line can be drawn from the start point to the target
+     * point without intervening obstructions.
      *
      * @param resistanceMap marks the level of resistance the the line per cell
      * @param startx
@@ -96,7 +100,8 @@ public class LOS {
     }
 
     /**
-     * Returns the path of the last LOS calculation, with the starting point as the head of the queue.
+     * Returns the path of the last LOS calculation, with the starting point as
+     * the head of the queue.
      *
      * @return
      */

@@ -9,46 +9,50 @@ import squidpony.squidmath.RNG;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public enum Radius{
+public enum Radius {
 
     /**
      * In an unobstructed area the FOV would be a square.
      *
-     * This is the shape that would represent movement radius in an 8-way movement scheme with no additional cost for
-     * diagonal movement.
+     * This is the shape that would represent movement radius in an 8-way
+     * movement scheme with no additional cost for diagonal movement.
      */
     SQUARE,
     /**
      * In an unobstructed area the FOV would be a diamond.
      *
-     * This is the shape that would represent movement radius in a 4-way movement scheme.
+     * This is the shape that would represent movement radius in a 4-way
+     * movement scheme.
      */
     DIAMOND,
     /**
      * In an unobstructed area the FOV would be a circle.
      *
-     * This is the shape that would represent movement radius in an 8-way movement scheme with all movement cost the
-     * same based on distance from the source
+     * This is the shape that would represent movement radius in an 8-way
+     * movement scheme with all movement cost the same based on distance from
+     * the source
      */
     CIRCLE,
     /**
      * In an unobstructed area the FOV would be a cube.
      *
-     * This is the shape that would represent movement radius in an 8-way movement scheme with no additional cost for
-     * diagonal movement.
+     * This is the shape that would represent movement radius in an 8-way
+     * movement scheme with no additional cost for diagonal movement.
      */
     CUBE,
     /**
      * In an unobstructed area the FOV would be a octahedron.
      *
-     * This is the shape that would represent movement radius in a 4-way movement scheme.
+     * This is the shape that would represent movement radius in a 4-way
+     * movement scheme.
      */
     OCTAHEDRON,
     /**
      * In an unobstructed area the FOV would be a sphere.
      *
-     * This is the shape that would represent movement radius in an 8-way movement scheme with all movement cost the
-     * same based on distance from the source
+     * This is the shape that would represent movement radius in an 8-way
+     * movement scheme with all movement cost the same based on distance from
+     * the source
      */
     SPHERE;
 
@@ -85,7 +89,7 @@ public enum Radius{
                 break;
             case CIRCLE:
             case SPHERE:
-                radius =  Math.sqrt(dx * dx + dy * dy + dz * dz);//standard spherical radius
+                radius = Math.sqrt(dx * dx + dy * dy + dz * dz);//standard spherical radius
         }
         return radius;
     }

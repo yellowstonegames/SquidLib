@@ -9,6 +9,7 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import squidpony.annotation.Beta;
 
 /**
  * Simplified class for working with sound output.
@@ -16,8 +17,11 @@ import javafx.scene.media.MediaPlayer.Status;
  * If fading is used, this class should be wrapped in a Thread to allow
  * automatic volume adjustments as needed.
  *
+ * Needs Java 8 for JavaFX support to work properly.
+ *
  * @author Eben Howard - http://squidpony.com
  */
+@Beta
 public class SquidSound implements Runnable {
 
     final static private String validExtensions = "aif|aiff|fxm|flv|m3u8|mp3|mp4|m4a|m4v|wav";

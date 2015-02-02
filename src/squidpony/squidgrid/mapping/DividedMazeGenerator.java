@@ -3,7 +3,6 @@ package squidpony.squidgrid.mapping;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.RNG;
 
@@ -14,7 +13,6 @@ import squidpony.squidmath.RNG;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-@Beta
 public class DividedMazeGenerator {
 
     private class DividedMazeRoom {
@@ -34,7 +32,8 @@ public class DividedMazeGenerator {
     private RNG rng = new RNG();
 
     /**
-     * Sets up the generator to make mazes the given width and height. The mazes have a solid wall border.
+     * Sets up the generator to make mazes the given width and height. The mazes
+     * have a solid wall border.
      *
      * @param width
      * @param height

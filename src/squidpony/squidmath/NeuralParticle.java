@@ -6,17 +6,19 @@ import java.util.List;
 import squidpony.annotation.Beta;
 
 /**
- * Creates a field of particles that tend to form a neuron image type distribution. The distribution tends to reach
- * towards the largest area of empty space, but features many nice branches and curls as well.
+ * Creates a field of particles that tend to form a neuron image type
+ * distribution. The distribution tends to reach towards the largest area of
+ * empty space, but features many nice branches and curls as well.
  *
- * If no points are added before the populate method is run, the center of the area is chosen as the single
- * pre-populated point.
+ * If no points are added before the populate method is run, the center of the
+ * area is chosen as the single pre-populated point.
  *
  * Based on work by Nolithius
  *
  * http://www.nolithius.com/game-development/neural-particle-deposition
  *
- * Source code is available on GitHub: https://github.com/Nolithius/neural-particle As well as Google Code:
+ * Source code is available on GitHub:
+ * https://github.com/Nolithius/neural-particle As well as Google Code:
  * http://code.google.com/p/neural-particle/
  *
  * @author @author Eben Howard - http://squidpony.com - howard@squidpony.com
@@ -80,8 +82,8 @@ public class NeuralParticle {
     }
 
     /**
-     * Creates a pip that falls within the required distance from the current distribution. Does not add the pip to the
-     * distribution.
+     * Creates a pip that falls within the required distance from the current
+     * distribution. Does not add the pip to the distribution.
      *
      * @return the created pip
      */

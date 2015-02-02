@@ -1,12 +1,13 @@
 package squidpony;
 
-import java.util.HashMap; 
+import java.util.HashMap;
 import java.util.Map;
 import squidpony.annotation.Beta;
 
 /**
- * The Damerau-Levenshtein Algorithm is an extension to the Levenshtein Algorithm which solves the
- * edit distance problem between a source string and a target string with the following operations:
+ * The Damerau-Levenshtein Algorithm is an extension to the Levenshtein
+ * Algorithm which solves the edit distance problem between a source string and
+ * a target string with the following operations:
  *
  * <ul>
  * <li>Character Insertion</li>
@@ -15,19 +16,21 @@ import squidpony.annotation.Beta;
  * <li>Adjacent Character Swap</li>
  * </ul>
  *
- * Note that the adjacent character swap operation is an edit that may be applied when two adjacent
- * characters in the source string match two adjacent characters in the target string, but in
- * reverse order, rather than a general allowance for adjacent character swaps.
+ * Note that the adjacent character swap operation is an edit that may be
+ * applied when two adjacent characters in the source string match two adjacent
+ * characters in the target string, but in reverse order, rather than a general
+ * allowance for adjacent character swaps.
  *
- * This implementation allows the client to specify the costs of the various edit operations with
- * the restriction that the cost of two swap operations must not be less than the cost of a delete
- * operation followed by an insert operation. This restriction is required to preclude two swaps
- * involving the same character being required for optimality which, in turn, enables a fast dynamic
- * programming solution.
+ * This implementation allows the client to specify the costs of the various
+ * edit operations with the restriction that the cost of two swap operations
+ * must not be less than the cost of a delete operation followed by an insert
+ * operation. This restriction is required to preclude two swaps involving the
+ * same character being required for optimality which, in turn, enables a fast
+ * dynamic programming solution.
  *
- * The running time of the Damerau-Levenshtein algorithm is O(n*m) where n is the length of the
- * source string and m is the length of the target string. This implementation consumes O(n*m)
- * space.
+ * The running time of the Damerau-Levenshtein algorithm is O(n*m) where n is
+ * the length of the source string and m is the length of the target string.
+ * This implementation consumes O(n*m) space.
  * 
 * @author Kevin L. Stern
  */
@@ -59,8 +62,8 @@ public class DamerauLevenshteinAlgorithm {
     }
 
     /**
-     * Compute the Damerau-Levenshtein distance between the specified source string and the
-     * specified target string.
+     * Compute the Damerau-Levenshtein distance between the specified source
+     * string and the specified target string.
      */
     public int execute(String source, String target) {
         if (source.length() == 0) {
