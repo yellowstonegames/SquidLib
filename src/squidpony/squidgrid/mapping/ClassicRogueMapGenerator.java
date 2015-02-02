@@ -9,7 +9,6 @@ import java.util.List;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.RNG;
-import squidpony.Pair;
 
 /**
  * Creates a dungeon in the style of the original Rogue game. It will always make a grid style of rooms where there are
@@ -388,7 +387,7 @@ public class ClassicRogueMapGenerator {
         int xpos = start.x;
         int ypos = start.y;
 
-        List<Pair<Direction, Integer>> moves = new LinkedList<>();
+        List<Magnitude> moves = new LinkedList<>();
 
         int xAbs = Math.abs(xOffset);
         int yAbs = Math.abs(yOffset);
@@ -401,24 +400,24 @@ public class ClassicRogueMapGenerator {
 
         if (xAbs < yAbs) {
             int tempDist = (int) Math.ceil(yAbs * firstHalf);
-            moves.add(new Pair(yDir, tempDist));
-            moves.add(new Pair(xDir, xAbs));
+            moves.add(new Magnitude(yDir, tempDist));
+            moves.add(new Magnitude(xDir, xAbs));
             tempDist = (int) Math.floor(yAbs * secondHalf);
-            moves.add(new Pair(yDir, tempDist));
+            moves.add(new Magnitude(yDir, tempDist));
         } else {
             int tempDist = (int) Math.ceil(xAbs * firstHalf);
-            moves.add(new Pair(xDir, tempDist));
-            moves.add(new Pair(yDir, yAbs));
+            moves.add(new Magnitude(xDir, tempDist));
+            moves.add(new Magnitude(yDir, yAbs));
             tempDist = (int) Math.floor(xAbs * secondHalf);
-            moves.add(new Pair(xDir, tempDist));
+            moves.add(new Magnitude(xDir, tempDist));
         }
 
         map[xpos][ypos] = Terrain.FLOOR;
 
         while (!moves.isEmpty()) {
-            Pair<Direction, Integer> move = moves.remove(0);
-            Direction dir = move.getFirst();
-            int dist = move.getSecond();
+            Magnitude move = moves.remove(0);
+            Direction dir = move.dir;
+            int dist = move.distance;
             while (dist > 0) {
                 xpos += dir.deltaX;
                 ypos += dir.deltaY;
@@ -437,6 +436,16 @@ public class ClassicRogueMapGenerator {
                     digPath(randomWallPosition(room, dir), randomWallPosition(otherRoom, dir.opposite()));
                 }
             }
+        }
+    }
+    
+    private class Magnitude{
+        public Direction dir;
+        public int distance;
+
+        public Magnitude(Direction dir, int distance) {
+            this.dir = dir;
+            this.distance = distance;
         }
     }
 }
