@@ -7,7 +7,7 @@ SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, and other proj
 Current Features:
 --
 ###Ease Of Use
--	Standard GUI notation of (x,y) locations within the grid.
+-	Standard GUI notation of (x,y) locations within the grid
 -	Uses Swing components
 -	Any Font can be used
 -	Images may be used alongside characters in same panel
@@ -22,8 +22,15 @@ Current Features:
 -   Multiple grids of different configurations can be overlayed allowing for transparency effects
 -	Basic Swing animation support
 
+###Highly Flexible
+-   Can create multiple overlapping layers
+--		Basic foreground & background color differences per cell
+--		Multiple layers can be used to have multiple characters in a single cell
+--		Multiple different sized layers can be used for sub-cell effects
+--		Overlays can be used to show animation effects without disturbing the display
+--		Overlays can be used to show potential Area of Effects or Ranges
+
 ###Lots of Color
--	Foreground and Background can be set individually on a per-cell basis
 -	SColor class extends Color and can be used as a drop-in replacement for any awt.Color needs
 -	SColor chooser included to visually select named and adjusted colors
 -	Over 500 named colors
