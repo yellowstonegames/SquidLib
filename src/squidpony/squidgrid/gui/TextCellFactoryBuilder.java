@@ -9,6 +9,9 @@ import java.awt.Font;
  * vertical padding is needed, it is recommended to try adding it mostly to the top. Often a padding of 1 on top
  * can give a good appearance.
  *
+ * If the width and height are not set then the factory will size the cells so that the font fits
+ * as tightly in the cells as possible, given any padding or antialiasing options.
+ * 
  * If the width and height are set then the factory will size the cells to those dimensions rather than to the font
  * size. In this case the font size is treated as an upper limit, and so a small font size in a large cell will render
  * at that font size, but a large font size in a small cell will be shrunk until it can fit inside the defined cell size.
