@@ -54,7 +54,15 @@ Current Features:
 --      Also can use Wu or Elias Lines (antialiased Bresenham Lines)
 -   Perlin noise implementation
   
-  
+Download JARs from the Releases tab or use Maven Central to download with
+```
+<dependency>
+  <groupId>com.squidpony</groupId>
+  <artifactId>squidlib</artifactId>
+  <version>2.2</version>
+</dependency>
+```
+
 GitHub repository: https://github.com/SquidPony/SquidLib
 
 Blog updates: http://squidpony.com/not-games/squidlib/
