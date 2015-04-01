@@ -5,7 +5,7 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>SquidLib</name>
             <source-roots>
-                <root id="src.dir"/>
+                <root id="src.java.dir"/>
             </source-roots>
             <test-roots/>
         </data>

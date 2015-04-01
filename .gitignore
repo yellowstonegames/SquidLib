@@ -2,5 +2,5 @@
 nbproject/private/
 build/
 libgdx libraries/
+target/
 *.class
-dist/README.TXT

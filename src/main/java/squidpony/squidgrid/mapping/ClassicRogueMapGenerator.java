@@ -286,8 +286,8 @@ public class ClassicRogueMapGenerator {
                 int sx = cwp * x;
                 int sy = chp * y;
 
-                sx = Integer.max(sx, 2);
-                sy = Integer.max(sy, 2);
+                sx = Math.max(sx, 2);
+                sy = Math.max(sy, 2);
 
                 int roomw = rng.between(minRoomWidth, maxRoomWidth + 1);
                 int roomh = rng.between(minRoomHeight, maxRoomHeight + 1);
