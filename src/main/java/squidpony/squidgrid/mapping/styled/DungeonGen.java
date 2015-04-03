@@ -291,18 +291,19 @@ public class DungeonGen {
     public char[][] wallWrap() {
         int upperY = high - 1;
         int upperX = wide - 1;
-        for (int i = 0; i < high; i++) {
+        for (int i = 0; i < wide; i++) {
             dungeon[i][0] = '#';
             dungeon[i][upperY] = '#';
         }
-        for (int i = 0; i < wide; i++) {
+        for (int i = 0; i < high; i++) {
             dungeon[0][i] = '#';
             dungeon[upperX][i] = '#';
         }
         return dungeon;
     }
 
-    private boolean matchingAdjacent(int x, int y) {
+    private boolean matchingAdjacent(int y, int x)
+    {
         return c_color[y][x] == c_color[y + 1][x + 1];
     }
 
