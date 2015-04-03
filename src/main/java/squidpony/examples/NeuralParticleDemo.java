@@ -9,7 +9,6 @@ import javax.swing.JLayeredPane;
 import squidpony.SColor;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 import squidpony.squidmath.NeuralParticle;
 import squidpony.squidmath.RNG;
 
@@ -36,18 +35,16 @@ public class NeuralParticleDemo {
     private void go() {
         JFrame frame = new JFrame("Neural Particle Test");
         frame.getContentPane().setBackground(SColor.BLACK);
-        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
-        build.font(new Font("Arial", Font.BOLD, 6));
-        build.width(2);
-        build.height(2);
-        TextCellFactory factory = new TextCellFactory(build);
-        back = new SquidPanel(width, height, factory, null);
+        TextCellFactory tcf = new TextCellFactory();
+        tcf.font(new Font("Arial", Font.BOLD, 6));
+        tcf.width(2);
+        tcf.height(2);
+        back = new SquidPanel(width, height, tcf, null);
 
-        build.font(new Font("Arial", Font.BOLD, 26));
-        build.width(20);
-        build.height(20);
-        TextCellFactory frontFactory = new TextCellFactory(build);
-        front = new SquidPanel(width / 10, height / 10, frontFactory, null);
+        tcf.font(new Font("Arial", Font.BOLD, 26));
+        tcf.width(20);
+        tcf.height(20);
+        front = new SquidPanel(width / 10, height / 10, tcf, null);
 
         JLayeredPane layers = new JLayeredPane();
         layers.setLayer(back, JLayeredPane.DEFAULT_LAYER);
