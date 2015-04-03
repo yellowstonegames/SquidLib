@@ -16,7 +16,7 @@ public class StyledDungeonTest {
         for(TilesetType tt : TilesetType.values())
         {
             System.out.println(tt.toString());
-            bg.generate(tt, 80, 80);
+            bg.generate(tt, 80, 40);
             bg.wallWrap();
             System.out.println(bg);
             bg.setDungeon(DungeonUtility.hashesToLines(bg.getDungeon()));
