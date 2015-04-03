@@ -4,3 +4,5 @@ build/
 libgdx libraries/
 target/
 *.class
+*.iml
+.idea/

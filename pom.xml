@@ -3,7 +3,7 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib</artifactId>
-    <version>2.2</version>
+    <version>2.2.1</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -122,7 +122,6 @@
                                 <goal>test-jar</goal>
                             </goals>
                             <configuration>
-                                <includePom>true</includePom>
                             </configuration>
                         </execution>
                     </executions>
@@ -151,5 +150,11 @@
         </plugins>
     </build>
     <dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>
