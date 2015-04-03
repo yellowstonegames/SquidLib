@@ -22,11 +22,11 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 import squidpony.squidmath.RNG;
 
 /**
- * This class is a scratchpad area to test things out.
+ * This class shows off various FOV algorithms in an animated manner. It's meant
+ * primarily for internal testing so is a bit rough.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -57,9 +57,7 @@ public class FOVAnimated {
 
         JFrame frame = new JFrame("FOV In Action");
         frame.getContentPane().setBackground(SColor.BLACK);
-        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
-        build.font(new Font("Arial", Font.BOLD, 26)).width(cellSize).height(cellSize);
-        TextCellFactory factory = new TextCellFactory(build);
+        TextCellFactory factory = new TextCellFactory().font(new Font("Arial", Font.BOLD, 26)).width(cellSize).height(cellSize);
         back = new SquidPanel(width, height, factory, null);
         front = new SquidPanel(width, height, factory, null);
 

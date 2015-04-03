@@ -14,7 +14,6 @@ import javax.swing.JFrame;
 import squidpony.SColorFactory;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 import squidpony.squidgrid.mapping.shape.ShapeGenerator;
 
 /**
@@ -129,9 +128,7 @@ public class MapGenerationTester {
 
     public void showColors(TiledShape shape) {
         JFrame frame = new JFrame();
-        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
-        build.font(new Font("Ariel", Font.PLAIN, 10)).width(12).height(12);
-        SquidPanel pane = new SquidPanel(shape.width(), shape.height(), new TextCellFactory(build), null);
+        SquidPanel pane = new SquidPanel(shape.width(), shape.height(), new TextCellFactory().font(new Font("Ariel", Font.PLAIN, 10)).width(12).height(12), null);
         frame.add(pane);
         frame.pack();
         frame.setLocationRelativeTo(null);

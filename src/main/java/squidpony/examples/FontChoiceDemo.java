@@ -1,7 +1,6 @@
 package squidpony.examples;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +19,6 @@ import javax.swing.JMenuItem;
 import squidpony.SColor;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 
 /**
  * Demonstrates some of the capabilities of the squidpony.squidgrid package.
@@ -59,9 +57,7 @@ public class FontChoiceDemo {
         control = new squidpony.examples.FontChoiceControlPanel(width, height);
         frame.getContentPane().add(control, BorderLayout.NORTH);
 
-        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
-        build.font(control.getFontFace()).width(control.getCellWidth()).height(control.getCellHeight());
-        textFactory = new TextCellFactory(build);
+        textFactory = new TextCellFactory().font(control.getFontFace()).width(control.getCellWidth()).height(control.getCellHeight());
         display = new SquidPanel(width, height, textFactory, null);
         back = new SquidPanel(width, height, textFactory, null);
 
@@ -89,15 +85,14 @@ public class FontChoiceDemo {
                 layers.remove(display);
                 layers.remove(back);
 
-                TextCellFactoryBuilder build = new TextCellFactoryBuilder();
-                build.font(control.getFontFace()).width(control.getCellWidth()).height(control.getCellHeight());
-                build.antialias(control.antialiasBox.isSelected());
-                build.topPadding(control.getTopPad());
-                build.bottomPadding(control.getBottomPad());
-                build.leftPadding(control.getLeftPad());
-                build.rightPadding(control.getRightPad());
-                build.fit(control.inputTextArea.getText());
-                textFactory = new TextCellFactory(build);
+                textFactory = new TextCellFactory();
+                textFactory.font(control.getFontFace()).width(control.getCellWidth()).height(control.getCellHeight());
+                textFactory.antialias(control.antialiasBox.isSelected());
+                textFactory.topPadding(control.getTopPad());
+                textFactory.bottomPadding(control.getBottomPad());
+                textFactory.leftPadding(control.getLeftPad());
+                textFactory.rightPadding(control.getRightPad());
+                textFactory.fit(control.inputTextArea.getText());
                 display = new SquidPanel(width, height, textFactory, null);
                 back = new SquidPanel(width, height, textFactory, null);
 

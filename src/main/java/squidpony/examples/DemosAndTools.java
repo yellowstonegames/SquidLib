@@ -10,7 +10,6 @@ import squidpony.SColorChooserPanel;
 import squidpony.squidgrid.gui.SquidKey;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 
 /**
  * Launcher for various demos and utilities associated with the SquidLib library suite.
@@ -158,9 +157,8 @@ public class DemosAndTools extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         final int width = 20, height = 20;
-        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
-        build.font(new Font("Sans Serif", Font.BOLD, 18)).width(18).height(18);
-        final SquidPanel display = new SquidPanel(width, height, new TextCellFactory(build), null);
+        TextCellFactory tcf = new TextCellFactory().font(new Font("Sans Serif", Font.BOLD, 18)).width(18).height(18);
+        final SquidPanel display = new SquidPanel(width, height, tcf, null);
         final JPanel jp = new JPanel();
         jp.setBackground(SColor.BLACK);
         jp.add(display);

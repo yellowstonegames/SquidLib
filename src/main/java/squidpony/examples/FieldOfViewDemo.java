@@ -21,7 +21,6 @@ import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Direction;
 import static squidpony.squidgrid.Direction.*;
-import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 
 /**
  * Demonstrates the use of the Field of View and Line of Sight algorithms.
@@ -143,9 +142,7 @@ public class FieldOfViewDemo {
 
         cellWidth = 18;
         cellHeight = 18;
-        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
-        build.font(new Font("Arial", Font.BOLD, 18)).width(cellWidth).height(cellHeight);
-        TextCellFactory text = new TextCellFactory(build);
+        TextCellFactory text = new TextCellFactory().font(new Font("Arial", Font.BOLD, 18)).width(cellWidth).height(cellHeight);
         display = new SquidPanel(width, height, text, null);
         back = new SquidPanel(width, height, text, null);
         clear();

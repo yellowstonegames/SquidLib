@@ -13,10 +13,16 @@ import squidpony.squidgrid.Direction;
 /**
  * Class for creating text blocks.
  *
- * Please refer to the {@link squidpony.squidgrid.gui.TextCellFactoryBuilder} class documentation regarding the 
- * defaults and sizing options for TextCellFactory objects.
+ * This class defaults to using the JVM's default Serif font at size 12, no
+ * padding, and antialias on. If more vertical padding is needed, it is
+ * recommended to try adding it mostly to the top. Often a padding of 1 on top
+ * can give a good appearance.
  *
- * In order to easily support Unicode, strings are treated as a series of code points.
+ * After all settings are set, one of the initialization methods must be called
+ * before the factory can be used.
+ *
+ * In order to easily support Unicode, strings are treated as a series of code
+ * points.
  *
  * All images have transparent backgrounds.
  *
@@ -30,50 +36,99 @@ public class TextCellFactory {
     public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\";
 
     private int verticalOffset = 0, horizontalOffset = 0;//how far the baseline needs to be moved based on squeezing the cell size
-    private Font font;
-    private String fitting;
+    private Font font = Font.decode("Serif");
+    private String fitting = DEFAULT_FITTING;
     private Set<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
-    private boolean antialias = false;
+    private boolean antialias = true;
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     private int width = 1, height = 1;
     private ImageCellMap map;
+    private boolean initialized = false;
 
-    public TextCellFactory(TextCellFactoryBuilder builder) {
-        font = builder.font;
-        fitting = builder.fitting;
-        antialias = builder.antialias;
-        leftPadding = builder.leftPadding;
-        rightPadding = builder.rightPadding;
-        topPadding = builder.topPadding;
-        bottomPadding = builder.bottomPadding;
-        width = builder.width;
-        height = builder.height;
-        if (width <= 0 || height <= 0) {
-            map = new ImageCellMap();
-            initializeByFont(font);
-            map = new ImageCellMap(width, height);
-        } else {
-            map = new ImageCellMap(width, height);
-            initializeBySize(width, height, font);
-        }
+    /**
+     * Creates a default valued factory. One of the initialization methods must
+     * be called before this factory can be used!
+     */
+    public TextCellFactory() {
+    }
+
+    /**
+     * Initializes the factory to then be able to create text cells on demand.
+     *
+     * Will match the width and height to best match the provided font. This
+     * causes any provided width and height to be ignored.
+     *
+     * Calling this after the factory has already been initialized will
+     * re-initialize it.
+     *
+     * @return this for method chaining
+     */
+    public TextCellFactory initByFont() {
+        initialized = true;
+        map = new ImageCellMap();
+        initializeByFont(font);
+        map = new ImageCellMap(width, height);
+        return this;
+    }
+
+    /**
+     * Initializes the factor to then be able to create text cells on demand.
+     *
+     * Will strictly use the provided width and height values to size the cells.
+     * The provided font will be used as a maximum size for the cells, but will
+     * be shrunk down if the provided font will not fit the requested size.
+     *
+     * Calling this after the factory has already been initialized will
+     * re-initialize it.
+     *
+     * @return this for method chaining
+     */
+    public TextCellFactory initBySize() {
+        initialized = true;
+        map = new ImageCellMap(width, height);
+        initializeBySize(width, height, font);
+        return this;
     }
 
     /**
      * Returns the font used by this factory.
      *
-     * @return
+     * @return the font
      */
     public Font font() {
         return font;
     }
 
     /**
+     * Sets this factory to use the provided font.
+     *
+     * @param font the font to use
+     * @return this factory for method chaining
+     */
+    public TextCellFactory font(Font font) {
+        this.font = font;
+        return this;
+    }
+
+    /**
      * Returns the width of a single cell.
      *
-     * @return
+     * @return the width
      */
     public int width() {
         return width;
+    }
+
+    /**
+     * Sets the factory's cell width to the provided value. Clamps at 1 on the
+     * lower bound to ensure valid calculations.
+     *
+     * @param width the desired width
+     * @return this factory for method chaining
+     */
+    public TextCellFactory width(int width) {
+        this.width = Integer.max(1, width);
+        return this;
     }
 
     /**
@@ -83,6 +138,179 @@ public class TextCellFactory {
      */
     public int height() {
         return height;
+    }
+
+    /**
+     * Sets the factory's cell height to the provided value. Clamps at 1 on the
+     * lower bound to ensure valid calculations.
+     *
+     * @param height the desired width
+     * @return this factory for method chaining
+     */
+    public TextCellFactory height(int height) {
+        this.height = Integer.max(1, height);
+        return this;
+    }
+
+    /**
+     * Returns the current String of code points that are used for sizing the
+     * cells.
+     *
+     * Note that this is actually a set of codepoints and treating them as an
+     * array of chars might give undesired results.
+     *
+     * @return the String used for sizing calculations
+     */
+    public String fit() {
+        return fitting;
+    }
+
+    /**
+     * Sets the characters that will be guaranteed to fit to the provided ones.
+     * This will override any previously set string.
+     *
+     * @param fit the String of code points to size to
+     * @return this factory for method chaining
+     */
+    public TextCellFactory fit(String fit) {
+        fitting = fit;
+        return this;
+    }
+
+    /**
+     * Adds the code points in the string to the list of characters that will be
+     * guaranteed to fit.
+     *
+     * @param fit the String of code points to size to
+     * @return this factory for method chaining
+     */
+    public TextCellFactory addFit(String fit) {
+        fitting += fit;
+        return this;
+    }
+
+    /**
+     * Returns whether this factory is currently set to do antialiasing on the
+     * characters rendered.
+     *
+     * @return true if antialiasing is set
+     */
+    public boolean antialias() {
+        return antialias;
+    }
+
+    /**
+     * When set to true, all fonts will be rendered with antialiasing.
+     *
+     * @param antialias true for antialiasing
+     * @return this factory for method chaining
+     */
+    public TextCellFactory antialias(boolean antialias) {
+        this.antialias = antialias;
+        return this;
+    }
+
+    /**
+     * Sets the amount of padding on all sides to the provided value.
+     *
+     * @param padding how much padding in pixels
+     * @return this for method chaining
+     */
+    public TextCellFactory padding(int padding) {
+        leftPadding = padding;
+        rightPadding = padding;
+        topPadding = padding;
+        bottomPadding = padding;
+        return this;
+    }
+    
+    /**
+     * Returns the padding on the left side.
+     * 
+     * @return amount of padding in pixels
+     */
+    public int leftPadding() {
+        return leftPadding;
+    }
+
+    /**
+     * Sets the amount of padding on the left side to the provided value.
+     *
+     * @param padding how much padding in pixels
+     * @return this for method chaining
+     */
+    public TextCellFactory leftPadding(int padding) {
+        leftPadding = padding;
+        return this;
+    }
+
+    /**
+     * Returns the padding on the right side.
+     * 
+     * @return amount of padding in pixels
+     */
+    public int rightPadding() {
+        return rightPadding;
+    }
+    
+    /**
+     * Sets the amount of padding on the right side to the provided value.
+     *
+     * @param padding how much padding in pixels
+     * @return this for method chaining
+     */
+    public TextCellFactory rightPadding(int padding) {
+        rightPadding = padding;
+        return this;
+    }
+
+    /**
+     * Returns the padding on the top side.
+     * 
+     * @return amount of padding in pixels
+     */
+    public int topPadding() {
+        return topPadding;
+    }
+    
+    /**
+     * Sets the amount of padding on the top side to the provided value.
+     *
+     * @param padding how much padding in pixels
+     * @return this for method chaining
+     */
+    public TextCellFactory topPadding(int padding) {
+        topPadding = padding;
+        return this;
+    }
+
+    /**
+     * Returns the padding on the bottom side.
+     * 
+     * @return amount of padding in pixels
+     */
+    public int bottomPadding() {
+        return bottomPadding;
+    }
+    
+    /**
+     * Returns true if this factory is fully initialized and ready to build text cells.
+     * 
+     * @return true if initialized
+     */
+    public boolean initialized() {
+        return initialized;
+    }
+    
+    /**
+     * Sets the amount of padding on the bottom side to the provided value.
+     *
+     * @param padding how much padding in pixels
+     * @return this for method chaining
+     */
+    public TextCellFactory bottomPadding(int padding) {
+        bottomPadding = padding;
+        return this;
     }
 
     private void initializeByFont(Font font) {
@@ -311,15 +539,20 @@ public class TextCellFactory {
     }
 
     /**
-     * Returns true if the given character will fit inside the current cell dimensions with the current font.
+     * Returns true if the given character will fit inside the current cell
+     * dimensions with the current font.
      *
-     * ISO Control characters, non-printing characters and invalid unicode characters are all considered by definition
-     * to fit.
+     * ISO Control characters, non-printing characters and invalid unicode
+     * characters are all considered by definition to fit.
      *
      * @param codepoint
      * @return
      */
     public boolean willFit(int codepoint) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        
         if (!Character.isValidCodePoint(codepoint) || Character.isISOControl(codepoint)) {
             return true;
         }
@@ -328,8 +561,9 @@ public class TextCellFactory {
     }
 
     /**
-     * Slides the character one pixel in the provided direction and test if fully exposed the opposite edge. Returns true
-     * if opposite edge was fully exposed.
+     * Slides the character one pixel in the provided direction and test if
+     * fully exposed the opposite edge. Returns true if opposite edge was fully
+     * exposed.
      *
      * @param code
      * @param dir
@@ -377,13 +611,18 @@ public class TextCellFactory {
     }
 
     /**
-     * Returns the image of the character represented by the passed in code point.
+     * Returns the image of the character represented by the passed in code
+     * point.
      *
      * @param code the unicode code point for the character to draw
      * @param color the color to draw
      * @return
      */
     public BufferedImage get(int code, Color color) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        
         String search = asKey(code, color);
         BufferedImage block = map.get(search);
 
@@ -395,13 +634,18 @@ public class TextCellFactory {
     }
 
     /**
-     * Returns the string used as a key for hash mapping. Useful for drop-in replacement of text and images.
+     * Returns the string used as a key for hash mapping. Useful for drop-in
+     * replacement of text and images.
      *
      * @param code the unicode code point for the character to draw
      * @param color the color to draw
      * @return
      */
     public String asKey(int code, Color color) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        
         return new String(Character.toChars(code)) + " " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
     }
 
@@ -412,6 +656,10 @@ public class TextCellFactory {
      * @return
      */
     public BufferedImage getSolid(Color color) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        
         String search = "Solid " + color.getClass().getSimpleName() + ": " + Integer.toHexString(color.getRGB());
         BufferedImage block = map.get(search);
 
@@ -455,5 +703,4 @@ public class TextCellFactory {
         int y = g.getFontMetrics().getMaxAscent() + verticalOffset;
         g.drawString(new String(Character.toChars(code)), x, y);
     }
-
 }

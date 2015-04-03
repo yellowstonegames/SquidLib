@@ -11,7 +11,6 @@ import squidpony.SColor;
 import squidpony.SColorFactory;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
-import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.AStarSearch;
 
@@ -49,9 +48,7 @@ public class GridSearchTest {
         frame.getContentPane().setBackground(SColor.BLACK);
 
         JLayeredPane layers = new JLayeredPane();
-        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
-        build.font(new Font("Arial", Font.BOLD, 22)).width(12).height(16);
-        TextCellFactory factory = new TextCellFactory(build);
+        TextCellFactory factory = new TextCellFactory().font(new Font("Arial", Font.BOLD, 22)).width(12).height(16);
         back = new SquidPanel(width, height, factory, null);
         front = new SquidPanel(width, height, factory, null);
         layers.setLayer(back, JLayeredPane.DEFAULT_LAYER);

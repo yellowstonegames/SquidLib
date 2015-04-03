@@ -15,7 +15,6 @@ import squidpony.SColor;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.gui.TextCellFactoryBuilder;
 
 /**
  * Demonstrates the use of animations in SGTextPanel.
@@ -62,9 +61,7 @@ public class MovingCharactersDemo {
         frame = new JFrame("SquidGrid Moving Objects Demonstration");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        TextCellFactoryBuilder build = new TextCellFactoryBuilder();
-        build.font(new Font("Arial", Font.BOLD, 20)).width(24).height(24);
-        display = new SquidPanel(width, height, new TextCellFactory(build), null);
+        display = new SquidPanel(width, height, new TextCellFactory().font(new Font("Arial", Font.BOLD, 20)).width(24).height(24), null);
         display.put(map);
         display.refresh();
         frame.getContentPane().add(display, BorderLayout.SOUTH);

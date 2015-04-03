@@ -15,6 +15,9 @@ import squidpony.squidgrid.Direction;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
+ * 
+ * Grid width and height settings are in terms of number of cells. Cell width and height
+ * are in terms of number of pixels.
  *
  * When text is placed, the background color is set separately from the foreground character. When moved, only the
  * foreground character is moved.
@@ -35,35 +38,56 @@ public class SquidPanel extends JLayeredPane {
     private Dimension panelDimension;
     private final TextCellFactory textFactory;
     private final ImageCellMap imageCellMap;
+    
+    /**
+     * Creates a bare-bones panel with all default values for text rendering.
+     * 
+     * @param gridWidth the number of cells horizontally
+     * @param gridHeight the number of cells vertically
+     */
+    public SquidPanel(int gridWidth, int gridHeight) {
+        this(gridWidth, gridHeight, new TextCellFactory().font(DEFAULT_FONT), null);
+    }
 
     /**
      * Creates a panel with the given grid and cell size. Uses a default font.
      *
-     * @param gridWidth
-     * @param gridHeight
-     * @param cellWidth
-     * @param cellHeight
+     * @param gridWidth the number of cells horizontally
+     * @param gridHeight the number of cells vertically
+     * @param cellWidth the number of horizontal pixels in each cell
+     * @param cellHeight the number of vertical pixels in each cell
      */
     public SquidPanel(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
-        this(gridWidth, gridHeight, new TextCellFactory(new TextCellFactoryBuilder().font(DEFAULT_FONT).width(cellWidth).height(cellHeight)), null);
+        this(gridWidth, gridHeight, new TextCellFactory().font(DEFAULT_FONT).width(cellWidth).height(cellHeight), null);
     }
 
     /**
      * Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
      * are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
+     * 
+     * If the TextCellFactory has not yet been initialized, then it will be sized based on its font. If it is null
+     * then a default one will be created and initialized.
      *
-     * For proper display, gridWidth should be an even multiple of the cellWidth in the factory, and likewise for the
-     * gridHeight and cellHeight. Additionally the imageMap (if not null) should have the same cell size as the factory.
+     * For proper display, The imageMap (if not null) should have the same cell size as the factory.
      *
-     * @param gridWidth
-     * @param gridHeight
-     * @param factory
+     * @param gridWidth the number of cells horizontally
+     * @param gridHeight the number of cells vertically
+     * @param factory the factory to use for cell rendering
      * @param imageMap can be null if no explicit images will be used
      */
     public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, ImageCellMap imageMap) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         textFactory = factory;
+        
+        if (factory == null) {
+            factory = new TextCellFactory();
+        }
+        
+        if (!factory.initialized()) {
+            factory.initByFont();
+        }
+        
         cellWidth = factory.width();
         cellHeight = factory.height();
         setFont(textFactory.font());
