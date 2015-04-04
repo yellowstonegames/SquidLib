@@ -63,7 +63,12 @@ public class DungeonUtility {
      * drawing characters to draw straight, continuous lines for walls, filling regions between walls (that were
      * filled with more walls before) with space characters, ' '. If the lines "point the wrong way," such as having
      * multiple horizontally adjacent vertical lines where there should be horizontal lines, call transposeLines() on
-     * the returned map, which will keep the dimensions of the map the same and only change the line chars.
+     * the returned map, which will keep the dimensions of the map the same and only change the line chars. You will
+     * also need to call transposeLines if you call hashesToLines on a map that already has "correct" line-drawing
+     * characters, which means hashesToLines should only be called on maps that use '#' for walls. If you have a
+     * jumbled map that contains two or more of the following: "correct" line-drawing characters, "incorrect"
+     * line-drawing characters, and '#' characters for walls, you can reset by calling linesToHashes() and then
+     * potentially calling hashesToLines() again.
      * @param map
      * @return
      */
@@ -353,9 +358,51 @@ public class DungeonUtility {
     }
 
     /**
+     * Reverses most of the effects of linesToHashes(). The only things that will not be reversed are the placement of
+     * space characters in unreachable wall-cells-behind-wall-cells, which remain as spaces. This is useful if you
+     * have a modified map that contains wall characters of conflicting varieties, as described in hashesToLines().
+     * @param map
+     * @return
+     */
+    public static char[][] linesToHashes(char[][] map)
+    {
+
+        int Width = map.length;
+        int Height = map[0].length;
+        char[][] portion = new char[Width][Height];
+        for(int i = 0; i < Width; i++)
+        {
+            for(int j = 0; j < Height; j++)
+            {
+                switch (map[i][j])
+                {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                        portion[i][j] = '#';
+                        break;
+                    default:
+                        portion[i][j] = map[i][j];
+                }
+            }
+        }
+        return portion;
+    }
+    /**
      * If you call hashesToLines() on a map that uses [y][x] conventions instead of [x][y], it will have the lines not
      * connect as you expect. Use this function to change the directions of the box-drawing characters only, without
      * altering the dimensions in any way. This returns a new char[][], instead of modifying the parameter in place.
+     * transposeLines is also needed if the lines in a map have become transposed when they were already correct;
+     * calling this method on an incorrectly transposed map will change the directions on all of its lines.
      * @param map
      * @return
      */

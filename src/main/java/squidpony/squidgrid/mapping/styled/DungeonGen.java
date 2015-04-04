@@ -74,6 +74,8 @@ public class DungeonGen {
      */
     public void setDungeon(char[][] dungeon) {
         this.dungeon = dungeon;
+        this.wide = dungeon.length;
+        this.high = dungeon[0].length;
     }
 
     /**
@@ -100,7 +102,7 @@ public class DungeonGen {
     /**
      * The latest result of calling this class' generate() method.
      */
-    public char[][] dungeon;
+    private char[][] dungeon;
 
     /**
      * Constructs a DungeonGen that uses the given java.util.Random .
