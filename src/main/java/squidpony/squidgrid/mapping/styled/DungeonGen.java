@@ -2,7 +2,6 @@ package squidpony.squidgrid.mapping.styled;
 
 import com.google.gson.Gson;
 import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RandomnessSource;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -14,23 +13,45 @@ import java.util.Random;
 public class DungeonGen {
     private Gson gson;
 
+    /**
+     * Gets the current RNG, a squidpony.squidmath.LightRNG that can have its state/seed directly changed with its
+     * setSeed or setState method.
+     * @return
+     */
     public LightRNG getRng() {
         return rng;
     }
 
+    /**
+     * Sets the current RNG, but requires a squidpony.squidmath.LightRNG for now. Any long can be used to seed a
+     * LightRNG, so if you have another kind of RNG, you can generate a long from that and use it as seed.
+     * @param rng
+     */
     public void setRng(LightRNG rng) {
         this.rng = rng;
     }
 
+    /**
+     * The current RNG, a squidpony.squidmath.LightRNG that can have its state/seed directly changed with its
+     * setSeed or setState method.
+     */
     public LightRNG rng;
     private static InputStream[] jsonStreams = null;
     private static HashMap<TilesetType, Tileset> tilesetCache = new HashMap<TilesetType, Tileset>();
     private int[][] c_color, h_color, v_color;
 
+    /**
+     * Returns the width, used as the first coordinate in any char[][] in this class.
+     * @return
+     */
     public int getWidth() {
         return wide;
     }
 
+    /**
+     * Returns the height, used as the second coordinate in any char[][] in this class.
+     * @return
+     */
     public int getHeight() {
         return high;
     }
@@ -38,22 +59,47 @@ public class DungeonGen {
     private int wide = 0;
     private int high = 0;
 
+    /**
+     * Get the char[][] dungeon that was last returned by generate(), or null if generate() or setDungeon have not been
+     * called. Uses x,y indexing.
+     * @return
+     */
     public char[][] getDungeon() {
         return dungeon;
     }
 
+    /**
+     * Change the stored char[][] dungeon, using x,y indexing.
+     * @param dungeon
+     */
     public void setDungeon(char[][] dungeon) {
         this.dungeon = dungeon;
     }
 
+    /**
+     * Gets the char at a given x,y position.
+     * @param x
+     * @param y
+     * @return
+     */
     public char get(int x, int y) {
         return dungeon[x][y];
     }
 
+    /**
+     * Sets the char at the given x,y position, storing it in this object. The dungeon this modifies is accessible with
+     * getDungeon() and can be set all at once with setDungeon().
+     * @param elem
+     * @param x
+     * @param y
+     */
     public void put(char elem, int x, int y) {
         this.dungeon[x][y] = elem;
     }
 
+    /**
+     * The latest result of calling this class' generate() method.
+     */
     public char[][] dungeon;
 
     /**

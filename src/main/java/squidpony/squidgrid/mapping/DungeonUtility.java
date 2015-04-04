@@ -1,13 +1,26 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.squidmath.LightRNG;
+
 import java.awt.Point;
-import java.util.Random;
 
 /**
  * Created by Tommy Ettinger on 4/1/2015.
  */
 public class DungeonUtility {
-    public static Point randomFloor(char[][] map, Random rng)
+    /**
+     * The random number generator that will be used for all methods in this class with a random component. You can use
+     * the setState(long seed) method at any point to fix the seed/state of this RNG, or getState() if you want to store
+     * it for some reason (maybe serialization).
+     */
+    public static LightRNG rng = new LightRNG();
+    /**
+     * Finds a random java.awt.Point where the x and y match up to a [x][y] location on map that has '.' as a value.
+     * Uses this class' rng field for pseudo-random number generation.
+     * @param map
+     * @return a Point that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
+     */
+    public static Point randomFloor(char[][] map)
     {
         int width = map.length;
         int height = map[0].length;
@@ -45,6 +58,15 @@ public class DungeonUtility {
         return pt;
     }
 
+    /**
+     * Takes a char[][] dungeon map that uses '#' to represent walls, and returns a new char[][] that uses unicode box
+     * drawing characters to draw straight, continuous lines for walls, filling regions between walls (that were
+     * filled with more walls before) with space characters, ' '. If the lines "point the wrong way," such as having
+     * multiple horizontally adjacent vertical lines where there should be horizontal lines, call transposeLines() on
+     * the returned map, which will keep the dimensions of the map the same and only change the line chars.
+     * @param map
+     * @return
+     */
     public static char[][] hashesToLines(char[][] map)
     {
         int Width = map[0].length+2;
@@ -329,6 +351,14 @@ public class DungeonUtility {
         }
         return transposeLines(portion);
     }
+
+    /**
+     * If you call hashesToLines() on a map that uses [y][x] conventions instead of [x][y], it will have the lines not
+     * connect as you expect. Use this function to change the directions of the box-drawing characters only, without
+     * altering the dimensions in any way. This returns a new char[][], instead of modifying the parameter in place.
+     * @param map
+     * @return
+     */
     public static char[][] transposeLines(char[][] map)
     {
 
@@ -375,5 +405,81 @@ public class DungeonUtility {
             }
         }
         return portion;
+    }
+
+    /**
+     * Takes a dungeon map with either '#' as the only wall character or the unicode box drawing characters used by
+     * hashesToLines(), and returns a new char[][] dungeon map with two characters per cell, mostly filling the spaces
+     * next to non-walls with space characters, and only doing anything different if a box-drawing character would
+     * continue into an adjacent cell, or if a '#' wall needs another '#' wall next to it. The recommended approach is
+     * to keep both the original non-double-width map and the newly-returned double-width map, since the single-width
+     * maps can be used more easily for pathfinding. If you need to undo this function, call unDoubleWidth().
+     * @param map
+     * @return
+     */
+    public static char[][] doubleWidth(char[][] map)
+    {
+        int width = map.length;
+        int height = map[0].length;
+        char[][] paired = new char[width*2][height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0, px = 0; x < width; x++, px += 2)
+            {
+                paired[px][y] = map[x][y];
+                switch (paired[px][y])
+                {
+                    //                        case '┼ ├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─'
+                    case '┼':
+                    case '├':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '└':
+                    case '─':
+                        paired[px + 1][y] = '─';
+                        break;
+                    case '#':
+                        paired[px + 1][y] = '#';
+                        break;
+
+                    default:
+                        paired[px + 1][y] = ' ';
+                        break;
+                        /*
+                    case '.':
+                    case '┤':
+                    case '┐':
+                    case '┘':
+                    case '│':
+                         */
+                }
+            }
+        }
+        return paired;
+    }
+
+    /**
+     * Takes a dungeon map that uses two characters per cell, and condenses it to use only the left (lower index)
+     * character in each cell. This should (probably) only be called on the result of doubleWidth(), and will throw an
+     * exception if called on a map with an odd number of characters for width, such as "#...#" .
+     * @param map
+     * @return
+     */
+    public static char[][] unDoubleWidth(char[][] map)
+    {
+        int width = map.length;
+        int height = map[0].length;
+        if(width % 2 != 0)
+            throw new IllegalArgumentException("Argument must be a char[width][height] with an even width.");
+        char[][] unpaired = new char[width/2][height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0, px = 0; px < width; x++, px += 2)
+            {
+                unpaired[x][y] = map[px][y];
+            }
+        }
+        return unpaired;
     }
 }
