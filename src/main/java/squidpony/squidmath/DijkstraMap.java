@@ -1,0 +1,654 @@
+package squidpony.squidmath;
+
+import squidpony.squidgrid.Direction;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.*;
+
+/**
+ * An alternative to AStarSearch when you want to fully explore a search space, or when you want a gradient floodfill.
+ * If you can't remember how to spell this, just remember: Does It Just Know Stuff? That's Really Awesome!
+ * Created by Tommy Ettinger on 4/4/2015.
+ */
+public class DijkstraMap
+{
+    /**
+     * The type of heuristic to use.
+     */
+    public enum Measurement {
+
+        /**
+         * The distance it takes when only the four primary directions can be
+         * moved in. The default.
+         */
+        MANHATTAN,
+        /**
+         * The distance it takes when diagonal movement costs the same as
+         * cardinal movement.
+         */
+        CHEBYSHEV,
+        /**
+         * The distance it takes as the crow flies.
+         */
+        EUCLIDIAN
+    }
+    
+    public Measurement measurement = Measurement.MANHATTAN;
+
+
+    /**
+     * Stores which parts of the map are accessible and which are not. Should not be changed unless the actual physical
+     * terrain has changed. You should call initialize() with a new map instead of changing this directly.
+     */
+    public double[][] physicalMap;
+    /**
+     * The frequently-changing values that are often the point of using this class; goals will have a value of 0, and
+     * any cells that can have a character reach a goal in n steps will have a value of n. Cells that cannot be
+     * entered because they are solid will have a very high value equal to the WALL constant in this class, and cells
+     * that cannot be entered because they cannot reach a goal will have a different very high value equal to the
+     * DARK constant in this class.
+     */
+    public double[][] gradientMap;
+    /**
+     * Height of the map. Exciting stuff. Don't change this, instead call initialize().
+     */
+    public int height;
+    /**
+     * Width of the map. Exciting stuff. Don't change this, instead call initialize().
+     */
+    public int width;
+    /**
+     * The latest path that was obtained by calling findPath(). It will not contain the value passed as a starting
+     * cell; only steps that require movement will be included, and so if the path has not been found or a valid
+     * path toward a goal is impossible, this ArrayList will be empty.
+     */
+    public ArrayList<Point> path = new ArrayList<Point>();
+    /**
+     * Goals are always marked with 0.
+     */
+    public static final double GOAL = 0.0;
+    /**
+     * Floor cells, which include any walkable cell, are marked with a high number equal to 999500.0 .
+     */
+    public static final double FLOOR = 999200.0;
+    /**
+     * Walls, which are solid no-entry cells, are marked with a high number equal to 999300.0 .
+     */
+    public static final double WALL = 999500.0;
+    /**
+     * This is used to mark cells that the scan couldn't reach, and these dark cells are marked with a high number
+     * equal to 999100.0 .
+     */
+    public static final double DARK = 999800.0;
+    /**
+     * Goals that pathfinding will seek out. The Double value should almost always be 0.0 , the same as the static GOAL
+     * constant in this class.
+     */
+    public HashMap<Point, Double> goals;
+    private HashMap<Point, Double> fresh, closed, open, filled;
+    /**
+     * The RNG used to decide which one of multiple equally-short paths to take.
+     */
+    public LightRNG rng;
+    private static int frustration = 0;
+
+    private boolean initialized = false;
+    /**
+     * Construct a DijkstraMap without a level to actually scan. If you use this constructor, you must call an
+     * initialize() method before using this class.
+     */
+    public DijkstraMap() {
+        rng = new LightRNG();
+        path = new ArrayList<Point>();
+
+        goals = new HashMap<Point, Double>();
+        fresh = new HashMap<Point, Double>();
+        closed = new HashMap<Point, Double>();
+        open = new HashMap<Point, Double>();
+        filled = new HashMap<Point, Double>();
+    }
+
+    /**
+     * Used to construct a DijkstraMap from the output of another.
+     * @param level
+     */
+    public DijkstraMap(final double[][] level) {
+        rng = new LightRNG();
+        path = new ArrayList<Point>();
+
+        goals = new HashMap<Point, Double>();
+        fresh = new HashMap<Point, Double>();
+        closed = new HashMap<Point, Double>();
+        open = new HashMap<Point, Double>();
+        filled = new HashMap<Point, Double>();
+        initialize(level);
+    }
+    /**
+     * Used to construct a DijkstraMap from the output of another, specifying a distance calculation.
+     * @param level
+     * @param measurement
+     */
+    public DijkstraMap(final double[][] level, Measurement measurement) {
+        rng = new LightRNG();
+        this.measurement = measurement;
+        path = new ArrayList<Point>();
+
+        goals = new HashMap<Point, Double>();
+        fresh = new HashMap<Point, Double>();
+        closed = new HashMap<Point, Double>();
+        open = new HashMap<Point, Double>();
+        filled = new HashMap<Point, Double>();
+        initialize(level);
+    }
+
+    /**
+     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
+     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
+     * map that can be used here.
+     *
+     * @param level
+     */
+    public DijkstraMap(final char[][] level) {
+        rng = new LightRNG();
+        path = new ArrayList<Point>();
+
+        goals = new HashMap<Point, Double>();
+        fresh = new HashMap<Point, Double>();
+        closed = new HashMap<Point, Double>();
+        open = new HashMap<Point, Double>();
+        filled = new HashMap<Point, Double>();
+        initialize(level);
+    }
+    /**
+     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * char[][] where one char means a wall and anything else is a walkable tile. If you only have
+     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
+     * map that can be used here. You can specify the character used for walls.
+     *
+     * @param level
+     */
+    public DijkstraMap(final char[][] level, char alternateWall) {
+        rng = new LightRNG();
+        path = new ArrayList<Point>();
+
+        goals = new HashMap<Point, Double>();
+        fresh = new HashMap<Point, Double>();
+        closed = new HashMap<Point, Double>();
+        open = new HashMap<Point, Double>();
+        filled = new HashMap<Point, Double>();
+        initialize(level, alternateWall);
+    }
+
+    /**
+     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
+     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
+     * map that can be used here. This constructor specifies a distance measurement.
+     *
+     * @param level
+     * @param measurement
+     */
+    public DijkstraMap(final char[][] level, Measurement measurement) {
+        rng = new LightRNG();
+        path = new ArrayList<Point>();
+        this.measurement = measurement;
+
+        goals = new HashMap<Point, Double>();
+        fresh = new HashMap<Point, Double>();
+        closed = new HashMap<Point, Double>();
+        open = new HashMap<Point, Double>();
+        filled = new HashMap<Point, Double>();
+        initialize(level);
+    }
+
+    /**
+     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
+     * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
+     * @param level
+     * @return
+     */
+    public DijkstraMap initialize(final double[][] level) {
+        width = level.length;
+        height = level[0].length;
+        gradientMap = new double[width][height];
+        physicalMap = new double[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                gradientMap[x][y] = level[x][y];
+                physicalMap[x][y] = level[x][y];
+            }
+        }
+        initialized = true;
+        return this;
+    }
+
+    /**
+     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
+     * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
+     * @param level
+     * @return
+     */
+    public DijkstraMap initialize(final char[][] level) {
+        width = level.length;
+        height = level[0].length;
+        gradientMap = new double[width][height];
+        physicalMap = new double[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                double t = (level[x][y] == '#') ? WALL : FLOOR;
+                gradientMap[x][y] = t;
+                physicalMap[x][y] = t;
+            }
+        }
+        initialized = true;
+        return this;
+    }
+
+    /**
+     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
+     * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ). This
+     * initialize() method allows you to specify an alternate wall char other than the default character, '#' .
+     * @param level
+     * @param alternateWall
+     * @return
+     */
+    public DijkstraMap initialize(final char[][] level, char alternateWall) {
+        width = level.length;
+        height = level[0].length;
+        gradientMap = new double[width][height];
+        physicalMap = new double[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                double t = (level[x][y] == alternateWall) ? WALL : FLOOR;
+                gradientMap[x][y] = t;
+                physicalMap[x][y] = t;
+            }
+        }
+        initialized = true;
+        return this;
+    }
+
+    /**
+     * Resets the gradientMap to its original value from physicalMap.
+     */
+    public void resetMap() {
+            if(!initialized) return;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                gradientMap[x][y] = physicalMap[x][y];
+            }
+        }
+    }
+
+    /**
+     * Resets this DijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
+     * relative to physicalMap.
+     */
+    public void reset() {
+        resetMap();
+        goals.clear();
+        path.clear();
+        closed.clear();
+        fresh.clear();
+        open.clear();
+        frustration = 0;
+    }
+
+    /**
+     * Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).
+     * @param x
+     * @param y
+     */
+    public void setGoal(int x, int y) {
+        if(!initialized) return;
+        if (physicalMap[x][y] > FLOOR) {
+            return;
+        }
+
+        goals.put(new Point(x, y), GOAL);
+    }
+
+    /**
+     * Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).
+     * @param pt
+     */
+    public void setGoal(Point pt) {
+        if(!initialized) return;
+        if (physicalMap[pt.x][pt.y] > FLOOR) {
+            return;
+        }
+
+        goals.put(pt, GOAL);
+    }
+
+    /**
+     * Marks a specific cell in gradientMap as completely impossible to enter.
+     * @param x
+     * @param y
+     */
+    public void setOccupied(int x, int y) {
+        if(!initialized) return;
+        gradientMap[x][y] = WALL;
+    }
+
+    /**
+     * Reverts a cell to the value stored in the original state of the level as known by physicalMap.
+     * @param x
+     * @param y
+     */
+    public void resetCell(int x, int y) {
+        if(!initialized) return;
+        gradientMap[x][y] = physicalMap[x][y];
+    }
+
+    /**
+     * Reverts a cell to the value stored in the original state of the level as known by physicalMap.
+     * @param pt
+     */
+    public void resetCell(Point pt) {
+        if(!initialized) return;
+        gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
+    }
+
+    /**
+     * Used to remove all goals and undo any changes to gradientMap made by having a goal present.
+     */
+    public void clearGoals() {
+        if(!initialized) return;
+        for (Map.Entry<Point, Double> entry : goals.entrySet()) {
+            resetCell(entry.getKey());
+        }
+        goals.clear();
+    }
+
+    protected void setFresh(int x, int y, double counter) {
+        if(!initialized) return;
+        gradientMap[x][y] = counter;
+        fresh.put(new Point(x, y), counter);
+    }
+
+    protected void setFresh(final Point pt, double counter) {
+        if(!initialized) return;
+        gradientMap[pt.x][pt.y] = counter;
+        fresh.put(pt, counter);
+    }
+
+    /**
+     * Recalculate the Dijkstra map and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls).
+     *
+     * @param impassable A Map of Position keys to any values (values will be ignored). Positions should be
+     *                 those of enemies or other moving obstacles to a path that cannot be moved through.
+     * @return A 2D int[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] scan(Set<Point> impassable) {
+        if(!initialized) return null;
+        if(impassable == null)
+            impassable = new HashSet<Point>();
+        HashMap<Point, Double> blocking = new HashMap<Point, Double>(impassable.size());
+        for (Point pt : impassable) {
+            blocking.put(pt, WALL);
+        }
+        closed.putAll(blocking);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (gradientMap[x][y] > FLOOR)
+                    closed.put(new Point(x, y), physicalMap[x][y]);
+            }
+        }
+        for (Map.Entry<Point, Double> entry : goals.entrySet()) {
+            if (closed.containsKey(entry.getKey()))
+                closed.remove(entry.getKey());
+            gradientMap[entry.getKey().x][entry.getKey().y] = GOAL;
+        }
+        int numAssigned = goals.size();
+        open.putAll(goals);
+        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        while (numAssigned > 0) {
+//            ++iter;
+            numAssigned = 0;
+
+            for (Map.Entry<Point, Double> cell : open.entrySet()) {
+                for (int d = 0; d < dirs.length; d++) {
+                    Point adj = new Point(cell.getKey());
+                    adj.translate(dirs[d].deltaX, dirs[d].deltaY);
+                    double h = heuristic(dirs[d]);
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
+                        setFresh(adj, cell.getValue() + h);
+                        ++numAssigned;
+                    }
+                }
+            }
+            closed.putAll(open);
+            open = new HashMap<Point, Double>(fresh);
+            fresh.clear();
+        }
+        closed.clear();
+        open.clear();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+        }
+
+        return gradientMap;
+    }
+
+    /**
+     * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
+     * of Point positions (using Manhattan distance) needed to get closer to the closest reachable
+     * goal. The maximum length of the returned list is given by length; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     *
+     * @param length
+     * @param impassable
+     * @param onlyPassable
+     * @param start
+     * @param targets
+     * @return
+     */
+    public ArrayList<Point> findPath(int length, Set<Point> impassable,
+                                     Set<Point> onlyPassable, Point start, Point... targets) {
+        if(!initialized) return null;
+        path = new ArrayList<Point>();
+        if(impassable == null)
+            impassable = new HashSet<Point>();
+        if(onlyPassable == null)
+            onlyPassable = new HashSet<Point>();
+
+        resetMap();
+        for (Point goal : targets) {
+            setGoal(goal.x, goal.y);
+        }
+        scan(impassable);
+        Point currentPos = start;
+        while (true) {
+            if (frustration > 500) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            double best = 999000;
+            Direction[] dirs = shuffle((measurement == Measurement.MANHATTAN)
+                    ? Direction.CARDINALS : Direction.OUTWARDS);
+            int choice = rng.nextInt(dirs.length);
+
+            for (int d = 0; d < dirs.length; d++) {
+                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best) {
+                    best = gradientMap[pt.x][pt.y];
+                    choice = d;
+                }
+            }
+            if (best >= 999000) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            currentPos.y += dirs[choice].deltaY;
+            currentPos.x += dirs[choice].deltaX;
+            path.add(new Point(currentPos.x, currentPos.y));
+            frustration++;
+            if (path.size() >= length) {
+                if (onlyPassable.contains(currentPos)) {
+
+                    closed.put(currentPos, WALL);
+                    filled.put(currentPos, WALL);
+                    scan(impassable);
+                    return findPath(length, impassable, onlyPassable, start, targets);
+                }
+                break;
+            }
+            if(gradientMap[currentPos.x][currentPos.y] == 0)
+                break;
+        }
+        frustration = 0;
+        clearGoals();
+        filled.clear();
+        return path;
+    }
+    /**
+     * Scans the dungeon using Dijkstra.scan with the listed fearSources and start point, and returns a list
+     * of Point positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+     * for running away. The maximum length of the returned list is given by length; if moving the full
+     * length of the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+     *
+     * @param length
+     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
+     * @param impassable
+     * @param onlyPassable
+     * @param start
+     * @param fearSources
+     * @return
+     */
+    public ArrayList<Point> findFleePath(int length, double preferLongerPaths, Set<Point> impassable,
+                                     Set<Point> onlyPassable, Point start, Point... fearSources) {
+        if(!initialized) return null;
+        path = new ArrayList<Point>();
+        if(impassable == null)
+            impassable = new HashSet<Point>();
+        if(onlyPassable == null)
+            onlyPassable = new HashSet<Point>();
+
+        resetMap();
+        for (Point goal : fearSources) {
+            setGoal(goal.x, goal.y);
+        }
+        scan(impassable);
+        for(int x = 0; x < gradientMap.length; x++)
+        {
+            for(int y = 0; y < gradientMap[x].length; y++)
+            {
+                gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : - preferLongerPaths;
+            }
+        }
+        Point currentPos = start;
+        while (true) {
+            if (frustration > 500) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            double best = 999000;
+            Direction[] dirs = shuffle((measurement == Measurement.MANHATTAN)
+                    ? Direction.CARDINALS : Direction.OUTWARDS);
+            int choice = rng.nextInt(dirs.length);
+
+            for (int d = 0; d < dirs.length; d++) {
+                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best) {
+                    best = gradientMap[pt.x][pt.y];
+                    choice = d;
+                }
+            }
+            if (best >= 999000) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            currentPos.y += dirs[choice].deltaY;
+            currentPos.x += dirs[choice].deltaX;
+            if(path.contains(currentPos))
+                break;
+            path.add(new Point(currentPos.x, currentPos.y));
+            frustration++;
+            if (path.size() >= length) {
+                if (onlyPassable.contains(currentPos)) {
+
+                    closed.put(currentPos, WALL);
+                    filled.put(currentPos, WALL);
+                    resetMap();
+                    for (Point goal : fearSources) {
+                        setGoal(goal.x, goal.y);
+                    }
+                    scan(impassable);
+                    for(int x = 0; x < gradientMap.length; x++)
+                    {
+                        for(int y = 0; y < gradientMap[x].length; y++)
+                        {
+                            gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : - preferLongerPaths;
+                        }
+                    }
+                    return findFleePath(length, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+                }
+                break;
+            }
+        }
+        frustration = 0;
+        clearGoals();
+        filled.clear();
+        return path;
+    }
+
+    /**
+     * Everybody do the Fisher-Yates Shuffle, come on.
+     * @param dirs
+     * @return
+     */
+    private Direction[] shuffle(Direction[] dirs)
+    {
+        Direction[] array = dirs.clone();
+        int n = array.length;
+        for (int i = 0; i < n; i++)
+        {
+            int r = i + (int)(rng.nextDouble() * (n - i));
+            Direction d = array[r];
+            array[r] = array[i];
+            array[i] = d;
+        }
+        return array;
+    }
+    private double heuristic(Direction target) {
+        switch (measurement) {
+            case MANHATTAN:
+            case CHEBYSHEV:
+                return 1.0;
+            case EUCLIDIAN:
+                int xDist = target.deltaX;
+                xDist *= xDist;
+                int yDist = target.deltaY;
+                yDist *= yDist;
+                return Math.sqrt(xDist + yDist);
+        }
+        return 1.0;
+    }
+}

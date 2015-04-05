@@ -41,8 +41,8 @@ public class AStarSearch {
          * Full space search. Least efficient but guaranteed to return a path if
          * one exists.
          */
-        DJIKSTRA
-    };
+        DIJKSTRA
+    }
 
     private final double[][] map;
     private final HashSet<Point> open = new HashSet<>();
@@ -97,7 +97,7 @@ public class AStarSearch {
                 break;
             case CHEBYSHEV:
             case EUCLIDIAN:
-            case DJIKSTRA:
+            case DIJKSTRA:
             default:
                 dirs = Direction.OUTWARDS;
                 break;
@@ -200,7 +200,7 @@ public class AStarSearch {
                 int yDist = Math.abs(y - target.y);
                 yDist *= yDist;
                 return Math.sqrt(xDist + yDist);
-            case DJIKSTRA:
+            case DIJKSTRA:
             default:
                 return 0;
 
