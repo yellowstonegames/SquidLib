@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.squidgrid.Direction;
 
 import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Point2D;
 import java.util.*;
 
@@ -400,19 +401,32 @@ public class DijkstraMap
         }
         closed.putAll(blocking);
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] > FLOOR)
-                    closed.put(new Point(x, y), physicalMap[x][y]);
-            }
-        }
         for (Map.Entry<Point, Double> entry : goals.entrySet()) {
             if (closed.containsKey(entry.getKey()))
                 closed.remove(entry.getKey());
             gradientMap[entry.getKey().x][entry.getKey().y] = GOAL;
         }
-        int numAssigned = goals.size();
-        open.putAll(goals);
+        double currentLowest = 999000;
+        HashMap<Point, Double> lowest = new HashMap<Point, Double>();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(new Point(x, y)))
+                    closed.put(new Point(x, y), physicalMap[x][y]);
+                else if(gradientMap[x][y] < currentLowest)
+                {
+                    currentLowest = gradientMap[x][y];
+                    lowest.clear();
+                    lowest.put(new Point(x, y), currentLowest);
+                }
+                else if(gradientMap[x][y] == currentLowest)
+                {
+                    lowest.put(new Point(x, y), currentLowest);
+                }
+            }
+        }
+        int numAssigned = lowest.size();
+        open.putAll(lowest);
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (numAssigned > 0) {
 //            ++iter;
@@ -478,7 +492,7 @@ public class DijkstraMap
             setGoal(goal.x, goal.y);
         }
         scan(impassable);
-        Point currentPos = start;
+        Point currentPos = new Point(start);
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Point>();
@@ -563,7 +577,8 @@ public class DijkstraMap
                 gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : - preferLongerPaths;
             }
         }
-        Point currentPos = start;
+        scan(impassable);
+        Point currentPos = new Point(start);
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Point>();
@@ -587,8 +602,11 @@ public class DijkstraMap
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
-            if(path.contains(currentPos))
-                break;
+            if(path.size() > 0) {
+                Point last = path.get(path.size() - 1);
+                if (gradientMap[last.x][last.y] <= gradientMap[currentPos.x][currentPos.y])
+                    break;
+            }
             path.add(new Point(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= length) {
