@@ -70,16 +70,16 @@ public class DijkstraMap
      */
     public static final double GOAL = 0.0;
     /**
-     * Floor cells, which include any walkable cell, are marked with a high number equal to 999500.0 .
+     * Floor cells, which include any walkable cell, are marked with a high number equal to 999200.0 .
      */
     public static final double FLOOR = 999200.0;
     /**
-     * Walls, which are solid no-entry cells, are marked with a high number equal to 999300.0 .
+     * Walls, which are solid no-entry cells, are marked with a high number equal to 999500.0 .
      */
     public static final double WALL = 999500.0;
     /**
      * This is used to mark cells that the scan couldn't reach, and these dark cells are marked with a high number
-     * equal to 999100.0 .
+     * equal to 999800.0 .
      */
     public static final double DARK = 999800.0;
     /**
@@ -275,7 +275,7 @@ public class DijkstraMap
     }
 
     /**
-     * Resets the gradientMap to its original value from physicalMap.
+     * Resets the spillMap to its original value from physicalMap.
      */
     public void resetMap() {
             if(!initialized) return;
@@ -287,7 +287,7 @@ public class DijkstraMap
     }
 
     /**
-     * Resets this DijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
+     * Resets this DijkstraMap to a state with no goals, no discovered path, and no changes made to spillMap
      * relative to physicalMap.
      */
     public void reset() {
@@ -328,7 +328,7 @@ public class DijkstraMap
     }
 
     /**
-     * Marks a specific cell in gradientMap as completely impossible to enter.
+     * Marks a specific cell in spillMap as completely impossible to enter.
      * @param x
      * @param y
      */
@@ -357,7 +357,7 @@ public class DijkstraMap
     }
 
     /**
-     * Used to remove all goals and undo any changes to gradientMap made by having a goal present.
+     * Used to remove all goals and undo any changes to spillMap made by having a goal present.
      */
     public void clearGoals() {
         if(!initialized) return;
@@ -387,9 +387,9 @@ public class DijkstraMap
      * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
      * these areas should not be used to place NPCs or items and should be filled with walls).
      *
-     * @param impassable A Map of Position keys to any values (values will be ignored). Positions should be
-     *                 those of enemies or other moving obstacles to a path that cannot be moved through.
-     * @return A 2D int[width][height] using the width and height of what this knows about the physical map.
+     * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
     public double[][] scan(Set<Point> impassable) {
         if(!initialized) return null;
@@ -655,17 +655,22 @@ public class DijkstraMap
         }
         return array;
     }
+    private static final double root2 = Math.sqrt(2.0);
     private double heuristic(Direction target) {
         switch (measurement) {
             case MANHATTAN:
             case CHEBYSHEV:
                 return 1.0;
             case EUCLIDIAN:
-                int xDist = target.deltaX;
-                xDist *= xDist;
-                int yDist = target.deltaY;
-                yDist *= yDist;
-                return Math.sqrt(xDist + yDist);
+                switch (target) {
+                    case DOWN_LEFT:
+                    case DOWN_RIGHT:
+                    case UP_LEFT:
+                    case UP_RIGHT:
+                        return root2;
+                    default:
+                        return  1.0;
+                }
         }
         return 1.0;
     }

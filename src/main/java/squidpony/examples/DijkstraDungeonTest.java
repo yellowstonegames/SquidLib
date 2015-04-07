@@ -16,15 +16,15 @@ public class DijkstraDungeonTest {
         for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {
             LightRNG rng = new LightRNG(0x1337deadbeefc000l);
             DungeonUtility.rng = rng;
-            DungeonGen bg = new DungeonGen(rng);
+            DungeonGen dg = new DungeonGen(rng);
 
-            bg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            bg.wallWrap();
+            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
+            dg.wallWrap();
 
-            char[][] dun = bg.getDungeon();
+            char[][] dun = dg.getDungeon();
             DijkstraMap dijkstra = new DijkstraMap(dun, m);
 
-            System.out.println(bg);
+            System.out.println(dg);
 
             Point entry = DungeonUtility.randomFloor(dun), goal1 = DungeonUtility.randomFloor(dun),
                     goal2 = DungeonUtility.randomFloor(dun), goal3 = DungeonUtility.randomFloor(dun);
@@ -49,20 +49,20 @@ public class DijkstraDungeonTest {
             for (Point pt : dijkstra.path) {
                 md[pt.x * 2][pt.y] = ("" + (i++ % 10)).charAt(0);
             }
-            bg.setDungeon(md);
-            System.out.println(bg);
+            dg.setDungeon(md);
+            System.out.println(dg);
 
 
             rng.setState(0x1337deadbeefc000l);
             DungeonUtility.rng = rng;
 
-            bg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            bg.wallWrap();
+            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
+            dg.wallWrap();
 
-            dun = bg.getDungeon();
+            dun = dg.getDungeon();
             dijkstra.initialize(dun);
 
-            System.out.println(bg);
+            System.out.println(dg);
 
             entry = DungeonUtility.randomFloor(dun);
             goal1 = DungeonUtility.randomFloor(dun);
@@ -90,8 +90,8 @@ public class DijkstraDungeonTest {
             for (Point pt : dijkstra.path) {
                 md[pt.x * 2][pt.y] = ("" + (i++ % 10)).charAt(0);
             }
-            bg.setDungeon(md);
-            System.out.println(bg);
+            dg.setDungeon(md);
+            System.out.println(dg);
 
             System.out.println();
 

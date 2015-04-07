@@ -58,12 +58,16 @@ public class LightRNG implements RandomnessSource
 
     public int nextInt( final int n ) {
         if ( n <= 0 ) throw new IllegalArgumentException();
-        return (int)( ( nextLong() >>> 1 ) % n );
+        for(;;) {
+            final int bits = nextInt();
+            final int value = bits % n;
+            if ( bits - value + ( n - 1 ) >= 0 ) return value;
+        }
     }
 
     public int nextInt( final int lower, final int upper ) {
         if ( upper - lower <= 0 ) throw new IllegalArgumentException();
-        return lower + (int)( ( nextLong() >>> 1 ) % (upper - lower) );
+        return lower + nextInt(upper - lower);
     }
 
     public long nextLong( final long n ) {
@@ -75,10 +79,27 @@ public class LightRNG implements RandomnessSource
         }
     }
 
+    /**
+     * Gets a uniform random double in the range [0.0,1.0)
+     * @return
+     */
     public double nextDouble() {
         return ( nextLong() & DOUBLE_MASK ) * NORM_53;
     }
 
+    /**
+     * Gets a uniform random double in the range [0.0,upper) given the parameter upper.
+     * @param upper
+     * @return
+     */
+    public double nextDouble(final double upper) {
+        return nextDouble() * upper;
+    }
+
+    /**
+     * Gets a uniform random float in the range [0.0,1.0)
+     * @return
+     */
     public float nextFloat() {
         return (float)( ( nextLong() & FLOAT_MASK ) * NORM_24 );
     }
