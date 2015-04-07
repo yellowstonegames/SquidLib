@@ -1,0 +1,55 @@
+package squidpony.examples;
+
+import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.styled.DungeonGen;
+import squidpony.squidgrid.mapping.styled.TilesetType;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.Spill;
+
+import java.awt.Point;
+import java.util.ArrayList;
+
+/**
+ * A test for the randomized flood-fill in the Spill class. This runs the Spill twice from the same starting position,
+ * which turns out to yield better results with Chebyshev and Euclidian measurements.
+ * Created by Tommy Ettinger on 4/7/2015.
+ */
+public class SpillTest {
+
+    public static void main(String[] args) {
+        for (Spill.Measurement m : Spill.Measurement.values()) {
+            LightRNG rng = new LightRNG(0x1337deadbeefc000l);
+            DungeonUtility.rng = rng;
+            DungeonGen dg = new DungeonGen(rng);
+
+            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
+            dg.wallWrap();
+
+            char[][] dun = dg.getDungeon();
+            Spill spreader = new Spill(dun, m);
+
+            System.out.println(dg);
+
+            Point entry = DungeonUtility.randomFloor(dun);
+            ArrayList<Point> ordered = spreader.start(entry, 20, null);
+            ordered.addAll(spreader.start(entry, 35, null));
+            boolean[][] sm = spreader.spillMap;
+            char[][] md = dun.clone(),
+                    hl = DungeonUtility.hashesToLines(dun);
+            for (int x = 0; x < md.length; x++) {
+                for (int y = 0; y < md[x].length; y++) {
+                    char t;
+                    if (sm[x][y])
+                        t = '~';
+                    else
+                        t = hl[x][y];
+                    md[x][y] = t;
+                }
+            }
+            dg.setDungeon(md);
+            System.out.println(dg);
+
+            System.out.println();
+        }
+    }
+}
