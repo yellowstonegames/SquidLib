@@ -8,6 +8,7 @@ import squidpony.squidmath.Spill;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * A test for the randomized flood-fill in the Spill class. This runs the Spill twice from the same starting position,
@@ -31,8 +32,13 @@ public class SpillTest {
             System.out.println(dg);
 
             Point entry = DungeonUtility.randomFloor(dun);
-            ArrayList<Point> ordered = spreader.start(entry, 20, null);
-            ordered.addAll(spreader.start(entry, 35, null));
+            HashSet<Point> impassable = new HashSet<Point>();
+            impassable.add(new Point(entry.x + 2, entry.y));
+            impassable.add(new Point(entry.x - 2, entry.y));
+            impassable.add(new Point(entry.x, entry.y + 2));
+            impassable.add(new Point(entry.x, entry.y - 2));
+            ArrayList<Point> ordered = spreader.start(entry, 20, impassable);
+            ordered.addAll(spreader.start(entry, 35, impassable));
             boolean[][] sm = spreader.spillMap;
             char[][] md = dun.clone(),
                     hl = DungeonUtility.hashesToLines(dun);
@@ -46,6 +52,7 @@ public class SpillTest {
                     md[x][y] = t;
                 }
             }
+            md[entry.x][entry.y] = '@';
             dg.setDungeon(md);
             System.out.println(dg);
 
