@@ -287,7 +287,7 @@ public class Spill {
         {
             for(int y = 0; y < spillMap[x].length; y++, temp.y = y)
             {
-                if(spillMap[x][y])
+                if(spillMap[x][y] && !impassable.contains(temp))
                     fresh.add(new Point(temp));
             }
         }
@@ -301,7 +301,7 @@ public class Spill {
                 Point adj = new Point(cell);
                 adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                 double h = heuristic(dirs[d]);
-                if (physicalMap[adj.x][adj.y] && !spillMap[adj.x][adj.y] && rng.nextDouble() <= 1.0 / h) {
+                if (physicalMap[adj.x][adj.y] && !spillMap[adj.x][adj.y] && !impassable.contains(adj) && rng.nextDouble() <= 1.0 / h) {
                     setFresh(adj);
                 }
             }
