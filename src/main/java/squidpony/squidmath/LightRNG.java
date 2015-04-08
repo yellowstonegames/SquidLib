@@ -44,6 +44,10 @@ public class LightRNG implements RandomnessSource
         return (int)( nextLong() & ( 1L << bits ) - 1 );
     }
 
+    /**
+     * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
+     * @return
+     */
     public long nextLong() {
         long z = ( state += 0x9E3779B97F4A7C15l );
         z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9l;
@@ -52,10 +56,19 @@ public class LightRNG implements RandomnessSource
 
     }
 
+    /**
+     * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.
+     * @return
+     */
     public int nextInt() {
         return (int)nextLong();
     }
 
+    /**
+     * Exclusive on the upper bound n.  The lower bound is 0.
+     * @param n
+     * @return
+     */
     public int nextInt( final int n ) {
         if ( n <= 0 ) throw new IllegalArgumentException();
         for(;;) {
@@ -65,11 +78,22 @@ public class LightRNG implements RandomnessSource
         }
     }
 
+    /**
+     * Inclusive lower, exclusive upper.
+     * @param lower
+     * @param upper
+     * @return
+     */
     public int nextInt( final int lower, final int upper ) {
         if ( upper - lower <= 0 ) throw new IllegalArgumentException();
         return lower + nextInt(upper - lower);
     }
 
+    /**
+     * Exclusive on the upper bound n. The lower bound is 0.
+     * @param n
+     * @return
+     */
     public long nextLong( final long n ) {
         if ( n <= 0 ) throw new IllegalArgumentException();
         for(;;) {

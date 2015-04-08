@@ -271,8 +271,8 @@ public class Spill {
      * @param volume The total number of cells to attempt to fill, which must be non-negative.
      * @param impassable A Set of Position keys representing the locations of moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
-     * @return An ArrayList of Points that this will enter, in order from entry at 0 onward, until it reaches its
-     * volume or fills its boundaries completely.
+     * @return An ArrayList of Points that this will enter, in order starting with entry at index 0, until it
+     * reaches its volume or fills its boundaries completely.
      */
     public ArrayList<Point> start(Point entry, int volume, Set<Point> impassable) {
         if(!initialized) return null;
