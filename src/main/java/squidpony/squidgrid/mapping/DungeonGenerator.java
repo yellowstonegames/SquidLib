@@ -7,6 +7,7 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.Spill;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -287,9 +288,11 @@ public class DungeonGenerator {
             {
                 floors.removeAll(obstacles);
                 Point entry = (Point) floors.toArray()[rng.nextInt(floors.size())];
-                spill.start(entry, volumes[i] / 3, obstacles);
-                spill.start(entry, 2 * volumes[i] / 3, obstacles);
+//                spill.start(entry, volumes[i] / 3, obstacles);
+//                spill.start(entry, 2 * volumes[i] / 3, obstacles);
                 HashSet<Point> ordered = new HashSet<Point>(spill.start(entry, volumes[i], obstacles));
+                floors.removeAll(ordered);
+                hazards.removeAll(ordered);
                 obstacles.addAll(ordered);
 
                 if(spill.filled <= volumes[i])
@@ -308,13 +311,13 @@ public class DungeonGenerator {
             while (bonusVolume > 0 && frustration < 50)
             {
                 Point entry = DungeonUtility.randomFloor(map);
-
-                for(Point p : spill.start(entry, bonusVolume, obstacles))
+                ArrayList<Point> finisher = spill.start(entry, bonusVolume, obstacles);
+                for(Point p : finisher)
                 {
                     map[p.x][p.y] = '~';
                 }
                 bonusVolume -= spill.filled;
-
+                hazards.removeAll(finisher);
                 frustration++;
             }
         }
