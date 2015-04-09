@@ -73,13 +73,14 @@ import squidpony.squidgrid.mapping.styled.TilesetType;
 public class DungeonGeneratorTest {
     public static void main( String[] args )
     {
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(60, 60);
+        DungeonGenerator dungeonGenerator = new DungeonGenerator(120, 60);
         dungeonGenerator.addDoors(15, true);
-        dungeonGenerator.addWater(40);
+        dungeonGenerator.addWater(25);
         dungeonGenerator.addTraps(2);
         dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
 
-        dungeonGenerator.setDungeon(DungeonUtility.hashesToLines(dungeonGenerator.getDungeon()));
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(dungeonGenerator.getDungeon())));
         System.out.println(dungeonGenerator.toString());
     }
 }
