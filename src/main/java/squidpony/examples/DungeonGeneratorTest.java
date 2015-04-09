@@ -73,11 +73,10 @@ public class DungeonGeneratorTest {
     public static void main( String[] args )
     {
         DungeonGenerator dungeonGenerator = new DungeonGenerator(60, 60);
-        dungeonGenerator.AddDoors(30, true);
-        dungeonGenerator.AddWater(20);
+        dungeonGenerator.AddDoors(20, true);
+        dungeonGenerator.AddWater(70);
         dungeonGenerator.AddTraps(2);
         dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
         System.out.println(dungeonGenerator.toString());
-
     }
 }

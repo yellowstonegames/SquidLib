@@ -7,6 +7,7 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.Spill;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -45,7 +46,10 @@ public class DungeonGenerator {
     }
 
     /**
-     * Turns the given percentage of floor cells into water cells, represented by '~'.
+     * Turns the given percentage of floor cells into water cells, represented by '~'. Water will be clustered into
+     * a random number of pools, with more appearing if needed to fill the percentage. Each pool will have randomized
+     * volume that should fill or get very close to filling the requested percentage, unless the pools encounter too
+     * much tight space. If this DungeonGenerator previously had AddWater called, the latest call will take precedence.
      * @param percentage
      * @return
      */
@@ -59,7 +63,8 @@ public class DungeonGenerator {
     }
     /**
      * Turns the given percentage of viable doorways into doors, represented by '+'. If doubleDoors is true,
-     * 2-cell-wide openings will be considered viable doorways and may receive a door in each cell.
+     * 2-cell-wide openings will be considered viable doorways and may receive a door in each cell. If this
+     * DungeonGenerator previously had AddDoors called, the latest call will take precedence.
      * @param percentage
      * @param doubleDoors
      * @return
@@ -74,10 +79,20 @@ public class DungeonGenerator {
         return this;
     }
 
+    /**
+     * Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.
+     * @return
+     */
+    public DungeonGenerator ClearEffects()
+    {
+        fx.clear();
+        return this;
+    }
 
     /**
      * Turns the given percentage of open area floor cells into trap cells, represented by '^'. Corridors that have no
-     * possible way to move around a trap will not receive traps, ever.
+     * possible way to move around a trap will not receive traps, ever. If this DungeonGenerator previously had
+     * AddTraps called, the latest call will take precedence.
      * @param percentage
      * @return
      */
@@ -201,11 +216,39 @@ public class DungeonGenerator {
         }
 
         doorways = viableDoorways(doubleDoors, map);
+
+        HashSet<Point> obstacles = new HashSet<Point>(doorways.size() * doorFill / 100);
+        if(doorFill > 0)
+        {
+            int total = doorways.size() * doorFill / 100;
+
+            BigLoop:
+            for(int i = 0; i < total; i++)
+            {
+                Point entry = (Point) doorways.toArray()[rng.nextInt(doorways.size())];
+                map[entry.x][entry.y] = '+';
+                obstacles.add(new Point(entry));
+                Point[] adj = new Point[]{new Point(entry.x + 1, entry.y), new Point(entry.x - 1, entry.y),
+                        new Point(entry.x, entry.y + 1), new Point(entry.x, entry.y - 1)};
+                for(Point near : adj) {
+                    if (doorways.contains(near)) {
+                        map[near.x][near.y] = '+';
+                        obstacles.add(new Point(near));
+                        doorways.remove(near);
+                        i++;
+                        doorways.remove(entry);
+                        continue BigLoop;
+                    }
+                }
+                doorways.remove(entry);
+            }
+        }
+
         for(int x = 1; x < map.length - 1; x++, temp.x = x)
         {
             for(int y = 1; y < map[x].length - 1; y++, temp.y = y)
             {
-                if(map[x][y] == '.')
+                if(map[x][y] == '.' && !obstacles.contains(temp))
                 {
                     floors.add(new Point(x, y));
                     int ctr = 0;
@@ -221,35 +264,9 @@ public class DungeonGenerator {
                 }
             }
         }
-
-
-        if(doorFill > 0)
-        {
-            int total = doorways.size() * doorFill / 100;
-
-            BigLoop:
-            for(int i = 0; i < total; i++)
-            {
-                Point entry = (Point) doorways.toArray()[rng.nextInt(doorways.size())];
-                map[entry.x][entry.y] = '+';
-                Point[] adj = new Point[]{new Point(entry.x + 1, entry.y), new Point(entry.x - 1, entry.y),
-                        new Point(entry.x, entry.y + 1), new Point(entry.x, entry.y - 1)};
-                for(Point near : adj) {
-                    if (doorways.contains(near)) {
-                        map[near.x][near.y] = '+';
-                        doorways.remove(near);
-                        i++;
-                        doorways.remove(entry);
-                        continue BigLoop;
-                    }
-                }
-                doorways.remove(entry);
-            }
-        }
-
         if(waterFill > 0)
         {
-            int numPools = rng.nextInt(2, 6);
+            int numPools = rng.nextInt(2, 6) + waterFill / 20;
             int[] volumes = new int[numPools];
             int total = floors.size() * waterFill / 100;
             int error = 0;
@@ -265,19 +282,40 @@ public class DungeonGenerator {
                 volumes[(i + 1) % numPools] -= r;
             }
             Spill spill = new Spill(map, Spill.Measurement.MANHATTAN);
-
+            int bonusVolume = 0;
             for(int i = 0; i < numPools; i++)
             {
+                floors.removeAll(obstacles);
                 Point entry = (Point) floors.toArray()[rng.nextInt(floors.size())];
-                spill.start(entry, volumes[i] / 3, null);
-                spill.start(entry, 2 * volumes[i] / 3, null);
-                spill.start(entry, volumes[i], null);
+                spill.start(entry, volumes[i] / 3, obstacles);
+                spill.start(entry, 2 * volumes[i] / 3, obstacles);
+                HashSet<Point> ordered = new HashSet<Point>(spill.start(entry, volumes[i], obstacles));
+                obstacles.addAll(ordered);
+
+                if(spill.filled <= volumes[i])
+                {
+                    bonusVolume += volumes[i] - spill.filled;
+                }
+
             }
             for(int x = 1; x < map.length - 1; x++) {
                 for (int y = 1; y < map[x].length - 1; y++) {
                     if(spill.spillMap[x][y])
                         map[x][y] = '~';
                 }
+            }
+            int frustration = 0;
+            while (bonusVolume > 0 && frustration < 50)
+            {
+                Point entry = DungeonUtility.randomFloor(map);
+
+                for(Point p : spill.start(entry, bonusVolume, obstacles))
+                {
+                    map[p.x][p.y] = '~';
+                }
+                bonusVolume -= spill.filled;
+
+                frustration++;
             }
         }
 
