@@ -57,6 +57,11 @@ public class Spill {
      * Width of the map. Exciting stuff. Don't change this, instead call initialize().
      */
     public int width;
+    /**
+     * The amount of cells filled by this Spill, which may be less than the volume passed to start() if the boundaries
+     * are reached on all sides and the Spill has no more room to fill.
+     */
+    public int filled = 0;
     private HashSet<Point> fresh;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
@@ -307,7 +312,7 @@ public class Spill {
             }
             fresh.remove(cell);
         }
-
+        filled = spreadPattern.size();
         return spreadPattern;
     }
 
