@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import squidpony.squidgrid.mapping.DungeonGenerator;
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 
 /**
@@ -73,10 +74,12 @@ public class DungeonGeneratorTest {
     public static void main( String[] args )
     {
         DungeonGenerator dungeonGenerator = new DungeonGenerator(60, 60);
-        dungeonGenerator.AddDoors(20, true);
-        dungeonGenerator.AddWater(70);
-        dungeonGenerator.AddTraps(2);
+        dungeonGenerator.addDoors(15, true);
+        dungeonGenerator.addWater(40);
+        dungeonGenerator.addTraps(2);
         dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+
+        dungeonGenerator.setDungeon(DungeonUtility.hashesToLines(dungeonGenerator.getDungeon()));
         System.out.println(dungeonGenerator.toString());
     }
 }

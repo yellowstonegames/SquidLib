@@ -28,7 +28,35 @@ public class DungeonGenerator {
     private DungeonGen gen;
     private int height, width;
     public LightRNG rng;
-    public char[][] dungeon = null;
+
+    private char[][] dungeon = null;
+
+    public char[][] getDungeon() {
+        return dungeon;
+    }
+
+    public void setDungeon(char[][] dungeon) {
+        this.dungeon = dungeon;
+        if(dungeon == null)
+        {
+            width = 0;
+            height = 0;
+            return;
+        }
+        width = dungeon.length;
+        if(width > 0)
+            height = dungeon[0].length;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+
     public DungeonGenerator()
     {
         rng = new LightRNG();
@@ -45,16 +73,24 @@ public class DungeonGenerator {
         this.width = width;
         fx = new HashMap<FillEffect, Integer>();
     }
+    public DungeonGenerator(int height, int width, LightRNG rng)
+    {
+        this.rng = rng;
+        gen = new DungeonGen(rng);
+        this.height = height;
+        this.width = width;
+        fx = new HashMap<FillEffect, Integer>();
+    }
 
     /**
      * Turns the given percentage of floor cells into water cells, represented by '~'. Water will be clustered into
      * a random number of pools, with more appearing if needed to fill the percentage. Each pool will have randomized
      * volume that should fill or get very close to filling the requested percentage, unless the pools encounter too
-     * much tight space. If this DungeonGenerator previously had AddWater called, the latest call will take precedence.
+     * much tight space. If this DungeonGenerator previously had addWater called, the latest call will take precedence.
      * @param percentage
      * @return
      */
-    public DungeonGenerator AddWater(int percentage)
+    public DungeonGenerator addWater(int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
@@ -65,12 +101,12 @@ public class DungeonGenerator {
     /**
      * Turns the given percentage of viable doorways into doors, represented by '+'. If doubleDoors is true,
      * 2-cell-wide openings will be considered viable doorways and may receive a door in each cell. If this
-     * DungeonGenerator previously had AddDoors called, the latest call will take precedence.
+     * DungeonGenerator previously had addDoors called, the latest call will take precedence.
      * @param percentage
      * @param doubleDoors
      * @return
      */
-    public DungeonGenerator AddDoors(int percentage, boolean doubleDoors)
+    public DungeonGenerator addDoors(int percentage, boolean doubleDoors)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
@@ -81,28 +117,28 @@ public class DungeonGenerator {
     }
 
     /**
-     * Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.
-     * @return
-     */
-    public DungeonGenerator ClearEffects()
-    {
-        fx.clear();
-        return this;
-    }
-
-    /**
      * Turns the given percentage of open area floor cells into trap cells, represented by '^'. Corridors that have no
      * possible way to move around a trap will not receive traps, ever. If this DungeonGenerator previously had
-     * AddTraps called, the latest call will take precedence.
+     * addTraps called, the latest call will take precedence.
      * @param percentage
      * @return
      */
-    public DungeonGenerator AddTraps(int percentage)
+    public DungeonGenerator addTraps(int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
         if(fx.containsKey(FillEffect.TRAPS)) fx.remove(FillEffect.TRAPS);
         fx.put(FillEffect.TRAPS, percentage);
+        return this;
+    }
+
+    /**
+     * Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.
+     * @return
+     */
+    public DungeonGenerator clearEffects()
+    {
+        fx.clear();
         return this;
     }
 
