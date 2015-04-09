@@ -139,10 +139,10 @@ public class DungeonUtility {
             {
                 if (dungeon[y][x] == '#')
                 {
-                    boolean n = (y <= 0 || dungeon[y - 1][x] == '#');
-                    boolean e = (x >= Width - 1 || dungeon[y][x + 1] == '#');
-                    boolean s = (y >= Height - 1 || dungeon[y + 1][x] == '#');
-                    boolean w = (x <= 0 || dungeon[y][x - 1] == '#');
+                    boolean n = (y <= 0 || dungeon[y - 1][x] == '#' || dungeon[y - 1][x] == '+');
+                    boolean e = (x >= Width - 1 || dungeon[y][x + 1] == '#' || dungeon[y][x + 1] == '+');
+                    boolean s = (y >= Height - 1 || dungeon[y + 1][x] == '#' || dungeon[y + 1][x] == '+');
+                    boolean w = (x <= 0 || dungeon[y][x - 1] == '#' || dungeon[y][x - 1] == '+');
 
                     if (n)
                     {
@@ -247,10 +247,10 @@ public class DungeonUtility {
                 {
                     if (neo[y - 1][x] == '┼' || neo[y - 1][x] == '├' || neo[y - 1][x] == '┤' || neo[y - 1][x] == '┬')
                     {
-                        if ((x >= Width - 1 || dungeon[y - 1][x + 1] == '#' || dungeon[y - 1][x + 1] == '\1') &&
-                                (x <= 0 || dungeon[y - 1][x - 1] == '#' || dungeon[y - 1][x - 1] == '\1') &&
-                                (x >= Width - 1 || dungeon[y][x + 1] == '#' || dungeon[y][x + 1] == '\1') &&
-                                (x <= 0 || dungeon[y][x - 1] == '#' || dungeon[y][x - 1] == '\1'))
+                        if ((x >= Width - 1 || dungeon[y - 1][x + 1] == '#' || dungeon[y - 1][x + 1] == '\1' || dungeon[y - 1][x + 1] == '+') &&
+                                (x <= 0 || dungeon[y - 1][x - 1] == '#' || dungeon[y - 1][x - 1] == '\1' || dungeon[y - 1][x - 1] == '+') &&
+                                (x >= Width - 1 || dungeon[y][x + 1] == '#' || dungeon[y][x + 1] == '\1' || dungeon[y][x + 1] == '+') &&
+                                (x <= 0 || dungeon[y][x - 1] == '#' || dungeon[y][x - 1] == '\1' || dungeon[y][x - 1] == '+'))
                         {
                             switch (neo[y][x])
                             {
@@ -298,10 +298,10 @@ public class DungeonUtility {
                 {
                     if (neo[y][x - 1] == '┼' || neo[y][x - 1] == '├' || neo[y][x - 1] == '┬' || neo[y][x - 1] == '┴')
                     {
-                        if ((y >= Height - 1 || x >= Width - 1 || dungeon[y + 1][x - 1] == '#' || dungeon[y + 1][x - 1] == '\1') &&
-                                (y <= 0 || dungeon[y - 1][x - 1] == '#' || dungeon[y - 1][x - 1] == '\1') &&
-                                (y >= Height - 1 || dungeon[y + 1][x] == '#' || dungeon[y + 1][x] == '\1') &&
-                                (y <= 0 || dungeon[y - 1][x] == '#' || dungeon[y - 1][x] == '\1'))
+                        if ((y >= Height - 1 || dungeon[y + 1][x - 1] == '#' || dungeon[y + 1][x - 1] == '\1' || dungeon[y + 1][x - 1] == '+') &&
+                                (y <= 0 || dungeon[y - 1][x - 1] == '#' || dungeon[y - 1][x - 1] == '\1' || dungeon[y - 1][x - 1] == '+') &&
+                                (y >= Height - 1 || dungeon[y + 1][x] == '#' || dungeon[y + 1][x] == '\1' || dungeon[y + 1][x] == '+') &&
+                                (y <= 0 || dungeon[y - 1][x] == '#' || dungeon[y - 1][x] == '\1' || dungeon[y - 1][x] == '+'))
                         {
                             switch (neo[y][x])
                             {
