@@ -65,7 +65,7 @@ public class DungeonGenerator {
         width = 40;
         fx = new HashMap<FillEffect, Integer>();
     }
-    public DungeonGenerator(int height, int width)
+    public DungeonGenerator(int width, int height)
     {
         rng = new LightRNG();
         gen = new DungeonGen(rng);
@@ -73,7 +73,7 @@ public class DungeonGenerator {
         this.width = width;
         fx = new HashMap<FillEffect, Integer>();
     }
-    public DungeonGenerator(int height, int width, LightRNG rng)
+    public DungeonGenerator(int width, int height, LightRNG rng)
     {
         this.rng = rng;
         gen = new DungeonGen(rng);
