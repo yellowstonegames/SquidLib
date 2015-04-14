@@ -83,6 +83,20 @@ public class DungeonGenerator {
     }
 
     /**
+     * Copies all fields from copying and makes a new DungeonGenerator.
+     * @param copying
+     */
+    public DungeonGenerator(DungeonGenerator copying)
+    {
+        rng = new LightRNG(copying.rng.getState());
+        gen = new DungeonGen(new LightRNG(copying.gen.rng.getState()));
+        height = copying.height;
+        width = copying.width;
+        fx = new HashMap<FillEffect, Integer>(copying.fx);
+        dungeon = copying.dungeon;
+    }
+
+    /**
      * Turns the given percentage of floor cells into water cells, represented by '~'. Water will be clustered into
      * a random number of pools, with more appearing if needed to fill the percentage. Each pool will have randomized
      * volume that should fill or get very close to filling the requested percentage, unless the pools encounter too
@@ -99,7 +113,8 @@ public class DungeonGenerator {
         return this;
     }
     /**
-     * Turns the given percentage of viable doorways into doors, represented by '+'. If doubleDoors is true,
+     * Turns the given percentage of viable doorways into doors, represented by '+' for doors that allow travel along
+     * the x-axis and '/' for doors that allow travel along the y-axis. If doubleDoors is true,
      * 2-cell-wide openings will be considered viable doorways and may receive a door in each cell. If this
      * DungeonGenerator previously had addDoors called, the latest call will take precedence.
      * @param percentage
@@ -263,13 +278,19 @@ public class DungeonGenerator {
             for(int i = 0; i < total; i++)
             {
                 Point entry = (Point) doorways.toArray()[rng.nextInt(doorways.size())];
-                map[entry.x][entry.y] = '+';
+                if(map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#')
+                {
+                    map[entry.x][entry.y] = '+';
+                }
+                else {
+                    map[entry.x][entry.y] = '/';
+                }
                 obstacles.add(new Point(entry));
                 Point[] adj = new Point[]{new Point(entry.x + 1, entry.y), new Point(entry.x - 1, entry.y),
                         new Point(entry.x, entry.y + 1), new Point(entry.x, entry.y - 1)};
                 for(Point near : adj) {
                     if (doorways.contains(near)) {
-                        map[near.x][near.y] = '+';
+                        map[near.x][near.y] = '#';
                         obstacles.add(new Point(near));
                         doorways.remove(near);
                         i++;
