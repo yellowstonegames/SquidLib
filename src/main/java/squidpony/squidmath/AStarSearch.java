@@ -36,7 +36,7 @@ public class AStarSearch {
         /**
          * The distance it takes as the crow flies.
          */
-        EUCLIDIAN,
+        EUCLIDEAN,
         /**
          * Full space search. Least efficient but guaranteed to return a path if
          * one exists.
@@ -96,7 +96,7 @@ public class AStarSearch {
                 dirs = Direction.CARDINALS;
                 break;
             case CHEBYSHEV:
-            case EUCLIDIAN:
+            case EUCLIDEAN:
             case DIJKSTRA:
             default:
                 dirs = Direction.OUTWARDS;
@@ -194,7 +194,7 @@ public class AStarSearch {
                 return Math.abs(x - target.x) + Math.abs(y - target.y);
             case CHEBYSHEV:
                 return Math.max(Math.abs(x - target.x), Math.abs(y - target.y));
-            case EUCLIDIAN:
+            case EUCLIDEAN:
                 int xDist = Math.abs(x - target.x);
                 xDist *= xDist;
                 int yDist = Math.abs(y - target.y);
