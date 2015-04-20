@@ -27,7 +27,7 @@ public class Spill {
         /**
          * The distance it takes as the crow flies.
          */
-        EUCLIDIAN
+        EUCLIDEAN
     }
 
     public Measurement measurement = Measurement.MANHATTAN;
@@ -340,7 +340,7 @@ public class Spill {
             case MANHATTAN:
             case CHEBYSHEV:
                 return 1.0;
-            case EUCLIDIAN:
+            case EUCLIDEAN:
                 switch (target) {
                     case DOWN_LEFT:
                     case DOWN_RIGHT:
