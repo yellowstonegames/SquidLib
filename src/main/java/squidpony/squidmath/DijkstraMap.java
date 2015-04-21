@@ -1,6 +1,8 @@
 package squidpony.squidmath;
 
 import squidpony.squidgrid.Direction;
+import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.mapping.styled.DungeonGen;
 
 import java.awt.*;
 import java.util.*;
@@ -28,7 +30,8 @@ public class DijkstraMap
          */
         CHEBYSHEV,
         /**
-         * The distance it takes as the crow flies.
+         * The distance it takes as the crow flies. This will NOT affect movement cost when calculating a path,
+         * only the preferred squares to travel to (resulting in drastically more reasonable-looking paths).
          */
         EUCLIDEAN
     }
@@ -521,8 +524,9 @@ public class DijkstraMap
 
                     closed.put(currentPos, WALL);
                     filled.put(currentPos, WALL);
-                    scan(impassable);
-                    return findPath(length, impassable, onlyPassable, start, targets);
+                    Set<Point> impassable2 = impassable;
+                    impassable2.add(currentPos);
+                    return findPath(length, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -535,6 +539,132 @@ public class DijkstraMap
         return path;
     }
     /**
+     * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
+     * of Point positions (using Manhattan distance) needed to get closer to a goal, until preferredRange is
+     * reached, or further from a goal if the preferredRange has not been met at the current distance.
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     *
+     * @param moveLength
+     * @param preferredRange
+     * @param los a squidgrid.LOS object if the preferredRange should try to stay in line of sight, or null if LoS
+     *            should be disregarded.
+     * @param impassable
+     * @param onlyPassable
+     * @param start
+     * @param targets
+     * @return
+     */
+    public ArrayList<Point> findAttackPath(int moveLength, int preferredRange, LOS los, Set<Point> impassable,
+                                     Set<Point> onlyPassable, Point start, Point... targets) {
+        if(!initialized) return null;
+        if(preferredRange < 0) preferredRange = 0;
+        double[][] resMap = new double[width][height];
+        if(los != null)
+        {
+            for(int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
+                }
+            }
+        }
+        path = new ArrayList<Point>();
+        if(impassable == null)
+            impassable = new HashSet<Point>();
+        if(onlyPassable == null)
+            onlyPassable = new HashSet<Point>();
+
+        resetMap();
+        for (Point goal : targets) {
+            setGoal(goal.x, goal.y);
+        }
+        Measurement mess = measurement;
+        if(measurement == Measurement.EUCLIDEAN)
+        {
+            measurement = Measurement.CHEBYSHEV;
+        }
+        scan(impassable);
+        goals.clear();
+
+        for(int x = 0; x < width; x++)
+        {
+            CELL:
+            for(int y = 0; y < height; y++)
+            {
+                if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
+                    continue;
+                if (gradientMap[x][y] == preferredRange && los != null) {
+                    for (Point goal : targets) {
+                        if (los.isReachable(resMap, x, y, goal.x, goal.y)) {
+                            setGoal(x, y);
+                            gradientMap[x][y] = 0;
+                            continue CELL;
+                        }
+                    }
+                    gradientMap[x][y] = FLOOR;
+                }
+                else
+                    gradientMap[x][y] = FLOOR;
+            }
+        }
+        measurement = mess;
+        scan(impassable);
+
+        Point currentPos = new Point(start);
+        while (true) {
+            if (frustration > 500) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            double best = 999000;
+            Direction[] dirs = shuffle((measurement == Measurement.MANHATTAN)
+                    ? Direction.CARDINALS : Direction.OUTWARDS);
+            int choice = rng.nextInt(dirs.length);
+
+            for (int d = 0; d < dirs.length; d++) {
+                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best) {
+                    best = gradientMap[pt.x][pt.y];
+                    choice = d;
+                }
+            }
+            if (best >= 999000) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            currentPos.y += dirs[choice].deltaY;
+            currentPos.x += dirs[choice].deltaX;
+            path.add(new Point(currentPos.x, currentPos.y));
+            frustration++;
+            if (path.size() >= moveLength) {
+                if (onlyPassable.contains(currentPos)) {
+
+                    closed.put(currentPos, WALL);
+                    filled.put(currentPos, WALL);
+                    Set<Point> impassable2 = impassable;
+                    impassable2.add(currentPos);
+                    return findAttackPath(moveLength, preferredRange, los, impassable2, onlyPassable, start, targets);
+                }
+                break;
+            }
+            if(gradientMap[currentPos.x][currentPos.y] == 0)
+                break;
+        }
+        frustration = 0;
+        clearGoals();
+        filled.clear();
+        return path;
+    }
+
+    private double cachedLongerPaths = 1.2;
+    private Set<Point> cachedImpassable = new HashSet<Point>();
+    private Point[] cachedFearSources;
+    private double[][] cachedFleeMap;
+    /**
      * Scans the dungeon using Dijkstra.scan with the listed fearSources and start point, and returns a list
      * of Point positions (using Manhattan distance) needed to get further from the closest fearSources, meant
      * for running away. The maximum length of the returned list is given by length; if moving the full
@@ -545,6 +675,9 @@ public class DijkstraMap
      * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
      * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
      * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+     * The parameters preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+     * any subsequent calls that use the same values as the last values passed will avoid recalculating
+     * unnecessary scans.
      *
      * @param length
      * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
@@ -556,26 +689,36 @@ public class DijkstraMap
      */
     public ArrayList<Point> findFleePath(int length, double preferLongerPaths, Set<Point> impassable,
                                      Set<Point> onlyPassable, Point start, Point... fearSources) {
-        if(!initialized) return null;
+        if (!initialized) return null;
         path = new ArrayList<Point>();
-        if(impassable == null)
+        if (impassable == null)
             impassable = new HashSet<Point>();
-        if(onlyPassable == null)
+        if (onlyPassable == null)
             onlyPassable = new HashSet<Point>();
-
-        resetMap();
-        for (Point goal : fearSources) {
-            setGoal(goal.x, goal.y);
+        if (fearSources == null || fearSources.length < 1) {
+            path = new ArrayList<Point>();
+            return path;
         }
-        scan(impassable);
-        for(int x = 0; x < gradientMap.length; x++)
-        {
-            for(int y = 0; y < gradientMap[x].length; y++)
-            {
-                gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : - preferLongerPaths;
+        if (preferLongerPaths == cachedLongerPaths && impassable.equals(cachedImpassable) && fearSources.equals(cachedFearSources)) {
+            gradientMap = cachedFleeMap;
+        }
+        else {
+            cachedLongerPaths = preferLongerPaths;
+            cachedImpassable = new HashSet<Point>(impassable);
+            cachedFearSources = fearSources.clone();
+            resetMap();
+            for (Point goal : fearSources) {
+                setGoal(goal.x, goal.y);
             }
+            scan(impassable);
+            for (int x = 0; x < gradientMap.length; x++) {
+                for (int y = 0; y < gradientMap[x].length; y++) {
+                    gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : -preferLongerPaths;
+                }
+            }
+            scan(impassable);
+            cachedFleeMap = gradientMap.clone();
         }
-        scan(impassable);
         Point currentPos = new Point(start);
         while (true) {
             if (frustration > 500) {
@@ -612,19 +755,9 @@ public class DijkstraMap
 
                     closed.put(currentPos, WALL);
                     filled.put(currentPos, WALL);
-                    resetMap();
-                    for (Point goal : fearSources) {
-                        setGoal(goal.x, goal.y);
-                    }
-                    scan(impassable);
-                    for(int x = 0; x < gradientMap.length; x++)
-                    {
-                        for(int y = 0; y < gradientMap[x].length; y++)
-                        {
-                            gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : - preferLongerPaths;
-                        }
-                    }
-                    return findFleePath(length, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+                    Set<Point> impassable2 = impassable;
+                    impassable2.add(currentPos);
+                    return findFleePath(length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
                 break;
             }

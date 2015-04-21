@@ -40,7 +40,16 @@ public class LOS {
     private int type;
     private double[][] resistanceMap;
     private int startx, starty, targetx, targety;
-    private Radius radiusStrategy;
+
+    public Radius getRadiusStrategy() {
+        return radiusStrategy;
+    }
+
+    public void setRadiusStrategy(Radius radiusStrategy) {
+        this.radiusStrategy = radiusStrategy;
+    }
+
+    private Radius radiusStrategy = Radius.CIRCLE;
 
     public LOS() {
         this(BRESENHAM);
@@ -54,11 +63,37 @@ public class LOS {
      * Returns true if a line can be drawn from the start point to the target
      * point without intervening obstructions.
      *
+     * Uses RadiusStrategy.CIRCLE, or whatever RadiusStrategy was set with setRadiusStrategy .
+     *
+     * @param walls '#' is fully opaque, anything else is fully transparent, as always this uses x,y indexing.
+     * @param startx
+     * @param starty
+     * @param targetx
+     * @param targety
+     * @return
+     */
+    public boolean isReachable(char[][] walls, int startx, int starty, int targetx, int targety) {
+        if(walls.length < 1) return false;
+        double[][] resMap = new double[walls.length][walls[0].length];
+        for(int x = 0; x < walls.length; x++)
+        {
+            for(int y = 0; y < walls[0].length; y++)
+            {
+                resMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;
+            }
+        }
+        return isReachable(resMap, startx, starty, targetx, targety, this.radiusStrategy);
+    }
+
+    /**
+     * Returns true if a line can be drawn from the start point to the target
+     * point without intervening obstructions.
+     *
      * Does not take into account resistance less than opaque or distance cost.
      *
-     * Uses the implementation's default RadiusStrategy.
+     * Uses RadiusStrategy.CIRCLE, or whatever RadiusStrategy was set with setRadiusStrategy .
      *
-     * @param resistanceMap
+     * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.
      * @param startx
      * @param starty
      * @param targetx
@@ -66,14 +101,14 @@ public class LOS {
      * @return
      */
     public boolean isReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety) {
-        return isReachable(resistanceMap, startx, starty, targetx, targety, Radius.CIRCLE);
+        return isReachable(resistanceMap, startx, starty, targetx, targety, this.radiusStrategy);
     }
 
     /**
      * Returns true if a line can be drawn from the start point to the target
      * point without intervening obstructions.
      *
-     * @param resistanceMap marks the level of resistance the the line per cell
+     * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.
      * @param startx
      * @param starty
      * @param targetx
@@ -87,18 +122,41 @@ public class LOS {
         this.starty = starty;
         this.targetx = targetx;
         this.targety = targety;
-        this.radiusStrategy = radiusStrategy;
         switch (type) {
             case BRESENHAM:
-                return bresenhamReachable();
+                return bresenhamReachable(radiusStrategy);
             case ELIAS:
-                return eliasReachable();
+                return eliasReachable(radiusStrategy);
             case RAY:
-                return rayReachable();
+                return rayReachable(radiusStrategy);
         }
         return false;
     }
 
+    /**
+     * Returns true if a line can be drawn from the start point to the target
+     * point without intervening obstructions.
+     *
+     * @param walls '#' is fully opaque, anything else is fully transparent, as always this uses x,y indexing.
+     * @param startx
+     * @param starty
+     * @param targetx
+     * @param targety
+     * @param radiusStrategy the strategy to use in computing unit distance
+     * @return
+     */
+    public boolean isReachable(char[][] walls, int startx, int starty, int targetx, int targety, Radius radiusStrategy) {
+        if(walls.length < 1) return false;
+        double[][] resMap = new double[walls.length][walls[0].length];
+        for(int x = 0; x < walls.length; x++)
+        {
+            for(int y = 0; y < walls[0].length; y++)
+            {
+                resMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;
+            }
+        }
+        return isReachable(resMap, startx, starty, targetx, targety, radiusStrategy);
+    }
     /**
      * Returns the path of the last LOS calculation, with the starting point as
      * the head of the queue.
@@ -109,7 +167,7 @@ public class LOS {
         return lastPath;
     }
 
-    private boolean bresenhamReachable() {
+    private boolean bresenhamReachable(Radius radiusStrategy) {
         Queue<Point> path = Bresenham.line2D(startx, starty, targetx, targety);
         lastPath = new LinkedList<>();
         lastPath.add(new Point(startx, starty));
@@ -132,7 +190,7 @@ public class LOS {
         return false;//never got to the target point
     }
 
-    private boolean rayReachable() {
+    private boolean rayReachable(Radius radiusStrategy) {
         lastPath = new LinkedList<>();//save path for later retreival
         lastPath.add(new Point(startx, starty));
         if (startx == targetx && starty == targety) {//already there!
@@ -208,14 +266,14 @@ public class LOS {
         return (int) end.x == targetx && (int) end.y == targety;
     }
 
-    private boolean eliasReachable() {
+    private boolean eliasReachable(Radius radiusStrategy) {
         List<Point> ePath = Elias.line(startx, starty, targetx, targety);
         lastPath = new LinkedList<>(ePath);//save path for later retreival
 
         HashMap<eliasWorker, Thread> pool = new HashMap<>();
 
         for (Point p : ePath) {
-            eliasWorker worker = new eliasWorker(p.x, p.y);
+            eliasWorker worker = new eliasWorker(p.x, p.y, radiusStrategy);
             Thread thread = new Thread(worker);
             thread.start();
             pool.put(worker, thread);
@@ -240,10 +298,11 @@ public class LOS {
         private Queue<Point> path;
         private boolean succeeded = false;
         private int testx, testy;
-
-        eliasWorker(int testx, int testy) {
+        private Radius radiusStrategy;
+        eliasWorker(int testx, int testy, Radius radiusStrategy) {
             this.testx = testx;
             this.testy = testy;
+            this.radiusStrategy = radiusStrategy;
         }
 
         @Override
