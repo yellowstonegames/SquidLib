@@ -117,7 +117,7 @@ public class DijkstraDungeonTest {
             LOS los = new LOS();
             los.setRadiusStrategy(Radius.DIAMOND);
 
-            dijkstra.findAttackPath(100, 9, los, null, null, entry, goal1, goal2, goal3);
+            dijkstra.findAttackPath(100, 6, 8, los, null, null, entry, goal1, goal2, goal3);
 
             gm = dijkstra.gradientMap;
             md = DungeonUtility.doubleWidth(dun);

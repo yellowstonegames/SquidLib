@@ -276,7 +276,7 @@ public class DijkstraMap
     }
 
     /**
-     * Resets the spillMap to its original value from physicalMap.
+     * Resets the gradientMap to its original value from physicalMap.
      */
     public void resetMap() {
             if(!initialized) return;
@@ -386,7 +386,8 @@ public class DijkstraMap
      * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
      * which will have a value defined by the WALL constant in this class, and areas that the scan was
      * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
-     * these areas should not be used to place NPCs or items and should be filled with walls).
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement
      *
      * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
@@ -464,7 +465,7 @@ public class DijkstraMap
 
     /**
      * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
-     * of Point positions (using Manhattan distance) needed to get closer to the closest reachable
+     * of Point positions (using the current measurement) needed to get closer to the closest reachable
      * goal. The maximum length of the returned list is given by length; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
      * (which is typically filled with friendly units that can be passed through in multi-tile-
@@ -534,13 +535,13 @@ public class DijkstraMap
                 break;
         }
         frustration = 0;
-        clearGoals();
+        goals.clear();
         filled.clear();
         return path;
     }
     /**
      * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
-     * of Point positions (using Manhattan distance) needed to get closer to a goal, until preferredRange is
+     * of Point positions (using the current measurement) needed to get closer to a goal, until preferredRange is
      * reached, or further from a goal if the preferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -560,7 +561,7 @@ public class DijkstraMap
      * @return
      */
     public ArrayList<Point> findAttackPath(int moveLength, int preferredRange, LOS los, Set<Point> impassable,
-                                     Set<Point> onlyPassable, Point start, Point... targets) {
+                                           Set<Point> onlyPassable, Point start, Point... targets) {
         if(!initialized) return null;
         if(preferredRange < 0) preferredRange = 0;
         double[][] resMap = new double[width][height];
@@ -655,7 +656,133 @@ public class DijkstraMap
                 break;
         }
         frustration = 0;
-        clearGoals();
+        goals.clear();
+        filled.clear();
+        return path;
+    }
+    /**
+     * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
+     * of Point positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
+     * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
+     * which may go further from a goal if the minPreferredRange has not been met at the current distance.
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     *
+     * @param moveLength
+     * @param minPreferredRange
+     * @param maxPreferredRange
+     * @param los a squidgrid.LOS object if the preferredRange should try to stay in line of sight, or null if LoS
+     *            should be disregarded.
+     * @param impassable
+     * @param onlyPassable
+     * @param start
+     * @param targets
+     * @return
+     */
+    public ArrayList<Point> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
+                                 Set<Point> impassable, Set<Point> onlyPassable, Point start, Point... targets) {
+        if(!initialized) return null;
+        if(minPreferredRange < 0) minPreferredRange = 0;
+        if(maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
+        double[][] resMap = new double[width][height];
+        if(los != null)
+        {
+            for(int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
+                }
+            }
+        }
+        path = new ArrayList<Point>();
+        if(impassable == null)
+            impassable = new HashSet<Point>();
+        if(onlyPassable == null)
+            onlyPassable = new HashSet<Point>();
+
+        resetMap();
+        for (Point goal : targets) {
+            setGoal(goal.x, goal.y);
+        }
+        Measurement mess = measurement;
+        if(measurement == Measurement.EUCLIDEAN)
+        {
+            measurement = Measurement.CHEBYSHEV;
+        }
+        scan(impassable);
+        goals.clear();
+
+        for(int x = 0; x < width; x++)
+        {
+            CELL:
+            for(int y = 0; y < height; y++)
+            {
+                if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
+                    continue;
+                if (gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange
+                        && los != null) {
+                    for (Point goal : targets) {
+                        if (los.isReachable(resMap, x, y, goal.x, goal.y)) {
+                            setGoal(x, y);
+                            gradientMap[x][y] = 0;
+                            continue CELL;
+                        }
+                    }
+                    gradientMap[x][y] = FLOOR;
+                }
+                else
+                    gradientMap[x][y] = FLOOR;
+            }
+        }
+        measurement = mess;
+        scan(impassable);
+
+        Point currentPos = new Point(start);
+        while (true) {
+            if (frustration > 500) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            double best = 999000;
+            Direction[] dirs = shuffle((measurement == Measurement.MANHATTAN)
+                    ? Direction.CARDINALS : Direction.OUTWARDS);
+            int choice = rng.nextInt(dirs.length);
+
+            for (int d = 0; d < dirs.length; d++) {
+                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best) {
+                    best = gradientMap[pt.x][pt.y];
+                    choice = d;
+                }
+            }
+            if (best >= 999000) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            currentPos.y += dirs[choice].deltaY;
+            currentPos.x += dirs[choice].deltaX;
+            path.add(new Point(currentPos.x, currentPos.y));
+            frustration++;
+            if (path.size() >= moveLength) {
+                if (onlyPassable.contains(currentPos)) {
+
+                    closed.put(currentPos, WALL);
+                    filled.put(currentPos, WALL);
+                    Set<Point> impassable2 = impassable;
+                    impassable2.add(currentPos);
+                    return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
+                            onlyPassable, start, targets);
+                }
+                break;
+            }
+            if(gradientMap[currentPos.x][currentPos.y] == 0)
+                break;
+        }
+        frustration = 0;
+        goals.clear();
         filled.clear();
         return path;
     }
@@ -711,12 +838,13 @@ public class DijkstraMap
                 setGoal(goal.x, goal.y);
             }
             scan(impassable);
+            goals.clear();
             for (int x = 0; x < gradientMap.length; x++) {
                 for (int y = 0; y < gradientMap[x].length; y++) {
-                    gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : -preferLongerPaths;
+                    gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : (0.0 - preferLongerPaths);
                 }
             }
-            scan(impassable);
+            //scan(impassable);
             cachedFleeMap = gradientMap.clone();
         }
         Point currentPos = new Point(start);
@@ -763,7 +891,7 @@ public class DijkstraMap
             }
         }
         frustration = 0;
-        clearGoals();
+        goals.clear();
         filled.clear();
         return path;
     }
