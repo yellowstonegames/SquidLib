@@ -512,7 +512,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= 999000) {
+            if (best >= gradientMap[start.x][start.y]) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -633,7 +633,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= 999000) {
+            if (best >= gradientMap[start.x][start.y]) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -758,7 +758,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= 999000) {
+            if (best >= gradientMap[start.x][start.y]) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -838,13 +838,13 @@ public class DijkstraMap
                 setGoal(goal.x, goal.y);
             }
             scan(impassable);
-            goals.clear();
+
             for (int x = 0; x < gradientMap.length; x++) {
                 for (int y = 0; y < gradientMap[x].length; y++) {
                     gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : (0.0 - preferLongerPaths);
                 }
             }
-            //scan(impassable);
+            scan(impassable);
             cachedFleeMap = gradientMap.clone();
         }
         Point currentPos = new Point(start);
@@ -865,7 +865,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= 999000) {
+            if (best >= gradientMap[start.x][start.y]) {
                 path = new ArrayList<Point>();
                 break;
             }
