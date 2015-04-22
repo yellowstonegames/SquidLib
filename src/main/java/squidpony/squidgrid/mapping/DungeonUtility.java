@@ -57,6 +57,66 @@ public class DungeonUtility {
         }
         return pt;
     }
+    /**
+     * Finds a random java.awt.Point where the x and y match up to a [x][y] location on map that has '.' as a value,
+     * and a square of cells extending in the positive x and y directions with a side length of size must also have
+     * '.' as their values.
+     * Uses this class' rng field for pseudo-random number generation.
+     * @param map
+     * @param size
+     * @return a Point that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
+     */
+    public static Point randomFloorLarge(char[][] map, int size)
+    {
+        int width = map.length;
+        int height = map[0].length;
+        if(width < 4 || height < 4)
+            return null;
+        Point pt = new Point(rng.nextInt(width - size), rng.nextInt(height - size));
+        CELL:
+        for(int i = 0; i < 20; i++, pt.x = rng.nextInt(width - size), pt.y = rng.nextInt(height - size))
+        {
+            if(map[pt.x][pt.y] == '.')
+            {
+                for(int x = 0; x < size; x++)
+                {
+                    for(int y = 0; y < size; y++)
+                    {
+                        if(map[pt.x + x][pt.y + y] != '.')
+                            continue CELL;
+                    }
+                }
+                return pt;
+            }
+        }
+        pt.x = 1;
+        pt.y = 1;
+
+        SLOW:
+        while(true)
+        {
+            pt.x += 1;
+            if(pt.x >= width - size)
+            {
+                pt.x = 1;
+                pt.y += 1;
+            }
+            if(pt.y >= height - size)
+                return null;
+            if(map[pt.x][pt.y] == '.')
+            {
+                for(int x = 0; x < size; x++)
+                {
+                    for(int y = 0; y < size; y++)
+                    {
+                        if(map[pt.x + x][pt.y + y] != '.')
+                            continue SLOW;
+                    }
+                }
+                return pt;
+            }
+        }
+    }
 
     /**
      * Takes a char[][] dungeon map that uses '#' to represent walls, and returns a new char[][] that uses unicode box
