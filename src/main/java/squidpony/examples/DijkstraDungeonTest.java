@@ -16,7 +16,8 @@ import java.awt.Point;
 public class DijkstraDungeonTest {
     public static void main(String[] args) {
         for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {
-            LightRNG rng = new LightRNG(0x1337deadbeefc000l);
+            LightRNG rng = new LightRNG(0x57a8deadbeef0ffal);
+
             DungeonUtility.rng = rng;
             DungeonGen dg = new DungeonGen(rng);
 
@@ -28,9 +29,12 @@ public class DijkstraDungeonTest {
 
             System.out.println(dg);
 
-            Point entry = DungeonUtility.randomFloor(dun), goal1 = DungeonUtility.randomFloor(dun),
-                    goal2 = DungeonUtility.randomFloor(dun), goal3 = DungeonUtility.randomFloor(dun);
-            dijkstra.findPath(100, null, null, entry, goal1, goal2, goal3);
+            Point goal1 = DungeonUtility.randomFloor(dun),
+                    goal2 = DungeonUtility.randomFloor(dun), goal3 = DungeonUtility.randomFloor(dun),
+                    goal4 = DungeonUtility.randomFloor(dun), goal5 = DungeonUtility.randomFloor(dun),
+                    entry = DungeonUtility.randomFloor(dun);
+
+            dijkstra.findPath(100, null, null, entry, goal1, goal2, goal3, goal4, goal5);
             double[][] gm = dijkstra.gradientMap;
             char[][] md = DungeonUtility.doubleWidth(dun),
                     hl = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(dun));
@@ -55,7 +59,7 @@ public class DijkstraDungeonTest {
             System.out.println(dg);
 
 
-            rng.setState(0x1337deadbeefc000l);
+            rng.setState(0x57a8deadbeef0ffal);
             DungeonUtility.rng = rng;
 
             dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
@@ -66,11 +70,15 @@ public class DijkstraDungeonTest {
 
             System.out.println(dg);
 
-            entry = DungeonUtility.randomFloor(dun);
             goal1 = DungeonUtility.randomFloor(dun);
             goal2 = DungeonUtility.randomFloor(dun);
             goal3 = DungeonUtility.randomFloor(dun);
-            dijkstra.findFleePath(100, 2.5, null, null, entry, goal1, goal2, goal3);
+            goal4 = DungeonUtility.randomFloor(dun);
+            goal5 = DungeonUtility.randomFloor(dun);
+
+            entry = DungeonUtility.randomFloor(dun);
+
+            dijkstra.findFleePath(100, 1.9, null, null, entry, goal1, goal2, goal3, goal4, goal5);
 
             gm = dijkstra.gradientMap;
             md = DungeonUtility.doubleWidth(dun);
@@ -98,7 +106,7 @@ public class DijkstraDungeonTest {
             System.out.println();
 
 
-            rng.setState(0x1337deadbeefc000l);
+            rng.setState(0x57a8deadbeef0ffal);
             DungeonUtility.rng = rng;
 
             dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
@@ -109,15 +117,18 @@ public class DijkstraDungeonTest {
 
             System.out.println(dg);
 
-            entry = DungeonUtility.randomFloor(dun);
             goal1 = DungeonUtility.randomFloor(dun);
             goal2 = DungeonUtility.randomFloor(dun);
             goal3 = DungeonUtility.randomFloor(dun);
+            goal4 = DungeonUtility.randomFloor(dun);
+            goal5 = DungeonUtility.randomFloor(dun);
+
+            entry = DungeonUtility.randomFloor(dun);
 
             LOS los = new LOS();
             los.setRadiusStrategy(Radius.DIAMOND);
 
-            dijkstra.findAttackPath(100, 6, 8, los, null, null, entry, goal1, goal2, goal3);
+            dijkstra.findAttackPath(100, 6, 8, los, null, null, entry, goal1, goal2, goal3, goal4, goal5);
 
             gm = dijkstra.gradientMap;
             md = DungeonUtility.doubleWidth(dun);
@@ -126,7 +137,7 @@ public class DijkstraDungeonTest {
                 for (int y = 0; y < md[x].length; y++) {
                     char t = (char) 33;
                     if (x % 2 == 0 && ((x /2 == goal1.x && y == goal1.y) || (x /2 == goal2.x && y == goal2.y) ||
-                            (x /2 == goal3.x && y == goal3.y)))
+                            (x /2 == goal3.x && y == goal3.y) || (x /2 == goal4.x && y == goal4.y)))
                         t = '*';
                     else if (x % 2 == 0 && gm[x / 2][y] < 200)
                         t = '.';
