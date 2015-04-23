@@ -377,7 +377,7 @@ public class DijkstraMap
     protected void setFresh(final Point pt, double counter) {
         if(!initialized) return;
         gradientMap[pt.x][pt.y] = counter;
-        fresh.put(pt, counter);
+        fresh.put(new Point(pt.x, pt.y), counter);
     }
 
     /**
@@ -510,29 +510,30 @@ public class DijkstraMap
         }
         double currentLowest = 999000;
         HashMap<Point, Double> lowest = new HashMap<Point, Double>();
-        Point p = new Point(width - 1, height - 1), temp = new Point(width - 1, height - 1);
-        for (int y = height - 1; y >= 0; --y) {
+        Point p = new Point(0, 0), temp = new Point(0, 0);
+        for (int y = 0; y < height; y++) {
             I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS:
-            for (int x = width - 1; x >= 0; --x) {
+            for (int x = 0; x < width; x++) {
                 p.x = x;
                 p.y = y;
                 if (gradientMap[x][y] > FLOOR && !goals.containsKey(p)) {
                     closed.put(new Point(p.x, p.y), physicalMap[x][y]);
-                    for(int i = 0; i < size; i++)
-                    {
-                        if(x - i < 0)
-                            continue;
-                        temp.x = x - i;
-                        for(int j = 0; j < size; j++)
-                        {
-                            temp.y = y - j;
-                            if(y - j < 0 || closed.containsKey(temp))
+                    if(gradientMap[x][y] == WALL) {
+                        for (int i = 0; i < size; i++) {
+                            if (x - i < 0)
                                 continue;
-                            if(gradientMap[temp.x][temp.y] <= FLOOR && !closed.containsKey(temp))
-                                closed.put(new Point(temp.x, temp.y), DARK);
+                            temp.x = x - i;
+                            for (int j = 0; j < size; j++) {
+                                temp.y = y - j;
+                                if (y - j < 0 || closed.containsKey(temp))
+                                    continue;
+                                if (gradientMap[temp.x][temp.y] <= FLOOR && !goals.containsKey(temp))
+                                    closed.put(new Point(temp.x, temp.y), DARK);
+                            }
                         }
                     }
                 }
+
                 else if(gradientMap[x][y] < currentLowest && !closed.containsKey(p))
                 {
                     for(int i = 0; i < size; i++)
@@ -550,23 +551,24 @@ public class DijkstraMap
 
                     currentLowest = gradientMap[x][y];
                     lowest.clear();
-                    lowest.put(new Point(p.x, p.y), currentLowest);
+                    lowest.put(new Point(x, y), currentLowest);
 
                 }
                 else if(gradientMap[x][y] == currentLowest && !closed.containsKey(p))
                 {
-                    for(int i = 0; i < size; i++) {
-                        if(x + i >= width)
-                            continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
-                        temp.x = x + i;
-                        for (int j = 0; j < size; j++) {
-                            temp.y = y + j;
-                            if(y + j >= height || closed.containsKey(temp))
+                    if(!closed.containsKey(p)) {
+                        for (int i = 0; i < size; i++) {
+                            if (x + i >= width)
                                 continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
+                            temp.x = x + i;
+                            for (int j = 0; j < size; j++) {
+                                temp.y = y + j;
+                                if (y + j >= height || closed.containsKey(temp))
+                                    continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
+                            }
                         }
+                        lowest.put(new Point(x, y), currentLowest);
                     }
-                    lowest.put(new Point(p.x, p.y), currentLowest);
-
                 }
             }
         }
@@ -574,17 +576,14 @@ public class DijkstraMap
         open.putAll(lowest);
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (numAssigned > 0) {
-//            ++iter;
             numAssigned = 0;
             for (Map.Entry<Point, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
                     Point adj = new Point(cell.getKey().x, cell.getKey().y);
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
-                    if(adj.x < 0 || adj.y < 0)
-                        System.out.println("AAAAAGH");
                     if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
-                        setFresh(adj, cell.getValue() + h);
+                        setFresh(new Point(adj.x, adj.y), cell.getValue() + h);
                         ++numAssigned;
                     }
                 }
@@ -1313,7 +1312,7 @@ public class DijkstraMap
             CELL:
             for(int y = 0; y < height; y++)
             {
-                if(gradientMap[x][y] == WALL)
+                if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
                     continue;
                 if (x+2 < width && y + 2 < height && gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange
                         && los != null) {

@@ -14,6 +14,26 @@ import java.awt.Point;
  * Created by Tommy Ettinger on 4/5/2015.
  */
 public class LargeDijkstraTest {
+    public static void debugPrint(DijkstraMap d)
+    {
+        int high = d.height;
+        int wide = d.width;
+        double[][] dungeon = d.gradientMap;
+        double[][] trans = new double[high][wide];
+        for (int x = 0; x < wide; x++) {
+            for (int y = 0; y < high; y++) {
+                trans[y][x] = dungeon[x][y];
+            }
+        }
+        StringBuffer sb = new StringBuffer();
+        for (int row = 0; row < high; row++) {
+            for (int col = 0; col < wide; col++) {
+                sb.append(String.format("%06.0f ", trans[row][col]));
+            }
+            sb.append('\n');
+        }
+        System.out.println(sb.toString());
+    }
     public static void main(String[] args) {
         for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {
             LightRNG rng = new LightRNG(0x57a8deadbeef0ffal);
@@ -29,7 +49,8 @@ public class LargeDijkstraTest {
             DijkstraMap dijkstra = new DijkstraMap(dun, m);
 
             System.out.println(dg);
-            DungeonUtility.randomFloorLarge(dun, size);
+//            DungeonUtility.randomFloorLarge(dun, size);
+//            DungeonUtility.randomFloorLarge(dun, size);
             Point goal1 = DungeonUtility.randomFloorLarge(dun, size),
                     goal2 = DungeonUtility.randomFloorLarge(dun, size), goal3 = DungeonUtility.randomFloorLarge(dun, size),
                     goal4 = DungeonUtility.randomFloorLarge(dun, size), goal5 = DungeonUtility.randomFloorLarge(dun, size),
@@ -43,7 +64,7 @@ public class LargeDijkstraTest {
                 for (int y = 0; y < md[x].length; y++) {
                     char t = (char) 33;
                     if (x % 2 == 0 && gm[x / 2][y] < 200)
-                        t = '.';
+                        t = '.';// ("" + (gm[x / 2][y] % 10)).charAt(0);
                     else if (gm[x / 2][y] == DijkstraMap.WALL)
                         t = hl[x][y];
                     else
@@ -52,20 +73,16 @@ public class LargeDijkstraTest {
                 }
             }
             md[entry.x * 2][entry.y] = '@';
-            md[entry.x * 2 + 2][entry.y] = '@';
-            md[entry.x * 2][entry.y + 1] = '@';
-            md[entry.x * 2 + 2][entry.y + 1] = '@';
             int i = 1;
             for (Point pt : dijkstra.path) {
                 md[pt.x * 2][pt.y] = ("" + (i % 10)).charAt(0);
-                md[pt.x * 2 + 2][pt.y] = ("" + (i % 10)).charAt(0);
-                md[pt.x * 2][pt.y + 1] = ("" + (i % 10)).charAt(0);
-                md[pt.x * 2 + 2][pt.y + 1] = ("" + (i % 10)).charAt(0);
                 i++;
             }
             dg.setDungeon(md);
-            System.out.println(dg);
+            System.out.println("SEEK PATH");
 
+            System.out.println(dg);
+            //debugPrint(dijkstra);
 
             rng.setState(0x57a8deadbeef0ffal);
             DungeonUtility.rng = rng;
@@ -77,7 +94,8 @@ public class LargeDijkstraTest {
             dijkstra.initialize(dun);
 
             System.out.println(dg);
-            DungeonUtility.randomFloorLarge(dun, size);
+//            DungeonUtility.randomFloorLarge(dun, size);
+//            DungeonUtility.randomFloorLarge(dun, size);
             goal1 = DungeonUtility.randomFloorLarge(dun, size);
             goal2 = DungeonUtility.randomFloorLarge(dun, size);
             goal3 = DungeonUtility.randomFloorLarge(dun, size);
@@ -95,7 +113,7 @@ public class LargeDijkstraTest {
                 for (int y = 0; y < md[x].length; y++) {
                     char t = (char) 33;
                     if (x % 2 == 0 && gm[x / 2][y] < 200)
-                        t = '.';
+                        t = '.';// ("" + (gm[x / 2][y] % 10)).charAt(0);
                     else if (gm[x / 2][y] == DijkstraMap.WALL)
                         t = hl[x][y];
                     else
@@ -104,20 +122,16 @@ public class LargeDijkstraTest {
                 }
             }
             md[entry.x * 2][entry.y] = '@';
-            md[entry.x * 2 + 2][entry.y] = '@';
-            md[entry.x * 2][entry.y + 1] = '@';
-            md[entry.x * 2 + 2][entry.y + 1] = '@';
             i = 1;
             for (Point pt : dijkstra.path) {
                 md[pt.x * 2][pt.y] = ("" + (i % 10)).charAt(0);
-                md[pt.x * 2 + 2][pt.y] = ("" + (i % 10)).charAt(0);
-                md[pt.x * 2][pt.y + 1] = ("" + (i % 10)).charAt(0);
-                md[pt.x * 2 + 2][pt.y + 1] = ("" + (i % 10)).charAt(0);
                 i++;
             }
             dg.setDungeon(md);
-            System.out.println(dg);
 
+            System.out.println("FLEE PATH");
+            System.out.println(dg);
+            //debugPrint(dijkstra);
             System.out.println();
 
 
@@ -131,7 +145,8 @@ public class LargeDijkstraTest {
             dijkstra.initialize(dun);
 
             System.out.println(dg);
-            DungeonUtility.randomFloorLarge(dun, size);
+//            DungeonUtility.randomFloorLarge(dun, size);
+//            DungeonUtility.randomFloorLarge(dun, size);
             goal1 = DungeonUtility.randomFloorLarge(dun, size);
             goal2 = DungeonUtility.randomFloorLarge(dun, size);
             goal3 = DungeonUtility.randomFloorLarge(dun, size);
@@ -141,7 +156,14 @@ public class LargeDijkstraTest {
             entry = DungeonUtility.randomFloorLarge(dun, size);
 
             LOS los = new LOS();
-            los.setRadiusStrategy(Radius.DIAMOND);
+            if(m == DijkstraMap.Measurement.MANHATTAN)
+            {
+                los.setRadiusStrategy(Radius.DIAMOND);
+            }
+            else
+            {
+                los.setRadiusStrategy(Radius.SQUARE);
+            }
 
             dijkstra.findAttackPathLarge(size, 100, 6, 8, los, null, null, entry, goal1, goal2, goal3, goal4, goal5);
 
@@ -152,10 +174,11 @@ public class LargeDijkstraTest {
                 for (int y = 0; y < md[x].length; y++) {
                     char t = (char) 33;
                     if (x % 2 == 0 && ((x /2 == goal1.x && y == goal1.y) || (x /2 == goal2.x && y == goal2.y) ||
-                            (x /2 == goal3.x && y == goal3.y) || (x /2 == goal4.x && y == goal4.y)))
+                            (x /2 == goal3.x && y == goal3.y) || (x /2 == goal4.x && y == goal4.y) ||
+                            (x /2 == goal5.x && y == goal5.y)))
                         t = '*';
                     else if (x % 2 == 0 && gm[x / 2][y] < 200)
-                        t = '.';
+                        t = '.';// ("" + (gm[x / 2][y] % 10)).charAt(0);
                     else if (gm[x / 2][y] == DijkstraMap.WALL)
                         t = hl[x][y];
                     else
@@ -164,20 +187,15 @@ public class LargeDijkstraTest {
                 }
             }
             md[entry.x * 2][entry.y] = '@';
-            md[entry.x * 2 + 2][entry.y] = '@';
-            md[entry.x * 2][entry.y + 1] = '@';
-            md[entry.x * 2 + 2][entry.y + 1] = '@';
             i = 1;
             for (Point pt : dijkstra.path) {
                 md[pt.x * 2][pt.y] = ("" + (i % 10)).charAt(0);
-                md[pt.x * 2 + 2][pt.y] = ("" + (i % 10)).charAt(0);
-                md[pt.x * 2][pt.y + 1] = ("" + (i % 10)).charAt(0);
-                md[pt.x * 2 + 2][pt.y + 1] = ("" + (i % 10)).charAt(0);
                 i++;
             }
             dg.setDungeon(md);
+            System.out.println("ATTACK PATH, 6-8 RANGE");
             System.out.println(dg);
-
+//            debugPrint(dijkstra);
             System.out.println();
 
 
