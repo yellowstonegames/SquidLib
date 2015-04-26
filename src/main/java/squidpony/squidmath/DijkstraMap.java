@@ -2,7 +2,6 @@ package squidpony.squidmath;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
-import squidpony.squidgrid.mapping.styled.DungeonGen;
 
 import java.awt.*;
 import java.util.*;
@@ -35,7 +34,14 @@ public class DijkstraMap
          */
         EUCLIDEAN
     }
-    
+
+    /**
+     * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
+     * diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. EUCLIDEAN does not affect
+     * the length of paths, though it will change the DijkstraMap's gradientMap to have many non-integer values, and
+     * that in turn will make paths this finds much more realistic and smooth (favoring orthogonal directions unless a
+     * diagonal one is a better option).
+     */
     public Measurement measurement = Measurement.MANHATTAN;
 
 
@@ -88,7 +94,7 @@ public class DijkstraMap
      * constant in this class.
      */
     public HashMap<Point, Double> goals;
-    private HashMap<Point, Double> fresh, closed, open, filled;
+    private HashMap<Point, Double> fresh, closed, open;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
@@ -108,7 +114,6 @@ public class DijkstraMap
         fresh = new HashMap<Point, Double>();
         closed = new HashMap<Point, Double>();
         open = new HashMap<Point, Double>();
-        filled = new HashMap<Point, Double>();
     }
 
     /**
@@ -123,7 +128,6 @@ public class DijkstraMap
         fresh = new HashMap<Point, Double>();
         closed = new HashMap<Point, Double>();
         open = new HashMap<Point, Double>();
-        filled = new HashMap<Point, Double>();
         initialize(level);
     }
     /**
@@ -140,7 +144,6 @@ public class DijkstraMap
         fresh = new HashMap<Point, Double>();
         closed = new HashMap<Point, Double>();
         open = new HashMap<Point, Double>();
-        filled = new HashMap<Point, Double>();
         initialize(level);
     }
 
@@ -160,7 +163,6 @@ public class DijkstraMap
         fresh = new HashMap<Point, Double>();
         closed = new HashMap<Point, Double>();
         open = new HashMap<Point, Double>();
-        filled = new HashMap<Point, Double>();
         initialize(level);
     }
     /**
@@ -179,7 +181,6 @@ public class DijkstraMap
         fresh = new HashMap<Point, Double>();
         closed = new HashMap<Point, Double>();
         open = new HashMap<Point, Double>();
-        filled = new HashMap<Point, Double>();
         initialize(level, alternateWall);
     }
 
@@ -201,7 +202,6 @@ public class DijkstraMap
         fresh = new HashMap<Point, Double>();
         closed = new HashMap<Point, Double>();
         open = new HashMap<Point, Double>();
-        filled = new HashMap<Point, Double>();
         initialize(level);
     }
 
@@ -288,7 +288,7 @@ public class DijkstraMap
     }
 
     /**
-     * Resets this DijkstraMap to a state with no goals, no discovered path, and no changes made to spillMap
+     * Resets this DijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
      * relative to physicalMap.
      */
     public void reset() {
@@ -329,7 +329,7 @@ public class DijkstraMap
     }
 
     /**
-     * Marks a specific cell in spillMap as completely impossible to enter.
+     * Marks a specific cell in gradientMap as completely impossible to enter.
      * @param x
      * @param y
      */
@@ -358,7 +358,7 @@ public class DijkstraMap
     }
 
     /**
-     * Used to remove all goals and undo any changes to spillMap made by having a goal present.
+     * Used to remove all goals and undo any changes to gradientMap made by having a goal present.
      */
     public void clearGoals() {
         if(!initialized) return;
@@ -607,7 +607,7 @@ public class DijkstraMap
     }
 
     /**
-     * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
      * of Point positions (using the current measurement) needed to get closer to the closest reachable
      * goal. The maximum length of the returned list is given by length; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -667,7 +667,6 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    filled.put(currentPos, WALL);
                     Set<Point> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findPath(length, impassable2, onlyPassable, start, targets);
@@ -679,11 +678,10 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
-        filled.clear();
         return path;
     }
     /**
-     * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
      * of Point positions (using the current measurement) needed to get closer to a goal, until preferredRange is
      * reached, or further from a goal if the preferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
@@ -788,7 +786,6 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    filled.put(currentPos, WALL);
                     Set<Point> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findAttackPath(moveLength, preferredRange, los, impassable2, onlyPassable, start, targets);
@@ -800,11 +797,10 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
-        filled.clear();
         return path;
     }
     /**
-     * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
      * of Point positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
      * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
      * which may go further from a goal if the minPreferredRange has not been met at the current distance.
@@ -913,7 +909,6 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    filled.put(currentPos, WALL);
                     Set<Point> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
@@ -926,7 +921,6 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
-        filled.clear();
         return path;
     }
 
@@ -936,7 +930,7 @@ public class DijkstraMap
     private double[][] cachedFleeMap;
     private int cachedSize = 1;
     /**
-     * Scans the dungeon using Dijkstra.scan with the listed fearSources and start point, and returns a list
+     * Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list
      * of Point positions (using Manhattan distance) needed to get further from the closest fearSources, meant
      * for running away. The maximum length of the returned list is given by length; if moving the full
      * length of the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -1028,7 +1022,6 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    filled.put(currentPos, WALL);
                     Set<Point> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findFleePath(length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
@@ -1038,11 +1031,10 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
-        filled.clear();
         return path;
     }
     /**
-     * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
      * of Point positions (using the current measurement) needed to get closer to the closest reachable
      * goal. The maximum length of the returned list is given by length; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -1106,7 +1098,6 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    filled.put(currentPos, WALL);
                     Set<Point> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findPathLarge(size, length, impassable2, onlyPassable, start, targets);
@@ -1118,11 +1109,10 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
-        filled.clear();
         return path;
     }
     /**
-     * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
      * of Point positions (using the current measurement) needed to get closer to a goal, until preferredRange is
      * reached, or further from a goal if the preferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
@@ -1233,7 +1223,6 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    filled.put(currentPos, WALL);
                     Set<Point> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findAttackPathLarge(size, moveLength, preferredRange, los, impassable2, onlyPassable, start, targets);
@@ -1245,11 +1234,10 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
-        filled.clear();
         return path;
     }
     /**
-     * Scans the dungeon using Dijkstra.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
      * of Point positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
      * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
      * which may go further from a goal if the minPreferredRange has not been met at the current distance.
@@ -1365,7 +1353,6 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    filled.put(currentPos, WALL);
                     Set<Point> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
@@ -1378,12 +1365,11 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
-        filled.clear();
         return path;
     }
 
     /**
-     * Scans the dungeon using Dijkstra.scan with the listed fearSources and start point, and returns a list
+     * Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list
      * of Point positions (using Manhattan distance) needed to get further from the closest fearSources, meant
      * for running away. The maximum length of the returned list is given by length; if moving the full
      * length of the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -1479,7 +1465,6 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    filled.put(currentPos, WALL);
                     Set<Point> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findFleePathLarge(size, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
@@ -1489,7 +1474,6 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
-        filled.clear();
         return path;
     }
 

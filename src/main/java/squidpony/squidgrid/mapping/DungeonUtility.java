@@ -57,6 +57,47 @@ public class DungeonUtility {
         }
         return pt;
     }
+
+    /**
+     * Gets a random Point that is adjacent to start, validating whether the position can exist on the given map.
+     * Adjacency defaults to four-way cardinal directions unless eightWay is true, in which case it uses Chebyshev.
+     * This can step into walls, and should NOT be used for movement.  It is meant for things like sound that can
+     * exist in walls, or for assigning decor to floors or walls that are adjacent to floors.
+     * @param map
+     * @param start
+     * @param eightWay
+     * @return
+     */
+    public static Point randomStep(char[][] map, Point start, boolean eightWay)
+    {
+        int width = map.length;
+        int height = map[0].length;
+        if(width < 3 || height < 3 || start.x <= 0 || start.y <= 0 || start.x >= width - 1 || start.y >= height - 1)
+            return null;
+        Point stepped = new Point(start.x, start.y);
+
+        if(eightWay)
+        {
+            int mv = rng.nextInt(9);
+            stepped.translate((mv % 3) - 1, (mv / 3) - 1);
+        }
+        else
+        {
+            int mv = rng.nextInt(5);
+            switch (mv)
+            {
+                case 0: stepped.translate(-1, 0);
+                    break;
+                case 1: stepped.translate(1, 0);
+                    break;
+                case 2: stepped.translate(0, -1);
+                    break;
+                case 3: stepped.translate(0, 1);
+                    break;
+            }
+        }
+        return stepped;
+    }
     /**
      * Finds a random java.awt.Point where the x and y match up to a [x][y] location on map that has '.' as a value,
      * and a square of cells extending in the positive x and y directions with a side length of size must also have

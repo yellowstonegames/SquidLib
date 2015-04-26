@@ -30,6 +30,16 @@ public class Spill {
         EUCLIDEAN
     }
 
+    /**
+     * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
+     * diamond shape on a featureless map, while CHEBYSHEV and EUCLIDEAN will form a square. If you only call
+     * Spill.start() once, you should strongly prefer MANHATTAN, even if the rest of the game uses another
+     * measurement, because CHEBYSHEV and EUCLIDEAN can produce odd, gap-filled flood-fills.  Any case where you have
+     * too many gaps can be corrected to varying extent by calling start() more than once with slowly increasing values.
+     * Because start() will extend from the existing area of the Spill, holes are likely to be filled after a few calls,
+     * but if the last call to start() tries to fill too many more cells than the previous one, it can cause holes on
+     * the periphery of the Spill area.
+     */
     public Measurement measurement = Measurement.MANHATTAN;
 
 
@@ -271,6 +281,10 @@ public class Spill {
      * the cells near that will be true if chosen at random from all passable cells adjacent to a
      * filled (true) cell, and all other cells will be false. This takes a total number of cells to attempt
      * to fill (the volume parameter), and will fill less if it has completely exhausted all passable cells.
+     * If the measurement this Spill uses is anything other than MANHATTAN, you can expect many gaps in the first
+     * filled area.  Subsequent calls to start() with the same entry and a higher volume will expand the area
+     * of the Spill, and are likely to fill any gaps after a few subsequent calls. Increasing the volume slowly
+     * is the best way to ensure that gaps only exist on the very edge if you use a non-MANHATTAN measurement.
      *
      * @param entry The first cell to spread from, which should really be passable.
      * @param volume The total number of cells to attempt to fill, which must be non-negative.
