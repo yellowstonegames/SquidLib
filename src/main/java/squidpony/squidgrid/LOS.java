@@ -10,7 +10,7 @@ import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Elias;
 
 /**
- * Line of Site (LOS) algorithms find if there is or is not a path between two
+ * Line of Sight (LOS) algorithms find if there is or is not a path between two
  * given points.
  *
  * The line found between two points will end at either the target, the

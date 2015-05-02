@@ -5,6 +5,7 @@ import squidpony.squidgrid.mapping.styled.DungeonGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidgrid.SoundMap;
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -17,8 +18,8 @@ import java.util.Map;
 public class SoundTest {
     public static void main(String[] args) {
         for (SoundMap.Measurement m : SoundMap.Measurement.values()) {
-            LightRNG rng = new LightRNG(0x57a8deadbeef0ffal);
-
+            LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
+            RNG rng = new RNG(lrng);
             DungeonUtility.rng = rng;
             DungeonGen dg = new DungeonGen(rng);
 

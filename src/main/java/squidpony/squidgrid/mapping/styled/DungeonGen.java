@@ -2,6 +2,7 @@ package squidpony.squidgrid.mapping.styled;
 
 import com.google.gson.Gson;
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -14,20 +15,18 @@ public class DungeonGen {
     private Gson gson;
 
     /**
-     * Gets the current RNG, a squidpony.squidmath.LightRNG that can have its state/seed directly changed with its
-     * setSeed or setState method.
+     * Gets the current RNG.
      * @return
      */
-    public LightRNG getRng() {
+    public RNG getRng() {
         return rng;
     }
 
     /**
-     * Sets the current RNG, but requires a squidpony.squidmath.LightRNG for now. Any long can be used to seed a
-     * LightRNG, so if you have another kind of RNG, you can generate a long from that and use it as seed.
+     * Sets the current RNG.
      * @param rng
      */
-    public void setRng(LightRNG rng) {
+    public void setRng(RNG rng) {
         this.rng = rng;
     }
 
@@ -35,7 +34,7 @@ public class DungeonGen {
      * The current RNG, a squidpony.squidmath.LightRNG that can have its state/seed directly changed with its
      * setSeed or setState method.
      */
-    public LightRNG rng;
+    public RNG rng;
     private static InputStream[] jsonStreams = null;
     private static HashMap<TilesetType, Tileset> tilesetCache = new HashMap<TilesetType, Tileset>();
     private int[][] c_color, h_color, v_color;
@@ -111,15 +110,15 @@ public class DungeonGen {
      *               be used to generate a seed for the internal RNG this class uses.
      */
     public DungeonGen(Random random) {
-        this.rng = new LightRNG(random.nextLong());
+        this.rng = new RNG(new LightRNG(random.nextLong()));
         initialize();
     }
     /**
-     * Constructs a DungeonGen that uses the given squidpony.squidmath.LightRNG.
+     * Constructs a DungeonGen that uses the given squidpony.squidmath.RNG.
      *
-     * @param random A squidpony.squidmath.LightRNG to be used during the dungeon generation.
+     * @param random A squidpony.squidmath.RNG to be used during the dungeon generation.
      */
-    public DungeonGen(LightRNG random) {
+    public DungeonGen(RNG random) {
         this.rng = random;
         initialize();
     }
@@ -128,7 +127,7 @@ public class DungeonGen {
      * Constructs a DungeonGen that uses the default RNG.
      */
     public DungeonGen() {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         initialize();
     }
 

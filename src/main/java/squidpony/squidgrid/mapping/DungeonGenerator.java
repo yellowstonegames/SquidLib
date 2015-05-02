@@ -4,6 +4,7 @@ import squidpony.annotation.Beta;
 import squidpony.squidgrid.mapping.styled.DungeonGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 import squidpony.squidmath.Spill;
 
 import java.awt.*;
@@ -27,7 +28,7 @@ public class DungeonGenerator {
     public HashMap<FillEffect, Integer> fx;
     private DungeonGen gen;
     private int height, width;
-    public LightRNG rng;
+    public RNG rng;
 
     private char[][] dungeon = null;
 
@@ -59,7 +60,7 @@ public class DungeonGenerator {
 
     public DungeonGenerator()
     {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         gen = new DungeonGen(rng);
         height = 40;
         width = 40;
@@ -67,13 +68,13 @@ public class DungeonGenerator {
     }
     public DungeonGenerator(int width, int height)
     {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         gen = new DungeonGen(rng);
         this.height = height;
         this.width = width;
         fx = new HashMap<FillEffect, Integer>();
     }
-    public DungeonGenerator(int width, int height, LightRNG rng)
+    public DungeonGenerator(int width, int height, RNG rng)
     {
         this.rng = rng;
         gen = new DungeonGen(rng);
@@ -88,8 +89,8 @@ public class DungeonGenerator {
      */
     public DungeonGenerator(DungeonGenerator copying)
     {
-        rng = new LightRNG(copying.rng.getState());
-        gen = new DungeonGen(new LightRNG(copying.gen.rng.getState()));
+        rng = new RNG(copying.rng.getRandomness());
+        gen = new DungeonGen(rng);
         height = copying.height;
         width = copying.width;
         fx = new HashMap<FillEffect, Integer>(copying.fx);
@@ -324,7 +325,7 @@ public class DungeonGenerator {
         }
         if(waterFill > 0)
         {
-            int numPools = rng.nextInt(2, 6) + waterFill / 20;
+            int numPools = rng.nextInt(4) + 2 + waterFill / 20;
             int[] volumes = new int[numPools];
             int total = floors.size() * waterFill / 100;
             int error = 0;
