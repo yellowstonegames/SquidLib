@@ -183,6 +183,15 @@ public class RNG {
     }
 
     /**
+     * This returns a random double between 0.0 (inclusive) and max (exclusive).
+     *
+     * @return a value between 0 (inclusive) and max (exclusive)
+     */
+    public double nextDouble(double max) {
+        return (((long) (next(26)) << 27) + next(27)) * DOUBLE_UNIT * max;
+    }
+
+    /**
      * This returns a maximum of 0.99999994 because that is the largest Float
      * value that is less than 1.0f
      *
@@ -230,5 +239,14 @@ public class RNG {
     private int next(int bits) {
         return random.next(bits);
     }
+
+    public RandomnessSource getRandomness() {
+        return random;
+    }
+
+    public void setRandomness(RandomnessSource random) {
+        this.random = random;
+    }
+
 
 }

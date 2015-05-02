@@ -98,7 +98,7 @@ public class DijkstraMap
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
-    public LightRNG rng;
+    public RNG rng;
     private static int frustration = 0;
 
     private boolean initialized = false;
@@ -107,7 +107,22 @@ public class DijkstraMap
      * initialize() method before using this class.
      */
     public DijkstraMap() {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
+        path = new ArrayList<Point>();
+
+        goals = new HashMap<Point, Double>();
+        fresh = new HashMap<Point, Double>();
+        closed = new HashMap<Point, Double>();
+        open = new HashMap<Point, Double>();
+    }
+
+    /**
+     * Construct a DijkstraMap without a level to actually scan. This constructor allows you to specify an RNG before
+     * it is ever used in this class. If you use this constructor, you must call an initialize() method before using
+     * any other methods in the class.
+     */
+    public DijkstraMap(RNG random) {
+        rng = random;
         path = new ArrayList<Point>();
 
         goals = new HashMap<Point, Double>();
@@ -121,7 +136,7 @@ public class DijkstraMap
      * @param level
      */
     public DijkstraMap(final double[][] level) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         path = new ArrayList<Point>();
 
         goals = new HashMap<Point, Double>();
@@ -136,7 +151,7 @@ public class DijkstraMap
      * @param measurement
      */
     public DijkstraMap(final double[][] level, Measurement measurement) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         this.measurement = measurement;
         path = new ArrayList<Point>();
 
@@ -156,7 +171,7 @@ public class DijkstraMap
      * @param level
      */
     public DijkstraMap(final char[][] level) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         path = new ArrayList<Point>();
 
         goals = new HashMap<Point, Double>();
@@ -174,7 +189,7 @@ public class DijkstraMap
      * @param level
      */
     public DijkstraMap(final char[][] level, char alternateWall) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         path = new ArrayList<Point>();
 
         goals = new HashMap<Point, Double>();
@@ -194,7 +209,7 @@ public class DijkstraMap
      * @param measurement
      */
     public DijkstraMap(final char[][] level, Measurement measurement) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         path = new ArrayList<Point>();
         this.measurement = measurement;
 

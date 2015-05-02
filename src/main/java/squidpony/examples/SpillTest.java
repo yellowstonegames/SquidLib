@@ -4,6 +4,7 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 import squidpony.squidmath.Spill;
 
 import java.awt.Point;
@@ -19,7 +20,8 @@ public class SpillTest {
 
     public static void main(String[] args) {
         for (Spill.Measurement m : Spill.Measurement.values()) {
-            LightRNG rng = new LightRNG(0x1337deadbeefc000l);
+            LightRNG lrng = new LightRNG(0x1337deadbeefc000l);
+            RNG rng = new RNG(lrng);
             DungeonUtility.rng = rng;
             DungeonGen dg = new DungeonGen(rng);
 

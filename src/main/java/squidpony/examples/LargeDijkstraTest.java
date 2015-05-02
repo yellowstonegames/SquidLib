@@ -7,6 +7,7 @@ import squidpony.squidgrid.mapping.styled.DungeonGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.DijkstraMap;
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 
 import java.awt.Point;
 
@@ -36,8 +37,8 @@ public class LargeDijkstraTest {
     }
     public static void main(String[] args) {
         for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {
-            LightRNG rng = new LightRNG(0x57a8deadbeef0ffal);
-
+            LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
+            RNG rng = new RNG(lrng);
             int size = 2;
             DungeonUtility.rng = rng;
             DungeonGen dg = new DungeonGen(rng);
@@ -84,7 +85,8 @@ public class LargeDijkstraTest {
             System.out.println(dg);
             //debugPrint(dijkstra);
 
-            rng.setState(0x57a8deadbeef0ffal);
+            lrng.setState(0x57a8deadbeef0ffal);
+            rng = new RNG(lrng);
             DungeonUtility.rng = rng;
 
             dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
@@ -134,8 +136,8 @@ public class LargeDijkstraTest {
             //debugPrint(dijkstra);
             System.out.println();
 
-
-            rng.setState(0x57a8deadbeef0ffal);
+            lrng.setState(0x57a8deadbeef0ffal);
+            rng = new RNG(lrng);
             DungeonUtility.rng = rng;
 
             dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);

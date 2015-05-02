@@ -1,6 +1,7 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 
 import java.awt.Point;
 
@@ -9,11 +10,9 @@ import java.awt.Point;
  */
 public class DungeonUtility {
     /**
-     * The random number generator that will be used for all methods in this class with a random component. You can use
-     * the setState(long seed) method at any point to fix the seed/state of this RNG, or getState() if you want to store
-     * it for some reason (maybe serialization).
+     * The random number generator that will be used for all methods in this class with a random component.
      */
-    public static LightRNG rng = new LightRNG();
+    public static RNG rng = new RNG(new LightRNG());
     /**
      * Finds a random java.awt.Point where the x and y match up to a [x][y] location on map that has '.' as a value.
      * Uses this class' rng field for pseudo-random number generation.

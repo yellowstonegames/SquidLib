@@ -1,6 +1,7 @@
 package squidpony.squidgrid;
 
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 
 import java.awt.*;
 import java.awt.geom.Arc2D;
@@ -78,7 +79,7 @@ public class SoundMap
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
-    public LightRNG rng;
+    public RNG rng;
     private static int frustration = 0;
 
     private boolean initialized = false;
@@ -87,8 +88,18 @@ public class SoundMap
      * initialize() method before using this class.
      */
     public SoundMap() {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
+        alerted = new HashMap<Point, Double>();
+        fresh = new HashMap<Point, Double>();
+        sounds = new HashMap<Point, Double>();
+    }
 
+    /**
+     * Construct a SoundMap without a level to actually scan. This constructor allows you to specify an RNG before it is
+     * used. If you use this constructor, you must call an initialize() method before using this class.
+     */
+    public SoundMap(RNG random) {
+        rng = random;
         alerted = new HashMap<Point, Double>();
         fresh = new HashMap<Point, Double>();
         sounds = new HashMap<Point, Double>();
@@ -99,7 +110,7 @@ public class SoundMap
      * @param level
      */
     public SoundMap(final double[][] level) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         alerted = new HashMap<Point, Double>();
         fresh = new HashMap<Point, Double>();
         sounds = new HashMap<Point, Double>();
@@ -111,7 +122,7 @@ public class SoundMap
      * @param measurement
      */
     public SoundMap(final double[][] level, Measurement measurement) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         this.measurement = measurement;
         alerted = new HashMap<Point, Double>();
         fresh = new HashMap<Point, Double>();
@@ -128,7 +139,7 @@ public class SoundMap
      * @param level
      */
     public SoundMap(final char[][] level) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         alerted = new HashMap<Point, Double>();
         fresh = new HashMap<Point, Double>();
         sounds = new HashMap<Point, Double>();
@@ -143,7 +154,7 @@ public class SoundMap
      * @param level
      */
     public SoundMap(final char[][] level, char alternateWall) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         alerted = new HashMap<Point, Double>();
         fresh = new HashMap<Point, Double>();
         sounds = new HashMap<Point, Double>();
@@ -160,7 +171,7 @@ public class SoundMap
      * @param measurement
      */
     public SoundMap(final char[][] level, Measurement measurement) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         this.measurement = measurement;
         alerted = new HashMap<Point, Double>();
         fresh = new HashMap<Point, Double>();

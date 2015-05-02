@@ -76,7 +76,7 @@ public class Spill {
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
-    public LightRNG rng;
+    public RNG rng;
     private static int frustration = 0;
 
     private boolean initialized = false;
@@ -85,7 +85,16 @@ public class Spill {
      * initialize() method before using this class.
      */
     public Spill() {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
+
+        fresh = new HashSet<>();
+    }
+    /**
+     * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG before it is
+     * used. If you use this constructor, you must call an  initialize() method before using this class.
+     */
+    public Spill(RNG random) {
+        rng = random;
 
         fresh = new HashSet<>();
     }
@@ -95,7 +104,7 @@ public class Spill {
      * @param level
      */
     public Spill(final boolean[][] level) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
 
         initialize(level);
     }
@@ -105,7 +114,7 @@ public class Spill {
      * @param measurement
      */
     public Spill(final boolean[][] level, Measurement measurement) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         this.measurement = measurement;
 
         initialize(level);
@@ -120,7 +129,7 @@ public class Spill {
      * @param level
      */
     public Spill(final char[][] level) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
 
         initialize(level);
     }
@@ -133,7 +142,7 @@ public class Spill {
      * @param level
      */
     public Spill(final char[][] level, char alternateWall) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
 
         initialize(level, alternateWall);
     }
@@ -148,7 +157,7 @@ public class Spill {
      * @param measurement
      */
     public Spill(final char[][] level, Measurement measurement) {
-        rng = new LightRNG();
+        rng = new RNG(new LightRNG());
         this.measurement = measurement;
 
         initialize(level);
