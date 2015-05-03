@@ -83,6 +83,9 @@ public class SobolQRNG implements RandomnessSource {
 
     /**
      * Construct a new Sobol sequence generator for the given space dimension.
+     * You should call {@link #skipTo(int)} with a fairly large number (over 1000) to ensure the results aren't
+     * too obviously non-random. If you skipTo(1), all doubles in that result will be 0.5, and if you skipTo(0),
+     * all will be 0 (this class starts at index 1 instead of 0 for that reason). This is true for all dimensions.
      *
      * @param dimension the space dimension
      * @throws ArithmeticException if the space dimension is outside the allowed range of [1, 1000]
@@ -417,6 +420,7 @@ public class SobolQRNG implements RandomnessSource {
      * This operation can be performed in O(1).
      * If index is somehow negative, this uses its absolute value instead of throwing an exception.
      * If index is 0, the result will always be entirely 0.
+     * You should skipTo a number greater than 1000 if you want random-seeming individual numbers in each vector.
      *
      * @param index the index in the sequence to skip to
      * @return the i-th point in the Sobol sequence

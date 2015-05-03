@@ -10,7 +10,7 @@ public class SobolTest {
         for(int d = 1; d <= 20; d++)
         {
             SobolQRNG sq = new SobolQRNG(d);
-            sq.skipTo(10000);
+            sq.skipTo(9000);
             long[] result;
             for(int c = 0; c < 10; c++)
             {
