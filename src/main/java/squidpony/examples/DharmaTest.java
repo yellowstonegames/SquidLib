@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import squidpony.squidmath.DharmaRNG;
+import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.SobolQRNG;
 
 /**
@@ -8,20 +9,20 @@ import squidpony.squidmath.SobolQRNG;
  */
 public class DharmaTest {
     public static void main(String[] args) {
-        long sum = 0l;
-        for(int d = 1; d <= 20; d++)
+        for(int d = 1; d < 20; d++)
         {
-            DharmaRNG sq = new DharmaRNG(d * 0xd00d);
-            long result;
-            for(int c = 0; c < 20; c++)
+            long sum = 0l;
+            System.out.println("\nFairness: " + (d * 0.05));
+            DharmaRNG sq = new DharmaRNG(new LightRNG(d * 0xbabe), d * 0.05);
+            int result;
+            for(int c = 0; c < 100; c++)
             {
-                result = sq.nextLong(100);
+                result = sq.nextInt(100);
                 sum += result;
-                System.out.print(result + " ");
+                System.out.print(result + " "); // System.out.print(result + "(" + sq.getFortune() + ") ");
             }
-            System.out.println();
+            System.out.println("\nTotal: " + sum);
+            System.out.println("Average for this many calls: " + (50 * 100));
         }
-        System.out.println("\nTotal: " + sum);
-        System.out.println("\nAverage for this many calls: " + (50 * 400));
     }
 }

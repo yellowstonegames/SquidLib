@@ -15,10 +15,10 @@ import java.util.Random;
  */
 public class RNG {
 
-    private static final double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53)
-    private RandomnessSource random;
-    private double nextNextGaussian;
-    private boolean haveNextNextGaussian = false;
+    protected static final double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53)
+    protected RandomnessSource random;
+    protected double nextNextGaussian;
+    protected boolean haveNextNextGaussian = false;
     private Random ran = null;
 
     /**
@@ -233,10 +233,10 @@ public class RNG {
     }
 
     public int nextInt() {
-        return next(32); //To change body of generated methods, choose Tools | Templates.
+        return next(32);
     }
 
-    private int next(int bits) {
+    public int next(int bits) {
         return random.next(bits);
     }
 
