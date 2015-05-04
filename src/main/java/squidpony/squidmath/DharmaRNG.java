@@ -1,45 +1,36 @@
 package squidpony.squidmath;
 
+import java.util.List;
+import java.util.Queue;
+
 /**
- * A Quasi-Random number generator that attempts to produce values that are perceived as fair to an imperfect user.
+ * An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.
  * <p>
- * This uses the values from a 4D Sobol sequence, only using one of the dimensions at a time, but tracking the total
- * and comparing it to the potential total of a generator of only-average numbers (this generates doubles internally,
- * so it compares against a sequence of all 0.5). If the current generated total is too high or low compared to the
- * average total, the currently used seed is possibly changed, the generated number is moved in the direction of the
+ * This takes a RandomnessSource, defaulting to a LightRNG, and uses it to generate random values, but tracks the total
+ * and compares it to the potential total of a generator of only numbers with a desired value (default 0.54,
+ * so it compares against a sequence of all 0.54). If the current generated total is too high or low compared to the
+ * desired total, the currently used seed is possibly changed, the generated number is moved in the direction of the
  * desired fairness, and it returns that instead of the number that would have pushed the current generated total
  * beyond the desired threshold. The new number, if one is changed, will always be closer to the desired fairness.
  * This is absolutely insecure for cryptographic purposes, but should seem more "fair" to a player than a
  * random number generator that seeks to be truly random.
  * You can create multiple DharmaRNG objects with different fairness values and seeds, and use favorable generators
- * (with fairness greater than 0.5) for characters that need an easier time, or unfavorable generators if you want
+ * (with fairness greater than 0.54) for characters that need an easier time, or unfavorable generators if you want
  * the characters that use that RNG to be impeded somewhat.
- * The name comes from the Wheel of Dharma, since this rotates the bits of the seed like a wheel.
- * This class currently will have a slight bias toward lower numbers unless fairness is tweaked; 0.54 is used now
- * because 0.5 leans too low.
+ * The name comes from the Wheel of Dharma.
+ * This class currently will have a slight bias toward lower numbers with many RNGs unless fairness is tweaked; 0.54
+ * can be used as a stand-in because 0.5 leans too low.
  *
- * <p>
- * The implementation already comes with support for up to 1000 dimensions with direction numbers
- * calculated from <a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Stephen Joe and Frances Kuo</a>.
  * <p>
  * You can get values from this generator with: {@link #nextDouble()}, {@link #nextInt()},
  *   {@link #nextLong()}, and the bounded variants on each of those.
  * <p>
- * You can alter the tracking information or requested fairness with {@link #resetFortune()}, {@link #reseed(int)},
+ * You can alter the tracking information or requested fairness with {@link #resetFortune()},
  *   {@link #setFairness(double)}, and {@link #getFairness()}.
- *
- * @see <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol sequence (Wikipedia)</a>
- * @see <a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Sobol sequence direction numbers</a>
  *
  * Created by Tommy Ettinger on 5/2/2015.
  */
-public class DharmaRNG implements RandomnessSource {
-
-    /** The scaling factor. */
-    private static final double SCALE = Math.pow(2, 52);
-
-    /** The number of bits to use. */
-    private SobolQRNG sobol;
+public class DharmaRNG extends RNG {
 
     /** The current index in the sequence. Starts at 1, not 0, because 0 acts differently and shouldn't be typical.*/
     private int seed = 1;
@@ -58,57 +49,62 @@ public class DharmaRNG implements RandomnessSource {
      */
     public DharmaRNG()
     {
-        this((int)(Math.random() * ((1l << 32) - 1)));
+        this((long)(Math.random() * ((1L << 50) - 1)));
     }
     /**
      * Construct a new DharmaRNG with the given seed.
      *
-     * @param seed used to determine the point in the Sobol sequence to start at; this should be non-negative.
+     * @param seed used to seed the default RandomnessSource.
      */
-    public DharmaRNG(final int seed) {
-        sobol = new SobolQRNG(1);
-
-        if(seed < 0) this.seed = seed * -1;
-        else this.seed = seed;
-        if(this.seed <= 9000) this.seed = this.seed + 9001; //IT'S OVER 9000!
-
-        sobol.skipTo(this.seed);
+    public DharmaRNG(final long seed) {
+        super(new LightRNG(seed));
     }
 
     /**
      * Construct a new DharmaRNG with the given seed.
      *
-     * @param seed used to determine the point in the Sobol sequence to start at; this should be non-negative
+     * @param seed used to seed the default RandomnessSource.
      * @param fairness the desired fairness metric, which must be between 0.0 and 1.0
      */
-    public DharmaRNG(final int seed, final double fairness) {
+    public DharmaRNG(final long seed, final double fairness) {
+        super(new LightRNG(seed));
         if(fairness < 0.0 || fairness >= 1.0)
             this.fairness = 0.54;
         else
             this.fairness = fairness;
-        sobol = new SobolQRNG(1);
-
-        if(seed < 0) this.seed = seed * -1;
-        else this.seed = seed;
-        if(this.seed <= 9000) this.seed = this.seed + 9001; //IT'S OVER 9000!
-
-        sobol.skipTo(this.seed);
     }
 
-    /** Generate a more-fair-random double.
-     * @return a more-fair-random double in the range [0.0, 1.0).
+    /**
+     * Construct a new DharmaRNG with the given seed.
+     *
+     * @param rs the implementation used to generate random bits.
      */
+    public DharmaRNG(final RandomnessSource rs) {
+        super(rs);
+    }
+    /**
+     * Construct a new DharmaRNG with the given seed.
+     *
+     * @param rs the implementation used to generate random bits.
+     * @param fairness the desired fairness metric, which must be between 0.0 and 1.0
+     */
+    public DharmaRNG(final RandomnessSource rs, final double fairness) {
+        super(rs);
+        if(fairness < 0.0 || fairness >= 1.0)
+            this.fairness = 0.54;
+        else
+            this.fairness = fairness;
+    }
+
+    @Override
     public double nextDouble() {
-        double gen = sobol.nextVector()[0];
-        seed++;
-        if(Math.abs((produced + gen) - (baseline + fairness)) > 1.5) {
-            seed &= 0x03ffffff;
-            seed *= 21;
-            gen = sobol.skipTo(seed)[0];
-        }
-        if(Math.abs((produced + gen) - (baseline + fairness)) > 0.7)
+        double gen = (((long) (super.next(26)) << 27) + super.next(27)) * DOUBLE_UNIT;
+        /*if(Math.abs((produced + gen) - (baseline + fairness)) > 1.5) {
+            //do some reseeding here if possible
+        }*/
+        if(Math.abs((produced + gen) - (baseline + fairness)) > 0.5)
         {
-            gen = (gen + gen + fairness) / 3.0;
+            gen = (gen + fairness) / 2.0;
             produced *= 0.5;
             baseline *= 0.5;
             produced += gen;
@@ -123,68 +119,170 @@ public class DharmaRNG implements RandomnessSource {
         }
     }
 
-    /** Generate a more-fair-random double.
-     * @param max the maximum exclusive value to be returned; minimum is 0 inclusive.
-     * @return a more-fair-random double in the range [0.0, 1.0).
+    /**
+     * This returns a random double between 0.0 (inclusive) and max (exclusive).
+     *
+     * @return a value between 0 (inclusive) and max (exclusive)
      */
-    public double nextDouble(final double max) {
-        final double gen = nextDouble();
-        return gen * max;
+    public double nextDouble(double max) {
+        return this.nextDouble() * max;
     }
 
-    /** Generate a more-fair-random long.
-     * @return a random long, positive or negative (only 52 bits are actually used for the result, plus sign bit).
+    /**
+     * Returns a value from a even distribution from min (inclusive) to max
+     * (exclusive).
+     *
+     * @param min the minimum bound on the return value (inclusive)
+     * @param max the maximum bound on the return value (exclusive)
+     * @return the found value
      */
-    public long nextLong() {
-        final double gen = nextDouble();
-        return (long)(2.0 * (gen - 0.5) * SCALE);
-    }
-    /** Generate a more-fair-random long.
-     * @param max the maximum exclusive value to be returned; minimum is 0 inclusive.
-     * @return a random long in the range [0,max) (only 52 bits are actually used for the result, plus sign bit).
-     */
-    public long nextLong(final long max) {
-        final double gen = nextDouble();
-        return (long)(gen * max);
+    public double between(double min, double max) {
+        return min + (max - min) * this.nextDouble();
     }
 
-    /** Generate a more-fair-random int.
-     * @return a random int, can be positive or negative.
+    /**
+     * Returns a value between min (inclusive) and max (exclusive).
+     *
+     * The inclusive and exclusive behavior is to match the behavior of the
+     * similar method that deals with floating point values.
+     *
+     * @param min the minimum bound on the return value (inclusive)
+     * @param max the maximum bound on the return value (exclusive)
+     * @return the found value
      */
+    public int between(int min, int max) {
+        return this.nextInt(max - min) + min;
+    }
+
+    /**
+     * Returns the average of a number of randomly selected numbers from the
+     * provided range, with min being inclusive and max being exclusive. It will
+     * sample the number of times passed in as the third parameter.
+     *
+     * The inclusive and exclusive behavior is to match the behavior of the
+     * similar method that deals with floating point values.
+     *
+     * This can be used to weight RNG calls to the average between min and max.
+     *
+     * @param min the minimum bound on the return value (inclusive)
+     * @param max the maximum bound on the return value (exclusive)
+     * @param samples the number of samples to take
+     * @return the found value
+     */
+    public int betweenWeighted(int min, int max, int samples) {
+        int sum = 0;
+        for (int i = 0; i < samples; i++) {
+            sum += between(min, max);
+        }
+
+        int answer = Math.round((float) sum / samples);
+        return answer;
+    }
+
+    /**
+     * Returns a random element from the provided array and maintains object
+     * type.
+     *
+     * @param <T> the type of the returned object
+     * @param array the array to get an element from
+     * @return the randomly selected element
+     */
+    public <T> T getRandomElement(T[] array) {
+        if (array.length < 1) {
+            return null;
+        }
+        return array[this.nextInt(array.length)];
+    }
+
+    /**
+     * Returns a random element from the provided list. If the list is empty
+     * then null is returned.
+     *
+     * @param <T> the type of the returned object
+     * @param list the list to get an element from
+     * @return the randomly selected element
+     */
+    public <T> T getRandomElement(List<T> list) {
+        if (list.size() <= 0) {
+            return null;
+        }
+        return list.get(this.nextInt(list.size()));
+    }
+
+    /**
+     * Returns a random elements from the provided queue. If the queue is empty
+     * then null is returned.
+     *
+     * @param <T> the type of the returned object
+     * @param list the list to get an element from
+     * @return the randomly selected element
+     */
+    public <T> T getRandomElement(Queue<T> list) {
+        if (list.isEmpty()) {
+            return null;
+        }
+        return (T) list.toArray()[this.nextInt(list.size())];
+    }
+
+    /**
+     * @return a value from the gaussian distribution
+     */
+    public synchronized double nextGaussian() {
+        if (haveNextNextGaussian) {
+            haveNextNextGaussian = false;
+            return nextNextGaussian;
+        } else {
+            double v1, v2, s;
+            do {
+                v1 = 2 * this.nextDouble() - 1; // between -1 and 1
+                v2 = 2 * this.nextDouble() - 1; // between -1 and 1
+                s = v1 * v1 + v2 * v2;
+            } while (s >= 1 || s == 0);
+            double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
+            nextNextGaussian = v2 * multiplier;
+            haveNextNextGaussian = true;
+            return v1 * multiplier;
+        }
+    }
+    /**
+     * Returns a random integer below the given bound, or 0 if the bound is 0 or
+     * negative.
+     *
+     * @param bound the upper bound (exclusive)
+     * @return the found number
+     */
+    @Override
+    public int nextInt(int bound) {
+        if (bound <= 0) {
+            return 0;
+        }
+
+        return (int)(this.nextDouble() * bound);
+    }
+
+    @Override
     public int nextInt() {
-        final double gen = nextDouble();
-        return (int)(Math.pow(2.0, 33.0) * (gen - 0.5));
+        return this.next(32);
     }
-    /** Generate a more-fair-random int.
-     * @param max the maximum exclusive value to be returned; minimum is 0 inclusive.
-     * @return a random long in the range [0,max).
-     */
-    public int nextInt(final int max) {
-        final double gen = nextDouble();
-        return (int)(gen * max);
+
+    @Override
+    public long nextLong() {
+        return (long)(2 * (this.nextDouble() - 0.5) * 0x7FFFFFFFFFFFFFFFL);
     }
 
     /**
-     * Sets the seed at any point after being constructed.
-     * @param seed used to determine the point in the Sobol sequence to start at; this should be non-negative.
+     * Returns a random long below the given bound, or 0 if the bound is 0 or
+     * negative.
+     *
+     * @param bound the upper bound (exclusive)
+     * @return the found number
      */
-    public void reseed(final int seed)
-    {
-        if(seed < 0) this.seed = seed * -1;
-        else this.seed = seed;
-        if(this.seed <= 9000) this.seed = this.seed + 9001; //IT'S OVER 9000!
-        this.seed--;
-        sobol.skipTo(this.seed);
+    public long nextLong(long bound) {
+        if (bound <= 0) {
+            return 0;
+        }
+        return (long)(this.nextDouble() * bound);
     }
-
-    /**
-     * Get the current seed.
-     * @return
-     */
-    public int getSeed() {
-        return seed;
-    }
-
     /**
      * Gets the measure that this class uses for RNG fairness, defaulting to 0.5 (always between 0.0 and 1.0).
      * @return the current fairness metric.
@@ -229,7 +327,12 @@ public class DharmaRNG implements RandomnessSource {
      */
     @Override
     public int next(int bits) {
-        return (int) (nextInt() & (1L << bits) - 1);
+        if(bits <= 0)
+            return 0;
+        if(bits > 32)
+            bits = 32;
+        return (int)(this.nextDouble() * (1l << bits));
+
     }
 
 }
