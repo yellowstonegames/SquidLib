@@ -39,7 +39,7 @@ public class AStarSearch {
         EUCLIDEAN,
         /**
          * Full space search. Least efficient but guaranteed to return a path if
-         * one exists.
+         * one exists. See also DijkstraMap class.
          */
         DIJKSTRA
     }

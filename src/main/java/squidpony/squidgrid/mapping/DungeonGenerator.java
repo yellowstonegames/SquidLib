@@ -1,14 +1,13 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.mapping.styled.DungeonGen;
+import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
-import squidpony.squidmath.Spill;
+import squidpony.squidgrid.Spill;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +25,7 @@ public class DungeonGenerator {
         WATER, DOORS, TRAPS
     }
     public HashMap<FillEffect, Integer> fx;
-    private DungeonGen gen;
+    private DungeonBoneGen gen;
     private int height, width;
     public RNG rng;
 
@@ -61,7 +60,7 @@ public class DungeonGenerator {
     public DungeonGenerator()
     {
         rng = new RNG(new LightRNG());
-        gen = new DungeonGen(rng);
+        gen = new DungeonBoneGen(rng);
         height = 40;
         width = 40;
         fx = new HashMap<FillEffect, Integer>();
@@ -69,7 +68,7 @@ public class DungeonGenerator {
     public DungeonGenerator(int width, int height)
     {
         rng = new RNG(new LightRNG());
-        gen = new DungeonGen(rng);
+        gen = new DungeonBoneGen(rng);
         this.height = height;
         this.width = width;
         fx = new HashMap<FillEffect, Integer>();
@@ -77,7 +76,7 @@ public class DungeonGenerator {
     public DungeonGenerator(int width, int height, RNG rng)
     {
         this.rng = rng;
-        gen = new DungeonGen(rng);
+        gen = new DungeonBoneGen(rng);
         this.height = height;
         this.width = width;
         fx = new HashMap<FillEffect, Integer>();
@@ -90,7 +89,7 @@ public class DungeonGenerator {
     public DungeonGenerator(DungeonGenerator copying)
     {
         rng = new RNG(copying.rng.getRandomness());
-        gen = new DungeonGen(rng);
+        gen = new DungeonBoneGen(rng);
         height = copying.height;
         width = copying.width;
         fx = new HashMap<FillEffect, Integer>(copying.fx);
@@ -241,7 +240,7 @@ public class DungeonGenerator {
 
     public char[][] generate(TilesetType kind)
     {
-        char[][] map = DungeonGen.wallWrap(gen.generate(kind, width, height));
+        char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
 
         HashSet<Point> floors = new HashSet<Point>();
         HashSet<Point> doorways = new HashSet<Point>();

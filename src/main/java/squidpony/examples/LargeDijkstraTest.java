@@ -3,9 +3,9 @@ package squidpony.examples;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.styled.DungeonGen;
+import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.DijkstraMap;
+import squidpony.squidai.DijkstraMap;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -41,7 +41,7 @@ public class LargeDijkstraTest {
             RNG rng = new RNG(lrng);
             int size = 2;
             DungeonUtility.rng = rng;
-            DungeonGen dg = new DungeonGen(rng);
+            DungeonBoneGen dg = new DungeonBoneGen(rng);
 
             dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
             dg.wallWrap();
