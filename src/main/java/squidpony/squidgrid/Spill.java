@@ -1,6 +1,8 @@
-package squidpony.squidmath;
+package squidpony.squidgrid;
 
-import squidpony.squidgrid.Direction;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
+
 import java.awt.*;
 import java.util.*;
 /**

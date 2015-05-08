@@ -1,6 +1,6 @@
 package squidpony.examples;
 
-import squidpony.squidgrid.mapping.styled.DungeonGen;
+import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.LightRNG;
@@ -13,7 +13,7 @@ public class StyledDungeonTest {
 
     public static void main( String[] args )
     {
-        DungeonGen bg = new DungeonGen(new RNG(new LightRNG(0x1337deadbeef48aaL)));
+        DungeonBoneGen bg = new DungeonBoneGen(new RNG(new LightRNG(0x1337deadbeef48aaL)));
         for(TilesetType tt : TilesetType.values())
         {
             System.out.println(tt.toString());

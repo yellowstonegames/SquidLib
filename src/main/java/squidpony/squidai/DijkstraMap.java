@@ -1,9 +1,11 @@
-package squidpony.squidmath;
+package squidpony.squidai;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.*;
 
 /**
@@ -400,7 +402,7 @@ public class DijkstraMap
      * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
      * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
      * which will have a value defined by the WALL constant in this class, and areas that the scan was
-     * unable to reach, which will have a value defined by the DARK constant in this class. (typically,
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
      * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
      * current measurement.
      *
@@ -463,6 +465,92 @@ public class DijkstraMap
             closed.putAll(open);
             open = new HashMap<Point, Double>(fresh);
             fresh.clear();
+        }
+        closed.clear();
+        open.clear();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+        }
+
+        return gradientMap;
+    }
+
+    /**
+     * Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
+     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
+     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
+     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
+     * current measurement.
+     *
+     * @param limit The maximum number of steps to scan outward from a goal.
+     * @param impassable A Set of Position keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] partialScan(int limit, Set<Point> impassable) {
+        if(!initialized) return null;
+        if(impassable == null)
+            impassable = new HashSet<Point>();
+        HashMap<Point, Double> blocking = new HashMap<Point, Double>(impassable.size());
+        for (Point pt : impassable) {
+            blocking.put(pt, WALL);
+        }
+        closed.putAll(blocking);
+
+        for (Map.Entry<Point, Double> entry : goals.entrySet()) {
+            if (closed.containsKey(entry.getKey()))
+                closed.remove(entry.getKey());
+            gradientMap[entry.getKey().x][entry.getKey().y] = GOAL;
+        }
+        double currentLowest = 999000;
+        HashMap<Point, Double> lowest = new HashMap<Point, Double>();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(new Point(x, y)))
+                    closed.put(new Point(x, y), physicalMap[x][y]);
+                else if(gradientMap[x][y] < currentLowest)
+                {
+                    currentLowest = gradientMap[x][y];
+                    lowest.clear();
+                    lowest.put(new Point(x, y), currentLowest);
+                }
+                else if(gradientMap[x][y] == currentLowest)
+                {
+                    lowest.put(new Point(x, y), currentLowest);
+                }
+            }
+        }
+        int numAssigned = lowest.size();
+        open.putAll(lowest);
+        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        int iter = 0;
+        while (numAssigned > 0 && iter < limit) {
+//            ++iter;
+            numAssigned = 0;
+
+            for (Map.Entry<Point, Double> cell : open.entrySet()) {
+                for (int d = 0; d < dirs.length; d++) {
+                    Point adj = new Point(cell.getKey());
+                    adj.translate(dirs[d].deltaX, dirs[d].deltaY);
+                    double h = heuristic(dirs[d]);
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
+                        setFresh(adj, cell.getValue() + h);
+                        ++numAssigned;
+                    }
+                }
+            }
+            closed.putAll(open);
+            open = new HashMap<Point, Double>(fresh);
+            fresh.clear();
+            ++iter;
         }
         closed.clear();
         open.clear();
@@ -1490,6 +1578,39 @@ public class DijkstraMap
         frustration = 0;
         goals.clear();
         return path;
+    }
+
+    /**
+     * A simple limited flood-fill that returns a HashMap of Point keys to the Double values in the DijkstraMap, only
+     * calculating out to a number of steps determined by limit. This can be useful if you need many flood-fills and
+     * don't need a large area for each, or if you want to have an effect spread to a certain number of cells away.
+     * @param radius the number of steps to take outward from each starting position.
+     * @param starts a vararg group of Points to step outward from; this often will only need to be one Point.
+     * @return A HashMap of Point keys to Double values; the starts are included in this with the value 0.0.
+     */
+    public HashMap<Point, Double> floodFill(int radius, Point... starts) {
+        if(!initialized) return null;
+        HashMap<Point, Double> fill = new HashMap<Point, Double>();
+
+        resetMap();
+        for (Point goal : starts) {
+            setGoal(goal.x, goal.y);
+        }
+        partialScan(radius, null);
+        double temp;
+        for(int x = 1; x < width - 1; x++)
+        {
+            for(int y = 1; y < height - 1; y++)
+            {
+                temp = gradientMap[x][y];
+                if(temp < FLOOR)
+                {
+                    fill.put(new Point(x, y), temp);
+                }
+            }
+        }
+        goals.clear();
+        return fill;
     }
 
     /**

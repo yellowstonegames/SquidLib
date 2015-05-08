@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * Created by Tommy Ettinger on 3/10/2015.
  */
-public class DungeonGen {
+public class DungeonBoneGen {
     private Gson gson;
 
     /**
@@ -31,8 +31,7 @@ public class DungeonGen {
     }
 
     /**
-     * The current RNG, a squidpony.squidmath.LightRNG that can have its state/seed directly changed with its
-     * setSeed or setState method.
+     * The current RNG, a squidpony.squidmath.RNG
      */
     public RNG rng;
     private static InputStream[] jsonStreams = null;
@@ -109,7 +108,7 @@ public class DungeonGen {
      * @param random A Random number generator to be used during the dungeon generation; it will
      *               be used to generate a seed for the internal RNG this class uses.
      */
-    public DungeonGen(Random random) {
+    public DungeonBoneGen(Random random) {
         this.rng = new RNG(new LightRNG(random.nextLong()));
         initialize();
     }
@@ -118,7 +117,7 @@ public class DungeonGen {
      *
      * @param random A squidpony.squidmath.RNG to be used during the dungeon generation.
      */
-    public DungeonGen(RNG random) {
+    public DungeonBoneGen(RNG random) {
         this.rng = random;
         initialize();
     }
@@ -126,7 +125,7 @@ public class DungeonGen {
     /**
      * Constructs a DungeonGen that uses the default RNG.
      */
-    public DungeonGen() {
+    public DungeonBoneGen() {
         rng = new RNG(new LightRNG());
         initialize();
     }

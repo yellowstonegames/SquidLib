@@ -1,11 +1,11 @@
 package squidpony.examples;
 
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.styled.DungeonGen;
+import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
-import squidpony.squidmath.Spill;
+import squidpony.squidgrid.Spill;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class SpillTest {
             LightRNG lrng = new LightRNG(0x1337deadbeefc000l);
             RNG rng = new RNG(lrng);
             DungeonUtility.rng = rng;
-            DungeonGen dg = new DungeonGen(rng);
+            DungeonBoneGen dg = new DungeonBoneGen(rng);
 
             dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
             dg.wallWrap();
