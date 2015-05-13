@@ -26,8 +26,8 @@ public class CellRepeat {
     public static final int EXPAND_CHEBYSHEV = 8;
     /**
      * Constant for cells that repeat moving in the same pattern as they did originally, but can change direction any
-     * number of times along that path, and will choose from the set of all possible options with kind set to
-     * FREE. An example is the Knight's Tour chess problem, which could get a collection of all possible paths in a
+     * number of times along that path, and will choose from the set of all possible options at that point. An example
+     * is the Knight's Tour chess problem, which could get a collection of all possible paths in a
      * certain number of moves by setting rotate to true, kind to FREE, and length to the desired number of moves, for
      * the two mirror-image moves that the Knight could take.
      */
@@ -76,4 +76,16 @@ public class CellRepeat {
         this.length = length;
         this.rotate = rotate;
     }
+
+    /**
+     * Every CellRepeat created with the parameter-less constructor is identical, so unless you alter DEFAULT,
+     * you can use this field instead of constructing new CellRepeat-s for every cell in a pattern.
+     */
+    public static final CellRepeat DEFAULT = new CellRepeat();
+    /**
+     * Area of Effect patterns don't usually need 4-way rotation around the center of their effect, and this otherwise
+     * will act like the default constructor.
+     * You can use this field instead of constructing new CellRepeat-s for every cell in a pattern.
+     */
+    public static final CellRepeat DEFAULT_AOE = new CellRepeat(SINGLE, 1, false);
 }
