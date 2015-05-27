@@ -13,17 +13,39 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * Creates a map for use in creating adventure areas.
+ * The primary way to create a more-complete dungeon, layering different effects and modifications on top of
+ * a DungeonBoneGen's dungeon.
+ *
+ * @see squidpony.squidgrid.mapping.DungeonUtility
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
+ * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 @Beta
 public class DungeonGenerator {
 
+    /**
+     * The effects that can be applied to this dungeon. More may be added in future releases.
+     */
     public enum FillEffect
     {
-        WATER, DOORS, TRAPS
+        /**
+         * Water, represented by '~'
+         */
+        WATER,
+        /**
+         * Doors, represented by '+' for east-to-west connections or '/' for north-to-south ones.
+         */
+        DOORS,
+        /**
+         * Traps, represented by '^'
+         */
+        TRAPS
     }
+
+    /**
+     * The effects that will be applied when generate is called. Strongly prefer using addWater, addDoors, and addTraps.
+     */
     public HashMap<FillEffect, Integer> fx;
     private DungeonBoneGen gen;
     private int height, width;
@@ -31,10 +53,19 @@ public class DungeonGenerator {
 
     private char[][] dungeon = null;
 
+    /**
+     * Get the most recently generated char[][] dungeon out of this class, which may be null if none have been
+     * generated with the method generate and setDungeon has not been called.
+     * @return a char[][] dungeon, or null.
+     */
     public char[][] getDungeon() {
         return dungeon;
     }
 
+    /**
+     * Change the underlying char[][]; only affects the toString method, and of course getDungeon.
+     * @param dungeon a char[][], probably produced by an earlier call to this class and then modified.
+     */
     public void setDungeon(char[][] dungeon) {
         this.dungeon = dungeon;
         if(dungeon == null)
@@ -48,15 +79,26 @@ public class DungeonGenerator {
             height = dungeon[0].length;
     }
 
+    /**
+     * Height of the dungeon in cells.
+     * @return Height of the dungeon in cells.
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Width of the dungeon in cells.
+     * @return Width of the dungeon in cells.
+     */
     public int getWidth() {
         return width;
     }
 
 
+    /**
+     * Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.
+     */
     public DungeonGenerator()
     {
         rng = new RNG(new LightRNG());
@@ -65,6 +107,13 @@ public class DungeonGenerator {
         width = 40;
         fx = new HashMap<FillEffect, Integer>();
     }
+
+    /**
+     * Make a DungeonGenerator with the given height and width, and the RNG used for generating a dungeon and
+     * adding features will be a LightRNG using a random seed.
+     * @param width The width of the dungeon in cells.
+     * @param height The height of the dungeon in cells.
+     */
     public DungeonGenerator(int width, int height)
     {
         rng = new RNG(new LightRNG());
@@ -73,6 +122,14 @@ public class DungeonGenerator {
         this.width = width;
         fx = new HashMap<FillEffect, Integer>();
     }
+
+    /**
+     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.
+     * @param width The width of the dungeon in cells.
+     * @param height The height of the dungeon in cells.
+     * @param rng The RNG to use for all purposes in this class; if this has been seeded and you want the same
+     *            results from map generation every time, don't use the same RNG object in other places.
+     */
     public DungeonGenerator(int width, int height, RNG rng)
     {
         this.rng = rng;
@@ -101,8 +158,9 @@ public class DungeonGenerator {
      * a random number of pools, with more appearing if needed to fill the percentage. Each pool will have randomized
      * volume that should fill or get very close to filling the requested percentage, unless the pools encounter too
      * much tight space. If this DungeonGenerator previously had addWater called, the latest call will take precedence.
-     * @param percentage
-     * @return
+     * @param percentage the percentage of floor cells to fill with water; this can vary quite a lot. It may be
+     *                   difficult to fill very high (approaching 100) percentages with water, though it will succeed.
+     * @return this DungeonGenerator; can be chained
      */
     public DungeonGenerator addWater(int percentage)
     {
@@ -115,11 +173,13 @@ public class DungeonGenerator {
     /**
      * Turns the given percentage of viable doorways into doors, represented by '+' for doors that allow travel along
      * the x-axis and '/' for doors that allow travel along the y-axis. If doubleDoors is true,
-     * 2-cell-wide openings will be considered viable doorways and may receive a door in each cell. If this
-     * DungeonGenerator previously had addDoors called, the latest call will take precedence.
-     * @param percentage
-     * @param doubleDoors
-     * @return
+     * 2-cell-wide openings will be considered viable doorways and will fill one cell with a wall, the other a door.
+     * If this DungeonGenerator previously had addDoors called, the latest call will take precedence.
+     * @param percentage the percentage of valid openings to corridors to fill with doors; should be between 10 and
+     *                   20 if you want doors to appear more than a few times, but not fill every possible opening.
+     * @param doubleDoors true if you want two-cell-wide openings to receive a door and a wall; false if only
+     *                    one-cell-wide openings should receive doors. Usually, this should be true.
+     * @return this DungeonGenerator; can be chained
      */
     public DungeonGenerator addDoors(int percentage, boolean doubleDoors)
     {
@@ -135,8 +195,9 @@ public class DungeonGenerator {
      * Turns the given percentage of open area floor cells into trap cells, represented by '^'. Corridors that have no
      * possible way to move around a trap will not receive traps, ever. If this DungeonGenerator previously had
      * addTraps called, the latest call will take precedence.
-     * @param percentage
-     * @return
+     * @param percentage the percentage of valid cells to fill with traps; should be no higher than 5 unless
+     *                   the dungeon floor is meant to be a kill screen or minefield.
+     * @return this DungeonGenerator; can be chained
      */
     public DungeonGenerator addTraps(int percentage)
     {
@@ -149,7 +210,7 @@ public class DungeonGenerator {
 
     /**
      * Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.
-     * @return
+     * @return this DungeonGenerator, with all effects removed. Can be chained.
      */
     public DungeonGenerator clearEffects()
     {
@@ -238,8 +299,28 @@ public class DungeonGenerator {
         return doors;
     }
 
+    /**
+     * Generate a char[][] dungeon using TilesetType.DEFAULT_DUNGEON; this produces a dungeon appropriate for a level
+     * of ruins or a partially constructed dungeon. This uses '#' for walls, '.' for floors, '~' for water,
+     * '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that provide vertical passage.
+     * Use the addDoors, addWater, and addTraps methods of this class to request these in the next generated map.
+     * @return a char[][] dungeon
+     */
+    public char[][] generate() {
+        return generate(TilesetType.DEFAULT_DUNGEON);
+    }
+
+    /**
+     * Generate a char[][] dungeon given a TilesetType; the comments in that class provide some opinions on what
+     * each TilesetType value could be used for in a game. This uses '#' for walls, '.' for floors, '~' for water,
+     * '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that provide vertical passage.
+     * Use the addDoors, addWater, and addTraps methods of this class to request these in the next generated map.
+     * @see squidpony.squidgrid.mapping.styled.TilesetType
+     * @param kind a TilesetType enum value, such as TilesetType.DEFAULT_DUNGEON
+     * @return a char[][] dungeon
+     */
     public char[][] generate(TilesetType kind)
-    {
+        {
         char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
 
         HashSet<Point> floors = new HashSet<Point>();

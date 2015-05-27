@@ -6,7 +6,12 @@ import squidpony.squidmath.RNG;
 import java.awt.Point;
 
 /**
+ * A static class that can be used to modify the char[][] dungeons that other generators produce.
+ * Includes various utilities for random floor-finding, but also provides ways to take dungeons that use '#'
+ * for walls and make a copy that uses unicode box drawing characters.
+ * @see squidpony.squidgrid.mapping.DungeonGenerator
  * Created by Tommy Ettinger on 4/1/2015.
+ * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonUtility {
     /**

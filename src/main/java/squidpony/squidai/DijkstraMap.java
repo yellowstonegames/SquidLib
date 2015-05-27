@@ -572,7 +572,7 @@ public class DijkstraMap
      * size, that its minimum-x, minimum-y cell is the starting cell, and that any cell with a distance number
      * represents the distance for the creature's minimum-x, minimum-y cell to reach it. Cells that cannot be entered
      * by the minimum-x, minimum-y cell because of sizing (such as a floor cell next to a maximum-x and/or maximum-y
-     * wall if size is > 1) will be marked as DARK. Cells that were marked as goals with setGoal will have
+     * wall if size is &gt; 1) will be marked as DARK. Cells that were marked as goals with setGoal will have
      * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
      * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
      * which will have a value defined by the WALL constant in this class, and areas that the scan was
@@ -1146,7 +1146,7 @@ public class DijkstraMap
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
      * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
-     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is > 1, and
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
      * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
      *
      * @param size
@@ -1225,7 +1225,7 @@ public class DijkstraMap
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
      * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
-     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is > 1, and
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
      * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
      *
      * @param moveLength
@@ -1351,7 +1351,7 @@ public class DijkstraMap
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
      * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
-     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is > 1, and
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
      * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
      *
      * @param size
@@ -1486,7 +1486,7 @@ public class DijkstraMap
      * any subsequent calls that use the same values as the last values passed will avoid recalculating
      * unnecessary scans. Calls to findFleePath will cache as if size is 1, and may share a cache with this function.
      * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
-     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is > 1, and
+     * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
      * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
      *
      * @param size
