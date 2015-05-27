@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
+ * Generate a dungeon using Sean T. Barrett's Herringbone Wang Tiles method. http://nothings.org/gamedev/herringbone/
  * Created by Tommy Ettinger on 3/10/2015.
+ * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonBoneGen {
     private Gson gson;

@@ -96,6 +96,11 @@ public class DharmaRNG extends RNG {
             this.fairness = fairness;
     }
 
+    /**
+     * Generate a random double, altering the result if recently generated results have been leaning
+     * away from this class' fairness value.
+     * @return a double between 0.0 (inclusive) and 1.0 (exclusive)
+     */
     @Override
     public double nextDouble() {
         double gen = (((long) (super.next(26)) << 27) + super.next(27)) * DOUBLE_UNIT;
@@ -246,7 +251,7 @@ public class DharmaRNG extends RNG {
     }
     /**
      * Returns a random integer below the given bound, or 0 if the bound is 0 or
-     * negative.
+     * negative. Affects the current fortune.
      *
      * @param bound the upper bound (exclusive)
      * @return the found number
@@ -260,11 +265,19 @@ public class DharmaRNG extends RNG {
         return (int)(this.nextDouble() * bound);
     }
 
+    /**
+     * Returns a random integer, which may be positive or negative. Affects the current fortune.
+     * @return A random int
+     */
     @Override
     public int nextInt() {
-        return this.next(32);
+        return (int)((this.nextDouble() - 0.5) * 2.0 * 0x7FFFFFFF);
     }
 
+    /**
+     * Returns a random long, which may be positive or negative. Affects the current fortune.
+     * @return A random long
+     */
     @Override
     public long nextLong() {
         return (long)(2 * (this.nextDouble() - 0.5) * 0x7FFFFFFFFFFFFFFFL);
@@ -284,7 +297,7 @@ public class DharmaRNG extends RNG {
         return (long)(this.nextDouble() * bound);
     }
     /**
-     * Gets the measure that this class uses for RNG fairness, defaulting to 0.5 (always between 0.0 and 1.0).
+     * Gets the measure that this class uses for RNG fairness, defaulting to 0.54 (always between 0.0 and 1.0).
      * @return the current fairness metric.
      */
     public double getFairness() {
@@ -293,8 +306,8 @@ public class DharmaRNG extends RNG {
 
     /**
      * Sets the measure that this class uses for RNG fairness, which must always be between 0.0 and 1.0, and will be
-     * set to 0.5 if an invalid value is passed.
-     * @param fairness the desired fairness metric, which must be between 0.0 and 1.0
+     * set to 0.54 if an invalid value is passed.
+     * @param fairness the desired fairness metric, which must be 0.0 &lt;= fairness &lt; 1.0
      */
     public void setFairness(double fairness) {
         if(fairness < 0.0 || fairness >= 1.0)

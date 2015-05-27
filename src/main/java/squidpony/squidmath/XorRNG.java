@@ -1,42 +1,35 @@
+/*
+Written in 2015 by Sebastiano Vigna (vigna@acm.org)
+
+To the extent possible under law, the author has dedicated all copyright
+and related and neighboring rights to this software to the public domain
+worldwide. This software is distributed without any warranty.
+
+See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 package squidpony.squidmath;
 
-import squidpony.annotation.Beta;
-
 /**
- * The following description is from the wikipedia page on xorshift
- *
- * "Xorshift random number generators form a class of pseudorandom number
- * generators that was discovered by George Marsaglia. They generate the next
- * number in their sequence by repeatedly taking the exclusive or of a number
- * with a bit shifted version of itself. This makes them extremely fast on
- * modern computer architectures. The xor shift primitive is invertible. They
- * are a subclass of linear feedback shift registers, but their simple
- * implementation typically makes them faster and use less space. However, the
- * parameters have to be chosen very carefully in order to achieve a long
- * period. The xorshift generators have been described as being fast but not
- * reliable."
- *
- * The reliability and comparative speed of this implementation has not been
- * fully tested.
- *
- * @author http://en.wikipedia.org/wiki/Xorshift
+ * A port of Sebastiano Vigna's XorShift 128+ generator. Should be very fast and produce high-quality output.
+ * Original version at http://xorshift.di.unimi.it/xorshift128plus.c
+ * Written in 2015 by Sebastiano Vigna (vigna@acm.org)
+ * @author Sebastiano Vigna
+ * @author Tommy Ettinger
  */
-@Beta
 public class XorRNG implements RandomnessSource {
 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     private static final long DOUBLE_MASK = (1L << 53) - 1;
     private static final double NORM_53 = 1. / (1L << 53);
     private static final long FLOAT_MASK = (1L << 24) - 1;
     private static final double NORM_24 = 1. / (1L << 24);
-    private long state;
+    private long state0, state1;
 
     /**
      * Creates a new generator seeded using Math.random.
      */
     public XorRNG() {
-        this((long) Math.floor(Math.random() * Long.MAX_VALUE));
+        this((long) (Math.random() * Long.MAX_VALUE));
     }
 
     public XorRNG(final long seed) {
@@ -49,9 +42,11 @@ public class XorRNG implements RandomnessSource {
     }
 
     public long nextLong() {
-        state ^= state >>> 11;
-        state ^= state >>> 32;
-        return 1181783497276652981L * (state ^= (state << 5));
+        long s1 = state0;
+        final long s0 = state1;
+        state0 = s0;
+        s1 ^= s1 << 23; // a
+        return ( state1 = ( s1 ^ s0 ^ ( s1 >> 17 ) ^ ( s0 >> 26 ) ) ) + s0; // b, c
     }
 
     public int nextInt() {
@@ -100,6 +95,17 @@ public class XorRNG implements RandomnessSource {
         }
     }
 
+    private long avalanche ( long k )
+    {
+        k ^= k >> 33;
+        k *= 0xff51afd7ed558ccdL;
+        k ^= k >> 33;
+        k *= 0xc4ceb9fe1a85ec53L;
+        k ^= k >> 33;
+
+        return k;
+    }
+
     /**
      * Sets the seed of this generator. Passing this 0 will just set it to -1
      * instead.
@@ -107,6 +113,8 @@ public class XorRNG implements RandomnessSource {
      * @param seed the number to use as the seed
      */
     public void setSeed(final long seed) {
-        state = seed == 0 ? -1 : seed;
+        state0 = avalanche(seed == 0 ? -1 : seed);
+        state1 = avalanche(state0);
+        state0 = avalanche(state1);
     }
 }
