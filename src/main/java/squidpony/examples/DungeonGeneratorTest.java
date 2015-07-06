@@ -3,6 +3,8 @@ package squidpony.examples;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 
 /**
  * Sample output: {@code
@@ -73,7 +75,8 @@ import squidpony.squidgrid.mapping.styled.TilesetType;
 public class DungeonGeneratorTest {
     public static void main( String[] args )
     {
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(35, 60);
+        RNG rng = new RNG(new LightRNG(0xc00bacca));
+        DungeonGenerator dungeonGenerator = new DungeonGenerator(35, 60, rng);
         dungeonGenerator.addDoors(15, true);
         dungeonGenerator.addWater(25);
         dungeonGenerator.addTraps(2);

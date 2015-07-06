@@ -1,8 +1,17 @@
 package squidpony.squidgrid.gui;
 
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.JLayeredPane;
 import squidpony.SColor;
@@ -144,6 +153,14 @@ public class SquidPanel extends JLayeredPane {
         SquidPanel.this.put(0, 0, chars);
     }
 
+    public void put(char[][] chars, Color[][] foregrounds) {//TODO - convert this to work with code points
+        SquidPanel.this.put(0, 0, chars, foregrounds);
+    }
+
+    public void put(char[][] chars, int[][] indices, List<Color> palette) {//TODO - convert this to work with code points
+        SquidPanel.this.put(0, 0, chars, indices, palette);
+    }
+
     public void put(int x, int y, BufferedImage image) {
         contents[x][y] = image;
         imageChanged[x][y] = true;
@@ -160,6 +177,46 @@ public class SquidPanel extends JLayeredPane {
 
     public void put(int xOffset, int yOffset, char[][] chars) {
         SquidPanel.this.put(xOffset, yOffset, chars, defaultForeground);
+    }
+
+    public void put(int xOffset, int yOffset, char[][] chars, Color[][] foregrounds) {
+        for (int x = xOffset; x < xOffset + chars.length; x++) {
+            for (int y = yOffset; y < yOffset + chars[0].length; y++) {
+                if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
+                    SquidPanel.this.put(x, y, chars[x - xOffset][y - yOffset], foregrounds[x - xOffset][y - yOffset]);
+                }
+            }
+        }
+    }
+
+    public void put(int xOffset, int yOffset, char[][] chars, int[][] indices, List<Color> palette) {
+        for (int x = xOffset; x < xOffset + chars.length; x++) {
+            for (int y = yOffset; y < yOffset + chars[0].length; y++) {
+                if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
+                    SquidPanel.this.put(x, y, chars[x - xOffset][y - yOffset], palette.get(indices[x - xOffset][y - yOffset]));
+                }
+            }
+        }
+    }
+
+    public void put(int xOffset, int yOffset, Color[][] foregrounds) {
+        for (int x = xOffset; x < xOffset + foregrounds.length; x++) {
+            for (int y = yOffset; y < yOffset + foregrounds[0].length; y++) {
+                if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
+                    SquidPanel.this.put(x, y, textFactory.getSolid(foregrounds[x - xOffset][y - yOffset]));
+                }
+            }
+        }
+    }
+
+    public void put(int xOffset, int yOffset, int[][] indices, List<Color> palette) {
+        for (int x = xOffset; x < xOffset + indices.length; x++) {
+            for (int y = yOffset; y < yOffset + indices[0].length; y++) {
+                if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
+                    SquidPanel.this.put(x, y, textFactory.getSolid(palette.get(indices[x - xOffset][y - yOffset])));
+                }
+            }
+        }
     }
 
     public void put(int xOffset, int yOffset, char[][] chars, Color foreground) {
@@ -268,7 +325,7 @@ public class SquidPanel extends JLayeredPane {
         this.put(x, y, SColor.TRANSPARENT);
     }
 
-    public void put(int x, int y, SColor color) {
+    public void put(int x, int y, Color color) {
         put(x, y, textFactory.getSolid(color));
     }
 
@@ -289,6 +346,10 @@ public class SquidPanel extends JLayeredPane {
 
     public void put(int x, int y, char c, Color color) {
         put(x, y, (int) c, color);
+    }
+
+    public void put(int x, int y, char c, int index, List<Color> palette) {
+        put(x, y, (int) c, palette.get(index));
     }
 
     /**

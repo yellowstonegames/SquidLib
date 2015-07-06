@@ -164,6 +164,21 @@ public class Spill {
 
         initialize(level);
     }
+    /**
+     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
+     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
+     * map that can be used here. This constructor specifies a distance measurement.
+     *
+     * @param level
+     * @param measurement
+     */
+    public Spill(final char[][] level, Measurement measurement, RNG rng) {
+        this.rng = rng;
+        this.measurement = measurement;
+
+        initialize(level);
+    }
 
     /**
      * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
