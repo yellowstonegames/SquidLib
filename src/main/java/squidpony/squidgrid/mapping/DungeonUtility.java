@@ -463,7 +463,7 @@ public class DungeonUtility {
     }
 
     /**
-     * Reverses most of the effects of linesToHashes(). The only things that will not be reversed are the placement of
+     * Reverses most of the effects of hashesToLines(). The only things that will not be reversed are the placement of
      * space characters in unreachable wall-cells-behind-wall-cells, which remain as spaces. This is useful if you
      * have a modified map that contains wall characters of conflicting varieties, as described in hashesToLines().
      * @param map
@@ -497,6 +497,61 @@ public class DungeonUtility {
                         break;
                     default:
                         portion[i][j] = map[i][j];
+                }
+            }
+        }
+        return portion;
+    }
+    /**
+     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
+     * rendering method. 0 is used as a default and for tiles with nothing in them; if the background is black, then
+     * white would make sense as this default. Other indices used are 1 for walls (this doesn't care if the walls are
+     * hashes or lines), 2 for floors (usually '.'), 3 for doors ('+' and '/' in the map), 4 for water, and 5 for traps.
+     * @param map
+     * @return
+     */
+    public static int[][] generatePaletteIndices(char[][] map)
+    {
+
+        int Width = map.length;
+        int Height = map[0].length;
+        int[][] portion = new int[Width][Height];
+        for(int i = 0; i < Width; i++)
+        {
+            for(int j = 0; j < Height; j++)
+            {
+                switch (map[i][j])
+                {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = 1;
+                        break;
+                    case '.':
+                        portion[i][j] = 2;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = 3;
+                        break;
+                    case '~':
+                        portion[i][j] = 4;
+                        break;
+                    case '^':
+                        portion[i][j] = 5;
+                        break;
+                    default:
+                        portion[i][j] = 0;
                 }
             }
         }
