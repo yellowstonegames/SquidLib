@@ -320,7 +320,8 @@ public class DungeonGenerator {
      * @return a char[][] dungeon
      */
     public char[][] generate(TilesetType kind)
-        {
+    {
+        DungeonUtility.rng = rng;
         char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
 
         HashSet<Point> floors = new HashSet<Point>();
@@ -420,7 +421,7 @@ public class DungeonGenerator {
                 volumes[i] += r;
                 volumes[(i + 1) % numPools] -= r;
             }
-            Spill spill = new Spill(map, Spill.Measurement.MANHATTAN);
+            Spill spill = new Spill(map, Spill.Measurement.MANHATTAN, rng);
             int bonusVolume = 0;
             for(int i = 0; i < numPools; i++)
             {
