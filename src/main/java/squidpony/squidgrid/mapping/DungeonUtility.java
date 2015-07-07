@@ -504,9 +504,9 @@ public class DungeonUtility {
     }
     /**
      * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
-     * rendering method. 0 is used as a default and for tiles with nothing in them; if the background is black, then
-     * white would make sense as this default. Other indices used are 1 for walls (this doesn't care if the walls are
-     * hashes or lines), 2 for floors (usually '.'), 3 for doors ('+' and '/' in the map), 4 for water, and 5 for traps.
+     * rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
+     * white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
+     * hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, and 6 for traps.
      * @param map
      * @return
      */
@@ -535,23 +535,23 @@ public class DungeonUtility {
                     case '─':
                     case '┼':
                     case '#':
-                        portion[i][j] = 1;
+                        portion[i][j] = 2;
                         break;
                     case '.':
-                        portion[i][j] = 2;
+                        portion[i][j] = 3;
                         break;
                     case '+':
                     case '/':
-                        portion[i][j] = 3;
-                        break;
-                    case '~':
                         portion[i][j] = 4;
                         break;
-                    case '^':
+                    case '~':
                         portion[i][j] = 5;
                         break;
+                    case '^':
+                        portion[i][j] = 6;
+                        break;
                     default:
-                        portion[i][j] = 0;
+                        portion[i][j] = 1;
                 }
             }
         }
