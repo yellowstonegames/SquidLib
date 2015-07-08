@@ -348,6 +348,9 @@ public class SquidPanel extends JLayeredPane {
         put(x, y, (int) c, color);
     }
 
+    public void put(int x, int y, int index, List<Color> palette) {
+        put(x, y, palette.get(index));
+    }
     public void put(int x, int y, char c, int index, List<Color> palette) {
         put(x, y, (int) c, palette.get(index));
     }
