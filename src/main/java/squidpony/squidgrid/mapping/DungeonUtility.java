@@ -1,6 +1,7 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 
 import java.awt.Point;
@@ -179,45 +180,45 @@ public class DungeonUtility {
      */
     public static char[][] hashesToLines(char[][] map)
     {
-        int Width = map[0].length+2;
-        int Height = map.length+2;
+        int width = map[0].length+2;
+        int height = map.length+2;
 
-        char[][] neo = new char[Height][Width], dungeon = new char[Height][Width];
-        for(int i = 1; i < Height - 1; i++)
+        char[][] neo = new char[height][width], dungeon = new char[height][width];
+        for(int i = 1; i < height - 1; i++)
         {
-            for(int j = 1; j < Width - 1; j++)
+            for(int j = 1; j < width - 1; j++)
             {
                 dungeon[i][j] = map[i-1][j-1];
             }
         }
-        for(int i = 0; i < Height; i++)
+        for(int i = 0; i < height; i++)
         {
             neo[i][0] = '\1';
-            neo[i][Width-1] = '\1';
+            neo[i][width-1] = '\1';
             dungeon[i][0] = '\1';
-            dungeon[i][Width-1] = '\1';
+            dungeon[i][width-1] = '\1';
         }
-        for(int i = 0; i < Width; i++)
+        for(int i = 0; i < width; i++)
         {
             neo[0][i] = '\1';
-            neo[Height-1][i] = '\1';
+            neo[height-1][i] = '\1';
             dungeon[0][i] = '\1';
-            dungeon[Height-1][i] = '\1';
+            dungeon[height-1][i] = '\1';
         }
 
-        for (int y = 1; y < Height - 1; y++)
+        for (int y = 1; y < height - 1; y++)
         {
-            for (int x = 1; x < Width - 1; x++)
+            for (int x = 1; x < width - 1; x++)
             {
                 if (map[y-1][x-1] == '#')
                 {
                     int q = 0;
                     q |= (y <= 1 || map[y - 2][x-1] == '#') ? 1 : 0;
-                    q |= (y <= 1 || x >= Width - 2 || map[y - 2][x + 0] == '#') ? 2 : 0;
-                    q |= (x >= Width - 2  || map[y - 1][x + 0] == '#') ? 4 : 0;
-                    q |= (y >= Height - 2 || x >= Width - 2 || map[y + 0][x + 0] == '#') ? 8 : 0;
-                    q |= (y >= Height - 2 || map[y + 0][x-1] == '#') ? 16 : 0;
-                    q |= (y >= Height - 2 || x <= 1 || map[y + 0][x - 2] == '#') ? 32 : 0;
+                    q |= (y <= 1 || x >= width - 2 || map[y - 2][x + 0] == '#') ? 2 : 0;
+                    q |= (x >= width - 2  || map[y - 1][x + 0] == '#') ? 4 : 0;
+                    q |= (y >= height - 2 || x >= width - 2 || map[y + 0][x + 0] == '#') ? 8 : 0;
+                    q |= (y >= height - 2 || map[y + 0][x-1] == '#') ? 16 : 0;
+                    q |= (y >= height - 2 || x <= 1 || map[y + 0][x - 2] == '#') ? 32 : 0;
                     q |= (x <= 1 || map[y - 1][x - 2] == '#') ? 64 : 0;
                     q |= (y <= 1 || x <= 1 || map[y - 2][x - 2] == '#') ? 128 : 0;
 
@@ -238,15 +239,15 @@ public class DungeonUtility {
             }
         }
 
-        for (int y = 0; y < Height; y++)
+        for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < Width; x++)
+            for (int x = 0; x < width; x++)
             {
                 if (dungeon[y][x] == '#')
                 {
                     boolean n = (y <= 0 || dungeon[y - 1][x] == '#' || dungeon[y - 1][x] == '+' || dungeon[y - 1][x] == '/');
-                    boolean e = (x >= Width - 1 || dungeon[y][x + 1] == '#' || dungeon[y][x + 1] == '+' || dungeon[y][x + 1] == '/');
-                    boolean s = (y >= Height - 1 || dungeon[y + 1][x] == '#' || dungeon[y + 1][x] == '+' || dungeon[y + 1][x] == '/');
+                    boolean e = (x >= width - 1 || dungeon[y][x + 1] == '#' || dungeon[y][x + 1] == '+' || dungeon[y][x + 1] == '/');
+                    boolean s = (y >= height - 1 || dungeon[y + 1][x] == '#' || dungeon[y + 1][x] == '+' || dungeon[y + 1][x] == '/');
                     boolean w = (x <= 0 || dungeon[y][x - 1] == '#' || dungeon[y][x - 1] == '+' || dungeon[y][x - 1] == '/');
 
                     if (n)
@@ -343,18 +344,18 @@ public class DungeonUtility {
             }
         }
         //vertical crossbar removal
-        for (int y = 1; y < Height; y++)
+        for (int y = 1; y < height; y++)
         {
-            for (int x = 0; x < Width; x++)
+            for (int x = 0; x < width; x++)
             {
                 // ┼ ├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─
                 if (neo[y][x] == '┼' || neo[y][x] == '├' || neo[y][x] == '┤' || neo[y][x] == '┴')
                 {
                     if (neo[y - 1][x] == '┼' || neo[y - 1][x] == '├' || neo[y - 1][x] == '┤' || neo[y - 1][x] == '┬')
                     {
-                        if ((x >= Width - 1 || dungeon[y - 1][x + 1] == '#' || dungeon[y - 1][x + 1] == '\1' || dungeon[y - 1][x + 1] == '+' || dungeon[y - 1][x + 1] == '/') &&
+                        if ((x >= width - 1 || dungeon[y - 1][x + 1] == '#' || dungeon[y - 1][x + 1] == '\1' || dungeon[y - 1][x + 1] == '+' || dungeon[y - 1][x + 1] == '/') &&
                                 (x <= 0 || dungeon[y - 1][x - 1] == '#' || dungeon[y - 1][x - 1] == '\1' || dungeon[y - 1][x - 1] == '+' || dungeon[y - 1][x - 1] == '/') &&
-                                (x >= Width - 1 || dungeon[y][x + 1] == '#' || dungeon[y][x + 1] == '\1' || dungeon[y][x + 1] == '+' || dungeon[y][x + 1] == '/') &&
+                                (x >= width - 1 || dungeon[y][x + 1] == '#' || dungeon[y][x + 1] == '\1' || dungeon[y][x + 1] == '+' || dungeon[y][x + 1] == '/') &&
                                 (x <= 0 || dungeon[y][x - 1] == '#' || dungeon[y][x - 1] == '\1' || dungeon[y][x - 1] == '+' || dungeon[y][x - 1] == '/'))
                         {
                             switch (neo[y][x])
@@ -394,18 +395,18 @@ public class DungeonUtility {
             }
         }
         //horizontal crossbar removal
-        for (int y = 0; y < Height; y++)
+        for (int y = 0; y < height; y++)
         {
-            for (int x = 1; x < Width; x++)
+            for (int x = 1; x < width; x++)
             {
                 // ┼ ├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─
                 if (neo[y][x] == '┼' || neo[y][x] == '┤' || neo[y][x] == '┬' || neo[y][x] == '┴')
                 {
                     if (neo[y][x - 1] == '┼' || neo[y][x - 1] == '├' || neo[y][x - 1] == '┬' || neo[y][x - 1] == '┴')
                     {
-                        if ((y >= Height - 1 || dungeon[y + 1][x - 1] == '#' || dungeon[y + 1][x - 1] == '\1' || dungeon[y + 1][x - 1] == '+' || dungeon[y + 1][x - 1] == '/') &&
+                        if ((y >= height - 1 || dungeon[y + 1][x - 1] == '#' || dungeon[y + 1][x - 1] == '\1' || dungeon[y + 1][x - 1] == '+' || dungeon[y + 1][x - 1] == '/') &&
                                 (y <= 0 || dungeon[y - 1][x - 1] == '#' || dungeon[y - 1][x - 1] == '\1' || dungeon[y - 1][x - 1] == '+' || dungeon[y - 1][x - 1] == '/') &&
-                                (y >= Height - 1 || dungeon[y + 1][x] == '#' || dungeon[y + 1][x] == '\1' || dungeon[y + 1][x] == '+' || dungeon[y + 1][x] == '/') &&
+                                (y >= height - 1 || dungeon[y + 1][x] == '#' || dungeon[y + 1][x] == '\1' || dungeon[y + 1][x] == '+' || dungeon[y + 1][x] == '/') &&
                                 (y <= 0 || dungeon[y - 1][x] == '#' || dungeon[y - 1][x] == '\1' || dungeon[y - 1][x] == '+' || dungeon[y - 1][x] == '/'))
                         {
                             switch (neo[y][x])
@@ -444,10 +445,10 @@ public class DungeonUtility {
                 }
             }
         }
-        char[][] portion = new char[Height-2][Width-2];
-        for(int i = 1; i < Height - 1; i++)
+        char[][] portion = new char[height-2][width-2];
+        for(int i = 1; i < height - 1; i++)
         {
-            for(int j = 1; j < Width - 1; j++)
+            for(int j = 1; j < width - 1; j++)
             {
                 switch (neo[i][j])
                 {
@@ -472,12 +473,12 @@ public class DungeonUtility {
     public static char[][] linesToHashes(char[][] map)
     {
 
-        int Width = map.length;
-        int Height = map[0].length;
-        char[][] portion = new char[Width][Height];
-        for(int i = 0; i < Width; i++)
+        int width = map.length;
+        int height = map[0].length;
+        char[][] portion = new char[width][height];
+        for(int i = 0; i < width; i++)
         {
-            for(int j = 0; j < Height; j++)
+            for(int j = 0; j < height; j++)
             {
                 switch (map[i][j])
                 {
@@ -503,61 +504,6 @@ public class DungeonUtility {
         return portion;
     }
     /**
-     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
-     * rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
-     * white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
-     * hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, and 6 for traps.
-     * @param map
-     * @return
-     */
-    public static int[][] generatePaletteIndices(char[][] map)
-    {
-
-        int Width = map.length;
-        int Height = map[0].length;
-        int[][] portion = new int[Width][Height];
-        for(int i = 0; i < Width; i++)
-        {
-            for(int j = 0; j < Height; j++)
-            {
-                switch (map[i][j])
-                {
-                    case '\1':
-                    case '├':
-                    case '┤':
-                    case '┴':
-                    case '┬':
-                    case '┌':
-                    case '┐':
-                    case '└':
-                    case '┘':
-                    case '│':
-                    case '─':
-                    case '┼':
-                    case '#':
-                        portion[i][j] = 2;
-                        break;
-                    case '.':
-                        portion[i][j] = 3;
-                        break;
-                    case '+':
-                    case '/':
-                        portion[i][j] = 4;
-                        break;
-                    case '~':
-                        portion[i][j] = 5;
-                        break;
-                    case '^':
-                        portion[i][j] = 6;
-                        break;
-                    default:
-                        portion[i][j] = 1;
-                }
-            }
-        }
-        return portion;
-    }
-    /**
      * If you call hashesToLines() on a map that uses [y][x] conventions instead of [x][y], it will have the lines not
      * connect as you expect. Use this function to change the directions of the box-drawing characters only, without
      * altering the dimensions in any way. This returns a new char[][], instead of modifying the parameter in place.
@@ -569,12 +515,12 @@ public class DungeonUtility {
     public static char[][] transposeLines(char[][] map)
     {
 
-        int Width = map[0].length;
-        int Height = map.length;
-        char[][] portion = new char[Height][Width];
-        for(int i = 0; i < Height; i++)
+        int width = map[0].length;
+        int height = map.length;
+        char[][] portion = new char[height][width];
+        for(int i = 0; i < height; i++)
         {
-            for(int j = 0; j < Width; j++)
+            for(int j = 0; j < width; j++)
             {
                 switch (map[i][j])
                 {
@@ -615,12 +561,37 @@ public class DungeonUtility {
     }
 
     /**
+     * When a map is generated by DungeonGenerator with addDoors enabled, different chars are used for vertical and
+     * horizontal doors ('+' for vertical and '/' for horizontal).  This makes all doors '+', which is useful if you
+     * want '/' to be used for a different purpose and/or to distinguish open and closed doors.
+     * @param map
+     * @return
+     */
+    public static char[][] closeDoors(char[][] map)
+    {
+
+        int width = map.length;
+        int height = map[0].length;
+        char[][] portion = new char[width][height];
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                if(map[i][j] == '/') portion[i][j] = '+';
+                else portion[i][j] = map[i][j];
+
+            }
+        }
+        return portion;
+    }
+
+    /**
      * Takes a dungeon map with either '#' as the only wall character or the unicode box drawing characters used by
      * hashesToLines(), and returns a new char[][] dungeon map with two characters per cell, mostly filling the spaces
      * next to non-walls with space characters, and only doing anything different if a box-drawing character would
      * continue into an adjacent cell, or if a '#' wall needs another '#' wall next to it. The recommended approach is
      * to keep both the original non-double-width map and the newly-returned double-width map, since the single-width
-     * maps can be used more easily for pathfinding. If you need to undo this function, call unDoubleWidth().
+     * maps can be used more easily for pathfinding. If you need to undo this function, call unDoublewidth().
      * @param map
      * @return
      */
@@ -673,7 +644,7 @@ public class DungeonUtility {
      * @param map
      * @return
      */
-    public static char[][] unDoubleWidth(char[][] map)
+    public static char[][] unDoublewidth(char[][] map)
     {
         int width = map.length;
         int height = map[0].length;
@@ -688,5 +659,276 @@ public class DungeonUtility {
             }
         }
         return unpaired;
+    }
+
+    /**
+     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
+     * rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
+     * white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
+     * hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, and 6 for traps.
+     * @param map
+     * @return
+     */
+    public static int[][] generatePaletteIndices(char[][] map)
+    {
+
+        int width = map.length;
+        int height = map[0].length;
+        int[][] portion = new int[width][height];
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                switch (map[i][j])
+                {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = 2;
+                        break;
+                    case '.':
+                        portion[i][j] = 3;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = 4;
+                        break;
+                    case '~':
+                        portion[i][j] = 5;
+                        break;
+                    case '^':
+                        portion[i][j] = 6;
+                        break;
+                    default:
+                        portion[i][j] = 1;
+                }
+            }
+        }
+        return portion;
+    }
+    /**
+     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
+     * rendering method, but meant for the background palette. This will produce 0 for anything but water (represented
+     * by '~'), and will produce 24 for water backgrounds (in the default palette, this is dark blue-green).
+     * @param map
+     * @return
+     */
+    public static int[][] generateBGPaletteIndices(char[][] map)
+    {
+
+        int width = map.length;
+        int height = map[0].length;
+        int[][] portion = new int[width][height];
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                switch (map[i][j])
+                {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = 2;
+                        break;
+                    case '.':
+                        portion[i][j] = 3;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = 4;
+                        break;
+                    case '~':
+                        portion[i][j] = 5;
+                        break;
+                    case '^':
+                        portion[i][j] = 6;
+                        break;
+                    default:
+                        portion[i][j] = 1;
+                }
+            }
+        }
+        return portion;
+    }
+    /**
+     * Produces an int[][] that can be used with SquidLayers to alter the background colors.
+     * @param map
+     * @return
+     */
+    public static int[][] generateLightnessModifiers(char[][] map)
+    {
+        int width = map.length;
+        int height = map[0].length;
+        int[][] portion = new int[width][height];
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                switch (map[i][j])
+                {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = 0;
+                        break;
+                    case '.':
+                        portion[i][j] = 20;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = -20;
+                        break;
+                    case '~':
+                        portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 2.0, j / 2.0) - 0.85));
+                        break;
+                    case '^':
+                        portion[i][j] = 40;
+                        break;
+                    default:
+                        portion[i][j] = 0;
+                }
+            }
+        }
+        return portion;
+    }
+    /**
+     * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
+     * animation frame if rippling water using Perlin Noise is desired.
+     * @param map
+     * @param frame
+     * @return
+     */
+    public static int[][] generateLightnessModifiers(char[][] map, int frame)
+    {
+        int width = map.length;
+        int height = map[0].length;
+        int[][] portion = new int[width][height];
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                switch (map[i][j])
+                {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = 0;
+                        break;
+                    case '.':
+                        portion[i][j] = 20;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = -20;
+                        break;
+                    case '~':
+                        portion[i][j] = (int)(60 * (PerlinNoise.noise(i / 2.0, j / 2.0, frame / 8.0) - 0.65));
+                        break;
+                    case '^':
+                        portion[i][j] = 40;
+                        break;
+                    default:
+                        portion[i][j] = 0;
+                }
+            }
+        }
+        return portion;
+    }
+    /**
+     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
+     * rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
+     * white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
+     * hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, and 6 for traps.
+     * @param map
+     * @return
+     */
+    public static double[][] generateResistances(char[][] map)
+    {
+
+        int width = map.length;
+        int height = map[0].length;
+        double[][] portion = new double[width][height];
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                switch (map[i][j])
+                {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = 1.0;
+                        break;
+                    case '.':
+                        portion[i][j] = 0.0;
+                        break;
+                    case '/':
+                        portion[i][j] = 0.15;
+                        break;
+                    case '+':
+                        portion[i][j] = 0.95;
+                        break;
+                    case '~':
+                        portion[i][j] = 0.0;
+                        break;
+                    case '^':
+                        portion[i][j] = 0.0;
+                        break;
+                    default:
+                        portion[i][j] = 0.0;
+                }
+            }
+        }
+        return portion;
     }
 }

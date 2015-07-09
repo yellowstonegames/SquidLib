@@ -524,7 +524,7 @@ public class FieldOfViewDemo {
          * Creates a new cell which has minimal properties needed to represent it.
          *
          * @param resistance
-         * @param light
+         * @param color
          * @param representation
          */
         public DemoCell(float resistance, char representation, SColor color) {

@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Beta
 public class SquidLayers extends JLayeredPane {
-    protected int width, height;
+    protected int width, height, cellWidth, cellHeight;
     protected SquidPanel backgroundPanel, lightnessPanel, foregroundPanel;
     protected int[][] bgIndices;
     protected int[][] lightnesses;
@@ -25,12 +25,12 @@ public class SquidLayers extends JLayeredPane {
 
     @Override
     public int getWidth() {
-        return width;
+        return width * cellWidth;
     }
 
     @Override
     public int getHeight() {
-        return height;
+        return height * cellHeight;
     }
 
     /**
@@ -113,6 +113,10 @@ public class SquidLayers extends JLayeredPane {
         initPalettes();
         width = gridWidth;
         height = gridHeight;
+
+        cellWidth = 16;
+        cellHeight = 16;
+
         bgIndices = new int[width][height];
         lightnesses = new int[width][height];
 
@@ -137,8 +141,11 @@ public class SquidLayers extends JLayeredPane {
         extraPanels = new ArrayList<SquidPanel>();
 
         this.setLayer(backgroundPanel, 0);
+        this.add(backgroundPanel);
         this.setLayer(lightnessPanel, 1);
+        this.add(lightnessPanel);
         this.setLayer(foregroundPanel, 3);
+        this.add(foregroundPanel);
 
         this.setSize(backgroundPanel.getPreferredSize());
         this.setPreferredSize(backgroundPanel.getPreferredSize());
@@ -150,6 +157,9 @@ public class SquidLayers extends JLayeredPane {
         initPalettes();
         width = gridWidth;
         height = gridHeight;
+
+        this.cellWidth = cellWidth;
+        this.cellHeight = cellHeight;
 
         bgIndices = new int[width][height];
         lightnesses = new int[width][height];
@@ -174,8 +184,11 @@ public class SquidLayers extends JLayeredPane {
         extraPanels = new ArrayList<SquidPanel>();
 
         this.setLayer(backgroundPanel, 0);
+        this.add(backgroundPanel);
         this.setLayer(lightnessPanel, 1);
+        this.add(lightnessPanel);
         this.setLayer(foregroundPanel, 3);
+        this.add(foregroundPanel);
 
         this.setSize(backgroundPanel.getPreferredSize());
         this.setPreferredSize(backgroundPanel.getPreferredSize());
@@ -184,8 +197,12 @@ public class SquidLayers extends JLayeredPane {
     {
         super();
         initPalettes();
+
         width = gridWidth;
         height = gridHeight;
+
+        this.cellWidth = cellWidth;
+        this.cellHeight = cellHeight;
 
         bgIndices = new int[width][height];
         lightnesses = new int[width][height];
@@ -210,8 +227,11 @@ public class SquidLayers extends JLayeredPane {
         extraPanels = new ArrayList<SquidPanel>();
 
         this.setLayer(backgroundPanel, 0);
+        this.add(backgroundPanel);
         this.setLayer(lightnessPanel, 1);
+        this.add(lightnessPanel);
         this.setLayer(foregroundPanel, 3);
+        this.add(foregroundPanel);
 
         this.setSize(backgroundPanel.getPreferredSize());
         this.setPreferredSize(backgroundPanel.getPreferredSize());
@@ -273,13 +293,16 @@ public class SquidLayers extends JLayeredPane {
         palette.add(Colors.SAPPANWOOD_INCENSE);
 
         lightingPalette = new ArrayList<Color>(512);
-        lightingPalette.add(0, Colors.TRANSPARENT);
+        for(int i = 0; i < 512; i++)
+        {
+            lightingPalette.add(Colors.TRANSPARENT);
+        }
         for(int i = 1; i < 256; i++)
         {
-            lightingPalette.add(256 + i, new Color(0xFF, 0xFD, 0xD8, i));
-            lightingPalette.add(256 - i, new Color(0, 0, 0, i));
+            lightingPalette.set(256 + i, new Color(0xFF, 0xFD, 0xD8, i));
+            lightingPalette.set(256 - i, new Color(0, 0, 0, i));
         }
-        lightingPalette.add(256, Colors.TRANSPARENT);
+
     }
 
     public SquidLayers addExtraLayer()
@@ -360,7 +383,7 @@ public class SquidLayers extends JLayeredPane {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
         lightnesses[x][y] = 256 + backgroundLightness;
 
-        lightnessPanel.put(x, y, backgroundLightness, lightingPalette);
+        lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
         backgroundPanel.put(x, y, backgroundIndex, palette);
         return this;
     }
@@ -383,7 +406,7 @@ public class SquidLayers extends JLayeredPane {
         foregroundPanel.put(x, y, c, foregroundIndex, alternatePalette);
         lightnesses[x][y] = 256 + backgroundLightness;
 
-        lightnessPanel.put(x, y, backgroundLightness, lightingPalette);
+        lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
         backgroundPanel.put(x, y, backgroundIndex, alternatePalette);
         return this;
     }
@@ -408,7 +431,7 @@ public class SquidLayers extends JLayeredPane {
         foregroundPanel.put(x, y, c, foregroundIndex, fgPalette);
         lightnesses[x][y] = 256 + backgroundLightness;
 
-        lightnessPanel.put(x, y, backgroundLightness, lightingPalette);
+        lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
         backgroundPanel.put(x, y, backgroundIndex, bgPalette);
         return this;
     }
