@@ -748,23 +748,23 @@ public class DungeonUtility {
                     case '─':
                     case '┼':
                     case '#':
-                        portion[i][j] = 2;
+                        portion[i][j] = 0;
                         break;
                     case '.':
-                        portion[i][j] = 3;
+                        portion[i][j] = 0;
                         break;
                     case '+':
                     case '/':
-                        portion[i][j] = 4;
+                        portion[i][j] = 0;
                         break;
                     case '~':
-                        portion[i][j] = 5;
+                        portion[i][j] = 24;
                         break;
                     case '^':
-                        portion[i][j] = 6;
+                        portion[i][j] = 0;
                         break;
                     default:
-                        portion[i][j] = 1;
+                        portion[i][j] = 0;
                 }
             }
         }
@@ -809,7 +809,7 @@ public class DungeonUtility {
                         portion[i][j] = -20;
                         break;
                     case '~':
-                        portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 2.0, j / 2.0) - 0.85));
+                        portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.65));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -852,17 +852,17 @@ public class DungeonUtility {
                     case '─':
                     case '┼':
                     case '#':
-                        portion[i][j] = 0;
+                        portion[i][j] = 30;
                         break;
                     case '.':
-                        portion[i][j] = 20;
+                        portion[i][j] = 0;
                         break;
                     case '+':
                     case '/':
                         portion[i][j] = -20;
                         break;
                     case '~':
-                        portion[i][j] = (int)(60 * (PerlinNoise.noise(i / 2.0, j / 2.0, frame / 8.0) - 0.65));
+                        portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
                         break;
                     case '^':
                         portion[i][j] = 40;
