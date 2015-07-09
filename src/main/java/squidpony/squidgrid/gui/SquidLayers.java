@@ -242,7 +242,7 @@ public class SquidLayers extends JLayeredPane {
         palette = new ArrayList<Color>(256);
         palette.add(Colors.DARK_SLATE_GRAY);
         palette.add(Colors.CREAM);
-        palette.add(Colors.SLATE_GRAY);
+        palette.add(Colors.FLATTERY_BROWN);
         palette.add(Colors.SILVER_GREY);
         palette.add(Colors.RUST);
         palette.add(Colors.WATER);
