@@ -136,7 +136,7 @@ public class FOV {
      * of fully lit.
      *
      * The starting point for the calculation is considered to be at the center
-     * of the origin cell. Radius determinations based on Euclidian
+     * of the origin cell. Radius determinations based on Euclidean
      * calculations. The light will be treated as having infinite possible
      * radius.
      *
