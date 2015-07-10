@@ -36,12 +36,17 @@ public class EverythingDemo {
     private int width, height;
     private SquidKey keyListener;
     private int counter;
-    private boolean[][] seen;
+    private boolean[][] seen, unchanged;
     private boolean drawing;
+
+    /**
+     * Initialize the Everything.
+     */
     public EverythingDemo() {
         width = 80;
         height = 30;
-
+        // the font will try to load Rogue-Zodiac.ttf from resources. I (Tommy Ettinger) made it, and it's under the
+        // same license as SquidLib.
         Font fnt = new Font("Dialog", Font.PLAIN, 24);
         try {
             fnt = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/Rogue-Zodiac.ttf")).deriveFont(32.0f);
@@ -51,10 +56,14 @@ public class EverythingDemo {
 
         lrng = new LightRNG();
         rng = new RNG(lrng);
+
+        // this is important if you use a seeded RNG, which we don't here.
         DungeonUtility.rng = rng;
         dungeonGen = new DungeonGenerator(width, height, rng);
         dungeonGen.addWater(10);
         dungeonGen.addDoors(15, true);
+
+        // change the TilesetType to lots of different choices to see what dungeon works best.
         bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
@@ -65,11 +74,17 @@ public class EverythingDemo {
         bgColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon, 0);
         seen = new boolean[width][height];
+        unchanged = new boolean[width][height];
 
-        keyListener = new SquidKey(true, SquidKey.CaptureType.DOWN);
+        keyListener = new SquidKey(false, SquidKey.CaptureType.DOWN);
         drawing = false;
     }
 
+    /**
+     * Move the player or open closed doors.
+     * @param xmod
+     * @param ymod
+     */
     private void move(int xmod, int ymod) {
         if (player.x + xmod >= 0 && player.y + ymod >= 0 && player.x + xmod < width && player.y + ymod < height
                 && bareDungeon[player.x + xmod][player.y + ymod] != '#') {
@@ -83,6 +98,12 @@ public class EverythingDemo {
         }
     }
 
+    /**
+     * Takes a KeyEvent that SquidKey passes it, and checks if it is an arrow key, HJKL, a numpad direction, or Q.
+     * Any of those but Q will move the player 1 cell, and Q will just close the game.
+     * @param k
+     * @return true if the input was handled successfully, false if you should stop handling due to a quit.
+     */
     private boolean handle(KeyEvent k) {
         switch (k.getExtendedKeyCode()) {
             case KeyEvent.VK_LEFT:
@@ -107,28 +128,42 @@ public class EverythingDemo {
                 break;
             case KeyEvent.VK_Q:
                 System.exit(0);
-
+                return false;
         }
         return true;
     }
 
+    /**
+     * Redraw the SquidLayers with the latest known information about FOV, seen tiles, etc.
+     * Sets seen as well.
+     */
     private void redraw() {
+        // we need to make sure we aren't currently drawing when we try to redraw.
         if (!drawing) {
+            // we set drawing to false at the end of the method.
             drawing = true;
-            //display.erase();
+
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
+                    // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
+                    // and 1.0), with 1.0 being almost pure white at +150 lightness and 0.0 being rather dark at -100.
                     if (fovmap[i][j] > 0.0) {
                         seen[i][j] = true;
+                        unchanged[i][j] = false;
                         display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j],
                                 lights[i][j] + (int) (-100 + 250 * fovmap[i][j]));
-                    } else if (seen[i][j]) {
+                    // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
+                    } else if (seen[i][j] && !unchanged[i][j]) {
                         display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -140);
+                        unchanged[i][j] = true;
                     }
                 }
             }
+            // the player doesn't care what was already rendered at its cell on the map.  30 is dark purple.
             display.put(player.x, player.y, '@', 30);
+            // needed to see changes.
             display.refresh();
+            // remember this was set to true? well, now we aren't drawing any more.
             drawing = false;
         }
     }
@@ -137,45 +172,81 @@ public class EverythingDemo {
         frame = new JFrame("SquidLib Everything Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // final is only needed so the inner class that handles water animations can see demo
         final EverythingDemo demo = new EverythingDemo();
 
+        // make the frame listen to our SquidKey
         frame.addKeyListener(demo.keyListener);
 
+        // the stuff that surrounds the SquidLayers component should be the same color
         Container panel = frame.getContentPane();
         panel.setBackground(Colors.DARK_SLATE_GRAY);
         panel.add(demo.display);
 
-        frame.getContentPane().setBackground(Colors.DARK_SLATE_GRAY);
+        // NEEDED TO SEE ANYTHING IN THE APP/GAME
         frame.setVisible(true);
 
+        // useful to make the size and location of the frame look correct
         frame.pack();
         frame.setLocationRelativeTo(null);
 
-        int[][] tempLights = new int[demo.width][demo.height];
+        // we only need to calculate FOV once everything is in place
         demo.fovmap = demo.fov.calculateFOV(demo.res, demo.player.x, demo.player.y, 8);
 
-//        demo.redraw();
+        // threads have a reputation for being tricky to deal with.
+        // if you don't need animations, this section can be simplified to the commented block after it.
         (new Thread(new Runnable() {
-            private int upd = (int) ((System.currentTimeMillis() / 80.0) % 64000);
+            // upd is used to determine if enough time has passed between attempts to redraw. This tries to update at
+            // about 15 frames per second, which is more than enough for a text-based game.
+            private int upd = (int) ((System.currentTimeMillis() / 65.0) % 64000);
             @Override
             public void run() {
+                // this runs in a non-UI thread, and doesn't directly change the UI -- only the lightness array.
+                // this thread can be interrupted by the application closing, so we should terminate the loop then.
                 while (!Thread.interrupted()) {
-                    upd = (int) ((System.currentTimeMillis() / 80.0) % 64000);
+                    // upd gets assigned a value every iteration of the loop, but if very little time has passed, then
+                    // the value won't be any different. this is important because upd needs to be different from
+                    // demo.counter for enough time to be considered to have passed (you get graphical glitches from
+                    // trying to render too frequently, or while something is being changed, with Swing).
+                    upd = (int) ((System.currentTimeMillis() / 65.0) % 64000);
+                    // if we are currently drawing, we do not want to suddenly jump in and render again.
+                    // if there is input queued in the keyListener, then we want to resolve that and not go into the
+                    // else if block below.
                     if (!demo.drawing && demo.keyListener.hasNext()) {
+                        // again, we want to make sure the times are different enough. demo.counter is updated in the
+                        // else if block below, and nowhere else, so if input is queued, the counter won't change, but
+                        // upd will. it won't be longer than 65 milliseconds before this runs.
                         if (demo.counter != upd) {
+                            // this gets the next queued input, and uses it to process movement or quitting.
                             demo.handle(demo.keyListener.next());
+                            // recalculate FOV, store it in fovmap for the redraw to use.
                             demo.fovmap = demo.fov.calculateFOV(demo.res, demo.player.x, demo.player.y, 8);
+                            // redraw with the changed player position (if the player moved) and FOV.
                             demo.redraw();
                         }
                     }
+                    // this needs the times to be different enough as well.
                     else if (!demo.drawing && demo.counter != upd) {
+                        // counter is set to the current value of upd so we won't redraw again too soon.
                         demo.counter = upd;
+                        // this makes the water change in lightness on its own. it could be used for many other tasks.
                         demo.lights = DungeonUtility.generateLightnessModifiers(demo.bareDungeon, demo.counter);
+                        // redraw with the new lightness.
                         demo.redraw();
 
                     }
                 }
             }
+        // threads need to be started.
         })).start();
+
+        // if you don't need animations that take place even while the player hasn't pressed a key,
+        // the above section of code can be replaced with the following:
+        /*
+        while (demo.handle(demo.keyListener.next())) {
+            demo.fovmap = demo.fov.calculateFOV(demo.res, demo.player.x, demo.player.y, 8);
+            demo.redraw();
+        }
+        */
     }
 }

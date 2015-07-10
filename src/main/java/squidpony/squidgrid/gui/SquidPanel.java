@@ -139,9 +139,11 @@ public class SquidPanel extends JLayeredPane {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         g.drawImage(contentsImage, 0, 0, null);
         paintComponents(g);
-        Toolkit.getDefaultToolkit().sync();
+        //TODO: The next line may be needed for animations, but it causes flickering with SquidLayers.
+//        Toolkit.getDefaultToolkit().sync();
     }
 
     /**
@@ -351,6 +353,7 @@ public class SquidPanel extends JLayeredPane {
     public void put(int x, int y, int index, List<Color> palette) {
         put(x, y, palette.get(index));
     }
+
     public void put(int x, int y, char c, int index, List<Color> palette) {
         put(x, y, (int) c, palette.get(index));
     }
@@ -387,12 +390,25 @@ public class SquidPanel extends JLayeredPane {
         return gridWidth;
     }
 
+    /**
+     * Cause everything that has been prepared for drawing (such as with put) to actually be drawn.
+     */
     public void refresh() {
         trimAnimations();
         redraw();
         repaint();
     }
 
+    /**
+     * A low-level check to see if a particular cell has been updated since the last draw. Not intended for general use.
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean hasChanged(int x, int y)
+    {
+        return imageChanged[x][y];
+    }
     private void redraw() {
         Graphics2D g = contentsImage.createGraphics();
 
