@@ -41,7 +41,7 @@ public class EverythingDemo {
     private int counter;
     private boolean[][] seen, unchanged;
     private boolean drawing;
-    private int health = 9;
+    private int health = 7;
 
     private HashMap<Point, Integer> monsters;
     private DijkstraMap getToPlayer;

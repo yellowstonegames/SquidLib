@@ -787,9 +787,11 @@ public class SquidLayers extends JLayeredPane {
     {
         foregroundPanel.put(x, y, s, palette.get(1));
         if(y > 0 && y + 1 < height && x > 0 && x + 1 < width) {
-            for(int j = y - 1; j < 3 && j < height; j++) {
-                for (int i = x - 1; i < s.length() + 2 && i < width; i++) {
-                    backgroundPanel.put(i, j, palette.get(0));
+            for(int j = y - 1; j < y + 2 && j < height; j++) {
+                for (int i = x - 1; i < s.length() + x + 2 && i < width; i++) {
+                    backgroundPanel.put(i, j, palette.get(9));
+                    lightnesses[i][j] = -255;
+                    lightnessPanel.put(i, j, 1, lightingPalette);
                 }
             }
         }
