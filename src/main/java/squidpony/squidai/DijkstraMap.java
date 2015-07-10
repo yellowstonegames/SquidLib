@@ -378,7 +378,8 @@ public class DijkstraMap
      * Used to remove all goals and undo any changes to gradientMap made by having a goal present.
      */
     public void clearGoals() {
-        if(!initialized) return;
+        if(!initialized)
+            return;
         for (Map.Entry<Point, Double> entry : goals.entrySet()) {
             resetCell(entry.getKey());
         }
@@ -1614,11 +1615,11 @@ public class DijkstraMap
     }
 
     /**
-     * Everybody do the Fisher-Yates Shuffle, come on.
-     * @param dirs
-     * @return
+     * Shuffle a Direction array, useful for making a path more random.
+     * @param dirs an array of Directions; will not be modified
+     * @return a shuffled copy of dirs
      */
-    private Direction[] shuffle(Direction[] dirs)
+    public Direction[] shuffle(Direction[] dirs)
     {
         Direction[] array = dirs.clone();
         int n = array.length;

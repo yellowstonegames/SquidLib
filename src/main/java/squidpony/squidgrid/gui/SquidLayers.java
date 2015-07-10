@@ -753,6 +753,49 @@ public class SquidLayers extends JLayeredPane {
         }
         return this;
     }
+
+    public SquidLayers putString(int x, int y, String s)
+    {
+        foregroundPanel.put(x, y, s);
+        return this;
+    }
+    public SquidLayers putString(int x, int y, String s, int foregroundIndex)
+    {
+        foregroundPanel.put(x, y, s, palette.get(foregroundIndex));
+        return this;
+    }
+    public SquidLayers putString(int x, int y, String s, int foregroundIndex, int backgroundIndex)
+    {
+        foregroundPanel.put(x, y, s, palette.get(foregroundIndex));
+        for(int i = x; i < s.length() && i < width; i++)
+        {
+            backgroundPanel.put(i, y, palette.get(backgroundIndex));
+        }
+        return this;
+    }
+
+    public SquidLayers putString(int x, int y, String s, List<Color> alternatePalette, int foregroundIndex, int backgroundIndex)
+    {
+        foregroundPanel.put(x, y, s, alternatePalette.get(foregroundIndex));
+        for(int i = x; i < s.length() && i < width; i++)
+        {
+            backgroundPanel.put(i, y, alternatePalette.get(backgroundIndex));
+        }
+        return this;
+    }
+    public SquidLayers putBoxedString(int x, int y, String s)
+    {
+        foregroundPanel.put(x, y, s, palette.get(1));
+        if(y > 0 && y + 1 < height && x > 0 && x + 1 < width) {
+            for(int j = y - 1; j < 3 && j < height; j++) {
+                for (int i = x - 1; i < s.length() + 2 && i < width; i++) {
+                    backgroundPanel.put(i, j, palette.get(0));
+                }
+            }
+        }
+        return this;
+    }
+
     public boolean hasChanged(int x, int y)
     {
         if(backgroundPanel.hasChanged(x, y) ||
