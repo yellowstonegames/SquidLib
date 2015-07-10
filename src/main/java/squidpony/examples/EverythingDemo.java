@@ -1,6 +1,8 @@
 package squidpony.examples;
 
 import squidpony.Colors;
+import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.gui.SquidKey;
 import squidpony.squidgrid.gui.SquidLayers;
@@ -15,6 +17,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 
 /**
  * A demo to show as many aspects of SquidLib at once as possible.
@@ -29,8 +32,8 @@ public class EverythingDemo {
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
     private double[][] res;
-    int[][] colors, bgColors, lights;
-    double[][] fovmap;
+    private int[][] colors, bgColors, lights;
+    private double[][] fovmap, pathMap;
     private Point player;
     private FOV fov;
     private int width, height;
@@ -38,6 +41,10 @@ public class EverythingDemo {
     private int counter;
     private boolean[][] seen, unchanged;
     private boolean drawing;
+    private int health = 9;
+
+    private HashMap<Point, Integer> monsters;
+    private DijkstraMap getToPlayer;
 
     /**
      * Initialize the Everything.
@@ -67,8 +74,21 @@ public class EverythingDemo {
         bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
-        player = DungeonUtility.randomFloor(bareDungeon);
+        char[][] placement = DungeonUtility.closeDoors(bareDungeon);
+        player = DungeonUtility.randomFloor(placement);
+        placement[player.x][player.y] = '@';
+        monsters = new HashMap<Point, Integer>(8);
+        for(int i = 0; i < 8; i++)
+        {
+            Point monPos = DungeonUtility.randomFloor(placement);
+            monsters.put(monPos, 0);
+            placement[monPos.x][monPos.y] = 'M';
+        }
         fov = new FOV(FOV.RIPPLE_TIGHT);
+        getToPlayer = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.MANHATTAN);
+        getToPlayer.rng = rng;
+        getToPlayer.setGoal(player);
+        pathMap = getToPlayer.scan(null);
         res = DungeonUtility.generateResistances(bareDungeon);
         colors = DungeonUtility.generatePaletteIndices(bareDungeon);
         bgColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
@@ -81,7 +101,9 @@ public class EverythingDemo {
     }
 
     /**
-     * Move the player or open closed doors.
+     * Move the player or open closed doors, remove any monsters the player bumped, then update the DijkstraMap and
+     * have the monsters that can see the player try to approach.
+     * In a fully-fledged game, this would not be organized like this, but this is a one-file demo.
      * @param xmod
      * @param ymod
      */
@@ -92,9 +114,61 @@ public class EverythingDemo {
                 bareDungeon[player.x + xmod][player.y + ymod] = '/';
                 lineDungeon[player.x + xmod][player.y + ymod] = '/';
                 res = DungeonUtility.generateResistances(bareDungeon);
-
-            } else
+            } else {
                 player.move(player.x + xmod, player.y + ymod);
+            }
+            if(monsters.containsKey(player))
+            {
+                monsters.remove(player);
+            }
+
+            getToPlayer.clearGoals();
+            getToPlayer.resetMap();
+            getToPlayer.setGoal(player);
+            pathMap = getToPlayer.scan(null);
+
+            // recalculate FOV, store it in fovmap for the redraw to use.
+            fovmap = fov.calculateFOV(res, player.x, player.y, 8);
+            HashMap<Point, Integer> newMons = new HashMap<Point, Integer>(monsters.size());
+
+            for(HashMap.Entry<Point, Integer> mon : monsters.entrySet())
+            {
+                if(mon.getValue() > 0 || fovmap[mon.getKey().x][mon.getKey().y] > 0.1)
+                {
+                    Direction choice = null;
+                    double best = 9999.0;
+                    for(Direction d : getToPlayer.shuffle(Direction.CARDINALS))
+                    {
+                        Point tmp = new Point(mon.getKey().x + d.deltaX, mon.getKey().y + d.deltaY);
+                        if(pathMap[mon.getKey().x + d.deltaX][mon.getKey().y + d.deltaY] < best &&
+                                !monsters.containsKey(tmp) && !newMons.containsKey(tmp))
+                        {
+                            best = pathMap[mon.getKey().x + d.deltaX][mon.getKey().y + d.deltaY];
+                            choice = d;
+                        }
+                    }
+                    if(choice != null)
+                    {
+                        Point tmp = new Point(mon.getKey().x + choice.deltaX, mon.getKey().y + choice.deltaY);
+                        if(player.equals(tmp))
+                        {
+                            health--;
+                            newMons.put(mon.getKey(), 1);
+                        }
+                        else
+                            newMons.put(tmp, 1);
+                    }
+                    else
+                    {
+                        newMons.put(mon.getKey(), 1);
+                    }
+                }
+                else
+                {
+                    newMons.put(mon.getKey(), mon.getValue());
+                }
+            }
+            monsters = newMons;
         }
     }
 
@@ -105,6 +179,11 @@ public class EverythingDemo {
      * @return true if the input was handled successfully, false if you should stop handling due to a quit.
      */
     private boolean handle(KeyEvent k) {
+        if(health <= 0) {
+            if(k.getExtendedKeyCode() == KeyEvent.VK_Q)
+                System.exit(0);
+            return false;
+        }
         switch (k.getExtendedKeyCode()) {
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_NUMPAD4:
@@ -142,7 +221,13 @@ public class EverythingDemo {
         if (!drawing) {
             // we set drawing to false at the end of the method.
             drawing = true;
-
+            if(health <= 0)
+            {
+                display.putBoxedString(width / 2 - 11, height / 2 - 1, "YOU HAVE BEEN EATEN!");
+                display.refresh();
+                drawing = false;
+                return;
+            }
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
                     // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
@@ -160,7 +245,14 @@ public class EverythingDemo {
                 }
             }
             // the player doesn't care what was already rendered at its cell on the map.  30 is dark purple.
-            display.put(player.x, player.y, '@', 30);
+            display.put(player.x, player.y, Character.forDigit(health, 10), 30);
+
+            for(Point mon : monsters.keySet()) {
+                if (fovmap[mon.x][mon.y] > 0.0) {
+                    display.put(mon.x, mon.y, 'M', 11);
+                    unchanged[mon.x][mon.y] = false;
+                }
+            }
             // needed to see changes.
             display.refresh();
             // remember this was set to true? well, now we aren't drawing any more.
@@ -219,8 +311,6 @@ public class EverythingDemo {
                         if (demo.counter != upd) {
                             // this gets the next queued input, and uses it to process movement or quitting.
                             demo.handle(demo.keyListener.next());
-                            // recalculate FOV, store it in fovmap for the redraw to use.
-                            demo.fovmap = demo.fov.calculateFOV(demo.res, demo.player.x, demo.player.y, 8);
                             // redraw with the changed player position (if the player moved) and FOV.
                             demo.redraw();
                         }
