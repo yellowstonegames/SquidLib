@@ -3,7 +3,7 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib</artifactId>
-    <version>2.3.0</version>
+    <version>2.3.1</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -146,10 +146,39 @@
                         <detectOfflineLinks>false</detectOfflineLinks>
                     </configuration>
                 </plugin>
-      
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>target/squidlib-everything-demo.jar</outputFile>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>squidpony.examples.EverythingDemo</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
     <dependencies>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>2.4</version>
+            <type>maven-plugin</type>
+        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
