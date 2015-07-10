@@ -4,8 +4,7 @@ import squidpony.Colors;
 import squidpony.annotation.Beta;
 
 import javax.swing.*;
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +21,7 @@ public class SquidLayers extends JLayeredPane {
     protected ArrayList<SquidPanel> extraPanels;
     protected TextCellFactory textFactory;
     protected ArrayList<Color> palette, lightingPalette;
+    protected boolean[][] values;
 
     @Override
     public int getWidth() {
@@ -119,6 +119,7 @@ public class SquidLayers extends JLayeredPane {
 
         bgIndices = new int[width][height];
         lightnesses = new int[width][height];
+        values = new boolean[width][height];
 
         for(int x = 0; x < width; x++)
         {
@@ -131,8 +132,11 @@ public class SquidLayers extends JLayeredPane {
         textFactory = new TextCellFactory().width(16).height(16);
 
         backgroundPanel = new SquidPanel(gridWidth, gridHeight);
+        backgroundPanel.setOpaque(true);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight);
+        lightnessPanel.setOpaque(false);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight);
+        foregroundPanel.setOpaque(false);
 
         backgroundPanel.refresh();
         lightnessPanel.refresh();
@@ -144,7 +148,7 @@ public class SquidLayers extends JLayeredPane {
         this.add(backgroundPanel);
         this.setLayer(lightnessPanel, 1);
         this.add(lightnessPanel);
-        this.setLayer(foregroundPanel, 3);
+        this.setLayer(foregroundPanel, 2);
         this.add(foregroundPanel);
 
         this.setSize(backgroundPanel.getPreferredSize());
@@ -163,6 +167,7 @@ public class SquidLayers extends JLayeredPane {
 
         bgIndices = new int[width][height];
         lightnesses = new int[width][height];
+        values = new boolean[width][height];
         for(int x = 0; x < width; x++)
         {
             for(int y = 0; y < height; y++)
@@ -174,8 +179,11 @@ public class SquidLayers extends JLayeredPane {
         textFactory = new TextCellFactory().width(cellWidth).height(cellHeight);
 
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
+        backgroundPanel.setOpaque(true);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
+        lightnessPanel.setOpaque(false);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
+        foregroundPanel.setOpaque(false);
 
         backgroundPanel.refresh();
         lightnessPanel.refresh();
@@ -187,7 +195,7 @@ public class SquidLayers extends JLayeredPane {
         this.add(backgroundPanel);
         this.setLayer(lightnessPanel, 1);
         this.add(lightnessPanel);
-        this.setLayer(foregroundPanel, 3);
+        this.setLayer(foregroundPanel, 2);
         this.add(foregroundPanel);
 
         this.setSize(backgroundPanel.getPreferredSize());
@@ -206,6 +214,7 @@ public class SquidLayers extends JLayeredPane {
 
         bgIndices = new int[width][height];
         lightnesses = new int[width][height];
+        values = new boolean[width][height];
         for(int x = 0; x < width; x++)
         {
             for(int y = 0; y < height; y++)
@@ -217,8 +226,11 @@ public class SquidLayers extends JLayeredPane {
         textFactory = new TextCellFactory().font(font).width(cellWidth).height(cellHeight);
 
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
+        backgroundPanel.setOpaque(true);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
+        lightnessPanel.setOpaque(false);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
+        foregroundPanel.setOpaque(false);
 
         backgroundPanel.refresh();
         lightnessPanel.refresh();
@@ -230,7 +242,7 @@ public class SquidLayers extends JLayeredPane {
         this.add(backgroundPanel);
         this.setLayer(lightnessPanel, 1);
         this.add(lightnessPanel);
-        this.setLayer(foregroundPanel, 3);
+        this.setLayer(foregroundPanel, 2);
         this.add(foregroundPanel);
 
         this.setSize(backgroundPanel.getPreferredSize());
@@ -305,10 +317,15 @@ public class SquidLayers extends JLayeredPane {
 
     }
 
+    /**
+     * Add an extra layer on top of the foreground layer. Use putInto methods to specify the layer when adding a char (0
+     * is background, 1 is lightness modifiers, 2 is foreground, and the first call to this method creates layer 3).
+     * @return
+     */
     public SquidLayers addExtraLayer()
     {
         SquidPanel sp = new SquidPanel(width, height, textFactory, null);
-        this.setLayer(sp, 4 + extraPanels.size());
+        this.setLayer(sp, 3 + extraPanels.size());
         sp.refresh();
         extraPanels.add(sp);
         return this;
@@ -350,12 +367,14 @@ public class SquidLayers extends JLayeredPane {
     public SquidLayers put(int x, int y, char c)
     {
         foregroundPanel.put(x, y, c);
+        values[x][y] = true;
         return this;
     }
 
     public SquidLayers put(int x, int y, char c, int foregroundIndex)
     {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
+        values[x][y] = true;
         return this;
     }
 
@@ -363,6 +382,7 @@ public class SquidLayers extends JLayeredPane {
     {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
         backgroundPanel.put(x, y, backgroundIndex, palette);
+        values[x][y] = true;
         return this;
     }
 
@@ -381,6 +401,7 @@ public class SquidLayers extends JLayeredPane {
     {
         backgroundLightness = clamp(backgroundLightness, -255, 255);
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
+        values[x][y] = true;
         lightnesses[x][y] = 256 + backgroundLightness;
 
         lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
@@ -404,6 +425,7 @@ public class SquidLayers extends JLayeredPane {
     {
         backgroundLightness = clamp(backgroundLightness, -255, 255);
         foregroundPanel.put(x, y, c, foregroundIndex, alternatePalette);
+        values[x][y] = true;
         lightnesses[x][y] = 256 + backgroundLightness;
 
         lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
@@ -429,6 +451,7 @@ public class SquidLayers extends JLayeredPane {
         if(fgPalette == null) fgPalette = palette;
         if(bgPalette == null) bgPalette = palette;
         foregroundPanel.put(x, y, c, foregroundIndex, fgPalette);
+        values[x][y] = true;
         lightnesses[x][y] = 256 + backgroundLightness;
 
         lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
@@ -440,18 +463,39 @@ public class SquidLayers extends JLayeredPane {
     public SquidLayers put(int x, int y, char[][] c)
     {
         foregroundPanel.put(x, y, c);
+        for(int i = x; i < c.length && i < width; i++)
+        {
+            for(int j = y; j < c[i].length && j < height; j++)
+            {
+                values[i][j] = true;
+            }
+        }
         return this;
     }
 
     public SquidLayers put(int x, int y, char[][] c, int[][] foregroundIndex)
     {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
+        for(int i = x; i < c.length && i < width; i++)
+        {
+            for(int j = y; j < c[i].length && j < height; j++)
+            {
+                values[i][j] = true;
+            }
+        }
         return this;
     }
 
     public SquidLayers put(int x, int y, char c[][], int[][] foregroundIndex, int[][] backgroundIndex)
     {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
+        for(int i = x; i < c.length && i < width; i++)
+        {
+            for(int j = y; j < c[i].length && j < height; j++)
+            {
+                values[i][j] = true;
+            }
+        }
         backgroundPanel.put(x, y, backgroundIndex, palette);
         return this;
     }
@@ -474,6 +518,7 @@ public class SquidLayers extends JLayeredPane {
             for (int j = y; j < height && j < backgroundLightness[i].length; j++)
             {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
+                values[i][j] = true;
             }
         }
         lightnessPanel.put(0, 0, lightnesses, lightingPalette);
@@ -502,6 +547,7 @@ public class SquidLayers extends JLayeredPane {
             for (int j = y; j < height && j < backgroundLightness[i].length; j++)
             {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
+                values[i][j] = true;
             }
         }
         lightnessPanel.put(0, 0, lightnesses, lightingPalette);
@@ -530,6 +576,7 @@ public class SquidLayers extends JLayeredPane {
             for (int j = y; j < height && j < backgroundLightness[i].length; j++)
             {
                 lightnesses[i][j] =  256 +clamp(backgroundLightness[i][j], -255, 255);
+                values[i][j] = true;
             }
         }
         lightnessPanel.put(0, 0, lightnesses, lightingPalette);
@@ -537,9 +584,195 @@ public class SquidLayers extends JLayeredPane {
         return this;
     }
 
+    /**
+     * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
+     * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param x
+     * @param y
+     * @param c char[][] to be drawn in the foreground starting from x, y
+     */
+    public SquidLayers putInto(int layer, int x, int y, char c)
+    {
+        SquidPanel p = backgroundPanel;
+        switch (layer)
+        {
+            case 0: break;
+            case 1: p = lightnessPanel;
+                break;
+            case 2: p = foregroundPanel;
+                break;
+            default: p = extraPanels.get(layer - 3);
+        }
+        p.put(x, y, c);
+        values[x][y] = true;
+        return this;
+    }
+
+    /**
+     * Place a char c[][] into the specified layer, with a color specified by an index into the default palette.
+     * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param x
+     * @param y
+     * @param c char[][] to be drawn in the foreground starting from x, y
+     * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
+     */
+    public SquidLayers putInto(int layer, int x, int y, char c,  int colorIndex)
+    {
+        SquidPanel p = backgroundPanel;
+        switch (layer)
+        {
+            case 0: break;
+            case 1: p = lightnessPanel;
+                break;
+            case 2: p = foregroundPanel;
+                break;
+            default: p = extraPanels.get(layer - 3);
+        }
+        p.put(x, y, c, colorIndex, palette);
+        values[x][y] = true;
+        return this;
+    }
+
+    /**
+     * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
+     * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param x
+     * @param y
+     * @param c char[][] to be drawn in the foreground starting from x, y
+     * @param alternatePalette an alternate Color List for both foreground and background
+     * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
+     */
+    public SquidLayers putInto(int layer, int x, int y, char c, List<Color> alternatePalette,  int colorIndex)
+    {
+        SquidPanel p = backgroundPanel;
+        switch (layer)
+        {
+            case 0: break;
+            case 1: p = lightnessPanel;
+                break;
+            case 2: p = foregroundPanel;
+                break;
+            default: p = extraPanels.get(layer - 3);
+        }
+        if(alternatePalette == null) alternatePalette = palette;
+        p.put(x, y, c, colorIndex, alternatePalette);
+        values[x][y] = true;
+        return this;
+    }
+
+    /**
+     * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
+     * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param x
+     * @param y
+     * @param c char[][] to be drawn in the foreground starting from x, y
+     */
+    public SquidLayers putInto(int layer, int x, int y, char[][] c)
+    {
+        SquidPanel p = backgroundPanel;
+        switch (layer)
+        {
+            case 0: break;
+            case 1: p = lightnessPanel;
+                break;
+            case 2: p = foregroundPanel;
+                break;
+            default: p = extraPanels.get(layer - 3);
+        }
+        p.put(x, y, c);
+        for(int i = x; i < c.length && i < width; i++)
+        {
+            for(int j = y; j < c[i].length && j < height; j++)
+            {
+                values[i][j] = true;
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Place a char c[][] into the specified layer, with a color specified by an index into the default palette.
+     * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param x
+     * @param y
+     * @param c char[][] to be drawn in the foreground starting from x, y
+     * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
+     */
+    public SquidLayers putInto(int layer, int x, int y, char[][] c,  int[][] colorIndex)
+    {
+        SquidPanel p = backgroundPanel;
+        switch (layer)
+        {
+            case 0: break;
+            case 1: p = lightnessPanel;
+                break;
+            case 2: p = foregroundPanel;
+                break;
+            default: p = extraPanels.get(layer - 3);
+        }
+        p.put(x, y, c, colorIndex, palette);
+        for(int i = x; i < c.length && i < width; i++)
+        {
+            for(int j = y; j < c[i].length && j < height; j++)
+            {
+                values[i][j] = true;
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
+     * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param x
+     * @param y
+     * @param c char[][] to be drawn in the foreground starting from x, y
+     * @param alternatePalette an alternate Color List for both foreground and background
+     * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
+     */
+    public SquidLayers putInto(int layer, int x, int y, char[][] c, List<Color> alternatePalette,  int[][] colorIndex)
+    {
+        SquidPanel p = backgroundPanel;
+        switch (layer)
+        {
+            case 0: break;
+            case 1: p = lightnessPanel;
+                break;
+            case 2: p = foregroundPanel;
+                break;
+            default: p = extraPanels.get(layer - 3);
+        }
+        if(alternatePalette == null) alternatePalette = palette;
+        p.put(x, y, c, colorIndex, alternatePalette);
+        for(int i = x; i < c.length && i < width; i++)
+        {
+            for(int j = y; j < c[i].length && j < height; j++)
+            {
+                values[i][j] = true;
+            }
+        }
+        return this;
+    }
+    public boolean hasChanged(int x, int y)
+    {
+        if(backgroundPanel.hasChanged(x, y) ||
+           lightnessPanel.hasChanged(x, y) ||
+           foregroundPanel.hasChanged(x, y)) return true;
+        for(int i = 0; i < extraPanels.size(); i++)
+        {
+            if(extraPanels.get(i).hasChanged(x, y)) return true;
+
+        }
+        return false;
+    }
+    public boolean hasValue(int x, int y)
+    {
+        return values[x][y];
+    }
     public SquidLayers clear(int x, int y)
     {
         foregroundPanel.clear(x, y);
+        values[x][y] = false;
         return this;
     }
     public SquidLayers erase()
@@ -551,7 +784,20 @@ public class SquidLayers extends JLayeredPane {
         {
             sp.erase();
         }
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                values[i][j] = false;
+            }
+        }
         return this;
+    }
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        paintComponents(g);
+        Toolkit.getDefaultToolkit().sync();
     }
 
     public void refresh()
