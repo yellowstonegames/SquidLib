@@ -4,6 +4,7 @@ import squidpony.Colors;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.gui.DefaultResources;
 import squidpony.squidgrid.gui.SquidKey;
 import squidpony.squidgrid.gui.SquidLayers;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -54,11 +55,7 @@ public class EverythingDemo {
         height = 30;
         // the font will try to load Rogue-Zodiac.ttf from resources. I (Tommy Ettinger) made it, and it's under the
         // same license as SquidLib.
-        Font fnt = new Font("Dialog", Font.PLAIN, 24);
-        try {
-            fnt = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/Rogue-Zodiac.ttf")).deriveFont(32.0f);
-        } catch (Exception e) {
-        }
+        Font fnt = DefaultResources.getDefaultNarrowFont(2.0f);
         display = new SquidLayers(width, height, 12, 24, fnt);
 
         lrng = new LightRNG();
@@ -77,8 +74,9 @@ public class EverythingDemo {
         char[][] placement = DungeonUtility.closeDoors(bareDungeon);
         player = DungeonUtility.randomFloor(placement);
         placement[player.x][player.y] = '@';
-        monsters = new HashMap<Point, Integer>(8);
-        for(int i = 0; i < 8; i++)
+        int numMonsters = 25;
+        monsters = new HashMap<Point, Integer>(numMonsters);
+        for(int i = 0; i < numMonsters; i++)
         {
             Point monPos = DungeonUtility.randomFloor(placement);
             monsters.put(monPos, 0);
@@ -224,6 +222,7 @@ public class EverythingDemo {
             if(health <= 0)
             {
                 display.putBoxedString(width / 2 - 11, height / 2 - 1, "YOU HAVE BEEN EATEN!");
+                display.putBoxedString(width / 2 - 11, height / 2 + 5, "     q to quit.     ");
                 display.refresh();
                 drawing = false;
                 return;

@@ -72,7 +72,7 @@ public class TextCellFactory {
     }
 
     /**
-     * Initializes the factor to then be able to create text cells on demand.
+     * Initializes the factory to then be able to create text cells on demand.
      *
      * Will strictly use the provided width and height values to size the cells.
      * The provided font will be used as a maximum size for the cells, but will
@@ -87,6 +87,25 @@ public class TextCellFactory {
         initialized = true;
         map = new ImageCellMap(width, height);
         initializeBySize(width, height, font);
+        return this;
+    }
+
+    /**
+     * Initializes the factory to then be able to create text cells on demand.
+     *
+     * Will strictly use the provided width and height values to size the cells.
+     * The provided font will be used as the exact size for the cells. Does no
+     * fitting, assumes you know what you're doing.
+     *
+     * Calling this after the factory has already been initialized will
+     * re-initialize it.
+     *
+     * @return this for method chaining
+     */
+    public TextCellFactory initVerbatim() {
+        initialized = true;
+        map = new ImageCellMap(width, height);
+        initializeVerbatim(width, height, font);
         return this;
     }
 
@@ -328,6 +347,15 @@ public class TextCellFactory {
         largeCharacters = new HashSet<>();
         map.clear();
         sizeCellByDimension();
+        map.clear();
+    }
+    private void initializeVerbatim(int cellWidth, int cellHeight, Font font) {
+        this.width = cellWidth;
+        this.height = cellHeight;
+        this.horizontalOffset = cellWidth / 2;
+        this.verticalOffset = 0;
+        this.font = font;
+        largeCharacters = new HashSet<>();
         map.clear();
     }
 

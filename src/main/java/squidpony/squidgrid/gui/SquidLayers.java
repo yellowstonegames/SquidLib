@@ -10,11 +10,16 @@ import java.util.List;
 
 /**
  * A helper class to make using multiple SquidPanels easier.
+ * There is some useful documentation in this class' getPalette method (honestly, I don't know where else to put
+ * documentation specifically about this class' default palette).
  * Created by Tommy Ettinger on 7/6/2015.
  */
 @Beta
 public class SquidLayers extends JLayeredPane {
-    protected int width, height, cellWidth, cellHeight;
+    protected int width;
+    protected int height;
+    protected int cellWidth;
+    protected int cellHeight;
     protected SquidPanel backgroundPanel, lightnessPanel, foregroundPanel;
     protected int[][] bgIndices;
     protected int[][] lightnesses;
@@ -23,14 +28,54 @@ public class SquidLayers extends JLayeredPane {
     protected ArrayList<Color> palette, lightingPalette;
     protected boolean[][] values;
 
+    /**
+     * The pixel width of the entire map.
+     * @return
+     */
     @Override
     public int getWidth() {
         return width * cellWidth;
     }
 
+    /**
+     * The pixel height of the entire map.
+     * @return
+     */
     @Override
     public int getHeight() {
         return height * cellHeight;
+    }
+
+    /**
+     * Width of the map in grid cells.
+     * @return
+     */
+    public int getGridWidth() {
+        return width;
+    }
+
+    /**
+     * Height of the map in grid cells.
+     * @return
+     */
+    public int getGridHeight() {
+        return height;
+    }
+
+    /**
+     * Width of one cell in pixels.
+     * @return
+     */
+    public int getCellWidth() {
+        return cellWidth;
+    }
+
+    /**
+     * Height of one cell in pixels.
+     * @return
+     */
+    public int getCellHeight() {
+        return cellHeight;
     }
 
     /**
@@ -87,27 +132,64 @@ public class SquidLayers extends JLayeredPane {
         return palette;
     }
 
+    /**
+     * Get the lightness modifiers used for background cells as an int[][], with elements between 0 and 511, 256 as the
+     * unmodified lightness level, lower numbers meaning darker, and higher meaning lighter.
+     * @return
+     */
     public int[][] getLightnesses() {
         return lightnesses;
     }
 
+    /**
+     * Get all the background color indices at once, which are probably indexed into the default palette. See the
+     * documentation for the getPalette() method in this class for more information.
+     * @return
+     */
     public int[][] getBgIndices() {
         return bgIndices;
     }
 
+    /**
+     * Sets the lightness modifiers used for background cells with the int[][] passed as lightnesses. This 2D array
+     * should have elements between 0 to 511, with 256 as the unmodified lightness level, lower numbers meaning darker,
+     * and higher meaning lighter. Elements less than 0 or higher than 511 will probably cause array out-of-bounds
+     * exceptions to be thrown when this renders, so just don't do that. This doesn't validate because maps can get
+     * large, validating many cells could be expensive, and this might be called often if it's being called at all.
+     * @param lightnesses 2D array, width and height should match this class' gridWidth and gridHeight. elements must
+     *                    be between 0 and 511.
+     */
     public void setLightnesses(int[][] lightnesses) {
         this.lightnesses = lightnesses;
     }
 
+    /**
+     * Set all of the background colors at once, using indexes into what is probably the default palette unless
+     * otherwise specified in the call to put(). If you want subtle variations on a color, don't add a new entry to
+     * the default palette every time if you can set the lightness differently for things with that color. Indices
+     * should correspond to the numbers in getPalette()'s documentation, or higher if you extended it.
+     * @param bgIndices 2D array, width and height should match this class' gridWidth and gridHeight.
+     */
     public void setBgIndices(int[][] bgIndices) {
         this.bgIndices = bgIndices;
     }
 
+    /**
+     * Create a new SquidLayers widget with the default <b>square</b> font, 40 cells wide and high, with a size of
+     * 12x12 pixels for each cell.
+     */
     public SquidLayers()
     {
         this(40, 40);
     }
-    public  SquidLayers(int gridWidth, int gridHeight)
+
+    /**
+     * Create a new SquidLayers widget with the default <b>square</b> font, the given number of cells for gridWidth
+     * and gridHeight, and 12x12 pixels for each cell.
+     * @param gridWidth in grid cells
+     * @param gridHeight in grid cells
+     */
+    public SquidLayers(int gridWidth, int gridHeight)
     {
         super();
         initPalettes();
@@ -129,7 +211,7 @@ public class SquidLayers extends JLayeredPane {
             }
         }
 
-        textFactory = new TextCellFactory().width(16).height(16);
+        textFactory = new TextCellFactory().font(DefaultResources.getDefaultFont()).width(12).height(12).initBySize();
 
         backgroundPanel = new SquidPanel(gridWidth, gridHeight);
         backgroundPanel.setOpaque(true);
@@ -155,6 +237,14 @@ public class SquidLayers extends JLayeredPane {
         this.setPreferredSize(backgroundPanel.getPreferredSize());
     }
 
+    /**
+     * Create a new SquidLayers widget with the default <b>narrow</b> font, the given number of cells for gridWidth
+     * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
+     * @param gridWidth in grid cells
+     * @param gridHeight in grid cells
+     * @param cellWidth in pixels
+     * @param cellHeight in pixels
+     */
     public  SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight)
     {
         super();
@@ -176,7 +266,9 @@ public class SquidLayers extends JLayeredPane {
             }
         }
 
-        textFactory = new TextCellFactory().width(cellWidth).height(cellHeight);
+        textFactory = new TextCellFactory().font(DefaultResources
+                .getDefaultNarrowFont().deriveFont(4.0f * gridHeight / 3.0f))
+                .width(cellWidth).height(cellHeight).initBySize();
 
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
         backgroundPanel.setOpaque(true);
@@ -201,6 +293,16 @@ public class SquidLayers extends JLayeredPane {
         this.setSize(backgroundPanel.getPreferredSize());
         this.setPreferredSize(backgroundPanel.getPreferredSize());
     }
+
+    /**
+     * Create a new SquidLayers widget with the given Font, the given number of cells for gridWidth
+     * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
+     * @param gridWidth in grid cells
+     * @param gridHeight in grid cells
+     * @param cellWidth in pixels
+     * @param cellHeight in pixels
+     * @param font A Font that should have been assigned a size before being passed here.
+     */
     public  SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, Font font)
     {
         super();
@@ -223,7 +325,7 @@ public class SquidLayers extends JLayeredPane {
             }
         }
 
-        textFactory = new TextCellFactory().font(font).width(cellWidth).height(cellHeight);
+        textFactory = new TextCellFactory().font(font).width(cellWidth).height(cellHeight).initVerbatim();
 
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
         backgroundPanel.setOpaque(true);
@@ -364,6 +466,12 @@ public class SquidLayers extends JLayeredPane {
         return palette;
     }
 
+    /**
+     * Place a char c into the foreground at position x, y, with the default color.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @param c a character to be drawn in the foreground
+     */
     public SquidLayers put(int x, int y, char c)
     {
         foregroundPanel.put(x, y, c);
@@ -371,6 +479,13 @@ public class SquidLayers extends JLayeredPane {
         return this;
     }
 
+    /**
+     * Place a char c into the foreground, with a foreground color specified by an index into the default palette.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @param c a character to be drawn in the foreground
+     * @param foregroundIndex int index into the default palette for the char being drawn
+     */
     public SquidLayers put(int x, int y, char c, int foregroundIndex)
     {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
@@ -378,6 +493,15 @@ public class SquidLayers extends JLayeredPane {
         return this;
     }
 
+    /**
+     * Place a char c into the foreground, with a foreground color specified by an index into the default palette, and a
+     * background color specified in the same way.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @param c a character to be drawn in the foreground
+     * @param foregroundIndex int index into the default palette for the char being drawn
+     * @param backgroundIndex int index into the default palette for the background
+     */
     public SquidLayers put(int x, int y, char c, int foregroundIndex, int backgroundIndex)
     {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
@@ -390,8 +514,8 @@ public class SquidLayers extends JLayeredPane {
      * Place a char c into the foreground, with a foreground color specified by an index into the default palette, a
      * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
      * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c a character to be drawn in the foreground
      * @param foregroundIndex int index into the default palette for the char being drawn
      * @param backgroundIndex int index into the default palette for the background
@@ -413,8 +537,8 @@ public class SquidLayers extends JLayeredPane {
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
      * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
      * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c a character to be drawn in the foreground
      * @param alternatePalette an alternate Color List for both foreground and background
      * @param foregroundIndex int index into alternatePalette for the char being drawn
@@ -436,8 +560,8 @@ public class SquidLayers extends JLayeredPane {
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
      * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
      * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c a character to be drawn in the foreground
      * @param foregroundIndex int index into alternatePalette for the char being drawn
      * @param fgPalette an alternate Color List for the foreground; can be null to use the default.
@@ -501,11 +625,11 @@ public class SquidLayers extends JLayeredPane {
     }
 
     /**
-     * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
+     * Place a char[][] c into the foreground, with a foreground color specified by an index into alternatePalette, a
      * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
      * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      * @param foregroundIndex int[][] of indices into the default palette for the char being drawn
      * @param backgroundIndex int[][] of indices into the default palette for the background
@@ -530,8 +654,8 @@ public class SquidLayers extends JLayeredPane {
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
      * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
      * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      * @param alternatePalette an alternate Color List for both foreground and background
      * @param foregroundIndex int[][] of indices into alternatePalette for the char being drawn
@@ -558,8 +682,8 @@ public class SquidLayers extends JLayeredPane {
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
      * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
      * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      * @param foregroundIndex int[][] of indices into fgPalette for the char being drawn
      * @param fgPalette an alternate Color List for the foreground; can be null to use the default.
@@ -587,8 +711,8 @@ public class SquidLayers extends JLayeredPane {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      */
     public SquidLayers putInto(int layer, int x, int y, char c)
@@ -611,8 +735,8 @@ public class SquidLayers extends JLayeredPane {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into the default palette.
      * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
      */
@@ -636,8 +760,8 @@ public class SquidLayers extends JLayeredPane {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      * @param alternatePalette an alternate Color List for both foreground and background
      * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
@@ -663,8 +787,8 @@ public class SquidLayers extends JLayeredPane {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      */
     public SquidLayers putInto(int layer, int x, int y, char[][] c)
@@ -693,8 +817,8 @@ public class SquidLayers extends JLayeredPane {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into the default palette.
      * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
      */
@@ -724,8 +848,8 @@ public class SquidLayers extends JLayeredPane {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
-     * @param x
-     * @param y
+     * @param x in grid cells.
+     * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      * @param alternatePalette an alternate Color List for both foreground and background
      * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
@@ -754,16 +878,42 @@ public class SquidLayers extends JLayeredPane {
         return this;
     }
 
+    /**
+     * Put a string at the given x, y position, using the default color.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @param s the string to print
+     * @return this, for chaining
+     */
     public SquidLayers putString(int x, int y, String s)
     {
         foregroundPanel.put(x, y, s);
         return this;
     }
+    /**
+     * Put a string at the given x, y position, with the given index for foreground color that gets looked up in the
+     * default palette.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @param s the string to print
+     * @param foregroundIndex
+     * @return this, for chaining
+     */
     public SquidLayers putString(int x, int y, String s, int foregroundIndex)
     {
         foregroundPanel.put(x, y, s, palette.get(foregroundIndex));
         return this;
     }
+    /**
+     * Put a string at the given x, y position, with the given indices for foreground and background color that look up
+     * their index in the default palette.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @param s the string to print
+     * @param foregroundIndex
+     * @param backgroundIndex
+     * @return this, for chaining
+     */
     public SquidLayers putString(int x, int y, String s, int foregroundIndex, int backgroundIndex)
     {
         foregroundPanel.put(x, y, s, palette.get(foregroundIndex));
@@ -774,6 +924,17 @@ public class SquidLayers extends JLayeredPane {
         return this;
     }
 
+    /**
+     * Put a string at the given x, y position, with the given indices for foreground and background color that look up
+     * their index in alternatePalette.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @param s the string to print
+     * @param alternatePalette
+     * @param foregroundIndex
+     * @param backgroundIndex
+     * @return this, for chaining
+     */
     public SquidLayers putString(int x, int y, String s, List<Color> alternatePalette, int foregroundIndex, int backgroundIndex)
     {
         foregroundPanel.put(x, y, s, alternatePalette.get(foregroundIndex));
@@ -783,21 +944,38 @@ public class SquidLayers extends JLayeredPane {
         }
         return this;
     }
+
+    /**
+     * A utility method that draws a 1-cell-wide black box around the text you request (as s) and replaces the contents
+     * of anything that was below or adjacent to the string's new position. Useful for message boxes.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @param s the string to print inside the box
+     * @return this, for chaining
+     */
     public SquidLayers putBoxedString(int x, int y, String s)
     {
-        foregroundPanel.put(x, y, s, palette.get(1));
         if(y > 0 && y + 1 < height && x > 0 && x + 1 < width) {
             for(int j = y - 1; j < y + 2 && j < height; j++) {
                 for (int i = x - 1; i < s.length() + x + 2 && i < width; i++) {
+                    foregroundPanel.put(i, j, ' ');
                     backgroundPanel.put(i, j, palette.get(9));
                     lightnesses[i][j] = -255;
                     lightnessPanel.put(i, j, 1, lightingPalette);
                 }
             }
         }
+        foregroundPanel.put(x, y, s, palette.get(1));
+
         return this;
     }
 
+    /**
+     * Used to check if an x,y cell has changed, checking all layers for changes.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @return true if it changed, false if it didn't.
+     */
     public boolean hasChanged(int x, int y)
     {
         if(backgroundPanel.hasChanged(x, y) ||
@@ -810,16 +988,40 @@ public class SquidLayers extends JLayeredPane {
         }
         return false;
     }
+
+    /**
+     * Very basic check to see if something was rendered at the x,y cell requested. (usually this only checks the
+     * foreground) If blank, false, otherwise true.
+     * @param x in grid cells.
+     * @param y in grid cells.
+     * @return
+     */
     public boolean hasValue(int x, int y)
     {
         return values[x][y];
     }
+
+    /**
+     * Clear one cell at position x, y of  its foreground contents.
+     *
+     * You may be looking for the erase() method, which erases all panels and all cells.
+     *
+     * @param x in grid cells
+     * @param y in grid cells
+     * @return
+     */
     public SquidLayers clear(int x, int y)
     {
         foregroundPanel.clear(x, y);
         values[x][y] = false;
         return this;
     }
+
+    /**
+     * Erase everything visible in all cells or all layers.  This can be expensive to do in a traditional game loop,
+     * since Swing is not meant for that at all.
+     * @return this, for chaining
+     */
     public SquidLayers erase()
     {
         foregroundPanel.erase();
@@ -845,6 +1047,9 @@ public class SquidLayers extends JLayeredPane {
         Toolkit.getDefaultToolkit().sync();
     }
 
+    /**
+     * Call this whenever you want to show the changes you made to contents of this widget.
+     */
     public void refresh()
     {
         backgroundPanel.refresh();
