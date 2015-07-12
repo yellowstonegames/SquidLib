@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.examples;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.awt.BorderLayout;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import java.awt.Font;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.awt.Point;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.awt.event.ActionEvent;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import java.awt.event.ActionListener;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.awt.event.MouseAdapter;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import java.awt.event.MouseEvent;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import java.util.Random;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import javax.swing.JFrame;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import javax.swing.JOptionPane;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import javax.swing.Timer;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import squidpony.SColor;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import squidpony.squidgrid.gui.SquidPanel;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import squidpony.squidgrid.gui.TextCellFactory;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import squidpony.squidgrid.Direction;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>/**<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * Demonstrates the use of animations in SGTextPanel.<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * Change which animations are commented out in the internal Spawner class at the bottom of the file to see the<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * different animations.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * @author Eben Howard - http://squidpony.com<a name="line.25"></a>
+<span class="sourceLineNo">026</span> */<a name="line.26"></a>
+<span class="sourceLineNo">027</span>public class MovingCharactersDemo {<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>    private SquidPanel display;//uses SGTextAndImagePanel instead of SGTextPanel in order to show it's usable as an in-place replacement/extension<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    private JFrame frame;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    private static char[][] map = new char[][]{//in order to be in line with GUI coordinate pairs, this appears to be sideways in this style constructor.<a name="line.31"></a>
+<span class="sourceLineNo">032</span>        {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},<a name="line.32"></a>
+<span class="sourceLineNo">033</span>        {'#', '.', '.', '.', ' ', '.', '.', '.', ' ', '.', '.', '#'},<a name="line.33"></a>
+<span class="sourceLineNo">034</span>        {'#', '.', '.', '.', 's', '.', '.', '.', 'S', '.', '.', '#'},<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        {'#', '.', '.', '.', 'q', '.', '.', '.', 'q', '.', '.', '#'},<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        {'#', '.', '.', '.', 'u', '.', '.', '.', 'u', '.', '.', '#'},<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        {'#', '.', '.', '.', 'i', '.', '.', '.', 'i', '.', '.', '#'},<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        {'#', '.', '.', '.', 'd', '.', '.', '.', 'd', '.', '.', '#'},<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        {'#', '.', '.', '.', 'p', '.', '.', '.', 'L', '.', '.', '#'},<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        {'#', '.', '.', '.', 'o', '.', '.', '.', 'i', '.', '.', '#'},<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        {'#', '.', '.', '.', 'n', '.', '.', '.', 'b', '.', '.', '#'},<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        {'#', '.', '.', '.', 'y', '.', '.', '.', ' ', '.', '.', '#'},<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        {'#', '.', '.', '.', '.', '.', '.', '.', 'A', '.', '.', '#'},<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        {'#', '.', '.', '.', 'c', '.', '.', '.', 'n', '.', '.', '#'},<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        {'#', '.', '.', '.', 'o', '.', '.', '.', 'i', '.', '.', '#'},<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        {'#', '.', '.', '.', 'm', '.', '.', '.', 'm', '.', '.', '#'},<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        {'#', '.', '.', '.', ' ', '.', '.', '.', ' ', '.', '.', '#'},<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'}<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    };<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    private int width = map.length, height = map[0].length;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    private Random rng = new Random();<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    private boolean spawning = false;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    private Point start = new Point();<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>    public static void main(String... args) {<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        new MovingCharactersDemo().go();<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    }<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>    private MovingCharactersDemo() {<a name="line.59"></a>
+<span class="sourceLineNo">060</span><a name="line.60"></a>
+<span class="sourceLineNo">061</span>        frame = new JFrame("SquidGrid Moving Objects Demonstration");<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>        display = new SquidPanel(width, height, new TextCellFactory().font(new Font("Arial", Font.BOLD, 20)).width(24).height(24), null);<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        display.put(map);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        display.refresh();<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        frame.getContentPane().add(display, BorderLayout.SOUTH);<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        frame.getContentPane().setBackground(SColor.BLACK);<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        frame.setVisible(true);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        frame.createBufferStrategy(2);<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>        frame.pack();<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        frame.setLocationRelativeTo(null);<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        frame.repaint();<a name="line.74"></a>
+<span class="sourceLineNo">075</span><a name="line.75"></a>
+<span class="sourceLineNo">076</span>        JOptionPane.showMessageDialog(frame, "Click inside the window to start the animation example.\nClick again to stop the animation.");<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>        Timer spawner = new Timer(100, new Spawner());<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        spawner.start();<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    }<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>    private void go() {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        display.addMouseListener(new DemoInputListener());<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    }<a name="line.84"></a>
+<span class="sourceLineNo">085</span><a name="line.85"></a>
+<span class="sourceLineNo">086</span>    private SColor getRandomColor() {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        return SColor.FULL_PALLET[rng.nextInt(SColor.FULL_PALLET.length)];<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>    private void slide() {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        start.x = rng.nextInt(display.gridWidth());<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        start.y = rng.nextInt(display.gridHeight());<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        display.put(start.x, start.y, '@', getRandomColor());<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        display.slide(start, new Point(rng.nextInt(display.gridWidth()), rng.nextInt(display.gridHeight())));<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        display.put(start.x, start.y, map[start.x][start.y]);//replaces the background as the object moves off of it<a name="line.95"></a>
+<span class="sourceLineNo">096</span><a name="line.96"></a>
+<span class="sourceLineNo">097</span>        display.refresh();<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    }<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>    private void wiggle() {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        start.x = rng.nextInt(display.gridWidth());<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        start.y = rng.nextInt(display.gridHeight());<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        display.put(start.x, start.y, '@', getRandomColor());<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>        display.wiggle(start);<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>        display.refresh();<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    }<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>    private void bump() {<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        start.x = rng.nextInt(display.gridWidth());<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        start.y = rng.nextInt(display.gridHeight());<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        display.put(start.x, start.y, '@', getRandomColor());<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>        display.bump(start, Direction.values()[rng.nextInt(Direction.values().length)]);<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>        display.refresh();<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    }<a name="line.118"></a>
+<span class="sourceLineNo">119</span><a name="line.119"></a>
+<span class="sourceLineNo">120</span>    private class DemoInputListener extends MouseAdapter {<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>        @Override<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        public void mouseClicked(MouseEvent me) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>            spawning = !spawning;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        }<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    }<a name="line.126"></a>
+<span class="sourceLineNo">127</span><a name="line.127"></a>
+<span class="sourceLineNo">128</span>    private class Spawner implements ActionListener {<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>        @Override<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        public void actionPerformed(ActionEvent ae) {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>            if (spawning) {<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>                //uncomment these to have these animations happen<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                slide();<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                // wiggle();<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                // bump();<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            }<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        }<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    }<a name="line.140"></a>
+<span class="sourceLineNo">141</span>}<a name="line.141"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

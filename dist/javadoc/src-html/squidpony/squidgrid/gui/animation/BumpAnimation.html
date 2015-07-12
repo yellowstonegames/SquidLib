@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.gui.animation;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.awt.Dimension;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import java.awt.Point;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.awt.event.ActionEvent;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.awt.image.BufferedImage;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import squidpony.squidgrid.Direction;<a name="line.7"></a>
+<span class="sourceLineNo">008</span><a name="line.8"></a>
+<span class="sourceLineNo">009</span>/**<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * Animates an object moving smoothly in a direction and then bouncing back.<a name="line.10"></a>
+<span class="sourceLineNo">011</span> *<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * @author Eben Howard - http://squidpony.com - howard@squidpony.com<a name="line.12"></a>
+<span class="sourceLineNo">013</span> */<a name="line.13"></a>
+<span class="sourceLineNo">014</span>public class BumpAnimation extends AbstractAnimation {<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>    /**<a name="line.16"></a>
+<span class="sourceLineNo">017</span>     * Creates a bump animation that will travel one cell in the given direction and return to the<a name="line.17"></a>
+<span class="sourceLineNo">018</span>     * starting position in the given time, in milliseconds.<a name="line.18"></a>
+<span class="sourceLineNo">019</span>     *<a name="line.19"></a>
+<span class="sourceLineNo">020</span>     * @param image the image to be animated<a name="line.20"></a>
+<span class="sourceLineNo">021</span>     * @param start the starting location of the image<a name="line.21"></a>
+<span class="sourceLineNo">022</span>     * @param cellSize the size of the cell that the animation will take place in<a name="line.22"></a>
+<span class="sourceLineNo">023</span>     * @param direction the direction the bump will happen in<a name="line.23"></a>
+<span class="sourceLineNo">024</span>     * @param duration the number of milliseconds the animation should take in total<a name="line.24"></a>
+<span class="sourceLineNo">025</span>     */<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    public BumpAnimation(BufferedImage image, Point start, Dimension cellSize, Direction direction, long duration) {<a name="line.26"></a>
+<span class="sourceLineNo">027</span>        this(image, start, new Point(start.x + direction.deltaX * cellSize.width, start.y + direction.deltaY * cellSize.height), duration);<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    }<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>    public BumpAnimation(BufferedImage image, Point start, Point end, long duration) {<a name="line.30"></a>
+<span class="sourceLineNo">031</span>        super(image, start, end, duration);<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    }<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>    @Override<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    public void actionPerformed(ActionEvent ae) {<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        lastTime = System.currentTimeMillis();<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        if (isActive()) {<a name="line.37"></a>
+<span class="sourceLineNo">038</span>            float ratio = (lastTime - startTime) / (endTime - startTime);<a name="line.38"></a>
+<span class="sourceLineNo">039</span>            ratio = ratio &gt; 0.5f ? 1.0f - ratio : Math.max(ratio, 0.001f);<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>            float dx = end.x - start.x;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>            float dy = end.y - start.y;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>            dx *= ratio;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>            dy *= ratio;<a name="line.44"></a>
+<span class="sourceLineNo">045</span><a name="line.45"></a>
+<span class="sourceLineNo">046</span>            label.setLocation(start.x + Math.round(dx), start.y + Math.round(dy));<a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>            label.invalidate();<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        }<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
+<span class="sourceLineNo">051</span>}<a name="line.51"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

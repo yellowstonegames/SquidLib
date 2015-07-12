@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.mapping.styled;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>/**<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * An enumeration of all the kinds of dungeon that DungeonGen<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * knows how to draw already. Each value has a Javadoc description.<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * Created by Tommy Ettinger on 3/10/2015.<a name="line.6"></a>
+<span class="sourceLineNo">007</span> */<a name="line.7"></a>
+<span class="sourceLineNo">008</span>public enum TilesetType {<a name="line.8"></a>
+<span class="sourceLineNo">009</span>    /**<a name="line.9"></a>
+<span class="sourceLineNo">010</span>     * A generally useful kind of dungeon for ruins or underground manufactured areas.<a name="line.10"></a>
+<span class="sourceLineNo">011</span>     */<a name="line.11"></a>
+<span class="sourceLineNo">012</span>    DEFAULT_DUNGEON,<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    /**<a name="line.13"></a>
+<span class="sourceLineNo">014</span>     * A good general kind of cave, with long distances between merging paths.<a name="line.14"></a>
+<span class="sourceLineNo">015</span>     */<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    CAVES_LIMIT_CONNECTIVITY,<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    /**<a name="line.17"></a>
+<span class="sourceLineNo">018</span>     * Only usable if using Chebyshev distances; many connections are diagonal-only.<a name="line.18"></a>
+<span class="sourceLineNo">019</span>     */<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    CAVES_TINY_CORRIDORS,<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    /**<a name="line.21"></a>
+<span class="sourceLineNo">022</span>     * Most parts of the cave are large and open, but tiny corridors link them, providing hiding places.<a name="line.22"></a>
+<span class="sourceLineNo">023</span>     */<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    CORNER_CAVES,<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    /**<a name="line.25"></a>
+<span class="sourceLineNo">026</span>     * Very basic demo dungeon.<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    HORIZONTAL_CORRIDORS_A,<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    /**<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     * Slightly less basic demo dungeon.<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     */<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    HORIZONTAL_CORRIDORS_B,<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    /**<a name="line.33"></a>
+<span class="sourceLineNo">034</span>     * A bit more complexity in this demo dungeon.<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     */<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    HORIZONTAL_CORRIDORS_C,<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    /**<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * A reference implementation of where you can place walls; mostly floor.<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     */<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    LIMIT_CONNECTIVITY_FAT,<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    /**<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * A reference implementation of where you can place walls; mostly wall.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     */<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    LIMITED_CONNECTIVITY,<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    /**<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * A generally good maze; MAZE_A and MAZE_B should both be interchangeable, but not on the same map.<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    MAZE_A,<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    /**<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * A generally good maze; MAZE_A and MAZE_B should both be interchangeable, but not on the same map.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    MAZE_B,<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    /**<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * A map that's less dungeon-like than the others, with lots of open space.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    OPEN_AREAS,<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    /**<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * An excellent natural cave style that looks worn down haphazardly, as by burrowing creatures or deep rivers.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    REFERENCE_CAVES,<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    /**<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * Mostly open, kinda weird.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    ROOMS_AND_CORRIDORS_A,<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * Mostly open, but with long corridors that should be a good fit for ranged combat.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    ROOMS_AND_CORRIDORS_B,<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    /**<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * A nice old-school roguelike map, with thin corridors and rectangular rooms.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    ROOMS_LIMIT_CONNECTIVITY,<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    /**<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * A thing of beauty. Good for maps that need to seem otherworldly or unusual, like heavenly planes.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    ROUND_ROOMS_DIAGONAL_CORRIDORS,<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    /**<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * A more open cave, but portions of this may seem artificial. Consider alternating with REFERENCE_CAVES .<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    SIMPLE_CAVES,<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    /**<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * Kinda... not the best map. Very predictable.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     */<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    SQUARE_ROOMS_WITH_RANDOM_RECTS<a name="line.84"></a>
+<span class="sourceLineNo">085</span>}<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
