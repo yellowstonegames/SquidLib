@@ -58,10 +58,10 @@ public class EverythingDemo {
         Font fnt = DefaultResources.getDefaultNarrowFont(2.0f);
         display = new SquidLayers(width, height, 12, 24, fnt);
 
-        lrng = new LightRNG();
+        lrng = new LightRNG(0x1337BEEF);
         rng = new RNG(lrng);
 
-        // this is important if you use a seeded RNG, which we don't here.
+        // this is important if you use a seeded RNG.
         DungeonUtility.rng = rng;
         dungeonGen = new DungeonGenerator(width, height, rng);
         dungeonGen.addWater(10);
@@ -108,51 +108,66 @@ public class EverythingDemo {
     private void move(int xmod, int ymod) {
         if (player.x + xmod >= 0 && player.y + ymod >= 0 && player.x + xmod < width && player.y + ymod < height
                 && bareDungeon[player.x + xmod][player.y + ymod] != '#') {
+            // '+' is a door.
             if (lineDungeon[player.x + xmod][player.y + ymod] == '+') {
                 bareDungeon[player.x + xmod][player.y + ymod] = '/';
                 lineDungeon[player.x + xmod][player.y + ymod] = '/';
+                // changes to the map mean the resistances for FOV need to be regenerated.
                 res = DungeonUtility.generateResistances(bareDungeon);
             } else {
                 player.move(player.x + xmod, player.y + ymod);
             }
             if(monsters.containsKey(player))
             {
+                // this doesn't remove the player, it removes the monster that just got run over by the player.
                 monsters.remove(player);
             }
-
+            // The next two lines are important to avoid monsters treating cells the player WAS in as goals.
             getToPlayer.clearGoals();
             getToPlayer.resetMap();
+            // now that goals are cleared, we can mark the current player position as a goal.
             getToPlayer.setGoal(player);
-            pathMap = getToPlayer.scan(null);
+            // this is an important piece of DijkstraMap usage; the argument is a Set of Points for squares that
+            // temporarily cannot be moved through (not walls, which are automatically known because the map char[][]
+            // was passed to the DijkstraMap constructor, but things like moving creatures and objects).
+            pathMap = getToPlayer.scan(monsters.keySet());
 
             // recalculate FOV, store it in fovmap for the redraw to use.
             fovmap = fov.calculateFOV(res, player.x, player.y, 8);
             HashMap<Point, Integer> newMons = new HashMap<Point, Integer>(monsters.size());
-
+            // handle monster turns
             for(HashMap.Entry<Point, Integer> mon : monsters.entrySet())
             {
+                // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
                 if(mon.getValue() > 0 || fovmap[mon.getKey().x][mon.getKey().y] > 0.1)
                 {
+                    // this block is used to ensure that the monster picks the best path, or a random choice if there
+                    // is more than one equally good best option.
                     Direction choice = null;
                     double best = 9999.0;
                     for(Direction d : getToPlayer.shuffle(Direction.CARDINALS))
                     {
                         Point tmp = new Point(mon.getKey().x + d.deltaX, mon.getKey().y + d.deltaY);
-                        if(pathMap[mon.getKey().x + d.deltaX][mon.getKey().y + d.deltaY] < best &&
+                        if(pathMap[tmp.x][tmp.y] < best &&
                                 !monsters.containsKey(tmp) && !newMons.containsKey(tmp))
                         {
-                            best = pathMap[mon.getKey().x + d.deltaX][mon.getKey().y + d.deltaY];
+                            // pathMap is a 2D array of doubles where 0 is the goal (the player).
+                            // we use best to store which option is closest to the goal.
+                            best = pathMap[tmp.x][tmp.y];
                             choice = d;
                         }
                     }
                     if(choice != null)
                     {
                         Point tmp = new Point(mon.getKey().x + choice.deltaX, mon.getKey().y + choice.deltaY);
+                        // if we would move into the player, instead damage the player and give newMons the current
+                        // position of this monster.
                         if(player.equals(tmp))
                         {
                             health--;
                             newMons.put(mon.getKey(), 1);
                         }
+                        // otherwise store the new position in newMons.
                         else
                             newMons.put(tmp, 1);
                     }
@@ -180,7 +195,7 @@ public class EverythingDemo {
         if(health <= 0) {
             if(k.getExtendedKeyCode() == KeyEvent.VK_Q)
                 System.exit(0);
-            return false;
+            return true;
         }
         switch (k.getExtendedKeyCode()) {
             case KeyEvent.VK_LEFT:
