@@ -18,8 +18,10 @@ Current Features:
 --      Set size of the cell, number of cells in the grid, and Font to be used
 ---         Font is dynamically resized to fit optimally within the cell
 -   Font size and style can be changed on the fly
+-   Two fonts provided as resources, one narrow, one square, for unicode line drawing to work out-of-the-box.
 -   Multiple grids of different configurations can be used simultaneously in the same display
 -   Multiple grids of different configurations can be overlayed allowing for transparency effects
+--      A convenience class, SquidLayers provides foreground and background setting with this, and more
 -   Basic Swing animation support
 
 ###Highly Flexible
@@ -38,6 +40,7 @@ Current Features:
 -   Can get a list of colors that are a gradient between two colors
 -   Can perform LIBTCOD style "dark", "light", and "desaturate" commands on any color
 -   Can get an arbitrary amount of blend between two colors
+-   Colors are also available as standard java.awt.Color constants in the Colors class
 
 ###Roguelike Specific Toolkit
 -   Robust Field of View and Line of Sight system
@@ -61,6 +64,7 @@ Current Features:
 -   HTML browsing of the API shows these samples
 -   Pop-up javadoc in NetBeans and Eclipse show these samples
 -   Demos of all functionality included
+-   EverythingDemo shows off lots of features and is fully documented; a good place to start
 
 ###Math Toolkit
 -   Custom extension(s) of Random allows drop-in replacement with added features
@@ -70,13 +74,14 @@ Current Features:
 -   Able to find Bresenham Lines for 2D and 3D coordinates.
 --      Also can use Wu or Elias Lines (antialiased Bresenham Lines)
 -   Perlin noise implementation
+--      Used to make Brogue-style "moving" water that works by altering the background lightness.
   
 Download JARs from the Releases tab or use Maven Central to download with
 ```
 <dependency>
   <groupId>com.squidpony</groupId>
   <artifactId>squidlib</artifactId>
-  <version>2.3.0</version>
+  <version>2.3.1</version>
 </dependency>
 ```
 
