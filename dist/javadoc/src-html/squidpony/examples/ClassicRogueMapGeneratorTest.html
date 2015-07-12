@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.examples;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.awt.event.MouseAdapter;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import java.awt.event.MouseEvent;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import javax.swing.JFrame;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import javax.swing.JLayeredPane;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import squidpony.SColor;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import squidpony.squidgrid.mapping.ClassicRogueMapGenerator;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import squidpony.squidgrid.gui.SquidPanel;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import squidpony.squidgrid.mapping.Terrain;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import squidpony.squidgrid.Direction;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>/**<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * Displays randomly built maps from the ClassicRogueMapGenerator.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> *<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * A new dungeon is generated every time the mouse is clicked.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> *<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * @author Eben Howard - http://squidpony.com - howard@squidpony.com<a name="line.18"></a>
+<span class="sourceLineNo">019</span> */<a name="line.19"></a>
+<span class="sourceLineNo">020</span>public class ClassicRogueMapGeneratorTest {<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>    private static final int width = 100, height = 80, scale = 10,<a name="line.22"></a>
+<span class="sourceLineNo">023</span>            horizontalRooms = 5, verticalRooms = 4,<a name="line.23"></a>
+<span class="sourceLineNo">024</span>            minRoomWidth = 3, maxRoomWidth = 15,<a name="line.24"></a>
+<span class="sourceLineNo">025</span>            minRoomHeight = 4, maxRoomHeight = 15;<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>    private JFrame frame;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    private SquidPanel back, front;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    private ClassicRogueMapGenerator gen;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>    public static void main(String... args) {<a name="line.31"></a>
+<span class="sourceLineNo">032</span>        new ClassicRogueMapGeneratorTest().go();<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    }<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>    private void go() {<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        gen = new ClassicRogueMapGenerator(horizontalRooms, verticalRooms, width, height, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight);<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>        back = new SquidPanel(width, height, scale, scale);<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        front = new SquidPanel(width, height, scale, scale);<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>        frame = new JFrame();<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        JLayeredPane layer = new JLayeredPane();<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        layer.setLayer(back, JLayeredPane.DEFAULT_LAYER);<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        layer.setLayer(front, JLayeredPane.PALETTE_LAYER);<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        layer.add(back);<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        layer.add(front);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        layer.setPreferredSize(back.getPreferredSize());<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        layer.setSize(back.getPreferredSize());<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        frame.add(layer);<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>        frame.pack();<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        frame.setLocationRelativeTo(null);<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        paint();<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        frame.setVisible(true);<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>        frame.addMouseListener(new MouseAdapter() {<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>            @Override<a name="line.59"></a>
+<span class="sourceLineNo">060</span>            public void mouseClicked(MouseEvent e) {<a name="line.60"></a>
+<span class="sourceLineNo">061</span>                paint();<a name="line.61"></a>
+<span class="sourceLineNo">062</span>            }<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>        });<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    }<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>    private void paint() {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        back.erase();<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        front.erase();<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        Terrain[][] map;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        map = gen.create();<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>        for (int x = 0; x &lt; width; x++) {<a name="line.73"></a>
+<span class="sourceLineNo">074</span>            for (int y = 0; y &lt; height; y++) {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                back.put(x, y, SColor.BLACK);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>                SColor color;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                boolean hasNeighbor = false;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>                for (Direction dir : Direction.OUTWARDS) {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>                    int x2 = x + dir.deltaX;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>                    int y2 = y + dir.deltaY;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                    if (x2 &gt;= 0 &amp;&amp; y2 &gt;= 0 &amp;&amp; x2 &lt; width &amp;&amp; y2 &lt; height &amp;&amp; map[x2][y2] != Terrain.WALL) {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                        hasNeighbor = true;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                        break;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                    }<a name="line.84"></a>
+<span class="sourceLineNo">085</span>                }<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                if (hasNeighbor) {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>                    front.put(x, y, map[x][y].symbol(), map[x][y].color());<a name="line.87"></a>
+<span class="sourceLineNo">088</span>                }<a name="line.88"></a>
+<span class="sourceLineNo">089</span>            }<a name="line.89"></a>
+<span class="sourceLineNo">090</span>        }<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>        back.refresh();<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        front.refresh();<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    }<a name="line.94"></a>
+<span class="sourceLineNo">095</span>}<a name="line.95"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
