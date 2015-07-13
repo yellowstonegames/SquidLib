@@ -11,26 +11,28 @@ Current Features:
 -   Uses Swing components
 -   Any Font can be used
 -   Images may be used alongside characters in same panel
---      Characters can be used as a drop-in fallback mechanism!
+  -  Characters can be used as a drop-in fallback mechanism!
 -   Specify Grid and Font size multiple ways
---      Set number of cells in the grid and Font to be used
----        Size of cell is adjusted to optimally fit the Font size given
---      Set size of the cell, number of cells in the grid, and Font to be used
----         Font is dynamically resized to fit optimally within the cell
+  -   Set number of cells in the grid and Font to be used
+    -   Size of cell is adjusted to optimally fit the Font size given
+  -   Set size of the cell, number of cells in the grid, and Font to be used
+    -   Font is dynamically resized to fit optimally within the cell
 -   Font size and style can be changed on the fly
 -   Two fonts provided as resources, one narrow, one square, for unicode line drawing to work out-of-the-box.
 -   Multiple grids of different configurations can be used simultaneously in the same display
 -   Multiple grids of different configurations can be overlayed allowing for transparency effects
---      A convenience class, SquidLayers provides foreground and background setting with this, and more
+  -   A convenience class, SquidLayers provides foreground and background setting with this
+  -   SquidLayers also allows background brightness changes (such as from torchlight) with just an int argument
+    -   This works by keeping a partly-transparent layer of black or white for darkening or lightening
 -   Basic Swing animation support
 
 ###Highly Flexible
 -   Can create multiple overlapping layers
---      Basic foreground & background color differences per cell
---      Multiple layers can be used to have multiple characters in a single cell
---      Multiple different sized layers can be used for sub-cell effects
---      Overlays can be used to show animation effects without disturbing the display
---      Overlays can be used to show potential Area of Effects or Ranges
+  -   Basic foreground & background color differences per cell
+  -   Multiple layers can be used to have multiple characters in a single cell
+  -   Multiple different sized layers can be used for sub-cell effects
+  -   Overlays can be used to show animation effects without disturbing the display
+  -   Overlays can be used to show potential Area of Effects or Ranges
 
 ###Lots of Color
 -   SColor class extends Color and can be used as a drop-in replacement for any awt.Color needs
@@ -58,9 +60,12 @@ Current Features:
 -       Many different styles of dungeon, from simple rectangular rooms and hallways to sinuous circular caverns
 -   Alternate dungeon generators available, such as the one used by the original Rogue
 -   Convert dungeons that use '#' for walls to use box drawing characters; this can also be used for graphical walls
+-   Convenience functions/constructors let you use the char[][] dungeons to easily build other grid things.
+  -   DijkstraMap will have walls automatically placed in as obstacles if passed a char[][] when it's constucted
 
 ###Fully Documented API
 -   Each named color has a sample of its appearance in the Javadoc against multiple backgrounds
+  -   This can be harder to access in IntelliJ, so the Colors class has constants that IDEA can preview easily
 -   HTML browsing of the API shows these samples
 -   Pop-up javadoc in NetBeans and Eclipse show these samples
 -   Demos of all functionality included
@@ -72,9 +77,9 @@ Current Features:
 -       DharmaRNG can be used to make more or less "lucky" RNGs that skew towards high or low results
 -       SobolQRNG produces deterministic results that may seem random, but tend to be more evenly distributed
 -   Able to find Bresenham Lines for 2D and 3D coordinates.
---      Also can use Wu or Elias Lines (antialiased Bresenham Lines)
+  -   Also can use Wu or Elias Lines (antialiased Bresenham Lines)
 -   Perlin noise implementation
---      Used to make Brogue-style "moving" water that works by altering the background lightness.
+  -   Used to make Brogue-style "moving" water that works by altering the background lightness
   
 Download JARs from the Releases tab or use Maven Central to download with
 ```
