@@ -67,9 +67,13 @@ public class FOV {
     private boolean indirect[][];//marks indirect lighting for Ripple FOV
     private int type = SHADOW;
     private int rippleNeighbors;
-    private double radius, decay;
+    private double radius, decay, startAngle, endAngle;
     private int startx, starty, width, height;
     private Radius radiusStrategy;
+    private static Direction[] ccw = new Direction[]
+            {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
+            ccw_full = new Direction[]{Direction.RIGHT, Direction.UP_RIGHT, Direction.UP, Direction.UP_LEFT,
+            Direction.LEFT, Direction.DOWN_LEFT, Direction.DOWN, Direction.DOWN_RIGHT};
 
     /**
      * Creates a solver which will use the default SHADOW solver.
@@ -164,7 +168,7 @@ public class FOV {
      * @param radius the distance the light will extend to
      * @return the computed light grid
      */
-    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, int radius) {
+    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius) {
         return calculateFOV(resistanceMap, startx, starty, radius, Radius.CIRCLE);
     }
 
@@ -190,6 +194,8 @@ public class FOV {
         this.starty = starty;
         this.radius = radius;
         this.radiusStrategy = radiusStrategy;
+        this.startAngle = 0;
+        this.endAngle = Math.PI * 2;
         decay = 1.0 / radius;
 
         width = resistanceMap.length;
@@ -230,6 +236,87 @@ public class FOV {
         return lightMap;
     }
 
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values represent a percentage
+     * of fully lit.
+     *
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are determined by the provided
+     * RadiusStrategy. A conical section of FOV is lit by this method if
+     * startAngle and endAngle are not equal.
+     *
+     * @param resistanceMap the grid of cells to calculate on
+     * @param startx the horizontal component of the starting location
+     * @param starty the vertical component of the starting location
+     * @param radius the distance the light will extend to
+     * @param radiusStrategy provides a means to calculate the radius as desired
+     * @param startAngle the angle in degrees to start calculating FOV, 0 points right
+     * @param endAngle the angle in degrees to stop calculating FOV, 0 points right
+     * @return the computed light grid
+     */
+    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius,
+                                   Radius radiusStrategy, double startAngle, double endAngle) {
+        this.map = resistanceMap;
+        this.startx = startx;
+        this.starty = starty;
+        this.radius = radius;
+
+        this.startAngle = Math.toRadians((startAngle > 360.0 || startAngle < 0.0) ? Math.abs(startAngle % 360.0) : startAngle);
+        this.endAngle = Math.toRadians((endAngle > 360.0 || endAngle < 0.0) ? Math.abs(endAngle % 360.0) : endAngle);
+        this.radiusStrategy = radiusStrategy;
+        decay = 1.0 / radius;
+
+        width = resistanceMap.length;
+        height = resistanceMap[0].length;
+
+        lightMap = new double[width][height];
+        lightMap[startx][starty] = 1;//make the starting space full power
+
+        switch (type) {
+            case RIPPLE:
+                indirect = new boolean[width][height];
+                rippleNeighbors = 2;
+                doRippleFOVLimited(startx, starty);
+                break;
+            case RIPPLE_LOOSE:
+                indirect = new boolean[width][height];
+                rippleNeighbors = 3;
+                doRippleFOVLimited(startx, starty);
+                break;
+            case RIPPLE_TIGHT:
+                indirect = new boolean[width][height];
+                rippleNeighbors = 1;
+                doRippleFOVLimited(startx, starty);
+                break;
+            case RIPPLE_VERY_LOOSE:
+                indirect = new boolean[width][height];
+                rippleNeighbors = 6;
+                doRippleFOVLimited(startx, starty);
+                break;
+            case SHADOW:
+                int ctr = 0;
+                boolean started = false;
+                for (Direction d : ccw) {
+                    ctr %= 4;
+                    ++ctr;
+                    if (startAngle <= Math.PI / 2.0 * ctr)
+                        started = true;
+                    if (started) {
+                        if(ctr < 4 && endAngle < Math.PI / 2.0 * (ctr - 1))
+                            break;
+                        shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0);
+                        shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY);
+                    }
+                }
+                break;
+        }
+
+        return lightMap;
+    }
+
+
     private void doRippleFOV(int x, int y) {
         Deque<Point> dq = new LinkedList<>();
         dq.offer(new Point(x, y));
@@ -248,6 +335,40 @@ public class FOV {
                 }
 
                 double surroundingLight = nearRippleLight(x2, y2);
+                if (lightMap[x2][y2] < surroundingLight) {
+                    lightMap[x2][y2] = surroundingLight;
+                    if (map[x2][y2] < 1) {//make sure it's not a wall
+                        dq.offer(new Point(x2, y2));//redo neighbors since this one's light changed
+                    }
+                }
+            }
+        }
+    }
+
+
+    private void doRippleFOVLimited(int x, int y) {
+        Deque<Point> dq = new LinkedList<>();
+        dq.offer(new Point(x, y));
+        while (!dq.isEmpty()) {
+            Point p = dq.pop();
+            if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
+                continue;//no light to spread
+            }
+
+            for (Direction dir : ccw_full) {
+                int x2 = p.x + dir.deltaX;
+                int y2 = p.y + dir.deltaY;
+                if (x2 < 0 || x2 >= width || y2 < 0 || y2 >= height //out of bounds
+                        || radiusStrategy.radius(startx, starty, x2, y2) >= radius + 1) {  //+1 to cover starting tile
+                    continue;
+                }
+                double angle = Math.atan2(y2 - starty, x2 - startx);
+                angle = (angle < 0) ? Math.PI * 2 + angle : angle;
+                if(angle < startAngle) continue;
+                else if(angle > endAngle) break;
+
+
+            double surroundingLight = nearRippleLight(x2, y2);
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
@@ -328,6 +449,11 @@ public class FOV {
                     break;
                 }
 
+                double angle = Math.atan2(currentY - starty, currentX - startx);
+                angle = (angle < 0) ? Math.PI * 2 + angle : angle;
+                if(angle < startAngle || angle > endAngle) continue;
+
+
                 //check if it's within the lightable area and light if needed
                 if (radiusStrategy.radius(deltaX, deltaY) <= radius) {
                     double bright = 1 - decay * radiusStrategy.radius(deltaX, deltaY);
@@ -345,6 +471,55 @@ public class FOV {
                     if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
                         blocked = true;
                         shadowCast(distance + 1, start, leftSlope, xx, xy, yx, yy);
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+    }
+    private void shadowCastLimited(int row, double start, double end, int xx, int xy, int yx, int yy) {
+        double newStart = 0;
+        if (start < end) {
+            return;
+        }
+
+        boolean blocked = false;
+        for (int distance = row; distance <= radius && !blocked; distance++) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; deltaX++) {
+                int currentX = startx + deltaX * xx + deltaY * xy;
+                int currentY = starty + deltaX * yx + deltaY * yy;
+                double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
+                double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
+
+                if (!(currentX >= 0 && currentY >= 0 && currentX < this.width && currentY < this.height) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+
+                double angle = Math.atan2(currentY - starty, currentX - startx);
+                angle = (angle < 0) ? Math.PI * 2 + angle : angle;
+                if(angle < startAngle || angle > endAngle) continue;
+
+
+                //check if it's within the lightable area and light if needed
+                if (radiusStrategy.radius(deltaX, deltaY) <= radius) {
+                    double bright = 1 - decay * radiusStrategy.radius(deltaX, deltaY);
+                    lightMap[currentX][currentY] = bright;
+                }
+
+                if (blocked) { //previous cell was a blocking one
+                    if (map[currentX][currentY] >= 1) {//hit a wall
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
+                        blocked = true;
+                        shadowCastLimited(distance + 1, start, leftSlope, xx, xy, yx, yy);
                         newStart = rightSlope;
                     }
                 }
