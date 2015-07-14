@@ -875,16 +875,15 @@ public class DungeonUtility {
         return portion;
     }
     /**
-     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
-     * rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
-     * white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
-     * hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, and 6 for traps.
-     * @param map
-     * @return
+     * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(). It expects any
+     * doors to be represented by '+' if closed or '/' if open (which can be caused by calling
+     * DungeonUtility.closeDoors() ), any walls to be '#' or line drawing characters, and it doesn't care what other
+     * chars are used (only doors, including open ones, and walls obscure light and thus have a resistance by default).
+     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()
+     * @return a resistance map suitable for use with the FOV class
      */
     public static double[][] generateResistances(char[][] map)
     {
-
         int width = map.length;
         int height = map[0].length;
         double[][] portion = new double[width][height];

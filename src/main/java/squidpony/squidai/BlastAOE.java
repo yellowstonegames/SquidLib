@@ -11,6 +11,8 @@ import java.util.HashMap;
  * An AOE type that has a center and a radius, and will blast outward and somewhat around corners/obstacles, out to
  * the distance specified by radius. You can specify the RadiusType to Radius.DIAMOND for Manhattan distance,
  * RADIUS.SQUARE for Chebyshev, or RADIUS.CIRCLE for Euclidean.
+ *
+ * This class uses squidpony.squidgrid.FOV to create its area of effect.
  * Created by Tommy Ettinger on 7/13/2015.
  */
 public class BlastAOE implements AOE {

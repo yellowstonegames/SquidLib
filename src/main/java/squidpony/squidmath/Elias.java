@@ -50,7 +50,9 @@ public class Elias {
         runLine(startx, starty, endx, endy);
         return path;
     }
-
+    public synchronized static List<Point> line(Point start, Point end) {
+        return line(start.x, start.y, end.x, end.y);
+    }
     /**
      * Marks the location as having the visibility given.
      *
