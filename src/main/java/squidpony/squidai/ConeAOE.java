@@ -84,6 +84,14 @@ public class ConeAOE implements AOE {
         this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
     }
 
+    public Radius getRadiusType() {
+        return radiusType;
+    }
+
+    public void setRadiusType(Radius radiusType) {
+        this.radiusType = radiusType;
+    }
+
     @Override
     public void setMap(char[][] map) {
         this.map = DungeonUtility.generateResistances(map);

@@ -53,6 +53,12 @@ public class Elias {
     public synchronized static List<Point> line(Point start, Point end) {
         return line(start.x, start.y, end.x, end.y);
     }
+
+    public synchronized static List<Point> getLastPath()
+    {
+        return path;
+    }
+
     /**
      * Marks the location as having the visibility given.
      *
