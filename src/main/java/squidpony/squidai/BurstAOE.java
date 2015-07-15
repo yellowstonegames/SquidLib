@@ -52,6 +52,13 @@ public class BurstAOE implements AOE {
         this.radius = radius;
     }
 
+    public Radius getRadiusType() {
+        return radiusType;
+    }
+
+    public void setRadiusType(Radius radiusType) {
+        this.radiusType = radiusType;
+    }
     @Override
     public void setMap(char[][] map) {
         this.map = DungeonUtility.generateResistances(map);

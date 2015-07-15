@@ -39,8 +39,10 @@ public class CloudAOE implements AOE {
         this.expanding = false;
         switch (radiusType)
         {
+            case SPHERE:
             case CIRCLE: this.measurement = Spill.Measurement.EUCLIDEAN;
                 break;
+            case CUBE:
             case SQUARE: this.measurement = Spill.Measurement.CHEBYSHEV;
                 break;
             default: this.measurement = Spill.Measurement.MANHATTAN;
@@ -56,8 +58,10 @@ public class CloudAOE implements AOE {
         this.expanding = false;
         switch (radiusType)
         {
+            case SPHERE:
             case CIRCLE: this.measurement = Spill.Measurement.EUCLIDEAN;
                 break;
+            case CUBE:
             case SQUARE: this.measurement = Spill.Measurement.CHEBYSHEV;
                 break;
             default: this.measurement = Spill.Measurement.MANHATTAN;
@@ -89,6 +93,29 @@ public class CloudAOE implements AOE {
 
     public void setVolume(int volume) {
         this.volume = volume;
+    }
+
+    public Radius getRadiusType() {
+        switch (measurement)
+        {
+            case EUCLIDEAN: return Radius.CIRCLE;
+            case CHEBYSHEV: return Radius.SQUARE;
+            default: return Radius.DIAMOND;
+        }
+    }
+
+    public void setRadiusType(Radius radiusType) {
+        switch (radiusType)
+        {
+            case SPHERE:
+            case CIRCLE: this.measurement = Spill.Measurement.EUCLIDEAN;
+                break;
+            case CUBE:
+            case SQUARE: this.measurement = Spill.Measurement.CHEBYSHEV;
+                break;
+            default: this.measurement = Spill.Measurement.MANHATTAN;
+                break;
+        }
     }
 
     @Override
