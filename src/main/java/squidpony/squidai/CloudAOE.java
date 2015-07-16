@@ -8,6 +8,7 @@ import squidpony.squidmath.RNG;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * An AOE type that has a center and a volume, and will randomly expand in all directions until it reaches volume or
@@ -19,6 +20,8 @@ import java.util.HashMap;
  * to the default of false. If expanding is true, then multiple calls to getArea with the same center and larger volumes
  * will produce more coherent clumps of affected area with fewer gaps, and can be spaced out over multiple calls.
  *
+ * This will produce doubles for its getArea() method which are equal to 1.0.
+ *
  * This class uses squidpony.squidgrid.Spill to create its area of effect.
  * Created by Tommy Ettinger on 7/13/2015.
  */
@@ -29,6 +32,7 @@ public class CloudAOE implements AOE {
     private Spill.Measurement measurement;
     private long seed;
     private boolean expanding;
+    private Radius rt;
     public CloudAOE(Point center, int volume, Radius radiusType)
     {
         LightRNG l = new LightRNG();
@@ -37,6 +41,7 @@ public class CloudAOE implements AOE {
         this.center = center;
         this.volume = volume;
         this.expanding = false;
+        rt = radiusType;
         switch (radiusType)
         {
             case SPHERE:
@@ -56,6 +61,7 @@ public class CloudAOE implements AOE {
         this.center = center;
         this.volume = volume;
         this.expanding = false;
+        rt = radiusType;
         switch (radiusType)
         {
             case SPHERE:
@@ -76,6 +82,7 @@ public class CloudAOE implements AOE {
         this.center = new Point(1, 1);
         this.volume = 1;
         this.measurement = Spill.Measurement.MANHATTAN;
+        rt = Radius.DIAMOND;
         this.expanding = false;
     }
 
@@ -96,15 +103,11 @@ public class CloudAOE implements AOE {
     }
 
     public Radius getRadiusType() {
-        switch (measurement)
-        {
-            case EUCLIDEAN: return Radius.CIRCLE;
-            case CHEBYSHEV: return Radius.SQUARE;
-            default: return Radius.DIAMOND;
-        }
+        return rt;
     }
 
     public void setRadiusType(Radius radiusType) {
+        rt = radiusType;
         switch (radiusType)
         {
             case SPHERE:
@@ -116,6 +119,21 @@ public class CloudAOE implements AOE {
             default: this.measurement = Spill.Measurement.MANHATTAN;
                 break;
         }
+    }
+
+    @Override
+    public void shift(Point aim) {
+        setCenter(aim);
+    }
+
+    @Override
+    public boolean mayContainTarget(Set<Point> targets) {
+        for (Point p : targets)
+        {
+            if(rt.radius(center.x, center.y, p.x, p.y) <= Math.sqrt(volume) * 1.5)
+                return true;
+        }
+        return false;
     }
 
     @Override

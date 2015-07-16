@@ -8,6 +8,7 @@ import squidpony.squidmath.RNG;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Line Area of Effect that affects an slightly expanded (Elias) line plus an optional radius of cells around it, while
@@ -17,22 +18,37 @@ import java.util.List;
  * That said, there is very little random about this, and it's possible the seed doesn't matter. You can specify the
  * RadiusType to Radius.DIAMOND for Manhattan distance, RADIUS.SQUARE for Chebyshev, or RADIUS.CIRCLE for Euclidean.
  *
+ * This will produce doubles for its getArea() method which are equal to 1.0.
+ *
  * This class uses squidpony.squidmath.Elias and squidpony.squidai.DijkstraMap to create its area of effect.
  * Created by Tommy Ettinger on 7/14/2015.
  */
 public class LineAOE implements AOE {
     private Point start, end;
     private int radius;
-    private char[][] map, obstructions;
+    private char[][] map;
     private DijkstraMap dijkstra;
-
     private long seed;
+    private Radius rt;
+
+    public LineAOE(Point start, Point end)
+    {
+        LightRNG l = new LightRNG();
+        this.seed = l.getState();
+        this.dijkstra = new DijkstraMap(new RNG(l));
+        this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+        rt = Radius.SQUARE;
+        this.start = start;
+        this.end = end;
+        this.radius = 0;
+    }
     public LineAOE(Point start, Point end, int radius)
     {
         LightRNG l = new LightRNG();
         this.seed = l.getState();
         this.dijkstra = new DijkstraMap(new RNG(l));
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+        rt = Radius.SQUARE;
         this.start = start;
         this.end = end;
         this.radius = radius;
@@ -52,6 +68,7 @@ public class LineAOE implements AOE {
         LightRNG l = new LightRNG();
         this.seed = l.getState();
         this.dijkstra = new DijkstraMap(new RNG(l));
+        this.rt = radiusType;
         switch (radiusType)
         {
             case OCTAHEDRON:
@@ -72,6 +89,7 @@ public class LineAOE implements AOE {
         this.seed = seed;
         LightRNG l = new LightRNG(seed);
         this.dijkstra = new DijkstraMap(new RNG(l));
+        this.rt = radiusType;
         switch (radiusType)
         {
             case OCTAHEDRON:
@@ -87,52 +105,18 @@ public class LineAOE implements AOE {
         this.end = end;
         this.radius = radius;
     }
-    private void initDijkstra()
+    private double[][] initDijkstra()
     {
-        for (int i = 0; i < obstructions.length; i++) {
-            for (int j = 0; j < obstructions[i].length; j++) {
-                obstructions[i][j] = map[i][j];
-            }
-        }
-        float[][] unobstructed = Elias.lightMap(start.x, start.y, end.x, end.y);
         List<Point> lit = Elias.getLastPath();
-        for (int i = 0; i < obstructions.length; i++) {
-            for (int j = 0; j < obstructions[i].length; j++) {
-                if(i >= unobstructed.length || j >= unobstructed[i].length
-                        || unobstructed[i][j] == 0.0)
-                    obstructions[i][j] = '#';
-            }
-        }
 
-        if(dijkstra.measurement == DijkstraMap.Measurement.MANHATTAN) {
-            for (Point p : lit) {
-                for (int i = -radius; i <= radius; i++) {
-                    for (int j = -radius; j <= radius; j++) {
-                        if(Math.abs(i) + Math.abs(j) <= radius &&
-                                p.x + i >= 0 && p.x + i < map.length && p.y + j >= 0 && p.y + j < map[0].length)
-                        {
-                            obstructions[p.x + i][p.y + j] = map[p.x + i][p.y + j];
-                        }
-                    }
-                }
-            }
-        }
-        else
+        dijkstra.initialize(map);
+        for(Point p : lit)
         {
-            for (Point p : lit) {
-                for (int i = -radius; i <= radius; i++) {
-                    for (int j = -radius; j <= radius; j++) {
-                        if(p.x + i >= 0 && p.x + i < map.length && p.y + j >= 0 && p.y + j < map[0].length)
-                        {
-                            obstructions[p.x + i][p.y + j] = map[p.x + i][p.y + j];
-                        }
-                    }
-
-                }
-            }
+            dijkstra.setGoal(p);
         }
-        dijkstra.initialize(obstructions);
-        dijkstra.scan(null);
+        if(radius == 0)
+            return dijkstra.gradientMap;
+        return dijkstra.partialScan(radius, null);
     }
 
     public Point getStart() {
@@ -141,6 +125,8 @@ public class LineAOE implements AOE {
 
     public void setStart(Point start) {
         this.start = start;
+        dijkstra.resetMap();
+        dijkstra.clearGoals();
     }
 
     public Point getEnd() {
@@ -169,15 +155,11 @@ public class LineAOE implements AOE {
     }
     public Radius getRadiusType()
     {
-        switch (dijkstra.measurement)
-        {
-            case EUCLIDEAN: return Radius.CIRCLE;
-            case CHEBYSHEV: return Radius.SQUARE;
-            default: return Radius.DIAMOND;
-        }
+        return rt;
     }
     public void setRadiusType(Radius radiusType)
     {
+        this.rt = radiusType;
         switch (radiusType)
         {
             case OCTAHEDRON:
@@ -192,15 +174,33 @@ public class LineAOE implements AOE {
     }
 
     @Override
+    public void shift(Point aim) {
+        setEnd(aim);
+    }
+
+    @Override
+    public boolean mayContainTarget(Set<Point> targets) {
+        for (Point p : targets)
+        {
+            if(rt.radius(start.x, start.y, p.x, p.y) + rt.radius(end.x, end.y, p.x, p.y) -
+                    rt.radius(start.x, start.y, end.x, end.y) <= 3.0 + radius)
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public void setMap(char[][] map) {
         this.map = map;
-        this.obstructions = new char[map.length][map[0].length];
+        dijkstra.resetMap();
+        dijkstra.clearGoals();
     }
 
     @Override
     public HashMap<Point, Double> findArea() {
-        initDijkstra();
+        double[][] dmap = initDijkstra();
+        dmap[start.x][start.y] = DijkstraMap.DARK;
         dijkstra.rng.setRandomness(new LightRNG(seed));
-        return AreaUtils.dijkstraToHashMap(dijkstra);
+        return AreaUtils.dijkstraToHashMap(dmap);
     }
 }
