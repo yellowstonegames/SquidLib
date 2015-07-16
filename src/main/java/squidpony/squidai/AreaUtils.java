@@ -74,13 +74,12 @@ public class AreaUtils {
     /**
      * This takes a DijkstraMap that has already completed a scan() and returns a HashMap of Point keys to Double
      * values, and will have a key for every position that was reached in the DijkstraMap, with 1.0 as the only value.
-     * @param dijkstra a DijkstraMap that has already done its scan
-     * @return a HashMap of Point keys to Double values, with values all greater than 0.0
+     * @param map a double[][] returned by a DijkstraMap running its scan()
+     * @return a HashMap of Point keys to Double values, with values of 1.0 only
      */
-    public static HashMap<Point, Double> dijkstraToHashMap(DijkstraMap dijkstra)
+    public static HashMap<Point, Double> dijkstraToHashMap(double[][] map)
     {
         HashMap<Point, Double> ret = new HashMap<>();
-        double[][] map = dijkstra.gradientMap;
         for(int i = 0; i < map.length; i++)
         {
             for(int j = 0; j < map[i].length; j++)
