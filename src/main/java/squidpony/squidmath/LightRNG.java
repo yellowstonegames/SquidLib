@@ -32,7 +32,7 @@ public class LightRNG implements RandomnessSource
 
     /** Creates a new generator seeded using Math.random. */
     public LightRNG() {
-        this((long)Math.floor(Math.random() * Long.MAX_VALUE));
+        this((long) Math.floor(Math.random() * Long.MAX_VALUE));
     }
 
     public LightRNG( final long seed ) {
@@ -72,7 +72,8 @@ public class LightRNG implements RandomnessSource
         if ( n <= 0 ) throw new IllegalArgumentException();
         for(;;) {
             final int bits = nextInt();
-            final int value = bits % n;
+            int value = bits % n;
+            value = (value < 0) ? -value : value;
             if ( bits - value + ( n - 1 ) >= 0 ) return value;
         }
     }
@@ -97,7 +98,8 @@ public class LightRNG implements RandomnessSource
         if ( n <= 0 ) throw new IllegalArgumentException();
         for(;;) {
             final long bits = nextLong() >>> 1;
-            final long value = bits % n;
+            long value = bits % n;
+            value = (value < 0) ? -value : value;
             if ( bits - value + ( n - 1 ) >= 0 ) return value;
         }
     }
