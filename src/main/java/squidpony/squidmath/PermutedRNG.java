@@ -82,7 +82,8 @@ public class PermutedRNG implements RandomnessSource
         if ( n <= 0 ) throw new IllegalArgumentException();
         for(;;) {
             final int bits = nextInt();
-            final int value = bits % n;
+            int value = bits % n;
+            value = (value < 0) ? -value : value;
             if ( bits - value + ( n - 1 ) >= 0 ) return value;
         }
     }
@@ -111,7 +112,8 @@ public class PermutedRNG implements RandomnessSource
         if ( n <= 0 ) throw new IllegalArgumentException();
         for(;;) {
             final long bits = nextLong() >>> 1;
-            final long value = bits % n;
+            long value = bits % n;
+            value = (value < 0) ? -value : value;
             if ( bits - value + ( n - 1 ) >= 0 ) return value;
         }
     }

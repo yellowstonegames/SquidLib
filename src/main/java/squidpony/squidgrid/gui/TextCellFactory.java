@@ -146,7 +146,7 @@ public class TextCellFactory {
      * @return this factory for method chaining
      */
     public TextCellFactory width(int width) {
-        this.width = Integer.max(1, width);
+        this.width = Math.max(1, width);
         return this;
     }
 
@@ -167,7 +167,7 @@ public class TextCellFactory {
      * @return this factory for method chaining
      */
     public TextCellFactory height(int height) {
-        this.height = Integer.max(1, height);
+        this.height = Math.max(1, height);
         return this;
     }
 

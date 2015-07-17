@@ -47,19 +47,19 @@ public class RNGTest {
         int c = 0;
         for(int i = 0; i < 99; i++)
         {
-            c = light.nextInt();
+            c = light.nextInt(Integer.MAX_VALUE);
             System.out.println("l  : " + binaryString(c, 0));
-            c = perm.nextInt();
+            c = perm.nextInt(Integer.MAX_VALUE);
             System.out.println("p  : " + binaryString(c, 1));
-            c = xor.nextInt();
+            c = xor.nextInt(Integer.MAX_VALUE);
             System.out.println("x  : " + binaryString(c, 2));
-            c = lr.nextInt();
+            c = lr.nextInt(Integer.MAX_VALUE);
             System.out.println("LR : " + binaryString(c, 3));
-            c = pr.nextInt();
+            c = pr.nextInt(Integer.MAX_VALUE);
             System.out.println("PR : " + binaryString(c, 4));
-            c = xr.nextInt();
+            c = xr.nextInt(Integer.MAX_VALUE);
             System.out.println("XR : " + binaryString(c, 5));
-            System.out.println();
+            System.out.println(Integer.MAX_VALUE);
         }
         for(int k = 0; k < 6; k++) {
             for (int i = 0; i < 32; i++) {
