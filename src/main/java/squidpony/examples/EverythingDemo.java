@@ -62,7 +62,7 @@ public class EverythingDemo {
         rng = new RNG(lrng);
 
         // this is important if you use a seeded RNG.
-        DungeonUtility.rng = rng;
+//        DungeonUtility.rng = rng;
         dungeonGen = new DungeonGenerator(width, height, rng);
         dungeonGen.addWater(10);
         dungeonGen.addDoors(15, true);

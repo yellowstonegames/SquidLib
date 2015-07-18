@@ -74,7 +74,7 @@ public class Spill {
      * are reached on all sides and the Spill has no more room to fill.
      */
     public int filled = 0;
-    private HashSet<Point> fresh;
+    private LinkedHashSet<Point> fresh;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
@@ -89,7 +89,7 @@ public class Spill {
     public Spill() {
         rng = new RNG(new LightRNG());
 
-        fresh = new HashSet<>();
+        fresh = new LinkedHashSet<>();
     }
     /**
      * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG before it is
@@ -98,7 +98,7 @@ public class Spill {
     public Spill(RNG random) {
         rng = random;
 
-        fresh = new HashSet<>();
+        fresh = new LinkedHashSet<>();
     }
 
     /**
@@ -188,7 +188,7 @@ public class Spill {
      * @return
      */
     public Spill initialize(final boolean[][] level) {
-        fresh = new HashSet<>();
+        fresh = new LinkedHashSet<>();
         width = level.length;
         height = level[0].length;
         spillMap = new boolean[width][height];
@@ -211,7 +211,7 @@ public class Spill {
      * @return
      */
     public Spill initialize(final char[][] level) {
-        fresh = new HashSet<>();
+        fresh = new LinkedHashSet<>();
         width = level.length;
         height = level[0].length;
         spillMap = new boolean[width][height];
@@ -236,7 +236,7 @@ public class Spill {
      * @return
      */
     public Spill initialize(final char[][] level, char alternateWall) {
-        fresh = new HashSet<>();
+        fresh = new LinkedHashSet<>();
         width = level.length;
         height = level[0].length;
         spillMap = new boolean[width][height];
@@ -322,7 +322,7 @@ public class Spill {
     public ArrayList<Point> start(Point entry, int volume, Set<Point> impassable) {
         if(!initialized) return null;
         if(impassable == null)
-            impassable = new HashSet<Point>();
+            impassable = new LinkedHashSet<>();
         if(!physicalMap[entry.x][entry.y] || impassable.contains(entry))
             return null;
         spreadPattern = new ArrayList<Point>(volume);

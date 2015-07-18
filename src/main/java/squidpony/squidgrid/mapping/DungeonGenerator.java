@@ -10,7 +10,7 @@ import squidpony.squidgrid.Spill;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * The primary way to create a more-complete dungeon, layering different effects and modifications on top of
@@ -218,7 +218,7 @@ public class DungeonGenerator {
         return this;
     }
 
-    private HashSet<Point> removeAdjacent(HashSet<Point> coll, Point pt)
+    private LinkedHashSet<Point> removeAdjacent(LinkedHashSet<Point> coll, Point pt)
     {
         for(Point temp : new Point[]{new Point(pt.x+1, pt.y), new Point(pt.x-1, pt.y),
                 new Point(pt.x, pt.y+1), new Point(pt.x, pt.y-1)})
@@ -229,7 +229,7 @@ public class DungeonGenerator {
 
         return coll;
     }
-    private HashSet<Point> removeAdjacent(HashSet<Point> coll, Point pt1, Point pt2)
+    private LinkedHashSet<Point> removeAdjacent(LinkedHashSet<Point> coll, Point pt1, Point pt2)
     {
 
         for(Point temp : new Point[]{new Point(pt1.x+1, pt1.y), new Point(pt1.x-1, pt1.y),
@@ -244,9 +244,9 @@ public class DungeonGenerator {
         return coll;
     }
 
-    private HashSet<Point> viableDoorways(boolean doubleDoors, char[][] map)
+    private LinkedHashSet<Point> viableDoorways(boolean doubleDoors, char[][] map)
     {
-        HashSet<Point> doors = new HashSet<Point>();
+        LinkedHashSet<Point> doors = new LinkedHashSet<Point>();
         Point temp = new Point(0, 0);
 
         for(int x = 1; x < map.length - 1; x++, temp.x = x) {
@@ -324,9 +324,9 @@ public class DungeonGenerator {
         DungeonUtility.rng = rng;
         char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
 
-        HashSet<Point> floors = new HashSet<Point>();
-        HashSet<Point> doorways = new HashSet<Point>();
-        HashSet<Point> hazards = new HashSet<Point>();
+        LinkedHashSet<Point> floors = new LinkedHashSet<Point>();
+        LinkedHashSet<Point> doorways = new LinkedHashSet<Point>();
+        LinkedHashSet<Point> hazards = new LinkedHashSet<Point>();
         Point temp = new Point(0, 0);
         boolean doubleDoors = false;
         int doorFill = 0;
@@ -351,7 +351,7 @@ public class DungeonGenerator {
 
         doorways = viableDoorways(doubleDoors, map);
 
-        HashSet<Point> obstacles = new HashSet<Point>(doorways.size() * doorFill / 100);
+        LinkedHashSet<Point> obstacles = new LinkedHashSet<Point>(doorways.size() * doorFill / 100);
         if(doorFill > 0)
         {
             int total = doorways.size() * doorFill / 100;
@@ -373,7 +373,7 @@ public class DungeonGenerator {
                 for(Point near : adj) {
                     if (doorways.contains(near)) {
                         map[near.x][near.y] = '#';
-                        obstacles.add(new Point(near));
+                        obstacles.add(new Point(near.x, near.y));
                         doorways.remove(near);
                         i++;
                         doorways.remove(entry);
@@ -429,7 +429,7 @@ public class DungeonGenerator {
                 Point entry = (Point) floors.toArray()[rng.nextInt(floors.size())];
 //                spill.start(entry, volumes[i] / 3, obstacles);
 //                spill.start(entry, 2 * volumes[i] / 3, obstacles);
-                HashSet<Point> ordered = new HashSet<Point>(spill.start(entry, volumes[i], obstacles));
+                ArrayList<Point> ordered = new ArrayList<Point>(spill.start(entry, volumes[i], obstacles));
                 floors.removeAll(ordered);
                 hazards.removeAll(ordered);
                 obstacles.addAll(ordered);
