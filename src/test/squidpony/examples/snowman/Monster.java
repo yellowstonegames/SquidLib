@@ -10,7 +10,7 @@ import squidpony.SColor;
 public class Monster {
 
     public static final Monster //this is a list of the various monster templates
-            SNOWMAN = new Monster("snowman", 5, '☃', SColor.ALICE_BLUE),
+            SNOWMAN = new Monster("squidpony/examples/snowman", 5, '☃', SColor.ALICE_BLUE),
             PLAYER = new Monster("player", 10, '☺', SColor.BRIGHT_TURQUOISE);
 
     private final String name;

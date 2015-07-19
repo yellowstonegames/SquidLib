@@ -143,7 +143,7 @@ public class SquidPanel extends JLayeredPane {
         g.drawImage(contentsImage, 0, 0, null);
         paintComponents(g);
         //TODO: The next line may be needed for animations, but it causes flickering with SquidLayers.
-//        Toolkit.getDefaultToolkit().sync();
+        Toolkit.getDefaultToolkit().sync();
     }
 
     /**

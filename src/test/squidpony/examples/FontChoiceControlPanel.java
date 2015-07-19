@@ -1,6 +1,4 @@
-package squidpony.examples;
-
-/*
+package squidpony.examples;/*
  * FontChoiceControlPanel.java
  *
  * Created on Dec 5, 2009, 11:58:20 PM
