@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import squidpony.squidmath.LightRNG;
 
 /**
  * Created by Tommy Ettinger on 7/11/2015.
@@ -39,4 +40,10 @@ public class DefaultResources {
         }
         return narrow;
     }
+
+    /**
+     * This is a static global LightRNG that's meant for usage in cases where the seed does not matter and any changes
+     * to this LightRNG's state will not change behavior elsewhere in the program; this means the GUI mainly.
+     */
+    public static LightRNG guiRandom = new LightRNG();
 }

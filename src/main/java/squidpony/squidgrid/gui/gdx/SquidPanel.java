@@ -1,5 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -7,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.gui.gdx.animation.*;
 import com.badlogic.gdx.graphics.Color;
 
 import java.awt.Point;
@@ -30,8 +30,7 @@ public class SquidPanel extends Group {
 
     private static float DEFAULT_ANIMATION_DURATION = 0.2F;
     private static FreeTypeFontGenerator DEFAULT_FONT = DefaultResources.getDefaultFont();
-    private AnimationManager animationManager;
-    private final ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<>();
+    private int animationCount = 0;
     private Color defaultForeground = Color.WHITE;
     private final int gridWidth, gridHeight, cellWidth, cellHeight;
     private String[][] contents;
@@ -347,6 +346,8 @@ public class SquidPanel extends Group {
 
     public Actor cellToActor(int x, int y)
     {
+        if(contents[x][y] == null || contents[x][y] == "")
+            return null;
         Color tmp = new Color();
         Color.rgba8888ToColor(tmp, colors[x][y]);
         Actor a = textFactory.makeActor(contents[x][y], tmp, x, y);
@@ -366,20 +367,31 @@ public class SquidPanel extends Group {
         }
         a.clear();
         super.removeActor(a);
+        animationCount--;
     }
 
-    public void bump(int x, int y, Direction dir)
+    /**
+     * Start a bumping animation in the given direction that will last duration seconds.
+     * @param x
+     * @param y
+     * @param direction
+     * @param duration
+     */
+    public void bump(int x, int y, Direction direction, float duration)
     {
         final Actor a = cellToActor(x, y);
+        if(a == null) return;
+        animationCount++;
         Actions.addAction(Actions.sequence(
-                Actions.moveToAligned(x + dir.deltaX / 3F, y + dir.deltaY / 3F, Align.center, DEFAULT_ANIMATION_DURATION * 0.35F),
-                Actions.moveToAligned(x, y, Align.center, DEFAULT_ANIMATION_DURATION * 0.65F),
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        recallActor(a);
-                    }
-                })),
+                        Actions.moveToAligned(x + direction.deltaX / 3F, y + direction.deltaY / 3F,
+                                Align.center, duration * 0.35F),
+                        Actions.moveToAligned(x, y, Align.center, duration * 0.65F),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                recallActor(a);
+                            }
+                        })),
                 a);
     }
 
@@ -390,18 +402,33 @@ public class SquidPanel extends Group {
      * @param direction
      */
     public void bump(Point location, Direction direction) {
-        if (contents[location.x][location.y] != null) {
-            int duration = 20;
-            Animation anim = new BumpAnimation(contents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), new Dimension(cellWidth / 3, cellHeight / 3), direction, duration);
-            contents[location.x][location.y] = null;
-            animations.add(anim);
-            if (animationManager == null) {
-                animationManager = AnimationManager.startNewAnimationManager(this);
-            }
-            animationManager.add(anim);
-        }
+        bump(location.x, location.y, direction, DEFAULT_ANIMATION_DURATION);
     }
 
+    /**
+     * Start a movement animation for the object at the grid location x, y and moves it to newX, newY over a number of
+     * seconds given by duration (often 0.2f or somewhere around there).
+     * @param x
+     * @param y
+     * @param newX
+     * @param newY
+     * @param duration
+     */
+    public void slide(int x, int y, int newX, int newY, float duration)
+    {
+        final Actor a = cellToActor(x, y);
+        if(a == null) return;
+        animationCount++;
+        Actions.addAction(Actions.sequence(
+                        Actions.moveToAligned(newX, newY, Align.center, duration),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                recallActor(a);
+                            }
+                        })),
+                a);
+    }
     /**
      * Starts a movement animation for the object at the given grid location at the default speed.
      *
@@ -409,7 +436,7 @@ public class SquidPanel extends Group {
      * @param end
      */
     public void slide(Point start, Point end) {
-        slide(start, end, DEFAULT_ANIMATION_DURATION);
+        slide(start.x, start.y, end.x, end.y, DEFAULT_ANIMATION_DURATION);
     }
 
     /**
@@ -420,94 +447,77 @@ public class SquidPanel extends Group {
      * @param direction
      */
     public void slide(Point start, Direction direction) {
-        slide(start, new Point(direction.deltaX + start.x, direction.deltaY + start.y), DEFAULT_ANIMATION_DURATION);
+        slide(start.x, start.y, start.x + direction.deltaX, start.y + direction.deltaY, DEFAULT_ANIMATION_DURATION);
     }
 
     /**
      * Starts a sliding movement animation for the object at the given location at the provided speed. The duration is
-     * how many milliseconds should pass for the entire animation.
+     * how many seconds should pass for the entire animation.
      *
      * @param start
      * @param end
      * @param duration
      */
-    public void slide(Point start, Point end, int duration) {
-        if (contents[start.x][start.y] != null) {
-            Animation anim = new SlideAnimation(contents[start.x][start.y], new Point(start.x * cellWidth, start.y * cellHeight), new Point(end.x * cellWidth, end.y * cellHeight), duration);
-            contents[start.x][start.y] = null;
-            imageChanged[start.x][start.y] = true;
-            redraw();
-            animations.add(anim);
-            if (animationManager == null) {
-                animationManager = AnimationManager.startNewAnimationManager(this);
-            }
-            animationManager.add(anim);
-        }
+    public void slide(Point start, Point end, float duration) {
+        slide(start.x, start.y, end.x, end.y, duration);
     }
 
     /**
-     * Starts an wiggling animation for the object at the given location.
+     * Starts an wiggling animation for the object at the given location for the given duration in seconds.
      *
-     * @param location
+     * @param x
+     * @param y
+     * @param duration
      */
-    public void wiggle(Point location) {
-        if (contents[location.x][location.y] != null) {
-            Animation anim = new WiggleAnimation(contents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), 0.3, new Point(cellWidth / 4, cellHeight / 4), 160);
-            contents[location.x][location.y] = null;
-            imageChanged[location.x][location.y] = true;
-            redraw();
-            animations.add(anim);
-            if (animationManager == null) {
-                animationManager = AnimationManager.startNewAnimationManager(this);
-            }
-            animationManager.add(anim);
-        }
-    }
-
-    /**
-     * Drops any finished animations from the animation list.
-     */
-    private void trimAnimations() {
-        if (animationManager == null) {
-            return;//no manager means nothing to trim
-        }
-        LinkedList<Animation> removals = new LinkedList<>();
-        for (Animation anim : animations) {
-            if (!anim.isActive()) {
-                removals.add(anim);
-            }
-        }
-        animations.removeAll(removals);
-        for (Animation anim : removals) {
-            animationManager.stopAnimation(anim);
-            anim.remove();
-            contents[anim.getLocation().x / cellWidth][anim.getLocation().y / cellHeight] = anim.getImage();
-        }
-    }
-
-    /**
-     * Causes the component to stop responding to input until all current animations are finished.
-     *
-     * Note that if an animation is set to not stop then this method will never return.
-     */
-    public void waitForAnimations() {
-
-        while (!animations.isEmpty()) {
-            trimAnimations();
-        }
+    public void wiggle(int x, int y, float duration) {
+        final Actor a = cellToActor(x, y);
+        if(a == null) return;
+        animationCount++;
+        Actions.addAction(Actions.sequence(
+                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                Align.center, duration * 0.1F),
+                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                Align.center, duration * 0.1F),
+                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                Align.center, duration * 0.1F),
+                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                Align.center, duration * 0.1F),
+                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                Align.center, duration * 0.1F),
+                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                Align.center, duration * 0.1F),
+                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                Align.center, duration * 0.1F),
+                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                Align.center, duration * 0.1F),
+                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
+                                Align.center, duration * 0.1F),
+                        Actions.moveToAligned(x, y, Align.center, duration * 0.1F),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                recallActor(a);
+                            }
+                        })),
+                a);
     }
 
     /**
      * Returns true if there are animations running when this method is called.
      *
-     * Note that due to the nature of animations ending at various times, this result is not guaranteed to be accurate.
-     *
-     * To fully ensure no animations are running, waitForAnimations() must be used.
-     *
      * @return
      */
     public boolean hasActiveAnimations() {
-        return animations == null ? false : !animations.isEmpty();
+        return animationCount != 0;
     }
 
 }
