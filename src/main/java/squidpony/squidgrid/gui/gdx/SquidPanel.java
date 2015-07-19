@@ -1,14 +1,18 @@
 package squidpony.squidgrid.gui.gdx;
 
-import squidpony.SColor;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Align;
 import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.gui.animation.*;
+import squidpony.squidgrid.gui.gdx.animation.*;
+import com.badlogic.gdx.graphics.Color;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -22,21 +26,18 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class SquidPanel extends JLayeredPane {
+public class SquidPanel extends Group {
 
-    private static int DEFAULT_ANIMATION_DURATION = 200;
-    private static Font DEFAULT_FONT = new Font("Helvetica", Font.PLAIN, 22);
+    private static float DEFAULT_ANIMATION_DURATION = 0.2F;
+    private static FreeTypeFontGenerator DEFAULT_FONT = DefaultResources.getDefaultFont();
     private AnimationManager animationManager;
     private final ConcurrentLinkedQueue<Animation> animations = new ConcurrentLinkedQueue<>();
-    private BufferedImage[][] contents;
-    private boolean[][] imageChanged;
-    private BufferedImage contentsImage = new BufferedImage(20, 20, BufferedImage.TYPE_4BYTE_ABGR);
-    private Color defaultForeground = SColor.WHITE;
+    private Color defaultForeground = Color.WHITE;
     private final int gridWidth, gridHeight, cellWidth, cellHeight;
-    private Dimension panelDimension;
+    private String[][] contents;
+    private int[][] colors;
     private final TextCellFactory textFactory;
-    private final ImageCellMap imageCellMap;
-    
+
     /**
      * Creates a bare-bones panel with all default values for text rendering.
      * 
@@ -44,11 +45,11 @@ public class SquidPanel extends JLayeredPane {
      * @param gridHeight the number of cells vertically
      */
     public SquidPanel(int gridWidth, int gridHeight) {
-        this(gridWidth, gridHeight, new TextCellFactory().font(DEFAULT_FONT), null);
+        this(gridWidth, gridHeight, new TextCellFactory().defaultSquareFont());
     }
 
     /**
-     * Creates a panel with the given grid and cell size. Uses a default font.
+     * Creates a panel with the given grid and cell size. Uses a default square font.
      *
      * @param gridWidth the number of cells horizontally
      * @param gridHeight the number of cells vertically
@@ -56,83 +57,42 @@ public class SquidPanel extends JLayeredPane {
      * @param cellHeight the number of vertical pixels in each cell
      */
     public SquidPanel(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
-        this(gridWidth, gridHeight, new TextCellFactory().font(DEFAULT_FONT).width(cellWidth).height(cellHeight), null);
+        this(gridWidth, gridHeight, new TextCellFactory().defaultSquareFont().width(cellWidth).height(cellHeight));
     }
 
     /**
      * Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
      * are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
      * 
-     * If the TextCellFactory has not yet been initialized, then it will be sized based on its font. If it is null
+     * If the TextCellFactory has not yet been initialized, then it will be sized at 16x16 px per cell. If it is null
      * then a default one will be created and initialized.
-     *
-     * For proper display, The imageMap (if not null) should have the same cell size as the factory.
      *
      * @param gridWidth the number of cells horizontally
      * @param gridHeight the number of cells vertically
      * @param factory the factory to use for cell rendering
-     * @param imageMap can be null if no explicit images will be used
      */
-    public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, ImageCellMap imageMap) {
+    public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         textFactory = factory;
-        
+
         if (factory == null) {
             factory = new TextCellFactory();
         }
-        
+
         if (!factory.initialized()) {
             factory.initByFont();
         }
-        
+
         cellWidth = factory.width();
         cellHeight = factory.height();
-        setFont(textFactory.font());
-        if (imageMap == null) {
-            imageCellMap = new ImageCellMap(cellWidth, cellHeight);
-        } else {
-            imageCellMap = imageMap;
-        }
 
-        setOpaque(false);
-        contents = new BufferedImage[gridWidth][gridHeight];
-        imageChanged = new boolean[gridWidth][gridHeight];
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                imageChanged[x][y] = true;
-            }
-        }
+        contents = new String[gridWidth][gridHeight];
+        colors = new int[gridWidth][gridHeight];
+
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;
-        panelDimension = new Dimension(w, h);
-        setSize(panelDimension);
-        setMinimumSize(panelDimension);
-        setPreferredSize(panelDimension);
-        contentsImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
-        redraw();
-        repaint();
-    }
-
-    /**
-     * Returns the image being displayed at the given coordinates. Because this is the actual image and not a copy, any
-     * changes to it will be reflected in the original during the next GUI update.
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    public BufferedImage getImage(int x, int y) {
-        return contents[x][y];
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(contentsImage, 0, 0, null);
-        paintComponents(g);
-        //TODO: The next line may be needed for animations, but it causes flickering with SquidLayers.
-        Toolkit.getDefaultToolkit().sync();
+        setSize(w, h);
     }
 
     /**
@@ -140,30 +100,16 @@ public class SquidPanel extends JLayeredPane {
      *
      * @param chars
      */
-    public void put(char[][] chars) {//TODO - convert this to work with code points
+    public void put(char[][] chars) {
         SquidPanel.this.put(0, 0, chars);
     }
 
-    public void put(char[][] chars, Color[][] foregrounds) {//TODO - convert this to work with code points
+    public void put(char[][] chars, Color[][] foregrounds) {
         SquidPanel.this.put(0, 0, chars, foregrounds);
     }
 
-    public void put(char[][] chars, int[][] indices, List<Color> palette) {//TODO - convert this to work with code points
+    public void put(char[][] chars, int[][] indices, ArrayList<Color> palette) {
         SquidPanel.this.put(0, 0, chars, indices, palette);
-    }
-
-    public void put(int x, int y, BufferedImage image) {
-        contents[x][y] = image;
-        imageChanged[x][y] = true;
-    }
-
-    public void putImage(int x, int y, String key) {
-        BufferedImage image = imageCellMap.get(key);
-        if (image == null) {
-            image = imageCellMap.getNullImage();
-        }
-        contents[x][y] = image;
-        imageChanged[x][y] = true;
     }
 
     public void put(int xOffset, int yOffset, char[][] chars) {
@@ -180,7 +126,7 @@ public class SquidPanel extends JLayeredPane {
         }
     }
 
-    public void put(int xOffset, int yOffset, char[][] chars, int[][] indices, List<Color> palette) {
+    public void put(int xOffset, int yOffset, char[][] chars, int[][] indices, ArrayList<Color> palette) {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
@@ -194,17 +140,17 @@ public class SquidPanel extends JLayeredPane {
         for (int x = xOffset; x < xOffset + foregrounds.length; x++) {
             for (int y = yOffset; y < yOffset + foregrounds[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    SquidPanel.this.put(x, y, textFactory.getSolid(foregrounds[x - xOffset][y - yOffset]));
+                    SquidPanel.this.put(x, y, '\0', foregrounds[x - xOffset][y - yOffset]);
                 }
             }
         }
     }
 
-    public void put(int xOffset, int yOffset, int[][] indices, List<Color> palette) {
+    public void put(int xOffset, int yOffset, int[][] indices, ArrayList<Color> palette) {
         for (int x = xOffset; x < xOffset + indices.length; x++) {
             for (int y = yOffset; y < yOffset + indices[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    SquidPanel.this.put(x, y, textFactory.getSolid(palette.get(indices[x - xOffset][y - yOffset])));
+                    SquidPanel.this.put(x, y, '\0', palette.get(indices[x - xOffset][y - yOffset]));
                 }
             }
         }
@@ -247,7 +193,7 @@ public class SquidPanel extends JLayeredPane {
      * @param string the characters to be displayed
      * @param foreground the color to draw the characters
      */
-    public void put(int xOffset, int yOffset, String string, Color foreground) {//TODO - make this work with code points
+    public void put(int xOffset, int yOffset, String string, Color foreground) {
         char[][] temp = new char[string.length()][1];
         for (int i = 0; i < string.length(); i++) {
             temp[i][0] = string.charAt(i);
@@ -284,7 +230,7 @@ public class SquidPanel extends JLayeredPane {
      * @param foreground the color to draw the characters
      * @param vertical true if the text should be written vertically, from top to bottom
      */
-    public void put(int xOffset, int yOffset, String string, Color foreground, boolean vertical) {//TODO - make this use any Direction
+    public void put(int xOffset, int yOffset, String string, Color foreground, boolean vertical) {
         if (vertical) {
             SquidPanel.this.put(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground);
         } else {
@@ -296,14 +242,13 @@ public class SquidPanel extends JLayeredPane {
      * Erases the entire panel, leaving only a transparent space.
      */
     public void erase() {
-        Graphics2D g = contentsImage.createGraphics();
+        for (int i = 0; i < contents.length; i++) {
+            for (int j = 0; j < contents[i].length; j++) {
+                contents[i][j] = "";
+                colors[i][j] = (255 << 24);
+            }
 
-        Composite c = g.getComposite();
-        g.setComposite(AlphaComposite.Clear);
-        g.fillRect(0, 0, getWidth(), getHeight());
-        g.setComposite(c);
-
-        redraw();
+        }
     }
 
     /**
@@ -313,11 +258,11 @@ public class SquidPanel extends JLayeredPane {
      * @param y
      */
     public void clear(int x, int y) {
-        this.put(x, y, SColor.TRANSPARENT);
+        this.put(x, y, Color.CLEAR);
     }
 
     public void put(int x, int y, Color color) {
-        put(x, y, textFactory.getSolid(color));
+        put(x, y, '\0', color);
     }
 
     public void put(int x, int y, char c) {
@@ -335,16 +280,16 @@ public class SquidPanel extends JLayeredPane {
         put(x, y, code, defaultForeground);
     }
 
-    public void put(int x, int y, char c, Color color) {
-        put(x, y, (int) c, color);
+    public void put(int x, int y, int c, Color color) {
+        put(x, y, String.valueOf(Character.toChars(c)), color);
     }
 
-    public void put(int x, int y, int index, List<Color> palette) {
+    public void put(int x, int y, int index, ArrayList<Color> palette) {
         put(x, y, palette.get(index));
     }
 
-    public void put(int x, int y, char c, int index, List<Color> palette) {
-        put(x, y, (int) c, palette.get(index));
+    public void put(int x, int y, char c, int index, ArrayList<Color> palette) {
+        put(x, y, c, palette.get(index));
     }
 
     /**
@@ -352,15 +297,15 @@ public class SquidPanel extends JLayeredPane {
      *
      * @param x
      * @param y
-     * @param code
+     * @param c
      * @param color
      */
-    public void put(int x, int y, int code, Color color) {
+    public void put(int x, int y, char c, Color color) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
-        contents[x][y] = textFactory.get(code, color);
-        imageChanged[x][y] = true;
+        contents[x][y] = String.valueOf(c);
+        colors[x][y] = color.toIntBits();
     }
 
     public int cellWidth() {
@@ -379,47 +324,63 @@ public class SquidPanel extends JLayeredPane {
         return gridWidth;
     }
 
-    /**
-     * Cause everything that has been prepared for drawing (such as with put) to actually be drawn.
-     */
-    public void refresh() {
-        trimAnimations();
-        redraw();
-        repaint();
-    }
 
-    /**
-     * A low-level check to see if a particular cell has been updated since the last draw. Not intended for general use.
-     * @param x
-     * @param y
-     * @return
-     */
-    public boolean hasChanged(int x, int y)
-    {
-        return imageChanged[x][y];
-    }
-    private void redraw() {
-        Graphics2D g = contentsImage.createGraphics();
 
+
+
+
+    @Override
+    public void draw (Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        Color tmp = new Color();
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                if (imageChanged[x][y]) {
-                    Composite c = g.getComposite();
-                    g.setComposite(AlphaComposite.Clear);
-                    g.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
-                    g.setComposite(c);
-
-                    if (contents[x][y] != null) {
-                        g.drawImage(contents[x][y], null, x * cellWidth, y * cellHeight);
-                    }
-                    imageChanged[x][y] = false;
-                }
+                Color.rgba8888ToColor(tmp, colors[x][y]);
+                textFactory.draw(batch, contents[x][y], tmp, x * cellWidth, y * cellHeight);
             }
         }
     }
 
     public void setDefaultForeground(Color defaultForeground) {
         this.defaultForeground = defaultForeground;
+    }
+
+    public Actor cellToActor(int x, int y)
+    {
+        Color tmp = new Color();
+        Color.rgba8888ToColor(tmp, colors[x][y]);
+        Actor a = textFactory.makeActor(contents[x][y], tmp, x, y);
+        a.setName(contents[x][y]);
+        super.addActor(a);
+        contents[x][y] = "";
+        return a;
+    }
+    public void recallActor(Actor a)
+    {
+        int ax = Math.round(a.getX(Align.bottomRight) / cellWidth),
+             ay = Math.round(a.getY(Align.bottomRight) / cellHeight);
+        if(ax >= 0 && ax < gridWidth && ay > 0 && ay < gridHeight)
+        {
+            contents[ax][ay] = a.getName();
+            colors[ax][ay] = a.getColor().toIntBits();
+        }
+        a.clear();
+        super.removeActor(a);
+    }
+
+    public void bump(int x, int y, Direction dir)
+    {
+        final Actor a = cellToActor(x, y);
+        Actions.addAction(Actions.sequence(
+                Actions.moveToAligned(x + dir.deltaX / 3F, y + dir.deltaY / 3F, Align.center, DEFAULT_ANIMATION_DURATION * 0.35F),
+                Actions.moveToAligned(x, y, Align.center, DEFAULT_ANIMATION_DURATION * 0.65F),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        recallActor(a);
+                    }
+                })),
+                a);
     }
 
     /**
@@ -433,8 +394,6 @@ public class SquidPanel extends JLayeredPane {
             int duration = 20;
             Animation anim = new BumpAnimation(contents[location.x][location.y], new Point(location.x * cellWidth, location.y * cellHeight), new Dimension(cellWidth / 3, cellHeight / 3), direction, duration);
             contents[location.x][location.y] = null;
-            imageChanged[location.x][location.y] = true;
-            redraw();
             animations.add(anim);
             if (animationManager == null) {
                 animationManager = AnimationManager.startNewAnimationManager(this);
@@ -523,7 +482,6 @@ public class SquidPanel extends JLayeredPane {
             animationManager.stopAnimation(anim);
             anim.remove();
             contents[anim.getLocation().x / cellWidth][anim.getLocation().y / cellHeight] = anim.getImage();
-            imageChanged[anim.getLocation().x / cellWidth][anim.getLocation().y / cellHeight] = true;
         }
     }
 
@@ -533,11 +491,10 @@ public class SquidPanel extends JLayeredPane {
      * Note that if an animation is set to not stop then this method will never return.
      */
     public void waitForAnimations() {
+
         while (!animations.isEmpty()) {
             trimAnimations();
         }
-        redraw();
-        repaint();
     }
 
     /**

@@ -4,11 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import com.badlogic.gdx.graphics.g2d.freetype.*;
 import java.awt.Color;
-import java.util.Set;
 
 /**
  * Class for creating text blocks.
@@ -36,15 +41,13 @@ public class TextCellFactory {
     public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\",
     LINE_FITTING = "┼├┤┴┬┌┐└┘│─", SQUID_FITTING = DEFAULT_FITTING + LINE_FITTING;
 
-    private FreeTypeFontGenerator font = new FreeTypeFontGenerator(Gdx.files.classpath("/Rogue-Zodiac.ttf"));
+    private FreeTypeFontGenerator font = DefaultResources.getDefaultFont();
     private FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
     private BitmapFont bmpFont = null;
     private Texture block = null;
     private String fitting = SQUID_FITTING;
-    private Set<Integer> largeCharacters;//size on only the largest characters, determined as sizing is performed
     private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     private int width = 1, height = 1;
-    private ImageCellMap map;
     private boolean initialized = false;
 
     /**
@@ -71,7 +74,6 @@ public class TextCellFactory {
         this.width = 16;
         this.height = 16;
         params.size = font.scaleToFitSquare(16, 16, 1);
-        map = new ImageCellMap(width, height);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         temp.fill();
@@ -96,7 +98,6 @@ public class TextCellFactory {
      */
     public TextCellFactory initBySize() {
         initialized = true;
-        map = new ImageCellMap(width, height);
         params.size = font.scaleToFitSquare(width, height, 1);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
@@ -122,7 +123,6 @@ public class TextCellFactory {
      */
     public TextCellFactory initVerbatim() {
         initialized = true;
-        map = new ImageCellMap(width, height);
         params.size = height;
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
@@ -154,15 +154,15 @@ public class TextCellFactory {
         return this;
     }
 
-    public TextCellFactory useDefaultNarrowFont()
+    public TextCellFactory defaultNarrowFont()
     {
-        font = new FreeTypeFontGenerator(Gdx.files.classpath("/Rogue-Zodiac.ttf"));
+        font = DefaultResources.getDefaultNarrowFont();
         return this;
     }
 
-    public TextCellFactory useDefaultSquareFont()
+    public TextCellFactory defaultSquareFont()
     {
-        font = new FreeTypeFontGenerator(Gdx.files.classpath("/Zodiac-Square.ttf"));
+        font = DefaultResources.getDefaultFont();
         return this;
     }
 
@@ -394,6 +394,27 @@ public class TextCellFactory {
     }
 
     /**
+     * Use the specified Batch to draw a String (often just one char long) with the default color (white), with x and y
+     * determining the world-space coordinates for the upper-left corner.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, String s, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (s == null) {
+            batch.draw(block, x, y, width, height);
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            batch.draw(block, x, y, width * s.length(), height);
+        } else {
+            bmpFont.draw(batch, s, x, y, width * s.length(), Align.center, false);
+        }
+    }
+    /**
      * Use the specified Batch to draw a String (often just one char long) in the specified AWT Color, with x and y
      * determining the world-space coordinates for the upper-left corner.
      *
@@ -412,7 +433,11 @@ public class TextCellFactory {
             batch.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
             batch.draw(block, x, y, width, height);
             batch.setColor(orig);
-            return;
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            com.badlogic.gdx.graphics.Color orig = batch.getColor();
+            batch.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
+            batch.draw(block, x, y, width * s.length(), height);
+            batch.setColor(orig);
         } else {
             bmpFont.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
             bmpFont.draw(batch, s, x, y, width * s.length(), Align.center, false);
@@ -440,7 +465,11 @@ public class TextCellFactory {
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y, width, height);
             batch.setColor(orig);
-            return;
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            com.badlogic.gdx.graphics.Color orig = batch.getColor();
+            batch.setColor(r, g, b, a);
+            batch.draw(block, x, y, width * s.length(), height);
+            batch.setColor(orig);
         } else {
             bmpFont.setColor(r, g, b, a);
             bmpFont.draw(batch, s, x, y, width * s.length(), Align.center, false);
@@ -468,10 +497,38 @@ public class TextCellFactory {
             batch.setColor(color);
             batch.draw(block, x, y, width, height);
             batch.setColor(orig);
-            return;
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            com.badlogic.gdx.graphics.Color orig = batch.getColor();
+            batch.setColor(color);
+            batch.draw(block, x, y, width * s.length(), height);
+            batch.setColor(orig);
         } else {
             bmpFont.setColor(color);
             bmpFont.draw(batch, s, x, y, width * s.length(), Align.center, false);
+        }
+    }
+
+    public Actor makeActor(String s, com.badlogic.gdx.graphics.Color color, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (s == null) {
+            Image im = new Image(block);
+            im.setColor(color);
+            im.setSize(width, height);
+            im.setPosition(x + width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            Image im = new Image(block);
+            im.setColor(color);
+            im.setSize(width * s.length(), height);
+            im.setPosition(x + width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else {
+            Label lb = new Label(s, new Label.LabelStyle(bmpFont, null));
+            lb.setColor(color);
+            lb.setPosition(x + width * 0.5f, y - height * 0.5f, Align.center);
+            return lb;
         }
     }
 
