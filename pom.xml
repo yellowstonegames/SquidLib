@@ -3,7 +3,7 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib</artifactId>
-    <version>2.3.1</version>
+    <version>2.3.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -173,6 +173,7 @@
         </plugins>
     </build>
     <dependencies>
+
         <!--
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
@@ -187,5 +188,39 @@
             <version>2.3.1</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx</artifactId>
+            <version>1.6.4</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-backend-lwjgl</artifactId>
+            <version>1.6.4</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-platform</artifactId>
+            <version>1.6.4</version>
+            <classifier>natives-desktop</classifier>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-freetype</artifactId>
+            <version>1.6.4</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-freetype-platform</artifactId>
+            <version>1.6.4</version>
+            <classifier>natives-desktop</classifier>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 </project>

@@ -3,8 +3,11 @@ package squidpony.squidgrid.gui;
 import squidpony.Colors;
 import squidpony.annotation.Beta;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLayeredPane;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -303,7 +306,7 @@ public class SquidLayers extends JLayeredPane {
      * @param cellHeight in pixels
      * @param font A Font that should have been assigned a size before being passed here.
      */
-    public  SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, Font font)
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, Font font)
     {
         super();
         initPalettes();

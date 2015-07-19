@@ -54,7 +54,7 @@ public class FontChoiceDemo {
         menu.add(tempItem);
         frame.setJMenuBar(bar);
 
-        control = new squidpony.examples.FontChoiceControlPanel(width, height);
+        control = new FontChoiceControlPanel(width, height);
         frame.getContentPane().add(control, BorderLayout.NORTH);
 
         textFactory = new TextCellFactory().font(control.getFontFace()).width(control.getCellWidth()).height(control.getCellHeight());
