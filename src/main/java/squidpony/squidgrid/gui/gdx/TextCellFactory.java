@@ -62,7 +62,7 @@ public class TextCellFactory {
     /**
      * Initializes the factory to then be able to create text cells on demand.
      *
-     * Will match the width and height to 16 and 16, scaling the font to fit.
+     * Will match the width and height to 12 and 12, scaling the font to fit.
      *
      * Calling this after the factory has already been initialized will
      * re-initialize it.
@@ -71,9 +71,9 @@ public class TextCellFactory {
      */
     public TextCellFactory initByFont() {
         initialized = true;
-        this.width = 16;
-        this.height = 16;
-        params.size = font.scaleToFitSquare(16, 16, 1);
+        this.width = 12;
+        this.height = 12;
+        params.size = font.scaleToFitSquare(12, 12, 1);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         temp.fill();
@@ -88,8 +88,7 @@ public class TextCellFactory {
      * Initializes the factory to then be able to create text cells on demand.
      *
      * Will strictly use the provided width and height values to size the cells.
-     * The provided font will be used as a maximum size for the cells, but will
-     * be shrunk down if the provided font will not fit the requested size.
+     * The provided font will be used as a maximum size for the cells.
      *
      * Calling this after the factory has already been initialized will
      * re-initialize it.

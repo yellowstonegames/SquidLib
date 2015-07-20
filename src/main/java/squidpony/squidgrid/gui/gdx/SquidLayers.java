@@ -1,21 +1,21 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import squidpony.Colors;
 import squidpony.annotation.Beta;
-
-import javax.swing.*;
-import java.awt.*;
+import com.badlogic.gdx.graphics.Color;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A helper class to make using multiple SquidPanels easier.
  * There is some useful documentation in this class' getPalette method (honestly, I don't know where else to put
- * documentation specifically about this class' default palette).
+ * documentation specifically about this class' default palette). Notably, it uses libGDX Color objects instead of the
+ * AWT Color objects used elsewhere, and a convenience method is provided to convert from AWT to GDX, awtColorToGDX().
  * Created by Tommy Ettinger on 7/6/2015.
  */
 @Beta
-public class SquidLayers extends JLayeredPane {
+public class SquidLayers extends Group {
     protected int width;
     protected int height;
     protected int cellWidth;
@@ -33,7 +33,7 @@ public class SquidLayers extends JLayeredPane {
      * @return
      */
     @Override
-    public int getWidth() {
+    public float getWidth() {
         return width * cellWidth;
     }
 
@@ -42,7 +42,7 @@ public class SquidLayers extends JLayeredPane {
      * @return
      */
     @Override
-    public int getHeight() {
+    public float getHeight() {
         return height * cellHeight;
     }
 
@@ -196,8 +196,8 @@ public class SquidLayers extends JLayeredPane {
         width = gridWidth;
         height = gridHeight;
 
-        cellWidth = 16;
-        cellHeight = 16;
+        cellWidth = 12;
+        cellHeight = 12;
 
         bgIndices = new int[width][height];
         lightnesses = new int[width][height];
@@ -211,30 +211,19 @@ public class SquidLayers extends JLayeredPane {
             }
         }
 
-        textFactory = new TextCellFactory().font(DefaultResources.getDefaultFont()).width(12).height(12).initBySize();
+        textFactory = new TextCellFactory().defaultSquareFont().width(12).height(12).initBySize();
 
         backgroundPanel = new SquidPanel(gridWidth, gridHeight);
-        backgroundPanel.setOpaque(true);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight);
-        lightnessPanel.setOpaque(false);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight);
-        foregroundPanel.setOpaque(false);
-
-        backgroundPanel.refresh();
-        lightnessPanel.refresh();
-        foregroundPanel.refresh();
 
         extraPanels = new ArrayList<SquidPanel>();
 
-        this.setLayer(backgroundPanel, 0);
-        this.add(backgroundPanel);
-        this.setLayer(lightnessPanel, 1);
-        this.add(lightnessPanel);
-        this.setLayer(foregroundPanel, 2);
-        this.add(foregroundPanel);
+        super.addActorAt(0, backgroundPanel);
+        super.addActorAt(1, lightnessPanel);
+        super.addActorAt(2, foregroundPanel);
 
-        this.setSize(backgroundPanel.getPreferredSize());
-        this.setPreferredSize(backgroundPanel.getPreferredSize());
+        this.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
     }
 
     /**
@@ -266,44 +255,32 @@ public class SquidLayers extends JLayeredPane {
             }
         }
 
-        textFactory = new TextCellFactory().font(DefaultResources
-                .getDefaultNarrowFont().deriveFont(4.0f * gridHeight / 3.0f))
+        textFactory = new TextCellFactory().defaultNarrowFont()
                 .width(cellWidth).height(cellHeight).initBySize();
 
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
-        backgroundPanel.setOpaque(true);
-        lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
-        lightnessPanel.setOpaque(false);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
-        foregroundPanel.setOpaque(false);
-
-        backgroundPanel.refresh();
-        lightnessPanel.refresh();
-        foregroundPanel.refresh();
+        backgroundPanel = new SquidPanel(gridWidth, gridHeight);
+        lightnessPanel = new SquidPanel(gridWidth, gridHeight);
+        foregroundPanel = new SquidPanel(gridWidth, gridHeight);
 
         extraPanels = new ArrayList<SquidPanel>();
 
-        this.setLayer(backgroundPanel, 0);
-        this.add(backgroundPanel);
-        this.setLayer(lightnessPanel, 1);
-        this.add(lightnessPanel);
-        this.setLayer(foregroundPanel, 2);
-        this.add(foregroundPanel);
+        super.addActorAt(0, backgroundPanel);
+        super.addActorAt(1, lightnessPanel);
+        super.addActorAt(2, foregroundPanel);
 
-        this.setSize(backgroundPanel.getPreferredSize());
-        this.setPreferredSize(backgroundPanel.getPreferredSize());
+        this.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
     }
 
     /**
-     * Create a new SquidLayers widget with the given Font, the given number of cells for gridWidth
+     * Create a new SquidLayers widget with the given path to a Font file, the given number of cells for gridWidth
      * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
      * @param gridWidth in grid cells
      * @param gridHeight in grid cells
      * @param cellWidth in pixels
      * @param cellHeight in pixels
-     * @param font A Font that should have been assigned a size before being passed here.
+     * @param fontpath A Font that should have been assigned a size before being passed here.
      */
-    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, Font font)
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, String fontpath)
     {
         super();
         initPalettes();
@@ -325,91 +302,85 @@ public class SquidLayers extends JLayeredPane {
             }
         }
 
-        textFactory = new TextCellFactory().font(font).width(cellWidth).height(cellHeight).initVerbatim();
+        textFactory = new TextCellFactory().font(fontpath).width(cellWidth).height(cellHeight).initBySize();
 
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
-        backgroundPanel.setOpaque(true);
-        lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
-        lightnessPanel.setOpaque(false);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, null);
-        foregroundPanel.setOpaque(false);
-
-        backgroundPanel.refresh();
-        lightnessPanel.refresh();
-        foregroundPanel.refresh();
+        backgroundPanel = new SquidPanel(gridWidth, gridHeight);
+        lightnessPanel = new SquidPanel(gridWidth, gridHeight);
+        foregroundPanel = new SquidPanel(gridWidth, gridHeight);
 
         extraPanels = new ArrayList<SquidPanel>();
 
-        this.setLayer(backgroundPanel, 0);
-        this.add(backgroundPanel);
-        this.setLayer(lightnessPanel, 1);
-        this.add(lightnessPanel);
-        this.setLayer(foregroundPanel, 2);
-        this.add(foregroundPanel);
+        super.addActorAt(0, backgroundPanel);
+        super.addActorAt(1, lightnessPanel);
+        super.addActorAt(2, foregroundPanel);
 
-        this.setSize(backgroundPanel.getPreferredSize());
-        this.setPreferredSize(backgroundPanel.getPreferredSize());
+        this.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
+    }
+
+    public Color awtColorToGDX(java.awt.Color original)
+    {
+        return new Color(original.getRed(), original.getGreen(), original.getBlue(), original.getAlpha());
     }
 
     private void initPalettes()
     {
         palette = new ArrayList<Color>(256);
-        palette.add(Colors.DARK_SLATE_GRAY);
-        palette.add(Colors.CREAM);
-        palette.add(Colors.FLATTERY_BROWN);
-        palette.add(Colors.SILVER_GREY);
-        palette.add(Colors.RUST);
-        palette.add(Colors.WATER);
-        palette.add(Colors.INTERNATIONAL_ORANGE);
+        palette.add(awtColorToGDX(Colors.DARK_SLATE_GRAY));
+        palette.add(awtColorToGDX(Colors.CREAM));
+        palette.add(awtColorToGDX(Colors.FLATTERY_BROWN));
+        palette.add(awtColorToGDX(Colors.SILVER_GREY));
+        palette.add(awtColorToGDX(Colors.RUST));
+        palette.add(awtColorToGDX(Colors.WATER));
+        palette.add(awtColorToGDX(Colors.INTERNATIONAL_ORANGE));
 
-        palette.add(Colors.WHITE);
-        palette.add(Colors.LIGHT_GRAY);
-        palette.add(Colors.DARK_GRAY);
+        palette.add(awtColorToGDX(Colors.WHITE));
+        palette.add(awtColorToGDX(Colors.LIGHT_GRAY));
+        palette.add(awtColorToGDX(Colors.DARK_GRAY));
 
-        palette.add(Colors.RED_INCENSE);
-        palette.add(Colors.RED);
-        palette.add(Colors.COCHINEAL_RED);
+        palette.add(awtColorToGDX(Colors.RED_INCENSE));
+        palette.add(awtColorToGDX(Colors.RED));
+        palette.add(awtColorToGDX(Colors.COCHINEAL_RED));
 
-        palette.add(Colors.PEACH_ORANGE);
-        palette.add(Colors.ORANGE_PEEL);
-        palette.add(Colors.TANGERINE);
+        palette.add(awtColorToGDX(Colors.PEACH_ORANGE));
+        palette.add(awtColorToGDX(Colors.ORANGE_PEEL));
+        palette.add(awtColorToGDX(Colors.TANGERINE));
 
-        palette.add(Colors.LEMON_CHIFFON);
-        palette.add(Colors.CORN);
-        palette.add(Colors.GOLDEN_YELLOW);
+        palette.add(awtColorToGDX(Colors.LEMON_CHIFFON));
+        palette.add(awtColorToGDX(Colors.CORN));
+        palette.add(awtColorToGDX(Colors.GOLDEN_YELLOW));
 
-        palette.add(Colors.TEA_GREEN);
-        palette.add(Colors.LIME_GREEN);
-        palette.add(Colors.PINE_GREEN);
+        palette.add(awtColorToGDX(Colors.TEA_GREEN));
+        palette.add(awtColorToGDX(Colors.LIME_GREEN));
+        palette.add(awtColorToGDX(Colors.PINE_GREEN));
 
-        palette.add(Colors.BABY_BLUE);
-        palette.add(Colors.CYAN);
-        palette.add(Colors.BLUE_GREEN);
+        palette.add(awtColorToGDX(Colors.BABY_BLUE));
+        palette.add(awtColorToGDX(Colors.CYAN));
+        palette.add(awtColorToGDX(Colors.BLUE_GREEN));
 
-        palette.add(Colors.COLUMBIA_BLUE);
-        palette.add(Colors.ROYAL_BLUE);
-        palette.add(Colors.PERSIAN_BLUE);
+        palette.add(awtColorToGDX(Colors.COLUMBIA_BLUE));
+        palette.add(awtColorToGDX(Colors.ROYAL_BLUE));
+        palette.add(awtColorToGDX(Colors.PERSIAN_BLUE));
 
-        palette.add(Colors.LAVENDER_BLUE);
-        palette.add(Colors.THIN_VIOLET);
-        palette.add(Colors.DARK_VIOLET);
+        palette.add(awtColorToGDX(Colors.LAVENDER_BLUE));
+        palette.add(awtColorToGDX(Colors.THIN_VIOLET));
+        palette.add(awtColorToGDX(Colors.DARK_VIOLET));
 
-        palette.add(Colors.CARNATION_PINK);
-        palette.add(Colors.HOT_MAGENTA);
-        palette.add(Colors.LIGHT_MAROON);
+        palette.add(awtColorToGDX(Colors.CARNATION_PINK));
+        palette.add(awtColorToGDX(Colors.HOT_MAGENTA));
+        palette.add(awtColorToGDX(Colors.LIGHT_MAROON));
 
-        palette.add(Colors.TAN);
-        palette.add(Colors.DARK_TAN);
-        palette.add(Colors.PALE_BROWN);
+        palette.add(awtColorToGDX(Colors.TAN));
+        palette.add(awtColorToGDX(Colors.DARK_TAN));
+        palette.add(awtColorToGDX(Colors.PALE_BROWN));
 
-        palette.add(Colors.STEAMED_CHESTNUT);
-        palette.add(Colors.DARK_CHESTNUT);
-        palette.add(Colors.SAPPANWOOD_INCENSE);
+        palette.add(awtColorToGDX(Colors.STEAMED_CHESTNUT));
+        palette.add(awtColorToGDX(Colors.DARK_CHESTNUT));
+        palette.add(awtColorToGDX(Colors.SAPPANWOOD_INCENSE));
 
         lightingPalette = new ArrayList<Color>(512);
         for(int i = 0; i < 512; i++)
         {
-            lightingPalette.add(Colors.TRANSPARENT);
+            lightingPalette.add(Color.CLEAR);
         }
         for(int i = 1; i < 256; i++)
         {
@@ -426,9 +397,8 @@ public class SquidLayers extends JLayeredPane {
      */
     public SquidLayers addExtraLayer()
     {
-        SquidPanel sp = new SquidPanel(width, height, textFactory, null);
-        this.setLayer(sp, 3 + extraPanels.size());
-        sp.refresh();
+        SquidPanel sp = new SquidPanel(width, height, textFactory);
+        super.addActor(sp);
         extraPanels.add(sp);
         return this;
     }
@@ -540,12 +510,12 @@ public class SquidLayers extends JLayeredPane {
      * @param x in grid cells.
      * @param y in grid cells.
      * @param c a character to be drawn in the foreground
-     * @param alternatePalette an alternate Color List for both foreground and background
+     * @param alternatePalette an alternate Color ArrayList for both foreground and background
      * @param foregroundIndex int index into alternatePalette for the char being drawn
      * @param backgroundIndex int index into alternatePalette for the background
      * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
      */
-    public SquidLayers put(int x, int y, char c, List<Color> alternatePalette, int foregroundIndex, int backgroundIndex, int backgroundLightness)
+    public SquidLayers put(int x, int y, char c, ArrayList<Color> alternatePalette, int foregroundIndex, int backgroundIndex, int backgroundLightness)
     {
         backgroundLightness = clamp(backgroundLightness, -255, 255);
         foregroundPanel.put(x, y, c, foregroundIndex, alternatePalette);
@@ -564,12 +534,12 @@ public class SquidLayers extends JLayeredPane {
      * @param y in grid cells.
      * @param c a character to be drawn in the foreground
      * @param foregroundIndex int index into alternatePalette for the char being drawn
-     * @param fgPalette an alternate Color List for the foreground; can be null to use the default.
+     * @param fgPalette an alternate Color ArrayList for the foreground; can be null to use the default.
      * @param backgroundIndex int index into alternatePalette for the background
-     * @param bgPalette an alternate Color List for the background; can be null to use the default.
+     * @param bgPalette an alternate Color ArrayList for the background; can be null to use the default.
      * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
      */
-    public SquidLayers put(int x, int y, char c, int foregroundIndex, List<Color> fgPalette, int backgroundIndex, List<Color> bgPalette, int backgroundLightness)
+    public SquidLayers put(int x, int y, char c, int foregroundIndex, ArrayList<Color> fgPalette, int backgroundIndex, ArrayList<Color> bgPalette, int backgroundLightness)
     {
         backgroundLightness = clamp(backgroundLightness, -255, 255);
         if(fgPalette == null) fgPalette = palette;
@@ -657,12 +627,12 @@ public class SquidLayers extends JLayeredPane {
      * @param x in grid cells.
      * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
-     * @param alternatePalette an alternate Color List for both foreground and background
+     * @param alternatePalette an alternate Color ArrayList for both foreground and background
      * @param foregroundIndex int[][] of indices into alternatePalette for the char being drawn
      * @param backgroundIndex int[][] of indices into alternatePalette for the background
      * @param backgroundLightness int[][] with elements between -255 and 255 , lower darker, higher lighter.
      */
-    public SquidLayers put(int x, int y, char[][] c, List<Color> alternatePalette,  int[][] foregroundIndex, int[][] backgroundIndex, int[][] backgroundLightness)
+    public SquidLayers put(int x, int y, char[][] c, ArrayList<Color> alternatePalette,  int[][] foregroundIndex, int[][] backgroundIndex, int[][] backgroundLightness)
     {
 
         if(alternatePalette == null) alternatePalette = palette;
@@ -686,12 +656,12 @@ public class SquidLayers extends JLayeredPane {
      * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
      * @param foregroundIndex int[][] of indices into fgPalette for the char being drawn
-     * @param fgPalette an alternate Color List for the foreground; can be null to use the default.
+     * @param fgPalette an alternate Color ArrayList for the foreground; can be null to use the default.
      * @param backgroundIndex int[][] of indices into bgPalette for the background
-     * @param bgPalette an alternate Color List for the background; can be null to use the default.
+     * @param bgPalette an alternate Color ArrayList for the background; can be null to use the default.
      * @param backgroundLightness int[][] with elements between -255 and 255 , lower darker, higher lighter.
      */
-    public SquidLayers put(int x, int y, char[][] c, int[][] foregroundIndex, List<Color> fgPalette, int[][] backgroundIndex, List<Color> bgPalette, int[][] backgroundLightness)
+    public SquidLayers put(int x, int y, char[][] c, int[][] foregroundIndex, ArrayList<Color> fgPalette, int[][] backgroundIndex, ArrayList<Color> bgPalette, int[][] backgroundLightness)
     {
         if(fgPalette == null) fgPalette = palette;
         if(bgPalette == null) bgPalette = palette;
@@ -763,10 +733,10 @@ public class SquidLayers extends JLayeredPane {
      * @param x in grid cells.
      * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
-     * @param alternatePalette an alternate Color List for both foreground and background
+     * @param alternatePalette an alternate Color ArrayList for both foreground and background
      * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
      */
-    public SquidLayers putInto(int layer, int x, int y, char c, List<Color> alternatePalette,  int colorIndex)
+    public SquidLayers putInto(int layer, int x, int y, char c, ArrayList<Color> alternatePalette,  int colorIndex)
     {
         SquidPanel p = backgroundPanel;
         switch (layer)
@@ -851,10 +821,10 @@ public class SquidLayers extends JLayeredPane {
      * @param x in grid cells.
      * @param y in grid cells.
      * @param c char[][] to be drawn in the foreground starting from x, y
-     * @param alternatePalette an alternate Color List for both foreground and background
+     * @param alternatePalette an alternate Color ArrayList for both foreground and background
      * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
      */
-    public SquidLayers putInto(int layer, int x, int y, char[][] c, List<Color> alternatePalette,  int[][] colorIndex)
+    public SquidLayers putInto(int layer, int x, int y, char[][] c, ArrayList<Color> alternatePalette,  int[][] colorIndex)
     {
         SquidPanel p = backgroundPanel;
         switch (layer)
@@ -935,7 +905,7 @@ public class SquidLayers extends JLayeredPane {
      * @param backgroundIndex
      * @return this, for chaining
      */
-    public SquidLayers putString(int x, int y, String s, List<Color> alternatePalette, int foregroundIndex, int backgroundIndex)
+    public SquidLayers putString(int x, int y, String s, ArrayList<Color> alternatePalette, int foregroundIndex, int backgroundIndex)
     {
         foregroundPanel.put(x, y, s, alternatePalette.get(foregroundIndex));
         for(int i = x; i < s.length() && i < width; i++)
@@ -968,25 +938,6 @@ public class SquidLayers extends JLayeredPane {
         foregroundPanel.put(x, y, s, palette.get(1));
 
         return this;
-    }
-
-    /**
-     * Used to check if an x,y cell has changed, checking all layers for changes.
-     * @param x in grid cells.
-     * @param y in grid cells.
-     * @return true if it changed, false if it didn't.
-     */
-    public boolean hasChanged(int x, int y)
-    {
-        if(backgroundPanel.hasChanged(x, y) ||
-           lightnessPanel.hasChanged(x, y) ||
-           foregroundPanel.hasChanged(x, y)) return true;
-        for(int i = 0; i < extraPanels.size(); i++)
-        {
-            if(extraPanels.get(i).hasChanged(x, y)) return true;
-
-        }
-        return false;
     }
 
     /**
@@ -1040,26 +991,12 @@ public class SquidLayers extends JLayeredPane {
         }
         return this;
     }
+
     @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        paintComponents(g);
-        Toolkit.getDefaultToolkit().sync();
+    public void draw (Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
     }
 
-    /**
-     * Call this whenever you want to show the changes you made to contents of this widget.
-     */
-    public void refresh()
-    {
-        backgroundPanel.refresh();
-        lightnessPanel.refresh();
-        foregroundPanel.refresh();
-        for(SquidPanel sp : extraPanels)
-        {
-            sp.refresh();
-        }
-    }
 
     private int clamp(int x, int min, int max)
     {
