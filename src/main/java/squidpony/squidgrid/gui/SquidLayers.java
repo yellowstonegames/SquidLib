@@ -199,8 +199,8 @@ public class SquidLayers extends JLayeredPane {
         width = gridWidth;
         height = gridHeight;
 
-        cellWidth = 16;
-        cellHeight = 16;
+        cellWidth = 12;
+        cellHeight = 12;
 
         bgIndices = new int[width][height];
         lightnesses = new int[width][height];

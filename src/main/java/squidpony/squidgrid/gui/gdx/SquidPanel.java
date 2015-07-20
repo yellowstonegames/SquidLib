@@ -63,7 +63,7 @@ public class SquidPanel extends Group {
      * Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
      * are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
      * 
-     * If the TextCellFactory has not yet been initialized, then it will be sized at 16x16 px per cell. If it is null
+     * If the TextCellFactory has not yet been initialized, then it will be sized at 12x12 px per cell. If it is null
      * then a default one will be created and initialized.
      *
      * @param gridWidth the number of cells horizontally
@@ -323,11 +323,6 @@ public class SquidPanel extends Group {
         return gridWidth;
     }
 
-
-
-
-
-
     @Override
     public void draw (Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -348,9 +343,8 @@ public class SquidPanel extends Group {
     {
         if(contents[x][y] == null || contents[x][y] == "")
             return null;
-        Color tmp = new Color();
-        Color.rgba8888ToColor(tmp, colors[x][y]);
-        Actor a = textFactory.makeActor(contents[x][y], tmp, x, y);
+
+        Actor a = textFactory.makeActor(contents[x][y], new Color(colors[x][y]), x, y);
         a.setName(contents[x][y]);
         super.addActor(a);
         contents[x][y] = "";
