@@ -828,7 +828,7 @@ public class DungeonUtility {
      * @param frame
      * @return
      */
-    public static int[][] generateLightnessModifiers(char[][] map, int frame)
+    public static int[][] generateLightnessModifiers(char[][] map, double frame)
     {
         int width = map.length;
         int height = map[0].length;

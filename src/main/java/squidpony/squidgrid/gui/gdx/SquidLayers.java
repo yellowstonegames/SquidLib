@@ -213,9 +213,9 @@ public class SquidLayers extends Group {
 
         textFactory = new TextCellFactory().defaultSquareFont().width(12).height(12).initBySize();
 
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight);
-        lightnessPanel = new SquidPanel(gridWidth, gridHeight);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight);
+        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
 
         extraPanels = new ArrayList<SquidPanel>();
 
@@ -227,7 +227,8 @@ public class SquidLayers extends Group {
     }
 
     /**
-     * Create a new SquidLayers widget with the default <b>narrow</b> font, the given number of cells for gridWidth
+     * Create a new SquidLayers widget with a default font (it will be square if cellWidth and cellHeight are equal, or
+     * narrow otherwise), the given number of cells for gridWidth
      * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
      * @param gridWidth in grid cells
      * @param gridHeight in grid cells
@@ -255,12 +256,17 @@ public class SquidLayers extends Group {
             }
         }
 
-        textFactory = new TextCellFactory().defaultNarrowFont()
-                .width(cellWidth).height(cellHeight).initBySize();
-
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight);
-        lightnessPanel = new SquidPanel(gridWidth, gridHeight);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight);
+        textFactory = new TextCellFactory();
+        if(cellHeight == cellWidth) {
+            textFactory = textFactory.defaultSquareFont();
+        }
+        else {
+            textFactory = textFactory.defaultNarrowFont();
+        }
+        textFactory = textFactory.width(cellWidth).height(cellHeight).initBySize();
+        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
 
         extraPanels = new ArrayList<SquidPanel>();
 
@@ -304,9 +310,9 @@ public class SquidLayers extends Group {
 
         textFactory = new TextCellFactory().font(fontpath).width(cellWidth).height(cellHeight).initBySize();
 
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight);
-        lightnessPanel = new SquidPanel(gridWidth, gridHeight);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight);
+        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
 
         extraPanels = new ArrayList<SquidPanel>();
 
@@ -317,9 +323,9 @@ public class SquidLayers extends Group {
         this.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
     }
 
-    public Color awtColorToGDX(java.awt.Color original)
+    public static Color awtColorToGDX(java.awt.Color original)
     {
-        return new Color(original.getRed(), original.getGreen(), original.getBlue(), original.getAlpha());
+        return new Color(original.getRed() / 255f, original.getGreen() / 255f, original.getBlue() / 255f, original.getAlpha() / 255f);
     }
 
     private void initPalettes()
@@ -384,8 +390,8 @@ public class SquidLayers extends Group {
         }
         for(int i = 1; i < 256; i++)
         {
-            lightingPalette.set(256 + i, new Color(0xFF, 0xFD, 0xD8, i));
-            lightingPalette.set(256 - i, new Color(0, 0, 0, i));
+            lightingPalette.set(256 + i, new Color(1.0f, 0xFD / 255f, 0xD8 / 255f, i / 255f));
+            lightingPalette.set(256 - i, new Color(0, 0, 0, i / 255f));
         }
 
     }

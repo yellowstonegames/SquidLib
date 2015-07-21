@@ -304,7 +304,7 @@ public class SquidPanel extends Group {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-        colors[x][y] = color.toIntBits();
+        colors[x][y] = Color.rgba8888(color);
     }
 
     public int cellWidth() {
@@ -330,7 +330,7 @@ public class SquidPanel extends Group {
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 Color.rgba8888ToColor(tmp, colors[x][y]);
-                textFactory.draw(batch, contents[x][y], tmp, x * cellWidth, y * cellHeight);
+                textFactory.draw(batch, contents[x][y], tmp, x * cellWidth, (gridHeight - y) * cellHeight);
             }
         }
     }
@@ -357,7 +357,7 @@ public class SquidPanel extends Group {
         if(ax >= 0 && ax < gridWidth && ay > 0 && ay < gridHeight)
         {
             contents[ax][ay] = a.getName();
-            colors[ax][ay] = a.getColor().toIntBits();
+            colors[ax][ay] = Color.rgba8888(a.getColor());
         }
         a.clear();
         super.removeActor(a);

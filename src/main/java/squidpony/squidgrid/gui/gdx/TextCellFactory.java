@@ -38,7 +38,7 @@ public class TextCellFactory {
     /**
      * The commonly used symbols in roguelike games.
      */
-    public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\",
+    public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\ ",
     LINE_FITTING = "┼├┤┴┬┌┐└┘│─", SQUID_FITTING = DEFAULT_FITTING + LINE_FITTING;
 
     private FreeTypeFontGenerator font = DefaultResources.getDefaultFont();
@@ -56,7 +56,7 @@ public class TextCellFactory {
      */
     public TextCellFactory() {
         params.characters = fitting;
-        params.kerning = false;
+        params.kerning = true;
     }
 
     /**
@@ -81,6 +81,7 @@ public class TextCellFactory {
         block.draw(temp, 0, 0);
         temp.dispose();
         bmpFont = font.generateFont(params);
+        bmpFont.setFixedWidthGlyphs(fitting);
         return this;
     }
 
@@ -105,6 +106,7 @@ public class TextCellFactory {
         block.draw(temp, 0, 0);
         temp.dispose();
         bmpFont = font.generateFont(params);
+        bmpFont.setFixedWidthGlyphs(fitting);
         return this;
     }
 
@@ -130,6 +132,7 @@ public class TextCellFactory {
         block.draw(temp, 0, 0);
         temp.dispose();
         bmpFont = font.generateFont(params);
+        bmpFont.setFixedWidthGlyphs(fitting);
         return this;
     }
 
@@ -349,16 +352,7 @@ public class TextCellFactory {
     public int bottomPadding() {
         return bottomPadding;
     }
-    
-    /**
-     * Returns true if this factory is fully initialized and ready to build text cells.
-     * 
-     * @return true if initialized
-     */
-    public boolean initialized() {
-        return initialized;
-    }
-    
+
     /**
      * Sets the amount of padding on the bottom side to the provided value.
      *
@@ -369,6 +363,15 @@ public class TextCellFactory {
         bottomPadding = padding;
         return this;
     }
+    /**
+     * Returns true if this factory is fully initialized and ready to build text cells.
+     * 
+     * @return true if initialized
+     */
+    public boolean initialized() {
+        return initialized;
+    }
+
 
     /**
      * Returns true if the given character will fit inside the current cell
@@ -406,9 +409,9 @@ public class TextCellFactory {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (s == null) {
-            batch.draw(block, x, y, width, height);
+            batch.draw(block, x, y - height, width, height);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            batch.draw(block, x, y, width * s.length(), height);
+            batch.draw(block, x, y - height, width * s.length(), height);
         } else {
             bmpFont.draw(batch, s, x, y, width * s.length(), Align.center, false);
         }
@@ -430,12 +433,12 @@ public class TextCellFactory {
         if (s == null) {
             com.badlogic.gdx.graphics.Color orig = batch.getColor();
             batch.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
-            batch.draw(block, x, y, width, height);
+            batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             com.badlogic.gdx.graphics.Color orig = batch.getColor();
             batch.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
-            batch.draw(block, x, y, width * s.length(), height);
+            batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
         } else {
             bmpFont.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
@@ -462,12 +465,12 @@ public class TextCellFactory {
         if (s == null) {
             com.badlogic.gdx.graphics.Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
-            batch.draw(block, x, y, width, height);
+            batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             com.badlogic.gdx.graphics.Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
-            batch.draw(block, x, y, width * s.length(), height);
+            batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
         } else {
             bmpFont.setColor(r, g, b, a);
@@ -494,12 +497,12 @@ public class TextCellFactory {
         if (s == null) {
             com.badlogic.gdx.graphics.Color orig = batch.getColor();
             batch.setColor(color);
-            batch.draw(block, x, y, width, height);
+            batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             com.badlogic.gdx.graphics.Color orig = batch.getColor();
             batch.setColor(color);
-            batch.draw(block, x, y, width * s.length(), height);
+            batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
         } else {
             bmpFont.setColor(color);

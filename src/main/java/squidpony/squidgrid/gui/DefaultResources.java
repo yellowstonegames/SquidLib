@@ -74,4 +74,9 @@ public class DefaultResources {
         }
         return narrow;
     }
+
+    /**
+     * Special symbols that can be used as icons if you use the narrow default font.
+     */
+    public static final String narrowFontSymbols = "ሀሁሂሃሄህሆሇለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማሜ";
 }
