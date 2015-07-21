@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
-import com.badlogic.gdx.graphics.g2d.freetype.*;
 import java.awt.Color;
 
 /**
@@ -41,8 +40,6 @@ public class TextCellFactory {
     public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\ ",
     LINE_FITTING = "┼├┤┴┬┌┐└┘│─", SQUID_FITTING = DEFAULT_FITTING + LINE_FITTING;
 
-    private FreeTypeFontGenerator font = DefaultResources.getDefaultFont();
-    private FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
     private BitmapFont bmpFont = null;
     private Texture block = null;
     private String fitting = SQUID_FITTING;
@@ -55,8 +52,6 @@ public class TextCellFactory {
      * be called before this factory can be used!
      */
     public TextCellFactory() {
-        params.characters = fitting;
-        params.kerning = true;
     }
 
     /**
@@ -70,18 +65,16 @@ public class TextCellFactory {
      * @return this for method chaining
      */
     public TextCellFactory initByFont() {
-        initialized = true;
-        this.width = 12;
-        this.height = 12;
-        params.size = font.scaleToFitSquare(12, 12, 1);
+        bmpFont.setFixedWidthGlyphs(fitting);
+        this.width = (int)bmpFont.getSpaceWidth();
+        this.height = (int)(bmpFont.getAscent() - bmpFont.getDescent());
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         temp.fill();
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
         temp.dispose();
-        bmpFont = font.generateFont(params);
-        bmpFont.setFixedWidthGlyphs(fitting);
+        initialized = true;
         return this;
     }
 
@@ -89,7 +82,6 @@ public class TextCellFactory {
      * Initializes the factory to then be able to create text cells on demand.
      *
      * Will strictly use the provided width and height values to size the cells.
-     * The provided font will be used as a maximum size for the cells.
      *
      * Calling this after the factory has already been initialized will
      * re-initialize it.
@@ -97,43 +89,26 @@ public class TextCellFactory {
      * @return this for method chaining
      */
     public TextCellFactory initBySize() {
-        initialized = true;
-        params.size = font.scaleToFitSquare(width, height, 1);
+        bmpFont.setFixedWidthGlyphs(fitting);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         temp.fill();
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
         temp.dispose();
-        bmpFont = font.generateFont(params);
-        bmpFont.setFixedWidthGlyphs(fitting);
+        initialized = true;
         return this;
     }
 
     /**
      * Initializes the factory to then be able to create text cells on demand.
      *
-     * Will strictly use the provided height value to size the cells.
-     * The provided width is used for the cell width without resizing. Does no
-     * fitting, assumes you know what you're doing.
-     *
-     * Calling this after the factory has already been initialized will
-     * re-initialize it.
+     * (This is identical to initBySize() when using libGDX.)
      *
      * @return this for method chaining
      */
     public TextCellFactory initVerbatim() {
-        initialized = true;
-        params.size = height;
-        Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
-        temp.fill();
-        block = new Texture(1, 1, Pixmap.Format.RGBA8888);
-        block.draw(temp, 0, 0);
-        temp.dispose();
-        bmpFont = font.generateFont(params);
-        bmpFont.setFixedWidthGlyphs(fitting);
-        return this;
+        return initBySize();
     }
 
     /**
@@ -141,8 +116,8 @@ public class TextCellFactory {
      *
      * @return the font
      */
-    public FreeTypeFontGenerator font() {
-        return font;
+    public BitmapFont font() {
+        return bmpFont;
     }
 
     /**
@@ -152,19 +127,19 @@ public class TextCellFactory {
      * @return this factory for method chaining
      */
     public TextCellFactory font(String fontpath) {
-        this.font = new FreeTypeFontGenerator(Gdx.files.internal(fontpath));
+        this.bmpFont = new BitmapFont(Gdx.files.internal(fontpath));
         return this;
     }
 
     public TextCellFactory defaultNarrowFont()
     {
-        font = DefaultResources.getDefaultNarrowFont();
+        bmpFont = DefaultResources.getLargeNarrowFont();
         return this;
     }
 
     public TextCellFactory defaultSquareFont()
     {
-        font = DefaultResources.getDefaultFont();
+        bmpFont = DefaultResources.getDefaultFont();
         return this;
     }
 
@@ -232,7 +207,6 @@ public class TextCellFactory {
      */
     public TextCellFactory fit(String fit) {
         fitting = fit;
-        params.characters = fitting;
         return this;
     }
 
@@ -245,7 +219,6 @@ public class TextCellFactory {
      */
     public TextCellFactory addFit(String fit) {
         fitting += fit;
-        params.characters = fitting;
         return this;
     }
 
@@ -392,7 +365,7 @@ public class TextCellFactory {
             return true;
         }
 
-        return params.characters.contains(String.valueOf(Character.toChars(codepoint)));
+        return fitting.contains(String.valueOf(Character.toChars(codepoint)));
     }
 
     /**
@@ -413,7 +386,7 @@ public class TextCellFactory {
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             batch.draw(block, x, y - height, width * s.length(), height);
         } else {
-            bmpFont.draw(batch, s, x, y, width * s.length(), Align.center, false);
+            bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
         }
     }
     /**
@@ -442,7 +415,7 @@ public class TextCellFactory {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
-            bmpFont.draw(batch, s, x, y, width * s.length(), Align.center, false);
+            bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
         }
     }
     /**
@@ -474,7 +447,7 @@ public class TextCellFactory {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(r, g, b, a);
-            bmpFont.draw(batch, s, x, y, width * s.length(), Align.center, false);
+            bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
         }
     }
 
@@ -506,7 +479,7 @@ public class TextCellFactory {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(color);
-            bmpFont.draw(batch, s, x, y, width * s.length(), Align.center, false);
+            bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
         }
     }
 
