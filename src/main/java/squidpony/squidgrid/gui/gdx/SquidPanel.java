@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -29,7 +30,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SquidPanel extends Group {
 
     private static float DEFAULT_ANIMATION_DURATION = 0.2F;
-    private static FreeTypeFontGenerator DEFAULT_FONT = DefaultResources.getDefaultFont();
     private int animationCount = 0;
     private Color defaultForeground = Color.WHITE;
     private final int gridWidth, gridHeight, cellWidth, cellHeight;

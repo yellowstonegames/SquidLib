@@ -273,7 +273,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_BLEND);
 
-        counter += Gdx.graphics.getDeltaTime();
+        counter += Gdx.graphics.getDeltaTime() * 15;
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon, counter);
 
         if (health <= 0) {
