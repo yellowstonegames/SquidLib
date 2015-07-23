@@ -3,7 +3,6 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -13,8 +12,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.LinkedHashSet;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -29,13 +27,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class SquidPanel extends Group {
 
-    private static float DEFAULT_ANIMATION_DURATION = 0.2F;
+    public float DEFAULT_ANIMATION_DURATION = 0.12F;
     private int animationCount = 0;
     private Color defaultForeground = Color.WHITE;
     private final int gridWidth, gridHeight, cellWidth, cellHeight;
     private String[][] contents;
     private int[][] colors;
     private final TextCellFactory textFactory;
+    private LinkedHashSet<AnimatedEntity> animatedEntities;
 
     /**
      * Creates a bare-bones panel with all default values for text rendering.
@@ -92,6 +91,7 @@ public class SquidPanel extends Group {
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;
         setSize(w, h);
+        animatedEntities = new LinkedHashSet<AnimatedEntity>();
     }
 
     /**
@@ -325,7 +325,6 @@ public class SquidPanel extends Group {
 
     @Override
     public void draw (Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
         Color tmp = new Color();
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
@@ -333,10 +332,33 @@ public class SquidPanel extends Group {
                 textFactory.draw(batch, contents[x][y], tmp, x * cellWidth, (gridHeight - y) * cellHeight);
             }
         }
+        for(AnimatedEntity ae : animatedEntities)
+        {
+            ae.actor.act(Gdx.graphics.getDeltaTime());
+        }
+    }
+    public void drawActor(Batch batch, float parentAlpha, AnimatedEntity ae)
+    {
+            ae.actor.draw(batch, parentAlpha);
     }
 
     public void setDefaultForeground(Color defaultForeground) {
         this.defaultForeground = defaultForeground;
+    }
+
+    public AnimatedEntity animateActor(int x, int y, char c, Color color)
+    {
+        Actor a = textFactory.makeActor("" + c, color);
+        a.setName("" + c);
+        a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y);
+        animatedEntities.add(ae);
+        return ae;
+    }
+    public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette)
+    {
+        return animateActor(x, y, c, palette.get(index));
     }
 
     public Actor cellToActor(int x, int y)
@@ -344,51 +366,105 @@ public class SquidPanel extends Group {
         if(contents[x][y] == null || contents[x][y] == "")
             return null;
 
-        Actor a = textFactory.makeActor(contents[x][y], new Color(colors[x][y]), x, y);
+        Actor a = textFactory.makeActor(contents[x][y], new Color(colors[x][y]));
         a.setName(contents[x][y]);
-        super.addActor(a);
+        a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y);
+        animatedEntities.add(ae);
+
         contents[x][y] = "";
         return a;
     }
-    public void recallActor(Actor a)
+
+    /*
+    public void startAnimation(Actor a, int oldX, int oldY)
     {
-        int ax = Math.round(a.getX(Align.bottomRight) / cellWidth),
-             ay = Math.round(a.getY(Align.bottomRight) / cellHeight);
-        if(ax >= 0 && ax < gridWidth && ay > 0 && ay < gridHeight)
+        Point tmp = new Point(oldX, oldY);
+
+        tmp.x = Math.round(a.getX() / cellWidth);
+        tmp.y = gridHeight - Math.round(a.getY() / cellHeight) - 1;
+        if(tmp.x >= 0 && tmp.x < gridWidth && tmp.y > 0 && tmp.y < gridHeight)
         {
-            contents[ax][ay] = a.getName();
-            colors[ax][ay] = Color.rgba8888(a.getColor());
         }
-        a.clear();
-        super.removeActor(a);
+    }
+    */
+    public void recallActor()
+    {
+        animationCount--;
+    }
+    public void recallActor(AnimatedEntity ae)
+    {
+        ae.gridX = Math.round(ae.actor.getX() / cellWidth);
+        ae.gridY = gridHeight - Math.round(ae.actor.getY() / cellHeight) - 1;
+        ae.animating = false;
         animationCount--;
     }
 
     /**
      * Start a bumping animation in the given direction that will last duration seconds.
+     * @param ae an AnimatedEntity returned by animateActor()
+     * @param direction
+     * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.2f
+     */
+    public void bump(final AnimatedEntity ae, Direction direction, float duration)
+    {
+        final Actor a = ae.actor;
+        final int x = ae.gridX * cellWidth, y = (gridHeight - ae.gridY - 1) * cellHeight - 1;
+        if(a == null || ae.animating) return;
+        animationCount++;
+        ae.animating = true;
+        a.addAction(Actions.sequence(
+                Actions.moveToAligned(x + direction.deltaX / 3F, y + direction.deltaY / 3F,
+                        Align.center, duration * 0.35F),
+                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        recallActor(ae);
+                    }
+                }))));
+
+    }
+    /**
+     * Start a bumping animation in the given direction that will last duration seconds.
      * @param x
      * @param y
      * @param direction
-     * @param duration
+     * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.2f
      */
     public void bump(int x, int y, Direction direction, float duration)
     {
         final Actor a = cellToActor(x, y);
         if(a == null) return;
         animationCount++;
-        Actions.addAction(Actions.sequence(
-                        Actions.moveToAligned(x + direction.deltaX / 3F, y + direction.deltaY / 3F,
-                                Align.center, duration * 0.35F),
-                        Actions.moveToAligned(x, y, Align.center, duration * 0.65F),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                recallActor(a);
-                            }
-                        })),
-                a);
+        x *= cellWidth;
+        y = (gridHeight - y - 1);
+        y *= cellHeight;
+        y -= 1;
+        a.addAction(Actions.sequence(
+                Actions.moveToAligned(x + direction.deltaX / 3F, y + direction.deltaY / 3F,
+                        Align.center, duration * 0.35F),
+                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        recallActor();
+                    }
+                }))));
+
     }
 
+    /**
+     * Starts a bumping animation in the direction provided.
+     *
+     * @param x
+     * @param y
+     * @param direction
+     */
+    public void bump(int x, int y, Direction direction) {
+        bump(x, y, direction, DEFAULT_ANIMATION_DURATION);
+    }
     /**
      * Starts a bumping animation in the direction provided.
      *
@@ -397,6 +473,30 @@ public class SquidPanel extends Group {
      */
     public void bump(Point location, Direction direction) {
         bump(location.x, location.y, direction, DEFAULT_ANIMATION_DURATION);
+    }
+    /**
+     * Start a movement animation for the object at the grid location x, y and moves it to newX, newY over a number of
+     * seconds given by duration (often 0.2f or somewhere around there).
+     * @param ae an AnimatedEntity returned by animateActor()
+     * @param newX
+     * @param newY
+     * @param duration
+     */
+    public void slide(final AnimatedEntity ae, int newX, int newY, float duration)
+    {
+        final Actor a = ae.actor;
+        final int nextX = newX * cellWidth, nextY = (gridHeight - newY - 1) * cellHeight - 1;
+        if(a == null || ae.animating) return;
+        animationCount++;
+        ae.animating = true;
+        a.addAction(Actions.sequence(
+                Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        recallActor(ae);
+                    }
+                }))));
     }
 
     /**
@@ -411,17 +511,21 @@ public class SquidPanel extends Group {
     public void slide(int x, int y, int newX, int newY, float duration)
     {
         final Actor a = cellToActor(x, y);
+        final int nextX = newX, nextY = newY;
         if(a == null) return;
         animationCount++;
-        Actions.addAction(Actions.sequence(
-                        Actions.moveToAligned(newX, newY, Align.center, duration),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                recallActor(a);
-                            }
-                        })),
-                a);
+        newX *= cellWidth;
+        newY = (gridHeight - newY - 1);
+        newY *= cellHeight;
+        newY -= 1;
+        a.addAction(Actions.sequence(
+                Actions.moveToAligned(newX, newY, Align.bottomLeft, duration),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        recallActor();
+                    }
+                }))));
     }
     /**
      * Starts a movement animation for the object at the given grid location at the default speed.
@@ -459,50 +563,74 @@ public class SquidPanel extends Group {
     /**
      * Starts an wiggling animation for the object at the given location for the given duration in seconds.
      *
+     * @param ae an AnimatedEntity returned by animateActor()
+     * @param duration
+     */
+    public void wiggle(final AnimatedEntity ae, float duration) {
+
+        final Actor a = ae.actor;
+        final int x = ae.gridX * cellWidth, y = (gridHeight - ae.gridY - 1) * cellHeight - 1;
+        if(a == null || ae.animating)
+            return;
+        ae.animating = true;
+        animationCount++;
+        a.addAction(Actions.sequence(
+                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.2F),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        recallActor(ae);
+                    }
+                }))));
+    }
+    /**
+     * Starts an wiggling animation for the object at the given location for the given duration in seconds.
+     *
      * @param x
      * @param y
      * @param duration
      */
     public void wiggle(int x, int y, float duration) {
         final Actor a = cellToActor(x, y);
+        final int nextX = x, nextY = y;
         if(a == null) return;
         animationCount++;
-        Actions.addAction(Actions.sequence(
-                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                Align.center, duration * 0.1F),
-                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                Align.center, duration * 0.1F),
-                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                Align.center, duration * 0.1F),
-                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                Align.center, duration * 0.1F),
-                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                Align.center, duration * 0.1F),
-                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                Align.center, duration * 0.1F),
-                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                Align.center, duration * 0.1F),
-                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                Align.center, duration * 0.1F),
-                        Actions.moveToAligned(x + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                y + DefaultResources.guiRandom.nextFloat() - 0.5F,
-                                Align.center, duration * 0.1F),
-                        Actions.moveToAligned(x, y, Align.center, duration * 0.1F),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                recallActor(a);
-                            }
-                        })),
-                a);
+        x *= cellWidth;
+        y = (gridHeight - y - 1);
+        y *= cellHeight;
+        y -= 1;
+        a.addAction(Actions.sequence(
+                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.2F),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        recallActor();
+                    }
+                }))));
     }
 
     /**
@@ -514,4 +642,7 @@ public class SquidPanel extends Group {
         return animationCount != 0;
     }
 
+    public LinkedHashSet<AnimatedEntity> getAnimatedEntities() {
+        return animatedEntities;
+    }
 }

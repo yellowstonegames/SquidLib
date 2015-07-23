@@ -137,7 +137,7 @@
               <shadedClassifierName>demo</shadedClassifierName>
               <transformers>
                 <transformer>
-                  <mainClass>squidpony.examples.EverythingDemo</mainClass>
+                  <mainClass>squidpony.EverythingDemo</mainClass>
                 </transformer>
               </transformers>
             </configuration>
