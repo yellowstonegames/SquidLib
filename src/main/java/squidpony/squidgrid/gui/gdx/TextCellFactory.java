@@ -17,10 +17,9 @@ import java.awt.Color;
 /**
  * Class for creating text blocks.
  *
- * This class defaults to using the JVM's default Serif font at size 12, no
+ * This class defaults to using one of the bundled sans fonts at size 12 px height, no
  * padding, and antialias on. If more vertical padding is needed, it is
- * recommended to try adding it mostly to the top. Often a padding of 1 on top
- * can give a good appearance.
+ * recommended to try adding it mostly to the top. Antialias can't be turned off, so
  *
  * After all settings are set, one of the initialization methods must be called
  * before the factory can be used.
@@ -483,7 +482,7 @@ public class TextCellFactory {
         }
     }
 
-    public Actor makeActor(String s, com.badlogic.gdx.graphics.Color color, float x, float y) {
+    public Actor makeActor(String s, com.badlogic.gdx.graphics.Color color) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -491,18 +490,18 @@ public class TextCellFactory {
             Image im = new Image(block);
             im.setColor(color);
             im.setSize(width, height);
-            im.setPosition(x + width * 0.5f, y - height * 0.5f, Align.center);
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             Image im = new Image(block);
             im.setColor(color);
             im.setSize(width * s.length(), height);
-            im.setPosition(x + width * 0.5f, y - height * 0.5f, Align.center);
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
             Label lb = new Label(s, new Label.LabelStyle(bmpFont, null));
             lb.setColor(color);
-            lb.setPosition(x + width * 0.5f, y - height * 0.5f, Align.center);
+            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
         }
     }
