@@ -1,8 +1,10 @@
 package squidpony.squidai;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.SortedMap;
 
 /**
  * Area of Effect interface meant to be implemented by various specific burst, line, flowing, and user-made AOE types.
@@ -30,6 +32,28 @@ public interface AOE {
      * @return true if there could be at least one target within the AOE, false otherwise. Very approximate.
      */
     boolean mayContainTarget(Set<Point> targets);
+
+    /**
+     * Returns an ArrayList of ArrayList of Point, with the first ArrayList containing the best locations to attempt in
+     * an AI calculation, and the total length of the outer ArrayList being equal to the length of the targets arg + 1
+     * (it is extremely likely that most of the earlier ArrayLists will be empty, though they will not be null). The
+     * second argument may be null or empty (then this will ignore it), but if it has Point elements, then any locations
+     * this tests that are very likely to include one of the requiredExclusions will not be added at all.
+     *
+     * With complex maps and varied arrangements of obstacles and desirable targets, calculating the best points to
+     * evaluate for AI can be computationally difficult. This method provides a way to calculate an approximation of
+     * the best Points to pass to shift(Point) before calling findArea(). For "blackened thrash industrial death metal"
+     * levels of brutality for the AI, only the earliest non-empty ArrayLists this returns need be used, but for more
+     * reasonable AI levels, you can intentionally skip the best options or a portion of them. Beast-like creatures
+     * that do not need clever AI should probably not use this method at all and instead use shift(Point) with the
+     * location of some enemy (probably the closest) as its argument.
+     * @param targets a Set of Points that are desirable targets to include in this AOE
+     * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE
+     * @return an ArrayList of non-null ArrayLists of Points with an outer collection length equal to the size of
+     * targets + 1, earlier inner ArrayLists include better Point locations to shift() to.
+     */
+    ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions);
+
     /**
      * This must be called before findArea() can be called, and takes a char[][] with '#' for walls, '.' for floors.
      * It must be bounded with walls, which DungeonGenerator does automatically.
