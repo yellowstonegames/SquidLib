@@ -187,4 +187,35 @@ public enum Radius {
 
         return new Point3D(x, y, z);
     }
+    public double volume2D(double radiusLength)
+    {
+        switch (this) {
+            case SQUARE:
+            case CUBE:
+                return (radiusLength * 2 + 1) * (radiusLength * 2 + 1);
+            case DIAMOND:
+            case OCTAHEDRON:
+                return radiusLength * (radiusLength + 1) * 2 + 1;
+            default:
+                return Math.PI * radiusLength * radiusLength + 1;
+        }
+    }
+    public double volume3D(double radiusLength)
+    {
+        switch (this) {
+            case SQUARE:
+            case CUBE:
+                return (radiusLength * 2 + 1) * (radiusLength * 2 + 1) * (radiusLength * 2 + 1);
+            case DIAMOND:
+            case OCTAHEDRON:
+                double total = radiusLength * (radiusLength + 1) * 2 + 1;
+                for(double i = radiusLength - 1; i >= 0; i--)
+                {
+                    total += (i * (i + 1) * 2 + 1) * 2;
+                }
+                return total;
+            default:
+                return Math.PI * radiusLength * radiusLength * radiusLength * 4.0 / 3.0 + 1;
+        }
+    }
 }
