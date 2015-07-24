@@ -189,12 +189,21 @@ public class LineAOE implements AOE {
         }
         return false;
     }
+    private boolean mayContainTarget(Set<Point> targets, int altX, int altY) {
+        for (Point p : targets)
+        {
+            if(rt.radius(start.x, start.y, p.x, p.y) + rt.radius(altX, altY, p.x, p.y) -
+                    rt.radius(start.x, start.y, altX, altY) <= 3.0 + radius)
+                return true;
+        }
+        return false;
+    }
 
 
     @Override
     public ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
         int totalTargets = targets.size() + 1;
-        int volume = (int)(rt.radius(2, 2, map.length, map[0].length) * radius * 2.1);
+        int volume = (int)(rt.radius(1, 1, map.length - 2, map[0].length - 2) * radius * 2.1);
         ArrayList<ArrayList<Point>> locs = new ArrayList<ArrayList<Point>>(totalTargets);
         if(totalTargets == 1)
             return locs;
@@ -204,25 +213,18 @@ public class LineAOE implements AOE {
             locs.add(new ArrayList<Point>(volume));
         }
         int ctr = 0;
-        if(radius < 1)
-        {
-            locs.get(totalTargets - 2).addAll(targets);
-            return locs;
-        }
 
         boolean[][] tested = new boolean[map.length][map[0].length];
         for (int x = 1; x < map.length - 1; x += radius) {
-            BY_POINT:
             for (int y = 1; y < map[x].length - 1; y += radius) {
-                for(Point ex : requiredExclusions)
-                {
-                    if(rt.radius(x, y, ex.x, ex.y) <= radius)
-                        continue BY_POINT;
-                }
+
+                if(mayContainTarget(requiredExclusions, x, y))
+                    continue;
                 ctr = 0;
                 for(Point tgt : targets)
                 {
-                    if(rt.radius(x, y, tgt.x, tgt.y) <= radius)
+                    if(rt.radius(start.x, start.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
+                        rt.radius(start.x, start.y, end.x, end.y) <= 3.0 + radius)
                         ctr++;
                 }
                 if(ctr > 0)
@@ -237,23 +239,20 @@ public class LineAOE implements AOE {
                 for (int i = 0; i < numPoints; i++) {
                     it = locs.get(t).get(i);
                     for (int x = Math.max(1, it.x - radius / 2); x < it.x + (radius + 1) / 2 && x < map.length - 1; x++) {
-                        BY_POINT:
                         for (int y = Math.max(1, it.y - radius / 2); y <= it.y + (radius - 1) / 2 && y < map[0].length - 1; y++)
                         {
                             if(tested[x][y])
                                 continue;
                             tested[x][y] = true;
 
-                            for(Point ex : requiredExclusions)
-                            {
-                                if(rt.radius(x, y, ex.x, ex.y) <= radius)
-                                    continue BY_POINT;
-                            }
+                            if(mayContainTarget(requiredExclusions, x, y))
+                                continue;
 
                             ctr = 0;
                             for(Point tgt : targets)
                             {
-                                if(rt.radius(x, y, tgt.x, tgt.y) <= radius)
+                                if(rt.radius(start.x, start.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
+                                        rt.radius(start.x, start.y, end.x, end.y) <= 3.0 + radius)
                                     ctr++;
                             }
                             if(ctr > 0)
