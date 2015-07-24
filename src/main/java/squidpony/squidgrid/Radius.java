@@ -1,6 +1,9 @@
 package squidpony.squidgrid;
 
 import java.awt.Point;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import squidpony.squidmath.Point3D;
 import squidpony.squidmath.RNG;
 
@@ -57,7 +60,7 @@ public enum Radius {
     SPHERE;
 
     private static RNG rng = null;//lazy instantiation
-
+    private static final double PI2 = Math.PI * 2;
     public double radius(int startx, int starty, int startz, int endx, int endy, int endz) {
         return radius((double) startx, (double) starty, (double) startz, (double) endx, (double) endy, (double) endz);
     }
@@ -151,7 +154,7 @@ public enum Radius {
             case CIRCLE:
             case SPHERE:
                 double radius = distance * Math.sqrt(rng.between(0.0, 1.0));
-                double theta = rng.between(0, 2 * Math.PI);
+                double theta = rng.between(0, PI2);
                 x = (int) (Math.cos(theta) * radius);
                 y = (int) (Math.sin(theta) * radius);
         }
@@ -217,5 +220,102 @@ public enum Radius {
             default:
                 return Math.PI * radiusLength * radiusLength * radiusLength * 4.0 / 3.0 + 1;
         }
+    }
+
+
+    private int clamp(int n, int min, int max)
+    {
+        return Math.min(Math.max(min, n), max);
+    }
+
+    public Set<Point> perimeter(Point center, int radiusLength, boolean surpassEdges, int width, int height)
+    {
+        LinkedHashSet<Point> rim = new LinkedHashSet<Point>(4 * radiusLength);
+        if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height))
+            return rim;
+        if(radiusLength < 1) {
+            rim.add(center);
+            return rim;
+        }
+        switch (this) {
+            case SQUARE:
+            case CUBE:
+            {
+                for (int i = center.x - radiusLength; i <= center.x + radiusLength; i++) {
+                    int x = i;
+                    if(!surpassEdges) x = clamp(i, 0, width);
+                    rim.add(new Point(x, clamp(center.y - radiusLength, 0, height)));
+                    rim.add(new Point(x, clamp(center.y + radiusLength, 0, height)));
+                }
+                for (int j = center.y - radiusLength; j <= center.y + radiusLength; j++) {
+                    int y = j;
+                    if(!surpassEdges) y = clamp(j, 0, height);
+                    rim.add(new Point(clamp(center.x - radiusLength, 0, height), y));
+                    rim.add(new Point(clamp(center.x + radiusLength, 0, height), y));
+                }
+            }
+            break;
+            case DIAMOND:
+            case OCTAHEDRON: {
+                {
+                    int xUp = center.x + radiusLength, xDown = center.x - radiusLength,
+                            yUp = center.y + radiusLength, yDown = center.y - radiusLength;
+                    if(!surpassEdges) {
+                        xDown = clamp(xDown, 0, width);
+                        xUp = clamp(xUp, 0, width);
+                        yDown = clamp(yDown, 0, height);
+                        yUp = clamp(yUp, 0, height);
+                    }
+
+                    rim.add(new Point(xDown, center.y));
+                    rim.add(new Point(xUp, center.y));
+                    rim.add(new Point(center.x, yDown));
+                    rim.add(new Point(center.x, yUp));
+
+                    for (int i = xDown + 1, c = 1; i < center.x; i++, c++) {
+                        int x = i;
+                        if(!surpassEdges) x = clamp(i, 0, width);
+                        rim.add(new Point(x, clamp(center.y - c, 0, height)));
+                        rim.add(new Point(x, clamp(center.y + c, 0, height)));
+                    }
+                    for (int i = center.x + 1, c = 1; i < center.x + radiusLength; i++, c++) {
+                        int x = i;
+                        if(!surpassEdges) x = clamp(i, 0, width);
+                        rim.add(new Point(x, clamp(center.y + radiusLength - c, 0, height)));
+                        rim.add(new Point(x, clamp(center.y - radiusLength + c, 0, height)));
+                    }
+                }
+            }
+            break;
+            default:
+            {
+                double theta = PI2;
+                int x, y, denom = 1;
+                boolean anySuccesses = false;
+                while(denom <= 256) {
+                    anySuccesses = false;
+                    for (int i = 1; i <= denom; i+=2)
+                    {
+                        theta = i * (PI2 / denom);
+                        x = (int) (Math.cos(theta) * radiusLength);
+                        y = (int) (Math.sin(theta) * radiusLength);
+                        if (!surpassEdges) {
+                            x = clamp(x, 0, width);
+                            y = clamp(y, 0, height);
+                        }
+                        Point p = new Point(x, y);
+                        boolean test = rim.contains(p);
+
+                        rim.add(p);
+                        anySuccesses = test || anySuccesses;
+                    }
+                    if(!anySuccesses)
+                        break;
+                    denom *= 2;
+                }
+
+            }
+        }
+        return rim;
     }
 }
