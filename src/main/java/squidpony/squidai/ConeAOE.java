@@ -28,6 +28,7 @@ public class ConeAOE implements AOE {
     private double[][] map;
     private char[][] dungeon;
     private Radius radiusType;
+    private final static double PI2 = Math.PI * 2;
     public ConeAOE(Point origin, Point endCenter, double span, Radius radiusType)
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
@@ -138,6 +139,7 @@ public class ConeAOE implements AOE {
     public ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
         int totalTargets = targets.size() + 1;
         int maxEffect = (int)(radiusType.volume2D(radius) * Math.max(5, span) / 360.0);
+        double allowed = Math.toRadians(span / 2.0);
         ArrayList<ArrayList<Point>> locs = new ArrayList<ArrayList<Point>>(totalTargets);
         if(totalTargets == 1)
             return locs;
@@ -153,20 +155,29 @@ public class ConeAOE implements AOE {
             return locs;
         }
 
+        double tmpAngle, ang;
         boolean[][] tested = new boolean[dungeon.length][dungeon[0].length];
         for (int x = 1; x < dungeon.length - 1; x += radius) {
             BY_POINT:
             for (int y = 1; y < dungeon[x].length - 1; y += radius) {
-                for(Point ex : requiredExclusions)
-                {
-                    if(radiusType.radius(x, y, ex.x, ex.y) <= radius)
-                        continue BY_POINT;
+                ang = Math.atan2(y - origin.y, x - origin.x); // between -pi and pi
+
+                for(Point ex : requiredExclusions) {
+                    if (radiusType.radius(x, y, ex.x, ex.y) <= radius) {
+                        tmpAngle = Math.abs(ang - Math.atan2(ex.y - origin.y, ex.x - origin.x));
+                        if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
+                        if(tmpAngle < allowed)
+                            continue BY_POINT;
+                    }
                 }
                 ctr = 0;
-                for(Point tgt : targets)
-                {
-                    if(radiusType.radius(x, y, tgt.x, tgt.y) <= radius)
-                        ctr++;
+                for(Point tgt : targets) {
+                    if (radiusType.radius(x, y, tgt.x, tgt.y) <= radius) {
+                        tmpAngle = Math.abs(ang - Math.atan2(tgt.y - origin.y, tgt.x - origin.x));
+                        if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
+                        if(tmpAngle < allowed)
+                            ctr++;
+                    }
                 }
                 if(ctr > 0)
                     locs.get(totalTargets - ctr).add(new Point(x, y));
@@ -186,18 +197,24 @@ public class ConeAOE implements AOE {
                             if(tested[x][y])
                                 continue;
                             tested[x][y] = true;
-
-                            for(Point ex : requiredExclusions)
-                            {
-                                if(radiusType.radius(x, y, ex.x, ex.y) <= radius)
-                                    continue BY_POINT;
+                            ang = Math.atan2(y - origin.y, x - origin.x); // between -pi and pi
+                            for(Point ex : requiredExclusions) {
+                                if (radiusType.radius(x, y, ex.x, ex.y) <= radius) {
+                                    tmpAngle = Math.abs(ang - Math.atan2(ex.y - origin.y, ex.x - origin.x));
+                                    if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
+                                    if(tmpAngle < allowed)
+                                        continue BY_POINT;
+                                }
                             }
 
                             ctr = 0;
-                            for(Point tgt : targets)
-                            {
-                                if(radiusType.radius(x, y, tgt.x, tgt.y) <= radius)
-                                    ctr++;
+                            for(Point tgt : targets) {
+                                if (radiusType.radius(x, y, tgt.x, tgt.y) <= radius) {
+                                    tmpAngle = Math.abs(ang - Math.atan2(tgt.y - origin.y, tgt.x - origin.x));
+                                    if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
+                                    if(tmpAngle < allowed)
+                                        ctr++;
+                                }
                             }
                             if(ctr > 0)
                                 locs.get(totalTargets - ctr).add(new Point(x, y));
