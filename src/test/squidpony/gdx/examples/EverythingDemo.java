@@ -214,6 +214,13 @@ public class EverythingDemo extends ApplicationAdapter {
             } else {
 //                display.put(player.x, player.y, Character.forDigit(health, 10), 30);
                 display.slide(player, newX, newY);
+
+                for(AnimatedEntity ae : monsters.keySet()) {
+                    if (newX == ae.gridX && newY == ae.gridY) {
+                        monsters.remove(ae);
+                        break;
+                    }
+                }
             }
 
             phase = Phase.PLAYER_ANIM;
@@ -238,12 +245,6 @@ public class EverythingDemo extends ApplicationAdapter {
     private void postMove()
     {
 
-        for(AnimatedEntity ae : monsters.keySet()) {
-            if (player.gridX == ae.gridX && player.gridY == ae.gridY) {
-                monsters.remove(ae);
-                break;
-            }
-        }
         phase = Phase.MONSTER_ANIM;
         // The next two lines are important to avoid monsters treating cells the player WAS in as goals.
         getToPlayer.clearGoals();

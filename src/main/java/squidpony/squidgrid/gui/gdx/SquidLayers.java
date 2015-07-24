@@ -94,9 +94,9 @@ public class SquidLayers extends Group {
 
     /**
      * Gets the current palette used when no other is specified.
-     * <p/>
+     *
      * The palette can be customized with SquidLayers.alterPalette() and SquidLayers.extendPalette() .
-     * <p/>
+     * 
      * The default palette has colors at these elements:
      * <ul>
      * <li>0: Black, also used for backgrounds if not specified</li>
@@ -418,7 +418,7 @@ public class SquidLayers extends Group {
 
     /**
      * Adds a color to the end of the default palette, then returns that palette.
-     * <p/>
+     * 
      * The default palette's entries can be seen in the documentation for SquidLayers.getPalette() .
      *
      * @param color
@@ -431,9 +431,9 @@ public class SquidLayers extends Group {
 
     /**
      * Changes a color at the specified index in the default palette, then returns that palette.
-     * <p/>
+     * 
      * If the index is greater than or equal to the number of colors in the palette, does nothing.
-     * <p/>
+     * 
      * The default palette's entries can be seen in the documentation for SquidLayers.getPalette() .
      *
      * @param index must be at least 0 and less than the length of palette (starts at length 40).
@@ -967,7 +967,7 @@ public class SquidLayers extends Group {
 
     /**
      * Clear one cell at position x, y of  its foreground contents.
-     * <p/>
+     * 
      * You may be looking for the erase() method, which erases all panels and all cells.
      *
      * @param x in grid cells
