@@ -5,10 +5,7 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An AOE type that has an origin, a radius, an angle, and a span; it will blast from the origin to a length equal to
@@ -92,7 +89,7 @@ public class ConeAOE implements AOE {
     }
 
     public void setEndCenter(Point endCenter) {
-        radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
+//        radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
         angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
         startAngle = Math.abs((angle - span / 2.0) % 360.0);
         endAngle = Math.abs((angle + span / 2.0) % 360.0);
@@ -136,28 +133,23 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public ArrayList<Point> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
         if(targets == null)
-            return new ArrayList<Point>();
+            return new LinkedHashMap<Point, ArrayList<Point>>();
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
         int totalTargets = targets.size();
-        ArrayList<Point> bestPoints = new ArrayList<Point>(totalTargets * 8);
+        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
 
-        if(radius == 0)
-        {
-            bestPoints.addAll(targets);
-            return bestPoints;
-        }
         Point[] ts = targets.toArray(new Point[targets.size()]);
         Point[] exs = targets.toArray(new Point[requiredExclusions.size()]);
         Point t = exs[0];
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
-        double tRadius, tAngle, tStartAngle, tEndAngle;
+        double tAngle, tStartAngle, tEndAngle;
 
 
         char[][] dungeonCopy = new char[dungeon.length][dungeon[0].length];
@@ -166,12 +158,11 @@ public class ConeAOE implements AOE {
         }
         double[][] tmpfov;
         for (int i = 0; i < exs.length; ++i, t = exs[i]) {
-
-            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
+//            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
             tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
             tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, tRadius, radiusType, tStartAngle, tEndAngle);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tStartAngle, tEndAngle);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     dungeonCopy[x][y] = (tmpfov[x][y] > 0.0) ? '!' : dungeonCopy[x][y];
@@ -187,12 +178,11 @@ public class ConeAOE implements AOE {
         DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
         for (int i = 0; i < ts.length; ++i, t = ts[i]) {
-
-            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
+//            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
             tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
             tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, tRadius, radiusType, tStartAngle, tEndAngle);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tStartAngle, tEndAngle);
 
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -215,19 +205,36 @@ public class ConeAOE implements AOE {
         for (int x = 0; x < qualityMap.length; x++) {
             for (int y = 0; y < qualityMap[x].length; y++) {
                 qualityMap[x][y] = 0.0;
+                long bits = 0;
                 for (int i = 0; i < ts.length; ++i) {
                     qualityMap[x][y] += compositeMap[i][x][y];
+                    if(compositeMap[i][x][y] < 99999.0 && i < 63)
+                        bits |= 1 << i;
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
                     bestQuality = qualityMap[x][y];
                     bestPoints.clear();
-                    bestPoints.add(new Point(x, y));
+                    ArrayList<Point> ap = new ArrayList<Point>();
+
+                    for (int i = 0; i < ts.length && i < 63; ++i) {
+                        if((bits & (1 << i)) != 0)
+                            ap.add(ts[i]);
+                    }
+                    bestPoints.put(new Point(x, y), ap);
+
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
-                    bestPoints.add(new Point(x, y));
+                    ArrayList<Point> ap = new ArrayList<Point>();
+
+                    for (int i = 0; i < ts.length && i < 63; ++i) {
+                        if((bits & (1 << i)) != 0)
+                            ap.add(ts[i]);
+                    }
+                    bestPoints.put(new Point(x, y), ap);
                 }
+
             }
         }
 
