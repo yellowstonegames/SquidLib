@@ -34,25 +34,23 @@ public interface AOE {
     boolean mayContainTarget(Set<Point> targets);
 
     /**
-     * Returns an ArrayList of ArrayList of Point, with the first ArrayList containing the best locations to attempt in
-     * an AI calculation, and the total length of the outer ArrayList being equal to the length of the targets arg + 1
-     * (it is extremely likely that most of the earlier ArrayLists will be empty, though they will not be null). The
-     * second argument may be null or empty (then this will ignore it), but if it has Point elements, then any locations
-     * this tests that are very likely to include one of the requiredExclusions will not be added at all.
+     * Returns an ArrayList of Point, where each Point is an ideal location to hit as many of the Points in targets as
+     * possible without hitting any Points in requiredExclusions. The second argument may be null or empty, in which
+     * case this will initialize it to an empty Set of Point.
      *
      * With complex maps and varied arrangements of obstacles and desirable targets, calculating the best points to
-     * evaluate for AI can be computationally difficult. This method provides a way to calculate an approximation of
+     * evaluate for AI can be computationally difficult. This method provides a way to calculate with good accuracy
      * the best Points to pass to shift(Point) before calling findArea(). For "blackened thrash industrial death metal"
-     * levels of brutality for the AI, only the earliest non-empty ArrayLists this returns need be used, but for more
-     * reasonable AI levels, you can intentionally skip the best options or a portion of them. Beast-like creatures
-     * that do not need clever AI should probably not use this method at all and instead use shift(Point) with the
-     * location of some enemy (probably the closest) as its argument.
+     * levels of brutality for the AI, the results of this can be used verbatim, but for more reasonable AI levels, you
+     * can intentionally alter the best options to simulate imperfect aim or environmental variance on the AOE.
+     *
+     * Beast-like creatures that do not need clever AI should probably not use this method at all and instead use
+     * shift(Point) with the location of some enemy (probably the closest) as its argument.
      * @param targets a Set of Points that are desirable targets to include in this AOE
      * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE
-     * @return an ArrayList of non-null ArrayLists of Points with an outer collection length equal to the size of
-     * targets + 1, earlier inner ArrayLists include better Point locations to shift() to.
+     * @return an ArrayList of Points that are ideal locations to call shift(Point) with.
      */
-    ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions);
+    ArrayList<Point> idealLocations(Set<Point> targets, Set<Point> requiredExclusions);
 
     /**
      * This must be called before findArea() can be called, and takes a char[][] with '#' for walls, '.' for floors.

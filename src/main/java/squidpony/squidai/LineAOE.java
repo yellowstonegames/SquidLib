@@ -2,14 +2,9 @@ package squidpony.squidai;
 
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Elias;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Line Area of Effect that affects an slightly expanded (Elias) line plus an optional radius of cells around it, while
@@ -27,16 +22,13 @@ import java.util.Set;
 public class LineAOE implements AOE {
     private Point start, end;
     private int radius;
-    private char[][] map;
+    private char[][] dungeon;
     private DijkstraMap dijkstra;
-    private long seed;
     private Radius rt;
 
     public LineAOE(Point start, Point end)
     {
-        LightRNG l = new LightRNG();
-        this.seed = l.getState();
-        this.dijkstra = new DijkstraMap(new RNG(l));
+        this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
         this.start = start;
@@ -45,51 +37,16 @@ public class LineAOE implements AOE {
     }
     public LineAOE(Point start, Point end, int radius)
     {
-        LightRNG l = new LightRNG();
-        this.seed = l.getState();
-        this.dijkstra = new DijkstraMap(new RNG(l));
+        this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
         this.start = start;
         this.end = end;
         this.radius = radius;
     }
-    public LineAOE(Point start, Point end, int radius, long seed)
-    {
-        this.seed = seed;
-        LightRNG l = new LightRNG(seed);
-        this.dijkstra = new DijkstraMap(new RNG(l));
-        this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
-        this.start = start;
-        this.end = end;
-        this.radius = radius;
-    }
     public LineAOE(Point start, Point end, int radius, Radius radiusType)
     {
-        LightRNG l = new LightRNG();
-        this.seed = l.getState();
-        this.dijkstra = new DijkstraMap(new RNG(l));
-        this.rt = radiusType;
-        switch (radiusType)
-        {
-            case OCTAHEDRON:
-            case DIAMOND: this.dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
-                break;
-            case CUBE:
-            case SQUARE: this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
-                break;
-            default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
-                break;
-        }
-        this.start = start;
-        this.end = end;
-        this.radius = radius;
-    }
-    public LineAOE(Point start, Point end, int radius, Radius radiusType, long seed)
-    {
-        this.seed = seed;
-        LightRNG l = new LightRNG(seed);
-        this.dijkstra = new DijkstraMap(new RNG(l));
+        this.dijkstra = new DijkstraMap();
         this.rt = radiusType;
         switch (radiusType)
         {
@@ -108,9 +65,9 @@ public class LineAOE implements AOE {
     }
     private double[][] initDijkstra()
     {
-        List<Point> lit = Elias.getLastPath();
+        List<Point> lit = Elias.line(start, end);
 
-        dijkstra.initialize(map);
+        dijkstra.initialize(dungeon);
         for(Point p : lit)
         {
             dijkstra.setGoal(p);
@@ -146,14 +103,6 @@ public class LineAOE implements AOE {
         this.radius = radius;
     }
 
-    public long getSeed() {
-        return seed;
-    }
-
-    public void setSeed(long seed) {
-        this.seed = seed;
-        dijkstra.rng.setRandomness(new LightRNG(seed));
-    }
     public Radius getRadiusType()
     {
         return rt;
@@ -199,24 +148,121 @@ public class LineAOE implements AOE {
         return false;
     }
 
+    @Override
+    public ArrayList<Point> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+        if(targets == null)
+            return new ArrayList<Point>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
+        int totalTargets = targets.size();
+        ArrayList<Point> bestPoints = new ArrayList<Point>(totalTargets * 8);
+
+        if(totalTargets == 0)
+            return bestPoints;
+
+        Point[] ts = targets.toArray(new Point[targets.size()]);
+        Point[] exs = targets.toArray(new Point[requiredExclusions.size()]);
+        Point t = exs[0];
+
+        double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
+
+        char[][] dungeonCopy = new char[dungeon.length][dungeon[0].length];
+        for (int i = 0; i < dungeon.length; i++) {
+            System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
+        }
+        DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
+        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+            dt.resetMap();
+            dt.clearGoals();
+            List<Point> lit = Elias.line(start, t);
+
+            for(Point p : lit)
+            {
+                dt.setGoal(p);
+            }
+            if(radius > 0)
+                dt.partialScan(radius, null);
+
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR) ? '!' : dungeonCopy[x][y];
+                }
+            }
+        }
+
+        t = ts[0];
+        DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
+
+        for (int i = 0; i < ts.length; ++i, t = ts[i]) {
+            dt.resetMap();
+            dt.clearGoals();
+            List<Point> lit = Elias.line(start, t);
+
+            for(Point p : lit)
+            {
+                dt.setGoal(p);
+            }
+            if(radius > 0)
+                dt.partialScan(radius, null);
+
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                }
+            }
+            dm.initialize(compositeMap[i]);
+            dm.setGoal(t);
+            dm.scan(null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 99999.0;
+                }
+            }
+            dm.resetMap();
+            dm.clearGoals();
+        }
+        double bestQuality = 99999 * ts.length;
+        double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
+        for (int x = 0; x < qualityMap.length; x++) {
+            for (int y = 0; y < qualityMap[x].length; y++) {
+                qualityMap[x][y] = 0.0;
+                for (int i = 0; i < ts.length; ++i) {
+                    qualityMap[x][y] += compositeMap[i][x][y];
+                }
+                if(qualityMap[x][y] < bestQuality)
+                {
+                    bestQuality = qualityMap[x][y];
+                    bestPoints.clear();
+                    bestPoints.add(new Point(x, y));
+                }
+                else if(qualityMap[x][y] == bestQuality)
+                {
+                    bestPoints.add(new Point(x, y));
+                }
+            }
+        }
+
+        return bestPoints;
+    }
+
+/*
     @Override
     public ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
         int totalTargets = targets.size() + 1;
-        int volume = (int)(rt.radius(1, 1, map.length - 2, map[0].length - 2) * radius * 2.1);
+        int volume = (int)(rt.radius(1, 1, dungeon.length - 2, dungeon[0].length - 2) * radius * 2.1);
         ArrayList<ArrayList<Point>> locs = new ArrayList<ArrayList<Point>>(totalTargets);
-        if(totalTargets == 1)
-            return locs;
-
         for(int i = 0; i < totalTargets; i++)
         {
             locs.add(new ArrayList<Point>(volume));
         }
+        if(totalTargets == 1)
+            return locs;
+
         int ctr = 0;
 
-        boolean[][] tested = new boolean[map.length][map[0].length];
-        for (int x = 1; x < map.length - 1; x += radius) {
-            for (int y = 1; y < map[x].length - 1; y += radius) {
+        boolean[][] tested = new boolean[dungeon.length][dungeon[0].length];
+        for (int x = 1; x < dungeon.length - 1; x += radius) {
+            for (int y = 1; y < dungeon[x].length - 1; y += radius) {
 
                 if(mayContainTarget(requiredExclusions, x, y))
                     continue;
@@ -238,8 +284,8 @@ public class LineAOE implements AOE {
                 int numPoints = locs.get(t).size();
                 for (int i = 0; i < numPoints; i++) {
                     it = locs.get(t).get(i);
-                    for (int x = Math.max(1, it.x - radius / 2); x < it.x + (radius + 1) / 2 && x < map.length - 1; x++) {
-                        for (int y = Math.max(1, it.y - radius / 2); y <= it.y + (radius - 1) / 2 && y < map[0].length - 1; y++)
+                    for (int x = Math.max(1, it.x - radius / 2); x < it.x + (radius + 1) / 2 && x < dungeon.length - 1; x++) {
+                        for (int y = Math.max(1, it.y - radius / 2); y <= it.y + (radius - 1) / 2 && y < dungeon[0].length - 1; y++)
                         {
                             if(tested[x][y])
                                 continue;
@@ -264,10 +310,10 @@ public class LineAOE implements AOE {
         }
         return locs;
     }
-
+*/
     @Override
     public void setMap(char[][] map) {
-        this.map = map;
+        this.dungeon = map;
         dijkstra.resetMap();
         dijkstra.clearGoals();
     }
@@ -276,7 +322,8 @@ public class LineAOE implements AOE {
     public HashMap<Point, Double> findArea() {
         double[][] dmap = initDijkstra();
         dmap[start.x][start.y] = DijkstraMap.DARK;
-        dijkstra.rng.setRandomness(new LightRNG(seed));
+        dijkstra.resetMap();
+        dijkstra.clearGoals();
         return AreaUtils.dijkstraToHashMap(dmap);
     }
 }

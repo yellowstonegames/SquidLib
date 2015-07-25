@@ -7,6 +7,7 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -134,20 +135,119 @@ public class ConeAOE implements AOE {
         return false;
     }
 
+    @Override
+    public ArrayList<Point> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+        if(targets == null)
+            return new ArrayList<Point>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
+        int totalTargets = targets.size();
+        ArrayList<Point> bestPoints = new ArrayList<Point>(totalTargets * 8);
+
+        if(totalTargets == 0)
+            return bestPoints;
+
+        if(radius == 0)
+        {
+            bestPoints.addAll(targets);
+            return bestPoints;
+        }
+        Point[] ts = targets.toArray(new Point[targets.size()]);
+        Point[] exs = targets.toArray(new Point[requiredExclusions.size()]);
+        Point t = exs[0];
+
+        double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
+        double tRadius, tAngle, tStartAngle, tEndAngle;
+
+
+        char[][] dungeonCopy = new char[dungeon.length][dungeon[0].length];
+        for (int i = 0; i < dungeon.length; i++) {
+            System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
+        }
+        double[][] tmpfov;
+        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+
+            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
+            tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
+            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, tRadius, radiusType, tStartAngle, tEndAngle);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0) ? '!' : dungeonCopy[x][y];
+                }
+            }
+        }
+
+        t = ts[0];
+
+        DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
+        if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = DijkstraMap.Measurement.CHEBYSHEV;
+        else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
+        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+
+        for (int i = 0; i < ts.length; ++i, t = ts[i]) {
+
+            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
+            tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
+            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, tRadius, radiusType, tStartAngle, tEndAngle);
+
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (tmpfov[x][y] > 0.0) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                }
+            }
+            dm.initialize(compositeMap[i]);
+            dm.setGoal(t);
+            dm.scan(null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 99999.0;
+                }
+            }
+            dm.resetMap();
+            dm.clearGoals();
+        }
+        double bestQuality = 99999 * ts.length;
+        double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
+        for (int x = 0; x < qualityMap.length; x++) {
+            for (int y = 0; y < qualityMap[x].length; y++) {
+                qualityMap[x][y] = 0.0;
+                for (int i = 0; i < ts.length; ++i) {
+                    qualityMap[x][y] += compositeMap[i][x][y];
+                }
+                if(qualityMap[x][y] < bestQuality)
+                {
+                    bestQuality = qualityMap[x][y];
+                    bestPoints.clear();
+                    bestPoints.add(new Point(x, y));
+                }
+                else if(qualityMap[x][y] == bestQuality)
+                {
+                    bestPoints.add(new Point(x, y));
+                }
+            }
+        }
+
+        return bestPoints;
+    }
+/*
     @Override
     public ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
         int totalTargets = targets.size() + 1;
         int maxEffect = (int)(radiusType.volume2D(radius) * Math.max(5, span) / 360.0);
         double allowed = Math.toRadians(span / 2.0);
         ArrayList<ArrayList<Point>> locs = new ArrayList<ArrayList<Point>>(totalTargets);
-        if(totalTargets == 1)
-            return locs;
 
         for(int i = 0; i < totalTargets; i++)
         {
             locs.add(new ArrayList<Point>(maxEffect));
         }
+        if(totalTargets == 1)
+            return locs;
+
         int ctr = 0;
         if(radius < 1)
         {
@@ -225,7 +325,7 @@ public class ConeAOE implements AOE {
         }
         return locs;
     }
-
+*/
     @Override
     public void setMap(char[][] map) {
         this.map = DungeonUtility.generateResistances(map);

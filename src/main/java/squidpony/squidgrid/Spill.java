@@ -79,6 +79,10 @@ public class Spill {
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
     public RNG rng;
+    /**
+     * The LightRNG used as a RandomnessSource for the RNG this object uses. Can have its state read and set.
+     */
+    public LightRNG lrng;
     private static int frustration = 0;
 
     private boolean initialized = false;
@@ -87,16 +91,35 @@ public class Spill {
      * initialize() method before using this class.
      */
     public Spill() {
-        rng = new RNG(new LightRNG());
+        lrng = new LightRNG();
+        rng = new RNG(lrng);
 
         fresh = new LinkedHashSet<>();
     }
     /**
-     * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG before it is
-     * used. If you use this constructor, you must call an  initialize() method before using this class.
+     * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual
+     * RandomnessSource the RNG that this object uses will not be identical to the one passed as random (64 bits will
+     * be requested from the passed RNG, and that will be used to seed this class' RNG).
+     *
+     * If you use this constructor, you must call an  initialize() method before using this class.
      */
     public Spill(RNG random) {
-        rng = random;
+        lrng = new LightRNG(random.nextLong());
+        rng = new RNG(lrng);
+
+        fresh = new LinkedHashSet<>();
+    }
+
+    /**
+     * Construct a Spill without a level to actually scan. This constructor allows you to specify a RandomnessSource
+     * in the form of a LightRNG, which will be referenced in this class (if the state of random changes because this
+     * object needed a random number, the state change will be reflected in the code that passed random to here).
+     *
+     * If you use this constructor, you must call an  initialize() method before using this class.
+     */
+    public Spill(LightRNG random) {
+        lrng = random;
+        rng = new RNG(lrng);
 
         fresh = new LinkedHashSet<>();
     }
@@ -106,7 +129,8 @@ public class Spill {
      * @param level
      */
     public Spill(final boolean[][] level) {
-        rng = new RNG(new LightRNG());
+        lrng = new LightRNG();
+        rng = new RNG(lrng);
 
         initialize(level);
     }
@@ -116,7 +140,9 @@ public class Spill {
      * @param measurement
      */
     public Spill(final boolean[][] level, Measurement measurement) {
-        rng = new RNG(new LightRNG());
+        lrng = new LightRNG();
+        rng = new RNG(lrng);
+
         this.measurement = measurement;
 
         initialize(level);
@@ -131,7 +157,8 @@ public class Spill {
      * @param level
      */
     public Spill(final char[][] level) {
-        rng = new RNG(new LightRNG());
+        lrng = new LightRNG();
+        rng = new RNG(lrng);
 
         initialize(level);
     }
@@ -144,7 +171,8 @@ public class Spill {
      * @param level
      */
     public Spill(final char[][] level, char alternateWall) {
-        rng = new RNG(new LightRNG());
+        lrng = new LightRNG();
+        rng = new RNG(lrng);
 
         initialize(level, alternateWall);
     }
@@ -159,7 +187,8 @@ public class Spill {
      * @param measurement
      */
     public Spill(final char[][] level, Measurement measurement) {
-        rng = new RNG(new LightRNG());
+        lrng = new LightRNG();
+        rng = new RNG(lrng);
         this.measurement = measurement;
 
         initialize(level);
@@ -170,11 +199,35 @@ public class Spill {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
      *
+     * This constructor allows you to specify an RNG, but the actual RandomnessSource the RNG that this object uses
+     * will not be identical to the one passed as random (64 bits will be requested from the passed RNG, and that will
+     * be used to seed this class' RNG).
+     *
      * @param level
      * @param measurement
      */
-    public Spill(final char[][] level, Measurement measurement, RNG rng) {
-        this.rng = rng;
+    public Spill(final char[][] level, Measurement measurement, RNG random) {
+        lrng = new LightRNG(random.nextLong());
+        rng = new RNG(lrng);
+        this.measurement = measurement;
+
+        initialize(level);
+    }
+    /**
+     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
+     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
+     * map that can be used here. This constructor specifies a distance measurement.
+     *
+     * This constructor allows you to specify a RandomnessSource in the form of a LightRNG, which will be referenced in
+     * this class (if the state of random changes because this object needed a random number, the state change will be
+     * reflected in the code that passed random to here).
+     * @param level
+     * @param measurement
+     */
+    public Spill(final char[][] level, Measurement measurement, LightRNG random) {
+        lrng = random;
+        rng = new RNG(lrng);
         this.measurement = measurement;
 
         initialize(level);

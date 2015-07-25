@@ -9,6 +9,7 @@ import squidpony.squidmath.RNG;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -138,19 +139,113 @@ public class CloudAOE implements AOE {
         return false;
     }
 
+    @Override
+    public ArrayList<Point> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+        if(targets == null)
+            return new ArrayList<Point>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
+        int totalTargets = targets.size();
+        ArrayList<Point> bestPoints = new ArrayList<Point>(totalTargets * 8);
+
+        if(totalTargets == 0 || volume <= 0)
+            return bestPoints;
+
+        if(volume == 1)
+        {
+            bestPoints.addAll(targets);
+            return bestPoints;
+        }
+        Point[] ts = targets.toArray(new Point[targets.size()]);
+        Point[] exs = targets.toArray(new Point[requiredExclusions.size()]);
+        Point t = exs[0];
+
+        double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
+
+        Spill sp;
+
+        char[][] dungeonCopy = new char[dungeon.length][dungeon[0].length];
+        for (int i = 0; i < dungeon.length; i++) {
+            System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
+        }
+
+        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+            sp = new Spill(dungeon, spill.measurement);
+            sp.lrng.setState(this.seed);
+
+            sp.start(t, volume, null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    dungeonCopy[x][y] = (sp.spillMap[x][y]) ? '!' : dungeonCopy[x][y];
+                }
+            }
+        }
+
+        t = ts[0];
+
+        DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
+        if(spill.measurement == Spill.Measurement.CHEBYSHEV) dmm = DijkstraMap.Measurement.CHEBYSHEV;
+        else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
+        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+
+        for (int i = 0; i < ts.length; ++i, t = ts[i]) {
+            sp = new Spill(dungeon, spill.measurement);
+            sp.lrng.setState(this.seed);
+
+            sp.start(t, volume, null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (sp.spillMap[x][y]) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                }
+            }
+            dm.initialize(compositeMap[i]);
+            dm.setGoal(t);
+            dm.scan(null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 99999.0;
+                }
+            }
+            dm.resetMap();
+            dm.clearGoals();
+        }
+        double bestQuality = 99999 * ts.length;
+        double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
+        for (int x = 0; x < qualityMap.length; x++) {
+            for (int y = 0; y < qualityMap[x].length; y++) {
+                qualityMap[x][y] = 0.0;
+                for (int i = 0; i < ts.length; ++i) {
+                    qualityMap[x][y] += compositeMap[i][x][y];
+                }
+                if(qualityMap[x][y] < bestQuality)
+                {
+                    bestQuality = qualityMap[x][y];
+                    bestPoints.clear();
+                    bestPoints.add(new Point(x, y));
+                }
+                else if(qualityMap[x][y] == bestQuality)
+                {
+                    bestPoints.add(new Point(x, y));
+                }
+            }
+        }
+
+        return bestPoints;
+    }
+
+/*
     @Override
     public ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
         int totalTargets = targets.size() + 1;
         int radius = Math.max(1, (int) (Math.sqrt(volume) * 1.5));
         ArrayList<ArrayList<Point>> locs = new ArrayList<ArrayList<Point>>(totalTargets);
-        if(totalTargets == 1)
-            return locs;
 
         for(int i = 0; i < totalTargets; i++)
         {
             locs.add(new ArrayList<Point>(volume));
         }
+        if(totalTargets == 1)
+            return locs;
         double ctr = 0;
         if(radius < 1)
         {
@@ -215,7 +310,7 @@ public class CloudAOE implements AOE {
         }
         return locs;
     }
-
+*/
 
     @Override
     public void setMap(char[][] map) {
@@ -228,9 +323,9 @@ public class CloudAOE implements AOE {
         spill.start(center, volume, null);
         HashMap<Point, Double> r = AreaUtils.arrayToHashMap(spill.spillMap);
         if(!expanding)
-         {
+        {
             spill.reset();
-            spill.rng.setRandomness(new LightRNG(this.seed));
+            spill.lrng.setState(this.seed);
         }
         return r;
     }
