@@ -7,10 +7,7 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An AOE type that has a center and a volume, and will randomly expand in all directions until it reaches volume or
@@ -140,20 +137,25 @@ public class CloudAOE implements AOE {
     }
 
     @Override
-    public ArrayList<Point> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
         if(targets == null)
-            return new ArrayList<Point>();
+            return new LinkedHashMap<Point, ArrayList<Point>>();
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
         int totalTargets = targets.size();
-        ArrayList<Point> bestPoints = new ArrayList<Point>(totalTargets * 8);
+        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
 
         if(totalTargets == 0 || volume <= 0)
             return bestPoints;
 
         if(volume == 1)
         {
-            bestPoints.addAll(targets);
+            for(Point p : targets)
+            {
+                ArrayList<Point> ap = new ArrayList<Point>();
+                ap.add(p);
+                bestPoints.put(p, ap);
+            }
             return bestPoints;
         }
         Point[] ts = targets.toArray(new Point[targets.size()]);
@@ -214,18 +216,34 @@ public class CloudAOE implements AOE {
         for (int x = 0; x < qualityMap.length; x++) {
             for (int y = 0; y < qualityMap[x].length; y++) {
                 qualityMap[x][y] = 0.0;
+                long bits = 0;
                 for (int i = 0; i < ts.length; ++i) {
                     qualityMap[x][y] += compositeMap[i][x][y];
+                    if(compositeMap[i][x][y] < 99999.0 && i < 63)
+                        bits |= 1 << i;
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
                     bestQuality = qualityMap[x][y];
                     bestPoints.clear();
-                    bestPoints.add(new Point(x, y));
+                    ArrayList<Point> ap = new ArrayList<Point>();
+
+                    for (int i = 0; i < ts.length && i < 63; ++i) {
+                        if((bits & (1 << i)) != 0)
+                            ap.add(ts[i]);
+                    }
+                    bestPoints.put(new Point(x, y), ap);
+
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
-                    bestPoints.add(new Point(x, y));
+                    ArrayList<Point> ap = new ArrayList<Point>();
+
+                    for (int i = 0; i < ts.length && i < 63; ++i) {
+                        if((bits & (1 << i)) != 0)
+                            ap.add(ts[i]);
+                    }
+                    bestPoints.put(new Point(x, y), ap);
                 }
             }
         }
