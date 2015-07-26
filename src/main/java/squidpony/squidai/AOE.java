@@ -51,6 +51,17 @@ public interface AOE {
     LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions);
 
     /**
+     * A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
+     * priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations
+     * that do not affect a Point in requiredExclusions.
+     * @param priorityTargets A Set of Points that are the most-wanted targets to include in this AOE
+     * @param lesserTargets A Set of Points that are the less-wanted targets to include in this AOE, should not overlap with priorityTargets
+     * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE
+     * @return a LinkedHashMap of Point keys and ArrayList of Point values where keys are ideal locations and values are the target points that will be hit when that key is used.
+     */
+    LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions);
+
+    /**
      * This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.
      * It must be bounded with walls, which DungeonGenerator does automatically.
      * @param map width first, height second, 2D char array.
