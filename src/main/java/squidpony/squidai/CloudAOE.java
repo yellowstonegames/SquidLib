@@ -159,7 +159,7 @@ public class CloudAOE implements AOE {
             return bestPoints;
         }
         Point[] ts = targets.toArray(new Point[targets.size()]);
-        Point[] exs = targets.toArray(new Point[requiredExclusions.size()]);
+        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
         Point t = exs[0];
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
@@ -250,6 +250,162 @@ public class CloudAOE implements AOE {
 
         return bestPoints;
     }
+
+    @Override
+    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions) {
+        if(priorityTargets == null)
+            return idealLocations(lesserTargets, requiredExclusions);
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+
+        int totalTargets = priorityTargets.size() + lesserTargets.size();
+        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+
+        if(totalTargets == 0 || volume <= 0)
+            return bestPoints;
+
+        if(volume == 1)
+        {
+            for(Point p : priorityTargets)
+            {
+                ArrayList<Point> ap = new ArrayList<Point>();
+                ap.add(p);
+                bestPoints.put(p, ap);
+            }
+            return bestPoints;
+        }
+        Point[] pts = priorityTargets.toArray(new Point[priorityTargets.size()]);
+        Point[] lts = lesserTargets.toArray(new Point[lesserTargets.size()]);
+        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
+        Point t = exs[0];
+
+        double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
+        Spill sp;
+
+        char[][] dungeonCopy = new char[dungeon.length][dungeon[0].length],
+                dungeonPriorities = new char[dungeon.length][dungeon[0].length];
+        for (int i = 0; i < dungeon.length; i++) {
+            System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
+            Arrays.fill(dungeonPriorities[i], '#');
+        }
+        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+            sp = new Spill(dungeon, spill.measurement);
+            sp.lrng.setState(this.seed);
+
+            sp.start(t, volume, null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    dungeonCopy[x][y] = (sp.spillMap[x][y]) ? '!' : dungeonCopy[x][y];
+                }
+            }
+        }
+
+        t = pts[0];
+
+        DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
+        if(spill.measurement == Spill.Measurement.CHEBYSHEV) dmm = DijkstraMap.Measurement.CHEBYSHEV;
+        else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
+        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+
+        for (int i = 0; i < pts.length; ++i, t = pts[i]) {
+            sp = new Spill(dungeon, spill.measurement);
+            sp.lrng.setState(this.seed);
+
+            sp.start(t, volume, null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (sp.spillMap[x][y]) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                    if(sp.spillMap[x][y])
+                        dungeonPriorities[x][y] = dungeon[x][y];
+                }
+            }
+            dm.initialize(compositeMap[i]);
+            dm.setGoal(t);
+            dm.scan(null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 399999.0;
+                }
+            }
+            dm.resetMap();
+            dm.clearGoals();
+        }
+
+        t = lts[0];
+
+        for (int i = pts.length; i < totalTargets; ++i, t = lts[i - pts.length]) {
+            sp = new Spill(dungeon, spill.measurement);
+            sp.lrng.setState(this.seed);
+
+            sp.start(t, volume, null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (sp.spillMap[x][y]) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                }
+            }
+            dm.initialize(compositeMap[i]);
+            dm.setGoal(t);
+            dm.scan(null);
+            for (int x = 0; x < dungeon.length; x++) {
+                for (int y = 0; y < dungeon[x].length; y++) {
+                    compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!' && dungeonPriorities[x][y] != '#') ? dm.gradientMap[x][y] : 99999.0;
+                }
+            }
+            dm.resetMap();
+            dm.clearGoals();
+        }
+        double bestQuality = 99999 * lts.length + 399999 * pts.length;
+        double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
+        for (int x = 0; x < qualityMap.length; x++) {
+            for (int y = 0; y < qualityMap[x].length; y++) {
+                qualityMap[x][y] = 0.0;
+                long pbits = 0, lbits = 0;
+                for (int i = 0; i < pts.length; ++i) {
+                    qualityMap[x][y] += compositeMap[i][x][y];
+                    if(compositeMap[i][x][y] < 399999.0 && i < 63)
+                        pbits |= 1 << i;
+                }
+                for (int i = pts.length; i < totalTargets; ++i) {
+                    qualityMap[x][y] += compositeMap[i][x][y];
+                    if(compositeMap[i][x][y] < 99999.0 && i < 63)
+                        lbits |= 1 << i;
+                }
+                if(qualityMap[x][y] < bestQuality)
+                {
+                    bestQuality = qualityMap[x][y];
+                    bestPoints.clear();
+                    ArrayList<Point> ap = new ArrayList<Point>();
+
+                    for (int i = 0; i < pts.length && i < 63; ++i) {
+                        if((pbits & (1 << i)) != 0)
+                            ap.add(pts[i]);
+                    }
+                    for (int i = pts.length; i < totalTargets && i < 63; ++i) {
+                        if((lbits & (1 << i)) != 0)
+                            ap.add(lts[i - pts.length]);
+                    }
+                    bestPoints.put(new Point(x, y), ap);
+
+                }
+                else if(qualityMap[x][y] == bestQuality)
+                {
+                    ArrayList<Point> ap = new ArrayList<Point>();
+
+                    for (int i = 0; i < pts.length && i < 63; ++i) {
+                        if((pbits & (1 << i)) != 0)
+                            ap.add(pts[i]);
+                    }
+                    for (int i = pts.length; i < totalTargets && i < 63; ++i) {
+                        if((lbits & (1 << i)) != 0)
+                            ap.add(lts[i - pts.length]);
+                    }
+                    bestPoints.put(new Point(x, y), ap);
+                }
+            }
+        }
+
+        return bestPoints;
+    }
+
 
 /*
     @Override

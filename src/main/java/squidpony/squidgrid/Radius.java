@@ -155,8 +155,8 @@ public enum Radius {
             case SPHERE:
                 double radius = distance * Math.sqrt(rng.between(0.0, 1.0));
                 double theta = rng.between(0, PI2);
-                x = (int) (Math.cos(theta) * radius);
-                y = (int) (Math.sin(theta) * radius);
+                x = (int) Math.round(Math.cos(theta) * radius);
+                y = (int) Math.round(Math.sin(theta) * radius);
         }
 
         return new Point(x, y);
@@ -225,7 +225,7 @@ public enum Radius {
 
     private int clamp(int n, int min, int max)
     {
-        return Math.min(Math.max(min, n), max);
+        return Math.min(Math.max(min, n), max - 1);
     }
 
     public Set<Point> perimeter(Point center, int radiusLength, boolean surpassEdges, int width, int height)
@@ -297,8 +297,8 @@ public enum Radius {
                     for (int i = 1; i <= denom; i+=2)
                     {
                         theta = i * (PI2 / denom);
-                        x = (int) (Math.cos(theta) * radiusLength);
-                        y = (int) (Math.sin(theta) * radiusLength);
+                        x = (int) Math.round(Math.cos(theta) * radiusLength) + center.x;
+                        y = (int) Math.round(Math.sin(theta) * radiusLength) + center.y;
                         if (!surpassEdges) {
                             x = clamp(x, 0, width);
                             y = clamp(y, 0, height);
@@ -318,4 +318,86 @@ public enum Radius {
         }
         return rim;
     }
+    public Point extend(Point center, Point middle, int radiusLength, boolean surpassEdges, int width, int height)
+    {
+        if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height ||
+                middle.x < 0 || middle.x >= width || middle.y < 0 || middle.y > height))
+            return new Point(0, 0);
+        if(radiusLength < 1) {
+            return center;
+        }
+        double theta = Math.atan2(middle.y - center.y, middle.x - center.x);
+
+        Point end = new Point(middle.x, middle.y);
+        switch (this) {
+            case SQUARE:
+            case CUBE:
+            case DIAMOND:
+            case OCTAHEDRON:
+            {
+                int rad2 = 0;
+                if(surpassEdges)
+                {
+                    while (this.radius(center.x, center.y, end.x, end.y) < radiusLength) {
+                        rad2++;
+                        end.x = (int) Math.round(Math.cos(theta) * rad2) + center.x;
+                        end.y = (int) Math.round(Math.sin(theta) * rad2) + center.y;
+                    }
+                }
+                else {
+                    while (this.radius(center.x, center.y, end.x, end.y) < radiusLength) {
+                        rad2++;
+                        end.x = clamp((int) Math.round(Math.cos(theta) * rad2) + center.x, 0, width);
+                        end.y = clamp((int) Math.round(Math.sin(theta) * rad2) + center.y, 0, height);
+                        if (end.x == 0 || end.x == width - 1 || end.y == 0 || end.y == height - 1)
+                            return end;
+                    }
+                }
+
+                return end;
+            }
+            default:
+            {
+                end.x = (int) Math.round(Math.cos(theta) * radiusLength) + center.x;
+                end.y = (int) Math.round(Math.sin(theta) * radiusLength) + center.y;
+                if(!surpassEdges) {
+                    long edgeLength = 0;
+//                    if (end.x == 0 || end.x == width - 1 || end.y == 0 || end.y == height - 1)
+                    if (end.x < 0)
+                    {
+                        // wow, we lucked out here. the only situation where cos(angle) is 0 is if the angle aims
+                        // straight up or down, and then x cannot be < 0 or >= width.
+                        edgeLength = Math.round((0 - center.x) / Math.cos(theta));
+                        end.y = (int) Math.round(Math.sin(theta) * edgeLength) + center.y;
+                    }
+                    else if(end.x >= width)
+                    {
+                        // wow, we lucked out here. the only situation where cos(angle) is 0 is if the angle aims
+                        // straight up or down, and then x cannot be < 0 or >= width.
+                        edgeLength = Math.round((width - 1 - center.x) / Math.cos(theta));
+                        end.y = (int) Math.round(Math.sin(theta) * edgeLength) + center.y;
+                    }
+
+                    if (end.y < 0)
+                    {
+                        // wow, we lucked out here. the only situation where sin(angle) is 0 is if the angle aims
+                        // straight left or right, and then y cannot be < 0 or >= height.
+                        edgeLength = Math.round((0 - center.y) / Math.sin(theta));
+                        end.x = (int) Math.round(Math.cos(theta) * edgeLength) + center.x;
+                    }
+                    else if(end.y >= height)
+                    {
+                        // wow, we lucked out here. the only situation where sin(angle) is 0 is if the angle aims
+                        // straight left or right, and then y cannot be < 0 or >= height.
+                        edgeLength = Math.round((height - 1 - center.y) / Math.sin(theta));
+                        end.x = (int) Math.round(Math.cos(theta) * edgeLength) + center.x;
+                    }
+                    end.x = clamp(end.x, 0, width);
+                    end.y = clamp(end.y, 0, height);
+                }
+                return end;
+            }
+        }
+    }
+
 }
