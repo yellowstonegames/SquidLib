@@ -78,5 +78,5 @@ public interface AOE {
      * have the same x and y as the x,y map positions they correspond to.
      * @return a HashMap of Point keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).
      */
-    HashMap<Point, Double> findArea();
+    LinkedHashMap<Point, Double> findArea();
 }
