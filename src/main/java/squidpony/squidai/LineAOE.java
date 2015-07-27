@@ -494,7 +494,7 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public HashMap<Point, Double> findArea() {
+    public LinkedHashMap<Point, Double> findArea() {
         double[][] dmap = initDijkstra();
         dmap[start.x][start.y] = DijkstraMap.DARK;
         dijkstra.resetMap();

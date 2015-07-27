@@ -2,7 +2,6 @@ package squidpony.squidai;
 
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Spill;
-import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -493,9 +492,9 @@ public class CloudAOE implements AOE {
     }
 
     @Override
-    public HashMap<Point, Double> findArea() {
+    public LinkedHashMap<Point, Double> findArea() {
         spill.start(center, volume, null);
-        HashMap<Point, Double> r = AreaUtils.arrayToHashMap(spill.spillMap);
+        LinkedHashMap<Point, Double> r = AreaUtils.arrayToHashMap(spill.spillMap);
         if(!expanding)
         {
             spill.reset();

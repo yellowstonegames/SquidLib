@@ -192,7 +192,7 @@ public class FOV {
         this.map = resistanceMap;
         this.startx = startx;
         this.starty = starty;
-        this.radius = radius;
+        this.radius = Math.max(1, radius);
         this.radiusStrategy = radiusStrategy;
         this.startAngle = 0;
         this.endAngle = Math.PI * 2;
@@ -261,7 +261,7 @@ public class FOV {
         this.map = resistanceMap;
         this.startx = startx;
         this.starty = starty;
-        this.radius = radius;
+        this.radius = Math.max(1, radius);
 
         this.startAngle = Math.toRadians((startAngle > 360.0 || startAngle < 0.0) ? Math.abs(startAngle % 360.0) : startAngle);
         this.endAngle = Math.toRadians((endAngle > 360.0 || endAngle < 0.0) ? Math.abs(endAngle % 360.0) : endAngle);

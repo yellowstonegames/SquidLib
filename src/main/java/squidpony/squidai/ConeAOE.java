@@ -492,8 +492,8 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public HashMap<Point, Double> findArea() {
-        HashMap<Point, Double> r = AreaUtils.arrayToHashMap(fov.calculateFOV(map, origin.x, origin.y, radius,
+    public LinkedHashMap<Point, Double> findArea() {
+        LinkedHashMap<Point, Double> r = AreaUtils.arrayToHashMap(fov.calculateFOV(map, origin.x, origin.y, radius,
                 radiusType, startAngle, endAngle));
         r.remove(origin);
         return r;

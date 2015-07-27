@@ -421,7 +421,7 @@ public class BurstAOE implements AOE {
     }
 
     @Override
-    public HashMap<Point, Double> findArea() {
+    public LinkedHashMap<Point, Double> findArea() {
         return AreaUtils.arrayToHashMap(fov.calculateFOV(map, center.x, center.y, radius, radiusType));
     }
 }
