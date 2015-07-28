@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.TimeUtils;
  * It does not perform the blocking functionality of the non-GDX SquidKey implementation, because this is meant to run
  * in an event-driven libGDX game and should not step on the toes of libGDX's input handling. To block game logic
  * until an event has been received, check hasNext() in the game's render() method and effectively "block" by not
- * running game logic if hasNext() returns false.
+ * running game logic if hasNext() returns false. You can get an event if hasNext() returns true by calling next().
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Nathan Sweet
@@ -25,7 +25,6 @@ public class SquidKey implements InputProcessor {
     private InputProcessor processor;
     private final IntArray queue = new IntArray();
     private final IntArray processingQueue = new IntArray();
-    private long currentEventTime;
 
     /**
      * Constructs a SquidKey with no InputProcessor; for this to do anything, setProcessor() must be called.
@@ -71,7 +70,6 @@ public class SquidKey implements InputProcessor {
             queue.clear();
         }
         for (int i = 0, n = q.size; i < n;) {
-            currentEventTime = (long)q.get(i++) << 32 | q.get(i++) & 0xFFFFFFFFL;
             switch (q.get(i++)) {
                 case KEY_DOWN:
                     processor.keyDown(q.get(i++));
@@ -93,7 +91,7 @@ public class SquidKey implements InputProcessor {
      */
     public boolean hasNext()
     {
-        return queue.size >= 4;
+        return queue.size >= 2;
     }
 
     /**
@@ -103,17 +101,16 @@ public class SquidKey implements InputProcessor {
     {
         IntArray q = processingQueue;
         synchronized (this) {
-            if (processor == null || queue.size < 4) {
+            if (processor == null || queue.size < 2) {
                 queue.clear();
                 return;
             }
-            q.addAll(queue, 0, 4);
-            queue.removeRange(0, 3);
+            q.addAll(queue, 0, 2);
+            queue.removeRange(0, 1);
         }
-        if(q.size >= 4)
+        if(q.size >= 2)
         {
-            int t0 = q.get(0), t1 = q.get(1), e = q.get(2), n = q.get(3);
-            currentEventTime = (long)t0 << 32 | t1 & 0xFFFFFFFFL;
+            int e = q.get(0), n = q.get(1);
             switch (e) {
                 case KEY_DOWN:
                     processor.keyDown(n);
@@ -137,28 +134,19 @@ public class SquidKey implements InputProcessor {
         queue.clear();
     }
 
-    private void queueTime () {
-        long time = TimeUtils.nanoTime();
-        queue.add((int)(time >> 32));
-        queue.add((int)time);
-    }
-
     public synchronized boolean keyDown (int keycode) {
-        queueTime();
         queue.add(KEY_DOWN);
         queue.add(keycode);
         return false;
     }
 
     public synchronized boolean keyUp (int keycode) {
-        queueTime();
         queue.add(KEY_UP);
         queue.add(keycode);
         return false;
     }
 
     public synchronized boolean keyTyped (char character) {
-        queueTime();
         queue.add(KEY_TYPED);
         queue.add(character);
         return false;
@@ -184,7 +172,4 @@ public class SquidKey implements InputProcessor {
         return false;
     }
 
-    public long getCurrentEventTime () {
-        return currentEventTime;
-    }
 }
