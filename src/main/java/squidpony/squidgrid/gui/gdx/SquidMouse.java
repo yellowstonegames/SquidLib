@@ -1,6 +1,8 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.MathUtils;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;
@@ -20,7 +22,7 @@ import java.awt.event.MouseEvent;
  */
 public class SquidMouse implements InputProcessor {
 
-    protected final int cellWidth, cellHeight, offsetX, offsetY;
+    protected int cellWidth, cellHeight, offsetX, offsetY, gridWidth, gridHeight;
     protected InputProcessor processor;
 
     /**
@@ -41,32 +43,86 @@ public class SquidMouse implements InputProcessor {
         this.processor = processor;
         this.offsetX = 0;
         this.offsetY = 0;
+        this.gridWidth = Gdx.graphics.getWidth() / cellWidth;
+        this.gridHeight = Gdx.graphics.getHeight() / cellHeight;
     }
 
     /**
      * Sets the size of the cell so that all mouse input can be evaluated as
      * relative to the grid. Offsets can be specified for x and y if the grid
-     * is displayed at a position other than the full screen. All input is
-     * passed to the provided InputProcessor once it has had its coordinates
+     * is displayed at a position other than the full screen. Instead of
+     * specifying an offset from the bottom and right edges, specify the
+     * width and height in grid cells of the area to receive input. All input
+     * is passed to the provided InputProcessor once it's had its coordinates
      * translated to grid coordinates.
      *
-     * If either offset is non-zero, then the InputProcessor must be able to
-     * handle grid coordinates that are negative or higher than the dimensions
-     * of the grid itself, since clicks outside of where the grid is displayed
-     * are by definition not within bounds.
+     * If the input is not within the bounds of the grid as determined by
+     * gridWidth, gridHeight, offsetX, and offsetY, the input will be clamped.
      *
      * @param cellWidth
      * @param cellHeight
+     * @param gridWidth
+     * @param gridHeight
      * @param offsetX
      * @param offsetY
      * @param processor an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().
      */
-    public SquidMouse(int cellWidth, int cellHeight, int offsetX, int offsetY, InputProcessor processor) {
+    public SquidMouse(int cellWidth, int cellHeight, int gridWidth, int gridHeight, int offsetX, int offsetY, InputProcessor processor) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.processor = processor;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
+        this.gridWidth = gridWidth;
+        this.gridHeight = gridHeight;
+    }
+
+    public int getCellWidth() {
+        return cellWidth;
+    }
+
+    public int getCellHeight() {
+        return cellHeight;
+    }
+
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    public int getOffsetY() {
+        return offsetY;
+    }
+
+    public int getGridWidth() {
+        return gridWidth;
+    }
+
+    public int getGridHeight() {
+        return gridHeight;
+    }
+
+    public void setCellWidth(int cellWidth) {
+        this.cellWidth = cellWidth;
+    }
+
+    public void setCellHeight(int cellHeight) {
+        this.cellHeight = cellHeight;
+    }
+
+    public void setOffsetX(int offsetX) {
+        this.offsetX = offsetX;
+    }
+
+    public void setOffsetY(int offsetY) {
+        this.offsetY = offsetY;
+    }
+
+    public void setGridWidth(int gridWidth) {
+        this.gridWidth = gridWidth;
+    }
+
+    public void setGridHeight(int gridHeight) {
+        this.gridHeight = gridHeight;
     }
 
     /**
@@ -86,10 +142,10 @@ public class SquidMouse implements InputProcessor {
     }
 
     protected int translateX(int screenX) {
-        return  (screenX - offsetX) / cellWidth;
+        return MathUtils.clamp((screenX - offsetX) / cellWidth, 0, gridWidth);
     }
     protected int translateY(int screenY) {
-        return  (screenY - offsetY) / cellHeight;
+        return MathUtils.clamp((screenY - offsetY) / cellHeight, 0, gridHeight);
     }
 
     @Override

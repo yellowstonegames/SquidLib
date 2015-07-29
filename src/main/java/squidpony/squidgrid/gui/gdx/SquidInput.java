@@ -31,7 +31,7 @@ public class SquidInput extends InputAdapter {
      * modifiers that can affect them. SquidInput has numerous static char values that are expected to be passed
      * to handle() in place of the special keys (such as arrow keys) that do not have a standard char value.
      */
-    interface KeyHandler{
+    public interface KeyHandler{
         /**
          * The only method you need to implement yourself in KeyHandler, this should react to keys such as
          * 'a' (produced by pressing the A key while not holding Shift), 'E' (produced by pressing the E key while
@@ -43,7 +43,7 @@ public class SquidInput extends InputAdapter {
          *
          * This can react to the input in whatever way you find appropriate for your game.
          * @param key a char of the "typed" representation of the key, such as 'a' or 'E', or if there is no Unicode
-         *            character for the key, an appropriate alternate character as documented in SquidInput.
+         *            character for the key, an appropriate alternate character as documented in SquidInput.fromKey()
          * @param alt true if the Alt modifier was being held while this key was entered, false otherwise.
          * @param ctrl true if the Ctrl modifier was being held while this key was entered, false otherwise.
          * @param shift true if the Shift modifier was being held while this key was entered, false otherwise.
