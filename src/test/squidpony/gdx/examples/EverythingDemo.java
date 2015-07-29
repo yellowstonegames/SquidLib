@@ -13,9 +13,11 @@ import squidpony.SColor;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.AnimatedEntity;
-import squidpony.squidgrid.gui.gdx.SquidKey;
+import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -23,9 +25,7 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 public class EverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
@@ -44,15 +44,18 @@ public class EverythingDemo extends ApplicationAdapter {
     private FOV fov;
     private int width, height;
     private int cellWidth, cellHeight;
-    private SquidKey keyListener;
+    private SquidInput input;
     private double counter;
     private boolean[][] seen;
     private int health = 7;
     private static final Color bgColor = SquidLayers.awtColorToGDX(SColor.DARK_SLATE_GRAY);
     private HashMap<AnimatedEntity, Integer> monsters;
-    private DijkstraMap getToPlayer;
+    private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage;
     private int framesWithoutAnimation = 0;
+    private Point cursor;
+    private ArrayList<Point> toCursor;
+    private ArrayList<Point> awaitedMoves;
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -92,55 +95,105 @@ public class EverythingDemo extends ApplicationAdapter {
             monsters.put(display.animateActor(monPos.x, monPos.y, 'M', 11), 0);
 
         }
+        // your choice of FOV matters here.
         fov = new FOV(FOV.RIPPLE_TIGHT);
-        getToPlayer = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.MANHATTAN);
+        getToPlayer = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
         getToPlayer.setGoal(pl);
         pathMap = getToPlayer.scan(null);
         res = DungeonUtility.generateResistances(bareDungeon);
-        fovmap = fov.calculateFOV(res, pl.x, pl.y, 8);
+        fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
 
         player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10), 30);
+        cursor = new Point(-1, -1);
+        toCursor = new ArrayList<Point>(10);
+        awaitedMoves = new ArrayList<Point>(10);
+        playerToCursor = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
         colors = DungeonUtility.generatePaletteIndices(bareDungeon);
         bgColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon, counter);
         seen = new boolean[width][height];
 
-        keyListener = new SquidKey(new InputProcessor() {
+        // this is a big one.
+        // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
+        // (which is given an InputProcessor implementation and can handle multiple kinds of mouse move), or both.
+        // keyHandler is meant to be able to handle complex, modified key input, typically for games that distinguish
+        // between, say, 'q' and 'Q' for 'quaff' and 'Quip' or whatever obtuse combination you choose. The
+        // implementation here handles hjklyubn keys for 8-way movement, numpad for 8-way movement, arrow keys for
+        // 4-way movement, and wasd for 4-way movement. Shifted letter keys produce capitalized chars when passed to
+        // KeyHandler.handle(), but we don't care about that so we just use two case statements with the same body,
+        // one for the lower case letter and one for the upper case letter.
+        // You can also set up a series of future moves by clicking within FOV range, using mouseMoved to determine the
+        // path to the mouse position with a DijkstraMap (called playerToCursor), and using touchUp to actually trigger
+        // the event when someone clicks.
+        input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
-            public boolean keyDown(int keycode) {
-                switch (keycode)
+            public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
+                switch (key)
                 {
-                    case Keys.UP:
-                    case Keys.K:
-                    case Keys.NUM_8:
-                    case Keys.W:
+                    case SquidInput.UP_ARROW:
+                    case 'k':
+                    case 'w':
+                    case 'K':
+                    case 'W':
                     {
                         move(0, -1);
                         break;
                     }
-                    case Keys.DOWN:
-                    case Keys.J:
-                    case Keys.NUM_2:
-                    case Keys.S:
+                    case SquidInput.DOWN_ARROW:
+                    case 'j':
+                    case 's':
+                    case 'J':
+                    case 'S':
                     {
                         move(0, 1);
                         break;
                     }
-                    case Keys.LEFT:
-                    case Keys.H:
-                    case Keys.NUM_4:
-                    case Keys.A:
+                    case SquidInput.LEFT_ARROW:
+                    case 'h':
+                    case 'a':
+                    case 'H':
+                    case 'A':
                     {
                         move(-1, 0);
                         break;
                     }
-                    case Keys.RIGHT:
-                    case Keys.L:
-                    case Keys.NUM_6:
-                    case Keys.D:
+                    case SquidInput.RIGHT_ARROW:
+                    case 'l':
+                    case 'd':
+                    case 'L':
+                    case 'D':
                     {
                         move(1, 0);
+                        break;
+                    }
+
+                    case SquidInput.UP_LEFT_ARROW:
+                    case 'y':
+                    case 'Y':
+                    {
+                        move(-1, -1);
+                        break;
+                    }
+                    case SquidInput.UP_RIGHT_ARROW:
+                    case 'u':
+                    case 'U':
+                    {
+                        move(1, -1);
+                        break;
+                    }
+                    case SquidInput.DOWN_RIGHT_ARROW:
+                    case 'n':
+                    case 'N':
+                    {
+                        move(1, 1);
+                        break;
+                    }
+                    case SquidInput.DOWN_LEFT_ARROW:
+                    case 'b':
+                    case 'B':
+                    {
+                        move(-1, 1);
                         break;
                     }
                     case Keys.Q:
@@ -149,6 +202,10 @@ public class EverythingDemo extends ApplicationAdapter {
                         Gdx.app.exit();
                     }
                 }
+            }
+        }, new SquidMouse(cellWidth, cellHeight, new InputProcessor() {
+            @Override
+            public boolean keyDown(int keycode) {
                 return false;
             }
 
@@ -167,18 +224,41 @@ public class EverythingDemo extends ApplicationAdapter {
                 return false;
             }
 
+            // if the user clicks within FOV range and there are no awaitedMoves queued up, generate toCursor if it
+            // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                if(fovmap[screenX][screenY] > 0.0 && awaitedMoves.isEmpty()) {
+                    if (toCursor.isEmpty()) {
+                        cursor.x = screenX;
+                        cursor.y = screenY;
+                        toCursor = playerToCursor.findPath(30, null, null, new Point(player.gridX, player.gridY), cursor);
+                    }
+                    awaitedMoves = new ArrayList<>(toCursor);
+                }
                 return false;
             }
 
             @Override
             public boolean touchDragged(int screenX, int screenY, int pointer) {
-                return false;
+                return mouseMoved(screenX, screenY);
             }
 
+            // causes the path to the mouse position to become highlighted (toCursor contains a list of points that
+            // receive highlighting). Uses DijkstraMap.findPath() to find the path, which is surprisingly fast.
             @Override
             public boolean mouseMoved(int screenX, int screenY) {
+                if(!awaitedMoves.isEmpty())
+                    return false;
+                if(cursor.x == screenX && cursor.y == screenY)
+                {
+                    return false;
+                }
+                if(fovmap[screenX][screenY] > 0.0) {
+                    cursor.x = screenX;
+                    cursor.y = screenY;
+                    toCursor = playerToCursor.findPath(30, null, null, new Point(player.gridX, player.gridY), cursor);
+                }
                 return false;
             }
 
@@ -186,8 +266,10 @@ public class EverythingDemo extends ApplicationAdapter {
             public boolean scrolled(int amount) {
                 return false;
             }
-        });
-        Gdx.input.setInputProcessor(keyListener);
+        }));
+        // ABSOLUTELY NEEDED TO HANDLE INPUT
+        Gdx.input.setInputProcessor(input);
+        // and then add display, our one visual component, to the list of things that act in Stage.
         display.setPosition(0, 0);
         stage.addActor(display);
 
@@ -200,6 +282,8 @@ public class EverythingDemo extends ApplicationAdapter {
      * @param ymod
      */
     private void move(int xmod, int ymod) {
+        if(health <= 0) return;
+
         int newX = player.gridX + xmod, newY = player.gridY + ymod;
         if (newX >= 0 && newY >= 0 && newX < width && newY < height
                 && bareDungeon[newX][newY] != '#') {
@@ -225,6 +309,7 @@ public class EverythingDemo extends ApplicationAdapter {
         }
     }
 
+    // check if a monster's movement would overlap with another monster.
     private boolean checkOverlap(AnimatedEntity ae, int x, int y, ArrayList<Point> futureOccupied)
     {
         for(AnimatedEntity mon : monsters.keySet())
@@ -260,7 +345,7 @@ public class EverythingDemo extends ApplicationAdapter {
         pathMap = getToPlayer.scan(monplaces);
 
         // recalculate FOV, store it in fovmap for the render to use.
-        fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8);
+        fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
         // handle monster turns
         ArrayList<Point> nextMovePositions = new ArrayList<>(25);
         for(HashMap.Entry<AnimatedEntity, Integer> mon : monsters.entrySet())
@@ -272,7 +357,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 // is more than one equally good best option.
                 Direction choice = null;
                 double best = 9999.0;
-                for(Direction d : getToPlayer.shuffle(Direction.CARDINALS))
+                for(Direction d : getToPlayer.shuffle(Direction.OUTWARDS))
                 {
                     Point tmp = new Point(mon.getKey().gridX + d.deltaX, mon.getKey().gridY + d.deltaY);
                     if(pathMap[tmp.x][tmp.y] < best &&
@@ -320,43 +405,81 @@ public class EverythingDemo extends ApplicationAdapter {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
-                // and 1.0), with 1.0 being almost pure white at +150 lightness and 0.0 being rather dark at -100.
+                // and 1.0), with 1.0 being almost pure white at +115 lightness and 0.0 being rather dark at -85.
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j],
-                            lights[i][j] + (int) (-100 + 250 * fovmap[i][j]));
+                            lights[i][j] + (int) (-85 + 200 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else if (seen[i][j]) {
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -140);
                 }
             }
         }
+        for (Point pt : toCursor)
+        {
+            // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
+            display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (0 + 170 * fovmap[pt.x][pt.y]));
+        }
     }
     @Override
     public void render () {
+        // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        // not sure if this is always needed...
         Gdx.gl.glEnable(GL20.GL_BLEND);
-        stage.act(Gdx.graphics.getDeltaTime());
-        display.act(Gdx.graphics.getDeltaTime());
 
+        // used as the z-axis when generating Simplex noise to make water seem to "move"
         counter += Gdx.graphics.getDeltaTime() * 15;
+        // this does the standard lighting for walls, floors, etc. but also uses counter to do the Simplex noise thing.
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon, counter);
 
+        // you done bad. you done real bad.
         if (health <= 0) {
+            // still need to display the map, then write over it with a message.
             putMap();
             display.putBoxedString(width / 2 - 11, height / 2 - 1, "YOU HAVE BEEN EATEN!");
             display.putBoxedString(width / 2 - 11, height / 2 + 5, "     q to quit.     ");
 
+            // because we return early, we still need to draw.
             stage.draw();
-            if(keyListener.hasNext())
-                keyListener.next();
+            // q still needs to quit.
+            if(input.hasNext())
+                input.next();
             return;
         }
+        // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
-        if(keyListener.hasNext() && !display.hasActiveAnimations() && phase == Phase.WAIT) {
-            keyListener.next();
+        // if the user clicked, we have a list of moves to perform.
+        if(!awaitedMoves.isEmpty())
+        {
+            // extremely similar to the block below that also checks if animations are done
+            // this doesn't check for input, but instead processes and removes Points from awaitedMoves.
+            if(!display.hasActiveAnimations()) {
+                ++framesWithoutAnimation;
+                if (framesWithoutAnimation > 5) {
+                    framesWithoutAnimation = 0;
+                    switch (phase) {
+                        case WAIT:
+                        case MONSTER_ANIM:
+                            Point m = awaitedMoves.remove(0);
+                            toCursor.remove(0);
+                            move(m.x - player.gridX, m.y - player.gridY);
+                            break;
+                        case PLAYER_ANIM:
+                            postMove();
+                            break;
+                    }
+                }
+            }
         }
+        // if we are waiting for the player's input and get input, process it.
+        else if(input.hasNext() && !display.hasActiveAnimations() && phase == Phase.WAIT) {
+            input.next();
+        }
+        // if the previous blocks didn't happen, and there are no active animations, then either change the phase
+        // (because with no animations running the last phase must have ended), or start a new animation soon.
         else if(!display.hasActiveAnimations()) {
             ++framesWithoutAnimation;
             if (framesWithoutAnimation > 5) {
@@ -375,23 +498,26 @@ public class EverythingDemo extends ApplicationAdapter {
                 }
             }
         }
+        // if we do have an animation running, then how many frames have passed with no animation needs resetting
         else
         {
             framesWithoutAnimation = 0;
         }
-//        batch.begin();
 
+        // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.draw();
 
+        // disolay does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
         batch.begin();
+        // the player needs to get drawn every frame, of course.
         display.drawActor(batch, 1.0f, player);
         for(AnimatedEntity mon : monsters.keySet()) {
+            // monsters are only drawn if within FOV.
             if (fovmap[mon.gridX][mon.gridY] > 0.0) {
                 display.drawActor(batch, 1.0f, mon);
             }
         }
+        // batch must end if it began.
         batch.end();
-
-//        batch.end();
     }
 }

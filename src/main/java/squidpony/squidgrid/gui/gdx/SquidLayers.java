@@ -954,6 +954,39 @@ public class SquidLayers extends Group {
     }
 
     /**
+     * Change the lightness for the background of the cell at x, y (0 is no change, 100 is
+     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param lightness int between -255 and 255 , lower numbers are darker, higher lighter.
+     */
+    public SquidLayers highlight(int x, int y, int lightness) {
+        lightness = clamp(lightness, -255, 255);
+        lightnesses[x][y] = 256 + lightness;
+
+        lightnessPanel.put(x, y, 256 + lightness, lightingPalette);
+        return this;
+    }
+    /**
+     * Change the lightness for the background of the cell at x, y (0 is no change, 100 is
+     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param lightness int[][] with elements between -255 and 255 , lower numbers are darker, higher lighter.
+     */
+    public SquidLayers highlight(int x, int y, int[][] lightness) {
+        for (int i = 0; i < lightness.length && x + i < width; i++) {
+            for (int j = 0; j < lightness[i].length && y + j < height; j++) {
+                lightness[i][j] = 256 + clamp(lightness[i][j], -255, 255);
+                lightnesses[x+i][y+j] = lightness[i][j];
+            }
+        }
+        lightnessPanel.put(x, y, lightness, lightingPalette);
+        return this;
+    }
+    /**
      * Very basic check to see if something was rendered at the x,y cell requested. (usually this only checks the
      * foreground) If blank, false, otherwise true.
      *

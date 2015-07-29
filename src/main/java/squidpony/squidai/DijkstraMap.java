@@ -740,6 +740,8 @@ public class DijkstraMap
         for (Point goal : targets) {
             setGoal(goal.x, goal.y);
         }
+        if(goals.isEmpty())
+            return path;
         scan(impassable);
         Point currentPos = new Point(start);
         while (true) {
@@ -754,6 +756,10 @@ public class DijkstraMap
 
             for (int d = 0; d < dirs.length; d++) {
                 Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if(!(pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height))
+                {
+                    continue;
+                }
                 if (gradientMap[pt.x][pt.y] < best) {
                     best = gradientMap[pt.x][pt.y];
                     choice = d;
@@ -828,6 +834,9 @@ public class DijkstraMap
         for (Point goal : targets) {
             setGoal(goal.x, goal.y);
         }
+        if(goals.isEmpty())
+            return path;
+
         Measurement mess = measurement;
         if(measurement == Measurement.EUCLIDEAN)
         {
@@ -950,6 +959,9 @@ public class DijkstraMap
         for (Point goal : targets) {
             setGoal(goal.x, goal.y);
         }
+        if(goals.isEmpty())
+            return path;
+
         Measurement mess = measurement;
         if(measurement == Measurement.EUCLIDEAN)
         {
@@ -1081,6 +1093,9 @@ public class DijkstraMap
             for (Point goal : fearSources) {
                 setGoal(goal.x, goal.y);
             }
+            if(goals.isEmpty())
+                return path;
+
             scan(impassable);
 
             for (int x = 0; x < gradientMap.length; x++) {
@@ -1171,6 +1186,9 @@ public class DijkstraMap
         for (Point goal : targets) {
             setGoal(goal.x, goal.y);
         }
+        if(goals.isEmpty())
+            return path;
+
         scan(impassable, size);
         Point currentPos = new Point(start);
         while (true) {
@@ -1262,6 +1280,9 @@ public class DijkstraMap
         for (Point goal : targets) {
             setGoal(goal.x, goal.y);
         }
+        if(goals.isEmpty())
+            return path;
+
         Measurement mess = measurement;
         if(measurement == Measurement.EUCLIDEAN)
         {
@@ -1391,6 +1412,9 @@ public class DijkstraMap
         for (Point goal : targets) {
             setGoal(goal.x, goal.y);
         }
+        if(goals.isEmpty())
+            return path;
+
         Measurement mess = measurement;
         if(measurement == Measurement.EUCLIDEAN)
         {
@@ -1524,6 +1548,9 @@ public class DijkstraMap
             for (Point goal : fearSources) {
                 setGoal(goal.x, goal.y);
             }
+            if(goals.isEmpty())
+                return path;
+
             scan(impassable, size);
 
             for (int x = 0; x < gradientMap.length; x++) {
@@ -1597,6 +1624,9 @@ public class DijkstraMap
         for (Point goal : starts) {
             setGoal(goal.x, goal.y);
         }
+        if(goals.isEmpty())
+            return fill;
+
         partialScan(radius, null);
         double temp;
         for(int x = 1; x < width - 1; x++)

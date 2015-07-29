@@ -1,6 +1,9 @@
 package squidpony.squidgrid;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +56,7 @@ public class FOV {
             RIPPLE_TIGHT = 3,
             /**
              * Performs FOV by pushing values outwards from the source location.
-             * It will only go around corners massively.
+             * It will go around corners massively.
              */
             RIPPLE_VERY_LOOSE = 4,
             /**
@@ -70,6 +73,7 @@ public class FOV {
     private double radius, decay, startAngle, endAngle;
     private int startx, starty, width, height;
     private Radius radiusStrategy;
+    private Comparator<Point> comp;
     private static Direction[] ccw = new Direction[]
             {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
             ccw_full = new Direction[]{Direction.RIGHT, Direction.UP_RIGHT, Direction.UP, Direction.UP_LEFT,
@@ -89,6 +93,8 @@ public class FOV {
      * @param type
      */
     public FOV(int type) {
+        lightMap = null;
+        map = null;
         this.type = type;
     }
 
@@ -182,20 +188,27 @@ public class FOV {
      * RadiusStrategy.
      *
      * @param resistanceMap the grid of cells to calculate on
-     * @param startx the horizontal component of the starting location
-     * @param starty the vertical component of the starting location
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
      * @param radius the distance the light will extend to
-     * @param radiusStrategy provides a means to calculate the radius as desired
+     * @param radiusTechnique provides a means to calculate the radius as desired
      * @return the computed light grid
      */
-    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius, Radius radiusStrategy) {
+    public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius, Radius radiusTechnique) {
         this.map = resistanceMap;
-        this.startx = startx;
-        this.starty = starty;
+        this.startx = startX;
+        this.starty = startY;
         this.radius = Math.max(1, radius);
-        this.radiusStrategy = radiusStrategy;
+        this.radiusStrategy = radiusTechnique;
         this.startAngle = 0;
         this.endAngle = Math.PI * 2;
+        this.comp = new Comparator<Point>() {
+            @Override
+            public int compare(Point pt1, Point pt2) {
+                return (int)Math.signum(radiusStrategy.radius(startx, starty, pt1.x, pt1.y) -
+                        radiusStrategy.radius(startx, starty, pt2.x, pt2.y));
+            }
+        };
         decay = 1.0 / radius;
 
         width = resistanceMap.length;
@@ -248,26 +261,32 @@ public class FOV {
      * startAngle and endAngle are not equal.
      *
      * @param resistanceMap the grid of cells to calculate on
-     * @param startx the horizontal component of the starting location
-     * @param starty the vertical component of the starting location
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
      * @param radius the distance the light will extend to
-     * @param radiusStrategy provides a means to calculate the radius as desired
+     * @param radiusTechnique provides a means to calculate the radius as desired
      * @param startAngle the angle in degrees to start calculating FOV, 0 points right
      * @param endAngle the angle in degrees to stop calculating FOV, 0 points right
      * @return the computed light grid
      */
-    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius,
-                                   Radius radiusStrategy, double startAngle, double endAngle) {
+    public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
+                                   Radius radiusTechnique, double startAngle, double endAngle) {
         this.map = resistanceMap;
-        this.startx = startx;
-        this.starty = starty;
+        this.startx = startX;
+        this.starty = startY;
         this.radius = Math.max(1, radius);
 
         this.startAngle = Math.toRadians((startAngle > 360.0 || startAngle < 0.0) ? Math.abs(startAngle % 360.0) : startAngle);
         this.endAngle = Math.toRadians((endAngle > 360.0 || endAngle < 0.0) ? Math.abs(endAngle % 360.0) : endAngle);
-        this.radiusStrategy = radiusStrategy;
+        this.radiusStrategy = radiusTechnique;
         decay = 1.0 / radius;
-
+        this.comp = new Comparator<Point>() {
+            @Override
+            public int compare(Point pt1, Point pt2) {
+                return (int)Math.signum(radiusStrategy.radius(startx, starty, pt1.x, pt1.y) -
+                        radiusStrategy.radius(startx, starty, pt2.x, pt2.y));
+            }
+        };
         width = resistanceMap.length;
         height = resistanceMap[0].length;
 
@@ -384,7 +403,7 @@ public class FOV {
             return 1;
         }
 
-        List<Point> neighbors = new LinkedList<>();
+        List<Point> neighbors = new ArrayList<>();
         for (Direction di : Direction.OUTWARDS) {
             int x2 = x + di.deltaX;
             int y2 = y + di.deltaY;
@@ -396,7 +415,9 @@ public class FOV {
         if (neighbors.isEmpty()) {
             return 0;
         }
-
+        Collections.sort(neighbors, comp);
+        neighbors = neighbors.subList(0, rippleNeighbors);
+/*
         while (neighbors.size() > rippleNeighbors) {
             Point p = neighbors.remove(0);
             double dist = radiusStrategy.radius(startx, starty, p.x, p.y);
@@ -408,7 +429,7 @@ public class FOV {
                 neighbors.add(p);
             }
         }
-
+*/
         double light = 0;
         int lit = 0, indirects = 0;
         for (Point p : neighbors) {
