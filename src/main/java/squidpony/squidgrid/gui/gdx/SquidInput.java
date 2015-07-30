@@ -259,7 +259,7 @@ public class SquidInput extends InputAdapter {
      * Maps keycodes to unicode chars, sometimes depending on whether the Shift key is held.
      *
      * It is strongly recommended that you refer to key combinations regarding non-alphabet keys by using, for example,
-     * Ctrl-Shift-. instead of Ctrl->, that is to use the unshifted key with Shift instead of assuming that all
+     * Ctrl-Shift-; instead of Ctrl-:, that is to use the unshifted key with Shift instead of assuming that all
      * keyboards will use the QWERTY layout. Pressing shift while pressing just about any representable symbol will map
      * to the shifted version as if on a QWERTY keyboard, and if you don't have a QWERTY keyboard, the mappings are
      * documented in full below.
@@ -269,8 +269,8 @@ public class SquidInput extends InputAdapter {
      *
      * Top row numbers map as follows:
      *
-     * '1' -> '!', '2' -> '@', '3' -> '#', '4' -> '$', '5' -> '%',
-     * '6' -> '^', '7' -> '&', '8' -> '*', '9' -> '(', '0' -> ')'
+     * '1' to '!', '2' to '@', '3' to '#', '4' to '$', '5' to '%',
+     * '6' to '^', '7' to '&amp;', '8' to '*', '9' to '(', '0' to ')'
      *
      * Numpad numbers will report a SquidInput constant such as UP_LEFT_ARROW for Numpad 7, but only if numpadDirections
      * is true; otherwise they send the number (here, 7). Numpad 0 sends VERTICAL_ARROW or 0.
@@ -288,27 +288,27 @@ public class SquidInput extends InputAdapter {
      *
      * Other characters map as follows when Shift is held, as they would on a QWERTY keyboard:
      *
-     * ',' -> '<'
+     * ',' to '&lt;'
      *
-     * '.' -> '>'
+     * '.' to '&gt;'
      *
-     * '/' -> '?'
+     * '/' to '?'
      *
-     * ';' -> ':'
+     * ';' to ':'
      *
-     * '\'' -> '"'
+     * '\'' to '&quot;'
      *
-     * '[' -> '{'
+     * '[' to '{'
      *
-     * ']' -> '}'
+     * ']' to '}'
      *
-     * '|' -> '\\'
+     * '|' to '\\'
      *
-     * '-' -> '_'
+     * '-' to '_'
      *
-     * '+' -> '='
+     * '+' to '='
      *
-     * '`' -> '~'
+     * '`' to '~'
      *
      * @param keycode a keycode as passed by LibGDX
      * @param shift true if Shift key is being held. Caps Lock inverts shift before it gets here.
