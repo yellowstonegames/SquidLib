@@ -66,7 +66,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // the font will try to load Rogue-Zodiac.ttf from resources. I (Tommy Ettinger) made it, and it's under the
         // same license as SquidLib.
         display = new SquidLayers(width, height, cellWidth, cellHeight);
-
+        display.setAnimation_duration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);
 
         counter = 0;
@@ -196,8 +196,9 @@ public class EverythingDemo extends ApplicationAdapter {
                         move(-1, 1);
                         break;
                     }
-                    case Keys.Q:
-                    case Keys.ESCAPE:
+                    case 'Q':
+                    case 'q':
+                    case SquidInput.ESCAPE:
                     {
                         Gdx.app.exit();
                     }
@@ -286,15 +287,20 @@ public class EverythingDemo extends ApplicationAdapter {
 
         int newX = player.gridX + xmod, newY = player.gridY + ymod;
         if (newX >= 0 && newY >= 0 && newX < width && newY < height
-                && bareDungeon[newX][newY] != '#') {
+                && bareDungeon[newX][newY] != '#')
+        {
             // '+' is a door.
             if (lineDungeon[newX][newY] == '+') {
                 bareDungeon[newX][newY] = '/';
                 lineDungeon[newX][newY] = '/';
                 // changes to the map mean the resistances for FOV need to be regenerated.
                 res = DungeonUtility.generateResistances(bareDungeon);
+                // recalculate FOV, store it in fovmap for the render to use.
+                fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
+
             } else {
-//                display.put(player.x, player.y, Character.forDigit(health, 10), 30);
+                // recalculate FOV, store it in fovmap for the render to use.
+                fovmap = fov.calculateFOV(res, newX, newY, 8, Radius.SQUARE);
                 display.slide(player, newX, newY);
 
                 for(AnimatedEntity ae : monsters.keySet()) {
@@ -458,7 +464,7 @@ public class EverythingDemo extends ApplicationAdapter {
             // this doesn't check for input, but instead processes and removes Points from awaitedMoves.
             if(!display.hasActiveAnimations()) {
                 ++framesWithoutAnimation;
-                if (framesWithoutAnimation > 5) {
+                if (framesWithoutAnimation >= 3) {
                     framesWithoutAnimation = 0;
                     switch (phase) {
                         case WAIT:
@@ -482,7 +488,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // (because with no animations running the last phase must have ended), or start a new animation soon.
         else if(!display.hasActiveAnimations()) {
             ++framesWithoutAnimation;
-            if (framesWithoutAnimation > 5) {
+            if (framesWithoutAnimation >= 3) {
                 framesWithoutAnimation = 0;
                 switch (phase) {
                     case WAIT:
