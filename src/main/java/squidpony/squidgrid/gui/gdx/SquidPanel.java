@@ -405,13 +405,14 @@ public class SquidPanel extends Group {
      * Start a bumping animation in the given direction that will last duration seconds.
      * @param ae an AnimatedEntity returned by animateActor()
      * @param direction
-     * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.2f
+     * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.12f
      */
     public void bump(final AnimatedEntity ae, Direction direction, float duration)
     {
         final Actor a = ae.actor;
         final int x = ae.gridX * cellWidth, y = (gridHeight - ae.gridY - 1) * cellHeight - 1;
         if(a == null || ae.animating) return;
+        if(duration < 0.02f) duration = 0.02f;
         animationCount++;
         ae.animating = true;
         a.addAction(Actions.sequence(
@@ -431,12 +432,13 @@ public class SquidPanel extends Group {
      * @param x
      * @param y
      * @param direction
-     * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.2f
+     * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.12f
      */
     public void bump(int x, int y, Direction direction, float duration)
     {
         final Actor a = cellToActor(x, y);
         if(a == null) return;
+        if(duration < 0.02f) duration = 0.02f;
         animationCount++;
         x *= cellWidth;
         y = (gridHeight - y - 1);
@@ -476,7 +478,7 @@ public class SquidPanel extends Group {
     }
     /**
      * Start a movement animation for the object at the grid location x, y and moves it to newX, newY over a number of
-     * seconds given by duration (often 0.2f or somewhere around there).
+     * seconds given by duration (often 0.12f or somewhere around there).
      * @param ae an AnimatedEntity returned by animateActor()
      * @param newX
      * @param newY
@@ -487,6 +489,7 @@ public class SquidPanel extends Group {
         final Actor a = ae.actor;
         final int nextX = newX * cellWidth, nextY = (gridHeight - newY - 1) * cellHeight - 1;
         if(a == null || ae.animating) return;
+        if(duration < 0.02f) duration = 0.02f;
         animationCount++;
         ae.animating = true;
         a.addAction(Actions.sequence(
@@ -501,7 +504,7 @@ public class SquidPanel extends Group {
 
     /**
      * Start a movement animation for the object at the grid location x, y and moves it to newX, newY over a number of
-     * seconds given by duration (often 0.2f or somewhere around there).
+     * seconds given by duration (often 0.12f or somewhere around there).
      * @param x
      * @param y
      * @param newX
@@ -511,8 +514,8 @@ public class SquidPanel extends Group {
     public void slide(int x, int y, int newX, int newY, float duration)
     {
         final Actor a = cellToActor(x, y);
-        final int nextX = newX, nextY = newY;
         if(a == null) return;
+        if(duration < 0.02f) duration = 0.02f;
         animationCount++;
         newX *= cellWidth;
         newY = (gridHeight - newY - 1);
@@ -572,6 +575,7 @@ public class SquidPanel extends Group {
         final int x = ae.gridX * cellWidth, y = (gridHeight - ae.gridY - 1) * cellHeight - 1;
         if(a == null || ae.animating)
             return;
+        if(duration < 0.02f) duration = 0.02f;
         ae.animating = true;
         animationCount++;
         a.addAction(Actions.sequence(
@@ -606,6 +610,7 @@ public class SquidPanel extends Group {
         final Actor a = cellToActor(x, y);
         final int nextX = x, nextY = y;
         if(a == null) return;
+        if(duration < 0.02f) duration = 0.02f;
         animationCount++;
         x *= cellWidth;
         y = (gridHeight - y - 1);

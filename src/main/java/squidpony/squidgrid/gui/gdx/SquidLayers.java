@@ -31,6 +31,7 @@ public class SquidLayers extends Group {
     protected TextCellFactory textFactory;
     protected ArrayList<Color> palette, lightingPalette;
     protected boolean[][] values;
+    protected float animation_duration;
 
     /**
      * The pixel width of the entire map.
@@ -86,6 +87,14 @@ public class SquidLayers extends Group {
      */
     public int getCellHeight() {
         return cellHeight;
+    }
+
+    public float getAnimation_duration() {
+        return animation_duration;
+    }
+
+    public void setAnimation_duration(float animation_duration) {
+        this.animation_duration = animation_duration;
     }
 
     public TextCellFactory getTextFactory() {
@@ -232,6 +241,7 @@ public class SquidLayers extends Group {
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        animation_duration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
         extraPanels = new ArrayList<SquidPanel>();
 
@@ -280,6 +290,7 @@ public class SquidLayers extends Group {
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        animation_duration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
         extraPanels = new ArrayList<SquidPanel>();
 
@@ -324,6 +335,7 @@ public class SquidLayers extends Group {
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        animation_duration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
         extraPanels = new ArrayList<SquidPanel>();
 
@@ -1048,8 +1060,8 @@ public class SquidLayers extends Group {
             default:
                 p = extraPanels.get(layer - 3);
         }
-        if (duration == 0)
-            duration = p.DEFAULT_ANIMATION_DURATION;
+        if (duration < 0)
+            duration = animation_duration;
         p.bump(x, y, dir, duration);
         return this;
     }
@@ -1067,17 +1079,17 @@ public class SquidLayers extends Group {
             default:
                 p = extraPanels.get(layer - 3);
         }
-        if (duration == 0)
-            duration = p.DEFAULT_ANIMATION_DURATION;
+        if (duration < 0)
+            duration = animation_duration;
         p.bump(ae, dir, duration);
         return this;
     }
 
     public SquidLayers bump(int x, int y, Direction dir) {
-        return bump(x, y, 2, dir, 0);
+        return bump(x, y, 2, dir, -1);
     }
     public SquidLayers bump(AnimatedEntity ae, Direction dir) {
-        return bump(ae, 2, dir, 0);
+        return bump(ae, 2, dir, -1);
     }
 
     public SquidLayers slide(AnimatedEntity ae, int endX, int endY, int layer, float duration) {
@@ -1094,8 +1106,8 @@ public class SquidLayers extends Group {
             default:
                 p = extraPanels.get(layer - 3);
         }
-        if (duration == 0)
-            duration = p.DEFAULT_ANIMATION_DURATION;
+        if (duration < 0)
+            duration = animation_duration;
         p.slide(ae, endX, endY, duration);
         return this;
     }
@@ -1113,17 +1125,17 @@ public class SquidLayers extends Group {
             default:
                 p = extraPanels.get(layer - 3);
         }
-        if (duration == 0)
-            duration = p.DEFAULT_ANIMATION_DURATION;
+        if (duration < 0)
+            duration = animation_duration;
         p.slide(x, y, endX, endY, duration);
         return this;
     }
 
     public SquidLayers slide(int x, int y, int endX, int endY) {
-        return slide(x, y, endX, endY, 2, 0);
+        return slide(x, y, endX, endY, 2, -1);
     }
     public SquidLayers slide(AnimatedEntity ae, int endX, int endY) {
-        return slide(ae, endX, endY, 2, 0);
+        return slide(ae, endX, endY, 2, -1);
     }
 
     public SquidLayers wiggle(int x, int y, int layer, float duration) {
@@ -1140,8 +1152,8 @@ public class SquidLayers extends Group {
             default:
                 p = extraPanels.get(layer - 3);
         }
-        if (duration == 0)
-            duration = p.DEFAULT_ANIMATION_DURATION;
+        if (duration < 0)
+            duration = animation_duration;
         p.wiggle(x, y, duration);
         return this;
     }
@@ -1159,17 +1171,17 @@ public class SquidLayers extends Group {
             default:
                 p = extraPanels.get(layer - 3);
         }
-        if (duration == 0)
-            duration = p.DEFAULT_ANIMATION_DURATION;
+        if (duration < 0)
+            duration = animation_duration;
         p.wiggle(ae, duration);
         return this;
     }
 
     public SquidLayers wiggle(int x, int y) {
-        return wiggle(x, y, 2, 0);
+        return wiggle(x, y, 2, -1);
     }
     public SquidLayers wiggle(AnimatedEntity ae) {
-        return wiggle(ae, 2, 0);
+        return wiggle(ae, 2, -1);
     }
 
     public boolean hasActiveAnimations() {
@@ -1208,14 +1220,14 @@ public class SquidLayers extends Group {
     }
 
     public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette, int layer) {
-        return animateActor(x, y, c, palette.get(index));
+        return animateActor(x, y, c, palette.get(index), layer);
     }
     public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette) {
         return animateActor(x, y, c, palette.get(index));
     }
 
     public AnimatedEntity animateActor(int x, int y, char c, int index, int layer) {
-        return animateActor(x, y, c, palette.get(index));
+        return animateActor(x, y, c, palette.get(index), layer);
     }
     public AnimatedEntity animateActor(int x, int y, char c, int index) {
         return animateActor(x, y, c, palette.get(index));
