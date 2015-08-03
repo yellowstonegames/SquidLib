@@ -15,23 +15,24 @@ import java.util.*;
  * be used for all random expansion; the RNG will reset to the specified seed after each generation so the same
  * CloudAOE can be used in different places by just changing the center. You can cause the CloudAOE to not reset after
  * generating each time by using setExpanding(true) and cause it to reset after the next generation by setting it back
- * to the default of false. If expanding is true, then multiple calls to getArea with the same center and larger volumes
- * will produce more coherent clumps of affected area with fewer gaps, and can be spaced out over multiple calls.
+ * to the default of false. If expanding is true, then multiple calls to findArea with the same center and larger
+ * volumes will produce more solid clumps of affected area with fewer gaps, and can be spaced out over multiple calls.
  *
- * This will produce doubles for its getArea() method which are equal to 1.0.
+ * This will produce doubles for its findArea() method which are equal to 1.0.
  *
  * This class uses squidpony.squidgrid.Spill to create its area of effect.
  * Created by Tommy Ettinger on 7/13/2015.
  */
 public class CloudAOE implements AOE {
     private Spill spill;
-    private Point center;
+    private Point center, origin = null;
     private int volume;
     private Spill.Measurement measurement;
     private long seed;
     private boolean expanding;
-    private Radius rt;
+    private Radius rt, limitType = null;
     private char[][] dungeon;
+
     public CloudAOE(Point center, int volume, Radius radiusType)
     {
         LightRNG l = new LightRNG();
@@ -90,7 +91,9 @@ public class CloudAOE implements AOE {
     }
 
     public void setCenter(Point center) {
-        this.center = center;
+        if (AreaUtils.verifyLimit(limitType, origin, center)) {
+            this.center = center;
+        }
     }
 
     public int getVolume() {
@@ -170,14 +173,17 @@ public class CloudAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
 
+        Point tempPt = new Point(0, 0);
         for (int i = 0; i < exs.length; ++i, t = exs[i]) {
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (sp.spillMap[x][y]) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (sp.spillMap[x][y] || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -286,14 +292,17 @@ public class CloudAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
             Arrays.fill(dungeonPriorities[i], '#');
         }
+        Point tempPt = new Point(0,0);
         for (int i = 0; i < exs.length; ++i, t = exs[i]) {
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (sp.spillMap[x][y]) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (sp.spillMap[x][y] || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -501,6 +510,12 @@ public class CloudAOE implements AOE {
             spill.lrng.setState(this.seed);
         }
         return r;
+    }
+
+    @Override
+    public void limit(Point origin, Radius limitType) {
+        this.origin = origin;
+        this.limitType = limitType;
     }
 
     public boolean isExpanding() {

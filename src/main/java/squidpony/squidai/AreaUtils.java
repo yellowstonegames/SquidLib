@@ -1,5 +1,7 @@
 package squidpony.squidai;
 
+import squidpony.squidgrid.Radius;
+
 import java.awt.Point;
 import java.util.LinkedHashMap;
 
@@ -89,5 +91,32 @@ public class AreaUtils {
             }
         }
         return ret;
+    }
+
+
+    public static boolean verifyLimit(Radius limit, Point origin, Point end)
+    {
+        if (limit != null && origin != null && end != null) {
+            switch (limit) {
+                case SQUARE:
+                case CUBE:
+                case CIRCLE:
+                case SPHERE:
+                    if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y))
+                    {
+                        return true;
+                    }
+                case DIAMOND:
+                case OCTAHEDRON:
+                    if(end.x == origin.x || end.y == origin.y)
+                    {
+                        return true;
+                    }
+                    break;
+            }
+            return false;
+        }
+        else
+            return true;
     }
 }

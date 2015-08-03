@@ -7,7 +7,7 @@ import java.awt.Point;
 import java.util.*;
 
 /**
- * Beam Area of Effect that affects an slightly expanded (Elias) line from a given start Point out to a given length,
+ * Beam Area of Effect that affects an slightly expanded (Elias) line from a given origin Point out to a given length,
  * plus an optional radius of cells around the path of the line, while respecting obstacles in its path and possibly
  * stopping if obstructed. There are several ways to specify the BeamAOE's direction and length, including specifying
  * an endpoint or specifying an angle in degrees and a distance to the end of the line (without the radius included).
@@ -21,41 +21,41 @@ import java.util.*;
  * BeamAOE is more suitable for that effect, while LineAOE may be more suitable for things like focused lasers that
  * pass through small (likely fleshy) obstacles but stop after hitting the aimed-at target.
  *
- * This will produce doubles for its getArea() method which are equal to 1.0.
+ * This will produce doubles for its findArea() method which are equal to 1.0.
  *
  * This class uses squidpony.squidmath.Elias and squidpony.squidai.DijkstraMap to create its area of effect.
  * Created by Tommy Ettinger on 7/14/2015.
  */
 public class BeamAOE implements AOE {
-    private Point start, end;
+    private Point origin, end;
     private int radius;
     private int length;
     private char[][] dungeon;
     private DijkstraMap dijkstra;
-    private Radius rt;
+    private Radius rt, limitType = null;
 
-    public BeamAOE(Point start, Point end)
+    public BeamAOE(Point origin, Point end)
     {
         this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
-        this.start = start;
+        this.origin = origin;
         this.end = end;
-        this.length =(int)Math.round(rt.radius(start.x, start.y, end.x, end.y));
+        this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
         this.radius = 0;
     }
-    public BeamAOE(Point start, Point end, int radius)
+    public BeamAOE(Point origin, Point end, int radius)
     {
         this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
-        this.start = start;
+        this.origin = origin;
         this.end = end;
         this.radius = radius;
-        this.length =(int)Math.round(rt.radius(start.x, start.y, end.x, end.y));
+        this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
 
     }
-    public BeamAOE(Point start, Point end, int radius, Radius radiusType)
+    public BeamAOE(Point origin, Point end, int radius, Radius radiusType)
     {
         this.dijkstra = new DijkstraMap();
         this.rt = radiusType;
@@ -70,38 +70,38 @@ public class BeamAOE implements AOE {
             default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
                 break;
         }
-        this.start = start;
+        this.origin = origin;
         this.end = end;
         this.radius = radius;
-        this.length =(int)Math.round(rt.radius(start.x, start.y, end.x, end.y));
+        this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
     }
 
-    public BeamAOE(Point start, double angle, int length)
+    public BeamAOE(Point origin, double angle, int length)
     {
         this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
-        this.start = start;
+        this.origin = origin;
         double theta = Math.toRadians(angle);
-        this.end = new Point((int)Math.round(Math.cos(theta) * length) + start.x,
-                (int)Math.round(Math.sin(theta) * length) + start.y);
+        this.end = new Point((int)Math.round(Math.cos(theta) * length) + origin.x,
+                (int)Math.round(Math.sin(theta) * length) + origin.y);
         this.length = length;
         this.radius = 0;
     }
-    public BeamAOE(Point start, double angle, int length, int radius)
+    public BeamAOE(Point origin, double angle, int length, int radius)
     {
         this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
-        this.start = start;
+        this.origin = origin;
         double theta = Math.toRadians(angle);
-        this.end = new Point((int)Math.round(Math.cos(theta) * length) + start.x,
-                (int)Math.round(Math.sin(theta) * length) + start.y);
+        this.end = new Point((int)Math.round(Math.cos(theta) * length) + origin.x,
+                (int)Math.round(Math.sin(theta) * length) + origin.y);
         this.radius = radius;
         this.length = length;
 
     }
-    public BeamAOE(Point start, double angle, int length, int radius, Radius radiusType)
+    public BeamAOE(Point origin, double angle, int length, int radius, Radius radiusType)
     {
         this.dijkstra = new DijkstraMap();
         this.rt = radiusType;
@@ -116,16 +116,16 @@ public class BeamAOE implements AOE {
             default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
                 break;
         }
-        this.start = start;
+        this.origin = origin;
         double theta = Math.toRadians(angle);
-        this.end = new Point((int)Math.round(Math.cos(theta) * length) + start.x,
-                (int)Math.round(Math.sin(theta) * length) + start.y);
+        this.end = new Point((int)Math.round(Math.cos(theta) * length) + origin.x,
+                (int)Math.round(Math.sin(theta) * length) + origin.y);
         this.radius = radius;
         this.length = length;
     }
     private double[][] initDijkstra()
     {
-        List<Point> lit = Elias.line(start, end);
+        List<Point> lit = Elias.line(origin, end);
 
         dijkstra.initialize(dungeon);
         for(Point p : lit)
@@ -137,12 +137,12 @@ public class BeamAOE implements AOE {
         return dijkstra.partialScan(radius, null);
     }
 
-    public Point getStart() {
-        return start;
+    public Point getOrigin() {
+        return origin;
     }
 
-    public void setStart(Point start) {
-        this.start = start;
+    public void setOrigin(Point origin) {
+        this.origin = origin;
         dijkstra.resetMap();
         dijkstra.clearGoals();
     }
@@ -152,7 +152,10 @@ public class BeamAOE implements AOE {
     }
 
     public void setEnd(Point end) {
-        this.end = rt.extend(start, end, length, false, dungeon.length, dungeon[0].length);
+        if (AreaUtils.verifyLimit(limitType, origin, end))
+        {
+            this.end = rt.extend(origin, end, length, false, dungeon.length, dungeon[0].length);
+        }
 
     }
 
@@ -193,8 +196,8 @@ public class BeamAOE implements AOE {
     public boolean mayContainTarget(Set<Point> targets) {
         for (Point p : targets)
         {
-            if(rt.radius(start.x, start.y, p.x, p.y) + rt.radius(end.x, end.y, p.x, p.y) -
-                    rt.radius(start.x, start.y, end.x, end.y) <= 3.0 + radius)
+            if(rt.radius(origin.x, origin.y, p.x, p.y) + rt.radius(end.x, end.y, p.x, p.y) -
+                    rt.radius(origin.x, origin.y, end.x, end.y) <= 3.0 + radius)
                 return true;
         }
         return false;
@@ -214,7 +217,7 @@ public class BeamAOE implements AOE {
 
         Point[] ts = targets.toArray(new Point[targets.size()]);
         Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = rt.extend(start, exs[0], length, false, dungeon.length, dungeon[0].length);
+        Point t = rt.extend(origin, exs[0], length, false, dungeon.length, dungeon[0].length);
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
 
@@ -223,10 +226,11 @@ public class BeamAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
-        for (int i = 0; i < exs.length; ++i, t = rt.extend(start, exs[i], length, false, dungeon.length, dungeon[0].length)) {
+        Point tempPt = new Point(0, 0);
+        for (int i = 0; i < exs.length; ++i, t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length)) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -236,19 +240,21 @@ public class BeamAOE implements AOE {
                 dt.partialScan(radius, null);
 
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
 
-        t = rt.extend(start, ts[0], length, false, dungeon.length, dungeon[0].length);
+        t = rt.extend(origin, ts[0], length, false, dungeon.length, dungeon[0].length);
         DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
-        for (int i = 0; i < ts.length; ++i, t = rt.extend(start, ts[i], length, false, dungeon.length, dungeon[0].length)) {
+        for (int i = 0; i < ts.length; ++i, t = rt.extend(origin, ts[i], length, false, dungeon.length, dungeon[0].length)) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -328,7 +334,7 @@ public class BeamAOE implements AOE {
         Point[] pts = priorityTargets.toArray(new Point[priorityTargets.size()]);
         Point[] lts = lesserTargets.toArray(new Point[lesserTargets.size()]);
         Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = rt.extend(start, exs[0], length, false, dungeon.length, dungeon[0].length);
+        Point t = rt.extend(origin, exs[0], length, false, dungeon.length, dungeon[0].length);
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
 
@@ -339,10 +345,11 @@ public class BeamAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
-        for (int i = 0; i < exs.length; ++i, t = rt.extend(start, exs[i], length, false, dungeon.length, dungeon[0].length)) {
+        Point tempPt = new Point(0,0);
+        for (int i = 0; i < exs.length; ++i, t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length)) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -352,20 +359,22 @@ public class BeamAOE implements AOE {
                 dt.partialScan(radius, null);
 
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR  || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
 
-        t = rt.extend(start, pts[0], length, false, dungeon.length, dungeon[0].length);
+        t = rt.extend(origin, pts[0], length, false, dungeon.length, dungeon[0].length);
 
         DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
-        for (int i = 0; i < pts.length; ++i, t = rt.extend(start, pts[i], length, false, dungeon.length, dungeon[0].length)) {
+        for (int i = 0; i < pts.length; ++i, t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length)) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -393,12 +402,12 @@ public class BeamAOE implements AOE {
             dm.clearGoals();
         }
 
-        t = rt.extend(start, lts[0], length, false, dungeon.length, dungeon[0].length);
+        t = rt.extend(origin, lts[0], length, false, dungeon.length, dungeon[0].length);
 
-        for (int i = pts.length; i < totalTargets; ++i, t = rt.extend(start, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length)) {
+        for (int i = pts.length; i < totalTargets; ++i, t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length)) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -500,8 +509,8 @@ public class BeamAOE implements AOE {
                     ctr = 0;
                     for(Point tgt : targets)
                     {
-                        if(rt.radius(start.x, start.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
-                            rt.radius(start.x, start.y, end.x, end.y) <= 3.0 + radius)
+                        if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
+                            rt.radius(origin.x, origin.y, end.x, end.y) <= 3.0 + radius)
                             ctr++;
                     }
                     if(ctr > 0)
@@ -528,8 +537,8 @@ public class BeamAOE implements AOE {
                                 ctr = 0;
                                 for(Point tgt : targets)
                                 {
-                                    if(rt.radius(start.x, start.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
-                                            rt.radius(start.x, start.y, end.x, end.y) <= 3.0 + radius)
+                                    if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
+                                            rt.radius(origin.x, origin.y, end.x, end.y) <= 3.0 + radius)
                                         ctr++;
                                 }
                                 if(ctr > 0)
@@ -545,7 +554,7 @@ public class BeamAOE implements AOE {
     @Override
     public void setMap(char[][] map) {
         this.dungeon = map;
-        end = rt.extend(start, end, length, false, map.length, map[0].length);
+        end = rt.extend(origin, end, length, false, map.length, map[0].length);
         dijkstra.resetMap();
         dijkstra.clearGoals();
     }
@@ -553,9 +562,15 @@ public class BeamAOE implements AOE {
     @Override
     public LinkedHashMap<Point, Double> findArea() {
         double[][] dmap = initDijkstra();
-        dmap[start.x][start.y] = DijkstraMap.DARK;
+        dmap[origin.x][origin.y] = DijkstraMap.DARK;
         dijkstra.resetMap();
         dijkstra.clearGoals();
         return AreaUtils.dijkstraToHashMap(dmap);
+    }
+
+    @Override
+    public void limit(Point origin, Radius limitType) {
+        setOrigin(origin);
+        this.limitType = limitType;
     }
 }

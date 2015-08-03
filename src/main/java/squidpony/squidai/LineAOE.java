@@ -7,7 +7,7 @@ import java.awt.Point;
 import java.util.*;
 
 /**
- * Line Area of Effect that affects an slightly expanded (Elias) line from a given start Point to a given end Point,
+ * Line Area of Effect that affects an slightly expanded (Elias) line from a given origin Point to a given end Point,
  * plus an optional radius of cells around the path of the line, while respecting obstacles in its path and possibly
  * stopping if obstructed. You can specify the RadiusType to Radius.DIAMOND for Manhattan distance, RADIUS.SQUARE for
  * Chebyshev, or RADIUS.CIRCLE for Euclidean.
@@ -19,37 +19,37 @@ import java.util.*;
  * BeamAOE is more suitable for that effect, while LineAOE may be more suitable for things like focused lasers that
  * pass through small (likely fleshy) obstacles but stop after hitting the aimed-at target.
  *
- * This will produce doubles for its getArea() method which are equal to 1.0.
+ * This will produce doubles for its findArea() method which are equal to 1.0.
  *
  * This class uses squidpony.squidmath.Elias and squidpony.squidai.DijkstraMap to create its area of effect.
  * Created by Tommy Ettinger on 7/14/2015.
  */
 public class LineAOE implements AOE {
-    private Point start, end;
+    private Point origin, end;
     private int radius;
     private char[][] dungeon;
     private DijkstraMap dijkstra;
-    private Radius rt;
+    private Radius rt, limitType = null;
 
-    public LineAOE(Point start, Point end)
+    public LineAOE(Point origin, Point end)
     {
         this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
-        this.start = start;
+        this.origin = origin;
         this.end = end;
         this.radius = 0;
     }
-    public LineAOE(Point start, Point end, int radius)
+    public LineAOE(Point origin, Point end, int radius)
     {
         this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
-        this.start = start;
+        this.origin = origin;
         this.end = end;
         this.radius = radius;
     }
-    public LineAOE(Point start, Point end, int radius, Radius radiusType)
+    public LineAOE(Point origin, Point end, int radius, Radius radiusType)
     {
         this.dijkstra = new DijkstraMap();
         this.rt = radiusType;
@@ -64,13 +64,13 @@ public class LineAOE implements AOE {
             default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
                 break;
         }
-        this.start = start;
+        this.origin = origin;
         this.end = end;
         this.radius = radius;
     }
     private double[][] initDijkstra()
     {
-        List<Point> lit = Elias.line(start, end);
+        List<Point> lit = Elias.line(origin, end);
 
         dijkstra.initialize(dungeon);
         for(Point p : lit)
@@ -82,12 +82,12 @@ public class LineAOE implements AOE {
         return dijkstra.partialScan(radius, null);
     }
 
-    public Point getStart() {
-        return start;
+    public Point getOrigin() {
+        return origin;
     }
 
-    public void setStart(Point start) {
-        this.start = start;
+    public void setOrigin(Point origin) {
+        this.origin = origin;
         dijkstra.resetMap();
         dijkstra.clearGoals();
     }
@@ -97,7 +97,11 @@ public class LineAOE implements AOE {
     }
 
     public void setEnd(Point end) {
-        this.end = end;
+        if (AreaUtils.verifyLimit(limitType, origin, end)) {
+            this.end = end;
+            dijkstra.resetMap();
+            dijkstra.clearGoals();
+        }
     }
 
     public int getRadius() {
@@ -137,8 +141,8 @@ public class LineAOE implements AOE {
     public boolean mayContainTarget(Set<Point> targets) {
         for (Point p : targets)
         {
-            if(rt.radius(start.x, start.y, p.x, p.y) + rt.radius(end.x, end.y, p.x, p.y) -
-                    rt.radius(start.x, start.y, end.x, end.y) <= 3.0 + radius)
+            if(rt.radius(origin.x, origin.y, p.x, p.y) + rt.radius(end.x, end.y, p.x, p.y) -
+                    rt.radius(origin.x, origin.y, end.x, end.y) <= 3.0 + radius)
                 return true;
         }
         return false;
@@ -167,10 +171,11 @@ public class LineAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
+        Point tempPt = new Point(0,0);
         for (int i = 0; i < exs.length; ++i, t = exs[i]) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -180,8 +185,10 @@ public class LineAOE implements AOE {
                 dt.partialScan(radius, null);
 
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -192,7 +199,7 @@ public class LineAOE implements AOE {
         for (int i = 0; i < ts.length; ++i, t = ts[i]) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -283,10 +290,11 @@ public class LineAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
+        Point tempPt = new Point(0,0);
         for (int i = 0; i < exs.length; ++i, t = exs[i]) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -296,8 +304,10 @@ public class LineAOE implements AOE {
                 dt.partialScan(radius, null);
 
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -309,7 +319,7 @@ public class LineAOE implements AOE {
         for (int i = 0; i < pts.length; ++i, t = pts[i]) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -342,7 +352,7 @@ public class LineAOE implements AOE {
         for (int i = pts.length; i < totalTargets; ++i, t = lts[i - pts.length]) {
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(start, t);
+            List<Point> lit = Elias.line(origin, t);
 
             for(Point p : lit)
             {
@@ -444,8 +454,8 @@ public class LineAOE implements AOE {
                 ctr = 0;
                 for(Point tgt : targets)
                 {
-                    if(rt.radius(start.x, start.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
-                        rt.radius(start.x, start.y, end.x, end.y) <= 3.0 + radius)
+                    if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
+                        rt.radius(origin.x, origin.y, end.x, end.y) <= 3.0 + radius)
                         ctr++;
                 }
                 if(ctr > 0)
@@ -472,8 +482,8 @@ public class LineAOE implements AOE {
                             ctr = 0;
                             for(Point tgt : targets)
                             {
-                                if(rt.radius(start.x, start.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
-                                        rt.radius(start.x, start.y, end.x, end.y) <= 3.0 + radius)
+                                if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
+                                        rt.radius(origin.x, origin.y, end.x, end.y) <= 3.0 + radius)
                                     ctr++;
                             }
                             if(ctr > 0)
@@ -496,9 +506,15 @@ public class LineAOE implements AOE {
     @Override
     public LinkedHashMap<Point, Double> findArea() {
         double[][] dmap = initDijkstra();
-        dmap[start.x][start.y] = DijkstraMap.DARK;
+        dmap[origin.x][origin.y] = DijkstraMap.DARK;
         dijkstra.resetMap();
         dijkstra.clearGoals();
         return AreaUtils.dijkstraToHashMap(dmap);
+    }
+
+    @Override
+    public void limit(Point origin, Radius limitType) {
+        setOrigin(origin);
+        this.limitType = limitType;
     }
 }
