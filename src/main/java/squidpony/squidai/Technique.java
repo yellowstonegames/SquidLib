@@ -15,13 +15,13 @@ import java.util.Set;
  * The typical usage of a Technique is:
  * <ul>
  * <li>Construct any AOE implementation the Technique would use (if the Technique affects multiple grid cells).</li>
- * <li>Construct the Technique (with the AOE if needed).</li>
+ * <li>Construct the Technique (passing the AOE as a parameter if needed).</li>
  * <li>Call setMap() before considering the Technique if it has not been called yet, if the physical map (including
  * doors and destructible objects) has changed since setMap() was last called, or simply on every Technique every time
  * the map changes if there are few enemies with few Techniques. PERFORMING ANY SUBSEQUENT STEPS WITHOUT SETTING THE
  * MAP TO THE CURRENT ACTUAL PHYSICAL MAP WILL HAVE BAD CONSEQUENCES FOR LOGIC AND MAY CAUSE CRASHING BUGS DUE TO
  * ARRAY BOUNDS VIOLATIONS IF YOU HAVEN'T SET THE MAP ARRAY IN THE FIRST PLACE. The map should be bounded by wall chars
- * ('#'), which is done automatically by squidpony.squidgrid.mapping.DungeonGenerator</li>
+ * ('#'), which is done automatically by squidpony.squidgrid.mapping.DungeonGenerator .</li>
  * <li>When the Technique is being considered by an AI, call idealLocations() with the values of targets,
  * lesserTargets, and/or priorityTargets set to beings that the AI can see (likely using FOV) and wants to affect with
  * this Technique (enemies for offensive Techniques, allies for supporting ones), and requiredExclusions typically set
@@ -43,6 +43,12 @@ import java.util.Set;
  * Every Technique has a Radius enum it uses to measure distance called radiusType; the value given to a Technique for
  * radiusType does not automatically propagate into the possible Radius enums that AOE implementations can have.
  *
+ * A Technique may have a Radius enum that is used to limit the cells that are tested for AI, called limitType; this
+ * enum may be null if the cells are not given limitations more strict than minRange and maxRange. If it is
+ * Radius.DIAMOND or Radius.OCTAHEDRON, then it limits the cells that can be picked as ideal locations to those directly
+ * north, east, south, and west (90 degree increments); for any other value of Radius, the cells affected can be in any
+ * 45 degree increments, so north, northeast, east, southeast, south, etc.  The cells must be in a straight line.
+ *
  * A Technique has a minimum and maximum range that applies to the "target point" of the AOE. It may be desirable to
  * restrict target points to a specific ring of cells, especially for ConeAOE, and this can be done by setting minRange
  * and maxRange to the same value: the distance the ring should have from the user, measured by radiusType.
@@ -60,6 +66,7 @@ public class Technique {
     public int maxRange;
     public AOE aoe;
     public Radius radiusType;
+    public Radius limitType = null;
     protected char[][] dungeon;
     protected final static Point DEFAULT_POINT = new Point(0, 0);
 
@@ -74,6 +81,7 @@ public class Technique {
         this.id = name;
         this.minRange = 1;
         this.maxRange = range;
+        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
         this.aoe = new PointAOE(DEFAULT_POINT);
         this.radiusType = Radius.SQUARE;
     }
@@ -90,6 +98,7 @@ public class Technique {
         this.id = name;
         this.minRange = minRange;
         this.maxRange = maxRange;
+        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
         this.aoe = new PointAOE(DEFAULT_POINT);
         this.radiusType = Radius.SQUARE;
     }
@@ -107,6 +116,7 @@ public class Technique {
         this.id = name;
         this.minRange = minRange;
         this.maxRange = maxRange;
+        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
         this.aoe = aoe;
         this.radiusType = Radius.SQUARE;
     }
@@ -125,6 +135,7 @@ public class Technique {
         this.id = name;
         this.minRange = minRange;
         this.maxRange = maxRange;
+        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
         this.aoe = aoe;
         this.radiusType = radiusType;
     }
@@ -144,8 +155,31 @@ public class Technique {
         this.id = id;
         this.minRange = minRange;
         this.maxRange = maxRange;
+        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
         this.aoe = aoe;
         this.radiusType = radiusType;
+    }
+
+    /**
+     * Creates a Technique that can target a Point at any range from minRange cell away to maxRange cells away,
+     * using the given radiusType for how to measure distance, and use that target Point for the given AOE.
+     * @param name An identifier that may be displayed to the user.
+     * @param id An identifier that should always be internal, and will probably never be shown to the user.
+     * @param minRange The minimum range, inclusive, of this Technique.
+     * @param maxRange The maximum range, inclusive, of this Technique.
+     * @param aoe An implementation of the AOE interface; typically needs construction beforehand.
+     * @param radiusType A Radius enum type such as Radius.DIAMOND for Manhattan (4-way diamond) distance. Not used for the AOE, only for measuring distance here.
+     * @param limitType A Radius enum that, if non-null, limits the valid ideal cells to straight lines from the user's position.
+     * */
+    public Technique(String name, String id, int minRange, int maxRange, AOE aoe, Radius radiusType, Radius limitType) {
+        this.name = name;
+        this.id = id;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
+        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
+        this.aoe = aoe;
+        this.radiusType = radiusType;
+        this.limitType = limitType;
     }
 
     /**
@@ -179,6 +213,7 @@ public class Technique {
      * @return LinkedHashMap of Point keys representing target points to pass to apply, to ArrayList of Point values representing what targets' locations will be affected.
      */
     public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Point user, Set<Point> targets, Set<Point> requiredExclusions) {
+        aoe.limit(user, limitType);
         LinkedHashMap<Point, ArrayList<Point>> area = aoe.idealLocations(targets, requiredExclusions),
                 r = new LinkedHashMap<Point, ArrayList<Point>>();
         for (Point shifter : area.keySet())
@@ -209,6 +244,7 @@ public class Technique {
      * @return LinkedHashMap of Point keys representing target points to pass to apply, to ArrayList of Point values representing what targets' locations will be affected.
      */
     public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Point user, Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions) {
+        aoe.limit(user, limitType);
         LinkedHashMap<Point, ArrayList<Point>> area = aoe.idealLocations(priorityTargets, lesserTargets, requiredExclusions),
                 r = new LinkedHashMap<Point, ArrayList<Point>>();
         for (Point shifter : area.keySet())
@@ -222,7 +258,9 @@ public class Technique {
 
     /**
      * This does one last validation of the location aimAt (checking that it is within the valid range for this
-     * Technique) before getting the area affected by the AOE targeting that cell.
+     * Technique) before getting the area affected by the AOE targeting that cell. It considers the origin of the AOE
+     * to be the Point parameter user, for purposes of directional limitations and for AOE implementations that need
+     * the user's location, such as ConeAOE and LineAOE.
      *
      * YOU MUST CALL setMap() with the current map status at some point before using this method, and call it again if
      * the map changes. Failure to do so can cause serious bugs, from logic errors where monsters consider a door
@@ -235,6 +273,7 @@ public class Technique {
      */
     public LinkedHashMap<Point, Double> apply(Point user, Point aimAt)
     {
+        aoe.limit(user, limitType);
         double dist = radiusType.radius(user.x, user.y, aimAt.x, aimAt.y);
         LinkedHashMap<Point, Double> r = new LinkedHashMap<Point, Double>();
         if(dist >= minRange && dist <= maxRange)

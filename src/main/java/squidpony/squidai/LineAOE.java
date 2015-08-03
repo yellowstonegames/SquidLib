@@ -415,8 +415,12 @@ public class LineAOE implements AOE {
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
-                        if((pbits & (1 << i)) != 0)
+                        if ((pbits & (1 << i)) != 0) {
                             ap.add(pts[i]);
+                            ap.add(pts[i]);
+                            ap.add(pts[i]);
+                            ap.add(pts[i]);
+                        }
                     }
                     for (int i = pts.length; i < totalTargets && i < 63; ++i) {
                         if((lbits & (1 << i)) != 0)

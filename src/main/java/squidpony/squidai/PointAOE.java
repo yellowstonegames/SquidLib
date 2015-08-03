@@ -93,6 +93,9 @@ public class PointAOE implements AOE {
 
                 ArrayList<Point> ap = new ArrayList<Point>();
                 ap.add(p);
+                ap.add(p);
+                ap.add(p);
+                ap.add(p);
                 bestPoints.put(p, ap);
             }
         }
