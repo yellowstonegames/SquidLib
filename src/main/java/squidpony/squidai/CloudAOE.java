@@ -403,8 +403,12 @@ public class CloudAOE implements AOE {
                             ap.add(pts[i]);
                     }
                     for (int i = pts.length; i < totalTargets && i < 63; ++i) {
-                        if((lbits & (1 << i)) != 0)
-                            ap.add(lts[i - pts.length]);
+                        if ((pbits & (1 << i)) != 0) {
+                            ap.add(pts[i]);
+                            ap.add(pts[i]);
+                            ap.add(pts[i]);
+                            ap.add(pts[i]);
+                        }
                     }
                     bestPoints.put(new Point(x, y), ap);
                 }

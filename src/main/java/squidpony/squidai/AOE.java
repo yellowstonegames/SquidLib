@@ -35,8 +35,10 @@ public interface AOE {
     /**
      * Returns a LinkedHashMap of Point keys and ArrayList of Point values, where each Point key is an ideal location to
      * hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value
-     * is the collection of targets that will be hit if the associated key is used. The second argument may be null, in
-     * which case this will initialize it to an empty Set of Point and disregard it.
+     * is the collection of targets that will be hit if the associated key is used. The length of any ArrayList in the
+     * returned collection's values will be the number of targets likely to be affected by the AOE when shift() is
+     * called with the Point key as an argument; all of the ArrayLists should have the same length. The second argument
+     * may be null, in which case this will initialize it to an empty Set of Point and disregard it.
      *
      * With complex maps and varied arrangements of obstacles and desirable targets, calculating the best points to
      * evaluate for AI can be computationally difficult. This method provides a way to calculate with good accuracy
@@ -55,7 +57,11 @@ public interface AOE {
     /**
      * A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
      * priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations
-     * that do not affect a Point in requiredExclusions.
+     * that do not affect a Point in requiredExclusions. Unlike the variant of idealLocations that only takes one group
+     * of targets, this variant can return a collection with ArrayList values where the same Point appears four times
+     * in the same ArrayList; this is done only for priorityTargets that are affected by the target point at the
+     * associated key, and is done so that the length of each similar-quality ArrayList should be identical (since a
+     * priorityTarget is worth four times what a lesserTarget is worth in the calculation this uses).
      * @param priorityTargets A Set of Points that are the most-wanted targets to include in this AOE
      * @param lesserTargets A Set of Points that are the less-wanted targets to include in this AOE, should not overlap with priorityTargets
      * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE

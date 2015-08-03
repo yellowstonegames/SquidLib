@@ -103,6 +103,9 @@ public class DijkstraMap
     public RNG rng;
     private static int frustration = 0;
 
+    public Point[][] targetMap;
+
+
     private boolean initialized = false;
     /**
      * Construct a DijkstraMap without a level to actually scan. If you use this constructor, you must call an
@@ -234,6 +237,7 @@ public class DijkstraMap
         height = level[0].length;
         gradientMap = new double[width][height];
         physicalMap = new double[width][height];
+        targetMap = new Point[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 gradientMap[x][y] = level[x][y];
@@ -256,6 +260,7 @@ public class DijkstraMap
         height = level[0].length;
         gradientMap = new double[width][height];
         physicalMap = new double[width][height];
+        targetMap = new Point[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 double t = (level[x][y] == '#') ? WALL : FLOOR;
@@ -281,6 +286,7 @@ public class DijkstraMap
         height = level[0].length;
         gradientMap = new double[width][height];
         physicalMap = new double[width][height];
+        targetMap = new Point[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 double t = (level[x][y] == alternateWall) ? WALL : FLOOR;
@@ -300,6 +306,8 @@ public class DijkstraMap
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 gradientMap[x][y] = physicalMap[x][y];
+                targetMap[x][y] = null;
+
             }
         }
     }
@@ -977,10 +985,10 @@ public class DijkstraMap
             {
                 if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
                     continue;
-                if (gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange
-                        && los != null) {
+                if (gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange) {
+
                     for (Point goal : targets) {
-                        if (los.isReachable(resMap, x, y, goal.x, goal.y)) {
+                        if (los == null || los.isReachable(resMap, x, y, goal.x, goal.y)) {
                             setGoal(x, y);
                             gradientMap[x][y] = 0;
                             continue CELL;
@@ -1025,9 +1033,8 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    Set<Point> impassable2 = impassable;
-                    impassable2.add(currentPos);
-                    return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
+                    impassable.add(currentPos);
+                    return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable,
                             onlyPassable, start, targets);
                 }
                 break;
@@ -1039,6 +1046,187 @@ public class DijkstraMap
         goals.clear();
         return path;
     }
+
+    /**
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * of Point positions (using the current measurement) needed to get closer to a goal, where goals are
+     * considered valid if they are at a valid range for the given Technique to hit at least one target
+     * and ideal if that Technique can affect as many targets as possible from a cell that can be moved
+     * to with at most movelength steps.
+     *
+     * The return value of this method is the path to get to a location to attack, but on its own it
+     * does not tell the user how to perform the attack.  It does set the targetMap 2D Point array field
+     * so that if your position at the end of the returned path is non-null in targetMap, it will be
+     * a Point that can be used as a target position for Technique.apply() . If your position at the end
+     * of the returned path is null, then an ideal attack position was not reachable by the path.
+     *
+     * This needs a char[][] dungeon as an argument because DijkstraMap does not always have a char[][]
+     * version of the map available to it, and certain AOE implementations that a Technique uses may
+     * need a char[][] specifically to determine what they affect.
+     *
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in allies
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios, and is also used considered an undesirable thing to affect for the Technique),
+     * it will recalculate a move so that it does not pass into that cell.
+     *
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a target overlapping one.
+     *
+     * @param moveLength the maximum distance to try to pathfind out to; if a spot to use a Technique can be found
+     *                   while moving no more than this distance, then the targetMap field in this object will have a
+     *                   target Point that is ideal for the given Technique at the x, y indices corresponding to the
+     *                   last Point in the returned path.
+     * @param tech a Technique that we will try to find an ideal place to use, and/or a path toward that place.
+     * @param dungeon a char 2D array with '#' for walls.
+     * @param los a squidgrid.LOS object if the preferred range should try to stay in line of sight, or null if LoS
+     *            should be disregarded.
+     * @param impassable locations of enemies or mobile hazards/obstacles that aren't in the map as walls
+     * @param allies called onlyPassable in other methods, here it also represents allies for Technique things
+     * @param start the Point the pathfinder starts at.
+     * @param targets a Set of Point, not an array of Point or variable argument list as in other methods.
+     * @return an ArrayList of Point that represents a path to travel to get to an ideal place to use tech
+     */
+    public ArrayList<Point> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, LOS los,
+                                           Set<Point> impassable, Set<Point> allies, Point start, Set<Point> targets) {
+        if(!initialized) return null;
+        tech.setMap(dungeon);
+        double[][] resMap = new double[width][height];
+        double[][] worthMap = new double[width][height];
+
+
+        if(los != null)
+        {
+            for(int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
+                }
+            }
+        }
+        path = new ArrayList<Point>();
+        if(targets == null)
+            return path;
+        if(impassable == null)
+            impassable = new HashSet<Point>();
+        if(allies == null)
+            allies = new HashSet<Point>();
+
+        resetMap();
+        for (Point goal : targets) {
+            setGoal(goal.x, goal.y);
+        }
+        if(goals.isEmpty())
+            return path;
+
+        Measurement mess = measurement;
+        if(measurement == Measurement.EUCLIDEAN)
+        {
+            measurement = Measurement.CHEBYSHEV;
+        }
+        scan(impassable);
+        goals.clear();
+
+        Point tempPt = new Point(0,0);
+        LinkedHashMap<Point, ArrayList<Point>> ideal;
+        for(int x = 0; x < width; x++)
+        {
+            tempPt.x = x;
+            CELL:
+            for(int y = 0; y < height; y++)
+            {
+                tempPt.y = y;
+                if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
+                    continue;
+                if (gradientMap[x][y] >= tech.minRange && gradientMap[x][y] <= tech.maxRange) {
+                    for (Point goal : targets) {
+                        if (los == null || los.isReachable(resMap, x, y, goal.x, goal.y)) {
+                            setGoal(x, y);
+                            gradientMap[x][y] = 0;
+                            ideal = tech.idealLocations(tempPt, targets, allies);
+                            // this is weird but it saves the trouble of getting the iterator and checking hasNext() .
+                            for(Map.Entry<Point, ArrayList<Point>> ip : ideal.entrySet()) {
+                                targetMap[x][y] = ip.getKey();
+                                worthMap[x][y] = ip.getValue().size();
+                                break;
+                            }
+                            continue CELL;
+                        }
+                    }
+                    gradientMap[x][y] = FLOOR;
+                }
+                else
+                    gradientMap[x][y] = FLOOR;
+            }
+        }
+        measurement = mess;
+        scan(impassable);
+
+        double currentDistance = gradientMap[start.x][start.y];
+        if(currentDistance <= moveLength)
+        {
+            Point[] g_arr = new Point[goals.size()];
+            g_arr = goals.keySet().toArray(g_arr);
+
+            goals.clear();
+            setGoal(start);
+            scan(impassable);
+            resetCell(start);
+            goals.clear();
+
+            for (Point g : g_arr) {
+                if (gradientMap[g.x][g.y] <= moveLength) {
+                    gradientMap[g.x][g.y] = 0.0 - worthMap[g.x][g.y];
+                    goals.put(g, 0.0 - worthMap[g.x][g.y]);
+                }
+            }
+            scan(impassable);
+
+        }
+
+        Point currentPos = new Point(start.x, start.y);
+        while (true) {
+            if (frustration > 500) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            double best = 999000;
+            Direction[] dirs = shuffle((measurement == Measurement.MANHATTAN)
+                    ? Direction.CARDINALS : Direction.OUTWARDS);
+            int choice = rng.nextInt(dirs.length);
+
+            for (int d = 0; d < dirs.length; d++) {
+                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best) {
+                    best = gradientMap[pt.x][pt.y];
+                    choice = d;
+                }
+            }
+            if (best >= gradientMap[start.x][start.y]) {
+                path = new ArrayList<Point>();
+                break;
+            }
+            currentPos.y += dirs[choice].deltaY;
+            currentPos.x += dirs[choice].deltaX;
+            path.add(new Point(currentPos.x, currentPos.y));
+            frustration++;
+            if (path.size() >= moveLength) {
+                if (allies.contains(currentPos)) {
+
+                    closed.put(currentPos, WALL);
+                    impassable.add(currentPos);
+                    return findTechniquePath(moveLength, tech, dungeon, los, impassable,
+                            allies, start, targets);
+                }
+                break;
+            }
+            if(gradientMap[currentPos.x][currentPos.y] == 0)
+                break;
+        }
+        frustration = 0;
+        goals.clear();
+        return path;
+    }
+
 
     private double cachedLongerPaths = 1.2;
     private Set<Point> cachedImpassable = new HashSet<Point>();
