@@ -1,5 +1,7 @@
 package squidpony.squidai;
 
+import squidpony.squidgrid.Radius;
+
 import java.awt.*;
 import java.util.*;
 
@@ -67,6 +69,7 @@ public interface AOE {
      * @param map width first, height second, 2D char array.
      */
     void setMap(char[][] map);
+
     /**
      * This is how an AOE interacts with anything that uses it. It expects a map to have already been set with setMap,
      * with '#' for walls, '.' for floors and potentially other chars that implementors can use if they are present in
@@ -79,4 +82,25 @@ public interface AOE {
      * @return a HashMap of Point keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).
      */
     LinkedHashMap<Point, Double> findArea();
+
+    /**
+     * This can be called to restrict any Points that might be processed based on the given origin (which will be used
+     * as the geometric origin for any calculations this makes) and the given limitType:
+     *
+     * <ul>
+     *     <li>Radius.CIRCLE, Radius.SPHERE, Radius.SQUARE or RADIUS.CUBE will cause the AOE to only consider Points
+     *     along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x axis.
+     *     Essentially, this limits the AOE to queen movement in chess.</li>
+     *     <li>Radius.DIAMOND or Radius.OCTAHEDRON will cause the AOE to only consider Points
+     *     along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x axis.
+     *     Essentially, this limits the AOE to rook movement in chess.</li>
+     *     <li>null will cause the AOE to consider all points.</li>
+     * </ul>
+     *
+     * Points that are not valid for this limit will simply not be considered.
+     *
+     * @param origin Typically where the AOE's producer is located.
+     * @param limitType a Radius enum that determines which cells will be considered; can be null.
+     */
+    void limit(Point origin, Radius limitType);
 }

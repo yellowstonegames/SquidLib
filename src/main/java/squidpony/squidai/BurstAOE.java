@@ -12,18 +12,18 @@ import java.util.*;
  * the distance specified by radius. You can specify the RadiusType to Radius.DIAMOND for Manhattan distance,
  * RADIUS.SQUARE for Chebyshev, or RADIUS.CIRCLE for Euclidean.
  *
- * This will produce doubles for its getArea() method which are equal to 1.0.
+ * This will produce doubles for its findArea() method which are equal to 1.0.
  *
  * This class uses squidpony.squidgrid.FOV to create its area of effect.
  * Created by Tommy Ettinger on 7/13/2015.
  */
 public class BurstAOE implements AOE {
     private FOV fov;
-    private Point center;
+    private Point center, origin;
     private int radius;
     private double[][] map;
     private char[][] dungeon;
-    private Radius radiusType;
+    private Radius radiusType, limitType;
     public BurstAOE(Point center, int radius, Radius radiusType)
     {
         fov = new FOV(FOV.SHADOW);
@@ -44,7 +44,11 @@ public class BurstAOE implements AOE {
     }
 
     public void setCenter(Point center) {
-        this.center = center;
+
+        if (AreaUtils.verifyLimit(limitType, origin, center))
+        {
+            this.center = center;
+        }
     }
 
     public int getRadius() {
@@ -111,12 +115,15 @@ public class BurstAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         double[][] tmpfov;
+        Point tempPt = new Point(0,0);
         for (int i = 0; i < exs.length; ++i, t = exs[i]) {
 
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -224,12 +231,15 @@ public class BurstAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
+        Point tempPt = new Point(0,0);
         for (int i = 0; i < exs.length; ++i, t = exs[i]) {
 
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -423,5 +433,12 @@ public class BurstAOE implements AOE {
     @Override
     public LinkedHashMap<Point, Double> findArea() {
         return AreaUtils.arrayToHashMap(fov.calculateFOV(map, center.x, center.y, radius, radiusType));
+    }
+
+
+    @Override
+    public void limit(Point origin, Radius limitType) {
+        this.origin = origin;
+        this.limitType = limitType;
     }
 }

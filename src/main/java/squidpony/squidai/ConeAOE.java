@@ -14,7 +14,7 @@ import java.util.*;
  * RadiusType to Radius.DIAMOND for Manhattan distance, RADIUS.SQUARE for Chebyshev, or RADIUS.CIRCLE for Euclidean.
  *
  * RADIUS.CIRCLE (Euclidean measurement) will produce the most real-looking cones. This will produce doubles for its
- * getArea() method which are greater than 0.0 and less than or equal to 1.0.
+ * findArea() method which are greater than 0.0 and less than or equal to 1.0.
  *
  * This class uses squidpony.squidgrid.FOV to create its area of effect.
  * Created by Tommy Ettinger on 7/13/2015.
@@ -25,7 +25,7 @@ public class ConeAOE implements AOE {
     private double radius, startAngle, endAngle, angle, span;
     private double[][] map;
     private char[][] dungeon;
-    private Radius radiusType;
+    private Radius radiusType, limitType = null;
     private final static double PI2 = Math.PI * 2;
     public ConeAOE(Point origin, Point endCenter, double span, Radius radiusType)
     {
@@ -83,16 +83,22 @@ public class ConeAOE implements AOE {
     }
 
     public void setAngle(double angle) {
-        this.angle = angle;
-        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
-        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
+        if (limitType == null ||
+                ((limitType == Radius.CIRCLE || limitType == Radius.SPHERE || limitType == Radius.SQUARE || limitType == Radius.CUBE) && (int)(angle) % 45 == 0) ||
+                ((limitType == Radius.DIAMOND || limitType == Radius.OCTAHEDRON) && (int)(angle) % 90 == 0)) {
+            this.angle = angle;
+            this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
+            this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
+        }
     }
 
     public void setEndCenter(Point endCenter) {
 //        radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
-        angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
-        startAngle = Math.abs((angle - span / 2.0) % 360.0);
-        endAngle = Math.abs((angle + span / 2.0) % 360.0);
+        if (AreaUtils.verifyLimit(limitType, origin, endCenter)) {
+            angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            startAngle = Math.abs((angle - span / 2.0) % 360.0);
+            endAngle = Math.abs((angle + span / 2.0) % 360.0);
+        }
     }
 
     public double getSpan() {
@@ -157,6 +163,7 @@ public class ConeAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         double[][] tmpfov;
+        Point tempPt = new Point(0,0);
         for (int i = 0; i < exs.length; ++i, t = exs[i]) {
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
@@ -164,8 +171,10 @@ public class ConeAOE implements AOE {
             tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tStartAngle, tEndAngle);
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -268,6 +277,7 @@ public class ConeAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
+        Point tempPt = new Point(0,0);
         for (int i = 0; i < exs.length; ++i, t = exs[i]) {
 
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
@@ -275,8 +285,10 @@ public class ConeAOE implements AOE {
             tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tStartAngle, tEndAngle);
             for (int x = 0; x < dungeon.length; x++) {
+                tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0) ? '!' : dungeonCopy[x][y];
+                    tempPt.y = y;
+                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -497,5 +509,11 @@ public class ConeAOE implements AOE {
                 radiusType, startAngle, endAngle));
         r.remove(origin);
         return r;
+    }
+
+    @Override
+    public void limit(Point origin, Radius limitType) {
+        this.origin = origin;
+        this.limitType = limitType;
     }
 }

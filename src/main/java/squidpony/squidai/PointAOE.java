@@ -1,20 +1,24 @@
 package squidpony.squidai;
 
-import java.awt.*;
-import java.util.*;
+import squidpony.squidgrid.Radius;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * An AOE type that has a center and a radius, and uses shadowcasting to create a burst of rays from the center, out to
- * the distance specified by radius. You can specify the RadiusType to Radius.DIAMOND for Manhattan distance,
- * RADIUS.SQUARE for Chebyshev, or RADIUS.CIRCLE for Euclidean.
+ * An AOE type that has a center Point only and only affects that single Point. Useful if you need an AOE implementation
+ * for something that does not actually affect an area.
+ * This will produce doubles for its findArea() method which are equal to 1.0.
  *
- * This will produce doubles for its getArea() method which are equal to 1.0.
- *
- * This class uses squidpony.squidgrid.FOV to create its area of effect.
+ * This class doesn't use any other SquidLib class to create its area of effect.
  * Created by Tommy Ettinger on 7/13/2015.
  */
 public class PointAOE implements AOE {
-    private Point center;
+    private Point center, origin = null;
+    private Radius limitType = null;
     private char[][] dungeon;
     public PointAOE(Point center)
     {
@@ -30,7 +34,10 @@ public class PointAOE implements AOE {
     }
 
     public void setCenter(Point center) {
-        this.center = center;
+        if(AreaUtils.verifyLimit(limitType, origin, center))
+        {
+            this.center = center;
+        }
     }
     @Override
     public void shift(Point aim) {
@@ -58,11 +65,12 @@ public class PointAOE implements AOE {
         if(totalTargets == 0)
             return bestPoints;
 
-        for(Point p : targets)
-        {
-            ArrayList<Point> ap = new ArrayList<Point>();
-            ap.add(p);
-            bestPoints.put(p, ap);
+        for(Point p : targets) {
+            if (AreaUtils.verifyLimit(limitType, origin, p)) {
+                ArrayList<Point> ap = new ArrayList<Point>();
+                ap.add(p);
+                bestPoints.put(p, ap);
+            }
         }
         return bestPoints;
     }
@@ -80,17 +88,20 @@ public class PointAOE implements AOE {
         if(totalTargets == 0)
             return bestPoints;
 
-        for(Point p : priorityTargets)
-        {
-            ArrayList<Point> ap = new ArrayList<Point>();
-            ap.add(p);
-            bestPoints.put(p, ap);
+        for(Point p : priorityTargets) {
+            if (AreaUtils.verifyLimit(limitType, origin, p)) {
+
+                ArrayList<Point> ap = new ArrayList<Point>();
+                ap.add(p);
+                bestPoints.put(p, ap);
+            }
         }
-        for(Point p : lesserTargets)
-        {
-            ArrayList<Point> ap = new ArrayList<Point>();
-            ap.add(p);
-            bestPoints.put(p, ap);
+        for(Point p : lesserTargets) {
+            if (AreaUtils.verifyLimit(limitType, origin, p)) {
+                ArrayList<Point> ap = new ArrayList<Point>();
+                ap.add(p);
+                bestPoints.put(p, ap);
+            }
         }
         return bestPoints;
 
@@ -183,5 +194,11 @@ public class PointAOE implements AOE {
         LinkedHashMap<Point, Double> ret = new LinkedHashMap<Point, Double>(1);
         ret.put(new Point(center.x, center.y), 1.0);
         return ret;
+    }
+
+    @Override
+    public void limit(Point origin, Radius limitType) {
+        this.origin = origin;
+        this.limitType = limitType;
     }
 }
