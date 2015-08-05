@@ -217,7 +217,7 @@ public class BeamAOE implements AOE {
 
         Point[] ts = targets.toArray(new Point[targets.size()]);
         Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = rt.extend(origin, exs[0], length, false, dungeon.length, dungeon[0].length);
+        Point t;
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
 
@@ -227,7 +227,8 @@ public class BeamAOE implements AOE {
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
         Point tempPt = new Point(0, 0);
-        for (int i = 0; i < exs.length; ++i, t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length)) {
+        for (int i = 0; i < exs.length; ++i) {
+            t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);
@@ -251,7 +252,8 @@ public class BeamAOE implements AOE {
         t = rt.extend(origin, ts[0], length, false, dungeon.length, dungeon[0].length);
         DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
-        for (int i = 0; i < ts.length; ++i, t = rt.extend(origin, ts[i], length, false, dungeon.length, dungeon[0].length)) {
+        for (int i = 0; i < ts.length; ++i) {
+            t = rt.extend(origin, ts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);
@@ -346,7 +348,8 @@ public class BeamAOE implements AOE {
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
         Point tempPt = new Point(0,0);
-        for (int i = 0; i < exs.length; ++i, t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length)) {
+        for (int i = 0; i < exs.length; ++i) {
+            t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);
@@ -371,7 +374,8 @@ public class BeamAOE implements AOE {
 
         DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
-        for (int i = 0; i < pts.length; ++i, t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length)) {
+        for (int i = 0; i < pts.length; ++i) {
+            t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);
@@ -404,7 +408,8 @@ public class BeamAOE implements AOE {
 
         t = rt.extend(origin, lts[0], length, false, dungeon.length, dungeon[0].length);
 
-        for (int i = pts.length; i < totalTargets; ++i, t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length)) {
+        for (int i = pts.length; i < totalTargets; ++i) {
+            t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);

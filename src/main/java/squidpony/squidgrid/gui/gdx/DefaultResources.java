@@ -9,7 +9,12 @@ import squidpony.squidmath.LightRNG;
  */
 public class DefaultResources {
     private static BitmapFont narrow = null, square = null, unicode = null;
-
+    public final static String squareName = "Zodiac-Square-12x12.fnt",
+            narrowName = "Rogue-Zodiac-6x12.fnt",
+            unicodeName = "Mandrill-6x16.fnt",
+            squareNameLarge = "Zodiac-Square-24x24.fnt",
+            narrowNameLarge = "Rogue-Zodiac-12x24.fnt",
+            unicodeNameLarge = "Mandrill-12x32.fnt";
     /**
      * Returns a 12x12px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
      * @return the BitmapFont object representing Zodiac-Square.ttf at size 16 pt.

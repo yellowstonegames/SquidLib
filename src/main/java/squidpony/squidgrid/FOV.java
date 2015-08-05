@@ -70,7 +70,7 @@ public class FOV {
     private boolean indirect[][];//marks indirect lighting for Ripple FOV
     private int type = SHADOW;
     private int rippleNeighbors;
-    private double radius, decay, startAngle, endAngle;
+    private double radius, decay, angle, span;
     private int startx, starty, width, height;
     private Radius radiusStrategy;
     private Comparator<Point> comp;
@@ -200,8 +200,6 @@ public class FOV {
         this.starty = startY;
         this.radius = Math.max(1, radius);
         this.radiusStrategy = radiusTechnique;
-        this.startAngle = 0;
-        this.endAngle = Math.PI * 2;
         this.comp = new Comparator<Point>() {
             @Override
             public int compare(Point pt1, Point pt2) {
@@ -265,19 +263,19 @@ public class FOV {
      * @param startY the vertical component of the starting location
      * @param radius the distance the light will extend to
      * @param radiusTechnique provides a means to calculate the radius as desired
-     * @param startAngle the angle in degrees to start calculating FOV, 0 points right
-     * @param endAngle the angle in degrees to stop calculating FOV, 0 points right
+     * @param angle the angle in degrees that will be the center of the FOV cone, 0 points right
+     * @param span the angle in degrees that measures the full arc contained in the FOV cone
      * @return the computed light grid
      */
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
-                                   Radius radiusTechnique, double startAngle, double endAngle) {
+                                   Radius radiusTechnique, double angle, double span) {
         this.map = resistanceMap;
         this.startx = startX;
         this.starty = startY;
         this.radius = Math.max(1, radius);
 
-        this.startAngle = Math.toRadians((startAngle > 360.0 || startAngle < 0.0) ? Math.abs(startAngle % 360.0) : startAngle);
-        this.endAngle = Math.toRadians((endAngle > 360.0 || endAngle < 0.0) ? Math.abs(endAngle % 360.0) : endAngle);
+        this.angle = Math.toRadians((angle > 360.0 || angle < 0.0) ? Math.abs(angle % 360.0) : angle);
+        this.span = Math.toRadians(span);
         this.radiusStrategy = radiusTechnique;
         decay = 1.0 / radius;
         this.comp = new Comparator<Point>() {
@@ -320,10 +318,10 @@ public class FOV {
                 for (Direction d : ccw) {
                     ctr %= 4;
                     ++ctr;
-                    if (startAngle <= Math.PI / 2.0 * ctr)
+                    if (angle <= Math.PI / 2.0 * ctr + span / 2.0)
                         started = true;
                     if (started) {
-                        if(ctr < 4 && endAngle < Math.PI / 2.0 * (ctr - 1))
+                        if(ctr < 4 && angle < Math.PI / 2.0 * (ctr - 1) - span / 2.0)
                             break;
                         shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0);
                         shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY);
@@ -381,10 +379,9 @@ public class FOV {
                         || radiusStrategy.radius(startx, starty, x2, y2) >= radius + 1) {  //+1 to cover starting tile
                     continue;
                 }
-                double angle = Math.atan2(y2 - starty, x2 - startx);
-                angle = (angle < 0) ? Math.PI * 2 + angle : angle;
-                if(angle < startAngle) continue;
-                else if(angle > endAngle) break;
+                double newAngle = Math.atan2(y2 - starty, x2 - startx);
+                newAngle = (newAngle < 0) ? Math.PI * 2 + newAngle : newAngle;
+                if(Math.abs(angle - newAngle) > span / 2.0) continue;
 
 
             double surroundingLight = nearRippleLight(x2, y2);
@@ -470,10 +467,6 @@ public class FOV {
                     break;
                 }
 
-                double angle = Math.atan2(currentY - starty, currentX - startx);
-                angle = (angle < 0) ? Math.PI * 2 + angle : angle;
-                if(angle < startAngle || angle > endAngle) continue;
-
 
                 //check if it's within the lightable area and light if needed
                 if (radiusStrategy.radius(deltaX, deltaY) <= radius) {
@@ -519,10 +512,9 @@ public class FOV {
                     break;
                 }
 
-                double angle = Math.atan2(currentY - starty, currentX - startx);
-                angle = (angle < 0) ? Math.PI * 2 + angle : angle;
-                if(angle < startAngle || angle > endAngle) continue;
-
+                double newAngle = Math.atan2(currentY - starty, currentX - startx);
+                newAngle = (newAngle < 0) ? Math.PI * 2 + newAngle : newAngle;
+                if(Math.abs(angle - newAngle) > span / 2.0) continue;
 
                 //check if it's within the lightable area and light if needed
                 if (radiusStrategy.radius(deltaX, deltaY) <= radius) {

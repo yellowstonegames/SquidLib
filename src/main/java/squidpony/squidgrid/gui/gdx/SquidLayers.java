@@ -1,7 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import squidpony.Colors;
 import squidpony.annotation.Beta;
@@ -31,7 +30,7 @@ public class SquidLayers extends Group {
     protected TextCellFactory textFactory;
     protected ArrayList<Color> palette, lightingPalette;
     protected boolean[][] values;
-    protected float animation_duration;
+    protected float animationDuration;
 
     /**
      * The pixel width of the entire map.
@@ -89,12 +88,12 @@ public class SquidLayers extends Group {
         return cellHeight;
     }
 
-    public float getAnimation_duration() {
-        return animation_duration;
+    public float getAnimationDuration() {
+        return animationDuration;
     }
 
-    public void setAnimation_duration(float animation_duration) {
-        this.animation_duration = animation_duration;
+    public void setAnimationDuration(float animationDuration) {
+        this.animationDuration = animationDuration;
     }
 
     public TextCellFactory getTextFactory() {
@@ -241,7 +240,7 @@ public class SquidLayers extends Group {
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
-        animation_duration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
+        animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
         extraPanels = new ArrayList<SquidPanel>();
 
@@ -290,7 +289,7 @@ public class SquidLayers extends Group {
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
-        animation_duration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
+        animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
         extraPanels = new ArrayList<SquidPanel>();
 
@@ -335,7 +334,7 @@ public class SquidLayers extends Group {
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
-        animation_duration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
+        animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
         extraPanels = new ArrayList<SquidPanel>();
 
@@ -1061,7 +1060,7 @@ public class SquidLayers extends Group {
                 p = extraPanels.get(layer - 3);
         }
         if (duration < 0)
-            duration = animation_duration;
+            duration = animationDuration;
         p.bump(x, y, dir, duration);
         return this;
     }
@@ -1080,7 +1079,7 @@ public class SquidLayers extends Group {
                 p = extraPanels.get(layer - 3);
         }
         if (duration < 0)
-            duration = animation_duration;
+            duration = animationDuration;
         p.bump(ae, dir, duration);
         return this;
     }
@@ -1107,7 +1106,7 @@ public class SquidLayers extends Group {
                 p = extraPanels.get(layer - 3);
         }
         if (duration < 0)
-            duration = animation_duration;
+            duration = animationDuration;
         p.slide(ae, endX, endY, duration);
         return this;
     }
@@ -1126,7 +1125,7 @@ public class SquidLayers extends Group {
                 p = extraPanels.get(layer - 3);
         }
         if (duration < 0)
-            duration = animation_duration;
+            duration = animationDuration;
         p.slide(x, y, endX, endY, duration);
         return this;
     }
@@ -1153,7 +1152,7 @@ public class SquidLayers extends Group {
                 p = extraPanels.get(layer - 3);
         }
         if (duration < 0)
-            duration = animation_duration;
+            duration = animationDuration;
         p.wiggle(x, y, duration);
         return this;
     }
@@ -1172,7 +1171,7 @@ public class SquidLayers extends Group {
                 p = extraPanels.get(layer - 3);
         }
         if (duration < 0)
-            duration = animation_duration;
+            duration = animationDuration;
         p.wiggle(ae, duration);
         return this;
     }
@@ -1182,6 +1181,51 @@ public class SquidLayers extends Group {
     }
     public SquidLayers wiggle(AnimatedEntity ae) {
         return wiggle(ae, 2, -1);
+    }
+    public SquidLayers tint(int x, int y, Color color, int layer, float duration) {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                p = lightnessPanel;
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        if (duration < 0)
+            duration = animationDuration;
+        p.tint(x, y, color, duration);
+        return this;
+    }
+    public SquidLayers tint(AnimatedEntity ae, Color color, int layer, float duration) {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                p = lightnessPanel;
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        if (duration < 0)
+            duration = animationDuration;
+        p.tint(ae, color, duration);
+        return this;
+    }
+
+    public SquidLayers tint(int x, int y, Color color) {
+        return tint(x, y, color, 2, -1);
+    }
+    public SquidLayers tint(AnimatedEntity ae, Color color) {
+        return tint(ae, color, 2, -1);
     }
 
     public boolean hasActiveAnimations() {
@@ -1218,6 +1262,9 @@ public class SquidLayers extends Group {
     public AnimatedEntity animateActor(int x, int y, char c, Color color) {
         return foregroundPanel.animateActor(x, y, c, color);
     }
+    public AnimatedEntity animateActor(int x, int y, char c, Color color, boolean doubleWidth) {
+        return foregroundPanel.animateActor(x, y, doubleWidth, c, color);
+    }
 
     public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette, int layer) {
         return animateActor(x, y, c, palette.get(index), layer);
@@ -1231,6 +1278,66 @@ public class SquidLayers extends Group {
     }
     public AnimatedEntity animateActor(int x, int y, char c, int index) {
         return animateActor(x, y, c, palette.get(index));
+    }
+    public AnimatedEntity animateActor(int x, int y, char c, int index, boolean doubleWidth) {
+        return animateActor(x, y, c, palette.get(index), doubleWidth);
+    }
+
+    public AnimatedEntity animateActor(int x, int y, String s, Color color, int layer) {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                p = lightnessPanel;
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        return p.animateActor(x, y, s, color);
+    }
+    public AnimatedEntity animateActor(int x, int y, String s, Color color, int layer, boolean doubleWidth) {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                p = lightnessPanel;
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        return p.animateActor(x, y, doubleWidth, s, color);
+    }
+
+    public AnimatedEntity animateActor(int x, int y, String s, Color color) {
+        return foregroundPanel.animateActor(x, y, s, color);
+    }
+    public AnimatedEntity animateActor(int x, int y, String s, Color color, boolean doubleWidth) {
+        return foregroundPanel.animateActor(x, y, doubleWidth, s, color);
+    }
+
+    public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<Color> palette, int layer) {
+        return animateActor(x, y, s, palette.get(index), layer);
+    }
+    public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<Color> palette) {
+        return animateActor(x, y, s, palette.get(index));
+    }
+
+    public AnimatedEntity animateActor(int x, int y, String s, int index, int layer) {
+        return animateActor(x, y, s, palette.get(index), layer);
+    }
+    public AnimatedEntity animateActor(int x, int y, String s, int index) {
+        return animateActor(x, y, s, palette.get(index));
+    }
+    public AnimatedEntity animateActor(int x, int y, String s, int index, boolean doubleWidth) {
+        return animateActor(x, y, s, palette.get(index), doubleWidth);
     }
 
     public LinkedHashSet<AnimatedEntity> getAnimatedEntities(int layer) {
@@ -1252,6 +1359,27 @@ public class SquidLayers extends Group {
 
     public LinkedHashSet<AnimatedEntity> getAnimatedEntities() {
         return foregroundPanel.getAnimatedEntities();
+    }
+
+    public AnimatedEntity getAnimatedEntityByCell(int x, int y, int layer) {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                p = lightnessPanel;
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        return p.getAnimatedEntityByCell(x, y);
+    }
+
+    public AnimatedEntity getAnimatedEntityByCell(int x, int y) {
+        return foregroundPanel.getAnimatedEntityByCell(x, y);
     }
         @Override
     public void draw(Batch batch, float parentAlpha) {

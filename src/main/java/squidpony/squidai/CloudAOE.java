@@ -174,7 +174,8 @@ public class CloudAOE implements AOE {
         }
 
         Point tempPt = new Point(0, 0);
-        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+        for (int i = 0; i < exs.length; ++i) {
+            t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
 
@@ -195,7 +196,8 @@ public class CloudAOE implements AOE {
         else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
         DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
-        for (int i = 0; i < ts.length; ++i, t = ts[i]) {
+        for (int i = 0; i < ts.length; ++i) {
+            t = ts[i];
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
 
@@ -293,7 +295,8 @@ public class CloudAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         Point tempPt = new Point(0,0);
-        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+        for (int i = 0; i < exs.length; ++i) {
+            t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
 
@@ -314,7 +317,8 @@ public class CloudAOE implements AOE {
         else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
         DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
-        for (int i = 0; i < pts.length; ++i, t = pts[i]) {
+        for (int i = 0; i < pts.length; ++i) {
+            t = pts[i];
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
 
@@ -340,7 +344,8 @@ public class CloudAOE implements AOE {
 
         t = lts[0];
 
-        for (int i = pts.length; i < totalTargets; ++i, t = lts[i - pts.length]) {
+        for (int i = pts.length; i < totalTargets; ++i) {
+            t = lts[i - pts.length];
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
 
