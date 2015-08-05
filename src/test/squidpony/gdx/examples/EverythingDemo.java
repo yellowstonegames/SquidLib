@@ -2,7 +2,6 @@ package squidpony.gdx.examples;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -66,14 +65,14 @@ public class EverythingDemo extends ApplicationAdapter {
         // the font will try to load Rogue-Zodiac.ttf from resources. I (Tommy Ettinger) made it, and it's under the
         // same license as SquidLib.
         display = new SquidLayers(width, height, cellWidth, cellHeight);
-        display.setAnimation_duration(0.03f);
+        display.setAnimationDuration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);
 
         counter = 0;
         lrng = new LightRNG(0x1337BEEF);
         rng = new RNG(lrng);
 
-        // this is important if you use a seeded RNG.
+        // this is normally important if you use a seeded RNG, but DungeonGenerator.generate() calls it already.
 //        DungeonUtility.rng = rng;
         dungeonGen = new DungeonGenerator(width, height, rng);
         dungeonGen.addWater(10);

@@ -105,7 +105,7 @@ public class BlastAOE implements AOE {
             return bestPoints;
         }
         Point[] ts = targets.toArray(new Point[targets.size()]);
-        Point[] exs = targets.toArray(new Point[requiredExclusions.size()]);
+        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
         Point t = exs[0];
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
@@ -116,8 +116,8 @@ public class BlastAOE implements AOE {
         }
         double[][] tmpfov;
         Point tempPt = new Point(0,0);
-        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
-
+        for (int i = 0; i < exs.length; ++i) {
+            t = exs[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
                 tempPt.x = x;
@@ -135,7 +135,8 @@ public class BlastAOE implements AOE {
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
         DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
-        for (int i = 0; i < ts.length; ++i, t = ts[i]) {
+        for (int i = 0; i < ts.length; ++i) {
+            t = ts[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
             for (int x = 0; x < dungeon.length; x++) {
@@ -231,7 +232,8 @@ public class BlastAOE implements AOE {
         }
         double[][] tmpfov;
         Point tempPt = new Point(0,0);
-        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+        for (int i = 0; i < exs.length; ++i) {
+            t = exs[i];
 
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
@@ -250,7 +252,8 @@ public class BlastAOE implements AOE {
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
         DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
-        for (int i = 0; i < pts.length; ++i, t = pts[i]) {
+        for (int i = 0; i < pts.length; ++i) {
+            t = pts[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
             for (int x = 0; x < dungeon.length; x++) {
@@ -274,7 +277,8 @@ public class BlastAOE implements AOE {
 
         t = lts[0];
 
-        for (int i = pts.length; i < totalTargets; ++i, t = lts[i - pts.length]) {
+        for (int i = pts.length; i < totalTargets; ++i) {
+            t = lts[i - pts.length];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
             for (int x = 0; x < dungeon.length; x++) {

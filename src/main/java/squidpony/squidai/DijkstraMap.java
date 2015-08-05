@@ -302,12 +302,22 @@ public class DijkstraMap
      * Resets the gradientMap to its original value from physicalMap.
      */
     public void resetMap() {
-            if(!initialized) return;
+        if(!initialized) return;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 gradientMap[x][y] = physicalMap[x][y];
-                targetMap[x][y] = null;
+            }
+        }
+    }
 
+    /**
+     * Resets the targetMap (which is only assigned in the first place if you use findTechniquePath() ).
+     */
+    public void resetTargetMap() {
+        if(!initialized) return;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                targetMap[x][y] = null;
             }
         }
     }
@@ -432,7 +442,7 @@ public class DijkstraMap
         for (Map.Entry<Point, Double> entry : goals.entrySet()) {
             if (closed.containsKey(entry.getKey()))
                 closed.remove(entry.getKey());
-            gradientMap[entry.getKey().x][entry.getKey().y] = GOAL;
+            gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
         HashMap<Point, Double> lowest = new HashMap<Point, Double>();
@@ -516,7 +526,7 @@ public class DijkstraMap
         for (Map.Entry<Point, Double> entry : goals.entrySet()) {
             if (closed.containsKey(entry.getKey()))
                 closed.remove(entry.getKey());
-            gradientMap[entry.getKey().x][entry.getKey().y] = GOAL;
+            gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
         HashMap<Point, Double> lowest = new HashMap<Point, Double>();
@@ -618,7 +628,7 @@ public class DijkstraMap
         for (Map.Entry<Point, Double> entry : goals.entrySet()) {
             if (closed.containsKey(entry.getKey()))
                 closed.remove(entry.getKey());
-            gradientMap[entry.getKey().x][entry.getKey().y] = GOAL;
+            gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
         HashMap<Point, Double> lowest = new HashMap<Point, Double>();
@@ -1100,11 +1110,12 @@ public class DijkstraMap
             for(int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
+                    targetMap[x][y] = null;
                 }
             }
         }
         path = new ArrayList<Point>();
-        if(targets == null)
+        if(targets == null || targets.size() == 0)
             return path;
         if(impassable == null)
             impassable = new HashSet<Point>();
@@ -1124,10 +1135,11 @@ public class DijkstraMap
             measurement = Measurement.CHEBYSHEV;
         }
         scan(impassable);
-        goals.clear();
+        clearGoals();
 
         Point tempPt = new Point(0,0);
         LinkedHashMap<Point, ArrayList<Point>> ideal;
+        // generate an array of the single best location to attack when you are in a given cell.
         for(int x = 0; x < width; x++)
         {
             tempPt.x = x;
@@ -1138,15 +1150,15 @@ public class DijkstraMap
                 if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
                     continue;
                 if (gradientMap[x][y] >= tech.minRange && gradientMap[x][y] <= tech.maxRange) {
-                    for (Point goal : targets) {
-                        if (los == null || los.isReachable(resMap, x, y, goal.x, goal.y)) {
-                            setGoal(x, y);
-                            gradientMap[x][y] = 0;
+                    for (Point tgt : targets) {
+                        if (los == null || los.isReachable(resMap, x, y, tgt.x, tgt.y)) {
                             ideal = tech.idealLocations(tempPt, targets, allies);
                             // this is weird but it saves the trouble of getting the iterator and checking hasNext() .
                             for(Map.Entry<Point, ArrayList<Point>> ip : ideal.entrySet()) {
                                 targetMap[x][y] = ip.getKey();
                                 worthMap[x][y] = ip.getValue().size();
+                                setGoal(x, y);
+                                gradientMap[x][y] = 0;
                                 break;
                             }
                             continue CELL;
@@ -1158,7 +1170,6 @@ public class DijkstraMap
                     gradientMap[x][y] = FLOOR;
             }
         }
-        measurement = mess;
         scan(impassable);
 
         double currentDistance = gradientMap[start.x][start.y];
@@ -1170,18 +1181,24 @@ public class DijkstraMap
             goals.clear();
             setGoal(start);
             scan(impassable);
-            resetCell(start);
             goals.clear();
+            gradientMap[start.x][start.y] = 100;
 
             for (Point g : g_arr) {
-                if (gradientMap[g.x][g.y] <= moveLength) {
-                    gradientMap[g.x][g.y] = 0.0 - worthMap[g.x][g.y];
+                if (gradientMap[g.x][g.y] <= moveLength && worthMap[g.x][g.y] > 0) {
                     goals.put(g, 0.0 - worthMap[g.x][g.y]);
                 }
             }
+            resetMap();
+           /* for(Point g : goals.keySet())
+            {
+                gradientMap[g.x][g.y] = 0.0 - worthMap[g.x][g.y];
+            }*/
             scan(impassable);
 
         }
+
+        measurement = mess;
 
         Point currentPos = new Point(start.x, start.y);
         while (true) {
@@ -1190,13 +1207,15 @@ public class DijkstraMap
                 break;
             }
             double best = 999000;
-            Direction[] dirs = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
+            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
+            dirs[dirs0.length] = Direction.NONE;
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
                 Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best) {
+                if (gradientMap[pt.x][pt.y] < best && (dirs[d] == Direction.NONE || !path.contains(pt))) {
                     best = gradientMap[pt.x][pt.y];
                     choice = d;
                 }
@@ -1219,8 +1238,8 @@ public class DijkstraMap
                 }
                 break;
             }
-            if(gradientMap[currentPos.x][currentPos.y] == 0)
-                break;
+//            if(gradientMap[currentPos.x][currentPos.y] == 0)
+//                break;
         }
         frustration = 0;
         goals.clear();

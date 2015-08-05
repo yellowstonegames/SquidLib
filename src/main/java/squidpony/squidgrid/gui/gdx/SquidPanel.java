@@ -332,6 +332,7 @@ public class SquidPanel extends Group {
                 textFactory.draw(batch, contents[x][y], tmp, x * cellWidth, (gridHeight - y) * cellHeight);
             }
         }
+        super.draw(batch, parentAlpha);
         for(AnimatedEntity ae : animatedEntities)
         {
             ae.actor.act(Gdx.graphics.getDeltaTime());
@@ -345,7 +346,14 @@ public class SquidPanel extends Group {
     public void setDefaultForeground(Color defaultForeground) {
         this.defaultForeground = defaultForeground;
     }
-
+    public AnimatedEntity getAnimatedEntityByCell(int x, int y) {
+        for(AnimatedEntity ae : animatedEntities)
+        {
+            if(ae.gridX == x && ae.gridY == y)
+                return ae;
+        }
+        return  null;
+    }
     public AnimatedEntity animateActor(int x, int y, char c, Color color)
     {
         Actor a = textFactory.makeActor("" + c, color);
@@ -356,22 +364,82 @@ public class SquidPanel extends Group {
         animatedEntities.add(ae);
         return ae;
     }
+
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, char c, Color color)
+    {
+        Actor a = textFactory.makeActor("" + c, color);
+        a.setName("" + c);
+        if(doubleWidth)
+            a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+        else
+            a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y);
+        animatedEntities.add(ae);
+        return ae;
+    }
+
+    public AnimatedEntity animateActor(int x, int y, String s, Color color)
+    {
+        Actor a = textFactory.makeActor(s, color);
+        a.setName(s);
+        a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y);
+        animatedEntities.add(ae);
+        return ae;
+    }
+
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Color color)
+    {
+        Actor a = textFactory.makeActor(s, color);
+        a.setName(s);
+        if(doubleWidth)
+            a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+        else
+            a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
     public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette)
     {
         return animateActor(x, y, c, palette.get(index));
     }
+    public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<Color> palette)
+    {
+        return animateActor(x, y, s, palette.get(index));
+    }
 
     public Actor cellToActor(int x, int y)
     {
-        if(contents[x][y] == null || contents[x][y] == "")
+        if(contents[x][y] == null || contents[x][y].equals(""))
             return null;
 
         Actor a = textFactory.makeActor(contents[x][y], new Color(colors[x][y]));
         a.setName(contents[x][y]);
         a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
 
-        AnimatedEntity ae = new AnimatedEntity(a, x, y);
-        animatedEntities.add(ae);
+        addActor(a);
+
+        contents[x][y] = "";
+        return a;
+    }
+
+    public Actor cellToActor(int x, int y, boolean doubleWidth)
+    {
+        if(contents[x][y] == null || contents[x][y].equals(""))
+            return null;
+
+        Actor a = textFactory.makeActor(contents[x][y], new Color(colors[x][y]));
+        a.setName(contents[x][y]);
+        if(doubleWidth)
+            a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+        else
+            a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        addActor(a);
 
         contents[x][y] = "";
         return a;
@@ -389,13 +457,20 @@ public class SquidPanel extends Group {
         }
     }
     */
-    public void recallActor()
+    public void recallActor(Actor a)
     {
+        int x = Math.round(a.getX() / cellWidth),
+             y = gridHeight - Math.round(a.getY() / cellHeight) - 1;
+        contents[x][y] = a.getName();
         animationCount--;
+        removeActor(a);
     }
     public void recallActor(AnimatedEntity ae)
     {
-        ae.gridX = Math.round(ae.actor.getX() / cellWidth);
+        if(ae.doubleWidth)
+            ae.gridX = Math.round(ae.actor.getX() / (2 * cellWidth));
+        else
+            ae.gridX = Math.round(ae.actor.getX() / cellWidth);
         ae.gridY = gridHeight - Math.round(ae.actor.getY() / cellHeight) - 1;
         ae.animating = false;
         animationCount--;
@@ -416,7 +491,7 @@ public class SquidPanel extends Group {
         animationCount++;
         ae.animating = true;
         a.addAction(Actions.sequence(
-                Actions.moveToAligned(x + direction.deltaX / 3F, y + direction.deltaY / 3F,
+                Actions.moveToAligned(x + (direction.deltaX / 3F) * ((ae.doubleWidth) ? 2F : 1F), y + direction.deltaY / 3F,
                         Align.center, duration * 0.35F),
                 Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F),
                 Actions.delay(duration, Actions.run(new Runnable() {
@@ -451,7 +526,7 @@ public class SquidPanel extends Group {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor();
+                        recallActor(a);
                     }
                 }))));
 
@@ -487,7 +562,7 @@ public class SquidPanel extends Group {
     public void slide(final AnimatedEntity ae, int newX, int newY, float duration)
     {
         final Actor a = ae.actor;
-        final int nextX = newX * cellWidth, nextY = (gridHeight - newY - 1) * cellHeight - 1;
+        final int nextX = newX * cellWidth * ((ae.doubleWidth) ? 2 : 1), nextY = (gridHeight - newY - 1) * cellHeight - 1;
         if(a == null || ae.animating) return;
         if(duration < 0.02f) duration = 0.02f;
         animationCount++;
@@ -526,7 +601,7 @@ public class SquidPanel extends Group {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor();
+                        recallActor(a);
                     }
                 }))));
     }
@@ -572,7 +647,7 @@ public class SquidPanel extends Group {
     public void wiggle(final AnimatedEntity ae, float duration) {
 
         final Actor a = ae.actor;
-        final int x = ae.gridX * cellWidth, y = (gridHeight - ae.gridY - 1) * cellHeight - 1;
+        final int x = ae.gridX * cellWidth * ((ae.doubleWidth) ? 2 : 1), y = (gridHeight - ae.gridY - 1) * cellHeight - 1;
         if(a == null || ae.animating)
             return;
         if(duration < 0.02f) duration = 0.02f;
@@ -633,7 +708,60 @@ public class SquidPanel extends Group {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor();
+                        recallActor(a);
+                    }
+                }))));
+    }
+
+    /**
+     * Starts an wiggling animation for the object at the given location for the given duration in seconds.
+     *
+     * @param ae an AnimatedEntity returned by animateActor()
+     * @param color
+     * @param duration
+     */
+    public void tint(final AnimatedEntity ae, Color color, float duration) {
+
+        final Actor a = ae.actor;
+        if(a == null || ae.animating)
+            return;
+        if(duration < 0.02f) duration = 0.02f;
+        ae.animating = true;
+        animationCount++;
+        Color ac = a.getColor().cpy();
+        a.addAction(Actions.sequence(
+                Actions.color(color, duration * 0.3f),
+                Actions.color(ac, duration * 0.7f),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        recallActor(ae);
+                    }
+                }))));
+    }
+    /**
+     * Starts an wiggling animation for the object at the given location for the given duration in seconds.
+     *
+     * @param x
+     * @param y
+     * @param color
+     * @param duration
+     */
+    public void tint(int x, int y, Color color, float duration) {
+        final Actor a = cellToActor(x, y);
+        if(a == null)
+            return;
+        if(duration < 0.02f) duration = 0.02f;
+        animationCount++;
+
+        Color ac = a.getColor().cpy();
+        a.addAction(Actions.sequence(
+                Actions.color(color, duration * 0.3f),
+                Actions.color(ac, duration * 0.7f),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        recallActor(a);
                     }
                 }))));
     }

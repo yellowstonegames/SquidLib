@@ -163,7 +163,7 @@
                             <outputFile>target/squidlib-everything-demo-gdx.jar</outputFile>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>squidpony.gdx.examples.desktop.DesktopLauncher</mainClass>
+                                    <mainClass>squidpony.gdx.examples.desktop.SquidAIDemoLauncher</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

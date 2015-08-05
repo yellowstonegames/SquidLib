@@ -22,7 +22,7 @@ import java.util.*;
 public class ConeAOE implements AOE {
     private FOV fov;
     private Point origin;
-    private double radius, startAngle, endAngle, angle, span;
+    private double radius, angle, span;
     private double[][] map;
     private char[][] dungeon;
     private Radius radiusType, limitType = null;
@@ -33,8 +33,8 @@ public class ConeAOE implements AOE {
         this.origin = origin;
         this.radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
         this.angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
-        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
-        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
+//        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
+//        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
         this.span = span;
         this.radiusType = radiusType;
     }
@@ -43,8 +43,8 @@ public class ConeAOE implements AOE {
         fov = new FOV(FOV.RIPPLE_LOOSE);
         this.origin = origin;
         this.radius = radius;
-        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
-        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
+//        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
+//        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
         this.angle = angle;
         this.span = span;
         this.radiusType = radiusType;
@@ -55,8 +55,8 @@ public class ConeAOE implements AOE {
         fov = new FOV(FOV.RIPPLE_LOOSE);
         this.origin = new Point(1, 1);
         this.radius = 1;
-        this.startAngle = 0;
-        this.endAngle = 90;
+//        this.startAngle = 0;
+//        this.endAngle = 90;
         this.angle = 45;
         this.span = 90;
         this.radiusType = Radius.DIAMOND;
@@ -87,8 +87,8 @@ public class ConeAOE implements AOE {
                 ((limitType == Radius.CIRCLE || limitType == Radius.SPHERE || limitType == Radius.SQUARE || limitType == Radius.CUBE) && (int)(angle) % 45 == 0) ||
                 ((limitType == Radius.DIAMOND || limitType == Radius.OCTAHEDRON) && (int)(angle) % 90 == 0)) {
             this.angle = angle;
-            this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
-            this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
+//            this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
+//            this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
         }
     }
 
@@ -96,8 +96,8 @@ public class ConeAOE implements AOE {
 //        radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
         if (AreaUtils.verifyLimit(limitType, origin, endCenter)) {
             angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
-            startAngle = Math.abs((angle - span / 2.0) % 360.0);
-            endAngle = Math.abs((angle + span / 2.0) % 360.0);
+//            startAngle = Math.abs((angle - span / 2.0) % 360.0);
+//            endAngle = Math.abs((angle + span / 2.0) % 360.0);
         }
     }
 
@@ -107,8 +107,8 @@ public class ConeAOE implements AOE {
 
     public void setSpan(double span) {
         this.span = span;
-        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
-        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
+//        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
+//        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
     }
 
     public Radius getRadiusType() {
@@ -155,7 +155,7 @@ public class ConeAOE implements AOE {
         Point t = exs[0];
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
-        double tAngle, tStartAngle, tEndAngle;
+        double tAngle; //, tStartAngle, tEndAngle;
 
 
         char[][] dungeonCopy = new char[dungeon.length][dungeon[0].length];
@@ -164,12 +164,13 @@ public class ConeAOE implements AOE {
         }
         double[][] tmpfov;
         Point tempPt = new Point(0,0);
-        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+        for (int i = 0; i < exs.length; i++) {
+            t = exs[i];
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
-            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
-            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tStartAngle, tEndAngle);
+//            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
+//            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
                 tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -186,12 +187,13 @@ public class ConeAOE implements AOE {
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
         DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
-        for (int i = 0; i < ts.length; ++i, t = ts[i]) {
+        for (int i = 0; i < ts.length; ++i) {
+            t = ts[i];
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
-            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
-            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tStartAngle, tEndAngle);
+//            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
+//            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
 
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -268,7 +270,7 @@ public class ConeAOE implements AOE {
         Point t = exs[0];
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
-        double tAngle, tStartAngle, tEndAngle;
+        double tAngle; //, tStartAngle, tEndAngle;
 
         char[][] dungeonCopy = new char[dungeon.length][dungeon[0].length],
                 dungeonPriorities = new char[dungeon.length][dungeon[0].length];
@@ -278,12 +280,13 @@ public class ConeAOE implements AOE {
         }
         double[][] tmpfov;
         Point tempPt = new Point(0,0);
-        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+        for (int i = 0; i < exs.length; ++i) {
+            t = exs[i];
 
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
-            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
-            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tStartAngle, tEndAngle);
+//            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
+//            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
                 tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -300,12 +303,12 @@ public class ConeAOE implements AOE {
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
         DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
-        for (int i = 0; i < pts.length; ++i, t = pts[i]) {
-
+        for (int i = 0; i < pts.length; ++i) {
+            t = pts[i];
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
-            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
-            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tStartAngle, tEndAngle);
+//            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
+//            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
 
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -328,12 +331,12 @@ public class ConeAOE implements AOE {
 
         t = lts[0];
 
-        for (int i = pts.length; i < totalTargets; ++i, t = lts[i - pts.length]) {
-
+        for (int i = pts.length; i < totalTargets; ++i) {
+            t = lts[i - pts.length];
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
-            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
-            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tStartAngle, tEndAngle);
+//            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
+//            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
 
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -510,7 +513,7 @@ public class ConeAOE implements AOE {
     @Override
     public LinkedHashMap<Point, Double> findArea() {
         LinkedHashMap<Point, Double> r = AreaUtils.arrayToHashMap(fov.calculateFOV(map, origin.x, origin.y, radius,
-                radiusType, startAngle, endAngle));
+                radiusType, angle, span));
         r.remove(origin);
         return r;
     }

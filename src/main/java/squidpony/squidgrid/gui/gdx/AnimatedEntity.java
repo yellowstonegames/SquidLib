@@ -10,11 +10,19 @@ public class AnimatedEntity {
     public Actor actor;
     public int gridX, gridY;
     public boolean animating = false;
+    public boolean doubleWidth = false;
     public AnimatedEntity(Actor actor, int x, int y)
     {
         this.actor = actor;
         this.gridX = x;
         this.gridY = y;
+    }
+    public AnimatedEntity(Actor actor, int x, int y, boolean doubleWidth)
+    {
+        this.actor = actor;
+        this.gridX = x;
+        this.gridY = y;
+        this.doubleWidth = doubleWidth;
     }
     public void setText(String text)
     {

@@ -172,7 +172,8 @@ public class LineAOE implements AOE {
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
         Point tempPt = new Point(0,0);
-        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+        for (int i = 0; i < exs.length; ++i) {
+            t = exs[i];
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);
@@ -196,7 +197,8 @@ public class LineAOE implements AOE {
         t = ts[0];
         DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
-        for (int i = 0; i < ts.length; ++i, t = ts[i]) {
+        for (int i = 0; i < ts.length; ++i) {
+            t = ts[i];
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);
@@ -291,7 +293,8 @@ public class LineAOE implements AOE {
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
         Point tempPt = new Point(0,0);
-        for (int i = 0; i < exs.length; ++i, t = exs[i]) {
+        for (int i = 0; i < exs.length; ++i) {
+            t = exs[i];
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);
@@ -316,7 +319,8 @@ public class LineAOE implements AOE {
 
         DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
-        for (int i = 0; i < pts.length; ++i, t = pts[i]) {
+        for (int i = 0; i < pts.length; ++i) {
+            t = pts[i];
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);
@@ -349,7 +353,8 @@ public class LineAOE implements AOE {
 
         t = lts[0];
 
-        for (int i = pts.length; i < totalTargets; ++i, t = lts[i - pts.length]) {
+        for (int i = pts.length; i < totalTargets; ++i) {
+            t = lts[i - pts.length];
             dt.resetMap();
             dt.clearGoals();
             List<Point> lit = Elias.line(origin, t);
