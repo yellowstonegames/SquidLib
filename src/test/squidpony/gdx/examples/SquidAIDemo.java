@@ -92,7 +92,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             bluePlaces.add(monPosBlue);
         }
         // your choice of FOV matters here.
-        los = new LOS(LOS.RAY);
+        los = new LOS(LOS.BRESENHAM);
         res = DungeonUtility.generateResistances(bareDungeon);
 
         ConeAOE cone = new ConeAOE(new Point(0, 0), 8, 0, 60, Radius.CIRCLE);

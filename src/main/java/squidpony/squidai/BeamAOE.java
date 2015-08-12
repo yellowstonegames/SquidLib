@@ -250,9 +250,10 @@ public class BeamAOE implements AOE {
         }
 
         t = rt.extend(origin, ts[0], length, false, dungeon.length, dungeon[0].length);
-        DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
         for (int i = 0; i < ts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
+
             t = rt.extend(origin, ts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
@@ -278,8 +279,6 @@ public class BeamAOE implements AOE {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 99999.0;
                 }
             }
-            dm.resetMap();
-            dm.clearGoals();
         }
         double bestQuality = 99999 * ts.length;
         double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
@@ -372,9 +371,9 @@ public class BeamAOE implements AOE {
 
         t = rt.extend(origin, pts[0], length, false, dungeon.length, dungeon[0].length);
 
-        DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
-
         for (int i = 0; i < pts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
+
             t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
@@ -409,6 +408,8 @@ public class BeamAOE implements AOE {
         t = rt.extend(origin, lts[0], length, false, dungeon.length, dungeon[0].length);
 
         for (int i = pts.length; i < totalTargets; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
+
             t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();

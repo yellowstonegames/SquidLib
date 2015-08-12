@@ -194,9 +194,10 @@ public class CloudAOE implements AOE {
         DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
         if(spill.measurement == Spill.Measurement.CHEBYSHEV) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
-        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
         for (int i = 0; i < ts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+
             t = ts[i];
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
@@ -315,9 +316,10 @@ public class CloudAOE implements AOE {
         DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
         if(spill.measurement == Spill.Measurement.CHEBYSHEV) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
-        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
         for (int i = 0; i < pts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+
             t = pts[i];
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
@@ -345,6 +347,8 @@ public class CloudAOE implements AOE {
         t = lts[0];
 
         for (int i = pts.length; i < totalTargets; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+
             t = lts[i - pts.length];
             sp = new Spill(dungeon, spill.measurement);
             sp.lrng.setState(this.seed);
