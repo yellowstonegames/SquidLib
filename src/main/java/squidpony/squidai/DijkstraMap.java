@@ -783,7 +783,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= gradientMap[start.x][start.y]) {
+            if             (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -905,7 +905,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= gradientMap[start.x][start.y]) {
+            if             (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -1031,7 +1031,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= gradientMap[start.x][start.y]) {
+            if             (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -1220,7 +1220,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= gradientMap[start.x][start.y]) {
+            if (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -1331,7 +1331,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= gradientMap[start.x][start.y]) {
+            if             (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -1415,7 +1415,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= gradientMap[start.x][start.y]) {
+            if             (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -1543,7 +1543,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= gradientMap[start.x][start.y]) {
+            if             (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -1676,7 +1676,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= gradientMap[start.x][start.y]) {
+            if             (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -1786,7 +1786,7 @@ public class DijkstraMap
                     choice = d;
                 }
             }
-            if (best >= gradientMap[start.x][start.y]) {
+            if             (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }

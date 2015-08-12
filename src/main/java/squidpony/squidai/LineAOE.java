@@ -195,9 +195,10 @@ public class LineAOE implements AOE {
         }
 
         t = ts[0];
-        DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
 
         for (int i = 0; i < ts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
+
             t = ts[i];
             dt.resetMap();
             dt.clearGoals();
@@ -317,9 +318,8 @@ public class LineAOE implements AOE {
 
         t = pts[0];
 
-        DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
-
         for (int i = 0; i < pts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
             t = pts[i];
             dt.resetMap();
             dt.clearGoals();
@@ -354,6 +354,7 @@ public class LineAOE implements AOE {
         t = lts[0];
 
         for (int i = pts.length; i < totalTargets; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dijkstra.measurement);
             t = lts[i - pts.length];
             dt.resetMap();
             dt.clearGoals();

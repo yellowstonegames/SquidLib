@@ -379,12 +379,10 @@ public class FOV {
                         || radiusStrategy.radius(startx, starty, x2, y2) >= radius + 1) {  //+1 to cover starting tile
                     continue;
                 }
-                double newAngle = Math.atan2(y2 - starty, x2 - startx);
-                newAngle = (newAngle < 0) ? Math.PI * 2 + newAngle : newAngle;
-                if(Math.abs(angle - newAngle) > span / 2.0) continue;
+                double newAngle = Math.atan2(y2 - starty, x2 - startx) + Math.PI * 2;
+                if(Math.abs(Math.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0) continue;
 
-
-            double surroundingLight = nearRippleLight(x2, y2);
+                double surroundingLight = nearRippleLight(x2, y2);
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
@@ -511,10 +509,8 @@ public class FOV {
                 } else if (end > leftSlope) {
                     break;
                 }
-
-                double newAngle = Math.atan2(currentY - starty, currentX - startx);
-                newAngle = (newAngle < 0) ? Math.PI * 2 + newAngle : newAngle;
-                if(Math.abs(angle - newAngle) > span / 2.0) continue;
+                double newAngle = Math.atan2(currentY - starty, currentX - startx) + Math.PI * 2;
+                if(Math.abs(Math.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0) continue;
 
                 //check if it's within the lightable area and light if needed
                 if (radiusStrategy.radius(deltaX, deltaY) <= radius) {

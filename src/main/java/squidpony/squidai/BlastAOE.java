@@ -133,9 +133,10 @@ public class BlastAOE implements AOE {
         DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
-        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
         for (int i = 0; i < ts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+
             t = ts[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
@@ -152,8 +153,6 @@ public class BlastAOE implements AOE {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 99999.0;
                 }
             }
-            dm.resetMap();
-            dm.clearGoals();
         }
         double bestQuality = 99999 * ts.length;
         double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
@@ -250,9 +249,10 @@ public class BlastAOE implements AOE {
         DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
-        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
         for (int i = 0; i < pts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+
             t = pts[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
@@ -271,13 +271,13 @@ public class BlastAOE implements AOE {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 399999.0;
                 }
             }
-            dm.resetMap();
-            dm.clearGoals();
         }
 
         t = lts[0];
 
         for (int i = pts.length; i < totalTargets; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+
             t = lts[i - pts.length];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
@@ -294,8 +294,6 @@ public class BlastAOE implements AOE {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!' && dungeonPriorities[x][y] != '#') ? dm.gradientMap[x][y] : 99999.0;
                 }
             }
-            dm.resetMap();
-            dm.clearGoals();
         }
         double bestQuality = 99999 * lts.length + 399999 * pts.length;
         double[][] qualityMap = new double[dungeon.length][dungeon[0].length];

@@ -185,9 +185,9 @@ public class ConeAOE implements AOE {
         DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
-        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
         for (int i = 0; i < ts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = ts[i];
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
@@ -301,9 +301,9 @@ public class ConeAOE implements AOE {
         DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
-        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
         for (int i = 0; i < pts.length; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = pts[i];
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
@@ -332,6 +332,7 @@ public class ConeAOE implements AOE {
         t = lts[0];
 
         for (int i = pts.length; i < totalTargets; ++i) {
+            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = lts[i - pts.length];
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
