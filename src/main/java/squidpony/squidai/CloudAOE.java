@@ -27,10 +27,11 @@ public class CloudAOE implements AOE {
     private Spill spill;
     private Point center, origin = null;
     private int volume;
-    private Spill.Measurement measurement;
     private long seed;
     private boolean expanding;
     private Radius rt, limitType = null;
+    private int minRange = 1, maxRange = 1;
+    private Radius metric = Radius.SQUARE;
     private char[][] dungeon;
 
     public CloudAOE(Point center, int volume, Radius radiusType)
@@ -45,12 +46,36 @@ public class CloudAOE implements AOE {
         switch (radiusType)
         {
             case SPHERE:
-            case CIRCLE: this.measurement = Spill.Measurement.EUCLIDEAN;
+            case CIRCLE: this.spill.measurement = Spill.Measurement.EUCLIDEAN;
                 break;
             case CUBE:
-            case SQUARE: this.measurement = Spill.Measurement.CHEBYSHEV;
+            case SQUARE: this.spill.measurement = Spill.Measurement.CHEBYSHEV;
                 break;
-            default: this.measurement = Spill.Measurement.MANHATTAN;
+            default: this.spill.measurement = Spill.Measurement.MANHATTAN;
+                break;
+        }
+    }
+
+    public CloudAOE(Point center, int volume, Radius radiusType, int minRange, int maxRange)
+    {
+        LightRNG l = new LightRNG();
+        this.seed = l.getState();
+        this.spill = new Spill(new RNG(l));
+        this.center = center;
+        this.volume = volume;
+        this.expanding = false;
+        rt = radiusType;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
+        switch (radiusType)
+        {
+            case SPHERE:
+            case CIRCLE: this.spill.measurement = Spill.Measurement.EUCLIDEAN;
+                break;
+            case CUBE:
+            case SQUARE: this.spill.measurement = Spill.Measurement.CHEBYSHEV;
+                break;
+            default: this.spill.measurement = Spill.Measurement.MANHATTAN;
                 break;
         }
     }
@@ -65,12 +90,12 @@ public class CloudAOE implements AOE {
         switch (radiusType)
         {
             case SPHERE:
-            case CIRCLE: this.measurement = Spill.Measurement.EUCLIDEAN;
+            case CIRCLE: this.spill.measurement = Spill.Measurement.EUCLIDEAN;
                 break;
             case CUBE:
-            case SQUARE: this.measurement = Spill.Measurement.CHEBYSHEV;
+            case SQUARE: this.spill.measurement = Spill.Measurement.CHEBYSHEV;
                 break;
-            default: this.measurement = Spill.Measurement.MANHATTAN;
+            default: this.spill.measurement = Spill.Measurement.MANHATTAN;
                 break;
         }
     }
@@ -81,7 +106,7 @@ public class CloudAOE implements AOE {
         this.spill = new Spill(new RNG(l));
         this.center = new Point(1, 1);
         this.volume = 1;
-        this.measurement = Spill.Measurement.MANHATTAN;
+        this.spill.measurement = Spill.Measurement.MANHATTAN;
         rt = Radius.DIAMOND;
         this.expanding = false;
     }
@@ -113,12 +138,12 @@ public class CloudAOE implements AOE {
         switch (radiusType)
         {
             case SPHERE:
-            case CIRCLE: this.measurement = Spill.Measurement.EUCLIDEAN;
+            case CIRCLE:
                 break;
             case CUBE:
-            case SQUARE: this.measurement = Spill.Measurement.CHEBYSHEV;
+            case SQUARE:
                 break;
-            default: this.measurement = Spill.Measurement.MANHATTAN;
+            default:
                 break;
         }
     }
@@ -144,6 +169,7 @@ public class CloudAOE implements AOE {
             return new LinkedHashMap<Point, ArrayList<Point>>();
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
+        //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
         LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
 
@@ -232,16 +258,18 @@ public class CloudAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    bestQuality = qualityMap[x][y];
-                    bestPoints.clear();
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
                             ap.add(ts[i]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
 
+                    if(ap.size() > 0) {
+                        bestQuality = qualityMap[x][y];
+                        bestPoints.clear();
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
@@ -251,7 +279,10 @@ public class CloudAOE implements AOE {
                         if((bits & (1 << i)) != 0)
                             ap.add(ts[i]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
+
+                    if (ap.size() > 0) {
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
             }
         }
@@ -264,6 +295,8 @@ public class CloudAOE implements AOE {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+
+        //requiredExclusions.remove(origin);
 
         int totalTargets = priorityTargets.size() + lesserTargets.size();
         LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
@@ -388,8 +421,6 @@ public class CloudAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    bestQuality = qualityMap[x][y];
-                    bestPoints.clear();
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
@@ -400,8 +431,12 @@ public class CloudAOE implements AOE {
                         if((lbits & (1 << i)) != 0)
                             ap.add(lts[i - pts.length]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
 
+                    if(ap.size() > 0) {
+                        bestQuality = qualityMap[x][y];
+                        bestPoints.clear();
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
@@ -419,7 +454,10 @@ public class CloudAOE implements AOE {
                             ap.add(pts[i]);
                         }
                     }
-                    bestPoints.put(new Point(x, y), ap);
+
+                    if (ap.size() > 0) {
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
             }
         }
@@ -526,9 +564,56 @@ public class CloudAOE implements AOE {
     }
 
     @Override
-    public void limit(Point origin, Radius limitType) {
+    public Point getOrigin() {
+        return origin;
+    }
+
+    @Override
+    public void setOrigin(Point origin) {
         this.origin = origin;
+
+    }
+
+    @Override
+    public Radius getLimitType() {
+        return limitType;
+    }
+
+    @Override
+    public int getMinRange() {
+        return minRange;
+    }
+
+    @Override
+    public int getMaxRange() {
+        return maxRange;
+    }
+
+    @Override
+    public Radius getMetric() {
+        return metric;
+    }
+
+    @Override
+    public void setLimitType(Radius limitType) {
         this.limitType = limitType;
+
+    }
+
+    @Override
+    public void setMinRange(int minRange) {
+        this.minRange = minRange;
+    }
+
+    @Override
+    public void setMaxRange(int maxRange) {
+        this.maxRange = maxRange;
+
+    }
+
+    @Override
+    public void setMetric(Radius metric) {
+        this.metric = metric;
     }
 
     public boolean isExpanding() {

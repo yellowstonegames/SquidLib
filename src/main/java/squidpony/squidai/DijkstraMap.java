@@ -2,6 +2,7 @@ package squidpony.squidai;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -488,15 +489,17 @@ public class DijkstraMap
         closed.clear();
         open.clear();
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        double[][] gradientClone = new double[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (gradientMap[x][y] == FLOOR) {
                     gradientMap[x][y] = DARK;
                 }
             }
+            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
         }
 
-        return gradientMap;
+        return gradientClone;
     }
 
     /**
@@ -574,15 +577,17 @@ public class DijkstraMap
         closed.clear();
         open.clear();
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+
+        double[][] gradientClone = new double[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (gradientMap[x][y] == FLOOR) {
                     gradientMap[x][y] = DARK;
                 }
             }
+            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
         }
-
-        return gradientMap;
+        return gradientClone;
     }
 
     /**
@@ -717,15 +722,17 @@ public class DijkstraMap
         closed.clear();
         open.clear();
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+
+        double[][] gradientClone = new double[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (gradientMap[x][y] == FLOOR) {
                     gradientMap[x][y] = DARK;
                 }
             }
+            System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
         }
-
-        return gradientMap;
+        return gradientClone;
     }
 
     /**
@@ -1103,25 +1110,35 @@ public class DijkstraMap
         tech.setMap(dungeon);
         double[][] resMap = new double[width][height];
         double[][] worthMap = new double[width][height];
+        double[][] userDistanceMap = new double[width][height];
+
+        LinkedHashSet friends;
 
 
-        if(los != null)
-        {
-            for(int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
-                    targetMap[x][y] = null;
-                }
+        for(int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
+                targetMap[x][y] = null;
             }
         }
+
         path = new ArrayList<Point>();
         if(targets == null || targets.size() == 0)
             return path;
         if(impassable == null)
-            impassable = new HashSet<Point>();
+            impassable = new LinkedHashSet<Point>();
         if(allies == null)
-            allies = new HashSet<Point>();
+            friends = new LinkedHashSet<Point>();
+        else
+        {
+            friends = new LinkedHashSet<Point>(allies);
+            friends.remove(start);
+        }
 
+        resetMap();
+        setGoal(start);
+        userDistanceMap = scan(impassable);
+        clearGoals();
         resetMap();
         for (Point goal : targets) {
             setGoal(goal.x, goal.y);
@@ -1130,10 +1147,12 @@ public class DijkstraMap
             return path;
 
         Measurement mess = measurement;
+        /*
         if(measurement == Measurement.EUCLIDEAN)
         {
             measurement = Measurement.CHEBYSHEV;
         }
+        */
         scan(impassable);
         clearGoals();
 
@@ -1147,12 +1166,12 @@ public class DijkstraMap
             for(int y = 0; y < height; y++)
             {
                 tempPt.y = y;
-                if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
+                if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK || userDistanceMap[x][y] > moveLength * 2.0)
                     continue;
-                if (gradientMap[x][y] >= tech.minRange && gradientMap[x][y] <= tech.maxRange) {
+                if (gradientMap[x][y] >= tech.aoe.getMinRange() && gradientMap[x][y] <= tech.aoe.getMaxRange()) {
                     for (Point tgt : targets) {
                         if (los == null || los.isReachable(resMap, x, y, tgt.x, tgt.y)) {
-                            ideal = tech.idealLocations(tempPt, targets, allies);
+                            ideal = tech.idealLocations(tempPt, targets, friends);
                             // this is weird but it saves the trouble of getting the iterator and checking hasNext() .
                             for(Map.Entry<Point, ArrayList<Point>> ip : ideal.entrySet()) {
                                 targetMap[x][y] = ip.getKey();
@@ -1182,7 +1201,7 @@ public class DijkstraMap
             setGoal(start);
             scan(impassable);
             goals.clear();
-            gradientMap[start.x][start.y] = 100;
+            gradientMap[start.x][start.y] = moveLength;
 
             for (Point g : g_arr) {
                 if (gradientMap[g.x][g.y] <= moveLength && worthMap[g.x][g.y] > 0) {
@@ -1206,7 +1225,7 @@ public class DijkstraMap
                 path = new ArrayList<Point>();
                 break;
             }
-            double best = 999000;
+            double best = gradientMap[currentPos.x][currentPos.y];
             Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
@@ -1215,12 +1234,24 @@ public class DijkstraMap
 
             for (int d = 0; d < dirs.length; d++) {
                 Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
-                if (gradientMap[pt.x][pt.y] < best && (dirs[d] == Direction.NONE || !path.contains(pt))) {
-                    best = gradientMap[pt.x][pt.y];
-                    choice = d;
+                if (gradientMap[pt.x][pt.y] < best) {
+                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
+                        best = gradientMap[pt.x][pt.y];
+                        choice = d;
+                    }
                 }
             }
-            if (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
+            if(best == gradientMap[currentPos.x][currentPos.y])
+            {
+                if (friends.contains(currentPos)) {
+                    closed.put(currentPos, WALL);
+                    impassable.add(currentPos);
+                    return findTechniquePath(moveLength, tech, dungeon, los, impassable,
+                            friends, start, targets);
+                }
+                break;
+            }
+            if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 path = new ArrayList<Point>();
                 break;
             }
@@ -1229,12 +1260,11 @@ public class DijkstraMap
             path.add(new Point(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= moveLength) {
-                if (allies.contains(currentPos)) {
-
+                if (friends.contains(currentPos)) {
                     closed.put(currentPos, WALL);
                     impassable.add(currentPos);
                     return findTechniquePath(moveLength, tech, dungeon, los, impassable,
-                            allies, start, targets);
+                            friends, start, targets);
                 }
                 break;
             }
@@ -1243,6 +1273,9 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
+        if(path.isEmpty())
+            path = findPath(moveLength, impassable, friends, start, DungeonUtility.randomFloor(dungeon),
+                    DungeonUtility.randomFloor(dungeon), DungeonUtility.randomFloor(dungeon));
         return path;
     }
 

@@ -90,8 +90,24 @@ public interface AOE {
     LinkedHashMap<Point, Double> findArea();
 
     /**
-     * This can be called to restrict any Points that might be processed based on the given origin (which will be used
-     * as the geometric origin for any calculations this makes) and the given limitType:
+     * Get the position from which the AOE originates, which may be related to the location of the AOE's effect, as for
+     * lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen
+     * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but
+     * have a maxRange at which they can deliver that effect).
+     */
+    public Point getOrigin();
+
+    /**
+     * Set the position from which the AOE originates, which may be related to the location of the AOE's effect, as for
+     * lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen
+     * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but
+     * have a maxRange at which they can deliver that effect).
+     */
+    public void setOrigin(Point origin);
+
+    /**
+     * You can use limitType to restrict any Points that might be processed based on the given origin (which will be
+     * used as the geometric origin for any calculations this makes) with Radius values having the following meanings:
      *
      * <ul>
      *     <li>Radius.CIRCLE, Radius.SPHERE, Radius.SQUARE or RADIUS.CUBE will cause the AOE to only consider Points
@@ -104,9 +120,57 @@ public interface AOE {
      * </ul>
      *
      * Points that are not valid for this limit will simply not be considered.
-     *
-     * @param origin Typically where the AOE's producer is located.
-     * @param limitType a Radius enum that determines which cells will be considered; can be null.
      */
-    void limit(Point origin, Radius limitType);
+    public Radius getLimitType();
+    /**
+     * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
+     */
+    public int getMinRange();
+    /**
+     * The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
+     */
+    public int getMaxRange();
+    /**
+     * Used to determine distance from origin for the purposes of selecting a target location that is within the bounds
+     * of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE
+     * should almost always use Manhattan distance for its spread due to how the algorithm works, but the positioning of
+     * where that floodfill should be allowed to start should likely follow the same distance measurement as the rest of
+     * the game, like Radius.SQUARE for Chebyshev distance/8-way movement).
+     */
+    public Radius getMetric();
+
+    /**
+     * You can use limitType to restrict any Points that might be processed based on the given origin (which will be
+     * used as the geometric origin for any calculations this makes) with Radius values having the following meanings:
+     *
+     * <ul>
+     *     <li>Radius.CIRCLE, Radius.SPHERE, Radius.SQUARE or RADIUS.CUBE will cause the AOE to only consider Points
+     *     along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x axis.
+     *     Essentially, this limits the AOE to queen movement in chess.</li>
+     *     <li>Radius.DIAMOND or Radius.OCTAHEDRON will cause the AOE to only consider Points
+     *     along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x axis.
+     *     Essentially, this limits the AOE to rook movement in chess.</li>
+     *     <li>null will cause the AOE to consider all points.</li>
+     * </ul>
+     *
+     * Points that are not valid for this limit will simply not be considered.
+     */
+    public void setLimitType(Radius limitType);
+    /**
+     * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
+     */
+    public void setMinRange(int minRange);
+    /**
+     * The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
+     */
+    public void setMaxRange(int maxRange);
+    /**
+     * Used to determine distance from origin for the purposes of selecting a target location that is within the bounds
+     * of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE
+     * should almost always use Manhattan distance for its spread due to how the algorithm works, but the positioning of
+     * where that floodfill should be allowed to start should likely follow the same distance measurement as the rest of
+     * the game, like Radius.SQUARE for Chebyshev distance/8-way movement).
+     */
+    public void setMetric(Radius metric);
+
 }
