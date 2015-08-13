@@ -40,20 +40,7 @@ import java.util.Set;
  * implementation; BeamAOE, LineAOE, and ConeAOE depend on the user's position, BurstAOE and BlastAOE treat radii
  * differently from BeamAOE and LineAOE, and CloudAOE has a random component that can be given a seed.
  *
- * Every Technique has a Radius enum it uses to measure distance called radiusType; the value given to a Technique for
- * radiusType does not automatically propagate into the possible Radius enums that AOE implementations can have.
- *
- * A Technique may have a Radius enum that is used to limit the cells that are tested for AI, called limitType; this
- * enum may be null if the cells are not given limitations more strict than minRange and maxRange. If it is
- * Radius.DIAMOND or Radius.OCTAHEDRON, then it limits the cells that can be picked as ideal locations to those directly
- * north, east, south, and west (90 degree increments); for any other value of Radius, the cells affected can be in any
- * 45 degree increments, so north, northeast, east, southeast, south, etc.  The cells must be in a straight line.
- *
- * A Technique has a minimum and maximum range that applies to the "target point" of the AOE. It may be desirable to
- * restrict target points to a specific ring of cells, especially for ConeAOE, and this can be done by setting minRange
- * and maxRange to the same value: the distance the ring should have from the user, measured by radiusType.
- *
- * A Technique finally has a String  name, which typically should be in a form that can be presented to a user, and a
+ * A Technique has a String  name, which typically should be in a form that can be presented to a user, and a
  * String id, which defaults to the same value as name but can be given some value not meant for users that records
  * any additional identifying characteristics the game needs for things like comparisons.
  *
@@ -62,125 +49,57 @@ import java.util.Set;
 public class Technique {
     public String name;
     public String id;
-    public int minRange;
-    public int maxRange;
     public AOE aoe;
-    public Radius radiusType;
-    public Radius limitType = null;
     protected char[][] dungeon;
     protected final static Point DEFAULT_POINT = new Point(0, 0);
 
     /**
-     * Creates a Technique that can target a single Point at any range from 1 cell away to range cells away, using
+     * Creates a Technique that can target any adjacent single Point, using
      * Chebyshev (8-way square) distance.
-     * @param name An identifier that may be displayed to the user. Also used for id.
-     * @param range The maximum range, inclusive, of this Technique. Minimum range is 1.
      */
-    public Technique(String name, int range) {
-        this.name = name;
-        this.id = name;
-        this.minRange = 1;
-        this.maxRange = range;
-        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
+    public Technique() {
+        this.name = "Default Technique";
+        this.id = this.name;
         this.aoe = new PointAOE(DEFAULT_POINT);
-        this.radiusType = Radius.SQUARE;
     }
 
     /**
-     * Creates a Technique that can target a single Point at any range from minRange cell away to maxRange cells away,
+     * Creates a Technique that can target any adjacent single Point,
      * using Chebyshev (8-way square) distance.
      * @param name An identifier that may be displayed to the user. Also used for id.
-     * @param minRange The minimum range, inclusive, of this Technique.
-     * @param maxRange The maximum range, inclusive, of this Technique.
      */
-    public Technique(String name, int minRange, int maxRange) {
+    public Technique(String name) {
         this.name = name;
         this.id = name;
-        this.minRange = minRange;
-        this.maxRange = maxRange;
-        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
         this.aoe = new PointAOE(DEFAULT_POINT);
-        this.radiusType = Radius.SQUARE;
     }
 
     /**
-     * Creates a Technique that can target a Point at any range from minRange cell away to maxRange cells away,
-     * using Chebyshev (8-way square) distance, and use that target Point for the given AOE.
+     * Creates a Technique that can target a Point at a range specified by the given AOE's minRange and maxRange,
+     * using a distance metric from the AOE, and use that target Point for the given AOE.
      * @param name An identifier that may be displayed to the user. Also used for id.
-     * @param minRange The minimum range, inclusive, of this Technique.
-     * @param maxRange The maximum range, inclusive, of this Technique.
      * @param aoe An implementation of the AOE interface; typically needs construction beforehand.
      */
-    public Technique(String name, int minRange, int maxRange, AOE aoe) {
+    public Technique(String name, AOE aoe) {
         this.name = name;
         this.id = name;
-        this.minRange = minRange;
-        this.maxRange = maxRange;
-        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
         this.aoe = aoe;
-        this.radiusType = Radius.SQUARE;
     }
 
-    /**
-     * Creates a Technique that can target a Point at any range from minRange cell away to maxRange cells away,
-     * using the given radiusType for how to measure distance, and use that target Point for the given AOE.
-     * @param name An identifier that may be displayed to the user. Also used for id.
-     * @param minRange The minimum range, inclusive, of this Technique.
-     * @param maxRange The maximum range, inclusive, of this Technique.
-     * @param aoe An implementation of the AOE interface; typically needs construction beforehand.
-     * @param radiusType A Radius enum type such as Radius.DIAMOND for Manhattan (4-way diamond) distance. Not used for the AOE, only for measuring distance here.
-     */
-    public Technique(String name, int minRange, int maxRange, AOE aoe, Radius radiusType) {
-        this.name = name;
-        this.id = name;
-        this.minRange = minRange;
-        this.maxRange = maxRange;
-        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
-        this.aoe = aoe;
-        this.radiusType = radiusType;
-    }
 
     /**
-     * Creates a Technique that can target a Point at any range from minRange cell away to maxRange cells away,
-     * using the given radiusType for how to measure distance, and use that target Point for the given AOE.
+     * Creates a Technique that can target a Point at a range specified by the given AOE's minRange and maxRange,
+     * using a distance metric from the AOE, and use that target Point for the given AOE. Takes an id parameter.
      * @param name An identifier that may be displayed to the user.
      * @param id An identifier that should always be internal, and will probably never be shown to the user.
-     * @param minRange The minimum range, inclusive, of this Technique.
-     * @param maxRange The maximum range, inclusive, of this Technique.
      * @param aoe An implementation of the AOE interface; typically needs construction beforehand.
-     * @param radiusType A Radius enum type such as Radius.DIAMOND for Manhattan (4-way diamond) distance. Not used for the AOE, only for measuring distance here.
      */
-    public Technique(String name, String id, int minRange, int maxRange, AOE aoe, Radius radiusType) {
+    public Technique(String name, String id, AOE aoe) {
         this.name = name;
         this.id = id;
-        this.minRange = minRange;
-        this.maxRange = maxRange;
-        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
         this.aoe = aoe;
-        this.radiusType = radiusType;
     }
 
-    /**
-     * Creates a Technique that can target a Point at any range from minRange cell away to maxRange cells away,
-     * using the given radiusType for how to measure distance, and use that target Point for the given AOE.
-     * @param name An identifier that may be displayed to the user.
-     * @param id An identifier that should always be internal, and will probably never be shown to the user.
-     * @param minRange The minimum range, inclusive, of this Technique.
-     * @param maxRange The maximum range, inclusive, of this Technique.
-     * @param aoe An implementation of the AOE interface; typically needs construction beforehand.
-     * @param radiusType A Radius enum type such as Radius.DIAMOND for Manhattan (4-way diamond) distance. Not used for the AOE, only for measuring distance here.
-     * @param limitType A Radius enum that, if non-null, limits the valid ideal cells to straight lines from the user's position.
-     * */
-    public Technique(String name, String id, int minRange, int maxRange, AOE aoe, Radius radiusType, Radius limitType) {
-        this.name = name;
-        this.id = id;
-        this.minRange = minRange;
-        this.maxRange = maxRange;
-        if(this.maxRange < this.minRange) this.maxRange = this.minRange;
-        this.aoe = aoe;
-        this.radiusType = radiusType;
-        this.limitType = limitType;
-    }
 
     /**
      * VITAL: Call this method before any calls to idealLocations() or apply(), and call it again if the map changes.
@@ -213,16 +132,9 @@ public class Technique {
      * @return LinkedHashMap of Point keys representing target points to pass to apply, to ArrayList of Point values representing what targets' locations will be affected.
      */
     public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Point user, Set<Point> targets, Set<Point> requiredExclusions) {
-        aoe.limit(user, limitType);
-        LinkedHashMap<Point, ArrayList<Point>> area = aoe.idealLocations(targets, requiredExclusions),
-                r = new LinkedHashMap<Point, ArrayList<Point>>();
-        for (Point shifter : area.keySet())
-        {
-            double dist = radiusType.radius(user.x, user.y, shifter.x, shifter.y);
-            if(dist >= minRange && dist <= maxRange)
-                r.put(shifter, area.get(shifter));
-        }
-        return  r;
+        aoe.setOrigin(user);
+        return aoe.idealLocations(targets, requiredExclusions);
+
     }
 
     /**
@@ -244,16 +156,8 @@ public class Technique {
      * @return LinkedHashMap of Point keys representing target points to pass to apply, to ArrayList of Point values representing what targets' locations will be affected.
      */
     public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Point user, Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions) {
-        aoe.limit(user, limitType);
-        LinkedHashMap<Point, ArrayList<Point>> area = aoe.idealLocations(priorityTargets, lesserTargets, requiredExclusions),
-                r = new LinkedHashMap<Point, ArrayList<Point>>();
-        for (Point shifter : area.keySet())
-        {
-            double dist = radiusType.radius(user.x, user.y, shifter.x, shifter.y);
-            if(dist >= minRange && dist <= maxRange)
-                r.put(shifter, area.get(shifter));
-        }
-        return  r;
+        aoe.setOrigin(user);
+        return aoe.idealLocations(priorityTargets, lesserTargets, requiredExclusions);
     }
 
     /**
@@ -273,14 +177,8 @@ public class Technique {
      */
     public LinkedHashMap<Point, Double> apply(Point user, Point aimAt)
     {
-        aoe.limit(user, limitType);
-        double dist = radiusType.radius(user.x, user.y, aimAt.x, aimAt.y);
-        LinkedHashMap<Point, Double> r = new LinkedHashMap<Point, Double>();
-        if(dist >= minRange && dist <= maxRange)
-        {
-            aoe.shift(aimAt);
-            r = aoe.findArea();
-        }
-        return r;
+        aoe.setOrigin(user);
+        aoe.shift(aimAt);
+        return aoe.findArea();
     }
 }

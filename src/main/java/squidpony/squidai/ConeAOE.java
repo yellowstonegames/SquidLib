@@ -26,6 +26,10 @@ public class ConeAOE implements AOE {
     private double[][] map;
     private char[][] dungeon;
     private Radius radiusType, limitType = null;
+
+    private int minRange = 1, maxRange = 1;
+    private Radius metric = Radius.SQUARE;
+
     private final static double PI2 = Math.PI * 2;
     public ConeAOE(Point origin, Point endCenter, double span, Radius radiusType)
     {
@@ -68,6 +72,48 @@ public class ConeAOE implements AOE {
 
     public void setOrigin(Point origin) {
         this.origin = origin;
+    }
+
+    @Override
+    public Radius getLimitType() {
+        return limitType;
+    }
+
+    @Override
+    public int getMinRange() {
+        return minRange;
+    }
+
+    @Override
+    public int getMaxRange() {
+        return maxRange;
+    }
+
+    @Override
+    public Radius getMetric() {
+        return metric;
+    }
+
+    @Override
+    public void setLimitType(Radius limitType) {
+        this.limitType = limitType;
+
+    }
+
+    @Override
+    public void setMinRange(int minRange) {
+        this.minRange = minRange;
+    }
+
+    @Override
+    public void setMaxRange(int maxRange) {
+        this.maxRange = maxRange;
+
+    }
+
+    @Override
+    public void setMetric(Radius metric) {
+        this.metric = metric;
     }
 
     public double getRadius() {
@@ -144,6 +190,7 @@ public class ConeAOE implements AOE {
             return new LinkedHashMap<Point, ArrayList<Point>>();
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
+        //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
         LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
 
@@ -164,13 +211,14 @@ public class ConeAOE implements AOE {
         }
         double[][] tmpfov;
         Point tempPt = new Point(0,0);
+
         for (int i = 0; i < exs.length; i++) {
             t = exs[i];
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
                 tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -193,7 +241,7 @@ public class ConeAOE implements AOE {
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -208,8 +256,6 @@ public class ConeAOE implements AOE {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 99999.0;
                 }
             }
-            dm.resetMap();
-            dm.clearGoals();
         }
         double bestQuality = 99999 * ts.length;
         double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
@@ -224,26 +270,28 @@ public class ConeAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    bestQuality = qualityMap[x][y];
-                    bestPoints.clear();
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
                             ap.add(ts[i]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
-
+                    if(ap.size() > 0) {
+                        bestQuality = qualityMap[x][y];
+                        bestPoints.clear();
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
-                else if(qualityMap[x][y] == bestQuality)
-                {
+                else if(qualityMap[x][y] == bestQuality) {
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
-                        if((bits & (1 << i)) != 0)
+                        if ((bits & (1 << i)) != 0)
                             ap.add(ts[i]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
+                    if (ap.size() > 0) {
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
 
             }
@@ -258,6 +306,7 @@ public class ConeAOE implements AOE {
             return idealLocations(lesserTargets, requiredExclusions);
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
+        //requiredExclusions.remove(origin);
         int totalTargets = priorityTargets.size() + lesserTargets.size();
         LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
 
@@ -286,7 +335,7 @@ public class ConeAOE implements AOE {
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
                 tempPt.x = x;
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -308,7 +357,7 @@ public class ConeAOE implements AOE {
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -325,8 +374,6 @@ public class ConeAOE implements AOE {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 399999.0;
                 }
             }
-            dm.resetMap();
-            dm.clearGoals();
         }
 
         t = lts[0];
@@ -337,7 +384,7 @@ public class ConeAOE implements AOE {
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -352,8 +399,6 @@ public class ConeAOE implements AOE {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!' && dungeonPriorities[x][y] != '#') ? dm.gradientMap[x][y] : 99999.0;
                 }
             }
-            dm.resetMap();
-            dm.clearGoals();
         }
         double bestQuality = 99999 * lts.length + 399999 * pts.length;
         double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
@@ -373,8 +418,6 @@ public class ConeAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    bestQuality = qualityMap[x][y];
-                    bestPoints.clear();
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
@@ -385,11 +428,15 @@ public class ConeAOE implements AOE {
                         if((lbits & (1 << i)) != 0)
                             ap.add(lts[i - pts.length]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
+
+                    if(ap.size() > 0) {
+                        bestQuality = qualityMap[x][y];
+                        bestPoints.clear();
+                        bestPoints.put(new Point(x, y), ap);
+                    }
 
                 }
-                else if(qualityMap[x][y] == bestQuality)
-                {
+                else if(qualityMap[x][y] == bestQuality) {
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
@@ -401,10 +448,12 @@ public class ConeAOE implements AOE {
                         }
                     }
                     for (int i = pts.length; i < totalTargets && i < 63; ++i) {
-                        if((lbits & (1 << i)) != 0)
+                        if ((lbits & (1 << i)) != 0)
                             ap.add(lts[i - pts.length]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
+                    if (ap.size() > 0) {
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
             }
         }
@@ -519,9 +568,4 @@ public class ConeAOE implements AOE {
         return r;
     }
 
-    @Override
-    public void limit(Point origin, Radius limitType) {
-        this.origin = origin;
-        this.limitType = limitType;
-    }
 }

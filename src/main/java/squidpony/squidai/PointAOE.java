@@ -20,6 +20,8 @@ public class PointAOE implements AOE {
     private Point center, origin = null;
     private Radius limitType = null;
     private char[][] dungeon;
+    private int minRange = 1, maxRange = 1;
+    private Radius metric = Radius.SQUARE;
     public PointAOE(Point center)
     {
         this.center = center;
@@ -199,9 +201,58 @@ public class PointAOE implements AOE {
         return ret;
     }
 
+
     @Override
-    public void limit(Point origin, Radius limitType) {
-        this.origin = origin;
-        this.limitType = limitType;
+    public Point getOrigin() {
+        return origin;
     }
+
+    @Override
+    public void setOrigin(Point origin) {
+        this.origin = origin;
+
+    }
+
+    @Override
+    public Radius getLimitType() {
+        return limitType;
+    }
+
+    @Override
+    public int getMinRange() {
+        return minRange;
+    }
+
+    @Override
+    public int getMaxRange() {
+        return maxRange;
+    }
+
+    @Override
+    public Radius getMetric() {
+        return metric;
+    }
+
+    @Override
+    public void setLimitType(Radius limitType) {
+        this.limitType = limitType;
+
+    }
+
+    @Override
+    public void setMinRange(int minRange) {
+        this.minRange = minRange;
+    }
+
+    @Override
+    public void setMaxRange(int maxRange) {
+        this.maxRange = maxRange;
+
+    }
+
+    @Override
+    public void setMetric(Radius metric) {
+        this.metric = metric;
+    }
+
 }

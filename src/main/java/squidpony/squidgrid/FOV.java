@@ -274,7 +274,7 @@ public class FOV {
         this.starty = startY;
         this.radius = Math.max(1, radius);
 
-        this.angle = Math.toRadians((angle > 360.0 || angle < 0.0) ? Math.abs(angle % 360.0) : angle);
+        this.angle = Math.toRadians((angle > 360.0 || angle < 0.0) ? Math.IEEEremainder(angle + 720.0, 360.0) : angle);
         this.span = Math.toRadians(span);
         this.radiusStrategy = radiusTechnique;
         decay = 1.0 / radius;

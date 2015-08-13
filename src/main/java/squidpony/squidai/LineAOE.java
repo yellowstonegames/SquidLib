@@ -31,6 +31,8 @@ public class LineAOE implements AOE {
     private DijkstraMap dijkstra;
     private Radius rt, limitType = null;
 
+    private int minRange = 1, maxRange = 1;
+    private Radius metric = Radius.SQUARE;
     public LineAOE(Point origin, Point end)
     {
         this.dijkstra = new DijkstraMap();
@@ -82,15 +84,60 @@ public class LineAOE implements AOE {
         return dijkstra.partialScan(radius, null);
     }
 
+    @Override
     public Point getOrigin() {
         return origin;
     }
 
+    @Override
     public void setOrigin(Point origin) {
         this.origin = origin;
         dijkstra.resetMap();
         dijkstra.clearGoals();
     }
+
+    @Override
+    public Radius getLimitType() {
+        return limitType;
+    }
+
+    @Override
+    public int getMinRange() {
+        return minRange;
+    }
+
+    @Override
+    public int getMaxRange() {
+        return maxRange;
+    }
+
+    @Override
+    public Radius getMetric() {
+        return metric;
+    }
+
+    @Override
+    public void setLimitType(Radius limitType) {
+        this.limitType = limitType;
+
+    }
+
+    @Override
+    public void setMinRange(int minRange) {
+        this.minRange = minRange;
+    }
+
+    @Override
+    public void setMaxRange(int maxRange) {
+        this.maxRange = maxRange;
+
+    }
+
+    @Override
+    public void setMetric(Radius metric) {
+        this.metric = metric;
+    }
+
 
     public Point getEnd() {
         return end;
@@ -154,6 +201,7 @@ public class LineAOE implements AOE {
             return new LinkedHashMap<Point, ArrayList<Point>>();
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
+        //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
         LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
 
@@ -240,16 +288,17 @@ public class LineAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    bestQuality = qualityMap[x][y];
-                    bestPoints.clear();
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
                             ap.add(ts[i]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
-
+                    if(ap.size() > 0) {
+                        bestQuality = qualityMap[x][y];
+                        bestPoints.clear();
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
@@ -259,7 +308,10 @@ public class LineAOE implements AOE {
                         if((bits & (1 << i)) != 0)
                             ap.add(ts[i]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
+
+                    if (ap.size() > 0) {
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
             }
         }
@@ -273,6 +325,7 @@ public class LineAOE implements AOE {
             return idealLocations(lesserTargets, requiredExclusions);
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
+        //requiredExclusions.remove(origin);
         int totalTargets = priorityTargets.size() + lesserTargets.size();
         LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
 
@@ -401,8 +454,6 @@ public class LineAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    bestQuality = qualityMap[x][y];
-                    bestPoints.clear();
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
@@ -413,11 +464,14 @@ public class LineAOE implements AOE {
                         if((lbits & (1 << i)) != 0)
                             ap.add(lts[i - pts.length]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
 
+                    if(ap.size() > 0) {
+                        bestQuality = qualityMap[x][y];
+                        bestPoints.clear();
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
-                else if(qualityMap[x][y] == bestQuality)
-                {
+                else if(qualityMap[x][y] == bestQuality) {
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
@@ -429,10 +483,13 @@ public class LineAOE implements AOE {
                         }
                     }
                     for (int i = pts.length; i < totalTargets && i < 63; ++i) {
-                        if((lbits & (1 << i)) != 0)
+                        if ((lbits & (1 << i)) != 0)
                             ap.add(lts[i - pts.length]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
+
+                    if (ap.size() > 0) {
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
             }
         }
@@ -522,9 +579,4 @@ public class LineAOE implements AOE {
         return AreaUtils.dijkstraToHashMap(dmap);
     }
 
-    @Override
-    public void limit(Point origin, Radius limitType) {
-        setOrigin(origin);
-        this.limitType = limitType;
-    }
 }

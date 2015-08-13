@@ -34,6 +34,9 @@ public class BeamAOE implements AOE {
     private DijkstraMap dijkstra;
     private Radius rt, limitType = null;
 
+    private int minRange = 1, maxRange = 1;
+    private Radius metric = Radius.SQUARE;
+
     public BeamAOE(Point origin, Point end)
     {
         this.dijkstra = new DijkstraMap();
@@ -147,6 +150,48 @@ public class BeamAOE implements AOE {
         dijkstra.clearGoals();
     }
 
+    @Override
+    public Radius getLimitType() {
+        return limitType;
+    }
+
+    @Override
+    public int getMinRange() {
+        return minRange;
+    }
+
+    @Override
+    public int getMaxRange() {
+        return maxRange;
+    }
+
+    @Override
+    public Radius getMetric() {
+        return metric;
+    }
+
+    @Override
+    public void setLimitType(Radius limitType) {
+        this.limitType = limitType;
+
+    }
+
+    @Override
+    public void setMinRange(int minRange) {
+        this.minRange = minRange;
+    }
+
+    @Override
+    public void setMaxRange(int maxRange) {
+        this.maxRange = maxRange;
+
+    }
+
+    @Override
+    public void setMetric(Radius metric) {
+        this.metric = metric;
+    }
+
     public Point getEnd() {
         return end;
     }
@@ -208,6 +253,8 @@ public class BeamAOE implements AOE {
         if(targets == null)
             return new LinkedHashMap<Point, ArrayList<Point>>();
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+
+        //requiredExclusions.remove(origin);
 
         int totalTargets = targets.size();
         LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
@@ -293,16 +340,18 @@ public class BeamAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    bestQuality = qualityMap[x][y];
-                    bestPoints.clear();
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
                             ap.add(ts[i]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
 
+                    if(ap.size() > 0) {
+                        bestQuality = qualityMap[x][y];
+                        bestPoints.clear();
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
@@ -312,7 +361,10 @@ public class BeamAOE implements AOE {
                         if((bits & (1 << i)) != 0)
                             ap.add(ts[i]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
+
+                    if (ap.size() > 0) {
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
             }
         }
@@ -326,6 +378,7 @@ public class BeamAOE implements AOE {
             return idealLocations(lesserTargets, requiredExclusions);
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
+        //requiredExclusions.remove(origin);
         int totalTargets = priorityTargets.size() + lesserTargets.size();
         LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
 
@@ -335,7 +388,7 @@ public class BeamAOE implements AOE {
         Point[] pts = priorityTargets.toArray(new Point[priorityTargets.size()]);
         Point[] lts = lesserTargets.toArray(new Point[lesserTargets.size()]);
         Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = rt.extend(origin, exs[0], length, false, dungeon.length, dungeon[0].length);
+        Point t;// = rt.extend(origin, exs[0], length, false, dungeon.length, dungeon[0].length);
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
 
@@ -456,8 +509,6 @@ public class BeamAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    bestQuality = qualityMap[x][y];
-                    bestPoints.clear();
                     ArrayList<Point> ap = new ArrayList<Point>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
@@ -468,8 +519,12 @@ public class BeamAOE implements AOE {
                         if((lbits & (1 << i)) != 0)
                             ap.add(lts[i - pts.length]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
 
+                    if(ap.size() > 0) {
+                        bestQuality = qualityMap[x][y];
+                        bestPoints.clear();
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
@@ -487,7 +542,10 @@ public class BeamAOE implements AOE {
                         if((lbits & (1 << i)) != 0)
                             ap.add(lts[i - pts.length]);
                     }
-                    bestPoints.put(new Point(x, y), ap);
+
+                    if (ap.size() > 0) {
+                        bestPoints.put(new Point(x, y), ap);
+                    }
                 }
             }
         }
@@ -576,11 +634,5 @@ public class BeamAOE implements AOE {
         dijkstra.resetMap();
         dijkstra.clearGoals();
         return AreaUtils.dijkstraToHashMap(dmap);
-    }
-
-    @Override
-    public void limit(Point origin, Radius limitType) {
-        setOrigin(origin);
-        this.limitType = limitType;
     }
 }

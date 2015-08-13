@@ -25,7 +25,7 @@ public class SquidAIDemo extends ApplicationAdapter {
     private enum Phase {MOVE_ANIM, ATTACK_ANIM}
     SpriteBatch batch;
 
-    private Phase phase = Phase.MOVE_ANIM;
+    private Phase phase = Phase.ATTACK_ANIM;
     private RNG rng;
     private LightRNG lrng;
     private SquidLayers display;
@@ -37,7 +37,8 @@ public class SquidAIDemo extends ApplicationAdapter {
     private int width, height;
     private int cellWidth, cellHeight;
     private SquidInput input;
-    private static final Color bgColor = SquidLayers.awtColorToGDX(SColor.DARK_SLATE_GRAY);
+    private static final Color bgColor = SquidLayers.awtColorToGDX(SColor.DARK_SLATE_GRAY),
+            highlightColor = new Color(1.0f, 0.95f, 0.4f, 0.7f);
     private LinkedHashMap<AnimatedEntity, Integer> teamRed, teamBlue;
     private LinkedHashSet<Point> redPlaces, bluePlaces;
     private Technique redCone, blueBlast;
@@ -47,6 +48,11 @@ public class SquidAIDemo extends ApplicationAdapter {
     private ArrayList<Point> awaitedMoves;
     private int redIdx = 0, blueIdx = 0;
     private boolean blueTurn = false;
+
+
+    private boolean debugFlag = false;
+
+
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -96,14 +102,23 @@ public class SquidAIDemo extends ApplicationAdapter {
         res = DungeonUtility.generateResistances(bareDungeon);
 
         ConeAOE cone = new ConeAOE(new Point(0, 0), 8, 0, 60, Radius.CIRCLE);
-        redCone = new Technique("Burning Breath", 1, 6, cone, Radius.CIRCLE);
+        cone.setMinRange(1);
+        cone.setMaxRange(6);
+        cone.setMetric(Radius.CIRCLE);
+
+        redCone = new Technique("Burning Breath",cone);
+        redCone.setMap(bareDungeon);
 
         BlastAOE blast = new BlastAOE(new Point(0,0), 4, Radius.CIRCLE);
-        blueBlast = new Technique("Winter Orb", 5, 7, blast, Radius.CIRCLE);
+        blast.setMinRange(5);
+        blast.setMaxRange(7);
+        blast.setMetric(Radius.CIRCLE);
+        blueBlast = new Technique("Winter Orb", blast);
+        blueBlast.setMap(bareDungeon);
 
-        getToRed = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.CHEBYSHEV);
+        getToRed = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
         getToRed.rng = rng;
-        getToBlue = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.CHEBYSHEV);
+        getToBlue = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
         getToBlue.rng = rng;
 
         dijkstraAlert();
@@ -138,6 +153,7 @@ public class SquidAIDemo extends ApplicationAdapter {
 
     private void dijkstraAlert()
     {
+        /*
         getToBlue.clearGoals();
         getToBlue.resetMap();
         getToRed.clearGoals();
@@ -149,7 +165,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         {
             for(AnimatedEntity red : redCopy)
             {
-                if(los.isReachable(res, blue.gridX, blue.gridY, red.gridX, red.gridY, Radius.SQUARE))
+                if(los.isReachable(res, blue.gridX, blue.gridY, red.gridX, red.gridY, Radius.CIRCLE))
                 {
                     getToBlue.setGoal(blue.gridX, blue.gridY);
                     getToRed.setGoal(red.gridX, red.gridY);
@@ -162,6 +178,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         }
         getToBlue.scan(redPlaces);
         getToRed.scan(bluePlaces);
+        */
     }
 
     /**
@@ -219,15 +236,26 @@ public class SquidAIDemo extends ApplicationAdapter {
             return;
         }
         whichAllies.remove(user);
-        for(Point p : whichFoes)
+        /*for(Point p : whichFoes)
         {
             AnimatedEntity foe = display.getAnimatedEntityByCell(p.x, p.y);
             if(los.isReachable(res, user.x, user.y, p.x, p.y) && foe != null && whichEnemyTeam.get(foe) != null && whichEnemyTeam.get(foe) > 0)
             {
                 visibleTargets.add(p);
             }
+        }*/
+        ArrayList<Point> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, null, whichFoes, whichAllies, user, whichFoes);
+        System.out.println("User at (" + user.x + "," + user.y + ") using " +
+                whichTech.name);
+        boolean anyFound = false;
+        for (int yy = 0; yy < height; yy++) {
+            for (int xx = 0; xx < width; xx++) {
+                System.out.print((whichDijkstra.targetMap[xx][yy] == null) ? "." : "@");
+                anyFound = (whichDijkstra.targetMap[xx][yy] != null) ? true : anyFound;
+            }
+            System.out.println();
         }
-        ArrayList<Point> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, los, whichFoes, whichAllies, user, visibleTargets);
+        debugFlag = !anyFound;
         awaitedMoves = new ArrayList<Point>(path);
     }
 
@@ -254,8 +282,6 @@ public class SquidAIDemo extends ApplicationAdapter {
     }
 
     private void postMove(int idx) {
-
-        phase = Phase.ATTACK_ANIM;
 
         int i = 0;
         DijkstraMap whichDijkstra;
@@ -302,9 +328,32 @@ public class SquidAIDemo extends ApplicationAdapter {
             phase = Phase.ATTACK_ANIM;
             return;
         }
-        if(whichDijkstra.targetMap[user.x][user.y] != null)
+        for(Point p : whichFoes)
         {
-            effects = whichTech.apply(user, whichDijkstra.targetMap[user.x][user.y]);
+            AnimatedEntity foe = display.getAnimatedEntityByCell(p.x, p.y);
+            if(los.isReachable(res, user.x, user.y, p.x, p.y) && foe != null && whichEnemyTeam.get(foe) != null && whichEnemyTeam.get(foe) > 0)
+            {
+                visibleTargets.add(p);
+            }
+        }
+        LinkedHashMap<Point, ArrayList<Point>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
+        Point targetCell = null;
+        for(Point ip : ideal.keySet())
+        {
+            targetCell = ip;
+            break;
+        }
+        if(targetCell != null && debugFlag) {
+            System.out.println("WAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT");
+        }
+        else
+        {
+            debugFlag = false;
+        }
+
+        if(targetCell != null)
+        {
+            effects = whichTech.apply(user, targetCell);
             for(Map.Entry<Point, Double> power : effects.entrySet())
             {
                 whichTint.a = power.getValue().floatValue();
@@ -320,6 +369,14 @@ public class SquidAIDemo extends ApplicationAdapter {
                     }
                 }
             }
+        }
+        else
+        {
+            System.out.println("NO ATTACK POSITION: User at (" + user.x + "," + user.y + ") using " +
+                    whichTech.name);
+
+            display.tint(user.x * 2    , user.y, highlightColor, 0, display.getAnimationDuration() * 3);
+            display.tint(user.x * 2 + 1, user.y, highlightColor, 0, display.getAnimationDuration() * 3);
         }
         whichAllies.add(user);
         phase = Phase.ATTACK_ANIM;
@@ -414,6 +471,10 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
+        // if we are waiting for the player's input and get input, process it.
+        if(input.hasNext()) {
+            input.next();
+        }
         // if the user clicked, we have a list of moves to perform.
         if(!awaitedMoves.isEmpty())
         {
@@ -430,10 +491,6 @@ public class SquidAIDemo extends ApplicationAdapter {
                     move(ae, m.x, m.y);
                 }
             }
-        }
-        // if we are waiting for the player's input and get input, process it.
-        else if(input.hasNext()) {
-            input.next();
         }
         // if the previous blocks didn't happen, and there are no active animations, then either change the phase
         // (because with no animations running the last phase must have ended), or start a new animation soon.
