@@ -1,0 +1,1 @@
+"C:\Program Files\Java\jdk1.8.0_25\jre\..\bin\javadoc.exe" -J-Xmx1024m -J-Xms256m @options @packages

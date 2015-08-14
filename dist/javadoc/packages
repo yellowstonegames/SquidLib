@@ -1,11 +1,10 @@
 squidpony.annotation
 squidpony
-squidpony.examples
-squidpony.examples.squidpony.examples.snowman
 squidpony.squidai
 squidpony.squidgrid
 squidpony.squidgrid.gui.animation
 squidpony.squidgrid.gui
+squidpony.squidgrid.gui.gdx
 squidpony.squidgrid.mapping
 squidpony.squidgrid.mapping.shape
 squidpony.squidgrid.mapping.styled
