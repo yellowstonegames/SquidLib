@@ -26,6 +26,13 @@ public class PointAOE implements AOE {
     {
         this.center = center;
     }
+    public PointAOE(Point center, int minRange, int maxRange)
+    {
+        this.center = center;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
+    }
+
     private PointAOE()
     {
         center = new Point(1, 1);

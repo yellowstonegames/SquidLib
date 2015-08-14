@@ -21,6 +21,9 @@ import java.util.*;
  * BeamAOE is more suitable for that effect, while LineAOE may be more suitable for things like focused lasers that
  * pass through small (likely fleshy) obstacles but stop after hitting the aimed-at target.
  *
+ * BeamAOE will strike a small area behind the user and in the opposite direction of the target if the radius is
+ * greater than 0. This behavior may be altered in a future version.
+ *
  * This will produce doubles for its findArea() method which are equal to 1.0.
  *
  * This class uses squidpony.squidmath.Elias and squidpony.squidai.DijkstraMap to create its area of effect.
@@ -45,6 +48,7 @@ public class BeamAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
+        this.maxRange = this.length;
         this.radius = 0;
     }
     public BeamAOE(Point origin, Point end, int radius)
@@ -56,7 +60,7 @@ public class BeamAOE implements AOE {
         this.end = end;
         this.radius = radius;
         this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
-
+        this.maxRange = this.length;
     }
     public BeamAOE(Point origin, Point end, int radius, Radius radiusType)
     {
@@ -77,6 +81,7 @@ public class BeamAOE implements AOE {
         this.end = end;
         this.radius = radius;
         this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
+        this.maxRange = this.length;
     }
 
     public BeamAOE(Point origin, double angle, int length)
@@ -89,6 +94,7 @@ public class BeamAOE implements AOE {
         this.end = new Point((int)Math.round(Math.cos(theta) * length) + origin.x,
                 (int)Math.round(Math.sin(theta) * length) + origin.y);
         this.length = length;
+        this.maxRange = this.length;
         this.radius = 0;
     }
     public BeamAOE(Point origin, double angle, int length, int radius)
@@ -102,7 +108,7 @@ public class BeamAOE implements AOE {
                 (int)Math.round(Math.sin(theta) * length) + origin.y);
         this.radius = radius;
         this.length = length;
-
+        this.maxRange = this.length;
     }
     public BeamAOE(Point origin, double angle, int length, int radius, Radius radiusType)
     {
@@ -125,6 +131,7 @@ public class BeamAOE implements AOE {
                 (int)Math.round(Math.sin(theta) * length) + origin.y);
         this.radius = radius;
         this.length = length;
+        this.maxRange = this.length;
     }
     private double[][] initDijkstra()
     {
@@ -184,6 +191,7 @@ public class BeamAOE implements AOE {
     @Override
     public void setMaxRange(int maxRange) {
         this.maxRange = maxRange;
+        this.length = maxRange;
 
     }
 

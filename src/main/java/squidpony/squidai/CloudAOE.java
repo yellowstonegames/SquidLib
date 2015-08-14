@@ -99,6 +99,28 @@ public class CloudAOE implements AOE {
                 break;
         }
     }
+    public CloudAOE(Point center, int volume, Radius radiusType, long rngSeed, int minRange, int maxRange)
+    {
+        this.seed = rngSeed;
+        this.spill = new Spill(new RNG(new LightRNG(rngSeed)));
+        this.center = center;
+        this.volume = volume;
+        this.expanding = false;
+        rt = radiusType;
+        switch (radiusType)
+        {
+            case SPHERE:
+            case CIRCLE: this.spill.measurement = Spill.Measurement.EUCLIDEAN;
+                break;
+            case CUBE:
+            case SQUARE: this.spill.measurement = Spill.Measurement.CHEBYSHEV;
+                break;
+            default: this.spill.measurement = Spill.Measurement.MANHATTAN;
+                break;
+        }
+        this.minRange = minRange;
+        this.maxRange = maxRange;
+    }
     private CloudAOE()
     {
         LightRNG l = new LightRNG();

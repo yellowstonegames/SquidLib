@@ -33,6 +33,15 @@ public class BurstAOE implements AOE {
         this.radius = radius;
         this.radiusType = radiusType;
     }
+    public BurstAOE(Point center, int radius, Radius radiusType, int minRange, int maxRange)
+    {
+        fov = new FOV(FOV.SHADOW);
+        this.center = center;
+        this.radius = radius;
+        this.radiusType = radiusType;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
+    }
     private BurstAOE()
     {
         fov = new FOV(FOV.SHADOW);

@@ -93,7 +93,25 @@ public class AreaUtils {
         return ret;
     }
 
-
+    /**
+     * Checks that the given end Point can be targeted from the given origin Point given the directional targeting
+     * rules specified by limit. If any of the arguments are null, returns true (it assumes that any limits are not
+     * valid and don't restrict anything). The following Radius enum values for limit have the following meanings:
+     *
+     * <ul>
+     *     <li>Radius.CIRCLE, Radius.SPHERE, Radius.SQUARE or RADIUS.CUBE will only consider Points to be valid targets
+     *     if they are along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x
+     *     axis. Essentially, this limits the points to those a queen could move to in chess.</li>
+     *     <li>Radius.DIAMOND or Radius.OCTAHEDRON will cause the AOE to only consider Points to be valid targets if
+     *     they are along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x
+     *     axis. Essentially, this limits the points to those a rook could move to in chess.</li>
+     * </ul>
+     *
+     * @param limit DIAMOND or OCTAHEDRON for rook-like, other enum values for queen-like, null for unrestricted
+     * @param origin where the user is
+     * @param end where the point we want to verify is
+     * @return true if the point is a valid target or if the limits are invalid (non-restricting), false otherwise
+     */
     public static boolean verifyLimit(Radius limit, Point origin, Point end)
     {
         if (limit != null && origin != null && end != null) {
