@@ -9,6 +9,7 @@ Current Features:
 ###Ease Of Use
 -   Standard GUI notation of (x,y) locations within the grid
 -   Uses Swing components or the scene2d.ui classes from libGDX
+  -   LibGDX is an optional dependency; if you don't use it, you don't need to include it (unless building SquidLib yourself)
 -   Any Font can be used
   -   This means TTF or OTF fonts in Swing
   -   For libGDX, it means bitmap fonts created by the libGDX tool Hiero, which uses TTF or OTF fonts as input
@@ -103,6 +104,26 @@ Download JARs from the Releases tab or use Maven Central to download with
   <groupId>com.squidpony</groupId>
   <artifactId>squidlib</artifactId>
   <version>2.9.0</version>
+</dependency>
+```
+
+If you want to use the LibGDX code (anything in a package with "gdx" in it), you need to depend on libGDX.
+```
+<dependency>
+    <groupId>com.badlogicgames.gdx</groupId>
+    <artifactId>gdx</artifactId>
+    <version>1.6.4</version>
+</dependency>
+<dependency>
+    <groupId>com.badlogicgames.gdx</groupId>
+    <artifactId>gdx-backend-lwjgl</artifactId>
+    <version>1.6.4</version>
+</dependency>
+<dependency>
+    <groupId>com.badlogicgames.gdx</groupId>
+    <artifactId>gdx-platform</artifactId>
+    <version>1.6.4</version>
+    <classifier>natives-desktop</classifier>
 </dependency>
 ```
 
