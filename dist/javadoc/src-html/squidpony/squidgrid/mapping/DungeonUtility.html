@@ -836,7 +836,7 @@
 <span class="sourceLineNo">828</span>     * @param frame<a name="line.828"></a>
 <span class="sourceLineNo">829</span>     * @return<a name="line.829"></a>
 <span class="sourceLineNo">830</span>     */<a name="line.830"></a>
-<span class="sourceLineNo">831</span>    public static int[][] generateLightnessModifiers(char[][] map, int frame)<a name="line.831"></a>
+<span class="sourceLineNo">831</span>    public static int[][] generateLightnessModifiers(char[][] map, double frame)<a name="line.831"></a>
 <span class="sourceLineNo">832</span>    {<a name="line.832"></a>
 <span class="sourceLineNo">833</span>        int width = map.length;<a name="line.833"></a>
 <span class="sourceLineNo">834</span>        int height = map[0].length;<a name="line.834"></a>
@@ -883,63 +883,62 @@
 <span class="sourceLineNo">875</span>        return portion;<a name="line.875"></a>
 <span class="sourceLineNo">876</span>    }<a name="line.876"></a>
 <span class="sourceLineNo">877</span>    /**<a name="line.877"></a>
-<span class="sourceLineNo">878</span>     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own<a name="line.878"></a>
-<span class="sourceLineNo">879</span>     * rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then<a name="line.879"></a>
-<span class="sourceLineNo">880</span>     * white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are<a name="line.880"></a>
-<span class="sourceLineNo">881</span>     * hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, and 6 for traps.<a name="line.881"></a>
-<span class="sourceLineNo">882</span>     * @param map<a name="line.882"></a>
-<span class="sourceLineNo">883</span>     * @return<a name="line.883"></a>
+<span class="sourceLineNo">878</span>     * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(). It expects any<a name="line.878"></a>
+<span class="sourceLineNo">879</span>     * doors to be represented by '+' if closed or '/' if open (which can be caused by calling<a name="line.879"></a>
+<span class="sourceLineNo">880</span>     * DungeonUtility.closeDoors() ), any walls to be '#' or line drawing characters, and it doesn't care what other<a name="line.880"></a>
+<span class="sourceLineNo">881</span>     * chars are used (only doors, including open ones, and walls obscure light and thus have a resistance by default).<a name="line.881"></a>
+<span class="sourceLineNo">882</span>     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors()<a name="line.882"></a>
+<span class="sourceLineNo">883</span>     * @return a resistance map suitable for use with the FOV class<a name="line.883"></a>
 <span class="sourceLineNo">884</span>     */<a name="line.884"></a>
 <span class="sourceLineNo">885</span>    public static double[][] generateResistances(char[][] map)<a name="line.885"></a>
 <span class="sourceLineNo">886</span>    {<a name="line.886"></a>
-<span class="sourceLineNo">887</span><a name="line.887"></a>
-<span class="sourceLineNo">888</span>        int width = map.length;<a name="line.888"></a>
-<span class="sourceLineNo">889</span>        int height = map[0].length;<a name="line.889"></a>
-<span class="sourceLineNo">890</span>        double[][] portion = new double[width][height];<a name="line.890"></a>
-<span class="sourceLineNo">891</span>        for(int i = 0; i &lt; width; i++)<a name="line.891"></a>
-<span class="sourceLineNo">892</span>        {<a name="line.892"></a>
-<span class="sourceLineNo">893</span>            for(int j = 0; j &lt; height; j++)<a name="line.893"></a>
-<span class="sourceLineNo">894</span>            {<a name="line.894"></a>
-<span class="sourceLineNo">895</span>                switch (map[i][j])<a name="line.895"></a>
-<span class="sourceLineNo">896</span>                {<a name="line.896"></a>
-<span class="sourceLineNo">897</span>                    case '\1':<a name="line.897"></a>
-<span class="sourceLineNo">898</span>                    case '├':<a name="line.898"></a>
-<span class="sourceLineNo">899</span>                    case '┤':<a name="line.899"></a>
-<span class="sourceLineNo">900</span>                    case '┴':<a name="line.900"></a>
-<span class="sourceLineNo">901</span>                    case '┬':<a name="line.901"></a>
-<span class="sourceLineNo">902</span>                    case '┌':<a name="line.902"></a>
-<span class="sourceLineNo">903</span>                    case '┐':<a name="line.903"></a>
-<span class="sourceLineNo">904</span>                    case '└':<a name="line.904"></a>
-<span class="sourceLineNo">905</span>                    case '┘':<a name="line.905"></a>
-<span class="sourceLineNo">906</span>                    case '│':<a name="line.906"></a>
-<span class="sourceLineNo">907</span>                    case '─':<a name="line.907"></a>
-<span class="sourceLineNo">908</span>                    case '┼':<a name="line.908"></a>
-<span class="sourceLineNo">909</span>                    case '#':<a name="line.909"></a>
-<span class="sourceLineNo">910</span>                        portion[i][j] = 1.0;<a name="line.910"></a>
-<span class="sourceLineNo">911</span>                        break;<a name="line.911"></a>
-<span class="sourceLineNo">912</span>                    case '.':<a name="line.912"></a>
-<span class="sourceLineNo">913</span>                        portion[i][j] = 0.0;<a name="line.913"></a>
-<span class="sourceLineNo">914</span>                        break;<a name="line.914"></a>
-<span class="sourceLineNo">915</span>                    case '/':<a name="line.915"></a>
-<span class="sourceLineNo">916</span>                        portion[i][j] = 0.15;<a name="line.916"></a>
-<span class="sourceLineNo">917</span>                        break;<a name="line.917"></a>
-<span class="sourceLineNo">918</span>                    case '+':<a name="line.918"></a>
-<span class="sourceLineNo">919</span>                        portion[i][j] = 0.95;<a name="line.919"></a>
-<span class="sourceLineNo">920</span>                        break;<a name="line.920"></a>
-<span class="sourceLineNo">921</span>                    case '~':<a name="line.921"></a>
-<span class="sourceLineNo">922</span>                        portion[i][j] = 0.0;<a name="line.922"></a>
-<span class="sourceLineNo">923</span>                        break;<a name="line.923"></a>
-<span class="sourceLineNo">924</span>                    case '^':<a name="line.924"></a>
-<span class="sourceLineNo">925</span>                        portion[i][j] = 0.0;<a name="line.925"></a>
-<span class="sourceLineNo">926</span>                        break;<a name="line.926"></a>
-<span class="sourceLineNo">927</span>                    default:<a name="line.927"></a>
-<span class="sourceLineNo">928</span>                        portion[i][j] = 0.0;<a name="line.928"></a>
-<span class="sourceLineNo">929</span>                }<a name="line.929"></a>
-<span class="sourceLineNo">930</span>            }<a name="line.930"></a>
-<span class="sourceLineNo">931</span>        }<a name="line.931"></a>
-<span class="sourceLineNo">932</span>        return portion;<a name="line.932"></a>
-<span class="sourceLineNo">933</span>    }<a name="line.933"></a>
-<span class="sourceLineNo">934</span>}<a name="line.934"></a>
+<span class="sourceLineNo">887</span>        int width = map.length;<a name="line.887"></a>
+<span class="sourceLineNo">888</span>        int height = map[0].length;<a name="line.888"></a>
+<span class="sourceLineNo">889</span>        double[][] portion = new double[width][height];<a name="line.889"></a>
+<span class="sourceLineNo">890</span>        for(int i = 0; i &lt; width; i++)<a name="line.890"></a>
+<span class="sourceLineNo">891</span>        {<a name="line.891"></a>
+<span class="sourceLineNo">892</span>            for(int j = 0; j &lt; height; j++)<a name="line.892"></a>
+<span class="sourceLineNo">893</span>            {<a name="line.893"></a>
+<span class="sourceLineNo">894</span>                switch (map[i][j])<a name="line.894"></a>
+<span class="sourceLineNo">895</span>                {<a name="line.895"></a>
+<span class="sourceLineNo">896</span>                    case '\1':<a name="line.896"></a>
+<span class="sourceLineNo">897</span>                    case '├':<a name="line.897"></a>
+<span class="sourceLineNo">898</span>                    case '┤':<a name="line.898"></a>
+<span class="sourceLineNo">899</span>                    case '┴':<a name="line.899"></a>
+<span class="sourceLineNo">900</span>                    case '┬':<a name="line.900"></a>
+<span class="sourceLineNo">901</span>                    case '┌':<a name="line.901"></a>
+<span class="sourceLineNo">902</span>                    case '┐':<a name="line.902"></a>
+<span class="sourceLineNo">903</span>                    case '└':<a name="line.903"></a>
+<span class="sourceLineNo">904</span>                    case '┘':<a name="line.904"></a>
+<span class="sourceLineNo">905</span>                    case '│':<a name="line.905"></a>
+<span class="sourceLineNo">906</span>                    case '─':<a name="line.906"></a>
+<span class="sourceLineNo">907</span>                    case '┼':<a name="line.907"></a>
+<span class="sourceLineNo">908</span>                    case '#':<a name="line.908"></a>
+<span class="sourceLineNo">909</span>                        portion[i][j] = 1.0;<a name="line.909"></a>
+<span class="sourceLineNo">910</span>                        break;<a name="line.910"></a>
+<span class="sourceLineNo">911</span>                    case '.':<a name="line.911"></a>
+<span class="sourceLineNo">912</span>                        portion[i][j] = 0.0;<a name="line.912"></a>
+<span class="sourceLineNo">913</span>                        break;<a name="line.913"></a>
+<span class="sourceLineNo">914</span>                    case '/':<a name="line.914"></a>
+<span class="sourceLineNo">915</span>                        portion[i][j] = 0.15;<a name="line.915"></a>
+<span class="sourceLineNo">916</span>                        break;<a name="line.916"></a>
+<span class="sourceLineNo">917</span>                    case '+':<a name="line.917"></a>
+<span class="sourceLineNo">918</span>                        portion[i][j] = 0.95;<a name="line.918"></a>
+<span class="sourceLineNo">919</span>                        break;<a name="line.919"></a>
+<span class="sourceLineNo">920</span>                    case '~':<a name="line.920"></a>
+<span class="sourceLineNo">921</span>                        portion[i][j] = 0.0;<a name="line.921"></a>
+<span class="sourceLineNo">922</span>                        break;<a name="line.922"></a>
+<span class="sourceLineNo">923</span>                    case '^':<a name="line.923"></a>
+<span class="sourceLineNo">924</span>                        portion[i][j] = 0.0;<a name="line.924"></a>
+<span class="sourceLineNo">925</span>                        break;<a name="line.925"></a>
+<span class="sourceLineNo">926</span>                    default:<a name="line.926"></a>
+<span class="sourceLineNo">927</span>                        portion[i][j] = 0.0;<a name="line.927"></a>
+<span class="sourceLineNo">928</span>                }<a name="line.928"></a>
+<span class="sourceLineNo">929</span>            }<a name="line.929"></a>
+<span class="sourceLineNo">930</span>        }<a name="line.930"></a>
+<span class="sourceLineNo">931</span>        return portion;<a name="line.931"></a>
+<span class="sourceLineNo">932</span>    }<a name="line.932"></a>
+<span class="sourceLineNo">933</span>}<a name="line.933"></a>
 
 
 

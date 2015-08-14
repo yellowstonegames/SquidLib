@@ -1,0 +1,35 @@
+-classpath
+'C:/Users/noto/Documents/GitHub/SquidLib/target/classes;C:/Users/noto/.m2/repository/com/badlogicgames/gdx/gdx/1.6.4/gdx-1.6.4.jar;C:/Users/noto/.m2/repository/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar;C:/Users/noto/.m2/repository/com/badlogicgames/gdx/gdx-platform/1.6.4/gdx-platform-1.6.4-natives-desktop.jar;C:/Users/noto/.m2/repository/org/lwjgl/lwjgl/lwjgl/2.9.2/lwjgl-2.9.2.jar;C:/Users/noto/.m2/repository/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar;C:/Users/noto/.m2/repository/com/badlogicgames/jlayer/jlayer/1.0.1-gdx/jlayer-1.0.1-gdx.jar;C:/Users/noto/.m2/repository/com/badlogicgames/gdx/gdx-backend-lwjgl/1.6.4/gdx-backend-lwjgl-1.6.4.jar;C:/Users/noto/.m2/repository/com/google/code/gson/gson/2.3.1/gson-2.3.1.jar;C:/Users/noto/.m2/repository/org/lwjgl/lwjgl/lwjgl_util/2.9.2/lwjgl_util-2.9.2.jar;C:/Users/noto/.m2/repository/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-windows.jar;C:/Users/noto/.m2/repository/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-osx.jar;C:/Users/noto/.m2/repository/org/lwjgl/lwjgl/lwjgl-platform/2.9.2/lwjgl-platform-2.9.2-natives-linux.jar;C:/Users/noto/.m2/repository/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar'
+-encoding
+'UTF-8'
+-protected
+-quiet
+-sourcepath
+'C:/Users/noto/Documents/GitHub/SquidLib/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2012&#x2013;2015. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/noto/Documents/GitHub/SquidLib/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'SquidLib 2.9.0'
+-link
+'http://docs.oracle.com/javase/8/docs/api'
+-link
+'http://docs.oracle.com/javase/7/docs/api'
+-link
+'http://docs.oracle.com/javase/6/docs/api'
+-link
+'http://docs.oracle.com/javase/1.5.0/docs/api'
+-linkoffline
+'http://docs.oracle.com/javase/7/docs/api' 'C:/Users/noto/Documents/GitHub/SquidLib/target/javadoc-bundle-options'
+-linksource
+-splitindex
+-use
+-version
+-windowtitle
+'SquidLib 2.9.0'

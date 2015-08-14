@@ -18,7 +18,7 @@
 <span class="sourceLineNo">010</span>import java.awt.*;<a name="line.10"></a>
 <span class="sourceLineNo">011</span>import java.util.ArrayList;<a name="line.11"></a>
 <span class="sourceLineNo">012</span>import java.util.HashMap;<a name="line.12"></a>
-<span class="sourceLineNo">013</span>import java.util.HashSet;<a name="line.13"></a>
+<span class="sourceLineNo">013</span>import java.util.LinkedHashSet;<a name="line.13"></a>
 <span class="sourceLineNo">014</span><a name="line.14"></a>
 <span class="sourceLineNo">015</span>/**<a name="line.15"></a>
 <span class="sourceLineNo">016</span> * The primary way to create a more-complete dungeon, layering different effects and modifications on top of<a name="line.16"></a>
@@ -226,7 +226,7 @@
 <span class="sourceLineNo">218</span>        return this;<a name="line.218"></a>
 <span class="sourceLineNo">219</span>    }<a name="line.219"></a>
 <span class="sourceLineNo">220</span><a name="line.220"></a>
-<span class="sourceLineNo">221</span>    private HashSet&lt;Point&gt; removeAdjacent(HashSet&lt;Point&gt; coll, Point pt)<a name="line.221"></a>
+<span class="sourceLineNo">221</span>    private LinkedHashSet&lt;Point&gt; removeAdjacent(LinkedHashSet&lt;Point&gt; coll, Point pt)<a name="line.221"></a>
 <span class="sourceLineNo">222</span>    {<a name="line.222"></a>
 <span class="sourceLineNo">223</span>        for(Point temp : new Point[]{new Point(pt.x+1, pt.y), new Point(pt.x-1, pt.y),<a name="line.223"></a>
 <span class="sourceLineNo">224</span>                new Point(pt.x, pt.y+1), new Point(pt.x, pt.y-1)})<a name="line.224"></a>
@@ -237,7 +237,7 @@
 <span class="sourceLineNo">229</span><a name="line.229"></a>
 <span class="sourceLineNo">230</span>        return coll;<a name="line.230"></a>
 <span class="sourceLineNo">231</span>    }<a name="line.231"></a>
-<span class="sourceLineNo">232</span>    private HashSet&lt;Point&gt; removeAdjacent(HashSet&lt;Point&gt; coll, Point pt1, Point pt2)<a name="line.232"></a>
+<span class="sourceLineNo">232</span>    private LinkedHashSet&lt;Point&gt; removeAdjacent(LinkedHashSet&lt;Point&gt; coll, Point pt1, Point pt2)<a name="line.232"></a>
 <span class="sourceLineNo">233</span>    {<a name="line.233"></a>
 <span class="sourceLineNo">234</span><a name="line.234"></a>
 <span class="sourceLineNo">235</span>        for(Point temp : new Point[]{new Point(pt1.x+1, pt1.y), new Point(pt1.x-1, pt1.y),<a name="line.235"></a>
@@ -252,9 +252,9 @@
 <span class="sourceLineNo">244</span>        return coll;<a name="line.244"></a>
 <span class="sourceLineNo">245</span>    }<a name="line.245"></a>
 <span class="sourceLineNo">246</span><a name="line.246"></a>
-<span class="sourceLineNo">247</span>    private HashSet&lt;Point&gt; viableDoorways(boolean doubleDoors, char[][] map)<a name="line.247"></a>
+<span class="sourceLineNo">247</span>    private LinkedHashSet&lt;Point&gt; viableDoorways(boolean doubleDoors, char[][] map)<a name="line.247"></a>
 <span class="sourceLineNo">248</span>    {<a name="line.248"></a>
-<span class="sourceLineNo">249</span>        HashSet&lt;Point&gt; doors = new HashSet&lt;Point&gt;();<a name="line.249"></a>
+<span class="sourceLineNo">249</span>        LinkedHashSet&lt;Point&gt; doors = new LinkedHashSet&lt;Point&gt;();<a name="line.249"></a>
 <span class="sourceLineNo">250</span>        Point temp = new Point(0, 0);<a name="line.250"></a>
 <span class="sourceLineNo">251</span><a name="line.251"></a>
 <span class="sourceLineNo">252</span>        for(int x = 1; x &lt; map.length - 1; x++, temp.x = x) {<a name="line.252"></a>
@@ -332,9 +332,9 @@
 <span class="sourceLineNo">324</span>        DungeonUtility.rng = rng;<a name="line.324"></a>
 <span class="sourceLineNo">325</span>        char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));<a name="line.325"></a>
 <span class="sourceLineNo">326</span><a name="line.326"></a>
-<span class="sourceLineNo">327</span>        HashSet&lt;Point&gt; floors = new HashSet&lt;Point&gt;();<a name="line.327"></a>
-<span class="sourceLineNo">328</span>        HashSet&lt;Point&gt; doorways = new HashSet&lt;Point&gt;();<a name="line.328"></a>
-<span class="sourceLineNo">329</span>        HashSet&lt;Point&gt; hazards = new HashSet&lt;Point&gt;();<a name="line.329"></a>
+<span class="sourceLineNo">327</span>        LinkedHashSet&lt;Point&gt; floors = new LinkedHashSet&lt;Point&gt;();<a name="line.327"></a>
+<span class="sourceLineNo">328</span>        LinkedHashSet&lt;Point&gt; doorways = new LinkedHashSet&lt;Point&gt;();<a name="line.328"></a>
+<span class="sourceLineNo">329</span>        LinkedHashSet&lt;Point&gt; hazards = new LinkedHashSet&lt;Point&gt;();<a name="line.329"></a>
 <span class="sourceLineNo">330</span>        Point temp = new Point(0, 0);<a name="line.330"></a>
 <span class="sourceLineNo">331</span>        boolean doubleDoors = false;<a name="line.331"></a>
 <span class="sourceLineNo">332</span>        int doorFill = 0;<a name="line.332"></a>
@@ -359,7 +359,7 @@
 <span class="sourceLineNo">351</span><a name="line.351"></a>
 <span class="sourceLineNo">352</span>        doorways = viableDoorways(doubleDoors, map);<a name="line.352"></a>
 <span class="sourceLineNo">353</span><a name="line.353"></a>
-<span class="sourceLineNo">354</span>        HashSet&lt;Point&gt; obstacles = new HashSet&lt;Point&gt;(doorways.size() * doorFill / 100);<a name="line.354"></a>
+<span class="sourceLineNo">354</span>        LinkedHashSet&lt;Point&gt; obstacles = new LinkedHashSet&lt;Point&gt;(doorways.size() * doorFill / 100);<a name="line.354"></a>
 <span class="sourceLineNo">355</span>        if(doorFill &gt; 0)<a name="line.355"></a>
 <span class="sourceLineNo">356</span>        {<a name="line.356"></a>
 <span class="sourceLineNo">357</span>            int total = doorways.size() * doorFill / 100;<a name="line.357"></a>
@@ -381,7 +381,7 @@
 <span class="sourceLineNo">373</span>                for(Point near : adj) {<a name="line.373"></a>
 <span class="sourceLineNo">374</span>                    if (doorways.contains(near)) {<a name="line.374"></a>
 <span class="sourceLineNo">375</span>                        map[near.x][near.y] = '#';<a name="line.375"></a>
-<span class="sourceLineNo">376</span>                        obstacles.add(new Point(near));<a name="line.376"></a>
+<span class="sourceLineNo">376</span>                        obstacles.add(new Point(near.x, near.y));<a name="line.376"></a>
 <span class="sourceLineNo">377</span>                        doorways.remove(near);<a name="line.377"></a>
 <span class="sourceLineNo">378</span>                        i++;<a name="line.378"></a>
 <span class="sourceLineNo">379</span>                        doorways.remove(entry);<a name="line.379"></a>
@@ -437,7 +437,7 @@
 <span class="sourceLineNo">429</span>                Point entry = (Point) floors.toArray()[rng.nextInt(floors.size())];<a name="line.429"></a>
 <span class="sourceLineNo">430</span>//                spill.start(entry, volumes[i] / 3, obstacles);<a name="line.430"></a>
 <span class="sourceLineNo">431</span>//                spill.start(entry, 2 * volumes[i] / 3, obstacles);<a name="line.431"></a>
-<span class="sourceLineNo">432</span>                HashSet&lt;Point&gt; ordered = new HashSet&lt;Point&gt;(spill.start(entry, volumes[i], obstacles));<a name="line.432"></a>
+<span class="sourceLineNo">432</span>                ArrayList&lt;Point&gt; ordered = new ArrayList&lt;Point&gt;(spill.start(entry, volumes[i], obstacles));<a name="line.432"></a>
 <span class="sourceLineNo">433</span>                floors.removeAll(ordered);<a name="line.433"></a>
 <span class="sourceLineNo">434</span>                hazards.removeAll(ordered);<a name="line.434"></a>
 <span class="sourceLineNo">435</span>                obstacles.addAll(ordered);<a name="line.435"></a>
