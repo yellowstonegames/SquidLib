@@ -36,12 +36,14 @@ public class SquidAIDemo extends ApplicationAdapter {
     private LOS los;
     private int width, height;
     private int cellWidth, cellHeight;
+    private int numMonsters = 16;
+
     private SquidInput input;
     private static final Color bgColor = SquidLayers.awtColorToGDX(SColor.DARK_SLATE_GRAY),
             highlightColor = new Color(1.0f, 0.95f, 0.4f, 0.7f);
     private LinkedHashMap<AnimatedEntity, Integer> teamRed, teamBlue;
     private LinkedHashSet<Point> redPlaces, bluePlaces;
-    private Technique redCone, blueBlast;
+    private Technique redCone, redCloud, blueBlast, blueBeam;
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
     private int framesWithoutAnimation = 0, moveLength = 5;
@@ -50,13 +52,10 @@ public class SquidAIDemo extends ApplicationAdapter {
     private boolean blueTurn = false;
 
 
-    private boolean debugFlag = false;
-
-
     @Override
     public void create () {
         batch = new SpriteBatch();
-        width = 60;
+        width = 40;
         height = 40;
         cellWidth = 6;
         cellHeight = 12;
@@ -70,7 +69,7 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         dungeonGen = new DungeonGenerator(width, height, rng);
 //        dungeonGen.addWater(10);
-//        dungeonGen.addDoors(15, true);
+        //dungeonGen.addDoors(15, true);
 
         // change the TilesetType to lots of different choices to see what dungeon works best.
         bareDungeon = dungeonGen.generate(TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS);
@@ -79,7 +78,6 @@ public class SquidAIDemo extends ApplicationAdapter {
         char[][] placement = DungeonUtility.closeDoors(bareDungeon);
 
 
-        int numMonsters = 15;
         teamRed = new LinkedHashMap<AnimatedEntity, Integer>(numMonsters);
         teamBlue = new LinkedHashMap<AnimatedEntity, Integer>(numMonsters);
 
@@ -101,20 +99,37 @@ public class SquidAIDemo extends ApplicationAdapter {
         los = new LOS(LOS.BRESENHAM);
         res = DungeonUtility.generateResistances(bareDungeon);
 
-        ConeAOE cone = new ConeAOE(new Point(0, 0), 8, 0, 60, Radius.CIRCLE);
+        ConeAOE cone = new ConeAOE(new Point(0, 0), 9, 0, 60, Radius.CIRCLE);
         cone.setMinRange(1);
-        cone.setMaxRange(6);
-        cone.setMetric(Radius.CIRCLE);
+        cone.setMaxRange(2);
+        cone.setMetric(Radius.SQUARE);
 
-        redCone = new Technique("Burning Breath",cone);
+        redCone = new Technique("Burning Breath", cone);
         redCone.setMap(bareDungeon);
 
-        BlastAOE blast = new BlastAOE(new Point(0,0), 4, Radius.CIRCLE);
-        blast.setMinRange(5);
-        blast.setMaxRange(7);
+        BlastAOE blast = new BlastAOE(new Point(0,0), 3, Radius.CIRCLE);
+        blast.setMinRange(3);
+        blast.setMaxRange(5);
         blast.setMetric(Radius.CIRCLE);
+
         blueBlast = new Technique("Winter Orb", blast);
         blueBlast.setMap(bareDungeon);
+
+        CloudAOE cloud = new CloudAOE(new Point(0, 0), 20, Radius.DIAMOND);
+        cloud.setMinRange(4);
+        cloud.setMaxRange(7);
+        cloud.setMetric(Radius.CIRCLE);
+
+        redCloud = new Technique("Acid Mist", cloud);
+        redCloud.setMap(bareDungeon);
+
+        BeamAOE beam = new BeamAOE(new Point(0,0), 0.0, 8, 1, Radius.DIAMOND);
+        beam.setMinRange(2);
+        beam.setMaxRange(8);
+        beam.setMetric(Radius.CIRCLE);
+        blueBeam = new Technique("Atomic Death Ray", beam);
+        blueBeam.setMap(bareDungeon);
+
 
         getToRed = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
         getToRed.rng = rng;
@@ -198,7 +213,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         if(blueTurn)
         {
             whichDijkstra = getToRed;
-            whichTech = blueBlast;
+            whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
             whichEnemyTeam = teamRed;
@@ -216,7 +231,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         else
         {
             whichDijkstra = getToBlue;
-            whichTech = redCone;
+            whichTech = (idx % 2 == 0) ? redCloud : redCone;
             whichFoes = bluePlaces;
             whichAllies = redPlaces;
             whichEnemyTeam = teamBlue;
@@ -244,25 +259,28 @@ public class SquidAIDemo extends ApplicationAdapter {
                 visibleTargets.add(p);
             }
         }*/
-        ArrayList<Point> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, null, whichFoes, whichAllies, user, whichFoes);
+        ArrayList<Point> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, los, whichFoes, whichAllies, user, whichFoes);
+        /*
         System.out.println("User at (" + user.x + "," + user.y + ") using " +
                 whichTech.name);
+        */
+        /*
         boolean anyFound = false;
+
         for (int yy = 0; yy < height; yy++) {
             for (int xx = 0; xx < width; xx++) {
                 System.out.print((whichDijkstra.targetMap[xx][yy] == null) ? "." : "@");
                 anyFound = (whichDijkstra.targetMap[xx][yy] != null) ? true : anyFound;
             }
             System.out.println();
-        }
-        debugFlag = !anyFound;
+        }*/
         awaitedMoves = new ArrayList<Point>(path);
     }
 
-    public void move(AnimatedEntity ae, int newX, int newY)
-    {
+    public void move(AnimatedEntity ae, int newX, int newY) {
         display.slide(ae, newX, newY);
         phase = Phase.MOVE_ANIM;
+
     }
 
     // check if a monster's movement would overlap with another monster.
@@ -295,7 +313,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         LinkedHashMap<Point, Double> effects = null;
         if (blueTurn) {
             whichDijkstra = getToRed;
-            whichTech = blueBlast;
+            whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
             whichTint = Color.CYAN;
@@ -310,7 +328,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             }
         } else {
             whichDijkstra = getToBlue;
-            whichTech = redCone;
+            whichTech = (idx % 2 == 0) ? redCloud : redCone;
             whichFoes = bluePlaces;
             whichAllies = redPlaces;
             whichTint = Color.RED;
@@ -343,41 +361,39 @@ public class SquidAIDemo extends ApplicationAdapter {
             targetCell = ip;
             break;
         }
-        if(targetCell != null && debugFlag) {
-            System.out.println("WAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT");
-        }
-        else
-        {
-            debugFlag = false;
-        }
 
         if(targetCell != null)
         {
             effects = whichTech.apply(user, targetCell);
+
             for(Map.Entry<Point, Double> power : effects.entrySet())
             {
-                whichTint.a = power.getValue().floatValue();
+                Double strength = (idx % 2 == 0) ? rng.nextDouble() : power.getValue();
+                whichTint.a = strength.floatValue();
                 display.tint(power.getKey().x * 2    , power.getKey().y, whichTint, 0, display.getAnimationDuration());
                 display.tint(power.getKey().x * 2 + 1, power.getKey().y, whichTint, 0, display.getAnimationDuration());
                 for(AnimatedEntity tgt : whichEnemyTeam.keySet())
                 {
                     if(tgt.gridX == power.getKey().x && tgt.gridY == power.getKey().y)
                     {
-                        int currentHealth = Math.max(whichEnemyTeam.get(tgt) - (int) (15 * power.getValue()), 0);
+                        int currentHealth = Math.max(whichEnemyTeam.get(tgt) - (int) (15 * strength), 0);
                         whichEnemyTeam.put(tgt,  currentHealth);
                         tgt.setText(Integer.toString(currentHealth));
                     }
                 }
             }
         }
+        /*
         else
         {
+
             System.out.println("NO ATTACK POSITION: User at (" + user.x + "," + user.y + ") using " +
                     whichTech.name);
 
             display.tint(user.x * 2    , user.y, highlightColor, 0, display.getAnimationDuration() * 3);
             display.tint(user.x * 2 + 1, user.y, highlightColor, 0, display.getAnimationDuration() * 3);
         }
+        */
         whichAllies.add(user);
         phase = Phase.ATTACK_ANIM;
     }
@@ -505,8 +521,8 @@ public class SquidAIDemo extends ApplicationAdapter {
                         if(!blueTurn)
                         {
                             whichIdx++;
-                            redIdx = (redIdx + 1) % 15;
-                            blueIdx = (blueIdx + 1) % 15;
+                            redIdx = (redIdx + 1) % numMonsters;
+                            blueIdx = (blueIdx + 1) % numMonsters;
                         }
                         dijkstraAlert();
                         startMove(whichIdx);

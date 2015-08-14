@@ -9,7 +9,7 @@ public class SquidAIDemoLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "SquidLib GDX AI Demo";
-		config.width = 120 * 6;
+		config.width = 40 * 2 * 6;
 		config.height = 40 * 12;
 		new LwjglApplication(new SquidAIDemo(), config);
 	}

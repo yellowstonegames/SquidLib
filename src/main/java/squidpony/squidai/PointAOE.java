@@ -62,16 +62,22 @@ public class PointAOE implements AOE {
             return new LinkedHashMap<Point, ArrayList<Point>>();
 
         int totalTargets = targets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets);
 
         if(totalTargets == 0)
             return bestPoints;
 
+
+        double dist = 0.0;
         for(Point p : targets) {
             if (AreaUtils.verifyLimit(limitType, origin, p)) {
-                ArrayList<Point> ap = new ArrayList<Point>();
-                ap.add(p);
-                bestPoints.put(p, ap);
+
+                dist = metric.radius(origin.x, origin.y, p.x, p.y);
+                if (dist <= maxRange && dist >= minRange) {
+                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ap.add(p);
+                    bestPoints.put(p, ap);
+                }
             }
         }
         return bestPoints;
@@ -85,27 +91,38 @@ public class PointAOE implements AOE {
         if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
 
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 4);
 
         if(totalTargets == 0)
             return bestPoints;
 
+        double dist = 0.0;
+
         for(Point p : priorityTargets) {
             if (AreaUtils.verifyLimit(limitType, origin, p)) {
 
-                ArrayList<Point> ap = new ArrayList<Point>();
-                ap.add(p);
-                ap.add(p);
-                ap.add(p);
-                ap.add(p);
-                bestPoints.put(p, ap);
+                dist = metric.radius(origin.x, origin.y, p.x, p.y);
+                if (dist <= maxRange && dist >= minRange) {
+                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ap.add(p);
+                    ap.add(p);
+                    ap.add(p);
+                    ap.add(p);
+                    bestPoints.put(p, ap);
+                }
             }
         }
-        for(Point p : lesserTargets) {
-            if (AreaUtils.verifyLimit(limitType, origin, p)) {
-                ArrayList<Point> ap = new ArrayList<Point>();
-                ap.add(p);
-                bestPoints.put(p, ap);
+        if(bestPoints.isEmpty()) {
+            for (Point p : lesserTargets) {
+                if (AreaUtils.verifyLimit(limitType, origin, p)) {
+
+                    dist = metric.radius(origin.x, origin.y, p.x, p.y);
+                    if (dist <= maxRange && dist >= minRange) {
+                        ArrayList<Point> ap = new ArrayList<Point>();
+                        ap.add(p);
+                        bestPoints.put(p, ap);
+                    }
+                }
             }
         }
         return bestPoints;

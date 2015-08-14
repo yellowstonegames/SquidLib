@@ -102,8 +102,8 @@ public enum Radius {
     }
 
     public double radius(double startx, double starty, double endx, double endy) {
-        double dx = Math.abs(startx - endx);
-        double dy = Math.abs(starty - endy);
+        double dx = startx - endx;
+        double dy = starty - endy;
         return radius(dx, dy);
     }
 

@@ -243,11 +243,26 @@ public class ConeAOE implements AOE {
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
+
+            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (tmpfov[x][y] > 0.0) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                    if (tmpfov[x][y] > 0.0)
+                    {
+                        compositeMap[i][x][y] = dm.physicalMap[x][y];
+                    }
+                    else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
+            if(compositeMap[i][t.x][t.y] > DijkstraMap.FLOOR)
+            {
+                for (int x = 0; x < dungeon.length; x++) {
+                    Arrays.fill(compositeMap[i][x], 99999.0);
+                }
+                continue;
+            }
+
+
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
             dm.scan(null);
@@ -359,13 +374,27 @@ public class ConeAOE implements AOE {
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
+
+            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (tmpfov[x][y] > 0.0) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
-                    if(tmpfov[x][y] > 0.0)
+                    if (tmpfov[x][y] > 0.0){
+                        compositeMap[i][x][y] = dm.physicalMap[x][y];
                         dungeonPriorities[x][y] = dungeon[x][y];
+                    }
+                    else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
+            if(compositeMap[i][pts[i].x][pts[i].y] > DijkstraMap.FLOOR)
+            {
+                for (int x = 0; x < dungeon.length; x++) {
+                    Arrays.fill(compositeMap[i][x], 399999.0);
+                }
+                continue;
+            }
+
+
+
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
             dm.scan(null);
@@ -386,11 +415,25 @@ public class ConeAOE implements AOE {
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
+            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (tmpfov[x][y] > 0.0) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                    if (tmpfov[x][y] > 0.0){
+                         compositeMap[i][x][y] = dm.physicalMap[x][y];
+                    }
+                    else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
+            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] > DijkstraMap.FLOOR)
+            {
+                for (int x = 0; x < dungeon.length; x++)
+                {
+                    Arrays.fill(compositeMap[i][x], 99999.0);
+                }
+                continue;
+            }
+
+
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
             dm.scan(null);

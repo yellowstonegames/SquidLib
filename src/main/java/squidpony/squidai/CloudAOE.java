@@ -157,7 +157,7 @@ public class CloudAOE implements AOE {
     public boolean mayContainTarget(Set<Point> targets) {
         for (Point p : targets)
         {
-            if(rt.radius(center.x, center.y, p.x, p.y) <= Math.sqrt(volume) * 1.5)
+            if(rt.radius(center.x, center.y, p.x, p.y) <= Math.sqrt(volume) * 0.75)
                 return true;
         }
         return false;
@@ -221,6 +221,8 @@ public class CloudAOE implements AOE {
         if(spill.measurement == Spill.Measurement.CHEBYSHEV) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
 
+        double radius = Math.sqrt(volume) * 0.75;
+
         for (int i = 0; i < ts.length; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
@@ -229,11 +231,28 @@ public class CloudAOE implements AOE {
             sp.lrng.setState(this.seed);
 
             sp.start(t, volume, null);
+
+            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (sp.spillMap[x][y]) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                    if (sp.spillMap[x][y]){
+                        dist = metric.radius(origin.x, origin.y, x, y);
+                        if(dist <= maxRange + radius && dist >= minRange - radius)
+                            compositeMap[i][x][y] = dm.physicalMap[x][y];
+                        else
+                            compositeMap[i][x][y] = DijkstraMap.WALL;
+                    }
+                    else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
+            if(compositeMap[i][ts[i].x][ts[i].y] > DijkstraMap.FLOOR)
+            {
+                for (int x = 0; x < dungeon.length; x++) {
+                    Arrays.fill(compositeMap[i][x], 99999.0);
+                }
+                continue;
+            }
+
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
             dm.scan(null);
@@ -350,6 +369,8 @@ public class CloudAOE implements AOE {
         if(spill.measurement == Spill.Measurement.CHEBYSHEV) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(spill.measurement == Spill.Measurement.EUCLIDEAN) dmm = DijkstraMap.Measurement.EUCLIDEAN;
 
+        double radius = Math.sqrt(volume) * 0.75;
+
         for (int i = 0; i < pts.length; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
@@ -358,13 +379,33 @@ public class CloudAOE implements AOE {
             sp.lrng.setState(this.seed);
 
             sp.start(t, volume, null);
+
+
+
+            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (sp.spillMap[x][y]) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
-                    if(sp.spillMap[x][y])
-                        dungeonPriorities[x][y] = dungeon[x][y];
+                    if (sp.spillMap[x][y]){
+                        dist = metric.radius(origin.x, origin.y, x, y);
+                        if(dist <= maxRange + radius && dist >= minRange - radius) {
+                            compositeMap[i][x][y] = dm.physicalMap[x][y];
+                            dungeonPriorities[x][y] = dungeon[x][y];
+                        }
+                        else
+                            compositeMap[i][x][y] = DijkstraMap.WALL;
+                    }
+                    else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
+            if(compositeMap[i][pts[i].x][pts[i].y] > DijkstraMap.FLOOR)
+            {
+                for (int x = 0; x < dungeon.length; x++) {
+                    Arrays.fill(compositeMap[i][x], 399999.0);
+                }
+                continue;
+            }
+
+
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
             dm.scan(null);
@@ -387,11 +428,31 @@ public class CloudAOE implements AOE {
             sp.lrng.setState(this.seed);
 
             sp.start(t, volume, null);
+
+
+            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (sp.spillMap[x][y]) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                    if (sp.spillMap[x][y]){
+                        dist = metric.radius(origin.x, origin.y, x, y);
+                        if(dist <= maxRange + radius && dist >= minRange - radius)
+                            compositeMap[i][x][y] = dm.physicalMap[x][y];
+                        else
+                            compositeMap[i][x][y] = DijkstraMap.WALL;
+                    }
+                    else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
+            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] > DijkstraMap.FLOOR)
+            {
+                for (int x = 0; x < dungeon.length; x++)
+                {
+                    Arrays.fill(compositeMap[i][x], 99999.0);
+                }
+                continue;
+            }
+
+
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
             dm.scan(null);
