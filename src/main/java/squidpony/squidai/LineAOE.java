@@ -19,6 +19,9 @@ import java.util.*;
  * BeamAOE is more suitable for that effect, while LineAOE may be more suitable for things like focused lasers that
  * pass through small (likely fleshy) obstacles but stop after hitting the aimed-at target.
  *
+ * LineAOE will strike a small area behind the user and in the opposite direction of the target if the radius is
+ * greater than 0. This behavior may be altered in a future version.
+ *
  * This will produce doubles for its findArea() method which are equal to 1.0.
  *
  * This class uses squidpony.squidmath.Elias and squidpony.squidai.DijkstraMap to create its area of effect.
@@ -69,6 +72,27 @@ public class LineAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.radius = radius;
+    }
+    public LineAOE(Point origin, Point end, int radius, Radius radiusType, int minRange, int maxRange)
+    {
+        this.dijkstra = new DijkstraMap();
+        this.rt = radiusType;
+        switch (radiusType)
+        {
+            case OCTAHEDRON:
+            case DIAMOND: this.dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+                break;
+            case CUBE:
+            case SQUARE: this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+                break;
+            default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+                break;
+        }
+        this.origin = origin;
+        this.end = end;
+        this.radius = radius;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
     }
     private double[][] initDijkstra()
     {

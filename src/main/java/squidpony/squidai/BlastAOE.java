@@ -33,6 +33,15 @@ public class BlastAOE implements AOE {
         this.radius = radius;
         this.radiusType = radiusType;
     }
+    public BlastAOE(Point center, int radius, Radius radiusType, int minRange, int maxRange)
+    {
+        fov = new FOV(FOV.RIPPLE_LOOSE);
+        this.center = center;
+        this.radius = radius;
+        this.radiusType = radiusType;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
+    }
     private BlastAOE()
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
