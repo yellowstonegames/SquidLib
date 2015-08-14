@@ -259,11 +259,29 @@ public class LineAOE implements AOE {
             if(radius > 0)
                 dt.partialScan(radius, null);
 
+
+            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                    if (dt.gradientMap[x][y] < DijkstraMap.FLOOR){
+                        dist = metric.radius(origin.x, origin.y, x, y);
+                        if(dist <= maxRange + radius && dist >= minRange - radius)
+                            compositeMap[i][x][y] = dm.physicalMap[x][y];
+                        else
+                            compositeMap[i][x][y] = DijkstraMap.WALL;
+                    }
+                    else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
+            if(compositeMap[i][ts[i].x][ts[i].y] > DijkstraMap.FLOOR)
+            {
+                for (int x = 0; x < dungeon.length; x++) {
+                    Arrays.fill(compositeMap[i][x], 99999.0);
+                }
+                continue;
+            }
+
+
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
             dm.scan(null);
@@ -385,13 +403,31 @@ public class LineAOE implements AOE {
             if(radius > 0)
                 dt.partialScan(radius, null);
 
+
+            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
-                    if(dt.gradientMap[x][y] < DijkstraMap.FLOOR)
-                        dungeonPriorities[x][y] = dungeon[x][y];
+                    if (dt.gradientMap[x][y] < DijkstraMap.FLOOR){
+                        dist = metric.radius(origin.x, origin.y, x, y);
+                        if(dist <= maxRange + radius && dist >= minRange - radius) {
+                            compositeMap[i][x][y] = dm.physicalMap[x][y];
+                            dungeonPriorities[x][y] = dungeon[x][y];
+                        }
+                        else
+                            compositeMap[i][x][y] = DijkstraMap.WALL;
+                    }
+                    else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
+            if(compositeMap[i][pts[i].x][pts[i].y] > DijkstraMap.FLOOR)
+            {
+                for (int x = 0; x < dungeon.length; x++) {
+                    Arrays.fill(compositeMap[i][x], 399999.0);
+                }
+                continue;
+            }
+
+
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
             dm.scan(null);
@@ -420,11 +456,29 @@ public class LineAOE implements AOE {
             if(radius > 0)
                 dt.partialScan(radius, null);
 
+            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
+                    if (dt.gradientMap[x][y] < DijkstraMap.FLOOR){
+                        dist = metric.radius(origin.x, origin.y, x, y);
+                        if(dist <= maxRange + radius && dist >= minRange - radius)
+                            compositeMap[i][x][y] = dm.physicalMap[x][y];
+                        else
+                            compositeMap[i][x][y] = DijkstraMap.WALL;
+                    }
+                    else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
+            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] > DijkstraMap.FLOOR)
+            {
+                for (int x = 0; x < dungeon.length; x++)
+                {
+                    Arrays.fill(compositeMap[i][x], 99999.0);
+                }
+                continue;
+            }
+
+
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
             dm.scan(null);
