@@ -53,7 +53,7 @@ public class SquidInput extends InputAdapter {
 
     protected java.awt.Toolkit tk;
     protected KeyHandler keyAction;
-    protected boolean numpadDirections = true;
+    protected boolean numpadDirections = true, ignoreInput = false;
     protected SquidMouse mouse;
     protected final CharArray queue = new CharArray();
     protected final CharArray processingQueue = new CharArray();
@@ -74,6 +74,7 @@ public class SquidInput extends InputAdapter {
      * be registered by calling Input.setInputProcessor(SquidMouse), and instead this object should be registered by
      * calling Input.setInputProcessor(SquidInput). The keyboard and mouse handling can be changed later by calling
      * setKeyHandler() to allow keyboard handling or setMouse() to change mouse handling.
+     * @param mouse a SquidMouse instance that will be used for handling mouse input. Must not be null.
      */
     public SquidInput(SquidMouse mouse) {
         tk = java.awt.Toolkit.getDefaultToolkit();
@@ -88,11 +89,27 @@ public class SquidInput extends InputAdapter {
      * Modifier keys do not go through the same processing but are checked for their current state when the key is
      * pressed, and the states of alt, ctrl, and shift (respecting caps lock) are passed to keyHandler.handle() as well.
      * You can use setMouse() to allow mouse handling or change the KeyHandler with setKeyHandler().
+     * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
      */
     public SquidInput(KeyHandler keyHandler) {
         tk = java.awt.Toolkit.getDefaultToolkit();
         keyAction = keyHandler;
         mouse = new SquidMouse(12, 12, new InputAdapter());
+    }
+    /**
+     * Constructs a new SquidInput that does not respond to mouse input, but does take keyboard input and sends keyboard
+     * events through some processing before calling keyHandler.handle() on keypresses that can sensibly be processed.
+     * Modifier keys do not go through the same processing but are checked for their current state when the key is
+     * pressed, and the states of alt, ctrl, and shift (respecting caps lock) are passed to keyHandler.handle() as well.
+     * You can use setMouse() to allow mouse handling or change the KeyHandler with setKeyHandler().
+     * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
+     * @param ignoreInput true if this should ignore input initially, false if it should process input normally.
+     */
+    public SquidInput(KeyHandler keyHandler, boolean ignoreInput) {
+        tk = java.awt.Toolkit.getDefaultToolkit();
+        keyAction = keyHandler;
+        mouse = new SquidMouse(12, 12, new InputAdapter());
+        this.ignoreInput = ignoreInput;
     }
     /**
      * Constructs a new SquidInput that responds to mouse and keyboard input when given a SquidMouse and a
@@ -103,11 +120,34 @@ public class SquidInput extends InputAdapter {
      * InputProcessor on its own, should not be registered by calling Input.setInputProcessor(SquidMouse), and instead
      * this object should be registered by calling Input.setInputProcessor(SquidInput). You can use setKeyHandler() or
      * setMouse() to change keyboard or mouse handling.
+     * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
+     * @param mouse a SquidMouse instance that will be used for handling mouse input. Must not be null.
      */
     public SquidInput(KeyHandler keyHandler, SquidMouse mouse) {
         tk = java.awt.Toolkit.getDefaultToolkit();
         keyAction = keyHandler;
         this.mouse = mouse;
+    }
+
+    /**
+     * Constructs a new SquidInput that responds to mouse and keyboard input when given a SquidMouse and a
+     * SquidInput.KeyHandler implementation, and can be put in an initial state where it ignores input until told
+     * otherwise via setIgnoreInput(boolean). It sends keyboard events through some processing before calling
+     * keyHandler.handle() on keypresses that can sensibly be processed. Modifier keys do not go through the same
+     * processing but are checked for their current state when the key is pressed, and the states of alt, ctrl, and
+     * shift (respecting caps lock) are passed to keyHandler.handle() as well. The SquidMouse, even though it is an
+     * InputProcessor on its own, should not be registered by calling Input.setInputProcessor(SquidMouse), and instead
+     * this object should be registered by calling Input.setInputProcessor(SquidInput). You can use setKeyHandler() or
+     * setMouse() to change keyboard or mouse handling.
+     * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
+     * @param mouse a SquidMouse instance that will be used for handling mouse input. Must not be null.
+     * @param ignoreInput true if this should ignore input initially, false if it should process input normally.
+     */
+    public SquidInput(KeyHandler keyHandler, SquidMouse mouse, boolean ignoreInput) {
+        tk = java.awt.Toolkit.getDefaultToolkit();
+        keyAction = keyHandler;
+        this.mouse = mouse;
+        this.ignoreInput = ignoreInput;
     }
 
     public void setKeyHandler(KeyHandler keyHandler)
@@ -133,6 +173,26 @@ public class SquidInput extends InputAdapter {
 
     public SquidMouse getMouse() {
         return mouse;
+    }
+
+    /**
+     * Get the status for whether this should ignore input right now or not. True means this object will ignore and not
+     * queue input, false means it should process them normally. Useful to pause processing or delegate it to
+     * another object temporarily.
+     * @return true if this object currently ignores input, false otherwise.
+     */
+    public boolean getIgnoreInput() {
+        return ignoreInput;
+    }
+
+    /**
+     * Set the status for whether this should ignore input right now or not. True means this object will ignore and not
+     * queue input, false means it should process them normally. Useful to pause processing or delegate it to
+     * another object temporarily.
+     * @param ignoreInput true if this should object should ignore and not queue input, false otherwise.
+     */
+    public void setIgnoreInput(boolean ignoreInput) {
+        this.ignoreInput = ignoreInput;
     }
 
     /**
@@ -204,6 +264,7 @@ public class SquidInput extends InputAdapter {
     }
 
     public synchronized boolean keyDown (int keycode) {
+        if(ignoreInput) return false;
         boolean alt = Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT),
                 ctrl = Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT),
                 // affected by caps lock. AWT uses 20 as the code for caps lock, LWJGL (so libGDX too) doesn't have a code.
@@ -231,26 +292,31 @@ public class SquidInput extends InputAdapter {
     }
 
     public synchronized boolean touchDown (int screenX, int screenY, int pointer, int button) {
+        if(ignoreInput) return false;
         mouse.touchDown(screenX, screenY, pointer, button);
         return false;
     }
 
     public synchronized boolean touchUp (int screenX, int screenY, int pointer, int button) {
+        if(ignoreInput) return false;
         mouse.touchUp(screenX, screenY, pointer, button);
         return false;
     }
 
     public synchronized boolean touchDragged (int screenX, int screenY, int pointer) {
+        if(ignoreInput) return false;
         mouse.touchDragged(screenX, screenY, pointer);
         return false;
     }
 
     public synchronized boolean mouseMoved (int screenX, int screenY) {
+        if(ignoreInput) return false;
         mouse.mouseMoved(screenX, screenY);
         return false;
     }
 
     public synchronized boolean scrolled (int amount) {
+        if(ignoreInput) return false;
         mouse.scrolled(amount);
         return false;
     }
