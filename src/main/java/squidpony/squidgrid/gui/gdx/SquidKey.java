@@ -25,6 +25,7 @@ public class SquidKey implements InputProcessor {
     private InputProcessor processor;
     private final IntArray queue = new IntArray();
     private final IntArray processingQueue = new IntArray();
+    private boolean ignoreInput = false;
 
     /**
      * Constructs a SquidKey with no InputProcessor; for this to do anything, setProcessor() must be called.
@@ -41,6 +42,16 @@ public class SquidKey implements InputProcessor {
     }
 
     /**
+     * Constructs a SquidKey with the given InputProcessor.
+     * @param processor An InputProcessor that will handle keyDown(), keyUp(), and keyTyped() events
+     * @param ignoreInput the starting value for the ignore status; true to ignore input, false to process it.
+     */
+    public SquidKey (InputProcessor processor, boolean ignoreInput) {
+        this.processor = processor;
+        this.ignoreInput = ignoreInput;
+    }
+
+    /**
      * Sets the InputProcessor that this object will use to make sense of Key events.
      * @param processor An InputProcessor that will handle keyDown(), keyUp(), and keyTyped() events
      */
@@ -54,6 +65,26 @@ public class SquidKey implements InputProcessor {
      */
     public InputProcessor getProcessor () {
         return processor;
+    }
+
+    /**
+     * Get the status for whether this should ignore input right now or not. True means this object will ignore and not
+     * queue keypresses, false means it should process them normally. Useful to pause processing or delegate it to
+     * another object temporarily.
+     * @return true if this object currently ignores input, false otherwise.
+     */
+    public boolean getIgnoreInput() {
+        return ignoreInput;
+    }
+
+    /**
+     * Set the status for whether this should ignore input right now or not. True means this object will ignore and not
+     * queue keypresses, false means it should process them normally. Useful to pause processing or delegate it to
+     * another object temporarily.
+     * @param ignoreInput true if this should object should ignore and not queue input, false otherwise.
+     */
+    public void setIgnoreInput(boolean ignoreInput) {
+        this.ignoreInput = ignoreInput;
     }
 
     /**
@@ -135,18 +166,21 @@ public class SquidKey implements InputProcessor {
     }
 
     public synchronized boolean keyDown (int keycode) {
+        if(ignoreInput) return false;
         queue.add(KEY_DOWN);
         queue.add(keycode);
         return false;
     }
 
     public synchronized boolean keyUp (int keycode) {
+        if(ignoreInput) return false;
         queue.add(KEY_UP);
         queue.add(keycode);
         return false;
     }
 
     public synchronized boolean keyTyped (char character) {
+        if(ignoreInput) return false;
         queue.add(KEY_TYPED);
         queue.add(character);
         return false;

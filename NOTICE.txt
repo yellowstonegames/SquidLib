@@ -51,6 +51,11 @@ The Spill class derives much of its implementation from DijkstraMap but also fro
 
 The SoundMap class also derives much of its implementation from DijkstraMap but is otherwise practically novel.
 
+The squidpony.squidai.AOE interface and its implementing classes are essentially made possible by the Progressive Dijkstra Scan technique, so more thanks must go to Brian Pender and Joshua Day.
+
+Small but important bugfixes and additions were contributed by Ivan Polozhēntsev ( https://github.com/uzername/ , introduced the concept and some code for SquidKeys.ignoreInput) and Shane Chubb (found and fixed a bug in the LibGDX TextCellFactory).
+This is not a complete list of bugfix contributors.
+
 All of the TrueType and bitmap fonts in src/main/resources were made by Tommy Ettinger and released into the public domain.
 
 libtcod 1.5.2 license text:

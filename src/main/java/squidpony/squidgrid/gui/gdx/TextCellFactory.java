@@ -66,7 +66,7 @@ public class TextCellFactory {
     public TextCellFactory initByFont() {
         bmpFont.setFixedWidthGlyphs(fitting);
         this.width = (int)bmpFont.getSpaceWidth();
-        this.height = (int)(bmpFont.getAscent() - bmpFont.getDescent());
+        this.height = (int)(bmpFont.getLineHeight());
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         temp.fill();
@@ -206,6 +206,8 @@ public class TextCellFactory {
      */
     public TextCellFactory fit(String fit) {
         fitting = fit;
+        bmpFont.setFixedWidthGlyphs(fitting);
+        this.width = (int)bmpFont.getSpaceWidth();
         return this;
     }
 
@@ -218,6 +220,8 @@ public class TextCellFactory {
      */
     public TextCellFactory addFit(String fit) {
         fitting += fit;
+        bmpFont.setFixedWidthGlyphs(fitting);
+        this.width = (int)bmpFont.getSpaceWidth();
         return this;
     }
 
