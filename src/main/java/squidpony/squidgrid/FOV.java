@@ -237,10 +237,11 @@ public class FOV {
                 doRippleFOV(startx, starty);
                 break;
             case SHADOW:
-               	// hotfix for infinite radius -> set to the biggest dimension of array instead
+               	// hotfix for infinite radius -> set to longest possible straight-line Manhattan distance instead
+                // does not cause problems with brightness falloff because shadowcasting is on/off
             	// TODO do proper fix for shadowCast
-            	if (Double.valueOf(Integer.MAX_VALUE).equals(radius)){
-            		this.radius = Math.max(width,height);
+            	if (radius >= Integer.MAX_VALUE){
+            		this.radius = width + height;
             	}
                 for (Direction d : Direction.DIAGONALS) {
                     shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0);
