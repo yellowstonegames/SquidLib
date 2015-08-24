@@ -237,6 +237,11 @@ public class FOV {
                 doRippleFOV(startx, starty);
                 break;
             case SHADOW:
+               	// hotfix for infinite radius -> set to the biggest dimension of array instead
+            	// TODO do proper fix for shadowCast
+            	if (Double.valueOf(Integer.MAX_VALUE).equals(radius)){
+            		this.radius = Math.max(width,height);
+            	}
                 for (Direction d : Direction.DIAGONALS) {
                     shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0);
                     shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY);
