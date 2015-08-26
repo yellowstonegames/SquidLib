@@ -142,10 +142,10 @@ public class SquidMouse implements InputProcessor {
     }
 
     protected int translateX(int screenX) {
-        return MathUtils.clamp((screenX - offsetX) / cellWidth, 0, gridWidth);
+        return MathUtils.clamp((screenX - offsetX) / cellWidth, 0, gridWidth - 1);
     }
     protected int translateY(int screenY) {
-        return MathUtils.clamp((screenY - offsetY) / cellHeight, 0, gridHeight);
+        return MathUtils.clamp((screenY - offsetY) / cellHeight, 0, gridHeight - 1);
     }
 
     @Override
