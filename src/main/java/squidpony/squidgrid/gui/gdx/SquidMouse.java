@@ -1,11 +1,9 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.MathUtils;
-
-import javax.swing.event.MouseInputListener;
-import java.awt.event.MouseEvent;
 
 /**
  * This mouse processor allows for easy conversion to a grid based system. This
@@ -20,7 +18,7 @@ import java.awt.event.MouseEvent;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger
  */
-public class SquidMouse implements InputProcessor {
+public class SquidMouse extends InputAdapter {
 
     protected int cellWidth, cellHeight, offsetX, offsetY, gridWidth, gridHeight;
     protected InputProcessor processor;
@@ -166,21 +164,6 @@ public class SquidMouse implements InputProcessor {
     }
     protected int translateY(int screenY) {
         return MathUtils.clamp((screenY - offsetY) / cellHeight, 0, gridHeight - 1);
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
     }
 
     @Override
