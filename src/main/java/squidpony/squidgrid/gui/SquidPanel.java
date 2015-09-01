@@ -429,9 +429,26 @@ public class SquidPanel extends JLayeredPane {
         }
     }
 
-    public void setDefaultForeground(Color defaultForeground) {
-        this.defaultForeground = defaultForeground;
-    }
+	/**
+	 * Sets the default foreground color.
+	 * 
+	 * @param defaultForeground
+	 *            A non-{@code null} color.
+	 */
+	public void setDefaultForeground(Color defaultForeground) {
+		if (defaultForeground == null)
+			throw new NullPointerException("A null default foreground color is forbidden");
+		this.defaultForeground = defaultForeground;
+	}
+
+	/**
+	 * @return The default foreground color (if none was set with
+	 *         {@link #setDefaultForeground(Color)}), or the last color set with
+	 *         {@link #setDefaultForeground(Color)}. Cannot be {@code null}.
+	 */
+	public Color getDefaultForegroundColor() {
+		return defaultForeground;
+	}
 
     /**
      * Starts a bumping animation in the direction provided.
