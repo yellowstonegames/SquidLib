@@ -346,11 +346,6 @@ public class SquidPanel extends Group {
     public void setDefaultForeground(Color defaultForeground) {
         this.defaultForeground = defaultForeground;
     }
-
-    public Color getDefaultForeground() {
-        return defaultForeground;
-    }
-
     public AnimatedEntity getAnimatedEntityByCell(int x, int y) {
         for(AnimatedEntity ae : animatedEntities)
         {
