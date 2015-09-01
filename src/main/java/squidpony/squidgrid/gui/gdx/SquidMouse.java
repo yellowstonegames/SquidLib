@@ -20,7 +20,8 @@ import com.badlogic.gdx.math.MathUtils;
  */
 public class SquidMouse extends InputAdapter {
 
-    protected int cellWidth, cellHeight, offsetX, offsetY, gridWidth, gridHeight;
+	protected float cellWidth, cellHeight, gridWidth, gridHeight;
+    protected int  offsetX, offsetY;
     protected InputProcessor processor;
 
     /**
@@ -75,11 +76,11 @@ public class SquidMouse extends InputAdapter {
         this.gridHeight = gridHeight;
     }
 
-    public int getCellWidth() {
+    public float getCellWidth() {
         return cellWidth;
     }
 
-    public int getCellHeight() {
+    public float getCellHeight() {
         return cellHeight;
     }
 
@@ -91,11 +92,11 @@ public class SquidMouse extends InputAdapter {
         return offsetY;
     }
 
-    public int getGridWidth() {
+    public float getGridWidth() {
         return gridWidth;
     }
 
-    public int getGridHeight() {
+    public float getGridHeight() {
         return gridHeight;
     }
 
@@ -124,7 +125,7 @@ public class SquidMouse extends InputAdapter {
     }
 
 
-    public void reinitialize(int cellWidth, int cellHeight)
+    public void reinitialize(float cellWidth, float cellHeight)
     {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
@@ -159,12 +160,13 @@ public class SquidMouse extends InputAdapter {
         this.processor = processor;
     }
 
-    protected int translateX(int screenX) {
-        return MathUtils.clamp((screenX - offsetX) / cellWidth, 0, gridWidth - 1);
-    }
-    protected int translateY(int screenY) {
-        return MathUtils.clamp((screenY - offsetY) / cellHeight, 0, gridHeight - 1);
-    }
+	protected int translateX(int screenX) {
+		return Math.round(MathUtils.clamp((float) (screenX - offsetX) / cellWidth, 0.0f, gridWidth - 1.0f));
+	}
+
+	protected int translateY(int screenY) {
+		return Math.round(MathUtils.clamp((float) (screenY - offsetY) / cellHeight, 0.0f, gridHeight - 1.0f));
+	}
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
