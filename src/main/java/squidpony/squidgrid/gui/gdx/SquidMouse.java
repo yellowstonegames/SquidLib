@@ -125,6 +125,26 @@ public class SquidMouse implements InputProcessor {
         this.gridHeight = gridHeight;
     }
 
+
+    public void reinitialize(int cellWidth, int cellHeight)
+    {
+        this.cellWidth = cellWidth;
+        this.cellHeight = cellHeight;
+        this.offsetX = 0;
+        this.offsetY = 0;
+        this.gridWidth = Gdx.graphics.getWidth() / cellWidth;
+        this.gridHeight = Gdx.graphics.getHeight() / cellHeight;
+    }
+    public void reinitialize(int cellWidth, int cellHeight, int gridWidth, int gridHeight, int offsetX, int offsetY)
+    {
+        this.cellWidth = cellWidth;
+        this.cellHeight = cellHeight;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.gridWidth = gridWidth;
+        this.gridHeight = gridHeight;
+    }
+
     /**
      * Gets the InputProcessor this object uses to handle mouse input.
      * @return the wrapped InputProcessor.

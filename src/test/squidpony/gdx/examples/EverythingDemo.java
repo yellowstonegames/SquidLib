@@ -525,4 +525,10 @@ public class EverythingDemo extends ApplicationAdapter {
         // batch must end if it began.
         batch.end();
     }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        input.getMouse().reinitialize(width / this.width, height / this.height);
+    }
 }
