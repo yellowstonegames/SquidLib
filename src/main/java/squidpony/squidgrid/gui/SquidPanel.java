@@ -433,6 +433,10 @@ public class SquidPanel extends JLayeredPane {
         this.defaultForeground = defaultForeground;
     }
 
+    public Color getDefaultForeground() {
+        return defaultForeground;
+    }
+
     /**
      * Starts a bumping animation in the direction provided.
      *
