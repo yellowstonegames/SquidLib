@@ -36,7 +36,7 @@ public class SquidMouse extends InputAdapter {
      * @param cellHeight
      * @param processor an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().
      */
-    public SquidMouse(int cellWidth, int cellHeight, InputProcessor processor) {
+    public SquidMouse(float cellWidth, float cellHeight, InputProcessor processor) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.processor = processor;
@@ -66,7 +66,7 @@ public class SquidMouse extends InputAdapter {
      * @param offsetY
      * @param processor an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().
      */
-    public SquidMouse(int cellWidth, int cellHeight, int gridWidth, int gridHeight, int offsetX, int offsetY, InputProcessor processor) {
+    public SquidMouse(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY, InputProcessor processor) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.processor = processor;
@@ -134,7 +134,7 @@ public class SquidMouse extends InputAdapter {
         this.gridWidth = Gdx.graphics.getWidth() / cellWidth;
         this.gridHeight = Gdx.graphics.getHeight() / cellHeight;
     }
-    public void reinitialize(int cellWidth, int cellHeight, int gridWidth, int gridHeight, int offsetX, int offsetY)
+    public void reinitialize(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY)
     {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
@@ -161,11 +161,11 @@ public class SquidMouse extends InputAdapter {
     }
 
 	protected int translateX(int screenX) {
-		return Math.round(MathUtils.clamp((float) (screenX - offsetX) / cellWidth, 0.0f, gridWidth - 1.0f));
+		return Math.round(MathUtils.clamp((screenX - offsetX) / cellWidth, 0.0f, gridWidth - 1.0f));
 	}
 
 	protected int translateY(int screenY) {
-		return Math.round(MathUtils.clamp((float) (screenY - offsetY) / cellHeight, 0.0f, gridHeight - 1.0f));
+		return Math.round(MathUtils.clamp((screenY - offsetY) / cellHeight, 0.0f, gridHeight - 1.0f));
 	}
 
     @Override
