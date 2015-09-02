@@ -100,11 +100,11 @@ public class SquidMouse extends InputAdapter {
         return gridHeight;
     }
 
-    public void setCellWidth(int cellWidth) {
+    public void setCellWidth(float cellWidth) {
         this.cellWidth = cellWidth;
     }
 
-    public void setCellHeight(int cellHeight) {
+    public void setCellHeight(float cellHeight) {
         this.cellHeight = cellHeight;
     }
 
@@ -116,11 +116,11 @@ public class SquidMouse extends InputAdapter {
         this.offsetY = offsetY;
     }
 
-    public void setGridWidth(int gridWidth) {
+    public void setGridWidth(float gridWidth) {
         this.gridWidth = gridWidth;
     }
 
-    public void setGridHeight(int gridHeight) {
+    public void setGridHeight(float gridHeight) {
         this.gridHeight = gridHeight;
     }
 
