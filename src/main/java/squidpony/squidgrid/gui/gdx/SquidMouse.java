@@ -1,11 +1,9 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.MathUtils;
-
-import javax.swing.event.MouseInputListener;
-import java.awt.event.MouseEvent;
 
 /**
  * This mouse processor allows for easy conversion to a grid based system. This
@@ -20,9 +18,10 @@ import java.awt.event.MouseEvent;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger
  */
-public class SquidMouse implements InputProcessor {
+public class SquidMouse extends InputAdapter {
 
-    protected int cellWidth, cellHeight, offsetX, offsetY, gridWidth, gridHeight;
+	protected float cellWidth, cellHeight, gridWidth, gridHeight;
+    protected int  offsetX, offsetY;
     protected InputProcessor processor;
 
     /**
@@ -37,7 +36,7 @@ public class SquidMouse implements InputProcessor {
      * @param cellHeight
      * @param processor an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().
      */
-    public SquidMouse(int cellWidth, int cellHeight, InputProcessor processor) {
+    public SquidMouse(float cellWidth, float cellHeight, InputProcessor processor) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.processor = processor;
@@ -67,7 +66,7 @@ public class SquidMouse implements InputProcessor {
      * @param offsetY
      * @param processor an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().
      */
-    public SquidMouse(int cellWidth, int cellHeight, int gridWidth, int gridHeight, int offsetX, int offsetY, InputProcessor processor) {
+    public SquidMouse(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY, InputProcessor processor) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.processor = processor;
@@ -77,11 +76,11 @@ public class SquidMouse implements InputProcessor {
         this.gridHeight = gridHeight;
     }
 
-    public int getCellWidth() {
+    public float getCellWidth() {
         return cellWidth;
     }
 
-    public int getCellHeight() {
+    public float getCellHeight() {
         return cellHeight;
     }
 
@@ -93,19 +92,19 @@ public class SquidMouse implements InputProcessor {
         return offsetY;
     }
 
-    public int getGridWidth() {
+    public float getGridWidth() {
         return gridWidth;
     }
 
-    public int getGridHeight() {
+    public float getGridHeight() {
         return gridHeight;
     }
 
-    public void setCellWidth(int cellWidth) {
+    public void setCellWidth(float cellWidth) {
         this.cellWidth = cellWidth;
     }
 
-    public void setCellHeight(int cellHeight) {
+    public void setCellHeight(float cellHeight) {
         this.cellHeight = cellHeight;
     }
 
@@ -117,16 +116,16 @@ public class SquidMouse implements InputProcessor {
         this.offsetY = offsetY;
     }
 
-    public void setGridWidth(int gridWidth) {
+    public void setGridWidth(float gridWidth) {
         this.gridWidth = gridWidth;
     }
 
-    public void setGridHeight(int gridHeight) {
+    public void setGridHeight(float gridHeight) {
         this.gridHeight = gridHeight;
     }
 
 
-    public void reinitialize(int cellWidth, int cellHeight)
+    public void reinitialize(float cellWidth, float cellHeight)
     {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
@@ -135,7 +134,7 @@ public class SquidMouse implements InputProcessor {
         this.gridWidth = Gdx.graphics.getWidth() / cellWidth;
         this.gridHeight = Gdx.graphics.getHeight() / cellHeight;
     }
-    public void reinitialize(int cellWidth, int cellHeight, int gridWidth, int gridHeight, int offsetX, int offsetY)
+    public void reinitialize(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY)
     {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
@@ -161,27 +160,13 @@ public class SquidMouse implements InputProcessor {
         this.processor = processor;
     }
 
-    protected int translateX(int screenX) {
-        return MathUtils.clamp((screenX - offsetX) / cellWidth, 0, gridWidth - 1);
-    }
-    protected int translateY(int screenY) {
-        return MathUtils.clamp((screenY - offsetY) / cellHeight, 0, gridHeight - 1);
-    }
+	protected int translateX(int screenX) {
+		return Math.round(MathUtils.clamp((screenX - offsetX) / cellWidth, 0.0f, gridWidth - 1.0f));
+	}
 
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
+	protected int translateY(int screenY) {
+		return Math.round(MathUtils.clamp((screenY - offsetY) / cellHeight, 0.0f, gridHeight - 1.0f));
+	}
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
