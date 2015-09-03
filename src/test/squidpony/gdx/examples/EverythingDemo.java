@@ -2,7 +2,7 @@ package squidpony.gdx.examples;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -203,26 +203,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                 }
             }
-        }, new SquidMouse(cellWidth, cellHeight, new InputProcessor() {
-            @Override
-            public boolean keyDown(int keycode) {
-                return false;
-            }
-
-            @Override
-            public boolean keyUp(int keycode) {
-                return false;
-            }
-
-            @Override
-            public boolean keyTyped(char character) {
-                return false;
-            }
-
-            @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                return false;
-            }
+        }, new SquidMouse(cellWidth, cellHeight, new InputAdapter() {
 
             // if the user clicks within FOV range and there are no awaitedMoves queued up, generate toCursor if it
             // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
@@ -259,11 +240,6 @@ public class EverythingDemo extends ApplicationAdapter {
                     cursor.y = screenY;
                     toCursor = playerToCursor.findPath(30, null, null, new Point(player.gridX, player.gridY), cursor);
                 }
-                return false;
-            }
-
-            @Override
-            public boolean scrolled(int amount) {
                 return false;
             }
         }));
@@ -527,8 +503,8 @@ public class EverythingDemo extends ApplicationAdapter {
     }
 
     @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        input.getMouse().reinitialize(width / this.width, height / this.height);
-    }
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		input.getMouse().reinitialize((float) width / this.width, (float) height / this.height);
+	}
 }
