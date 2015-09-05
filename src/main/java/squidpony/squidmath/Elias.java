@@ -24,6 +24,7 @@ public class Elias {
     static private List<Point> path;
     static private float[][] lightMap;
     static private int width, height;
+    static private double threshold = 0.0;
 
     private Elias() {
     }
@@ -50,8 +51,31 @@ public class Elias {
         runLine(startx, starty, endx, endy);
         return path;
     }
+    /**
+     * Gets the line between the two points.
+     *
+     * @param startx
+     * @param starty
+     * @param endx
+     * @param endy
+     * @param brightnessThreshold between 0.0 (default) and 1.0; only Points with higher brightness will be included
+     * @return
+     */
+    public synchronized static List<Point> line(double startx, double starty, double endx, double endy,
+                                                double brightnessThreshold) {
+        threshold = brightnessThreshold;
+        path = new LinkedList<>();
+        width = (int) (Math.max(startx, endx) + 1);
+        height = (int) (Math.max(starty, endy) + 1);
+        lightMap = new float[width][height];
+        runLine(startx, starty, endx, endy);
+        return path;
+    }
     public synchronized static List<Point> line(Point start, Point end) {
         return line(start.x, start.y, end.x, end.y);
+    }
+    public synchronized static List<Point> line(Point start, Point end, double brightnessThreshold) {
+        return line(start.x, start.y, end.x, end.y, brightnessThreshold);
     }
 
     public synchronized static List<Point> getLastPath()
@@ -68,7 +92,7 @@ public class Elias {
      */
     private static void mark(double x, double y, double c) {
         //check bounds overflow from antialiasing
-        if (x >= 0 && x < width && y >= 0 && y < height) {
+        if (x >= 0 && x < width && y >= 0 && y < height && c > threshold) {
             path.add(new Point((int) x, (int) y));
             lightMap[(int) x][(int) y] = (float) c;
         }

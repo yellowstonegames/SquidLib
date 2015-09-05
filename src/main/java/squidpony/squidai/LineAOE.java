@@ -248,7 +248,7 @@ public class LineAOE implements AOE {
             t = exs[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {
@@ -274,7 +274,7 @@ public class LineAOE implements AOE {
             t = ts[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {
@@ -393,7 +393,7 @@ public class LineAOE implements AOE {
             t = exs[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {
@@ -418,7 +418,7 @@ public class LineAOE implements AOE {
             t = pts[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {
@@ -471,7 +471,7 @@ public class LineAOE implements AOE {
             t = lts[i - pts.length];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {

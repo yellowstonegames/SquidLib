@@ -1,6 +1,7 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.annotation.Beta;
+import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
@@ -323,6 +324,19 @@ public class DungeonGenerator {
     {
         DungeonUtility.rng = rng;
         char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
+        DijkstraMap dijkstra = new DijkstraMap(map);
+        int frustrated = 0;
+        do {
+            dijkstra.setGoal(DungeonUtility.randomFloor(map));
+            dijkstra.scan(null);
+            frustrated++;
+        }while (dijkstra.getMappedCount() < width + height && frustrated < 10);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if(dijkstra.gradientMap[i][j] == DijkstraMap.DARK)
+                    map[i][j] = '#';
+            }
+        }
 
         LinkedHashSet<Point> floors = new LinkedHashSet<Point>();
         LinkedHashSet<Point> doorways = new LinkedHashSet<Point>();
