@@ -135,7 +135,7 @@ public class BeamAOE implements AOE {
     }
     private double[][] initDijkstra()
     {
-        List<Point> lit = Elias.line(origin, end);
+        List<Point> lit = Elias.line(origin, end, 0.4);
 
         dijkstra.initialize(dungeon);
         for(Point p : lit)
@@ -286,7 +286,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {
@@ -312,7 +312,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, ts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {
@@ -430,7 +430,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {
@@ -456,7 +456,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {
@@ -510,7 +510,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t);
+            List<Point> lit = Elias.line(origin, t, 0.4);
 
             for(Point p : lit)
             {
