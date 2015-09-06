@@ -143,7 +143,7 @@
 <span class="sourceLineNo">135</span>    }<a name="line.135"></a>
 <span class="sourceLineNo">136</span>    private double[][] initDijkstra()<a name="line.136"></a>
 <span class="sourceLineNo">137</span>    {<a name="line.137"></a>
-<span class="sourceLineNo">138</span>        List&lt;Point&gt; lit = Elias.line(origin, end);<a name="line.138"></a>
+<span class="sourceLineNo">138</span>        List&lt;Point&gt; lit = Elias.line(origin, end, 0.4);<a name="line.138"></a>
 <span class="sourceLineNo">139</span><a name="line.139"></a>
 <span class="sourceLineNo">140</span>        dijkstra.initialize(dungeon);<a name="line.140"></a>
 <span class="sourceLineNo">141</span>        for(Point p : lit)<a name="line.141"></a>
@@ -294,7 +294,7 @@
 <span class="sourceLineNo">286</span>            t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);<a name="line.286"></a>
 <span class="sourceLineNo">287</span>            dt.resetMap();<a name="line.287"></a>
 <span class="sourceLineNo">288</span>            dt.clearGoals();<a name="line.288"></a>
-<span class="sourceLineNo">289</span>            List&lt;Point&gt; lit = Elias.line(origin, t);<a name="line.289"></a>
+<span class="sourceLineNo">289</span>            List&lt;Point&gt; lit = Elias.line(origin, t, 0.4);<a name="line.289"></a>
 <span class="sourceLineNo">290</span><a name="line.290"></a>
 <span class="sourceLineNo">291</span>            for(Point p : lit)<a name="line.291"></a>
 <span class="sourceLineNo">292</span>            {<a name="line.292"></a>
@@ -320,7 +320,7 @@
 <span class="sourceLineNo">312</span>            t = rt.extend(origin, ts[i], length, false, dungeon.length, dungeon[0].length);<a name="line.312"></a>
 <span class="sourceLineNo">313</span>            dt.resetMap();<a name="line.313"></a>
 <span class="sourceLineNo">314</span>            dt.clearGoals();<a name="line.314"></a>
-<span class="sourceLineNo">315</span>            List&lt;Point&gt; lit = Elias.line(origin, t);<a name="line.315"></a>
+<span class="sourceLineNo">315</span>            List&lt;Point&gt; lit = Elias.line(origin, t, 0.4);<a name="line.315"></a>
 <span class="sourceLineNo">316</span><a name="line.316"></a>
 <span class="sourceLineNo">317</span>            for(Point p : lit)<a name="line.317"></a>
 <span class="sourceLineNo">318</span>            {<a name="line.318"></a>
@@ -438,7 +438,7 @@
 <span class="sourceLineNo">430</span>            t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);<a name="line.430"></a>
 <span class="sourceLineNo">431</span>            dt.resetMap();<a name="line.431"></a>
 <span class="sourceLineNo">432</span>            dt.clearGoals();<a name="line.432"></a>
-<span class="sourceLineNo">433</span>            List&lt;Point&gt; lit = Elias.line(origin, t);<a name="line.433"></a>
+<span class="sourceLineNo">433</span>            List&lt;Point&gt; lit = Elias.line(origin, t, 0.4);<a name="line.433"></a>
 <span class="sourceLineNo">434</span><a name="line.434"></a>
 <span class="sourceLineNo">435</span>            for(Point p : lit)<a name="line.435"></a>
 <span class="sourceLineNo">436</span>            {<a name="line.436"></a>
@@ -464,7 +464,7 @@
 <span class="sourceLineNo">456</span>            t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length);<a name="line.456"></a>
 <span class="sourceLineNo">457</span>            dt.resetMap();<a name="line.457"></a>
 <span class="sourceLineNo">458</span>            dt.clearGoals();<a name="line.458"></a>
-<span class="sourceLineNo">459</span>            List&lt;Point&gt; lit = Elias.line(origin, t);<a name="line.459"></a>
+<span class="sourceLineNo">459</span>            List&lt;Point&gt; lit = Elias.line(origin, t, 0.4);<a name="line.459"></a>
 <span class="sourceLineNo">460</span><a name="line.460"></a>
 <span class="sourceLineNo">461</span>            for(Point p : lit)<a name="line.461"></a>
 <span class="sourceLineNo">462</span>            {<a name="line.462"></a>
@@ -518,7 +518,7 @@
 <span class="sourceLineNo">510</span>            t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length);<a name="line.510"></a>
 <span class="sourceLineNo">511</span>            dt.resetMap();<a name="line.511"></a>
 <span class="sourceLineNo">512</span>            dt.clearGoals();<a name="line.512"></a>
-<span class="sourceLineNo">513</span>            List&lt;Point&gt; lit = Elias.line(origin, t);<a name="line.513"></a>
+<span class="sourceLineNo">513</span>            List&lt;Point&gt; lit = Elias.line(origin, t, 0.4);<a name="line.513"></a>
 <span class="sourceLineNo">514</span><a name="line.514"></a>
 <span class="sourceLineNo">515</span>            for(Point p : lit)<a name="line.515"></a>
 <span class="sourceLineNo">516</span>            {<a name="line.516"></a>

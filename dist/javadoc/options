@@ -16,7 +16,7 @@
 -docencoding
 'UTF-8'
 -doctitle
-'SquidLib 2.9.0'
+'SquidLib 2.9.1'
 -link
 'http://docs.oracle.com/javase/8/docs/api'
 -link
@@ -32,4 +32,4 @@
 -use
 -version
 -windowtitle
-'SquidLib 2.9.0'
+'SquidLib 2.9.1'
