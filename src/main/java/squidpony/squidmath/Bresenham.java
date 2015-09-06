@@ -25,7 +25,7 @@ public class Bresenham {
      * @param b the ending point
      * @return
      */
-    public static Queue<Point> line2D(Point a, Point b) {
+    public static Queue<Coord> line2D(Coord a, Coord b) {
         return line2D(a.x, a.y, b.x, b.y);
     }
 
@@ -38,8 +38,8 @@ public class Bresenham {
      * @param endY the y coordinate of the ending point
      * @return
      */
-    public static Queue<Point> line2D(int startX, int startY, int endX, int endY) {
-        Queue<Point> line = new LinkedList<>();
+    public static Queue<Coord> line2D(int startX, int startY, int endX, int endY) {
+        Queue<Coord> line = new LinkedList<>();
         Queue<Point3D> found = line3D(startX, startY, 0, endX, endY, 0);
         while (!found.isEmpty()) {
             line.offer(found.poll());

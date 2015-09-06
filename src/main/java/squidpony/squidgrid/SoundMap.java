@@ -1,5 +1,6 @@
 package squidpony.squidgrid;
 
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -61,7 +62,7 @@ public class SoundMap
      * The latest results of findAlerted(), with Point keys representing the positions of creatures that were alerted
      * and Double values representing how loud the sound was when it reached them.
      */
-    public HashMap<Point, Double> alerted = new HashMap<Point, Double>();
+    public HashMap<Coord, Double> alerted = new HashMap<Coord, Double>();
     /**
      * Cells with no sound are always marked with 0.
      */
@@ -74,8 +75,8 @@ public class SoundMap
      * Sources of sound on the map; keys are positions, values are how loud the noise is (10.0 should spread 10 cells
      * away, with diminishing values assigned to further positions).
      */
-    public HashMap<Point, Double> sounds;
-    private HashMap<Point, Double> fresh;
+    public HashMap<Coord, Double> sounds;
+    private HashMap<Coord, Double> fresh;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
@@ -89,9 +90,9 @@ public class SoundMap
      */
     public SoundMap() {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<Point, Double>();
-        fresh = new HashMap<Point, Double>();
-        sounds = new HashMap<Point, Double>();
+        alerted = new HashMap<Coord, Double>();
+        fresh = new HashMap<Coord, Double>();
+        sounds = new HashMap<Coord, Double>();
     }
 
     /**
@@ -100,9 +101,9 @@ public class SoundMap
      */
     public SoundMap(RNG random) {
         rng = random;
-        alerted = new HashMap<Point, Double>();
-        fresh = new HashMap<Point, Double>();
-        sounds = new HashMap<Point, Double>();
+        alerted = new HashMap<Coord, Double>();
+        fresh = new HashMap<Coord, Double>();
+        sounds = new HashMap<Coord, Double>();
     }
 
     /**
@@ -111,9 +112,9 @@ public class SoundMap
      */
     public SoundMap(final double[][] level) {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<Point, Double>();
-        fresh = new HashMap<Point, Double>();
-        sounds = new HashMap<Point, Double>();
+        alerted = new HashMap<Coord, Double>();
+        fresh = new HashMap<Coord, Double>();
+        sounds = new HashMap<Coord, Double>();
         initialize(level);
     }
     /**
@@ -124,9 +125,9 @@ public class SoundMap
     public SoundMap(final double[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
         this.measurement = measurement;
-        alerted = new HashMap<Point, Double>();
-        fresh = new HashMap<Point, Double>();
-        sounds = new HashMap<Point, Double>();
+        alerted = new HashMap<Coord, Double>();
+        fresh = new HashMap<Coord, Double>();
+        sounds = new HashMap<Coord, Double>();
         initialize(level);
     }
 
@@ -140,9 +141,9 @@ public class SoundMap
      */
     public SoundMap(final char[][] level) {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<Point, Double>();
-        fresh = new HashMap<Point, Double>();
-        sounds = new HashMap<Point, Double>();
+        alerted = new HashMap<Coord, Double>();
+        fresh = new HashMap<Coord, Double>();
+        sounds = new HashMap<Coord, Double>();
         initialize(level);
     }
     /**
@@ -155,9 +156,9 @@ public class SoundMap
      */
     public SoundMap(final char[][] level, char alternateWall) {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<Point, Double>();
-        fresh = new HashMap<Point, Double>();
-        sounds = new HashMap<Point, Double>();
+        alerted = new HashMap<Coord, Double>();
+        fresh = new HashMap<Coord, Double>();
+        sounds = new HashMap<Coord, Double>();
         initialize(level, alternateWall);
     }
 
@@ -173,9 +174,9 @@ public class SoundMap
     public SoundMap(final char[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
         this.measurement = measurement;
-        alerted = new HashMap<Point, Double>();
-        fresh = new HashMap<Point, Double>();
-        sounds = new HashMap<Point, Double>();
+        alerted = new HashMap<Coord, Double>();
+        fresh = new HashMap<Coord, Double>();
+        sounds = new HashMap<Coord, Double>();
         initialize(level);
     }
 
@@ -282,7 +283,7 @@ public class SoundMap
      */
     public void setSound(int x, int y, double loudness) {
         if(!initialized) return;
-        Point pt = new Point(x, y);
+        Coord pt = new Coord(x, y);
         if(sounds.containsKey(pt) && sounds.get(pt) >= loudness)
             return;
         sounds.put(pt, loudness);
@@ -296,7 +297,7 @@ public class SoundMap
      * @param pt
      * @param loudness The number of cells the sound should spread away using the current measurement.
      */
-    public void setSound(Point pt, double loudness) {
+    public void setSound(Coord pt, double loudness) {
         if(!initialized) return;
         if(sounds.containsKey(pt) && sounds.get(pt) >= loudness)
             return;
@@ -310,7 +311,7 @@ public class SoundMap
      */
     public void removeSound(int x, int y) {
         if(!initialized) return;
-        Point pt = new Point(x, y);
+        Coord pt = new Coord(x, y);
         if(sounds.containsKey(pt))
             sounds.remove(pt);
     }
@@ -319,7 +320,7 @@ public class SoundMap
      * If a sound is being produced at a given location (a Point), this removes it.
      * @param pt
      */
-    public void removeSound(Point pt) {
+    public void removeSound(Coord pt) {
         if(!initialized) return;
         if(sounds.containsKey(pt))
             sounds.remove(pt);
@@ -349,7 +350,7 @@ public class SoundMap
      * Reverts a cell to the value stored in the original state of the level as known by physicalMap.
      * @param pt
      */
-    public void resetCell(Point pt) {
+    public void resetCell(Coord pt) {
         if(!initialized) return;
         gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
     }
@@ -365,13 +366,13 @@ public class SoundMap
     protected void setFresh(int x, int y, double counter) {
         if(!initialized) return;
         gradientMap[x][y] = counter;
-        fresh.put(new Point(x, y), counter);
+        fresh.put(new Coord(x, y), counter);
     }
 
-    protected void setFresh(final Point pt, double counter) {
+    protected void setFresh(final Coord pt, double counter) {
         if(!initialized) return;
         gradientMap[pt.x][pt.y] = counter;
-        fresh.put(new Point(pt.x, pt.y), counter);
+        fresh.put(new Coord(pt.x, pt.y), counter);
     }
 
     /**
@@ -388,7 +389,7 @@ public class SoundMap
     public double[][] scan() {
         if(!initialized) return null;
 
-        for (Map.Entry<Point, Double> entry : sounds.entrySet()) {
+        for (Map.Entry<Coord, Double> entry : sounds.entrySet()) {
             gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
             if(fresh.containsKey(entry.getKey()) && fresh.get(entry.getKey()) > entry.getValue())
             {
@@ -405,15 +406,15 @@ public class SoundMap
 
         while (numAssigned > 0) {
             numAssigned = 0;
-            HashMap<Point, Double> fresh2 = new HashMap<Point, Double>(fresh.size());
+            HashMap<Coord, Double> fresh2 = new HashMap<Coord, Double>(fresh.size());
             fresh2.putAll(fresh);
             fresh.clear();
 
-            for (Map.Entry<Point, Double> cell : fresh2.entrySet()) {
+            for (Map.Entry<Coord, Double> cell : fresh2.entrySet()) {
                 if(cell.getValue() <= 1) //We shouldn't assign values lower than 1.
                     continue;
                 for (int d = 0; d < dirs.length; d++) {
-                    Point adj = new Point(cell.getKey());
+                    Coord adj = new Coord(cell.getKey());
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     if(adj.x < 0 || adj.x >= width || adj.y < 0 || adj.y >= height)
                         continue;
@@ -423,7 +424,7 @@ public class SoundMap
                         double v = cell.getValue() - 1 - ((physicalMap[adj.x][adj.y] == WALL) ? 1 : 0);
                         if (v > 0) {
                             gradientMap[adj.x][adj.y] = v;
-                            fresh.put(new Point(adj.x, adj.y), v);
+                            fresh.put(new Coord(adj.x, adj.y), v);
                             ++numAssigned;
                         }
                     }
@@ -451,20 +452,20 @@ public class SoundMap
      * @param extraSounds
      * @return
      */
-    public HashMap<Point, Double> findAlerted(Set<Point> creatures, Map<Point, Double> extraSounds) {
+    public HashMap<Coord, Double> findAlerted(Set<Coord> creatures, Map<Coord, Double> extraSounds) {
         if(!initialized) return null;
-        alerted = new HashMap<Point, Double>(creatures.size());
+        alerted = new HashMap<Coord, Double>(creatures.size());
 
         resetMap();
-        for (Map.Entry<Point, Double> sound : extraSounds.entrySet()) {
+        for (Map.Entry<Coord, Double> sound : extraSounds.entrySet()) {
             setSound(sound.getKey(), sound.getValue());
         }
         scan();
-        for(Point critter : creatures)
+        for(Coord critter : creatures)
         {
             if(critter.x < 0 || critter.x >= width || critter.y < 0 || critter.y >= height)
                 continue;
-            alerted.put(new Point(critter.x, critter.y), gradientMap[critter.x][critter.y]);
+            alerted.put(new Coord(critter.x, critter.y), gradientMap[critter.x][critter.y]);
         }
         return alerted;
     }

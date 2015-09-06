@@ -1,5 +1,7 @@
 package squidpony.squidgrid;
 
+import squidpony.squidmath.Coord;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,7 +75,7 @@ public class FOV {
     private double radius, decay, angle, span;
     private int startx, starty, width, height;
     private Radius radiusStrategy;
-    private Comparator<Point> comp;
+    private Comparator<Coord> comp;
     private static Direction[] ccw = new Direction[]
             {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
             ccw_full = new Direction[]{Direction.RIGHT, Direction.UP_RIGHT, Direction.UP, Direction.UP_LEFT,
@@ -200,9 +202,9 @@ public class FOV {
         this.starty = startY;
         this.radius = Math.max(1, radius);
         this.radiusStrategy = radiusTechnique;
-        this.comp = new Comparator<Point>() {
+        this.comp = new Comparator<Coord>() {
             @Override
-            public int compare(Point pt1, Point pt2) {
+            public int compare(Coord pt1, Coord pt2) {
                 return (int)Math.signum(radiusStrategy.radius(startx, starty, pt1.x, pt1.y) -
                         radiusStrategy.radius(startx, starty, pt2.x, pt2.y));
             }
@@ -284,9 +286,9 @@ public class FOV {
         this.span = Math.toRadians(span);
         this.radiusStrategy = radiusTechnique;
         decay = 1.0 / radius;
-        this.comp = new Comparator<Point>() {
+        this.comp = new Comparator<Coord>() {
             @Override
-            public int compare(Point pt1, Point pt2) {
+            public int compare(Coord pt1, Coord pt2) {
                 return (int)Math.signum(radiusStrategy.radius(startx, starty, pt1.x, pt1.y) -
                         radiusStrategy.radius(startx, starty, pt2.x, pt2.y));
             }
@@ -341,10 +343,10 @@ public class FOV {
 
 
     private void doRippleFOV(int x, int y) {
-        Deque<Point> dq = new LinkedList<>();
-        dq.offer(new Point(x, y));
+        Deque<Coord> dq = new LinkedList<>();
+        dq.offer(new Coord(x, y));
         while (!dq.isEmpty()) {
-            Point p = dq.pop();
+            Coord p = dq.pop();
             if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
                 continue;//no light to spread
             }
@@ -361,7 +363,7 @@ public class FOV {
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
-                        dq.offer(new Point(x2, y2));//redo neighbors since this one's light changed
+                        dq.offer(new Coord(x2, y2));//redo neighbors since this one's light changed
                     }
                 }
             }
@@ -370,10 +372,10 @@ public class FOV {
 
 
     private void doRippleFOVLimited(int x, int y) {
-        Deque<Point> dq = new LinkedList<>();
-        dq.offer(new Point(x, y));
+        Deque<Coord> dq = new LinkedList<>();
+        dq.offer(new Coord(x, y));
         while (!dq.isEmpty()) {
-            Point p = dq.pop();
+            Coord p = dq.pop();
             if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
                 continue;//no light to spread
             }
@@ -392,7 +394,7 @@ public class FOV {
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
-                        dq.offer(new Point(x2, y2));//redo neighbors since this one's light changed
+                        dq.offer(new Coord(x2, y2));//redo neighbors since this one's light changed
                     }
                 }
             }
@@ -404,12 +406,12 @@ public class FOV {
             return 1;
         }
 
-        List<Point> neighbors = new ArrayList<>();
+        List<Coord> neighbors = new ArrayList<>();
         for (Direction di : Direction.OUTWARDS) {
             int x2 = x + di.deltaX;
             int y2 = y + di.deltaY;
             if (x2 >= 0 && x2 < width && y2 >= 0 && y2 < height) {
-                neighbors.add(new Point(x2, y2));
+                neighbors.add(new Coord(x2, y2));
             }
         }
 
@@ -433,7 +435,7 @@ public class FOV {
 */
         double light = 0;
         int lit = 0, indirects = 0;
-        for (Point p : neighbors) {
+        for (Coord p : neighbors) {
             if (lightMap[p.x][p.y] > 0) {
                 lit++;
                 if (indirect[p.x][p.y]) {

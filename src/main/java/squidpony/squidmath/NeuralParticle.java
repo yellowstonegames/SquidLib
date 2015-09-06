@@ -28,7 +28,7 @@ public class NeuralParticle {
 
     private final RNG rng;
     private final int maxDistance, minDistance, width, height;
-    private final List<Point> distribution = new LinkedList<>();
+    private final List<Coord> distribution = new LinkedList<>();
 
     public NeuralParticle(int width, int height, int maxDistance, RNG rng) {
         this.rng = rng;
@@ -54,7 +54,7 @@ public class NeuralParticle {
      *
      * @return
      */
-    public List<Point> asList() {
+    public List<Coord> asList() {
         return new LinkedList<>(distribution);
     }
 
@@ -66,7 +66,7 @@ public class NeuralParticle {
      */
     public int[][] asIntMap(int scale) {
         int ret[][] = new int[width][height];
-        for (Point p : distribution) {
+        for (Coord p : distribution) {
             ret[p.x][p.y] = scale;
         }
         return ret;
@@ -77,7 +77,7 @@ public class NeuralParticle {
      *
      * @param point
      */
-    public void add(Point point) {
+    public void add(Coord point) {
         distribution.add(point);
     }
 
@@ -87,9 +87,9 @@ public class NeuralParticle {
      *
      * @return the created pip
      */
-    public Point createPoint() {
-        Point randomPoint = randomPoint();
-        Point nearestPoint = nearestPoint(randomPoint);
+    public Coord createPoint() {
+        Coord randomPoint = randomPoint();
+        Coord nearestPoint = nearestPoint(randomPoint);
         double pointDistance = randomPoint.distance(nearestPoint);
         // Too close, toss
         while (pointDistance < minDistance) {
@@ -108,16 +108,16 @@ public class NeuralParticle {
         return randomPoint;
     }
 
-    private Point nearestPoint(Point point) {
+    private Coord nearestPoint(Coord point) {
         if (distribution.isEmpty()) {
-            Point center = new Point(width / 2, height / 2);
+            Coord center = new Coord(width / 2, height / 2);
             distribution.add(center);
             return center;
         }
 
-        Point nearestPoint = distribution.get(0);
+        Coord nearestPoint = distribution.get(0);
         double nearestDistance = point.distance(nearestPoint);
-        for (Point candidatePoint : distribution) {
+        for (Coord candidatePoint : distribution) {
             double candidateDistance = point.distance(candidatePoint);
             if (candidateDistance > 0 && candidateDistance <= maxDistance) {
                 return candidatePoint;
@@ -131,8 +131,8 @@ public class NeuralParticle {
         return nearestPoint;
     }
 
-    private Point randomPoint() {
-        return new Point(rng.nextInt(width), rng.nextInt(height));
+    private Coord randomPoint() {
+        return new Coord(rng.nextInt(width), rng.nextInt(height));
     }
 
 }

@@ -22,6 +22,7 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 
 /**
@@ -283,10 +284,10 @@ public class FOVAnimated {
     }
 
     private void doRippleFOV(int x, int y) {
-        Deque<Point> dq = new LinkedList<>();
-        dq.offer(new Point(x, y));
+        Deque<Coord> dq = new LinkedList<>();
+        dq.offer(new Coord(x, y));
         while (!dq.isEmpty()) {
-            Point p = dq.pop();
+            Coord p = dq.pop();
             if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
                 continue;//no light to spread
             }
@@ -303,7 +304,7 @@ public class FOVAnimated {
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
-                        dq.offer(new Point(x2, y2));//redo neighbors since this one's light changed
+                        dq.offer(new Coord(x2, y2));//redo neighbors since this one's light changed
                     }
                 }
             }
@@ -317,12 +318,12 @@ public class FOVAnimated {
 
 //        mark(x, y, SColor.LILAC);
 
-        List<Point> neighbors = new LinkedList<>();
+        List<Coord> neighbors = new LinkedList<>();
         for (Direction di : Direction.OUTWARDS) {
             int x2 = x + di.deltaX;
             int y2 = y + di.deltaY;
             if (x2 >= 0 && x2 < width && y2 >= 0 && y2 < height) {
-                neighbors.add(new Point(x2, y2));
+                neighbors.add(new Coord(x2, y2));
             }
         }
 
@@ -331,10 +332,10 @@ public class FOVAnimated {
         }
 
         while (neighbors.size() > rippleNeighbors) {
-            Point p = neighbors.remove(0);
+            Coord p = neighbors.remove(0);
             double dist = radiusStrategy.radius(startx, starty, p.x, p.y);
             double dist2 = 0;
-            for (Point p2 : neighbors) {
+            for (Coord p2 : neighbors) {
                 dist2 = Math.max(dist2, radiusStrategy.radius(startx, starty, p2.x, p2.y));
             }
             if (dist < dist2) {//not the largest, put it back
@@ -344,7 +345,7 @@ public class FOVAnimated {
 
         double light = 0;
         int lit = 0, indirects = 0;
-        for (Point p : neighbors) {
+        for (Coord p : neighbors) {
             if (lightMap[p.x][p.y] > 0) {
                 lit++;
                 if (indirect[p.x][p.y]) {

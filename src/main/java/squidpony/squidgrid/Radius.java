@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.Point3D;
 import squidpony.squidmath.RNG;
 
@@ -115,7 +116,7 @@ public enum Radius {
         return radius(dx, dy, 0);
     }
 
-    public Point onUnitShape(double distance) {
+    public Coord onUnitShape(double distance) {
         if (rng == null) {
             rng = new RNG();
         }
@@ -159,7 +160,7 @@ public enum Radius {
                 y = (int) Math.round(Math.sin(theta) * radius);
         }
 
-        return new Point(x, y);
+        return new Coord(x, y);
     }
 
     public Point3D onUnitShape3D(double distance) {
@@ -172,7 +173,7 @@ public enum Radius {
             case SQUARE:
             case DIAMOND:
             case CIRCLE:
-                Point p = onUnitShape(distance);
+                Coord p = onUnitShape(distance);
                 return new Point3D(p.x, p.y, 0);//2D strategies
             case CUBE:
                 x = rng.between((int) -distance, (int) distance + 1);
@@ -228,9 +229,9 @@ public enum Radius {
         return Math.min(Math.max(min, n), max - 1);
     }
 
-    public Set<Point> perimeter(Point center, int radiusLength, boolean surpassEdges, int width, int height)
+    public Set<Coord> perimeter(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
     {
-        LinkedHashSet<Point> rim = new LinkedHashSet<Point>(4 * radiusLength);
+        LinkedHashSet<Coord> rim = new LinkedHashSet<Coord>(4 * radiusLength);
         if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height))
             return rim;
         if(radiusLength < 1) {
@@ -244,14 +245,14 @@ public enum Radius {
                 for (int i = center.x - radiusLength; i <= center.x + radiusLength; i++) {
                     int x = i;
                     if(!surpassEdges) x = clamp(i, 0, width);
-                    rim.add(new Point(x, clamp(center.y - radiusLength, 0, height)));
-                    rim.add(new Point(x, clamp(center.y + radiusLength, 0, height)));
+                    rim.add(new Coord(x, clamp(center.y - radiusLength, 0, height)));
+                    rim.add(new Coord(x, clamp(center.y + radiusLength, 0, height)));
                 }
                 for (int j = center.y - radiusLength; j <= center.y + radiusLength; j++) {
                     int y = j;
                     if(!surpassEdges) y = clamp(j, 0, height);
-                    rim.add(new Point(clamp(center.x - radiusLength, 0, height), y));
-                    rim.add(new Point(clamp(center.x + radiusLength, 0, height), y));
+                    rim.add(new Coord(clamp(center.x - radiusLength, 0, height), y));
+                    rim.add(new Coord(clamp(center.x + radiusLength, 0, height), y));
                 }
             }
             break;
@@ -267,22 +268,22 @@ public enum Radius {
                         yUp = clamp(yUp, 0, height);
                     }
 
-                    rim.add(new Point(xDown, center.y));
-                    rim.add(new Point(xUp, center.y));
-                    rim.add(new Point(center.x, yDown));
-                    rim.add(new Point(center.x, yUp));
+                    rim.add(new Coord(xDown, center.y));
+                    rim.add(new Coord(xUp, center.y));
+                    rim.add(new Coord(center.x, yDown));
+                    rim.add(new Coord(center.x, yUp));
 
                     for (int i = xDown + 1, c = 1; i < center.x; i++, c++) {
                         int x = i;
                         if(!surpassEdges) x = clamp(i, 0, width);
-                        rim.add(new Point(x, clamp(center.y - c, 0, height)));
-                        rim.add(new Point(x, clamp(center.y + c, 0, height)));
+                        rim.add(new Coord(x, clamp(center.y - c, 0, height)));
+                        rim.add(new Coord(x, clamp(center.y + c, 0, height)));
                     }
                     for (int i = center.x + 1, c = 1; i < center.x + radiusLength; i++, c++) {
                         int x = i;
                         if(!surpassEdges) x = clamp(i, 0, width);
-                        rim.add(new Point(x, clamp(center.y + radiusLength - c, 0, height)));
-                        rim.add(new Point(x, clamp(center.y - radiusLength + c, 0, height)));
+                        rim.add(new Coord(x, clamp(center.y + radiusLength - c, 0, height)));
+                        rim.add(new Coord(x, clamp(center.y - radiusLength + c, 0, height)));
                     }
                 }
             }
@@ -303,7 +304,7 @@ public enum Radius {
                             x = clamp(x, 0, width);
                             y = clamp(y, 0, height);
                         }
-                        Point p = new Point(x, y);
+                        Coord p = new Coord(x, y);
                         boolean test = rim.contains(p);
 
                         rim.add(p);
@@ -318,17 +319,17 @@ public enum Radius {
         }
         return rim;
     }
-    public Point extend(Point center, Point middle, int radiusLength, boolean surpassEdges, int width, int height)
+    public Coord extend(Coord center, Coord middle, int radiusLength, boolean surpassEdges, int width, int height)
     {
         if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height ||
                 middle.x < 0 || middle.x >= width || middle.y < 0 || middle.y > height))
-            return new Point(0, 0);
+            return new Coord(0, 0);
         if(radiusLength < 1) {
             return center;
         }
         double theta = Math.atan2(middle.y - center.y, middle.x - center.x);
 
-        Point end = new Point(middle.x, middle.y);
+        Coord end = new Coord(middle.x, middle.y);
         switch (this) {
             case SQUARE:
             case CUBE:
