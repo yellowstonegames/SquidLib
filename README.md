@@ -103,7 +103,7 @@ Download JARs from the Releases tab or use Maven Central to download with
 <dependency>
   <groupId>com.squidpony</groupId>
   <artifactId>squidlib</artifactId>
-  <version>2.9.0</version>
+  <version>2.9.1</version>
 </dependency>
 ```
 
@@ -126,6 +126,7 @@ If you want to use the LibGDX code (anything in a package with "gdx" in it), you
     <classifier>natives-desktop</classifier>
 </dependency>
 ```
+(This is not the absolute-most-recent version of LibGDX, and it may work with more recent versions, but no guarantees can be made. SquidLib will update its dependency version when needed, like in the case of the breaking changes between LibGDX 1.5.5 and 1.5.6 that affected text rendering. SquidLib may also update dependencies simply because there's a major release.)
 
 GitHub repository: https://github.com/SquidPony/SquidLib
 
