@@ -1,5 +1,7 @@
 package squidpony.squidgrid.gui.animation;
 
+import squidpony.squidmath.Coord;
+
 import java.awt.Point;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;

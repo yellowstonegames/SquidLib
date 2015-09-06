@@ -15,6 +15,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -42,12 +43,12 @@ public class SquidAIDemo extends ApplicationAdapter {
     private static final Color bgColor = SquidLayers.awtColorToGDX(SColor.DARK_SLATE_GRAY),
             highlightColor = new Color(1.0f, 0.95f, 0.4f, 0.7f);
     private LinkedHashMap<AnimatedEntity, Integer> teamRed, teamBlue;
-    private LinkedHashSet<Point> redPlaces, bluePlaces;
+    private LinkedHashSet<Coord> redPlaces, bluePlaces;
     private Technique redCone, redCloud, blueBlast, blueBeam;
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
     private int framesWithoutAnimation = 0, moveLength = 5;
-    private ArrayList<Point> awaitedMoves;
+    private ArrayList<Coord> awaitedMoves;
     private int redIdx = 0, blueIdx = 0;
     private boolean blueTurn = false;
 
@@ -81,16 +82,16 @@ public class SquidAIDemo extends ApplicationAdapter {
         teamRed = new LinkedHashMap<AnimatedEntity, Integer>(numMonsters);
         teamBlue = new LinkedHashMap<AnimatedEntity, Integer>(numMonsters);
 
-        redPlaces = new LinkedHashSet<Point>(numMonsters);
-        bluePlaces = new LinkedHashSet<Point>(numMonsters);
+        redPlaces = new LinkedHashSet<Coord>(numMonsters);
+        bluePlaces = new LinkedHashSet<Coord>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Point monPos = DungeonUtility.randomFloor(placement);
+            Coord monPos = DungeonUtility.randomFloor(placement);
             placement[monPos.x][monPos.y] = 'R';
             teamRed.put(display.animateActor(monPos.x, monPos.y, "50", 11, true), 50);
             redPlaces.add(monPos);
 
-            Point monPosBlue = DungeonUtility.randomFloor(placement);
+            Coord monPosBlue = DungeonUtility.randomFloor(placement);
             placement[monPosBlue.x][monPosBlue.y] = 'B';
             teamBlue.put(display.animateActor(monPosBlue.x, monPosBlue.y, "50", 25, true), 50);
             bluePlaces.add(monPosBlue);
@@ -99,7 +100,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         los = new LOS(LOS.BRESENHAM);
         res = DungeonUtility.generateResistances(bareDungeon);
 
-        ConeAOE cone = new ConeAOE(new Point(0, 0), 9, 0, 60, Radius.CIRCLE);
+        ConeAOE cone = new ConeAOE(new Coord(0, 0), 9, 0, 60, Radius.CIRCLE);
         cone.setMinRange(1);
         cone.setMaxRange(2);
         cone.setMetric(Radius.SQUARE);
@@ -107,7 +108,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         redCone = new Technique("Burning Breath", cone);
         redCone.setMap(bareDungeon);
 
-        BlastAOE blast = new BlastAOE(new Point(0,0), 3, Radius.CIRCLE);
+        BlastAOE blast = new BlastAOE(new Coord(0, 0), 3, Radius.CIRCLE);
         blast.setMinRange(3);
         blast.setMaxRange(5);
         blast.setMetric(Radius.CIRCLE);
@@ -115,7 +116,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         blueBlast = new Technique("Winter Orb", blast);
         blueBlast.setMap(bareDungeon);
 
-        CloudAOE cloud = new CloudAOE(new Point(0, 0), 20, Radius.DIAMOND);
+        CloudAOE cloud = new CloudAOE(new Coord(0, 0), 20, Radius.DIAMOND);
         cloud.setMinRange(4);
         cloud.setMaxRange(7);
         cloud.setMetric(Radius.CIRCLE);
@@ -123,7 +124,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         redCloud = new Technique("Acid Mist", cloud);
         redCloud.setMap(bareDungeon);
 
-        BeamAOE beam = new BeamAOE(new Point(0,0), 0.0, 8, 1, Radius.DIAMOND);
+        BeamAOE beam = new BeamAOE(new Coord(0, 0), 0.0, 8, 1, Radius.DIAMOND);
         beam.setMinRange(2);
         beam.setMaxRange(8);
         beam.setMetric(Radius.CIRCLE);
@@ -138,7 +139,7 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         dijkstraAlert();
 
-        awaitedMoves = new ArrayList<Point>(10);
+        awaitedMoves = new ArrayList<Coord>(10);
         colors = DungeonUtility.generatePaletteIndices(bareDungeon);
         bgColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon);
@@ -205,11 +206,11 @@ public class SquidAIDemo extends ApplicationAdapter {
         int i = 0;
         DijkstraMap whichDijkstra;
         Technique whichTech;
-        Set<Point> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
+        Set<Coord> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
         LinkedHashMap<AnimatedEntity, Integer> whichEnemyTeam = null;
         AnimatedEntity ae = null;
         int health = 0;
-        Point user = null;
+        Coord user = null;
         if(blueTurn)
         {
             whichDijkstra = getToRed;
@@ -223,7 +224,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Point(ae.gridX, ae.gridY);
+                    user = new Coord(ae.gridX, ae.gridY);
                     break;
                 }
             }
@@ -241,7 +242,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Point(ae.gridX, ae.gridY);
+                    user = new Coord(ae.gridX, ae.gridY);
                     break;
                 }
             }
@@ -259,7 +260,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 visibleTargets.add(p);
             }
         }*/
-        ArrayList<Point> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, los, whichFoes, whichAllies, user, whichFoes);
+        ArrayList<Coord> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, los, whichFoes, whichAllies, user, whichFoes);
         /*
         System.out.println("User at (" + user.x + "," + user.y + ") using " +
                 whichTech.name);
@@ -274,7 +275,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             }
             System.out.println();
         }*/
-        awaitedMoves = new ArrayList<Point>(path);
+        awaitedMoves = new ArrayList<Coord>(path);
     }
 
     public void move(AnimatedEntity ae, int newX, int newY) {
@@ -304,13 +305,13 @@ public class SquidAIDemo extends ApplicationAdapter {
         int i = 0;
         DijkstraMap whichDijkstra;
         Technique whichTech;
-        Set<Point> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
+        Set<Coord> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
         AnimatedEntity ae = null;
         int health = 0;
-        Point user = null;
+        Coord user = null;
         Color whichTint = Color.WHITE;
         LinkedHashMap<AnimatedEntity, Integer> whichEnemyTeam = null;
-        LinkedHashMap<Point, Double> effects = null;
+        LinkedHashMap<Coord, Double> effects = null;
         if (blueTurn) {
             whichDijkstra = getToRed;
             whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
@@ -322,7 +323,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 if (i++ == idx) {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Point(ae.gridX, ae.gridY);
+                    user = new Coord(ae.gridX, ae.gridY);
                     break;
                 }
             }
@@ -337,7 +338,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 if (i++ == idx) {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Point(ae.gridX, ae.gridY);
+                    user = new Coord(ae.gridX, ae.gridY);
                     break;
                 }
             }
@@ -346,7 +347,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             phase = Phase.ATTACK_ANIM;
             return;
         }
-        for(Point p : whichFoes)
+        for(Coord p : whichFoes)
         {
             AnimatedEntity foe = display.getAnimatedEntityByCell(p.x, p.y);
             if(los.isReachable(res, user.x, user.y, p.x, p.y) && foe != null && whichEnemyTeam.get(foe) != null && whichEnemyTeam.get(foe) > 0)
@@ -354,9 +355,9 @@ public class SquidAIDemo extends ApplicationAdapter {
                 visibleTargets.add(p);
             }
         }
-        LinkedHashMap<Point, ArrayList<Point>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
-        Point targetCell = null;
-        for(Point ip : ideal.keySet())
+        LinkedHashMap<Coord, ArrayList<Coord>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
+        Coord targetCell = null;
+        for(Coord ip : ideal.keySet())
         {
             targetCell = ip;
             break;
@@ -366,7 +367,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         {
             effects = whichTech.apply(user, targetCell);
 
-            for(Map.Entry<Point, Double> power : effects.entrySet())
+            for(Map.Entry<Coord, Double> power : effects.entrySet())
             {
                 Double strength = (idx % 2 == 0) ? rng.nextDouble() : power.getValue();
                 whichTint.a = strength.floatValue();
@@ -459,14 +460,14 @@ public class SquidAIDemo extends ApplicationAdapter {
         int i = 0;
         AnimatedEntity ae = null;
         int health = 0;
-        Point user = null;
+        Coord user = null;
         int whichIdx = 0;
         if(blueTurn) {
             for (Map.Entry<AnimatedEntity, Integer> entry : teamBlue.entrySet()) {
                 if (i++ == blueIdx) {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Point(ae.gridX, ae.gridY);
+                    user = new Coord(ae.gridX, ae.gridY);
                     whichIdx = blueIdx;
                     break;
                 }
@@ -478,7 +479,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 if (i++ == redIdx) {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Point(ae.gridX, ae.gridY);
+                    user = new Coord(ae.gridX, ae.gridY);
                     whichIdx = redIdx;
                     break;
                 }
@@ -503,7 +504,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 ++framesWithoutAnimation;
                 if (framesWithoutAnimation >= 3) {
                     framesWithoutAnimation = 0;
-                    Point m = awaitedMoves.remove(0);
+                    Coord m = awaitedMoves.remove(0);
                     move(ae, m.x, m.y);
                 }
             }

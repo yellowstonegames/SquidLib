@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.Radius;
+import squidpony.squidmath.Coord;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Technique {
     public String id;
     public AOE aoe;
     protected char[][] dungeon;
-    protected final static Point DEFAULT_POINT = new Point(0, 0);
+    protected final static Coord DEFAULT_POINT = new Coord(0, 0);
 
     /**
      * Creates a Technique that can target any adjacent single Point, using
@@ -131,7 +132,7 @@ public class Technique {
      * @param requiredExclusions Set of Point where each value is something this Technique will really try to avoid.
      * @return LinkedHashMap of Point keys representing target points to pass to apply, to ArrayList of Point values representing what targets' locations will be affected.
      */
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Point user, Set<Point> targets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Set<Coord> targets, Set<Coord> requiredExclusions) {
         aoe.setOrigin(user);
         return aoe.idealLocations(targets, requiredExclusions);
 
@@ -155,7 +156,7 @@ public class Technique {
      * @param requiredExclusions Set of Point where each value is something this Technique will really try to avoid.
      * @return LinkedHashMap of Point keys representing target points to pass to apply, to ArrayList of Point values representing what targets' locations will be affected.
      */
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Point user, Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         aoe.setOrigin(user);
         return aoe.idealLocations(priorityTargets, lesserTargets, requiredExclusions);
     }
@@ -175,7 +176,7 @@ public class Technique {
      * @param aimAt A target Point typically obtained from idealLocations that determines how to position the AOE.
      * @return a HashMap of Point keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).
      */
-    public LinkedHashMap<Point, Double> apply(Point user, Point aimAt)
+    public LinkedHashMap<Coord, Double> apply(Coord user, Coord aimAt)
     {
         aoe.setOrigin(user);
         aoe.shift(aimAt);

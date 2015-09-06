@@ -81,13 +81,13 @@ public class EverythingDemo extends ApplicationAdapter {
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
         char[][] placement = DungeonUtility.closeDoors(bareDungeon);
-        Point pl = DungeonUtility.randomFloor(placement);
+        Coord pl = DungeonUtility.randomFloor(placement);
         placement[pl.x][pl.y] = '@';
         int numMonsters = 25;
         monsters = new HashMap<AnimatedEntity, Integer>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Point monPos = DungeonUtility.randomFloor(placement);
+            Coord monPos = DungeonUtility.randomFloor(placement);
             placement[monPos.x][monPos.y] = 'M';
             monsters.put(display.animateActor(monPos.x, monPos.y, 'M', 11), 0);
 
@@ -225,14 +225,14 @@ public class EverythingDemo extends ApplicationAdapter {
         }
     }
 
-    private boolean checkOverlap(AnimatedEntity ae, int x, int y, ArrayList<Point> futureOccupied)
+    private boolean checkOverlap(AnimatedEntity ae, int x, int y, ArrayList<Coord> futureOccupied)
     {
         for(AnimatedEntity mon : monsters.keySet())
         {
             if(mon.gridX == x && mon.gridY == y && !mon.equals(ae))
                 return true;
         }
-        for(Point p : futureOccupied)
+        for(Coord p : futureOccupied)
         {
             if(x == p.x && y == p.y)
                 return true;
@@ -252,17 +252,17 @@ public class EverythingDemo extends ApplicationAdapter {
         // this is an important piece of DijkstraMap usage; the argument is a Set of Points for squares that
         // temporarily cannot be moved through (not walls, which are automatically known because the map char[][]
         // was passed to the DijkstraMap constructor, but things like moving creatures and objects).
-        LinkedHashSet<Point> monplaces = new LinkedHashSet<>(monsters.size());
+        LinkedHashSet<Coord> monplaces = new LinkedHashSet<>(monsters.size());
         for(AnimatedEntity ae : monsters.keySet())
         {
-            monplaces.add(new Point(ae.gridX, ae.gridY));
+            monplaces.add(new Coord(ae.gridX, ae.gridY));
         }
         pathMap = getToPlayer.scan(monplaces);
 
         // recalculate FOV, store it in fovmap for the render to use.
         fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8);
         // handle monster turns
-        ArrayList<Point> nextMovePositions = new ArrayList<>(25);
+        ArrayList<Coord> nextMovePositions = new ArrayList<>(25);
         for(HashMap.Entry<AnimatedEntity, Integer> mon : monsters.entrySet())
         {
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
@@ -274,7 +274,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 double best = 9999.0;
                 for(Direction d : getToPlayer.shuffle(Direction.CARDINALS))
                 {
-                    Point tmp = new Point(mon.getKey().gridX + d.deltaX, mon.getKey().gridY + d.deltaY);
+                    Coord tmp = new Coord(mon.getKey().gridX + d.deltaX, mon.getKey().gridY + d.deltaY);
                     if(pathMap[tmp.x][tmp.y] < best &&
                             !checkOverlap(mon.getKey(), tmp.x, tmp.y, nextMovePositions))
                     {
@@ -285,7 +285,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                 }
                 if(choice != null) {
-                    Point tmp = new Point(mon.getKey().gridX + choice.deltaX, mon.getKey().gridY + choice.deltaY);
+                    Coord tmp = new Coord(mon.getKey().gridX + choice.deltaX, mon.getKey().gridY + choice.deltaY);
                     // if we would move into the player, instead damage the player and give newMons the current
                     // position of this monster.
                     if (player.gridX == tmp.x && player.gridY == tmp.y) {
@@ -299,7 +299,7 @@ public class EverythingDemo extends ApplicationAdapter {
                         /*if (fovmap[mon.getKey().x][mon.getKey().y] > 0.0) {
                             display.put(mon.getKey().x, mon.getKey().y, 'M', 11);
                         }*/
-                        nextMovePositions.add(new Point(tmp.x, tmp.y));
+                        nextMovePositions.add(new Coord(tmp.x, tmp.y));
                         display.slide(mon.getKey(), tmp.x, tmp.y);
                     }
                 }

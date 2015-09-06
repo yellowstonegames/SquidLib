@@ -9,6 +9,7 @@ import javax.swing.JLayeredPane;
 import squidpony.SColor;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.NeuralParticle;
 import squidpony.squidmath.RNG;
 
@@ -102,14 +103,14 @@ public class NeuralParticleDemo {
 
                 np = new NeuralParticle(width, height, radius, rng);
                 for (int i = 0; i < seeds; i++) {
-                    Point p = new Point(rng.nextInt(width), rng.nextInt(height));
+                    Coord p = new Coord(rng.nextInt(width), rng.nextInt(height));
                     np.add(p);
                     back.put(p.x, p.y, SColor.SCARLET);
                     back.refresh();
                 }
 
                 for (int i = 0; i < iterations; i++) {
-                    Point pip = np.createPoint();
+                    Coord pip = np.createPoint();
                     np.add(pip);
                     back.put(pip.x, pip.y, SColor.GREEN);
                     back.refresh();

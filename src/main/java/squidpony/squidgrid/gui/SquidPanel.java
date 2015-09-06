@@ -21,6 +21,7 @@ import squidpony.squidgrid.gui.animation.BumpAnimation;
 import squidpony.squidgrid.gui.animation.SlideAnimation;
 import squidpony.squidgrid.gui.animation.WiggleAnimation;
 import squidpony.squidgrid.Direction;
+import squidpony.squidmath.Coord;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.

@@ -7,6 +7,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import squidpony.squidgrid.Direction;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 
 /**
@@ -342,34 +343,34 @@ public class ClassicRogueMapGenerator {
         }
     }
 
-    private Point randomWallPosition(ClassicRogueRoom room, Direction dir) {
+    private Coord randomWallPosition(ClassicRogueRoom room, Direction dir) {
         int x, y;
-        Point p = null;
+        Coord p = null;
 
         switch (dir) {
             case LEFT:
                 y = rng.between(room.y + 1, room.y + room.height);
                 x = room.x - 1;
                 map[x][y] = Terrain.CLOSED_DOOR;
-                p = new Point(x - 1, y);
+                p = new Coord(x - 1, y);
                 break;
             case RIGHT:
                 y = rng.between(room.y + 1, room.y + room.height);
                 x = room.x + room.width;
                 map[x][y] = Terrain.CLOSED_DOOR;
-                p = new Point(x + 1, y);
+                p = new Coord(x + 1, y);
                 break;
             case UP:
                 x = rng.between(room.x + 1, room.x + room.width);
                 y = room.y - 1;
                 map[x][y] = Terrain.CLOSED_DOOR;
-                p = new Point(x, y - 1);
+                p = new Coord(x, y - 1);
                 break;
             case DOWN:
                 x = rng.between(room.x + 1, room.x + room.width);
                 y = room.y + room.height;
                 map[x][y] = Terrain.CLOSED_DOOR;
-                p = new Point(x, y + 1);
+                p = new Coord(x, y + 1);
                 break;
         }
 
@@ -382,7 +383,7 @@ public class ClassicRogueMapGenerator {
      * @param start
      * @param end
      */
-    private void digPath(Point start, Point end) {
+    private void digPath(Coord start, Coord end) {
         int xOffset = end.x - start.x;
         int yOffset = end.y - start.y;
         int xpos = start.x;
