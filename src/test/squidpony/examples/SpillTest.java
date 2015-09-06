@@ -3,6 +3,7 @@ package squidpony.examples;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 import squidpony.squidgrid.Spill;
@@ -33,13 +34,13 @@ public class SpillTest {
 
             System.out.println(dg);
 
-            Point entry = DungeonUtility.randomFloor(dun);
-            HashSet<Point> impassable = new HashSet<Point>();
-            impassable.add(new Point(entry.x + 2, entry.y));
-            impassable.add(new Point(entry.x - 2, entry.y));
-            impassable.add(new Point(entry.x, entry.y + 2));
-            impassable.add(new Point(entry.x, entry.y - 2));
-            ArrayList<Point> ordered = spreader.start(entry, 20, impassable);
+            Coord entry = DungeonUtility.randomFloor(dun);
+            HashSet<Coord> impassable = new HashSet<Coord>();
+            impassable.add(new Coord(entry.x + 2, entry.y));
+            impassable.add(new Coord(entry.x - 2, entry.y));
+            impassable.add(new Coord(entry.x, entry.y + 2));
+            impassable.add(new Coord(entry.x, entry.y - 2));
+            ArrayList<Coord> ordered = spreader.start(entry, 20, impassable);
             ordered.addAll(spreader.start(entry, 35, impassable));
             boolean[][] sm = spreader.spillMap;
             char[][] md = dun.clone(),

@@ -3,6 +3,7 @@ package squidpony.squidai;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -74,7 +75,7 @@ public class DijkstraMap
      * cell; only steps that require movement will be included, and so if the path has not been found or a valid
      * path toward a goal is impossible, this ArrayList will be empty.
      */
-    public ArrayList<Point> path = new ArrayList<Point>();
+    public ArrayList<Coord> path = new ArrayList<Coord>();
     /**
      * Goals are always marked with 0.
      */
@@ -96,15 +97,15 @@ public class DijkstraMap
      * Goals that pathfinding will seek out. The Double value should almost always be 0.0 , the same as the static GOAL
      * constant in this class.
      */
-    public LinkedHashMap<Point, Double> goals;
-    private LinkedHashMap<Point, Double> fresh, closed, open;
+    public LinkedHashMap<Coord, Double> goals;
+    private LinkedHashMap<Coord, Double> fresh, closed, open;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
     public RNG rng;
     private static int frustration = 0;
 
-    public Point[][] targetMap;
+    public Coord[][] targetMap;
 
 
     private boolean initialized = false;
@@ -121,12 +122,12 @@ public class DijkstraMap
      */
     public DijkstraMap() {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
 
-        goals = new LinkedHashMap<Point, Double>();
-        fresh = new LinkedHashMap<Point, Double>();
-        closed = new LinkedHashMap<Point, Double>();
-        open = new LinkedHashMap<Point, Double>();
+        goals = new LinkedHashMap<Coord, Double>();
+        fresh = new LinkedHashMap<Coord, Double>();
+        closed = new LinkedHashMap<Coord, Double>();
+        open = new LinkedHashMap<Coord, Double>();
     }
 
     /**
@@ -136,12 +137,12 @@ public class DijkstraMap
      */
     public DijkstraMap(RNG random) {
         rng = random;
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
 
-        goals = new LinkedHashMap<Point, Double>();
-        fresh = new LinkedHashMap<Point, Double>();
-        closed = new LinkedHashMap<Point, Double>();
-        open = new LinkedHashMap<Point, Double>();
+        goals = new LinkedHashMap<Coord, Double>();
+        fresh = new LinkedHashMap<Coord, Double>();
+        closed = new LinkedHashMap<Coord, Double>();
+        open = new LinkedHashMap<Coord, Double>();
     }
 
     /**
@@ -150,12 +151,12 @@ public class DijkstraMap
      */
     public DijkstraMap(final double[][] level) {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
 
-        goals = new LinkedHashMap<Point, Double>();
-        fresh = new LinkedHashMap<Point, Double>();
-        closed = new LinkedHashMap<Point, Double>();
-        open = new LinkedHashMap<Point, Double>();
+        goals = new LinkedHashMap<Coord, Double>();
+        fresh = new LinkedHashMap<Coord, Double>();
+        closed = new LinkedHashMap<Coord, Double>();
+        open = new LinkedHashMap<Coord, Double>();
         initialize(level);
     }
     /**
@@ -166,12 +167,12 @@ public class DijkstraMap
     public DijkstraMap(final double[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
         this.measurement = measurement;
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
 
-        goals = new LinkedHashMap<Point, Double>();
-        fresh = new LinkedHashMap<Point, Double>();
-        closed = new LinkedHashMap<Point, Double>();
-        open = new LinkedHashMap<Point, Double>();
+        goals = new LinkedHashMap<Coord, Double>();
+        fresh = new LinkedHashMap<Coord, Double>();
+        closed = new LinkedHashMap<Coord, Double>();
+        open = new LinkedHashMap<Coord, Double>();
         initialize(level);
     }
 
@@ -185,12 +186,12 @@ public class DijkstraMap
      */
     public DijkstraMap(final char[][] level) {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
 
-        goals = new LinkedHashMap<Point, Double>();
-        fresh = new LinkedHashMap<Point, Double>();
-        closed = new LinkedHashMap<Point, Double>();
-        open = new LinkedHashMap<Point, Double>();
+        goals = new LinkedHashMap<Coord, Double>();
+        fresh = new LinkedHashMap<Coord, Double>();
+        closed = new LinkedHashMap<Coord, Double>();
+        open = new LinkedHashMap<Coord, Double>();
         initialize(level);
     }
     /**
@@ -203,12 +204,12 @@ public class DijkstraMap
      */
     public DijkstraMap(final char[][] level, char alternateWall) {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
 
-        goals = new LinkedHashMap<Point, Double>();
-        fresh = new LinkedHashMap<Point, Double>();
-        closed = new LinkedHashMap<Point, Double>();
-        open = new LinkedHashMap<Point, Double>();
+        goals = new LinkedHashMap<Coord, Double>();
+        fresh = new LinkedHashMap<Coord, Double>();
+        closed = new LinkedHashMap<Coord, Double>();
+        open = new LinkedHashMap<Coord, Double>();
         initialize(level, alternateWall);
     }
 
@@ -223,13 +224,13 @@ public class DijkstraMap
      */
     public DijkstraMap(final char[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         this.measurement = measurement;
 
-        goals = new LinkedHashMap<Point, Double>();
-        fresh = new LinkedHashMap<Point, Double>();
-        closed = new LinkedHashMap<Point, Double>();
-        open = new LinkedHashMap<Point, Double>();
+        goals = new LinkedHashMap<Coord, Double>();
+        fresh = new LinkedHashMap<Coord, Double>();
+        closed = new LinkedHashMap<Coord, Double>();
+        open = new LinkedHashMap<Coord, Double>();
         initialize(level);
     }
 
@@ -245,7 +246,7 @@ public class DijkstraMap
         height = level[0].length;
         gradientMap = new double[width][height];
         physicalMap = new double[width][height];
-        targetMap = new Point[width][height];
+        targetMap = new Coord[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 gradientMap[x][y] = level[x][y];
@@ -268,7 +269,7 @@ public class DijkstraMap
         height = level[0].length;
         gradientMap = new double[width][height];
         physicalMap = new double[width][height];
-        targetMap = new Point[width][height];
+        targetMap = new Coord[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 double t = (level[x][y] == '#') ? WALL : FLOOR;
@@ -294,7 +295,7 @@ public class DijkstraMap
         height = level[0].length;
         gradientMap = new double[width][height];
         physicalMap = new double[width][height];
-        targetMap = new Point[width][height];
+        targetMap = new Coord[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 double t = (level[x][y] == alternateWall) ? WALL : FLOOR;
@@ -355,14 +356,14 @@ public class DijkstraMap
             return;
         }
 
-        goals.put(new Point(x, y), GOAL);
+        goals.put(new Coord(x, y), GOAL);
     }
 
     /**
      * Marks a cell as a goal for pathfinding, unless the cell is a wall or unreachable area (then it does nothing).
      * @param pt
      */
-    public void setGoal(Point pt) {
+    public void setGoal(Coord pt) {
         if(!initialized) return;
         if (physicalMap[pt.x][pt.y] > FLOOR) {
             return;
@@ -395,7 +396,7 @@ public class DijkstraMap
      * Reverts a cell to the value stored in the original state of the level as known by physicalMap.
      * @param pt
      */
-    public void resetCell(Point pt) {
+    public void resetCell(Coord pt) {
         if(!initialized) return;
         gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
     }
@@ -406,7 +407,7 @@ public class DijkstraMap
     public void clearGoals() {
         if(!initialized)
             return;
-        for (Map.Entry<Point, Double> entry : goals.entrySet()) {
+        for (Map.Entry<Coord, Double> entry : goals.entrySet()) {
             resetCell(entry.getKey());
         }
         goals.clear();
@@ -415,13 +416,13 @@ public class DijkstraMap
     protected void setFresh(int x, int y, double counter) {
         if(!initialized) return;
         gradientMap[x][y] = counter;
-        fresh.put(new Point(x, y), counter);
+        fresh.put(new Coord(x, y), counter);
     }
 
-    protected void setFresh(final Point pt, double counter) {
+    protected void setFresh(final Coord pt, double counter) {
         if(!initialized) return;
         gradientMap[pt.x][pt.y] = counter;
-        fresh.put(new Point(pt.x, pt.y), counter);
+        fresh.put(new Coord(pt.x, pt.y), counter);
     }
 
     /**
@@ -437,37 +438,37 @@ public class DijkstraMap
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Set<Point> impassable) {
+    public double[][] scan(Set<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
-        LinkedHashMap<Point, Double> blocking = new LinkedHashMap<Point, Double>(impassable.size());
-        for (Point pt : impassable) {
+            impassable = new LinkedHashSet<Coord>();
+        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<Coord, Double>(impassable.size());
+        for (Coord pt : impassable) {
             blocking.put(pt, WALL);
         }
         closed.putAll(blocking);
 
-        for (Map.Entry<Point, Double> entry : goals.entrySet()) {
+        for (Map.Entry<Coord, Double> entry : goals.entrySet()) {
             if (closed.containsKey(entry.getKey()))
                 closed.remove(entry.getKey());
             gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
-        LinkedHashMap<Point, Double> lowest = new LinkedHashMap<Point, Double>();
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] > FLOOR && !goals.containsKey(new Point(x, y)))
-                    closed.put(new Point(x, y), physicalMap[x][y]);
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(new Coord(x, y)))
+                    closed.put(new Coord(x, y), physicalMap[x][y]);
                 else if(gradientMap[x][y] < currentLowest)
                 {
                     currentLowest = gradientMap[x][y];
                     lowest.clear();
-                    lowest.put(new Point(x, y), currentLowest);
+                    lowest.put(new Coord(x, y), currentLowest);
                 }
                 else if(gradientMap[x][y] == currentLowest)
                 {
-                    lowest.put(new Point(x, y), currentLowest);
+                    lowest.put(new Coord(x, y), currentLowest);
                 }
             }
         }
@@ -479,9 +480,9 @@ public class DijkstraMap
 //            ++iter;
             numAssigned = 0;
 
-            for (Map.Entry<Point, Double> cell : open.entrySet()) {
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
-                    Point adj = new Point(cell.getKey());
+                    Coord adj = new Coord(cell.getKey());
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
                     if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
@@ -492,7 +493,7 @@ public class DijkstraMap
                 }
             }
             closed.putAll(open);
-            open = new LinkedHashMap<Point, Double>(fresh);
+            open = new LinkedHashMap<Coord, Double>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -525,37 +526,37 @@ public class DijkstraMap
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] partialScan(int limit, Set<Point> impassable) {
+    public double[][] partialScan(int limit, Set<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
-        LinkedHashMap<Point, Double> blocking = new LinkedHashMap<Point, Double>(impassable.size());
-        for (Point pt : impassable) {
+            impassable = new LinkedHashSet<Coord>();
+        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<Coord, Double>(impassable.size());
+        for (Coord pt : impassable) {
             blocking.put(pt, WALL);
         }
         closed.putAll(blocking);
 
-        for (Map.Entry<Point, Double> entry : goals.entrySet()) {
+        for (Map.Entry<Coord, Double> entry : goals.entrySet()) {
             if (closed.containsKey(entry.getKey()))
                 closed.remove(entry.getKey());
             gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
-        LinkedHashMap<Point, Double> lowest = new LinkedHashMap<Point, Double>();
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] > FLOOR && !goals.containsKey(new Point(x, y)))
-                    closed.put(new Point(x, y), physicalMap[x][y]);
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(new Coord(x, y)))
+                    closed.put(new Coord(x, y), physicalMap[x][y]);
                 else if(gradientMap[x][y] < currentLowest)
                 {
                     currentLowest = gradientMap[x][y];
                     lowest.clear();
-                    lowest.put(new Point(x, y), currentLowest);
+                    lowest.put(new Coord(x, y), currentLowest);
                 }
                 else if(gradientMap[x][y] == currentLowest)
                 {
-                    lowest.put(new Point(x, y), currentLowest);
+                    lowest.put(new Coord(x, y), currentLowest);
                 }
             }
         }
@@ -569,9 +570,9 @@ public class DijkstraMap
 //            ++iter;
             numAssigned = 0;
 
-            for (Map.Entry<Point, Double> cell : open.entrySet()) {
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
-                    Point adj = new Point(cell.getKey());
+                    Coord adj = new Coord(cell.getKey());
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
                     if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
@@ -582,7 +583,7 @@ public class DijkstraMap
                 }
             }
             closed.putAll(open);
-            open = new LinkedHashMap<Point, Double>(fresh);
+            open = new LinkedHashMap<Coord, Double>(fresh);
             fresh.clear();
             ++iter;
         }
@@ -622,12 +623,12 @@ public class DijkstraMap
      *             creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[][] scan(Set<Point> impassable, int size) {
+    public double[][] scan(Set<Coord> impassable, int size) {
         if(!initialized) return null;
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
-        LinkedHashMap<Point, Double> blocking = new LinkedHashMap<Point, Double>(impassable.size());
-        for (Point pt : impassable) {
+            impassable = new LinkedHashSet<Coord>();
+        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<Coord, Double>(impassable.size());
+        for (Coord pt : impassable) {
             blocking.put(pt, WALL);
             for(int x = 0; x < size; x++)
             {
@@ -636,28 +637,28 @@ public class DijkstraMap
                     if(x + y == 0)
                         continue;
                     if(gradientMap[pt.x - x][pt.y - y] <= FLOOR)
-                        blocking.put(new Point(pt.x - x, pt.y - y), DARK);
+                        blocking.put(new Coord(pt.x - x, pt.y - y), DARK);
                 }
             }
         }
         closed.putAll(blocking);
 
-        for (Map.Entry<Point, Double> entry : goals.entrySet()) {
+        for (Map.Entry<Coord, Double> entry : goals.entrySet()) {
             if (closed.containsKey(entry.getKey()))
                 closed.remove(entry.getKey());
             gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         mappedCount = goals.size();
         double currentLowest = 999000;
-        LinkedHashMap<Point, Double> lowest = new LinkedHashMap<Point, Double>();
-        Point p = new Point(0, 0), temp = new Point(0, 0);
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
+        Coord p = new Coord(0, 0), temp = new Coord(0, 0);
         for (int y = 0; y < height; y++) {
             I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS:
             for (int x = 0; x < width; x++) {
                 p.x = x;
                 p.y = y;
                 if (gradientMap[x][y] > FLOOR && !goals.containsKey(p)) {
-                    closed.put(new Point(p.x, p.y), physicalMap[x][y]);
+                    closed.put(new Coord(p.x, p.y), physicalMap[x][y]);
                     if(gradientMap[x][y] == WALL) {
                         for (int i = 0; i < size; i++) {
                             if (x - i < 0)
@@ -668,7 +669,7 @@ public class DijkstraMap
                                 if (y - j < 0 || closed.containsKey(temp))
                                     continue;
                                 if (gradientMap[temp.x][temp.y] <= FLOOR && !goals.containsKey(temp))
-                                    closed.put(new Point(temp.x, temp.y), DARK);
+                                    closed.put(new Coord(temp.x, temp.y), DARK);
                             }
                         }
                     }
@@ -691,7 +692,7 @@ public class DijkstraMap
 
                     currentLowest = gradientMap[x][y];
                     lowest.clear();
-                    lowest.put(new Point(x, y), currentLowest);
+                    lowest.put(new Coord(x, y), currentLowest);
 
                 }
                 else if(gradientMap[x][y] == currentLowest && !closed.containsKey(p))
@@ -707,7 +708,7 @@ public class DijkstraMap
                                     continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
                             }
                         }
-                        lowest.put(new Point(x, y), currentLowest);
+                        lowest.put(new Coord(x, y), currentLowest);
                     }
                 }
             }
@@ -717,20 +718,20 @@ public class DijkstraMap
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (numAssigned > 0) {
             numAssigned = 0;
-            for (Map.Entry<Point, Double> cell : open.entrySet()) {
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
-                    Point adj = new Point(cell.getKey().x, cell.getKey().y);
+                    Coord adj = new Coord(cell.getKey().x, cell.getKey().y);
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
                     if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
-                        setFresh(new Point(adj.x, adj.y), cell.getValue() + h);
+                        setFresh(new Coord(adj.x, adj.y), cell.getValue() + h);
                         ++numAssigned;
                         ++mappedCount;
                     }
                 }
             }
             closed.putAll(open);
-            open = new LinkedHashMap<Point, Double>(fresh);
+            open = new LinkedHashMap<Coord, Double>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -766,26 +767,26 @@ public class DijkstraMap
      * @param targets
      * @return
      */
-    public ArrayList<Point> findPath(int length, Set<Point> impassable,
-                                     Set<Point> onlyPassable, Point start, Point... targets) {
+    public ArrayList<Coord> findPath(int length, Set<Coord> impassable,
+                                     Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if(!initialized) return null;
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
+            impassable = new LinkedHashSet<Coord>();
         if(onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Point>();
+            onlyPassable = new LinkedHashSet<Coord>();
 
         resetMap();
-        for (Point goal : targets) {
+        for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if(goals.isEmpty())
             return path;
         scan(impassable);
-        Point currentPos = new Point(start);
+        Coord currentPos = new Coord(start);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -796,7 +797,7 @@ public class DijkstraMap
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
-                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                Coord pt = new Coord(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -806,18 +807,18 @@ public class DijkstraMap
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
-            path.add(new Point(currentPos.x, currentPos.y));
+            path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= length) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    Set<Point> impassable2 = impassable;
+                    Set<Coord> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findPath(length, impassable2, onlyPassable, start, targets);
                 }
@@ -851,8 +852,8 @@ public class DijkstraMap
      * @param targets
      * @return
      */
-    public ArrayList<Point> findAttackPath(int moveLength, int preferredRange, LOS los, Set<Point> impassable,
-                                           Set<Point> onlyPassable, Point start, Point... targets) {
+    public ArrayList<Coord> findAttackPath(int moveLength, int preferredRange, LOS los, Set<Coord> impassable,
+                                           Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if(!initialized) return null;
         if(preferredRange < 0) preferredRange = 0;
         double[][] resMap = new double[width][height];
@@ -864,14 +865,14 @@ public class DijkstraMap
                 }
             }
         }
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
+            impassable = new LinkedHashSet<Coord>();
         if(onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Point>();
+            onlyPassable = new LinkedHashSet<Coord>();
 
         resetMap();
-        for (Point goal : targets) {
+        for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if(goals.isEmpty())
@@ -893,7 +894,7 @@ public class DijkstraMap
                 if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
                     continue;
                 if (gradientMap[x][y] == preferredRange && los != null) {
-                    for (Point goal : targets) {
+                    for (Coord goal : targets) {
                         if (los.isReachable(resMap, x, y, goal.x, goal.y)) {
                             setGoal(x, y);
                             gradientMap[x][y] = 0;
@@ -909,10 +910,10 @@ public class DijkstraMap
         measurement = mess;
         scan(impassable);
 
-        Point currentPos = new Point(start);
+        Coord currentPos = new Coord(start);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -923,7 +924,7 @@ public class DijkstraMap
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
-                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                Coord pt = new Coord(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -932,18 +933,18 @@ public class DijkstraMap
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
-            path.add(new Point(currentPos.x, currentPos.y));
+            path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= moveLength) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    Set<Point> impassable2 = impassable;
+                    Set<Coord> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findAttackPath(moveLength, preferredRange, los, impassable2, onlyPassable, start, targets);
                 }
@@ -979,8 +980,8 @@ public class DijkstraMap
      * @param targets
      * @return
      */
-    public ArrayList<Point> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
-                                           Set<Point> impassable, Set<Point> onlyPassable, Point start, Point... targets) {
+    public ArrayList<Coord> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
+                                           Set<Coord> impassable, Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if(!initialized) return null;
         if(minPreferredRange < 0) minPreferredRange = 0;
         if(maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
@@ -993,14 +994,14 @@ public class DijkstraMap
                 }
             }
         }
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
+            impassable = new LinkedHashSet<Coord>();
         if(onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Point>();
+            onlyPassable = new LinkedHashSet<Coord>();
 
         resetMap();
-        for (Point goal : targets) {
+        for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if(goals.isEmpty())
@@ -1023,7 +1024,7 @@ public class DijkstraMap
                     continue;
                 if (gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange) {
 
-                    for (Point goal : targets) {
+                    for (Coord goal : targets) {
                         if (los == null || los.isReachable(resMap, x, y, goal.x, goal.y)) {
                             setGoal(x, y);
                             gradientMap[x][y] = 0;
@@ -1039,10 +1040,10 @@ public class DijkstraMap
         measurement = mess;
         scan(impassable);
 
-        Point currentPos = new Point(start);
+        Coord currentPos = new Coord(start);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1053,7 +1054,7 @@ public class DijkstraMap
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
-                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                Coord pt = new Coord(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1063,12 +1064,12 @@ public class DijkstraMap
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
-            path.add(new Point(currentPos.x, currentPos.y));
+            path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= moveLength) {
                 if (onlyPassable.contains(currentPos)) {
@@ -1128,8 +1129,8 @@ public class DijkstraMap
      * @param targets a Set of Point, not an array of Point or variable argument list as in other methods.
      * @return an ArrayList of Point that represents a path to travel to get to an ideal place to use tech
      */
-    public ArrayList<Point> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, LOS los,
-                                           Set<Point> impassable, Set<Point> allies, Point start, Set<Point> targets) {
+    public ArrayList<Coord> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, LOS los,
+                                           Set<Coord> impassable, Set<Coord> allies, Coord start, Set<Coord> targets) {
         if(!initialized) return null;
         tech.setMap(dungeon);
         double[][] resMap = new double[width][height];
@@ -1146,16 +1147,16 @@ public class DijkstraMap
             }
         }
 
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         if(targets == null || targets.size() == 0)
             return path;
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
+            impassable = new LinkedHashSet<Coord>();
         if(allies == null)
-            friends = new LinkedHashSet<Point>();
+            friends = new LinkedHashSet<Coord>();
         else
         {
-            friends = new LinkedHashSet<Point>(allies);
+            friends = new LinkedHashSet<Coord>(allies);
             friends.remove(start);
         }
 
@@ -1164,7 +1165,7 @@ public class DijkstraMap
         userDistanceMap = scan(impassable);
         clearGoals();
         resetMap();
-        for (Point goal : targets) {
+        for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if(goals.isEmpty())
@@ -1180,8 +1181,8 @@ public class DijkstraMap
         scan(impassable);
         clearGoals();
 
-        Point tempPt = new Point(0,0);
-        LinkedHashMap<Point, ArrayList<Point>> ideal;
+        Coord tempPt = new Coord(0, 0);
+        LinkedHashMap<Coord, ArrayList<Coord>> ideal;
         // generate an array of the single best location to attack when you are in a given cell.
         for(int x = 0; x < width; x++)
         {
@@ -1193,11 +1194,11 @@ public class DijkstraMap
                 if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK || userDistanceMap[x][y] > moveLength * 2.0)
                     continue;
                 if (gradientMap[x][y] >= tech.aoe.getMinRange() && gradientMap[x][y] <= tech.aoe.getMaxRange()) {
-                    for (Point tgt : targets) {
+                    for (Coord tgt : targets) {
                         if (los == null || los.isReachable(resMap, x, y, tgt.x, tgt.y)) {
                             ideal = tech.idealLocations(tempPt, targets, friends);
                             // this is weird but it saves the trouble of getting the iterator and checking hasNext() .
-                            for(Map.Entry<Point, ArrayList<Point>> ip : ideal.entrySet()) {
+                            for(Map.Entry<Coord, ArrayList<Coord>> ip : ideal.entrySet()) {
                                 targetMap[x][y] = ip.getKey();
                                 worthMap[x][y] = ip.getValue().size();
                                 setGoal(x, y);
@@ -1218,7 +1219,7 @@ public class DijkstraMap
         double currentDistance = gradientMap[start.x][start.y];
         if(currentDistance <= moveLength)
         {
-            Point[] g_arr = new Point[goals.size()];
+            Coord[] g_arr = new Coord[goals.size()];
             g_arr = goals.keySet().toArray(g_arr);
 
             goals.clear();
@@ -1227,7 +1228,7 @@ public class DijkstraMap
             goals.clear();
             gradientMap[start.x][start.y] = moveLength;
 
-            for (Point g : g_arr) {
+            for (Coord g : g_arr) {
                 if (gradientMap[g.x][g.y] <= moveLength && worthMap[g.x][g.y] > 0) {
                     goals.put(g, 0.0 - worthMap[g.x][g.y]);
                 }
@@ -1243,10 +1244,10 @@ public class DijkstraMap
 
         measurement = mess;
 
-        Point currentPos = new Point(start.x, start.y);
+        Coord currentPos = new Coord(start.x, start.y);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1257,7 +1258,7 @@ public class DijkstraMap
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
-                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                Coord pt = new Coord(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1276,12 +1277,12 @@ public class DijkstraMap
                 break;
             }
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
-            path.add(new Point(currentPos.x, currentPos.y));
+            path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= moveLength) {
                 if (friends.contains(currentPos)) {
@@ -1305,8 +1306,8 @@ public class DijkstraMap
 
 
     private double cachedLongerPaths = 1.2;
-    private Set<Point> cachedImpassable = new LinkedHashSet<Point>();
-    private Point[] cachedFearSources;
+    private Set<Coord> cachedImpassable = new LinkedHashSet<Coord>();
+    private Coord[] cachedFearSources;
     private double[][] cachedFleeMap;
     private int cachedSize = 1;
     /**
@@ -1332,16 +1333,16 @@ public class DijkstraMap
      * @param fearSources
      * @return
      */
-    public ArrayList<Point> findFleePath(int length, double preferLongerPaths, Set<Point> impassable,
-                                         Set<Point> onlyPassable, Point start, Point... fearSources) {
+    public ArrayList<Coord> findFleePath(int length, double preferLongerPaths, Set<Coord> impassable,
+                                         Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         if (impassable == null)
-            impassable = new LinkedHashSet<Point>();
+            impassable = new LinkedHashSet<Coord>();
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Point>();
+            onlyPassable = new LinkedHashSet<Coord>();
         if (fearSources == null || fearSources.length < 1) {
-            path = new ArrayList<Point>();
+            path = new ArrayList<Coord>();
             return path;
         }
         if (cachedSize == 1 && preferLongerPaths == cachedLongerPaths && impassable.equals(cachedImpassable) &&
@@ -1350,11 +1351,11 @@ public class DijkstraMap
         }
         else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new LinkedHashSet<Point>(impassable);
+            cachedImpassable = new LinkedHashSet<Coord>(impassable);
             cachedFearSources = fearSources.clone();
             cachedSize = 1;
             resetMap();
-            for (Point goal : fearSources) {
+            for (Coord goal : fearSources) {
                 setGoal(goal.x, goal.y);
             }
             if(goals.isEmpty())
@@ -1370,10 +1371,10 @@ public class DijkstraMap
             scan(impassable);
             cachedFleeMap = gradientMap.clone();
         }
-        Point currentPos = new Point(start);
+        Coord currentPos = new Coord(start);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1384,7 +1385,7 @@ public class DijkstraMap
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
-                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                Coord pt = new Coord(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1393,23 +1394,23 @@ public class DijkstraMap
                 }
             }
             if (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
             if(path.size() > 0) {
-                Point last = path.get(path.size() - 1);
+                Coord last = path.get(path.size() - 1);
                 if (gradientMap[last.x][last.y] <= gradientMap[currentPos.x][currentPos.y])
                     break;
             }
-            path.add(new Point(currentPos.x, currentPos.y));
+            path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= length) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    Set<Point> impassable2 = impassable;
+                    Set<Coord> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findFleePath(length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
@@ -1441,27 +1442,27 @@ public class DijkstraMap
      * @param targets
      * @return
      */
-    public ArrayList<Point> findPathLarge(int size, int length, Set<Point> impassable,
-                                     Set<Point> onlyPassable, Point start, Point... targets) {
+    public ArrayList<Coord> findPathLarge(int size, int length, Set<Coord> impassable,
+                                     Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if(!initialized) return null;
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
+            impassable = new LinkedHashSet<Coord>();
         if(onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Point>();
+            onlyPassable = new LinkedHashSet<Coord>();
 
         resetMap();
-        for (Point goal : targets) {
+        for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if(goals.isEmpty())
             return path;
 
         scan(impassable, size);
-        Point currentPos = new Point(start);
+        Coord currentPos = new Coord(start);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1472,7 +1473,7 @@ public class DijkstraMap
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
-                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                Coord pt = new Coord(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1482,18 +1483,18 @@ public class DijkstraMap
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
-            path.add(new Point(currentPos.x, currentPos.y));
+            path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= length) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    Set<Point> impassable2 = impassable;
+                    Set<Coord> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findPathLarge(size, length, impassable2, onlyPassable, start, targets);
                 }
@@ -1530,8 +1531,8 @@ public class DijkstraMap
      * @param targets
      * @return
      */
-    public ArrayList<Point> findAttackPathLarge(int size, int moveLength, int preferredRange, LOS los, Set<Point> impassable,
-                                           Set<Point> onlyPassable, Point start, Point... targets) {
+    public ArrayList<Coord> findAttackPathLarge(int size, int moveLength, int preferredRange, LOS los, Set<Coord> impassable,
+                                           Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if(!initialized) return null;
         if(preferredRange < 0) preferredRange = 0;
         double[][] resMap = new double[width][height];
@@ -1543,14 +1544,14 @@ public class DijkstraMap
                 }
             }
         }
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
+            impassable = new LinkedHashSet<Coord>();
         if(onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Point>();
+            onlyPassable = new LinkedHashSet<Coord>();
 
         resetMap();
-        for (Point goal : targets) {
+        for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if(goals.isEmpty())
@@ -1572,7 +1573,7 @@ public class DijkstraMap
                 if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
                     continue;
                 if (x+2 < width && y + 2 < height && gradientMap[x][y] == preferredRange && los != null) {
-                    for (Point goal : targets) {
+                    for (Coord goal : targets) {
                         if (los.isReachable(resMap, x, y, goal.x, goal.y)
                                 || los.isReachable(resMap, x+1, y, goal.x, goal.y)
                                 || los.isReachable(resMap, x, y+1, goal.x, goal.y)
@@ -1591,10 +1592,10 @@ public class DijkstraMap
         measurement = mess;
         scan(impassable, size);
 
-        Point currentPos = new Point(start);
+        Coord currentPos = new Coord(start);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1605,7 +1606,7 @@ public class DijkstraMap
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
-                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                Coord pt = new Coord(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1615,18 +1616,18 @@ public class DijkstraMap
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
-            path.add(new Point(currentPos.x, currentPos.y));
+            path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= moveLength) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    Set<Point> impassable2 = impassable;
+                    Set<Coord> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findAttackPathLarge(size, moveLength, preferredRange, los, impassable2, onlyPassable, start, targets);
                 }
@@ -1666,8 +1667,8 @@ public class DijkstraMap
      * @param targets
      * @return
      */
-    public ArrayList<Point> findAttackPathLarge(int size, int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
-                                           Set<Point> impassable, Set<Point> onlyPassable, Point start, Point... targets) {
+    public ArrayList<Coord> findAttackPathLarge(int size, int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
+                                           Set<Coord> impassable, Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if(!initialized) return null;
         if(minPreferredRange < 0) minPreferredRange = 0;
         if(maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
@@ -1680,14 +1681,14 @@ public class DijkstraMap
                 }
             }
         }
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         if(impassable == null)
-            impassable = new LinkedHashSet<Point>();
+            impassable = new LinkedHashSet<Coord>();
         if(onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Point>();
+            onlyPassable = new LinkedHashSet<Coord>();
 
         resetMap();
-        for (Point goal : targets) {
+        for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
         }
         if(goals.isEmpty())
@@ -1710,7 +1711,7 @@ public class DijkstraMap
                     continue;
                 if (x+2 < width && y + 2 < height && gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange
                         && los != null) {
-                    for (Point goal : targets) {
+                    for (Coord goal : targets) {
                         if (los.isReachable(resMap, x, y, goal.x, goal.y)
                                 || los.isReachable(resMap, x+1, y, goal.x, goal.y)
                                 || los.isReachable(resMap, x, y+1, goal.x, goal.y)
@@ -1729,10 +1730,10 @@ public class DijkstraMap
         measurement = mess;
         scan(impassable, size);
 
-        Point currentPos = new Point(start);
+        Coord currentPos = new Coord(start);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
 
@@ -1744,7 +1745,7 @@ public class DijkstraMap
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
-                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                Coord pt = new Coord(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1753,18 +1754,18 @@ public class DijkstraMap
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
-            path.add(new Point(currentPos.x, currentPos.y));
+            path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= moveLength) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    Set<Point> impassable2 = impassable;
+                    Set<Coord> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
                             onlyPassable, start, targets);
@@ -1806,16 +1807,16 @@ public class DijkstraMap
      * @param fearSources
      * @return
      */
-    public ArrayList<Point> findFleePathLarge(int size, int length, double preferLongerPaths, Set<Point> impassable,
-                                         Set<Point> onlyPassable, Point start, Point... fearSources) {
+    public ArrayList<Coord> findFleePathLarge(int size, int length, double preferLongerPaths, Set<Coord> impassable,
+                                         Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
-        path = new ArrayList<Point>();
+        path = new ArrayList<Coord>();
         if (impassable == null)
-            impassable = new LinkedHashSet<Point>();
+            impassable = new LinkedHashSet<Coord>();
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Point>();
+            onlyPassable = new LinkedHashSet<Coord>();
         if (fearSources == null || fearSources.length < 1) {
-            path = new ArrayList<Point>();
+            path = new ArrayList<Coord>();
             return path;
         }
         if (size == cachedSize && preferLongerPaths == cachedLongerPaths && impassable.equals(cachedImpassable)
@@ -1824,11 +1825,11 @@ public class DijkstraMap
         }
         else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new LinkedHashSet<Point>(impassable);
+            cachedImpassable = new LinkedHashSet<Coord>(impassable);
             cachedFearSources = fearSources.clone();
             cachedSize = size;
             resetMap();
-            for (Point goal : fearSources) {
+            for (Coord goal : fearSources) {
                 setGoal(goal.x, goal.y);
             }
             if(goals.isEmpty())
@@ -1844,10 +1845,10 @@ public class DijkstraMap
             scan(impassable, size);
             cachedFleeMap = gradientMap.clone();
         }
-        Point currentPos = new Point(start);
+        Coord currentPos = new Coord(start);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
 
@@ -1859,7 +1860,7 @@ public class DijkstraMap
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
-                Point pt = new Point(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                Coord pt = new Coord(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
                         best = gradientMap[pt.x][pt.y];
@@ -1868,23 +1869,23 @@ public class DijkstraMap
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Point>();
+                path = new ArrayList<Coord>();
                 break;
             }
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
             if(path.size() > 0) {
-                Point last = path.get(path.size() - 1);
+                Coord last = path.get(path.size() - 1);
                 if (gradientMap[last.x][last.y] <= gradientMap[currentPos.x][currentPos.y])
                     break;
             }
-            path.add(new Point(currentPos.x, currentPos.y));
+            path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
             if (path.size() >= length) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    Set<Point> impassable2 = impassable;
+                    Set<Coord> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findFleePathLarge(size, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
@@ -1904,12 +1905,12 @@ public class DijkstraMap
      * @param starts a vararg group of Points to step outward from; this often will only need to be one Point.
      * @return A LinkedHashMap of Point keys to Double values; the starts are included in this with the value 0.0.
      */
-    public LinkedHashMap<Point, Double> floodFill(int radius, Point... starts) {
+    public LinkedHashMap<Coord, Double> floodFill(int radius, Coord... starts) {
         if(!initialized) return null;
-        LinkedHashMap<Point, Double> fill = new LinkedHashMap<Point, Double>();
+        LinkedHashMap<Coord, Double> fill = new LinkedHashMap<Coord, Double>();
 
         resetMap();
-        for (Point goal : starts) {
+        for (Coord goal : starts) {
             setGoal(goal.x, goal.y);
         }
         if(goals.isEmpty())
@@ -1924,7 +1925,7 @@ public class DijkstraMap
                 temp = gradientMap[x][y];
                 if(temp < FLOOR)
                 {
-                    fill.put(new Point(x, y), temp);
+                    fill.put(new Coord(x, y), temp);
                 }
             }
         }

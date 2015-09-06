@@ -10,6 +10,7 @@ import squidpony.squidgrid.gui.SquidLayers;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -35,7 +36,7 @@ public class EverythingDemo {
     private double[][] res;
     private int[][] colors, bgColors, lights;
     private double[][] fovmap, pathMap;
-    private Point player;
+    private Coord player;
     private FOV fov;
     private int width, height;
     private SquidKey keyListener;
@@ -44,7 +45,7 @@ public class EverythingDemo {
     private boolean drawing;
     private int health = 7;
 
-    private HashMap<Point, Integer> monsters;
+    private HashMap<Coord, Integer> monsters;
     private DijkstraMap getToPlayer;
 
     /**
@@ -75,10 +76,10 @@ public class EverythingDemo {
         player = DungeonUtility.randomFloor(placement);
         placement[player.x][player.y] = '@';
         int numMonsters = 25;
-        monsters = new HashMap<Point, Integer>(numMonsters);
+        monsters = new HashMap<Coord, Integer>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Point monPos = DungeonUtility.randomFloor(placement);
+            Coord monPos = DungeonUtility.randomFloor(placement);
             monsters.put(monPos, 0);
             placement[monPos.x][monPos.y] = 'M';
         }
@@ -134,9 +135,9 @@ public class EverythingDemo {
 
             // recalculate FOV, store it in fovmap for the redraw to use.
             fovmap = fov.calculateFOV(res, player.x, player.y, 8);
-            HashMap<Point, Integer> newMons = new HashMap<Point, Integer>(monsters.size());
+            HashMap<Coord, Integer> newMons = new HashMap<Coord, Integer>(monsters.size());
             // handle monster turns
-            for(HashMap.Entry<Point, Integer> mon : monsters.entrySet())
+            for(HashMap.Entry<Coord, Integer> mon : monsters.entrySet())
             {
                 // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
                 if(mon.getValue() > 0 || fovmap[mon.getKey().x][mon.getKey().y] > 0.1)
@@ -147,7 +148,7 @@ public class EverythingDemo {
                     double best = 9999.0;
                     for(Direction d : getToPlayer.shuffle(Direction.CARDINALS))
                     {
-                        Point tmp = new Point(mon.getKey().x + d.deltaX, mon.getKey().y + d.deltaY);
+                        Coord tmp = new Coord(mon.getKey().x + d.deltaX, mon.getKey().y + d.deltaY);
                         if(pathMap[tmp.x][tmp.y] < best &&
                                 !monsters.containsKey(tmp) && !newMons.containsKey(tmp))
                         {
@@ -159,7 +160,7 @@ public class EverythingDemo {
                     }
                     if(choice != null)
                     {
-                        Point tmp = new Point(mon.getKey().x + choice.deltaX, mon.getKey().y + choice.deltaY);
+                        Coord tmp = new Coord(mon.getKey().x + choice.deltaX, mon.getKey().y + choice.deltaY);
                         // if we would move into the player, instead damage the player and give newMons the current
                         // position of this monster.
                         if(player.equals(tmp))
@@ -261,7 +262,7 @@ public class EverythingDemo {
             // the player doesn't care what was already rendered at its cell on the map.  30 is dark purple.
             display.put(player.x, player.y, Character.forDigit(health, 10), 30);
 
-            for(Point mon : monsters.keySet()) {
+            for(Coord mon : monsters.keySet()) {
                 if (fovmap[mon.x][mon.y] > 0.0) {
                     display.put(mon.x, mon.y, 'M', 11);
                     unchanged[mon.x][mon.y] = false;

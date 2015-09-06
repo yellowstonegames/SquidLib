@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import squidpony.squidgrid.Direction;
+import squidpony.squidmath.Coord;
 
 /**
  * Animates an object moving smoothly in a direction and then bouncing back.

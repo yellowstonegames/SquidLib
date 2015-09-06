@@ -2,6 +2,7 @@ package squidpony.squidai;
 
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Spill;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -25,7 +26,7 @@ import java.util.*;
  */
 public class CloudAOE implements AOE {
     private Spill spill;
-    private Point center, origin = null;
+    private Coord center, origin = null;
     private int volume;
     private long seed;
     private boolean expanding;
@@ -34,7 +35,7 @@ public class CloudAOE implements AOE {
     private Radius metric = Radius.SQUARE;
     private char[][] dungeon;
 
-    public CloudAOE(Point center, int volume, Radius radiusType)
+    public CloudAOE(Coord center, int volume, Radius radiusType)
     {
         LightRNG l = new LightRNG();
         this.seed = l.getState();
@@ -56,7 +57,7 @@ public class CloudAOE implements AOE {
         }
     }
 
-    public CloudAOE(Point center, int volume, Radius radiusType, int minRange, int maxRange)
+    public CloudAOE(Coord center, int volume, Radius radiusType, int minRange, int maxRange)
     {
         LightRNG l = new LightRNG();
         this.seed = l.getState();
@@ -79,7 +80,7 @@ public class CloudAOE implements AOE {
                 break;
         }
     }
-    public CloudAOE(Point center, int volume, Radius radiusType, long rngSeed)
+    public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed)
     {
         this.seed = rngSeed;
         this.spill = new Spill(new RNG(new LightRNG(rngSeed)));
@@ -99,7 +100,7 @@ public class CloudAOE implements AOE {
                 break;
         }
     }
-    public CloudAOE(Point center, int volume, Radius radiusType, long rngSeed, int minRange, int maxRange)
+    public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed, int minRange, int maxRange)
     {
         this.seed = rngSeed;
         this.spill = new Spill(new RNG(new LightRNG(rngSeed)));
@@ -126,18 +127,18 @@ public class CloudAOE implements AOE {
         LightRNG l = new LightRNG();
         this.seed = l.getState();
         this.spill = new Spill(new RNG(l));
-        this.center = new Point(1, 1);
+        this.center = new Coord(1, 1);
         this.volume = 1;
         this.spill.measurement = Spill.Measurement.MANHATTAN;
         rt = Radius.DIAMOND;
         this.expanding = false;
     }
 
-    public Point getCenter() {
+    public Coord getCenter() {
         return center;
     }
 
-    public void setCenter(Point center) {
+    public void setCenter(Coord center) {
         if (AreaUtils.verifyLimit(limitType, origin, center)) {
             this.center = center;
         }
@@ -171,13 +172,13 @@ public class CloudAOE implements AOE {
     }
 
     @Override
-    public void shift(Point aim) {
+    public void shift(Coord aim) {
         setCenter(aim);
     }
 
     @Override
-    public boolean mayContainTarget(Set<Point> targets) {
-        for (Point p : targets)
+    public boolean mayContainTarget(Set<Coord> targets) {
+        for (Coord p : targets)
         {
             if(rt.radius(center.x, center.y, p.x, p.y) <= Math.sqrt(volume) * 0.75)
                 return true;
@@ -186,31 +187,31 @@ public class CloudAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<Point, ArrayList<Point>>();
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+            return new LinkedHashMap<Coord, ArrayList<Coord>>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
 
         if(totalTargets == 0 || volume <= 0)
             return bestPoints;
 
         if(volume == 1)
         {
-            for(Point p : targets)
+            for(Coord p : targets)
             {
-                ArrayList<Point> ap = new ArrayList<Point>();
+                ArrayList<Coord> ap = new ArrayList<Coord>();
                 ap.add(p);
                 bestPoints.put(p, ap);
             }
             return bestPoints;
         }
-        Point[] ts = targets.toArray(new Point[targets.size()]);
-        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = exs[0];
+        Coord[] ts = targets.toArray(new Coord[targets.size()]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord t = exs[0];
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
 
@@ -221,7 +222,7 @@ public class CloudAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
 
-        Point tempPt = new Point(0, 0);
+        Coord tempPt = new Coord(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -299,7 +300,7 @@ public class CloudAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
@@ -309,12 +310,12 @@ public class CloudAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
@@ -322,7 +323,7 @@ public class CloudAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
             }
@@ -332,33 +333,33 @@ public class CloudAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
 
         //requiredExclusions.remove(origin);
 
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
 
         if(totalTargets == 0 || volume <= 0)
             return bestPoints;
 
         if(volume == 1)
         {
-            for(Point p : priorityTargets)
+            for(Coord p : priorityTargets)
             {
-                ArrayList<Point> ap = new ArrayList<Point>();
+                ArrayList<Coord> ap = new ArrayList<Coord>();
                 ap.add(p);
                 bestPoints.put(p, ap);
             }
             return bestPoints;
         }
-        Point[] pts = priorityTargets.toArray(new Point[priorityTargets.size()]);
-        Point[] lts = lesserTargets.toArray(new Point[lesserTargets.size()]);
-        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = exs[0];
+        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
+        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord t = exs[0];
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
         Spill sp;
@@ -369,7 +370,7 @@ public class CloudAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
             Arrays.fill(dungeonPriorities[i], '#');
         }
-        Point tempPt = new Point(0,0);
+        Coord tempPt = new Coord(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -504,7 +505,7 @@ public class CloudAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if((pbits & (1 << i)) != 0)
@@ -518,12 +519,12 @@ public class CloudAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if((pbits & (1 << i)) != 0)
@@ -539,7 +540,7 @@ public class CloudAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
             }
@@ -635,9 +636,9 @@ public class CloudAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, Double> findArea() {
+    public LinkedHashMap<Coord, Double> findArea() {
         spill.start(center, volume, null);
-        LinkedHashMap<Point, Double> r = AreaUtils.arrayToHashMap(spill.spillMap);
+        LinkedHashMap<Coord, Double> r = AreaUtils.arrayToHashMap(spill.spillMap);
         if(!expanding)
         {
             spill.reset();
@@ -647,12 +648,12 @@ public class CloudAOE implements AOE {
     }
 
     @Override
-    public Point getOrigin() {
+    public Coord getOrigin() {
         return origin;
     }
 
     @Override
-    public void setOrigin(Point origin) {
+    public void setOrigin(Coord origin) {
         this.origin = origin;
 
     }

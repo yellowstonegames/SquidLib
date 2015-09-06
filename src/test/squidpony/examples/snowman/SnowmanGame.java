@@ -17,6 +17,7 @@ import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.gui.SquidKey;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.Direction;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 
 /**

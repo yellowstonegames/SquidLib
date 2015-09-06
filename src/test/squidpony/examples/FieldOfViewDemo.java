@@ -20,6 +20,8 @@ import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Direction;
+import squidpony.squidmath.Coord;
+
 import static squidpony.squidgrid.Direction.*;
 
 /**
@@ -383,10 +385,10 @@ public class FieldOfViewDemo {
 
         //run the LOS calculation
         boolean seen = los.isReachable(resistances, startx, starty, endx, endy);
-        Queue<Point> path = los.getLastPath();
+        Queue<Coord> path = los.getLastPath();
 
         //draw out background for path followed
-        for (Point p : path) {
+        for (Coord p : path) {
             back.put(p.x, p.y, SColorFactory.blend(SColor.BLUE_GREEN_DYE, SColor.DARK_INDIGO, panel.getStrategy().radius(startx, starty, p.x, p.y) / panel.getStrategy().radius(startx, starty, endx, endy)));
         }
 

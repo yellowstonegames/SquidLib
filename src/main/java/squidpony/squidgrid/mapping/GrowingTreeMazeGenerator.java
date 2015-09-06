@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 
 /**
@@ -42,13 +43,13 @@ public class GrowingTreeMazeGenerator {
         x *= 2;
         y *= 2;
 
-        ArrayList<Point> deck = new ArrayList<>();
-        deck.add(new Point(x, y));
+        ArrayList<Coord> deck = new ArrayList<>();
+        deck.add(new Coord(x, y));
 
         List<Direction> dirs = Arrays.asList(Direction.CARDINALS);
         while (!deck.isEmpty()) {
             int i = choosing.chooseIndex(deck.size());
-            Point p = deck.get(i);
+            Coord p = deck.get(i);
             Collections.shuffle(dirs, rng.asRandom());
 
             boolean foundNeighbor = false;
@@ -63,7 +64,7 @@ public class GrowingTreeMazeGenerator {
 //                        }
                         map[x][y] = true;
                         map[p.x + dir.deltaX][p.y + dir.deltaY] = true;
-                        deck.add(new Point(x, y));
+                        deck.add(new Coord(x, y));
                         break;
                     }
                 }

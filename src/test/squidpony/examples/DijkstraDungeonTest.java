@@ -6,6 +6,7 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -30,7 +31,7 @@ public class DijkstraDungeonTest {
 
             System.out.println(dg);
 
-            Point goal1 = DungeonUtility.randomFloor(dun),
+            Coord goal1 = DungeonUtility.randomFloor(dun),
                     goal2 = DungeonUtility.randomFloor(dun), goal3 = DungeonUtility.randomFloor(dun),
                     goal4 = DungeonUtility.randomFloor(dun), goal5 = DungeonUtility.randomFloor(dun),
                     entry = DungeonUtility.randomFloor(dun);
@@ -53,7 +54,7 @@ public class DijkstraDungeonTest {
             }
             md[entry.x * 2][entry.y] = '@';
             int i = 1;
-            for (Point pt : dijkstra.path) {
+            for (Coord pt : dijkstra.path) {
                 md[pt.x * 2][pt.y] = ("" + (i++ % 10)).charAt(0);
             }
             dg.setDungeon(md);
@@ -99,7 +100,7 @@ public class DijkstraDungeonTest {
             }
             md[entry.x * 2][entry.y] = '@';
             i = 1;
-            for (Point pt : dijkstra.path) {
+            for (Coord pt : dijkstra.path) {
                 md[pt.x * 2][pt.y] = ("" + (i++ % 10)).charAt(0);
             }
             dg.setDungeon(md);
@@ -153,7 +154,7 @@ public class DijkstraDungeonTest {
             }
             md[entry.x * 2][entry.y] = '@';
             i = 1;
-            for (Point pt : dijkstra.path) {
+            for (Coord pt : dijkstra.path) {
                 md[pt.x * 2][pt.y] = ("" + (i++ % 10)).charAt(0);
             }
             dg.setDungeon(md);

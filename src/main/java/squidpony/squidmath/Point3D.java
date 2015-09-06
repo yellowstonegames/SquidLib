@@ -8,7 +8,7 @@ import java.awt.Point;
  * @author Lewis Potter
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class Point3D extends Point {
+public class Point3D extends Coord {
 
     public int z;
 

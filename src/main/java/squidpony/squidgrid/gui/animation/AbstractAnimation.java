@@ -1,5 +1,7 @@
 package squidpony.squidgrid.gui.animation;
 
+import squidpony.squidmath.Coord;
+
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;

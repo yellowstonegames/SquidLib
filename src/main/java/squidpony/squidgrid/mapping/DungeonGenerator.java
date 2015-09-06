@@ -4,6 +4,7 @@ import squidpony.annotation.Beta;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 import squidpony.squidgrid.Spill;
@@ -219,10 +220,10 @@ public class DungeonGenerator {
         return this;
     }
 
-    private LinkedHashSet<Point> removeAdjacent(LinkedHashSet<Point> coll, Point pt)
+    private LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt)
     {
-        for(Point temp : new Point[]{new Point(pt.x+1, pt.y), new Point(pt.x-1, pt.y),
-                new Point(pt.x, pt.y+1), new Point(pt.x, pt.y-1)})
+        for(Coord temp : new Coord[]{new Coord(pt.x + 1, pt.y), new Coord(pt.x - 1, pt.y),
+                new Coord(pt.x, pt.y + 1), new Coord(pt.x, pt.y - 1)})
         {
             if(coll.contains(temp) && !(temp.x == pt.x && temp.y == pt.y))
                 coll.remove(temp);
@@ -230,13 +231,13 @@ public class DungeonGenerator {
 
         return coll;
     }
-    private LinkedHashSet<Point> removeAdjacent(LinkedHashSet<Point> coll, Point pt1, Point pt2)
+    private LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt1, Coord pt2)
     {
 
-        for(Point temp : new Point[]{new Point(pt1.x+1, pt1.y), new Point(pt1.x-1, pt1.y),
-                new Point(pt1.x, pt1.y+1), new Point(pt1.x, pt1.y-1),
-                new Point(pt2.x+1, pt2.y), new Point(pt2.x-1, pt2.y),
-                new Point(pt2.x, pt2.y+1), new Point(pt2.x, pt2.y-1),})
+        for(Coord temp : new Coord[]{new Coord(pt1.x + 1, pt1.y), new Coord(pt1.x - 1, pt1.y),
+                new Coord(pt1.x, pt1.y + 1), new Coord(pt1.x, pt1.y - 1),
+                new Coord(pt2.x + 1, pt2.y), new Coord(pt2.x - 1, pt2.y),
+                new Coord(pt2.x, pt2.y + 1), new Coord(pt2.x, pt2.y - 1),})
         {
             if(coll.contains(temp) && !(temp.x == pt1.x && temp.y == pt1.y) && !(temp.x == pt2.x && temp.y == pt2.y))
                 coll.remove(temp);
@@ -245,10 +246,10 @@ public class DungeonGenerator {
         return coll;
     }
 
-    private LinkedHashSet<Point> viableDoorways(boolean doubleDoors, char[][] map)
+    private LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map)
     {
-        LinkedHashSet<Point> doors = new LinkedHashSet<Point>();
-        Point temp = new Point(0, 0);
+        LinkedHashSet<Coord> doors = new LinkedHashSet<Coord>();
+        Coord temp = new Coord(0, 0);
 
         for(int x = 1; x < map.length - 1; x++, temp.x = x) {
             for (int y = 1; y < map[x].length - 1; y++, temp.y = y) {
@@ -263,9 +264,9 @@ public class DungeonGenerator {
                                 && map[x][y + 1] != '#' && map[x][y - 1] != '#'
                                 && map[x+1][y + 1] != '#' && map[x+1][y - 1] != '#') {
                             if (map[x + 2][y + 1] != '#' || map[x - 1][y + 1] != '#' || map[x + 2][y - 1] != '#' || map[x - 1][y - 1] != '#') {
-                                doors.add(new Point(x, y));
-                                doors.add(new Point(x + 1, y));
-                                doors = removeAdjacent(doors, new Point(x, y), new Point(x + 1, y));
+                                doors.add(new Coord(x, y));
+                                doors.add(new Coord(x + 1, y));
+                                doors = removeAdjacent(doors, new Coord(x, y), new Coord(x + 1, y));
                                 continue;
                             }
                         } else if (map[x][y+1] != '#' &&
@@ -273,9 +274,9 @@ public class DungeonGenerator {
                                 && map[x + 1][y] != '#' && map[x - 1][y] != '#'
                                 && map[x + 1][y+1] != '#' && map[x - 1][y+1] != '#') {
                             if (map[x + 1][y + 2] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y + 2] != '#' || map[x - 1][y - 1] != '#') {
-                                doors.add(new Point(x, y));
-                                doors.add(new Point(x, y+1));
-                                doors = removeAdjacent(doors, new Point(x, y), new Point(x, y+1));
+                                doors.add(new Coord(x, y));
+                                doors.add(new Coord(x, y + 1));
+                                doors = removeAdjacent(doors, new Coord(x, y), new Coord(x, y + 1));
                                 continue;
                             }
                         }
@@ -283,13 +284,13 @@ public class DungeonGenerator {
                 }
                 if (map[x + 1][y] == '#' && map[x - 1][y] == '#' && map[x][y + 1] != '#' && map[x][y - 1] != '#') {
                     if (map[x + 1][y + 1] != '#' || map[x - 1][y + 1] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y - 1] != '#') {
-                        doors.add(new Point(x, y));
-                        doors = removeAdjacent(doors, new Point(x, y));
+                        doors.add(new Coord(x, y));
+                        doors = removeAdjacent(doors, new Coord(x, y));
                     }
                 } else if (map[x][y + 1] == '#' && map[x][y - 1] == '#' && map[x + 1][y] != '#' && map[x - 1][y] != '#') {
                     if (map[x + 1][y + 1] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y + 1] != '#' || map[x - 1][y - 1] != '#') {
-                        doors.add(new Point(x, y));
-                        doors = removeAdjacent(doors, new Point(x, y));
+                        doors.add(new Coord(x, y));
+                        doors = removeAdjacent(doors, new Coord(x, y));
                     }
                 }
 
@@ -338,10 +339,10 @@ public class DungeonGenerator {
             }
         }
 
-        LinkedHashSet<Point> floors = new LinkedHashSet<Point>();
-        LinkedHashSet<Point> doorways = new LinkedHashSet<Point>();
-        LinkedHashSet<Point> hazards = new LinkedHashSet<Point>();
-        Point temp = new Point(0, 0);
+        LinkedHashSet<Coord> floors = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> doorways = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> hazards = new LinkedHashSet<Coord>();
+        Coord temp = new Coord(0, 0);
         boolean doubleDoors = false;
         int doorFill = 0;
         int waterFill = 0;
@@ -365,7 +366,7 @@ public class DungeonGenerator {
 
         doorways = viableDoorways(doubleDoors, map);
 
-        LinkedHashSet<Point> obstacles = new LinkedHashSet<Point>(doorways.size() * doorFill / 100);
+        LinkedHashSet<Coord> obstacles = new LinkedHashSet<Coord>(doorways.size() * doorFill / 100);
         if(doorFill > 0)
         {
             int total = doorways.size() * doorFill / 100;
@@ -373,7 +374,7 @@ public class DungeonGenerator {
             BigLoop:
             for(int i = 0; i < total; i++)
             {
-                Point entry = (Point) doorways.toArray()[rng.nextInt(doorways.size())];
+                Coord entry = (Coord) doorways.toArray()[rng.nextInt(doorways.size())];
                 if(map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#')
                 {
                     map[entry.x][entry.y] = '+';
@@ -381,13 +382,13 @@ public class DungeonGenerator {
                 else {
                     map[entry.x][entry.y] = '/';
                 }
-                obstacles.add(new Point(entry));
-                Point[] adj = new Point[]{new Point(entry.x + 1, entry.y), new Point(entry.x - 1, entry.y),
-                        new Point(entry.x, entry.y + 1), new Point(entry.x, entry.y - 1)};
-                for(Point near : adj) {
+                obstacles.add(new Coord(entry));
+                Coord[] adj = new Coord[]{new Coord(entry.x + 1, entry.y), new Coord(entry.x - 1, entry.y),
+                        new Coord(entry.x, entry.y + 1), new Coord(entry.x, entry.y - 1)};
+                for(Coord near : adj) {
                     if (doorways.contains(near)) {
                         map[near.x][near.y] = '#';
-                        obstacles.add(new Point(near.x, near.y));
+                        obstacles.add(new Coord(near.x, near.y));
                         doorways.remove(near);
                         i++;
                         doorways.remove(entry);
@@ -404,7 +405,7 @@ public class DungeonGenerator {
             {
                 if(map[x][y] == '.' && !obstacles.contains(temp))
                 {
-                    floors.add(new Point(x, y));
+                    floors.add(new Coord(x, y));
                     int ctr = 0;
                     if(map[x+1][y] != '#') ++ctr;
                     if(map[x-1][y] != '#') ++ctr;
@@ -414,7 +415,7 @@ public class DungeonGenerator {
                     if(map[x-1][y+1] != '#') ++ctr;
                     if(map[x+1][y-1] != '#') ++ctr;
                     if(map[x-1][y-1] != '#') ++ctr;
-                    if(ctr >= 5) hazards.add(new Point(x, y));
+                    if(ctr >= 5) hazards.add(new Coord(x, y));
                 }
             }
         }
@@ -440,10 +441,10 @@ public class DungeonGenerator {
             for(int i = 0; i < numPools; i++)
             {
                 floors.removeAll(obstacles);
-                Point entry = (Point) floors.toArray()[rng.nextInt(floors.size())];
+                Coord entry = (Coord) floors.toArray()[rng.nextInt(floors.size())];
 //                spill.start(entry, volumes[i] / 3, obstacles);
 //                spill.start(entry, 2 * volumes[i] / 3, obstacles);
-                ArrayList<Point> ordered = new ArrayList<Point>(spill.start(entry, volumes[i], obstacles));
+                ArrayList<Coord> ordered = new ArrayList<Coord>(spill.start(entry, volumes[i], obstacles));
                 floors.removeAll(ordered);
                 hazards.removeAll(ordered);
                 obstacles.addAll(ordered);
@@ -463,9 +464,9 @@ public class DungeonGenerator {
             int frustration = 0;
             while (bonusVolume > 0 && frustration < 50)
             {
-                Point entry = DungeonUtility.randomFloor(map);
-                ArrayList<Point> finisher = spill.start(entry, bonusVolume, obstacles);
-                for(Point p : finisher)
+                Coord entry = DungeonUtility.randomFloor(map);
+                ArrayList<Coord> finisher = spill.start(entry, bonusVolume, obstacles);
+                for(Coord p : finisher)
                 {
                     map[p.x][p.y] = '~';
                 }
@@ -483,7 +484,7 @@ public class DungeonGenerator {
 
             for(int i = 0; i < total; i++)
             {
-                Point entry = (Point) hazards.toArray()[rng.nextInt(hazards.size())];
+                Coord entry = (Coord) hazards.toArray()[rng.nextInt(hazards.size())];
                 map[entry.x][entry.y] = '^';
                 hazards.remove(entry);
             }

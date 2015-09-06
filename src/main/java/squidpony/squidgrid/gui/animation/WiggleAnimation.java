@@ -1,5 +1,7 @@
 package squidpony.squidgrid.gui.animation;
 
+import squidpony.squidmath.Coord;
+
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
@@ -19,7 +21,7 @@ public class WiggleAnimation extends AbstractAnimation {
     private long stopTime = 0;//0 indicates that it is continuous
     private Point2D.Double location = new Point2D.Double(0, 0);
     private double impulse;//speed to move
-    private Point targetMovement = new Point(0, 0);
+    private Coord targetMovement = new Coord(0, 0);
     private static Random rng = new Random();
 
     public WiggleAnimation(BufferedImage image, Point start, double impulse, Point maxDistance, long duration) {

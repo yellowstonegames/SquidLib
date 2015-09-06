@@ -4,6 +4,7 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidgrid.SoundMap;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -31,14 +32,14 @@ public class SoundTest {
 
             System.out.println(dg);
 
-            HashSet<Point> dudes = new HashSet<Point>(5);
+            HashSet<Coord> dudes = new HashSet<Coord>(5);
             dudes.add(DungeonUtility.randomFloor(dun));
             dudes.add(DungeonUtility.randomFloor(dun));
             dudes.add(DungeonUtility.randomFloor(dun));
             dudes.add(DungeonUtility.randomFloor(dun));
             dudes.add(DungeonUtility.randomFloor(dun));
 
-            HashMap<Point, Double> noises = new HashMap<Point, Double>(8);
+            HashMap<Coord, Double> noises = new HashMap<Coord, Double>(8);
             for(int i = 0; i < 6; i++)
             {
                 noises.put(DungeonUtility.randomStep(dun, DungeonUtility.randomFloor(dun),
@@ -62,11 +63,11 @@ public class SoundTest {
                 }
             }
             int i = 1;
-            for (Map.Entry<Point, Double> snd : audio.sounds.entrySet()) {
+            for (Map.Entry<Coord, Double> snd : audio.sounds.entrySet()) {
                 md[snd.getKey().x * 2][snd.getKey().y] = '!';
             }
 
-            for (Map.Entry<Point, Double> guy : audio.alerted.entrySet()) {
+            for (Map.Entry<Coord, Double> guy : audio.alerted.entrySet()) {
                     md[guy.getKey().x * 2][guy.getKey().y] = (String.format("%-2d", (int) Math.floor(guy.getValue()))).charAt(0);
                     md[guy.getKey().x * 2 + 1][guy.getKey().y] = (String.format("%-2d", (int) Math.floor(guy.getValue()))).charAt(1);
             }

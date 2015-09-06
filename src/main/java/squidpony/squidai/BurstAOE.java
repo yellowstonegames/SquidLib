@@ -3,6 +3,7 @@ package squidpony.squidai;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidmath.Coord;
 
 import java.awt.*;
 import java.util.*;
@@ -19,21 +20,21 @@ import java.util.*;
  */
 public class BurstAOE implements AOE {
     private FOV fov;
-    private Point center, origin;
+    private Coord center, origin;
     private int radius;
     private double[][] map;
     private char[][] dungeon;
     private Radius radiusType, limitType;
     private int minRange = 1, maxRange = 1;
     private Radius metric = Radius.SQUARE;
-    public BurstAOE(Point center, int radius, Radius radiusType)
+    public BurstAOE(Coord center, int radius, Radius radiusType)
     {
         fov = new FOV(FOV.SHADOW);
         this.center = center;
         this.radius = radius;
         this.radiusType = radiusType;
     }
-    public BurstAOE(Point center, int radius, Radius radiusType, int minRange, int maxRange)
+    public BurstAOE(Coord center, int radius, Radius radiusType, int minRange, int maxRange)
     {
         fov = new FOV(FOV.SHADOW);
         this.center = center;
@@ -45,16 +46,16 @@ public class BurstAOE implements AOE {
     private BurstAOE()
     {
         fov = new FOV(FOV.SHADOW);
-        center = new Point(1, 1);
+        center = new Coord(1, 1);
         radius = 1;
         radiusType = Radius.DIAMOND;
     }
 
-    public Point getCenter() {
+    public Coord getCenter() {
         return center;
     }
 
-    public void setCenter(Point center) {
+    public void setCenter(Coord center) {
 
         if (AreaUtils.verifyLimit(limitType, origin, center))
         {
@@ -79,13 +80,13 @@ public class BurstAOE implements AOE {
     }
 
     @Override
-    public void shift(Point aim) {
+    public void shift(Coord aim) {
         setCenter(aim);
     }
 
     @Override
-    public boolean mayContainTarget(Set<Point> targets) {
-        for (Point p : targets)
+    public boolean mayContainTarget(Set<Coord> targets) {
+        for (Coord p : targets)
         {
             if(radiusType.radius(center.x, center.y, p.x, p.y) <= radius)
                 return true;
@@ -94,31 +95,31 @@ public class BurstAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<Point, ArrayList<Point>>();
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+            return new LinkedHashMap<Coord, ArrayList<Coord>>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
 
         if(radius == 0)
         {
-            for(Point p : targets)
+            for(Coord p : targets)
             {
-                ArrayList<Point> ap = new ArrayList<Point>();
+                ArrayList<Coord> ap = new ArrayList<Coord>();
                 ap.add(p);
                 bestPoints.put(p, ap);
             }
             return bestPoints;
         }
-        Point[] ts = targets.toArray(new Point[targets.size()]);
-        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = exs[0];
+        Coord[] ts = targets.toArray(new Coord[targets.size()]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord t = exs[0];
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
 
@@ -127,7 +128,7 @@ public class BurstAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         double[][] tmpfov;
-        Point tempPt = new Point(0,0);
+        Coord tempPt = new Coord(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
@@ -197,7 +198,7 @@ public class BurstAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
@@ -207,11 +208,11 @@ public class BurstAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }                }
                 else if(qualityMap[x][y] == bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
@@ -219,7 +220,7 @@ public class BurstAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
             }
@@ -230,32 +231,32 @@ public class BurstAOE implements AOE {
 
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
 
         if(radius == 0)
         {
-            for(Point p : priorityTargets)
+            for(Coord p : priorityTargets)
             {
-                ArrayList<Point> ap = new ArrayList<Point>();
+                ArrayList<Coord> ap = new ArrayList<Coord>();
                 ap.add(p);
                 bestPoints.put(p, ap);
             }
             return bestPoints;
         }
-        Point[] pts = priorityTargets.toArray(new Point[priorityTargets.size()]);
-        Point[] lts = lesserTargets.toArray(new Point[lesserTargets.size()]);
-        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = exs[0];
+        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
+        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord t = exs[0];
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
 
@@ -266,7 +267,7 @@ public class BurstAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
-        Point tempPt = new Point(0,0);
+        Coord tempPt = new Coord(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
@@ -386,7 +387,7 @@ public class BurstAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if((pbits & (1 << i)) != 0)
@@ -400,12 +401,12 @@ public class BurstAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if ((pbits & (1 << i)) != 0) {
@@ -421,7 +422,7 @@ public class BurstAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
             }
@@ -514,18 +515,18 @@ public class BurstAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, Double> findArea() {
+    public LinkedHashMap<Coord, Double> findArea() {
         return AreaUtils.arrayToHashMap(fov.calculateFOV(map, center.x, center.y, radius, radiusType));
     }
 
 
     @Override
-    public Point getOrigin() {
+    public Coord getOrigin() {
         return origin;
     }
 
     @Override
-    public void setOrigin(Point origin) {
+    public void setOrigin(Coord origin) {
         this.origin = origin;
 
     }
