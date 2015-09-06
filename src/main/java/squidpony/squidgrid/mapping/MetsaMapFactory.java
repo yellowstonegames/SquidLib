@@ -9,8 +9,11 @@ import squidpony.SColor;
 import squidpony.SColorFactory;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.gui.SquidPanel;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
+
+import static java.lang.Math.round;
 
 /**
  * A map generation factory using perlin noise to make island chain style maps.
@@ -62,7 +65,7 @@ public class MetsaMapFactory {
 
     private JFrame frame;
     private SquidPanel back, front;
-    private List<Point> cities = new LinkedList<>();
+    private List<Coord> cities = new LinkedList<>();
     private final RNG rng = new RNG();
     private double highn = 0;
 
@@ -116,10 +119,10 @@ public class MetsaMapFactory {
      * @param point
      * @return
      */
-    private Point closestCity(Point point) {
+    private Coord closestCity(Coord point) {
         double dist = 999999999, newdist;
-        Point closest = null;
-        for (Point c : cities) {
+        Coord closest = null;
+        for (Coord c : cities) {
             if (c.equals(point)) {
                 continue;//skip the one being tested for
             }
@@ -207,7 +210,7 @@ public class MetsaMapFactory {
                 px = rng.between(0, width);
                 py = rng.between(0, height);
             }
-            cities.add(new Point(4 * Math.round(px / 4), 4 * Math.round(py / 4)));
+            cities.add(new Coord(4 * round(px / 4), 4 * round(py / 4)));
         }
         return weighedMap;
     }
@@ -308,7 +311,7 @@ public class MetsaMapFactory {
             }
         }
 
-        for (Point city : cities) {
+        for (Coord city : cities) {
             front.put(city.x, city.y, 'C', CITY_COLOR);
         }
 

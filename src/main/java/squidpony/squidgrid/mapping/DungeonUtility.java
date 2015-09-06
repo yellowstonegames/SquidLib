@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
@@ -25,13 +26,13 @@ public class DungeonUtility {
      * @param map
      * @return a Point that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
      */
-    public static Point randomFloor(char[][] map)
+    public static Coord randomFloor(char[][] map)
     {
         int width = map.length;
         int height = map[0].length;
         if(width < 3 || height < 3)
             return null;
-        Point pt = new Point(rng.nextInt(width), rng.nextInt(height));
+        Coord pt = new Coord(rng.nextInt(width), rng.nextInt(height));
         for(int i = 0; i < 20; i++)
         {
             if(map[pt.x][pt.y] == '.')
@@ -73,13 +74,13 @@ public class DungeonUtility {
      * @param eightWay
      * @return
      */
-    public static Point randomStep(char[][] map, Point start, boolean eightWay)
+    public static Coord randomStep(char[][] map, Coord start, boolean eightWay)
     {
         int width = map.length;
         int height = map[0].length;
         if(width < 3 || height < 3 || start.x <= 0 || start.y <= 0 || start.x >= width - 1 || start.y >= height - 1)
             return null;
-        Point stepped = new Point(start.x, start.y);
+        Coord stepped = new Coord(start.x, start.y);
 
         if(eightWay)
         {
@@ -112,13 +113,13 @@ public class DungeonUtility {
      * @param size
      * @return a Point that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
      */
-    public static Point randomFloorLarge(char[][] map, int size)
+    public static Coord randomFloorLarge(char[][] map, int size)
     {
         int width = map.length;
         int height = map[0].length;
         if(width < 4 || height < 4)
             return null;
-        Point pt = new Point(rng.nextInt(width - size), rng.nextInt(height - size));
+        Coord pt = new Coord(rng.nextInt(width - size), rng.nextInt(height - size));
         CELL:
         for(int i = 0; i < 20; i++, pt.x = rng.nextInt(width - size), pt.y = rng.nextInt(height - size))
         {

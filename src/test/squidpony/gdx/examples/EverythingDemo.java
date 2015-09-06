@@ -20,6 +20,7 @@ import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -52,9 +53,9 @@ public class EverythingDemo extends ApplicationAdapter {
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage;
     private int framesWithoutAnimation = 0;
-    private Point cursor;
-    private ArrayList<Point> toCursor;
-    private ArrayList<Point> awaitedMoves;
+    private Coord cursor;
+    private ArrayList<Coord> toCursor;
+    private ArrayList<Coord> awaitedMoves;
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -83,13 +84,13 @@ public class EverythingDemo extends ApplicationAdapter {
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
         char[][] placement = DungeonUtility.closeDoors(bareDungeon);
-        Point pl = DungeonUtility.randomFloor(placement);
+        Coord pl = DungeonUtility.randomFloor(placement);
         placement[pl.x][pl.y] = '@';
         int numMonsters = 25;
         monsters = new HashMap<AnimatedEntity, Integer>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Point monPos = DungeonUtility.randomFloor(placement);
+            Coord monPos = DungeonUtility.randomFloor(placement);
             placement[monPos.x][monPos.y] = 'M';
             monsters.put(display.animateActor(monPos.x, monPos.y, 'M', 11), 0);
 
@@ -104,9 +105,9 @@ public class EverythingDemo extends ApplicationAdapter {
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
 
         player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10), 30);
-        cursor = new Point(-1, -1);
-        toCursor = new ArrayList<Point>(10);
-        awaitedMoves = new ArrayList<Point>(10);
+        cursor = new Coord(-1, -1);
+        toCursor = new ArrayList<Coord>(10);
+        awaitedMoves = new ArrayList<Coord>(10);
         playerToCursor = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
         colors = DungeonUtility.generatePaletteIndices(bareDungeon);
         bgColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
@@ -213,7 +214,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     if (toCursor.isEmpty()) {
                         cursor.x = screenX;
                         cursor.y = screenY;
-                        toCursor = playerToCursor.findPath(30, null, null, new Point(player.gridX, player.gridY), cursor);
+                        toCursor = playerToCursor.findPath(30, null, null, new Coord(player.gridX, player.gridY), cursor);
                     }
                     awaitedMoves = new ArrayList<>(toCursor);
                 }
@@ -238,7 +239,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 if(fovmap[screenX][screenY] > 0.0) {
                     cursor.x = screenX;
                     cursor.y = screenY;
-                    toCursor = playerToCursor.findPath(30, null, null, new Point(player.gridX, player.gridY), cursor);
+                    toCursor = playerToCursor.findPath(30, null, null, new Coord(player.gridX, player.gridY), cursor);
                 }
                 return false;
             }
@@ -291,14 +292,14 @@ public class EverythingDemo extends ApplicationAdapter {
     }
 
     // check if a monster's movement would overlap with another monster.
-    private boolean checkOverlap(AnimatedEntity ae, int x, int y, ArrayList<Point> futureOccupied)
+    private boolean checkOverlap(AnimatedEntity ae, int x, int y, ArrayList<Coord> futureOccupied)
     {
         for(AnimatedEntity mon : monsters.keySet())
         {
             if(mon.gridX == x && mon.gridY == y && !mon.equals(ae))
                 return true;
         }
-        for(Point p : futureOccupied)
+        for(Coord p : futureOccupied)
         {
             if(x == p.x && y == p.y)
                 return true;
@@ -318,17 +319,17 @@ public class EverythingDemo extends ApplicationAdapter {
         // this is an important piece of DijkstraMap usage; the argument is a Set of Points for squares that
         // temporarily cannot be moved through (not walls, which are automatically known because the map char[][]
         // was passed to the DijkstraMap constructor, but things like moving creatures and objects).
-        LinkedHashSet<Point> monplaces = new LinkedHashSet<>(monsters.size());
+        LinkedHashSet<Coord> monplaces = new LinkedHashSet<>(monsters.size());
         for(AnimatedEntity ae : monsters.keySet())
         {
-            monplaces.add(new Point(ae.gridX, ae.gridY));
+            monplaces.add(new Coord(ae.gridX, ae.gridY));
         }
         pathMap = getToPlayer.scan(monplaces);
 
         // recalculate FOV, store it in fovmap for the render to use.
         fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
         // handle monster turns
-        ArrayList<Point> nextMovePositions = new ArrayList<>(25);
+        ArrayList<Coord> nextMovePositions = new ArrayList<>(25);
         for(HashMap.Entry<AnimatedEntity, Integer> mon : monsters.entrySet())
         {
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
@@ -340,7 +341,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 double best = 9999.0;
                 for(Direction d : getToPlayer.shuffle(Direction.OUTWARDS))
                 {
-                    Point tmp = new Point(mon.getKey().gridX + d.deltaX, mon.getKey().gridY + d.deltaY);
+                    Coord tmp = new Coord(mon.getKey().gridX + d.deltaX, mon.getKey().gridY + d.deltaY);
                     if(pathMap[tmp.x][tmp.y] < best &&
                             !checkOverlap(mon.getKey(), tmp.x, tmp.y, nextMovePositions))
                     {
@@ -351,7 +352,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                 }
                 if(choice != null) {
-                    Point tmp = new Point(mon.getKey().gridX + choice.deltaX, mon.getKey().gridY + choice.deltaY);
+                    Coord tmp = new Coord(mon.getKey().gridX + choice.deltaX, mon.getKey().gridY + choice.deltaY);
                     // if we would move into the player, instead damage the player and give newMons the current
                     // position of this monster.
                     if (player.gridX == tmp.x && player.gridY == tmp.y) {
@@ -365,7 +366,7 @@ public class EverythingDemo extends ApplicationAdapter {
                         /*if (fovmap[mon.getKey().x][mon.getKey().y] > 0.0) {
                             display.put(mon.getKey().x, mon.getKey().y, 'M', 11);
                         }*/
-                        nextMovePositions.add(new Point(tmp.x, tmp.y));
+                        nextMovePositions.add(new Coord(tmp.x, tmp.y));
                         display.slide(mon.getKey(), tmp.x, tmp.y);
                     }
                 }
@@ -397,7 +398,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 }
             }
         }
-        for (Point pt : toCursor)
+        for (Coord pt : toCursor)
         {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
             display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (0 + 170 * fovmap[pt.x][pt.y]));
@@ -444,7 +445,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     switch (phase) {
                         case WAIT:
                         case MONSTER_ANIM:
-                            Point m = awaitedMoves.remove(0);
+                            Coord m = awaitedMoves.remove(0);
                             toCursor.remove(0);
                             move(m.x - player.gridX, m.y - player.gridY);
                             break;

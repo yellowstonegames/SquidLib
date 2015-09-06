@@ -21,7 +21,7 @@ import squidpony.annotation.Beta;
 @Beta
 public class Elias {
 
-    static private List<Point> path;
+    static private List<Coord> path;
     static private float[][] lightMap;
     static private int width, height;
     static private double threshold = 0.0;
@@ -43,7 +43,7 @@ public class Elias {
      * @param endy
      * @return
      */
-    public synchronized static List<Point> line(double startx, double starty, double endx, double endy) {
+    public synchronized static List<Coord> line(double startx, double starty, double endx, double endy) {
         path = new LinkedList<>();
         width = (int) (Math.max(startx, endx) + 1);
         height = (int) (Math.max(starty, endy) + 1);
@@ -61,7 +61,7 @@ public class Elias {
      * @param brightnessThreshold between 0.0 (default) and 1.0; only Points with higher brightness will be included
      * @return
      */
-    public synchronized static List<Point> line(double startx, double starty, double endx, double endy,
+    public synchronized static List<Coord> line(double startx, double starty, double endx, double endy,
                                                 double brightnessThreshold) {
         threshold = brightnessThreshold;
         path = new LinkedList<>();
@@ -71,14 +71,14 @@ public class Elias {
         runLine(startx, starty, endx, endy);
         return path;
     }
-    public synchronized static List<Point> line(Point start, Point end) {
+    public synchronized static List<Coord> line(Coord start, Coord end) {
         return line(start.x, start.y, end.x, end.y);
     }
-    public synchronized static List<Point> line(Point start, Point end, double brightnessThreshold) {
+    public synchronized static List<Coord> line(Coord start, Coord end, double brightnessThreshold) {
         return line(start.x, start.y, end.x, end.y, brightnessThreshold);
     }
 
-    public synchronized static List<Point> getLastPath()
+    public synchronized static List<Coord> getLastPath()
     {
         return path;
     }
@@ -93,7 +93,7 @@ public class Elias {
     private static void mark(double x, double y, double c) {
         //check bounds overflow from antialiasing
         if (x >= 0 && x < width && y >= 0 && y < height && c > threshold) {
-            path.add(new Point((int) x, (int) y));
+            path.add(new Coord((int) x, (int) y));
             lightMap[(int) x][(int) y] = (float) c;
         }
     }

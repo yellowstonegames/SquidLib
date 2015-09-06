@@ -3,6 +3,7 @@ package squidpony.squidai;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidmath.Coord;
 
 import java.awt.*;
 import java.util.*;
@@ -21,7 +22,7 @@ import java.util.*;
  */
 public class ConeAOE implements AOE {
     private FOV fov;
-    private Point origin;
+    private Coord origin;
     private double radius, angle, span;
     private double[][] map;
     private char[][] dungeon;
@@ -31,7 +32,7 @@ public class ConeAOE implements AOE {
     private Radius metric = Radius.SQUARE;
 
     private final static double PI2 = Math.PI * 2;
-    public ConeAOE(Point origin, Point endCenter, double span, Radius radiusType)
+    public ConeAOE(Coord origin, Coord endCenter, double span, Radius radiusType)
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
         this.origin = origin;
@@ -42,7 +43,7 @@ public class ConeAOE implements AOE {
         this.span = span;
         this.radiusType = radiusType;
     }
-    public ConeAOE(Point origin, int radius, double angle, double span, Radius radiusType)
+    public ConeAOE(Coord origin, int radius, double angle, double span, Radius radiusType)
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
         this.origin = origin;
@@ -57,7 +58,7 @@ public class ConeAOE implements AOE {
     private ConeAOE()
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
-        this.origin = new Point(1, 1);
+        this.origin = new Coord(1, 1);
         this.radius = 1;
 //        this.startAngle = 0;
 //        this.endAngle = 90;
@@ -66,11 +67,11 @@ public class ConeAOE implements AOE {
         this.radiusType = Radius.DIAMOND;
     }
 
-    public Point getOrigin() {
+    public Coord getOrigin() {
         return origin;
     }
 
-    public void setOrigin(Point origin) {
+    public void setOrigin(Coord origin) {
         this.origin = origin;
     }
 
@@ -138,7 +139,7 @@ public class ConeAOE implements AOE {
         }
     }
 
-    public void setEndCenter(Point endCenter) {
+    public void setEndCenter(Coord endCenter) {
 //        radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
         if (AreaUtils.verifyLimit(limitType, origin, endCenter)) {
             angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
@@ -166,13 +167,13 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public void shift(Point aim) {
+    public void shift(Coord aim) {
         setEndCenter(aim);
     }
 
     @Override
-    public boolean mayContainTarget(Set<Point> targets) {
-        for (Point p : targets) {
+    public boolean mayContainTarget(Set<Coord> targets) {
+        for (Coord p : targets) {
             if (radiusType.radius(origin.x, origin.y, p.x, p.y) <= radius) {
                 double d = ((angle - Math.toDegrees(Math.atan2(p.y - origin.y, p.x - origin.x)) % 360.0 + 360.0) % 360.0);
                 if(d > 180)
@@ -185,21 +186,21 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<Point, ArrayList<Point>>();
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+            return new LinkedHashMap<Coord, ArrayList<Coord>>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
 
-        Point[] ts = targets.toArray(new Point[targets.size()]);
-        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = exs[0];
+        Coord[] ts = targets.toArray(new Coord[targets.size()]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord t = exs[0];
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
         double tAngle; //, tStartAngle, tEndAngle;
@@ -210,7 +211,7 @@ public class ConeAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         double[][] tmpfov;
-        Point tempPt = new Point(0,0);
+        Coord tempPt = new Coord(0, 0);
 
         for (int i = 0; i < exs.length; i++) {
             t = exs[i];
@@ -285,7 +286,7 @@ public class ConeAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
@@ -294,18 +295,18 @@ public class ConeAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality) {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if ((bits & (1 << i)) != 0)
                             ap.add(ts[i]);
                     }
                     if (ap.size() > 0) {
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
 
@@ -316,22 +317,22 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
 
-        Point[] pts = priorityTargets.toArray(new Point[priorityTargets.size()]);
-        Point[] lts = lesserTargets.toArray(new Point[lesserTargets.size()]);
-        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = exs[0];
+        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
+        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord t = exs[0];
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
         double tAngle; //, tStartAngle, tEndAngle;
@@ -343,7 +344,7 @@ public class ConeAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
-        Point tempPt = new Point(0,0);
+        Coord tempPt = new Coord(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
@@ -461,7 +462,7 @@ public class ConeAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if((pbits & (1 << i)) != 0)
@@ -475,12 +476,12 @@ public class ConeAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
 
                 }
                 else if(qualityMap[x][y] == bestQuality) {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if ((pbits & (1 << i)) != 0) {
@@ -495,7 +496,7 @@ public class ConeAOE implements AOE {
                             ap.add(lts[i - pts.length]);
                     }
                     if (ap.size() > 0) {
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
             }
@@ -604,8 +605,8 @@ public class ConeAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, Double> findArea() {
-        LinkedHashMap<Point, Double> r = AreaUtils.arrayToHashMap(fov.calculateFOV(map, origin.x, origin.y, radius,
+    public LinkedHashMap<Coord, Double> findArea() {
+        LinkedHashMap<Coord, Double> r = AreaUtils.arrayToHashMap(fov.calculateFOV(map, origin.x, origin.y, radius,
                 radiusType, angle, span));
         r.remove(origin);
         return r;

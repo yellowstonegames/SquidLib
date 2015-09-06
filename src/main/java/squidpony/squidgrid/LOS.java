@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import squidpony.squidmath.Bresenham;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.Elias;
 
 /**
@@ -36,7 +37,7 @@ public class LOS {
              * determine visibility. Does not respect translucency.
              */
             RAY = 3;
-    private Queue<Point> lastPath = new LinkedList<>();
+    private Queue<Coord> lastPath = new LinkedList<>();
     private int type;
     private double[][] resistanceMap;
     private int startx, starty, targetx, targety;
@@ -163,18 +164,18 @@ public class LOS {
      *
      * @return
      */
-    public Queue<Point> getLastPath() {
+    public Queue<Coord> getLastPath() {
         return lastPath;
     }
 
     private boolean bresenhamReachable(Radius radiusStrategy) {
-        Queue<Point> path = Bresenham.line2D(startx, starty, targetx, targety);
+        Queue<Coord> path = Bresenham.line2D(startx, starty, targetx, targety);
         lastPath = new LinkedList<>();
-        lastPath.add(new Point(startx, starty));
+        lastPath.add(new Coord(startx, starty));
         double force = 1;
         double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);
         double currentForce = force;
-        for (Point p : path) {
+        for (Coord p : path) {
             lastPath.offer(p);
             if (p.x == targetx && p.y == targety) {
                 return true;//reached the end 
@@ -192,7 +193,7 @@ public class LOS {
 
     private boolean rayReachable(Radius radiusStrategy) {
         lastPath = new LinkedList<>();//save path for later retreival
-        lastPath.add(new Point(startx, starty));
+        lastPath.add(new Coord(startx, starty));
         if (startx == targetx && starty == targety) {//already there!
             return true;
         }
@@ -223,7 +224,7 @@ public class LOS {
 
         Point2D.Double collisionPoint = new Point2D.Double();
         while (testX >= 0 && testX < width && testY >= 0 && testY < height && (testX != endTileX || testY != endTileY)) {
-            lastPath.add(new Point(testX, testY));
+            lastPath.add(new Coord(testX, testY));
             if (maxX < maxY) {
                 maxX += deltaX;
                 testX += stepX;
@@ -260,19 +261,19 @@ public class LOS {
         }
 
         if (end.x >= 0 && end.x < width && end.y >= 0 && end.y < height) {
-            lastPath.add(new Point((int) end.x, (int) end.y));
+            lastPath.add(new Coord((int) end.x, (int) end.y));
         }
 
         return (int) end.x == targetx && (int) end.y == targety;
     }
 
     private boolean eliasReachable(Radius radiusStrategy) {
-        List<Point> ePath = Elias.line(startx, starty, targetx, targety);
+        List<Coord> ePath = Elias.line(startx, starty, targetx, targety);
         lastPath = new LinkedList<>(ePath);//save path for later retreival
 
         HashMap<eliasWorker, Thread> pool = new HashMap<>();
 
-        for (Point p : ePath) {
+        for (Coord p : ePath) {
             eliasWorker worker = new eliasWorker(p.x, p.y, radiusStrategy);
             Thread thread = new Thread(worker);
             thread.start();
@@ -295,7 +296,7 @@ public class LOS {
 
     private class eliasWorker implements Runnable {
 
-        private Queue<Point> path;
+        private Queue<Coord> path;
         private boolean succeeded = false;
         private int testx, testy;
         private Radius radiusStrategy;

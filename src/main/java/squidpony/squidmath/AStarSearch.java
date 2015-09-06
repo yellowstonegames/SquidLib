@@ -45,11 +45,11 @@ public class AStarSearch {
     }
 
     private final double[][] map;
-    private final HashSet<Point> open = new HashSet<>();
+    private final HashSet<Coord> open = new HashSet<>();
     private final int width, height;
     private boolean[][] finished;
-    private Point[][] parent;
-    private Point start, target;
+    private Coord[][] parent;
+    private Coord start, target;
     private final SearchType type;
 
     /**
@@ -83,12 +83,12 @@ public class AStarSearch {
      * @param targety the y coordinate of the target location
      * @return the shortest path, or null
      */
-    public Queue<Point> path(int startx, int starty, int targetx, int targety) {
-        start = new Point(startx, starty);
-        target = new Point(targetx, targety);
+    public Queue<Coord> path(int startx, int starty, int targetx, int targety) {
+        start = new Coord(startx, starty);
+        target = new Coord(targetx, targety);
         open.clear();
         finished = new boolean[width][height];
-        parent = new Point[width][height];
+        parent = new Coord[width][height];
 
         Direction[] dirs;
         switch (type) {
@@ -103,7 +103,7 @@ public class AStarSearch {
                 break;
         }
 
-        Point p = start;
+        Coord p = start;
         open.add(p);
 
         while (!p.equals(target)) {
@@ -122,7 +122,7 @@ public class AStarSearch {
                 }
 
                 if (!finished[x][y]) {
-                    Point test = new Point(x, y);
+                    Coord test = new Coord(x, y);
                     if (open.contains(test)) {
                         double parentG = g(parent[x][y].x, parent[x][y].y);
                         if (parentG < 0) {
@@ -133,11 +133,11 @@ public class AStarSearch {
                             continue;//not a valid point so skip ahead
                         }
                         if (parent[x][y] == null || parentG > g) {
-                            parent[x][y] = new Point(p);
+                            parent[x][y] = new Coord(p);
                         }
                     } else {
                         open.add(test);
-                        parent[x][y] = new Point(p);
+                        parent[x][y] = new Coord(p);
                     }
                 }
             }
@@ -147,7 +147,7 @@ public class AStarSearch {
             }
         }
 
-        Deque<Point> deq = new ArrayDeque<>();
+        Deque<Coord> deq = new ArrayDeque<>();
         while (!p.equals(start)) {
             deq.offerFirst(p);
             p = parent[p.x][p.y];
@@ -227,11 +227,11 @@ public class AStarSearch {
     /**
      * @return the current open point with the smallest F
      */
-    private Point smallestF() {
-        Point smallest = null;
+    private Coord smallestF() {
+        Coord smallest = null;
         double smallF = Double.POSITIVE_INFINITY;
         double f;
-        for (Point p : open) {
+        for (Coord p : open) {
             f = f(p.x, p.y);
             if (f < 0) {
                 continue;//current tested point is not valid so skip it

@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.Radius;
+import squidpony.squidmath.Coord;
 
 import java.awt.*;
 import java.util.*;
@@ -17,7 +18,7 @@ public interface AOE {
      * must be enough on its own to select a different target area without the producer of the AOE needing to move.
      * @param aim a Point that will be used to change the location of the AOE without its producer needing to move
      */
-    void shift(Point aim);
+    void shift(Coord aim);
 
     /**
      * Given a Set of Points that the producer of the AOE wants to include in the region of this AOE, this method does
@@ -30,7 +31,7 @@ public interface AOE {
      * @param targets a Set of Points that are desirable targets to include in this AOE
      * @return true if there could be at least one target within the AOE, false otherwise. Very approximate.
      */
-    boolean mayContainTarget(Set<Point> targets);
+    boolean mayContainTarget(Set<Coord> targets);
 
     /**
      * Returns a LinkedHashMap of Point keys and ArrayList of Point values, where each Point key is an ideal location to
@@ -52,7 +53,7 @@ public interface AOE {
      * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE
      * @return a LinkedHashMap of Point keys and ArrayList of Point values where keys are ideal locations and values are the target points that will be hit when that key is used.
      */
-    LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions);
+    LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions);
 
     /**
      * A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
@@ -67,7 +68,7 @@ public interface AOE {
      * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE
      * @return a LinkedHashMap of Point keys and ArrayList of Point values where keys are ideal locations and values are the target points that will be hit when that key is used.
      */
-    LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions);
+    LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions);
 
     /**
      * This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.
@@ -87,7 +88,7 @@ public interface AOE {
      * have the same x and y as the x,y map positions they correspond to.
      * @return a HashMap of Point keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).
      */
-    LinkedHashMap<Point, Double> findArea();
+    LinkedHashMap<Coord, Double> findArea();
 
     /**
      * Get the position from which the AOE originates, which may be related to the location of the AOE's effect, as for
@@ -95,7 +96,7 @@ public interface AOE {
      * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but
      * have a maxRange at which they can deliver that effect).
      */
-    public Point getOrigin();
+    public Coord getOrigin();
 
     /**
      * Set the position from which the AOE originates, which may be related to the location of the AOE's effect, as for
@@ -103,7 +104,7 @@ public interface AOE {
      * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but
      * have a maxRange at which they can deliver that effect).
      */
-    public void setOrigin(Point origin);
+    public void setOrigin(Coord origin);
 
     /**
      * You can use limitType to restrict any Points that might be processed based on the given origin (which will be

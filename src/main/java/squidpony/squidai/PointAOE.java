@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.Radius;
+import squidpony.squidmath.Coord;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -17,16 +18,16 @@ import java.util.Set;
  * Created by Tommy Ettinger on 7/13/2015.
  */
 public class PointAOE implements AOE {
-    private Point center, origin = null;
+    private Coord center, origin = null;
     private Radius limitType = null;
     private char[][] dungeon;
     private int minRange = 1, maxRange = 1;
     private Radius metric = Radius.SQUARE;
-    public PointAOE(Point center)
+    public PointAOE(Coord center)
     {
         this.center = center;
     }
-    public PointAOE(Point center, int minRange, int maxRange)
+    public PointAOE(Coord center, int minRange, int maxRange)
     {
         this.center = center;
         this.minRange = minRange;
@@ -35,27 +36,27 @@ public class PointAOE implements AOE {
 
     private PointAOE()
     {
-        center = new Point(1, 1);
+        center = new Coord(1, 1);
     }
 
-    public Point getCenter() {
+    public Coord getCenter() {
         return center;
     }
 
-    public void setCenter(Point center) {
+    public void setCenter(Coord center) {
         if(AreaUtils.verifyLimit(limitType, origin, center))
         {
             this.center = center;
         }
     }
     @Override
-    public void shift(Point aim) {
+    public void shift(Coord aim) {
         setCenter(aim);
     }
 
     @Override
-    public boolean mayContainTarget(Set<Point> targets) {
-        for (Point p : targets)
+    public boolean mayContainTarget(Set<Coord> targets) {
+        for (Coord p : targets)
         {
             if(center.x == p.x && center.y == p.y)
                 return true;
@@ -64,24 +65,24 @@ public class PointAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<Point, ArrayList<Point>>();
+            return new LinkedHashMap<Coord, ArrayList<Coord>>();
 
         int totalTargets = targets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets);
 
         if(totalTargets == 0)
             return bestPoints;
 
 
         double dist = 0.0;
-        for(Point p : targets) {
+        for(Coord p : targets) {
             if (AreaUtils.verifyLimit(limitType, origin, p)) {
 
                 dist = metric.radius(origin.x, origin.y, p.x, p.y);
                 if (dist <= maxRange && dist >= minRange) {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
                     ap.add(p);
                     bestPoints.put(p, ap);
                 }
@@ -92,25 +93,25 @@ public class PointAOE implements AOE {
 
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
 
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 4);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 4);
 
         if(totalTargets == 0)
             return bestPoints;
 
         double dist = 0.0;
 
-        for(Point p : priorityTargets) {
+        for(Coord p : priorityTargets) {
             if (AreaUtils.verifyLimit(limitType, origin, p)) {
 
                 dist = metric.radius(origin.x, origin.y, p.x, p.y);
                 if (dist <= maxRange && dist >= minRange) {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
                     ap.add(p);
                     ap.add(p);
                     ap.add(p);
@@ -120,12 +121,12 @@ public class PointAOE implements AOE {
             }
         }
         if(bestPoints.isEmpty()) {
-            for (Point p : lesserTargets) {
+            for (Coord p : lesserTargets) {
                 if (AreaUtils.verifyLimit(limitType, origin, p)) {
 
                     dist = metric.radius(origin.x, origin.y, p.x, p.y);
                     if (dist <= maxRange && dist >= minRange) {
-                        ArrayList<Point> ap = new ArrayList<Point>();
+                        ArrayList<Coord> ap = new ArrayList<Coord>();
                         ap.add(p);
                         bestPoints.put(p, ap);
                     }
@@ -219,20 +220,20 @@ public class PointAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, Double> findArea() {
-        LinkedHashMap<Point, Double> ret = new LinkedHashMap<Point, Double>(1);
-        ret.put(new Point(center.x, center.y), 1.0);
+    public LinkedHashMap<Coord, Double> findArea() {
+        LinkedHashMap<Coord, Double> ret = new LinkedHashMap<Coord, Double>(1);
+        ret.put(new Coord(center.x, center.y), 1.0);
         return ret;
     }
 
 
     @Override
-    public Point getOrigin() {
+    public Coord getOrigin() {
         return origin;
     }
 
     @Override
-    public void setOrigin(Point origin) {
+    public void setOrigin(Coord origin) {
         this.origin = origin;
 
     }

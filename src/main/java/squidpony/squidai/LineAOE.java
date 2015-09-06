@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.Radius;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.Elias;
 
 import java.awt.Point;
@@ -28,7 +29,7 @@ import java.util.*;
  * Created by Tommy Ettinger on 7/14/2015.
  */
 public class LineAOE implements AOE {
-    private Point origin, end;
+    private Coord origin, end;
     private int radius;
     private char[][] dungeon;
     private DijkstraMap dijkstra;
@@ -36,7 +37,7 @@ public class LineAOE implements AOE {
 
     private int minRange = 1, maxRange = 1;
     private Radius metric = Radius.SQUARE;
-    public LineAOE(Point origin, Point end)
+    public LineAOE(Coord origin, Coord end)
     {
         this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
@@ -45,7 +46,7 @@ public class LineAOE implements AOE {
         this.end = end;
         this.radius = 0;
     }
-    public LineAOE(Point origin, Point end, int radius)
+    public LineAOE(Coord origin, Coord end, int radius)
     {
         this.dijkstra = new DijkstraMap();
         this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
@@ -54,7 +55,7 @@ public class LineAOE implements AOE {
         this.end = end;
         this.radius = radius;
     }
-    public LineAOE(Point origin, Point end, int radius, Radius radiusType)
+    public LineAOE(Coord origin, Coord end, int radius, Radius radiusType)
     {
         this.dijkstra = new DijkstraMap();
         this.rt = radiusType;
@@ -73,7 +74,7 @@ public class LineAOE implements AOE {
         this.end = end;
         this.radius = radius;
     }
-    public LineAOE(Point origin, Point end, int radius, Radius radiusType, int minRange, int maxRange)
+    public LineAOE(Coord origin, Coord end, int radius, Radius radiusType, int minRange, int maxRange)
     {
         this.dijkstra = new DijkstraMap();
         this.rt = radiusType;
@@ -96,10 +97,10 @@ public class LineAOE implements AOE {
     }
     private double[][] initDijkstra()
     {
-        List<Point> lit = Elias.line(origin, end);
+        List<Coord> lit = Elias.line(origin, end);
 
         dijkstra.initialize(dungeon);
-        for(Point p : lit)
+        for(Coord p : lit)
         {
             dijkstra.setGoal(p);
         }
@@ -109,12 +110,12 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public Point getOrigin() {
+    public Coord getOrigin() {
         return origin;
     }
 
     @Override
-    public void setOrigin(Point origin) {
+    public void setOrigin(Coord origin) {
         this.origin = origin;
         dijkstra.resetMap();
         dijkstra.clearGoals();
@@ -163,11 +164,11 @@ public class LineAOE implements AOE {
     }
 
 
-    public Point getEnd() {
+    public Coord getEnd() {
         return end;
     }
 
-    public void setEnd(Point end) {
+    public void setEnd(Coord end) {
         if (AreaUtils.verifyLimit(limitType, origin, end)) {
             this.end = end;
             dijkstra.resetMap();
@@ -204,13 +205,13 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public void shift(Point aim) {
+    public void shift(Coord aim) {
         setEnd(aim);
     }
 
     @Override
-    public boolean mayContainTarget(Set<Point> targets) {
-        for (Point p : targets)
+    public boolean mayContainTarget(Set<Coord> targets) {
+        for (Coord p : targets)
         {
             if(rt.radius(origin.x, origin.y, p.x, p.y) + rt.radius(end.x, end.y, p.x, p.y) -
                     rt.radius(origin.x, origin.y, end.x, end.y) <= 3.0 + radius)
@@ -220,21 +221,21 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<Point, ArrayList<Point>>();
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+            return new LinkedHashMap<Coord, ArrayList<Coord>>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
 
-        Point[] ts = targets.toArray(new Point[targets.size()]);
-        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = exs[0];
+        Coord[] ts = targets.toArray(new Coord[targets.size()]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord t = exs[0];
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
 
@@ -243,14 +244,14 @@ public class LineAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
-        Point tempPt = new Point(0,0);
+        Coord tempPt = new Coord(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = Elias.line(origin, t, 0.4);
 
-            for(Point p : lit)
+            for(Coord p : lit)
             {
                 dt.setGoal(p);
             }
@@ -274,9 +275,9 @@ public class LineAOE implements AOE {
             t = ts[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = Elias.line(origin, t, 0.4);
 
-            for(Point p : lit)
+            for(Coord p : lit)
             {
                 dt.setGoal(p);
             }
@@ -330,7 +331,7 @@ public class LineAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
@@ -339,12 +340,12 @@ public class LineAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
@@ -352,7 +353,7 @@ public class LineAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
             }
@@ -362,22 +363,22 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, ArrayList<Point>> idealLocations(Set<Point> priorityTargets, Set<Point> lesserTargets, Set<Point> requiredExclusions) {
+    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Point>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Point, ArrayList<Point>> bestPoints = new LinkedHashMap<Point, ArrayList<Point>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
 
-        Point[] pts = priorityTargets.toArray(new Point[priorityTargets.size()]);
-        Point[] lts = lesserTargets.toArray(new Point[lesserTargets.size()]);
-        Point[] exs = requiredExclusions.toArray(new Point[requiredExclusions.size()]);
-        Point t = exs[0];
+        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
+        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
+        Coord t = exs[0];
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
 
@@ -388,14 +389,14 @@ public class LineAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
-        Point tempPt = new Point(0,0);
+        Coord tempPt = new Coord(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = Elias.line(origin, t, 0.4);
 
-            for(Point p : lit)
+            for(Coord p : lit)
             {
                 dt.setGoal(p);
             }
@@ -418,9 +419,9 @@ public class LineAOE implements AOE {
             t = pts[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = Elias.line(origin, t, 0.4);
 
-            for(Point p : lit)
+            for(Coord p : lit)
             {
                 dt.setGoal(p);
             }
@@ -471,9 +472,9 @@ public class LineAOE implements AOE {
             t = lts[i - pts.length];
             dt.resetMap();
             dt.clearGoals();
-            List<Point> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = Elias.line(origin, t, 0.4);
 
-            for(Point p : lit)
+            for(Coord p : lit)
             {
                 dt.setGoal(p);
             }
@@ -532,7 +533,7 @@ public class LineAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if((pbits & (1 << i)) != 0)
@@ -546,11 +547,11 @@ public class LineAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality) {
-                    ArrayList<Point> ap = new ArrayList<Point>();
+                    ArrayList<Coord> ap = new ArrayList<Coord>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if ((pbits & (1 << i)) != 0) {
@@ -566,7 +567,7 @@ public class LineAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Point(x, y), ap);
+                        bestPoints.put(new Coord(x, y), ap);
                     }
                 }
             }
@@ -649,7 +650,7 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public LinkedHashMap<Point, Double> findArea() {
+    public LinkedHashMap<Coord, Double> findArea() {
         double[][] dmap = initDijkstra();
         dmap[origin.x][origin.y] = DijkstraMap.DARK;
         dijkstra.resetMap();

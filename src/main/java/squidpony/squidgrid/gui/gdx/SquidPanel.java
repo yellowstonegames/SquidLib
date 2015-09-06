@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 import squidpony.squidgrid.Direction;
 import com.badlogic.gdx.graphics.Color;
+import squidpony.squidmath.Coord;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -548,7 +549,7 @@ public class SquidPanel extends Group {
      * @param location
      * @param direction
      */
-    public void bump(Point location, Direction direction) {
+    public void bump(Coord location, Direction direction) {
         bump(location.x, location.y, direction, DEFAULT_ANIMATION_DURATION);
     }
     /**
@@ -611,7 +612,7 @@ public class SquidPanel extends Group {
      * @param start
      * @param end
      */
-    public void slide(Point start, Point end) {
+    public void slide(Coord start, Coord end) {
         slide(start.x, start.y, end.x, end.y, DEFAULT_ANIMATION_DURATION);
     }
 
@@ -622,7 +623,7 @@ public class SquidPanel extends Group {
      * @param start
      * @param direction
      */
-    public void slide(Point start, Direction direction) {
+    public void slide(Coord start, Direction direction) {
         slide(start.x, start.y, start.x + direction.deltaX, start.y + direction.deltaY, DEFAULT_ANIMATION_DURATION);
     }
 
@@ -634,7 +635,7 @@ public class SquidPanel extends Group {
      * @param end
      * @param duration
      */
-    public void slide(Point start, Point end, float duration) {
+    public void slide(Coord start, Coord end, float duration) {
         slide(start.x, start.y, end.x, end.y, duration);
     }
 

@@ -1,5 +1,6 @@
 package squidpony.squidgrid;
 
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -60,7 +61,7 @@ public class Spill {
      * The list of points that the Spill will randomly fill, starting with what is passed to start(), in order of when
      * they are reached.
      */
-    public ArrayList<Point> spreadPattern;
+    public ArrayList<Coord> spreadPattern;
     /**
      * Height of the map. Exciting stuff. Don't change this, instead call initialize().
      */
@@ -74,7 +75,7 @@ public class Spill {
      * are reached on all sides and the Spill has no more room to fill.
      */
     public int filled = 0;
-    private LinkedHashSet<Point> fresh;
+    private LinkedHashSet<Coord> fresh;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
@@ -340,17 +341,17 @@ public class Spill {
      * Reverts a cell to an unfilled state (false in spillMap).
      * @param pt
      */
-    public void resetCell(Point pt) {
+    public void resetCell(Coord pt) {
         if(!initialized) return;
         spillMap[pt.x][pt.y] = false;
     }
 
     protected void setFresh(int x, int y) {
         if(!initialized) return;
-        fresh.add(new Point(x, y));
+        fresh.add(new Coord(x, y));
     }
 
-    protected void setFresh(final Point pt) {
+    protected void setFresh(final Coord pt) {
         if(!initialized) return;
         fresh.add(pt);
     }
@@ -372,31 +373,31 @@ public class Spill {
      * @return An ArrayList of Points that this will enter, in order starting with entry at index 0, until it
      * reaches its volume or fills its boundaries completely.
      */
-    public ArrayList<Point> start(Point entry, int volume, Set<Point> impassable) {
+    public ArrayList<Coord> start(Coord entry, int volume, Set<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
             impassable = new LinkedHashSet<>();
         if(!physicalMap[entry.x][entry.y] || impassable.contains(entry))
             return null;
-        spreadPattern = new ArrayList<Point>(volume);
+        spreadPattern = new ArrayList<Coord>(volume);
         spillMap[entry.x][entry.y] = true;
-        Point temp = new Point(0,0);
+        Coord temp = new Coord(0, 0);
         for(int x = 0; x < spillMap.length; x++, temp.x = x)
         {
             for(int y = 0; y < spillMap[x].length; y++, temp.y = y)
             {
                 if(spillMap[x][y] && !impassable.contains(temp))
-                    fresh.add(new Point(temp));
+                    fresh.add(new Coord(temp));
             }
         }
 
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (!fresh.isEmpty() && spreadPattern.size() < volume) {
-            Point cell = (Point) fresh.toArray()[rng.nextInt(fresh.size())];
+            Coord cell = (Coord) fresh.toArray()[rng.nextInt(fresh.size())];
             spreadPattern.add(cell);
             spillMap[cell.x][cell.y] = true;
             for (int d = 0; d < dirs.length; d++) {
-                Point adj = new Point(cell);
+                Coord adj = new Coord(cell);
                 adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                 double h = heuristic(dirs[d]);
                 if (physicalMap[adj.x][adj.y] && !spillMap[adj.x][adj.y] && !impassable.contains(adj) && rng.nextDouble() <= 1.0 / h) {

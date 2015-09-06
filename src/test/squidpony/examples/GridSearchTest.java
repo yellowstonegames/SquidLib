@@ -11,6 +11,7 @@ import squidpony.SColor;
 import squidpony.SColorFactory;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.AStarSearch;
 
@@ -29,8 +30,8 @@ public class GridSearchTest {
     private double[][] map;
     private RNG rng = new RNG();
     private AStarSearch search;
-    private Queue<Point> path;
-    private Point start, target;
+    private Queue<Coord> path;
+    private Coord start, target;
     private float weight = 10;
     private SquidPanel back, front;
 
@@ -93,7 +94,7 @@ public class GridSearchTest {
             float splitSize = 1f / (path.size() + 2);
             front.put(start.x, start.y, 'X', SColorFactory.fromPallet("path", grade));
             grade += splitSize;
-            for (Point p : path) {
+            for (Coord p : path) {
                 front.put(p.x, p.y, 'X', SColorFactory.fromPallet("path", grade));
                 grade += splitSize;
             }
@@ -109,8 +110,8 @@ public class GridSearchTest {
             }
         }
         search = new AStarSearch(map, AStarSearch.SearchType.MANHATTAN);
-        start = new Point(rng.nextInt(width), rng.nextInt(height));
-        target = new Point(rng.nextInt(width), rng.nextInt(height));
+        start = new Coord(rng.nextInt(width), rng.nextInt(height));
+        target = new Coord(rng.nextInt(width), rng.nextInt(height));
         path = search.path(start.x, start.y, target.x, target.y);
 
 //        print();
@@ -121,7 +122,7 @@ public class GridSearchTest {
         if (path == null) {
             System.out.println("No path found.");
         } else {
-            for (Point p : path) {
+            for (Coord p : path) {
                 System.out.println(p + " " + map[p.x][p.y]);
             }
         }
