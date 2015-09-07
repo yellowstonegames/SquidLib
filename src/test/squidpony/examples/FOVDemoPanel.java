@@ -1,7 +1,7 @@
 package squidpony.examples;
 
 import java.util.TreeMap;
-import squidpony.SColorFactory;
+import squidpony.squidgrid.gui.SColorFactory;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.FOV;

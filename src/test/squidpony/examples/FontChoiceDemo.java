@@ -16,7 +16,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import squidpony.SColor;
+import squidpony.squidgrid.gui.SColor;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 
@@ -147,8 +147,8 @@ public class FontChoiceDemo {
             for (int y = 0; y < display.gridHeight(); y++) {
                 for (int x = 0; x < display.gridWidth(); x++) {
                     if (control.colorizeToggleButton.isSelected()) {
-                        foreground = SColor.FULL_PALLET[rng.nextInt(SColor.FULL_PALLET.length)];
-                        background = SColor.FULL_PALLET[rng.nextInt(SColor.FULL_PALLET.length)];
+                        foreground = SColor.FULL_PALETTE[rng.nextInt(SColor.FULL_PALETTE.length)];
+                        background = SColor.FULL_PALETTE[rng.nextInt(SColor.FULL_PALETTE.length)];
                     }
                     if (position < text.codePointCount(0, text.length())) {
                         int code = text.codePointAt(position);
@@ -165,8 +165,8 @@ public class FontChoiceDemo {
             for (int x = 0; x < display.gridWidth(); x++) {
                 for (int y = 0; y < display.gridHeight(); y++) {
                     if (control.colorizeToggleButton.isSelected()) {
-                        foreground = SColor.FULL_PALLET[rng.nextInt(SColor.FULL_PALLET.length)];
-                        background = SColor.FULL_PALLET[rng.nextInt(SColor.FULL_PALLET.length)];
+                        foreground = SColor.FULL_PALETTE[rng.nextInt(SColor.FULL_PALETTE.length)];
+                        background = SColor.FULL_PALETTE[rng.nextInt(SColor.FULL_PALETTE.length)];
                     }
                     if (rng.nextBoolean()) {
                         display.put(x, y, (char) ('A' + (x + y) % 26), foreground);

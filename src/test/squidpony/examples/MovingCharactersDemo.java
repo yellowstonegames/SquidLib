@@ -11,7 +11,7 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import squidpony.SColor;
+import squidpony.squidgrid.gui.SColor;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidgrid.Direction;
@@ -84,7 +84,7 @@ public class MovingCharactersDemo {
     }
 
     private SColor getRandomColor() {
-        return SColor.FULL_PALLET[rng.nextInt(SColor.FULL_PALLET.length)];
+        return SColor.FULL_PALETTE[rng.nextInt(SColor.FULL_PALETTE.length)];
     }
 
     private void slide() {

@@ -1,4 +1,4 @@
-package squidpony;
+package squidpony.squidgrid.gui;
 
 import java.awt.AWTException;
 import java.awt.BorderLayout;
@@ -29,7 +29,7 @@ import javax.swing.event.MouseInputListener;
  */
 public class SColorChooserPanel extends AbstractColorChooserPanel {
 
-    private SColor[] colors = SColor.FULL_PALLET;
+    private SColor[] colors = SColor.FULL_PALETTE;
     private TreeMap<String, SColor[]> colorMap = new TreeMap<>();
     private int colorHeight = 20;
     private int colorWidth = 40;
@@ -59,7 +59,7 @@ public class SColorChooserPanel extends AbstractColorChooserPanel {
         colorMap.put("Achromatic Series", SColor.ACHROMATIC_SERIES);
         colorMap.put("Blue Green Series", SColor.BLUE_GREEN_SERIES);
         colorMap.put("Blue Violet Series", SColor.BLUE_VIOLET_SERIES);
-        colorMap.put("Full Pallet", SColor.FULL_PALLET);
+        colorMap.put("Full Pallet", SColor.FULL_PALETTE);
         colorMap.put("Rainbow", SColor.RAINBOW);
         colorMap.put("Red Series", SColor.RED_SERIES);
         colorMap.put("Red Violet Series", SColor.RED_VIOLET_SERIES);

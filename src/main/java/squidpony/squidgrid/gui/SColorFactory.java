@@ -1,4 +1,4 @@
-package squidpony;
+package squidpony.squidgrid.gui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -13,7 +13,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import squidpony.squidmath.Bresenham;
-import squidpony.squidmath.Point3D;
+import squidpony.squidmath.Coord3D;
 import squidpony.squidmath.RNG;
 
 /**
@@ -31,7 +31,7 @@ public class SColorFactory {
     private static final TreeMap<Integer, SColor> valueLookup = new TreeMap<>();
     private static RNG rng = new RNG();
     private static Map<Integer, SColor> colorBag = new HashMap<>();
-    private static Map<String, ArrayList<SColor>> pallets = new HashMap<>();
+    private static Map<String, ArrayList<SColor>> palettes = new HashMap<>();
     private static int floor = 1;//what multiple to floor rgb values to in order to reduce total colors
 
     /**
@@ -52,7 +52,7 @@ public class SColorFactory {
      */
     public static SColor colorForName(String s) {
         if (nameLookup.isEmpty()) {
-            for (SColor sc : SColor.FULL_PALLET) {
+            for (SColor sc : SColor.FULL_PALETTE) {
                 nameLookup.put(sc.getName(), sc);
             }
         }
@@ -73,7 +73,7 @@ public class SColorFactory {
      */
     public static SColor colorForValue(int rgb) {
         if (valueLookup.isEmpty()) {
-            for (SColor sc : SColor.FULL_PALLET) {
+            for (SColor sc : SColor.FULL_PALETTE) {
                 valueLookup.put(sc.getRGB(), sc);
             }
         }
@@ -376,47 +376,84 @@ public class SColorFactory {
      * @return
      */
     public static ArrayList<SColor> asGradient(SColor color1, SColor color2) {
-        String name = palletNamer(color1, color2);
-        if (pallets.containsKey(name)) {
-            return pallets.get(name);
+        String name = paletteNamer(color1, color2);
+        if (palettes.containsKey(name)) {
+            return palettes.get(name);
         }
 
         //get the gradient
-        Queue<Point3D> gradient = Bresenham.line3D(scolorToCoord3D(color1), scolorToCoord3D(color2));
+        Queue<Coord3D> gradient = Bresenham.line3D(scolorToCoord3D(color1), scolorToCoord3D(color2));
         ArrayList<SColor> ret = new ArrayList<>();
-        for (Point3D coord : gradient) {
+        for (Coord3D coord : gradient) {
             ret.add(coord3DToSColor(coord));
         }
 
-        pallets.put(name, ret);
+        palettes.put(name, ret);
         return ret;
     }
 
     /**
-     * Returns the pallet associate with the provided name, or null if there is
-     * no such pallet.
+     * Returns the palette associate with the provided name, or null if there is
+     * no such palette.
      *
      * @param name
      * @return
      */
+    public static ArrayList<SColor> palette(String name) {
+        return palettes.get(name);
+    }
+    /**
+     * Returns the palette associate with the provided name, or null if there is
+     * no such palette.
+     *
+     * @param name
+     * @return
+     *
+     * @deprecated Prefer palette
+     */
     public static ArrayList<SColor> pallet(String name) {
-        return pallets.get(name);
+        return palettes.get(name);
     }
 
     /**
      * Returns the SColor that is the provided percent towards the end of the
-     * pallet. Bounds are checked so as long as there is at least one color in
+     * palette. Bounds are checked so as long as there is at least one color in
      * the palette, values below 0 will return the first element and values
      * above 1 will return the last element;
      *
-     * If there is no pallette keyed to the provided name, null is returned.
+     * If there is no palette keyed to the provided name, null is returned.
      *
      * @param name
      * @param percent
      * @return
      */
+    public static SColor fromPalette(String name, float percent) {
+        ArrayList<SColor> list = palettes.get(name);
+        if (list == null) {
+            return null;
+        }
+
+        int index = Math.round(list.size() * percent);//find the index that's the given percent into the gradient
+        index = Math.min(index, list.size() - 1);
+        index = Math.max(index, 0);
+        return list.get(index);
+    }
+    /**
+     * Returns the SColor that is the provided percent towards the end of the
+     * palette. Bounds are checked so as long as there is at least one color in
+     * the palette, values below 0 will return the first element and values
+     * above 1 will return the last element;
+     *
+     * If there is no palette keyed to the provided name, null is returned.
+     *
+     * @param name
+     * @param percent
+     * @return
+     *
+     * @deprecated Prefer fromPalette
+     */
     public static SColor fromPallet(String name, float percent) {
-        ArrayList<SColor> list = pallets.get(name);
+        ArrayList<SColor> list = palettes.get(name);
         if (list == null) {
             return null;
         }
@@ -453,20 +490,38 @@ public class SColorFactory {
     private static SColor pickedColor;//needed for the color chooser
 
     /**
-     * Places the pallet into the cache, along with each of the member colors.
+     * Places the palette into the cache, along with each of the member colors.
      *
      * @param name
-     * @param pallet
+     * @param palette
      */
-    public static void addPallet(String name, ArrayList<SColor> pallet) {
+    public static void addPalette(String name, ArrayList<SColor> palette) {
         ArrayList<SColor> temp = new ArrayList<>();
 
-        //make sure all the colors in the pallet are also in the general color cache
-        for (SColor sc : pallet) {
+        //make sure all the colors in the palette are also in the general color cache
+        for (SColor sc : palette) {
             temp.add(asSColor(sc.getRGB()));
         }
 
-        pallets.put(name, temp);
+        palettes.put(name, temp);
+    }
+    /**
+     * Places the palette into the cache, along with each of the member colors.
+     *
+     * @param name
+     * @param palette
+     *
+     * @deprecated Prefer addPalette
+     */
+    public static void addPallet(String name, ArrayList<SColor> palette) {
+        ArrayList<SColor> temp = new ArrayList<>();
+
+        //make sure all the colors in the palette are also in the general color cache
+        for (SColor sc : palette) {
+            temp.add(asSColor(sc.getRGB()));
+        }
+
+        palettes.put(name, temp);
     }
 
     /**
@@ -476,8 +531,8 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    private static Point3D scolorToCoord3D(SColor color) {
-        return new Point3D(color.getRed(), color.getGreen(), color.getBlue());
+    private static Coord3D scolorToCoord3D(SColor color) {
+        return new Coord3D(color.getRed(), color.getGreen(), color.getBlue());
     }
 
     /**
@@ -487,11 +542,11 @@ public class SColorFactory {
      * @param coord
      * @return
      */
-    private static SColor coord3DToSColor(Point3D coord) {
+    private static SColor coord3DToSColor(Coord3D coord) {
         return asSColor(coord.x, coord.y, coord.z);
     }
 
-    private static String palletNamer(SColor color1, SColor color2) {
+    private static String paletteNamer(SColor color1, SColor color2) {
         return color1.getName() + " to " + color2.getName();
     }
 }

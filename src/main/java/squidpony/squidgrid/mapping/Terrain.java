@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.SColor;
+import squidpony.squidgrid.gui.SColor;
 import squidpony.annotation.Beta;
 
 /**

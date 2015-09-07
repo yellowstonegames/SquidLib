@@ -1,14 +1,13 @@
 package squidpony.examples;
 
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Queue;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import squidpony.SColor;
-import squidpony.SColorFactory;
+import squidpony.squidgrid.gui.SColor;
+import squidpony.squidgrid.gui.SColorFactory;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidmath.Coord;
@@ -42,8 +41,8 @@ public class GridSearchTest {
     private void go() {
         map = new double[width][height];
 
-        SColorFactory.addPallet("floor", SColorFactory.asGradient(SColor.BLACK_DYE, SColorFactory.desaturate(SColor.ROSE_MADDER, 0.6)));
-        SColorFactory.addPallet("path", SColorFactory.asGradient(SColor.AMUR_CORK_TREE, SColor.AZUL));
+        SColorFactory.addPalette("floor", SColorFactory.asGradient(SColor.BLACK_DYE, SColorFactory.desaturate(SColor.ROSE_MADDER, 0.6)));
+        SColorFactory.addPalette("path", SColorFactory.asGradient(SColor.AMUR_CORK_TREE, SColor.AZUL));
 
         JFrame frame = new JFrame("A* Test");
         frame.getContentPane().setBackground(SColor.BLACK);
@@ -82,7 +81,7 @@ public class GridSearchTest {
         front.erase();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                back.put(x, y, SColorFactory.fromPallet("floor", ((float) (map[x][y] + weight) / weight) / 2));
+                back.put(x, y, SColorFactory.fromPalette("floor", ((float) (map[x][y] + weight) / weight) / 2));
             }
         }
         back.refresh();
@@ -92,13 +91,13 @@ public class GridSearchTest {
         } else {
             float grade = 0;
             float splitSize = 1f / (path.size() + 2);
-            front.put(start.x, start.y, 'X', SColorFactory.fromPallet("path", grade));
+            front.put(start.x, start.y, 'X', SColorFactory.fromPalette("path", grade));
             grade += splitSize;
             for (Coord p : path) {
-                front.put(p.x, p.y, 'X', SColorFactory.fromPallet("path", grade));
+                front.put(p.x, p.y, 'X', SColorFactory.fromPalette("path", grade));
                 grade += splitSize;
             }
-            front.put(target.x, target.y, 'X', SColorFactory.fromPallet("path", grade));
+            front.put(target.x, target.y, 'X', SColorFactory.fromPalette("path", grade));
         }
         front.refresh();
     }
