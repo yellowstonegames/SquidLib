@@ -6,6 +6,12 @@ target/
 *.class
 *.iml
 .idea/
-/.settings/
-/.classpath
-/.project
+.settings/
+.classpath
+.project
+
+
+# jEdit garbage
+*~
+*#*#
+*#*.*#
