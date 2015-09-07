@@ -3,13 +3,14 @@ package squidpony.gdx.examples.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import squidpony.gdx.examples.EverythingDemo;
+import squidpony.gdx.examples.SquidAIDemo;
 
-public class DesktopLauncher {
+public class SquidAIDemoLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "SquidLib GDX Everything Demo";
-		config.width = 80 * 12;
-		config.height = 30 * 24;
-		new LwjglApplication(new EverythingDemo(), config);
+		config.title = "SquidLib GDX AI Demo";
+		config.width = 40 * 2 * 6;
+		config.height = 40 * 12;
+		new LwjglApplication(new SquidAIDemo(), config);
 	}
 }

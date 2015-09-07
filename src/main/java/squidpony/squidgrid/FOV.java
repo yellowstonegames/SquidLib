@@ -2,7 +2,6 @@ package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

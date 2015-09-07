@@ -1,7 +1,6 @@
 package squidpony.examples;
 
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -16,8 +15,8 @@ import static squidpony.squidgrid.FOV.RIPPLE_LOOSE;
 import static squidpony.squidgrid.FOV.RIPPLE_TIGHT;
 import static squidpony.squidgrid.FOV.RIPPLE_VERY_LOOSE;
 import static squidpony.squidgrid.FOV.SHADOW;
-import squidpony.SColor;
-import squidpony.SColorFactory;
+import squidpony.squidgrid.gui.SColor;
+import squidpony.squidgrid.gui.SColorFactory;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.gui.SquidPanel;
@@ -77,7 +76,7 @@ public class FOVAnimated {
 
         frame.setVisible(true);
 
-        SColorFactory.addPallet("colors", SColorFactory.asGradient(SColor.ALICE_BLUE, SColor.BRIGHT_PINK));
+        SColorFactory.addPalette("colors", SColorFactory.asGradient(SColor.ALICE_BLUE, SColor.BRIGHT_PINK));
 
         back.addMouseListener(new MouseAdapter() {
 

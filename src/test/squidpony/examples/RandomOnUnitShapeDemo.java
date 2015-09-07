@@ -4,10 +4,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import squidpony.SColor;
+import squidpony.squidgrid.gui.SColor;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.Radius;
-import squidpony.squidmath.Point3D;
+import squidpony.squidmath.Coord3D;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.XorRNG;
 
@@ -65,7 +65,7 @@ public class RandomOnUnitShapeDemo {
         boolean[][] map = new boolean[width][height];
         int offset = width / 3 - 3;
         for (int i = 0; i < width * height / 10; i++) {
-            Point3D p = Radius.SPHERE.onUnitShape3D(offset / 2);
+            Coord3D p = Radius.SPHERE.onUnitShape3D(offset / 2);
             map[p.x + 1 + offset / 2][p.y + (height) / 2] = true;
 
             p = Radius.OCTAHEDRON.onUnitShape3D(offset / 2);

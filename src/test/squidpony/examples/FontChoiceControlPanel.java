@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import squidpony.SColorFactory;
+import squidpony.squidgrid.gui.SColorFactory;
 
 /**
  *

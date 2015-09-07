@@ -2,8 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import squidpony.Colors;
-import squidpony.annotation.Beta;
+import squidpony.squidgrid.gui.gdx.SColor;
 import com.badlogic.gdx.graphics.Color;
 import squidpony.squidgrid.Direction;
 
@@ -13,11 +12,9 @@ import java.util.LinkedHashSet;
 /**
  * A helper class to make using multiple SquidPanels easier.
  * There is some useful documentation in this class' getPalette method (honestly, I don't know where else to put
- * documentation specifically about this class' default palette). Notably, it uses libGDX Color objects instead of the
- * AWT Color objects used elsewhere, and a convenience method is provided to convert from AWT to GDX, awtColorToGDX().
+ * documentation specifically about this class' default palette)..
  * Created by Tommy Ettinger on 7/6/2015.
  */
-@Beta
 public class SquidLayers extends Group {
     protected int width;
     protected int height;
@@ -345,63 +342,59 @@ public class SquidLayers extends Group {
         this.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
     }
 
-    public static Color awtColorToGDX(java.awt.Color original) {
-        return new Color(original.getRed() / 255f, original.getGreen() / 255f, original.getBlue() / 255f, original.getAlpha() / 255f);
-    }
-
     private void initPalettes() {
         palette = new ArrayList<Color>(256);
-        palette.add(awtColorToGDX(Colors.DARK_SLATE_GRAY));
-        palette.add(awtColorToGDX(Colors.CREAM));
-        palette.add(awtColorToGDX(Colors.FLATTERY_BROWN));
-        palette.add(awtColorToGDX(Colors.SILVER_GREY));
-        palette.add(awtColorToGDX(Colors.RUST));
-        palette.add(awtColorToGDX(Colors.WATER));
-        palette.add(awtColorToGDX(Colors.INTERNATIONAL_ORANGE));
+        palette.add(SColor.DARK_SLATE_GRAY);
+        palette.add(SColor.CREAM);
+        palette.add(SColor.FLATTERY_BROWN);
+        palette.add(SColor.SILVER_GREY);
+        palette.add(SColor.RUST);
+        palette.add(SColor.WATER);
+        palette.add(SColor.INTERNATIONAL_ORANGE);
 
-        palette.add(awtColorToGDX(Colors.WHITE));
-        palette.add(awtColorToGDX(Colors.LIGHT_GRAY));
-        palette.add(awtColorToGDX(Colors.DARK_GRAY));
+        palette.add(SColor.WHITE);
+        palette.add(SColor.LIGHT_GRAY);
+        palette.add(SColor.DARK_GRAY);
 
-        palette.add(awtColorToGDX(Colors.RED_INCENSE));
-        palette.add(awtColorToGDX(Colors.RED));
-        palette.add(awtColorToGDX(Colors.COCHINEAL_RED));
+        palette.add(SColor.RED_INCENSE);
+        palette.add(SColor.RED);
+        palette.add(SColor.COCHINEAL_RED);
 
-        palette.add(awtColorToGDX(Colors.PEACH_ORANGE));
-        palette.add(awtColorToGDX(Colors.ORANGE_PEEL));
-        palette.add(awtColorToGDX(Colors.TANGERINE));
+        palette.add(SColor.PEACH_ORANGE);
+        palette.add(SColor.ORANGE_PEEL);
+        palette.add(SColor.TANGERINE);
 
-        palette.add(awtColorToGDX(Colors.LEMON_CHIFFON));
-        palette.add(awtColorToGDX(Colors.CORN));
-        palette.add(awtColorToGDX(Colors.GOLDEN_YELLOW));
+        palette.add(SColor.LEMON_CHIFFON);
+        palette.add(SColor.CORN);
+        palette.add(SColor.GOLDEN_YELLOW);
 
-        palette.add(awtColorToGDX(Colors.TEA_GREEN));
-        palette.add(awtColorToGDX(Colors.LIME_GREEN));
-        palette.add(awtColorToGDX(Colors.PINE_GREEN));
+        palette.add(SColor.TEA_GREEN);
+        palette.add(SColor.LIME_GREEN);
+        palette.add(SColor.PINE_GREEN);
 
-        palette.add(awtColorToGDX(Colors.BABY_BLUE));
-        palette.add(awtColorToGDX(Colors.CYAN));
-        palette.add(awtColorToGDX(Colors.BLUE_GREEN));
+        palette.add(SColor.BABY_BLUE);
+        palette.add(SColor.CYAN);
+        palette.add(SColor.BLUE_GREEN);
 
-        palette.add(awtColorToGDX(Colors.COLUMBIA_BLUE));
-        palette.add(awtColorToGDX(Colors.ROYAL_BLUE));
-        palette.add(awtColorToGDX(Colors.PERSIAN_BLUE));
+        palette.add(SColor.COLUMBIA_BLUE);
+        palette.add(SColor.ROYAL_BLUE);
+        palette.add(SColor.PERSIAN_BLUE);
 
-        palette.add(awtColorToGDX(Colors.LAVENDER_BLUE));
-        palette.add(awtColorToGDX(Colors.THIN_VIOLET));
-        palette.add(awtColorToGDX(Colors.DARK_VIOLET));
+        palette.add(SColor.LAVENDER_BLUE);
+        palette.add(SColor.THIN_VIOLET);
+        palette.add(SColor.DARK_VIOLET);
 
-        palette.add(awtColorToGDX(Colors.CARNATION_PINK));
-        palette.add(awtColorToGDX(Colors.HOT_MAGENTA));
-        palette.add(awtColorToGDX(Colors.LIGHT_MAROON));
+        palette.add(SColor.CARNATION_PINK);
+        palette.add(SColor.HOT_MAGENTA);
+        palette.add(SColor.LIGHT_MAROON);
 
-        palette.add(awtColorToGDX(Colors.TAN));
-        palette.add(awtColorToGDX(Colors.DARK_TAN));
-        palette.add(awtColorToGDX(Colors.PALE_BROWN));
+        palette.add(SColor.TAN);
+        palette.add(SColor.DARK_TAN);
+        palette.add(SColor.PALE_BROWN);
 
-        palette.add(awtColorToGDX(Colors.STEAMED_CHESTNUT));
-        palette.add(awtColorToGDX(Colors.DARK_CHESTNUT));
-        palette.add(awtColorToGDX(Colors.SAPPANWOOD_INCENSE));
+        palette.add(SColor.STEAMED_CHESTNUT);
+        palette.add(SColor.DARK_CHESTNUT);
+        palette.add(SColor.SAPPANWOOD_INCENSE);
 
         lightingPalette = new ArrayList<Color>(512);
         for (int i = 0; i < 512; i++) {
