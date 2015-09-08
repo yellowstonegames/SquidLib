@@ -9,7 +9,7 @@
 
     <name>squidlib-parent</name>
   
-    <description>Please refer to https://github.com/SquidPony/SquidLib .</description>
+    <description>Parent module for squidlib projects. Please do not depend on this module, and refer to https://github.com/SquidPony/SquidLib .</description>
 
     <url>https://github.com/SquidPony/SquidLib</url>
 

@@ -63,6 +63,18 @@ public class DijkstraMap
      */
     public double[][] gradientMap;
     /**
+     * This stores the entry cost multipliers for each cell; that is, a value of 1.0 is a normal, unmodified cell, but
+     * a value of 0.5 can be entered easily (two cells of its cost can be entered for the cost of one 1.0 cell), and a
+     * value of 2.0 can only be entered with difficulty (one cell of its cost can be entered for the cost of two 1.0
+     * cells). Unlike the measurement field, this does affect the length of paths, as well as the numbers assigned
+     * to gradientMap during a scan. The values for walls are identical to the value used by gradientMap, that is, this
+     * class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .
+     *
+     * NOTE: costMap defaults to null and will be ignored by all methods while it remains null. You should initialize it
+     * with initializeCost(), which will give it a non-null value, but after that you can freely modify this field.
+     */
+    public double[][] costMap = null;
+    /**
      * Height of the map. Exciting stuff. Don't change this, instead call initialize().
      */
     public int height;
@@ -108,7 +120,7 @@ public class DijkstraMap
     public Coord[][] targetMap;
 
 
-    private boolean initialized = false;
+    private boolean initialized = false, costInitialized = false;
 
 
     private int mappedCount = 0;
@@ -306,6 +318,70 @@ public class DijkstraMap
         initialized = true;
         return this;
     }
+    /**
+     * Used to initialize the entry cost modifiers for games that require variable costs to enter squares. This expects
+     * a char[][] of the same exact dimensions as the 2D array that was used to previously initialize() this
+     * DijkstraMap, treating the '#' char as a wall (impassable) and anything else as having a normal cost to enter.
+     * The costs can be accessed later by using costMap directly (which will have a valid value when this does not
+     * throw an exception), or by calling setCost().
+     * @param level a 2D char array that uses '#' for walls
+     * @return this DijkstraMap for chaining.
+     */
+    public DijkstraMap initializeCost(final char[][] level) {
+        if(!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
+        costMap = new double[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                costMap[x][y] = (level[x][y] == '#') ? WALL : 1.0;
+            }
+        }
+        costInitialized = true;
+        return this;
+    }
+    /**
+     * Used to initialize the entry cost modifiers for games that require variable costs to enter squares. This expects
+     * a char[][] of the same exact dimensions as the 2D array that was used to previously initialize() this
+     * DijkstraMap, treating the '#' char as a wall (impassable) and anything else as having a normal cost to enter.
+     * The costs can be accessed later by using costMap directly (which will have a valid value when this does not
+     * throw an exception), or by calling setCost().
+     *
+     * This method allows you to specify an alternate wall char other than the default character, '#' .
+     * @param level a 2D char array that uses alternateChar for walls.
+     * @param alternateWall a char to use to represent walls.
+     * @return this DijkstraMap for chaining.
+     */
+    public DijkstraMap initializeCost(final char[][] level, char alternateWall) {
+        if(!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
+        costMap = new double[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                costMap[x][y] = (level[x][y] == alternateWall) ? WALL : 1.0;
+            }
+        }
+        costInitialized = true;
+        return this;
+    }
+    /**
+     * Used to initialize the entry cost modifiers for games that require variable costs to enter squares. This expects
+     * a double[][] of the same exact dimensions as the 2D array that was used to previously initialize() this
+     * DijkstraMap, using the exact values given in costs as the values to enter cells, even if they aren't what this
+     * class would assign normally -- walls and other impassable values should be given WALL as a value, however.
+     * The costs can be accessed later by using costMap directly (which will have a valid value when this does not
+     * throw an exception), or by calling setCost().
+     *
+     * This method should be slightly more efficient than the other initializeCost methods.
+     * @param costs a 2D double array that already has the desired cost values
+     * @return this DijkstraMap for chaining.
+     */
+    public DijkstraMap initializeCost(final double[][] costs) {
+        if(!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
+        costMap = new double[width][height];
+        for (int x = 0; x < width; x++) {
+            System.arraycopy(costs[x], 0, costMap[x], 0, height);
+        }
+        costInitialized = true;
+        return this;
+    }
 
     /**
      * Resets the gradientMap to its original value from physicalMap.
@@ -370,6 +446,35 @@ public class DijkstraMap
         }
 
         goals.put(pt, GOAL);
+    }
+    /**
+     * Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
+     * the cost to the value of the WALL field).
+     * @param pt
+     * @param cost
+     */
+    public void setCost(Coord pt, double cost) {
+        if(!initialized) return;
+        if (physicalMap[pt.x][pt.y] > FLOOR) {
+            costMap[pt.x][pt.y] = WALL;
+            return;
+        }
+        costMap[pt.x][pt.y] = cost;
+    }
+    /**
+     * Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
+     * the cost to the value of the WALL field).
+     * @param x
+     * @param y
+     * @param cost
+     */
+    public void setCost(int x, int y, double cost) {
+        if(!initialized) return;
+        if (physicalMap[x][y] > FLOOR) {
+            costMap[x][y] = WALL;
+            return;
+        }
+        costMap[x][y] = cost;
     }
 
     /**
