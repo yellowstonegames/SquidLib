@@ -70,8 +70,6 @@ public class DijkstraMap
      * to gradientMap during a scan. The values for walls are identical to the value used by gradientMap, that is, this
      * class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .
      *
-     * NOTE: costMap defaults to null and will be ignored by all methods while it remains null. You should initialize it
-     * with initializeCost(), which will give it a non-null value, but after that you can freely modify this field.
      */
     public double[][] costMap = null;
     /**
@@ -120,7 +118,7 @@ public class DijkstraMap
     public Coord[][] targetMap;
 
 
-    private boolean initialized = false, costInitialized = false;
+    private boolean initialized = false;
 
 
     private int mappedCount = 0;
@@ -258,12 +256,12 @@ public class DijkstraMap
         height = level[0].length;
         gradientMap = new double[width][height];
         physicalMap = new double[width][height];
+        costMap = new double[width][height];
         targetMap = new Coord[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                gradientMap[x][y] = level[x][y];
-                physicalMap[x][y] = level[x][y];
-            }
+        for (int x = 0; x < width; x++) {
+            System.arraycopy(level[x], 0, gradientMap[x],0, height);
+            System.arraycopy(level[x], 0, physicalMap[x],0, height);
+            Arrays.fill(costMap[x], 1.0);
         }
         initialized = true;
         return this;
@@ -281,9 +279,11 @@ public class DijkstraMap
         height = level[0].length;
         gradientMap = new double[width][height];
         physicalMap = new double[width][height];
+        costMap = new double[width][height];
         targetMap = new Coord[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
+            Arrays.fill(costMap[x], 1.0);
+            for (int y = 0; y < height; y++) {
                 double t = (level[x][y] == '#') ? WALL : FLOOR;
                 gradientMap[x][y] = t;
                 physicalMap[x][y] = t;
@@ -307,9 +307,11 @@ public class DijkstraMap
         height = level[0].length;
         gradientMap = new double[width][height];
         physicalMap = new double[width][height];
+        costMap = new double[width][height];
         targetMap = new Coord[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
+            Arrays.fill(costMap[x], 1.0);
+            for (int y = 0; y < height; y++) {
                 double t = (level[x][y] == alternateWall) ? WALL : FLOOR;
                 gradientMap[x][y] = t;
                 physicalMap[x][y] = t;
@@ -329,13 +331,11 @@ public class DijkstraMap
      */
     public DijkstraMap initializeCost(final char[][] level) {
         if(!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
-        costMap = new double[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 costMap[x][y] = (level[x][y] == '#') ? WALL : 1.0;
             }
         }
-        costInitialized = true;
         return this;
     }
     /**
@@ -352,13 +352,11 @@ public class DijkstraMap
      */
     public DijkstraMap initializeCost(final char[][] level, char alternateWall) {
         if(!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
-        costMap = new double[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 costMap[x][y] = (level[x][y] == alternateWall) ? WALL : 1.0;
             }
         }
-        costInitialized = true;
         return this;
     }
     /**
@@ -379,7 +377,6 @@ public class DijkstraMap
         for (int x = 0; x < width; x++) {
             System.arraycopy(costs[x], 0, costMap[x], 0, height);
         }
-        costInitialized = true;
         return this;
     }
 
@@ -387,9 +384,9 @@ public class DijkstraMap
      * Resets the gradientMap to its original value from physicalMap.
      */
     public void resetMap() {
-        if(!initialized) return;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        if (!initialized) return;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 gradientMap[x][y] = physicalMap[x][y];
             }
         }
@@ -399,9 +396,9 @@ public class DijkstraMap
      * Resets the targetMap (which is only assigned in the first place if you use findTechniquePath() ).
      */
     public void resetTargetMap() {
-        if(!initialized) return;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        if (!initialized) return;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 targetMap[x][y] = null;
             }
         }
@@ -591,7 +588,7 @@ public class DijkstraMap
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
                     if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
-                        setFresh(adj, cell.getValue() + h);
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                     }
@@ -681,7 +678,7 @@ public class DijkstraMap
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
                     if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
-                        setFresh(adj, cell.getValue() + h);
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                     }
@@ -825,11 +822,11 @@ public class DijkstraMap
             numAssigned = 0;
             for (Map.Entry<Coord, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
-                    Coord adj = new Coord(cell.getKey().x, cell.getKey().y);
+                    Coord adj = new Coord(cell.getKey());
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
                     if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
-                        setFresh(new Coord(adj.x, adj.y), cell.getValue() + h);
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                     }
@@ -889,6 +886,7 @@ public class DijkstraMap
             return path;
         scan(impassable);
         Coord currentPos = new Coord(start);
+        double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Coord>();
@@ -918,8 +916,9 @@ public class DijkstraMap
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
             path.add(new Coord(currentPos.x, currentPos.y));
+            paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
-            if (path.size() >= length) {
+            if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
@@ -1016,6 +1015,8 @@ public class DijkstraMap
         scan(impassable);
 
         Coord currentPos = new Coord(start);
+        double paidLength = 0.0;
+
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Coord>();
@@ -1044,8 +1045,10 @@ public class DijkstraMap
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
             path.add(new Coord(currentPos.x, currentPos.y));
+            paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
-            if (path.size() >= moveLength) {
+            if (paidLength > moveLength - 1.0) {
+
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
@@ -1146,6 +1149,7 @@ public class DijkstraMap
         scan(impassable);
 
         Coord currentPos = new Coord(start);
+        double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Coord>();
@@ -1175,8 +1179,10 @@ public class DijkstraMap
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
             path.add(new Coord(currentPos.x, currentPos.y));
+            paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
-            if (path.size() >= moveLength) {
+            if (paidLength > moveLength - 1.0) {
+
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
@@ -1241,6 +1247,7 @@ public class DijkstraMap
         double[][] resMap = new double[width][height];
         double[][] worthMap = new double[width][height];
         double[][] userDistanceMap = new double[width][height];
+        double paidLength = 0.0;
 
         LinkedHashSet friends;
 
@@ -1388,8 +1395,9 @@ public class DijkstraMap
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
             path.add(new Coord(currentPos.x, currentPos.y));
+            paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
-            if (path.size() >= moveLength) {
+            if (paidLength > moveLength - 1.0) {
                 if (friends.contains(currentPos)) {
                     closed.put(currentPos, WALL);
                     impassable.add(currentPos);
@@ -1477,6 +1485,7 @@ public class DijkstraMap
             cachedFleeMap = gradientMap.clone();
         }
         Coord currentPos = new Coord(start);
+        double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Coord>();
@@ -1511,7 +1520,8 @@ public class DijkstraMap
             }
             path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
-            if (path.size() >= length) {
+            paidLength += costMap[currentPos.x][currentPos.y];
+            if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
@@ -1565,6 +1575,7 @@ public class DijkstraMap
 
         scan(impassable, size);
         Coord currentPos = new Coord(start);
+        double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Coord>();
@@ -1594,8 +1605,9 @@ public class DijkstraMap
             currentPos.y += dirs[choice].deltaY;
             currentPos.x += dirs[choice].deltaX;
             path.add(new Coord(currentPos.x, currentPos.y));
+            paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
-            if (path.size() >= length) {
+            if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
@@ -1698,6 +1710,7 @@ public class DijkstraMap
         scan(impassable, size);
 
         Coord currentPos = new Coord(start);
+        double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Coord>();
@@ -1728,7 +1741,8 @@ public class DijkstraMap
             currentPos.x += dirs[choice].deltaX;
             path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
-            if (path.size() >= moveLength) {
+            paidLength += costMap[currentPos.x][currentPos.y];
+            if (paidLength > moveLength - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
@@ -1836,6 +1850,7 @@ public class DijkstraMap
         scan(impassable, size);
 
         Coord currentPos = new Coord(start);
+        double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Coord>();
@@ -1866,7 +1881,8 @@ public class DijkstraMap
             currentPos.x += dirs[choice].deltaX;
             path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
-            if (path.size() >= moveLength) {
+            paidLength += costMap[currentPos.x][currentPos.y];
+            if (paidLength > moveLength - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
@@ -1951,6 +1967,7 @@ public class DijkstraMap
             cachedFleeMap = gradientMap.clone();
         }
         Coord currentPos = new Coord(start);
+        double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Coord>();
@@ -1986,7 +2003,8 @@ public class DijkstraMap
             }
             path.add(new Coord(currentPos.x, currentPos.y));
             frustration++;
-            if (path.size() >= length) {
+            paidLength += costMap[currentPos.x][currentPos.y];
+            if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
