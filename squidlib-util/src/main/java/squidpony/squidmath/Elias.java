@@ -1,6 +1,6 @@
 package squidpony.squidmath;
 
-import java.awt.Point;
+
 import java.util.LinkedList;
 import java.util.List;
 import squidpony.annotation.Beta;

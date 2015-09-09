@@ -249,7 +249,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             return;
         }
         whichAllies.remove(user);
-        /*for(Point p : whichFoes)
+        /*for(Coord p : whichFoes)
         {
             AnimatedEntity foe = display.getAnimatedEntityByCell(p.x, p.y);
             if(los.isReachable(res, user.x, user.y, p.x, p.y) && foe != null && whichEnemyTeam.get(foe) != null && whichEnemyTeam.get(foe) > 0)

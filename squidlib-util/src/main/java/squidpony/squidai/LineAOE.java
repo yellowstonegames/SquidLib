@@ -4,11 +4,11 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.Elias;
 
-import java.awt.Point;
+
 import java.util.*;
 
 /**
- * Line Area of Effect that affects an slightly expanded (Elias) line from a given origin Point to a given end Point,
+ * Line Area of Effect that affects an slightly expanded (Elias) line from a given origin Coord to a given end Coord,
  * plus an optional radius of cells around the path of the line, while respecting obstacles in its path and possibly
  * stopping if obstructed. You can specify the RadiusType to Radius.DIAMOND for Manhattan distance, RADIUS.SQUARE for
  * Chebyshev, or RADIUS.CIRCLE for Euclidean.
@@ -578,13 +578,13 @@ public class LineAOE implements AOE {
 
 /*
     @Override
-    public ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public ArrayList<ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         int totalTargets = targets.size() + 1;
         int volume = (int)(rt.radius(1, 1, dungeon.length - 2, dungeon[0].length - 2) * radius * 2.1);
-        ArrayList<ArrayList<Point>> locs = new ArrayList<ArrayList<Point>>(totalTargets);
+        ArrayList<ArrayList<Coord>> locs = new ArrayList<ArrayList<Coord>>(totalTargets);
         for(int i = 0; i < totalTargets; i++)
         {
-            locs.add(new ArrayList<Point>(volume));
+            locs.add(new ArrayList<Coord>(volume));
         }
         if(totalTargets == 1)
             return locs;
@@ -598,17 +598,17 @@ public class LineAOE implements AOE {
                 if(mayContainTarget(requiredExclusions, x, y))
                     continue;
                 ctr = 0;
-                for(Point tgt : targets)
+                for(Coord tgt : targets)
                 {
                     if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
                         rt.radius(origin.x, origin.y, end.x, end.y) <= 3.0 + radius)
                         ctr++;
                 }
                 if(ctr > 0)
-                    locs.get(totalTargets - ctr).add(new Point(x, y));
+                    locs.get(totalTargets - ctr).add(new Coord(x, y));
             }
         }
-        Point it;
+        Coord it;
         for(int t = 0; t < totalTargets - 1; t++)
         {
             if(locs.get(t).size() > 0) {
@@ -626,14 +626,14 @@ public class LineAOE implements AOE {
                                 continue;
 
                             ctr = 0;
-                            for(Point tgt : targets)
+                            for(Coord tgt : targets)
                             {
                                 if(rt.radius(origin.x, origin.y, tgt.x, tgt.y) + rt.radius(end.x, end.y, tgt.x, tgt.y) -
                                         rt.radius(origin.x, origin.y, end.x, end.y) <= 3.0 + radius)
                                     ctr++;
                             }
                             if(ctr > 0)
-                                locs.get(totalTargets - ctr).add(new Point(x, y));
+                                locs.get(totalTargets - ctr).add(new Coord(x, y));
                         }
                     }
                 }

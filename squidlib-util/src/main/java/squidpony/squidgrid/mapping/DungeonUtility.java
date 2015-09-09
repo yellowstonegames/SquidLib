@@ -5,7 +5,8 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 
-import java.awt.Point;
+
+import java.util.Map;
 
 /**
  * A static class that can be used to modify the char[][] dungeons that other generators produce.
@@ -21,10 +22,10 @@ public class DungeonUtility {
      */
     public static RNG rng = new RNG(new LightRNG());
     /**
-     * Finds a random java.awt.Point where the x and y match up to a [x][y] location on map that has '.' as a value.
+     * Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value.
      * Uses this class' rng field for pseudo-random number generation.
      * @param map
-     * @return a Point that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
+     * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
      */
     public static Coord randomFloor(char[][] map)
     {
@@ -32,7 +33,7 @@ public class DungeonUtility {
         int height = map[0].length;
         if(width < 3 || height < 3)
             return null;
-        Coord pt = new Coord(rng.nextInt(width), rng.nextInt(height));
+        Coord pt = new Coord(rng.nextInt(width - 2) + 1, rng.nextInt(height - 2) + 1);
         for(int i = 0; i < 20; i++)
         {
             if(map[pt.x][pt.y] == '.')
@@ -41,8 +42,8 @@ public class DungeonUtility {
             }
             else
             {
-                pt.x = rng.nextInt(width);
-                pt.y = rng.nextInt(height);
+                pt.x = rng.nextInt(width - 2) + 1;
+                pt.y = rng.nextInt(height - 2) + 1;
             }
         }
         pt.x = 1;
@@ -63,9 +64,52 @@ public class DungeonUtility {
         }
         return pt;
     }
+    /**
+     * Finds a random Coord where the x and y match up to a [x][y] location on map that has the same value as the
+     * parameter tile. Uses this class' rng field for pseudo-random number generation.
+     * @param map
+     * @return a Coord that corresponds to a map element equal to tile, or null if tile cannot be found or if map is too small.
+     */
+    public static Coord randomMatchingTile(char[][] map, char tile)
+    {
+        int width = map.length;
+        int height = map[0].length;
+        if(width < 3 || height < 3)
+            return null;
+        Coord pt = new Coord(rng.nextInt(width - 2) + 1, rng.nextInt(height - 2) + 1);
+        for(int i = 0; i < 30; i++)
+        {
+            if(map[pt.x][pt.y] == tile)
+            {
+                return pt;
+            }
+            else
+            {
+                pt.x = rng.nextInt(width - 2) + 1;
+                pt.y = rng.nextInt(height - 2) + 1;
+            }
+        }
+        pt.x = 1;
+        pt.y = 1;
+        if(map[pt.x][pt.y] == tile)
+            return pt;
+
+        while(map[pt.x][pt.y] != tile)
+        {
+            pt.x += 1;
+            if(pt.x >= width - 1)
+            {
+                pt.x = 1;
+                pt.y += 1;
+            }
+            if(pt.y >= height - 1)
+                return null;
+        }
+        return pt;
+    }
 
     /**
-     * Gets a random Point that is adjacent to start, validating whether the position can exist on the given map.
+     * Gets a random Coord that is adjacent to start, validating whether the position can exist on the given map.
      * Adjacency defaults to four-way cardinal directions unless eightWay is true, in which case it uses Chebyshev.
      * This can step into walls, and should NOT be used for movement.  It is meant for things like sound that can
      * exist in walls, or for assigning decor to floors or walls that are adjacent to floors.
@@ -105,13 +149,13 @@ public class DungeonUtility {
         return stepped;
     }
     /**
-     * Finds a random java.awt.Point where the x and y match up to a [x][y] location on map that has '.' as a value,
+     * Finds a random java.awt.Coord where the x and y match up to a [x][y] location on map that has '.' as a value,
      * and a square of cells extending in the positive x and y directions with a side length of size must also have
      * '.' as their values.
      * Uses this class' rng field for pseudo-random number generation.
      * @param map
      * @param size
-     * @return a Point that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
+     * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
      */
     public static Coord randomFloorLarge(char[][] map, int size)
     {
@@ -586,6 +630,48 @@ public class DungeonUtility {
         return portion;
     }
 
+
+    /**
+     * Takes a char[][] dungeon map and returns a copy with all box drawing chars, special placeholder chars, or '#'
+     * chars changed to '#' and everything else changed to '.' .
+     * @param map
+     * @return
+     */
+    public static char[][] simplifyDungeon(char[][] map)
+    {
+
+        int width = map.length;
+        int height = map[0].length;
+        char[][] portion = new char[width][height];
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                switch (map[i][j])
+                {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = '#';
+                        break;
+                    default:
+                        portion[i][j] = '.';
+                }
+            }
+        }
+        return portion;
+    }
+
     /**
      * Takes a dungeon map with either '#' as the only wall character or the unicode box drawing characters used by
      * hashesToLines(), and returns a new char[][] dungeon map with two characters per cell, mostly filling the spaces
@@ -926,6 +1012,74 @@ public class DungeonUtility {
                         break;
                     default:
                         portion[i][j] = 0.0;
+                }
+            }
+        }
+        return portion;
+    }
+    /**
+     * Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and
+     * a double value for unhandled characters, produces a double[][] that can be used as a costMap by DijkstraMap. It
+     * expects any doors to be represented by '+' if closed or '/' if open (which can be caused by calling
+     * DungeonUtility.closeDoors() ) and any walls to be '#' or line drawing characters. In the parameter costs, there
+     * does not need to be an entry for '#' or any box drawing characters, but if one is present for '#' it will apply
+     * that cost to both '#' and all box drawing characters, and if one is not present it will default to a very high
+     * number. For any other entry in costs, a char in the 2D char array that matches the key will correspond
+     * (at the same x,y position in the returned 2D double array) to that key's value in costs. If a char is used in the
+     * map but does not have a corresponding key in costs, it will be given the value of the parameter defaultValue.
+     *
+     * The values in costs are multipliers, so should not be negative, should only be 0.0 in cases where you want
+     * infinite movement across all adjacent squares of that kind, should be higher than 1.0 for difficult terrain (2.0
+     * and 3.0 are reasonable), should be between 0.0 and 1.0 for easy terrain, and should be 1.0 for normal terrain.
+     * If a cell should not be possible to enter for this character, 999.0 should be a reasonable value for a cost.
+     *
+     * An example use for this would be to make a creature unable to enter any non-water cell (like a fish),
+     * unable to enter doorways (like some mythological versions of vampires), or to make a wheeled vehicle take more
+     * time to move across rubble or rough terrain.
+     *
+     * A potentially common case that needs to be addressed is NPC movement onto staircases in games that have them;
+     * some games may find it desirable for NPCs to block staircases and others may not, but in either case you should
+     * give both '&gt;' and '&lt;', the standard characters for staircases, the same value in costs.
+     *
+     * @param map a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors() .
+     * @param costs a Map of Character keys representing possible elements in map, and Double values for their cost.
+     * @param defaultValue a double that will be used as the cost for any characters that don't have a key in costs.
+     * @return a cost map suitable for use with DijkstraMap
+     */
+    public static double[][] generateCostMap(char[][] map, Map<Character, Double> costs, double defaultValue)
+    {
+        int width = map.length;
+        int height = map[0].length;
+        double[][] portion = new double[width][height];
+        char current;
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < height; j++) {
+                current = map[i][j];
+                if (costs.containsKey(current)) {
+                    portion[i][j] = costs.get(current);
+                } else {
+                    switch (current) {
+                        case '\1':
+                        case '├':
+                        case '┤':
+                        case '┴':
+                        case '┬':
+                        case '┌':
+                        case '┐':
+                        case '└':
+                        case '┘':
+                        case '│':
+                        case '─':
+                        case '┼':
+                        case '#':
+                            portion[i][j] = (costs.containsKey('#'))
+                                    ? costs.get('#')
+                                    : squidpony.squidai.DijkstraMap.WALL;
+                            break;
+                        default:
+                            portion[i][j] = defaultValue;
+                    }
                 }
             }
         }

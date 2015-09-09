@@ -49,8 +49,8 @@ public class Bresenham {
     /**
      * Generates a 3D Bresenham line between two points.
      *
-     * @param a Point to start from. This will be the first element of the list
-     * @param b Point to end at. This will be the last element of the list.
+     * @param a Coord to start from. This will be the first element of the list
+     * @param b Coord to end at. This will be the last element of the list.
      * @return A list of points between a and b.
      */
     public static Queue<Coord3D> line3D(Coord3D a, Coord3D b) {

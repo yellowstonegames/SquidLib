@@ -30,9 +30,9 @@ import java.util.Set;
  * that don't affect allies.</li>
  * <li>When an ideal location has been determined from the previous step, and the AI decides (possibly randomly, by an
  * aggression ("aggro") level tracked per-enemy, or by weights on Techniques for different situations) to use this
- * Technique on a specific target point, call apply() with the user position as a Point and the chosen Point, and
- * proceed to process the effects of the Technique as fitting for your game on the returned Map of Point keys to Double
- * values that describe the amount of effect (from 0.0 for none to 1.0 for full) that Point receives.</li>
+ * Technique on a specific target point, call apply() with the user position as a Coord and the chosen Coord, and
+ * proceed to process the effects of the Technique as fitting for your game on the returned Map of Coord keys to Double
+ * values that describe the amount of effect (from 0.0 for none to 1.0 for full) that Coord receives.</li>
  * </ul>
  *
  * A Technique always has an AOE implementation that it uses to determine which cells it actually affects, and
@@ -55,7 +55,7 @@ public class Technique {
     protected final static Coord DEFAULT_POINT = new Coord(0, 0);
 
     /**
-     * Creates a Technique that can target any adjacent single Point, using
+     * Creates a Technique that can target any adjacent single Coord, using
      * Chebyshev (8-way square) distance.
      */
     public Technique() {
@@ -65,7 +65,7 @@ public class Technique {
     }
 
     /**
-     * Creates a Technique that can target any adjacent single Point,
+     * Creates a Technique that can target any adjacent single Coord,
      * using Chebyshev (8-way square) distance.
      * @param name An identifier that may be displayed to the user. Also used for id.
      */
@@ -76,8 +76,8 @@ public class Technique {
     }
 
     /**
-     * Creates a Technique that can target a Point at a range specified by the given AOE's minRange and maxRange,
-     * using a distance metric from the AOE, and use that target Point for the given AOE.
+     * Creates a Technique that can target a Coord at a range specified by the given AOE's minRange and maxRange,
+     * using a distance metric from the AOE, and use that target Coord for the given AOE.
      * @param name An identifier that may be displayed to the user. Also used for id.
      * @param aoe An implementation of the AOE interface; typically needs construction beforehand.
      */
@@ -89,8 +89,8 @@ public class Technique {
 
 
     /**
-     * Creates a Technique that can target a Point at a range specified by the given AOE's minRange and maxRange,
-     * using a distance metric from the AOE, and use that target Point for the given AOE. Takes an id parameter.
+     * Creates a Technique that can target a Coord at a range specified by the given AOE's minRange and maxRange,
+     * using a distance metric from the AOE, and use that target Coord for the given AOE. Takes an id parameter.
      * @param name An identifier that may be displayed to the user.
      * @param id An identifier that should always be internal, and will probably never be shown to the user.
      * @param aoe An implementation of the AOE interface; typically needs construction beforehand.
@@ -118,8 +118,8 @@ public class Technique {
     }
 
     /**
-     * Get a mapping of Point keys representing locations to apply this Technique to, to ArrayList of Point values
-     * representing which targets (by their location) are effected by choosing that Point. All targets with this method
+     * Get a mapping of Coord keys representing locations to apply this Technique to, to ArrayList of Coord values
+     * representing which targets (by their location) are effected by choosing that Coord. All targets with this method
      * are valued equally, and the ideal location affects as many as possible without hitting any requiredExclusions.
      *
      * YOU MUST CALL setMap() with the current map status at some point before using this method, and call it again if
@@ -128,9 +128,9 @@ public class Technique {
      * differently-sized map and the Technique tries to use the previous map with coordinates from the new one.
      *
      * @param user The location of the user of this Technique
-     * @param targets Set of Point of desirable targets to include in the area of this Technique, as many as possible.
-     * @param requiredExclusions Set of Point where each value is something this Technique will really try to avoid.
-     * @return LinkedHashMap of Point keys representing target points to pass to apply, to ArrayList of Point values representing what targets' locations will be affected.
+     * @param targets Set of Coord of desirable targets to include in the area of this Technique, as many as possible.
+     * @param requiredExclusions Set of Coord where each value is something this Technique will really try to avoid.
+     * @return LinkedHashMap of Coord keys representing target points to pass to apply, to ArrayList of Coord values representing what targets' locations will be affected.
      */
     public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Set<Coord> targets, Set<Coord> requiredExclusions) {
         aoe.setOrigin(user);
@@ -139,8 +139,8 @@ public class Technique {
     }
 
     /**
-     * Get a mapping of Point keys representing locations to apply this Technique to, to ArrayList of Point values
-     * representing which targets (by their location) are effected by choosing that Point. This method will strongly
+     * Get a mapping of Coord keys representing locations to apply this Technique to, to ArrayList of Coord values
+     * representing which targets (by their location) are effected by choosing that Coord. This method will strongly
      * prefer including priorityTargets in its area, especially multiple one if possible, and primarily uses
      * lesserTargets as a tiebreaker if two locations have the same number of included priorityTargets but one has more
      * lesserTargets in its area.
@@ -151,10 +151,10 @@ public class Technique {
      * differently-sized map and the Technique tries to use the previous map with coordinates from the new one.
      *
      * @param user The location of the user of this Technique
-     * @param priorityTargets Set of Point of important targets to include in the area of this Technique, preferring to target a single priorityTarget over four lesserTargets.
-     * @param lesserTargets Set of Point of desirable targets to include in the area of this Technique, as many as possible without excluding priorityTargets.
-     * @param requiredExclusions Set of Point where each value is something this Technique will really try to avoid.
-     * @return LinkedHashMap of Point keys representing target points to pass to apply, to ArrayList of Point values representing what targets' locations will be affected.
+     * @param priorityTargets Set of Coord of important targets to include in the area of this Technique, preferring to target a single priorityTarget over four lesserTargets.
+     * @param lesserTargets Set of Coord of desirable targets to include in the area of this Technique, as many as possible without excluding priorityTargets.
+     * @param requiredExclusions Set of Coord where each value is something this Technique will really try to avoid.
+     * @return LinkedHashMap of Coord keys representing target points to pass to apply, to ArrayList of Coord values representing what targets' locations will be affected.
      */
     public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         aoe.setOrigin(user);
@@ -164,7 +164,7 @@ public class Technique {
     /**
      * This does one last validation of the location aimAt (checking that it is within the valid range for this
      * Technique) before getting the area affected by the AOE targeting that cell. It considers the origin of the AOE
-     * to be the Point parameter user, for purposes of directional limitations and for AOE implementations that need
+     * to be the Coord parameter user, for purposes of directional limitations and for AOE implementations that need
      * the user's location, such as ConeAOE and LineAOE.
      *
      * YOU MUST CALL setMap() with the current map status at some point before using this method, and call it again if
@@ -173,8 +173,8 @@ public class Technique {
      * differently-sized map and the Technique tries to use the previous map with coordinates from the new one.
      *
      * @param user The position of the Technique's user, x first, y second.
-     * @param aimAt A target Point typically obtained from idealLocations that determines how to position the AOE.
-     * @return a HashMap of Point keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).
+     * @param aimAt A target Coord typically obtained from idealLocations that determines how to position the AOE.
+     * @return a HashMap of Coord keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).
      */
     public LinkedHashMap<Coord, Double> apply(Coord user, Coord aimAt)
     {

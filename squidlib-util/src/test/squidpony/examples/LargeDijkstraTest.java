@@ -10,8 +10,6 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-import java.awt.Point;
-
 /**
  * Created by Tommy Ettinger on 4/5/2015.
  */

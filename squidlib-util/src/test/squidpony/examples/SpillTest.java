@@ -8,7 +8,6 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 import squidpony.squidgrid.Spill;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 
