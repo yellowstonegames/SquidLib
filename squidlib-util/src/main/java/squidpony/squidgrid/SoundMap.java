@@ -59,7 +59,7 @@ public class SoundMap
      */
     public int width;
     /**
-     * The latest results of findAlerted(), with Point keys representing the positions of creatures that were alerted
+     * The latest results of findAlerted(), with Coord keys representing the positions of creatures that were alerted
      * and Double values representing how loud the sound was when it reached them.
      */
     public HashMap<Coord, Double> alerted = new HashMap<Coord, Double>();
@@ -317,7 +317,7 @@ public class SoundMap
     }
 
     /**
-     * If a sound is being produced at a given location (a Point), this removes it.
+     * If a sound is being produced at a given location (a Coord), this removes it.
      * @param pt
      */
     public void removeSound(Coord pt) {
@@ -446,7 +446,7 @@ public class SoundMap
     /**
      * Scans the dungeon using SoundMap.scan, adding any positions in extraSounds to the group of known sounds before
      * scanning.  The creatures passed to this function as a Set of Points will have the loudness of all sounds at
-     * their position put as the value in alerted corresponding to their Point position.
+     * their position put as the value in alerted corresponding to their Coord position.
      *
      * @param creatures
      * @param extraSounds

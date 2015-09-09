@@ -7,7 +7,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-import java.awt.Point;
+
 import java.util.*;
 
 /**
@@ -587,14 +587,14 @@ public class DijkstraMap
                     Coord adj = new Coord(cell.getKey());
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
-                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                     }
                 }
             }
-            closed.putAll(open);
+//            closed.putAll(open);
             open = new LinkedHashMap<Coord, Double>(fresh);
             fresh.clear();
         }
@@ -677,14 +677,14 @@ public class DijkstraMap
                     Coord adj = new Coord(cell.getKey());
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
-                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                     }
                 }
             }
-            closed.putAll(open);
+//            closed.putAll(open);
             open = new LinkedHashMap<Coord, Double>(fresh);
             fresh.clear();
             ++iter;
@@ -825,14 +825,14 @@ public class DijkstraMap
                     Coord adj = new Coord(cell.getKey());
                     adj.translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
-                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h < gradientMap[adj.x][adj.y]) {
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                     }
                 }
             }
-            closed.putAll(open);
+//            closed.putAll(open);
             open = new LinkedHashMap<Coord, Double>(fresh);
             fresh.clear();
         }
@@ -854,7 +854,7 @@ public class DijkstraMap
 
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
-     * of Point positions (using the current measurement) needed to get closer to the closest reachable
+     * of Coord positions (using the current measurement) needed to get closer to the closest reachable
      * goal. The maximum length of the returned list is given by length; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
      * (which is typically filled with friendly units that can be passed through in multi-tile-
@@ -937,7 +937,7 @@ public class DijkstraMap
     }
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
-     * of Point positions (using the current measurement) needed to get closer to a goal, until preferredRange is
+     * of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is
      * reached, or further from a goal if the preferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -1067,7 +1067,7 @@ public class DijkstraMap
     }
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
-     * of Point positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
+     * of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
      * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
      * which may go further from a goal if the minPreferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
@@ -1202,15 +1202,15 @@ public class DijkstraMap
 
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
-     * of Point positions (using the current measurement) needed to get closer to a goal, where goals are
+     * of Coord positions (using the current measurement) needed to get closer to a goal, where goals are
      * considered valid if they are at a valid range for the given Technique to hit at least one target
      * and ideal if that Technique can affect as many targets as possible from a cell that can be moved
      * to with at most movelength steps.
      *
      * The return value of this method is the path to get to a location to attack, but on its own it
-     * does not tell the user how to perform the attack.  It does set the targetMap 2D Point array field
+     * does not tell the user how to perform the attack.  It does set the targetMap 2D Coord array field
      * so that if your position at the end of the returned path is non-null in targetMap, it will be
-     * a Point that can be used as a target position for Technique.apply() . If your position at the end
+     * a Coord that can be used as a target position for Technique.apply() . If your position at the end
      * of the returned path is null, then an ideal attack position was not reachable by the path.
      *
      * This needs a char[][] dungeon as an argument because DijkstraMap does not always have a char[][]
@@ -1228,17 +1228,17 @@ public class DijkstraMap
      *
      * @param moveLength the maximum distance to try to pathfind out to; if a spot to use a Technique can be found
      *                   while moving no more than this distance, then the targetMap field in this object will have a
-     *                   target Point that is ideal for the given Technique at the x, y indices corresponding to the
-     *                   last Point in the returned path.
+     *                   target Coord that is ideal for the given Technique at the x, y indices corresponding to the
+     *                   last Coord in the returned path.
      * @param tech a Technique that we will try to find an ideal place to use, and/or a path toward that place.
      * @param dungeon a char 2D array with '#' for walls.
      * @param los a squidgrid.LOS object if the preferred range should try to stay in line of sight, or null if LoS
      *            should be disregarded.
      * @param impassable locations of enemies or mobile hazards/obstacles that aren't in the map as walls
      * @param allies called onlyPassable in other methods, here it also represents allies for Technique things
-     * @param start the Point the pathfinder starts at.
-     * @param targets a Set of Point, not an array of Point or variable argument list as in other methods.
-     * @return an ArrayList of Point that represents a path to travel to get to an ideal place to use tech
+     * @param start the Coord the pathfinder starts at.
+     * @param targets a Set of Coord, not an array of Coord or variable argument list as in other methods.
+     * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech
      */
     public ArrayList<Coord> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, LOS los,
                                            Set<Coord> impassable, Set<Coord> allies, Coord start, Set<Coord> targets) {
@@ -1346,7 +1346,7 @@ public class DijkstraMap
                 }
             }
             resetMap();
-           /* for(Point g : goals.keySet())
+           /* for(Coord g : goals.keySet())
             {
                 gradientMap[g.x][g.y] = 0.0 - worthMap[g.x][g.y];
             }*/
@@ -1425,7 +1425,7 @@ public class DijkstraMap
     private int cachedSize = 1;
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list
-     * of Point positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
      * for running away. The maximum length of the returned list is given by length; if moving the full
      * length of the list would place the mover in a position shared by one of the positions in onlyPassable
      * (which is typically filled with friendly units that can be passed through in multi-tile-
@@ -1538,7 +1538,7 @@ public class DijkstraMap
     }
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
-     * of Point positions (using the current measurement) needed to get closer to the closest reachable
+     * of Coord positions (using the current measurement) needed to get closer to the closest reachable
      * goal. The maximum length of the returned list is given by length; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
      * (which is typically filled with friendly units that can be passed through in multi-tile-
@@ -1626,7 +1626,7 @@ public class DijkstraMap
     }
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
-     * of Point positions (using the current measurement) needed to get closer to a goal, until preferredRange is
+     * of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is
      * reached, or further from a goal if the preferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -1761,7 +1761,7 @@ public class DijkstraMap
     }
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
-     * of Point positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
+     * of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
      * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
      * which may go further from a goal if the minPreferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
@@ -1903,7 +1903,7 @@ public class DijkstraMap
 
     /**
      * Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list
-     * of Point positions (using Manhattan distance) needed to get further from the closest fearSources, meant
+     * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
      * for running away. The maximum length of the returned list is given by length; if moving the full
      * length of the list would place the mover in a position shared by one of the positions in onlyPassable
      * (which is typically filled with friendly units that can be passed through in multi-tile-
@@ -2021,12 +2021,12 @@ public class DijkstraMap
     }
 
     /**
-     * A simple limited flood-fill that returns a LinkedHashMap of Point keys to the Double values in the DijkstraMap, only
+     * A simple limited flood-fill that returns a LinkedHashMap of Coord keys to the Double values in the DijkstraMap, only
      * calculating out to a number of steps determined by limit. This can be useful if you need many flood-fills and
      * don't need a large area for each, or if you want to have an effect spread to a certain number of cells away.
      * @param radius the number of steps to take outward from each starting position.
-     * @param starts a vararg group of Points to step outward from; this often will only need to be one Point.
-     * @return A LinkedHashMap of Point keys to Double values; the starts are included in this with the value 0.0.
+     * @param starts a vararg group of Points to step outward from; this often will only need to be one Coord.
+     * @return A LinkedHashMap of Coord keys to Double values; the starts are included in this with the value 0.0.
      */
     public LinkedHashMap<Coord, Double> floodFill(int radius, Coord... starts) {
         if(!initialized) return null;

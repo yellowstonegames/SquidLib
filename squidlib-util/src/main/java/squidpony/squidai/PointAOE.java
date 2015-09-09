@@ -3,14 +3,14 @@ package squidpony.squidai;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
-import java.awt.Point;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * An AOE type that has a center Point only and only affects that single Point. Useful if you need an AOE implementation
+ * An AOE type that has a center Coord only and only affects that single Coord. Useful if you need an AOE implementation
  * for something that does not actually affect an area.
  * This will produce doubles for its findArea() method which are equal to 1.0.
  *
@@ -139,14 +139,14 @@ public class PointAOE implements AOE {
 
     /*
     @Override
-    public ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public ArrayList<ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         int totalTargets = targets.size() + 1;
         int maxEffect = (int)radiusType.volume2D(radius);
-        ArrayList<ArrayList<Point>> locs = new ArrayList<ArrayList<Point>>(totalTargets);
+        ArrayList<ArrayList<Coord>> locs = new ArrayList<ArrayList<Coord>>(totalTargets);
 
         for(int i = 0; i < totalTargets; i++)
         {
-            locs.add(new ArrayList<Point>(maxEffect));
+            locs.add(new ArrayList<Coord>(maxEffect));
         }
         if(totalTargets == 1)
             return locs;
@@ -162,22 +162,22 @@ public class PointAOE implements AOE {
         for (int x = 1; x < dungeon.length - 1; x += radius) {
             BY_POINT:
             for (int y = 1; y < dungeon[x].length - 1; y += radius) {
-                for(Point ex : requiredExclusions)
+                for(Coord ex : requiredExclusions)
                 {
                     if(radiusType.radius(x, y, ex.x, ex.y) <= radius)
                         continue BY_POINT;
                 }
                 ctr = 0;
-                for(Point tgt : targets)
+                for(Coord tgt : targets)
                 {
                     if(radiusType.radius(x, y, tgt.x, tgt.y) <= radius)
                         ctr++;
                 }
                 if(ctr > 0)
-                    locs.get(totalTargets - ctr).add(new Point(x, y));
+                    locs.get(totalTargets - ctr).add(new Coord(x, y));
             }
         }
-        Point it;
+        Coord it;
         for(int t = 0; t < totalTargets - 1; t++)
         {
             if(locs.get(t).size() > 0) {
@@ -192,20 +192,20 @@ public class PointAOE implements AOE {
                                 continue;
                             tested[x][y] = true;
 
-                            for(Point ex : requiredExclusions)
+                            for(Coord ex : requiredExclusions)
                             {
                                 if(radiusType.radius(x, y, ex.x, ex.y) <= radius)
                                     continue BY_POINT;
                             }
 
                             ctr = 0;
-                            for(Point tgt : targets)
+                            for(Coord tgt : targets)
                             {
                                 if(radiusType.radius(x, y, tgt.x, tgt.y) <= radius)
                                     ctr++;
                             }
                             if(ctr > 0)
-                                locs.get(totalTargets - ctr).add(new Point(x, y));
+                                locs.get(totalTargets - ctr).add(new Coord(x, y));
                         }
                     }
                 }

@@ -507,15 +507,15 @@ public class ConeAOE implements AOE {
 
     /*
     @Override
-    public ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public ArrayList<ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         int totalTargets = targets.size() + 1;
         int maxEffect = (int)(radiusType.volume2D(radius) * Math.max(5, span) / 360.0);
         double allowed = Math.toRadians(span / 2.0);
-        ArrayList<ArrayList<Point>> locs = new ArrayList<ArrayList<Point>>(totalTargets);
+        ArrayList<ArrayList<Coord>> locs = new ArrayList<ArrayList<Coord>>(totalTargets);
 
         for(int i = 0; i < totalTargets; i++)
         {
-            locs.add(new ArrayList<Point>(maxEffect));
+            locs.add(new ArrayList<Coord>(maxEffect));
         }
         if(totalTargets == 1)
             return locs;
@@ -534,7 +534,7 @@ public class ConeAOE implements AOE {
             for (int y = 1; y < dungeon[x].length - 1; y += radius) {
                 ang = Math.atan2(y - origin.y, x - origin.x); // between -pi and pi
 
-                for(Point ex : requiredExclusions) {
+                for(Coord ex : requiredExclusions) {
                     if (radiusType.radius(x, y, ex.x, ex.y) <= radius) {
                         tmpAngle = Math.abs(ang - Math.atan2(ex.y - origin.y, ex.x - origin.x));
                         if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
@@ -543,7 +543,7 @@ public class ConeAOE implements AOE {
                     }
                 }
                 ctr = 0;
-                for(Point tgt : targets) {
+                for(Coord tgt : targets) {
                     if (radiusType.radius(x, y, tgt.x, tgt.y) <= radius) {
                         tmpAngle = Math.abs(ang - Math.atan2(tgt.y - origin.y, tgt.x - origin.x));
                         if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
@@ -552,10 +552,10 @@ public class ConeAOE implements AOE {
                     }
                 }
                 if(ctr > 0)
-                    locs.get(totalTargets - ctr).add(new Point(x, y));
+                    locs.get(totalTargets - ctr).add(new Coord(x, y));
             }
         }
-        Point it;
+        Coord it;
         for(int t = 0; t < totalTargets - 1; t++)
         {
             if(locs.get(t).size() > 0) {
@@ -570,7 +570,7 @@ public class ConeAOE implements AOE {
                                 continue;
                             tested[x][y] = true;
                             ang = Math.atan2(y - origin.y, x - origin.x); // between -pi and pi
-                            for(Point ex : requiredExclusions) {
+                            for(Coord ex : requiredExclusions) {
                                 if (radiusType.radius(x, y, ex.x, ex.y) <= radius) {
                                     tmpAngle = Math.abs(ang - Math.atan2(ex.y - origin.y, ex.x - origin.x));
                                     if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
@@ -580,7 +580,7 @@ public class ConeAOE implements AOE {
                             }
 
                             ctr = 0;
-                            for(Point tgt : targets) {
+                            for(Coord tgt : targets) {
                                 if (radiusType.radius(x, y, tgt.x, tgt.y) <= radius) {
                                     tmpAngle = Math.abs(ang - Math.atan2(tgt.y - origin.y, tgt.x - origin.x));
                                     if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
@@ -589,7 +589,7 @@ public class ConeAOE implements AOE {
                                 }
                             }
                             if(ctr > 0)
-                                locs.get(totalTargets - ctr).add(new Point(x, y));
+                                locs.get(totalTargets - ctr).add(new Coord(x, y));
                         }
                     }
                 }

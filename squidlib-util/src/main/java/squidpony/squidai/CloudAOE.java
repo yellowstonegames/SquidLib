@@ -552,14 +552,14 @@ public class CloudAOE implements AOE {
 
 /*
     @Override
-    public ArrayList<ArrayList<Point>> idealLocations(Set<Point> targets, Set<Point> requiredExclusions) {
+    public ArrayList<ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         int totalTargets = targets.size() + 1;
         int radius = Math.max(1, (int) (Math.sqrt(volume) * 1.5));
-        ArrayList<ArrayList<Point>> locs = new ArrayList<ArrayList<Point>>(totalTargets);
+        ArrayList<ArrayList<Coord>> locs = new ArrayList<ArrayList<Coord>>(totalTargets);
 
         for(int i = 0; i < totalTargets; i++)
         {
-            locs.add(new ArrayList<Point>(volume));
+            locs.add(new ArrayList<Coord>(volume));
         }
         if(totalTargets == 1)
             return locs;
@@ -574,23 +574,23 @@ public class CloudAOE implements AOE {
         for (int x = 1; x < dungeon.length - 1; x += radius) {
             BY_POINT:
             for (int y = 1; y < dungeon[x].length - 1; y += radius) {
-                for(Point ex : requiredExclusions)
+                for(Coord ex : requiredExclusions)
                 {
                     if(rt.radius(x, y, ex.x, ex.y) <= radius * 0.75)
                         continue BY_POINT;
                 }
                 ctr = 0;
-                for(Point tgt : targets)
+                for(Coord tgt : targets)
                 {
                     tempRad = rt.radius(x, y, tgt.x, tgt.y);
                     if(tempRad < radius)
                         ctr += 1.0 - (tempRad / radius) * 0.5;
                 }
                 if(ctr >= 1)
-                    locs.get((int)(totalTargets - ctr)).add(new Point(x, y));
+                    locs.get((int)(totalTargets - ctr)).add(new Coord(x, y));
             }
         }
-        Point it;
+        Coord it;
         for(int t = 0; t < totalTargets - 1; t++)
         {
             if(locs.get(t).size() > 0) {
@@ -605,21 +605,21 @@ public class CloudAOE implements AOE {
                                 continue;
                             tested[x][y] = true;
 
-                            for(Point ex : requiredExclusions)
+                            for(Coord ex : requiredExclusions)
                             {
                                 if(rt.radius(x, y, ex.x, ex.y) <= radius * 0.75)
                                     continue BY_POINT;
                             }
 
                             ctr = 0;
-                            for(Point tgt : targets)
+                            for(Coord tgt : targets)
                             {
                                 tempRad = rt.radius(x, y, tgt.x, tgt.y);
                                 if(tempRad < radius)
                                     ctr += 1.0 - (tempRad / radius) * 0.5;
                             }
                             if(ctr >= 1)
-                                locs.get((int)(totalTargets - ctr)).add(new Point(x, y));
+                                locs.get((int)(totalTargets - ctr)).add(new Coord(x, y));
                         }
                     }
                 }

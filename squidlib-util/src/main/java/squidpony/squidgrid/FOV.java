@@ -421,10 +421,10 @@ public class FOV {
         neighbors = neighbors.subList(0, rippleNeighbors);
 /*
         while (neighbors.size() > rippleNeighbors) {
-            Point p = neighbors.remove(0);
+            Coord p = neighbors.remove(0);
             double dist = radiusStrategy.radius(startx, starty, p.x, p.y);
             double dist2 = 0;
-            for (Point p2 : neighbors) {
+            for (Coord p2 : neighbors) {
                 dist2 = Math.max(dist2, radiusStrategy.radius(startx, starty, p2.x, p2.y));
             }
             if (dist < dist2) {//not the largest, put it back

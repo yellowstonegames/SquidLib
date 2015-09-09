@@ -1,6 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import java.awt.Point;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
