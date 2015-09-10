@@ -1,10 +1,13 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,9 +18,11 @@ import com.badlogic.gdx.utils.Align;
 /**
  * Class for creating text blocks.
  *
- * This class defaults to using one of the bundled sans fonts at size 12 px height, no
- * padding, and antialias on. If more vertical padding is needed, it is
- * recommended to try adding it mostly to the top. Antialias can't be turned off, so
+ * This class defaults to having no padding and having no font set. You can use a
+ * default square or narrow font by calling the appropriate method, or set the font
+ * to any AngelCode bitmap font on the classpath (typically in libGDX, this would be
+ * in the assets folder; these fonts can be created by Hiero in the libGDX tools,
+ * see https://github.com/libgdx/libgdx/wiki/Hiero for more)
  *
  * After all settings are set, one of the initialization methods must be called
  * before the factory can be used.
@@ -37,11 +42,11 @@ public class TextCellFactory {
     public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\ ",
     LINE_FITTING = "┼├┤┴┬┌┐└┘│─", SQUID_FITTING = DEFAULT_FITTING + LINE_FITTING;
 
-    private BitmapFont bmpFont = null;
-    private Texture block = null;
-    private String fitting = SQUID_FITTING;
-    private int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
-    private int width = 1, height = 1;
+    protected BitmapFont bmpFont = null;
+    protected Texture block = null;
+    protected String fitting = SQUID_FITTING;
+    protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
+    protected int width = 1, height = 1;
     private boolean initialized = false;
 
     /**
@@ -66,7 +71,7 @@ public class TextCellFactory {
         this.width = (int)bmpFont.getSpaceWidth();
         this.height = (int)(bmpFont.getLineHeight());
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
+        temp.setColor(Color.WHITE);
         temp.fill();
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
@@ -88,7 +93,7 @@ public class TextCellFactory {
     public TextCellFactory initBySize() {
         bmpFont.setFixedWidthGlyphs(fitting);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        temp.setColor(com.badlogic.gdx.graphics.Color.WHITE);
+        temp.setColor(Color.WHITE);
         temp.fill();
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
@@ -120,6 +125,23 @@ public class TextCellFactory {
     /**
      * Sets this factory to use the provided font.
      *
+     * This is a way to complete a needed step; the font must be set before initializing, which can be done by a few
+     * methods in this class.
+     *
+     * This should be called with an argument such as "Rogue-Zodiac-6x12.fnt", that is, it should have the .fnt
+     * extension as opposed to the .png that accompanies such a bitmap font. The bitmap font should be on the classpath,
+     * which usually means it is in the libGDX assets folder, but can also be a resource bundled with SquidLib:
+     * <ul>
+     *     <li>"Rogue-Zodiac-6x12.fnt"</li>
+     *     <li>"Rogue-Zodiac-12x24.fnt" (available with the defaultNarrowFont() method as well)</li>
+     *     <li>"Zodiac-Square-12x12.fnt" (available with the defaultSquareFont() method as well)</li>
+     *     <li>"Zodiac-Square-24x24.fnt"</li>
+     *     <li>"Mandrill-6x16.fnt"</li>
+     *     <li>"Mandrill-12x32.fnt"</li>
+     * </ul>
+     *
+     * See https://github.com/libgdx/libgdx/wiki/Hiero for some ways to create a bitmap font this can use.
+     *
      * @param fontpath the path to the font to use
      * @return this factory for method chaining
      */
@@ -128,12 +150,28 @@ public class TextCellFactory {
         return this;
     }
 
+    /**
+     * Sets this factory to use a default 12x24 font.
+     *
+     * This is a way to complete a needed step; the font must be set before initializing, which can be done by a few
+     * methods in this class.
+     *
+     * @return this factory for method chaining
+     */
     public TextCellFactory defaultNarrowFont()
     {
         bmpFont = DefaultResources.getLargeNarrowFont();
         return this;
     }
 
+    /**
+     * Sets this factory to use a default 12x12 font.
+     *
+     * This is a way to complete a needed step; the font must be set before initializing, which can be done by a few
+     * methods in this class.
+     *
+     * @return this factory for method chaining
+     */
     public TextCellFactory defaultSquareFont()
     {
         bmpFont = DefaultResources.getDefaultFont();
@@ -408,12 +446,12 @@ public class TextCellFactory {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (s == null) {
-            com.badlogic.gdx.graphics.Color orig = batch.getColor();
+            Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            com.badlogic.gdx.graphics.Color orig = batch.getColor();
+            Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
@@ -440,12 +478,12 @@ public class TextCellFactory {
         bmpFont.setColor(color);
 
         if (s == null) {
-            com.badlogic.gdx.graphics.Color orig = batch.getColor();
+            Color orig = batch.getColor();
             batch.setColor(color);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            com.badlogic.gdx.graphics.Color orig = batch.getColor();
+            Color orig = batch.getColor();
             batch.setColor(color);
             batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
@@ -455,7 +493,182 @@ public class TextCellFactory {
         }
     }
 
-    public Actor makeActor(String s, com.badlogic.gdx.graphics.Color color) {
+    /**
+     * Use the specified Batch to draw a TextureRegion with the default tint color (white, so un-tinted), with x and y
+     * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
+     * if its size does not match what this TextCellFactory uses for width and height.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, TextureRegion tr, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (tr == null) {
+            batch.draw(block, x, y - height, width, height);
+        } else {
+            batch.draw(tr, x, y - height, width, height);
+        }
+    }
+    /**
+     * Use the specified Batch to draw a TextureRegion tinted with the specified rgba color, with x and y
+     * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
+     * if its size does not match what this TextCellFactory uses for width and height.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
+     * @param r 0.0 to 0.1 red value
+     * @param g 0.0 to 0.1 green value
+     * @param b 0.0 to 0.1 blue value
+     * @param a 0.0 to 0.1 alpha value
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, TextureRegion tr, float r, float g, float b, float a, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (tr == null) {
+            Color orig = batch.getColor();
+            batch.setColor(r, g, b, a);
+            batch.draw(block, x, y - height, width, height);
+            batch.setColor(orig);
+        } else {
+            Color orig = batch.getColor();
+            batch.setColor(r, g, b, a);
+            batch.draw(tr, x, y - height, width, height);
+            batch.setColor(orig);
+        }
+    }
+
+    /**
+     * Use the specified Batch to draw a TextureRegion tinted with the specified LibGDX Color, with x and y
+     * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
+     * if its size does not match what this TextCellFactory uses for width and height.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
+     * @param color the LibGDX Color to draw the char(s) with, all the same color
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, TextureRegion tr, Color color, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        bmpFont.setColor(color);
+
+        if (tr == null) {
+            Color orig = batch.getColor();
+            batch.setColor(color);
+            batch.draw(block, x, y - height, width, height);
+            batch.setColor(orig);
+        } else {
+            Color orig = batch.getColor();
+            batch.setColor(color);
+            batch.draw(tr, x, y - height, width, height);
+            batch.setColor(orig);
+        }
+    }
+
+    /**
+     * Use the specified Batch to draw a TextureRegion with the default tint color (white, so un-tinted), with x and y
+     * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
+     * only if the supplied width and height do not match what its own dimensions are.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     * @param width the width of the TextureRegion or solid block in pixels.
+     * @param height the height of the TextureRegion or solid block in pixels.
+     */
+    public void draw(Batch batch, TextureRegion tr, float x, float y, float width, float height) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (tr == null) {
+            batch.draw(block, x, y - height, width, height);
+        } else {
+            batch.draw(tr, x, y - height, width, height);
+        }
+    }
+    /**
+     * Use the specified Batch to draw a TextureRegion tinted with the specified rgba color, with x and y
+     * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
+     * only if the supplied width and height do not match what its own dimensions are.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
+     * @param r 0.0 to 0.1 red value
+     * @param g 0.0 to 0.1 green value
+     * @param b 0.0 to 0.1 blue value
+     * @param a 0.0 to 0.1 alpha value
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     * @param width the width of the TextureRegion or solid block in pixels.
+     * @param height the height of the TextureRegion or solid block in pixels.
+     */
+    public void draw(Batch batch, TextureRegion tr, float r, float g, float b, float a, float x, float y, float width, float height) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (tr == null) {
+            Color orig = batch.getColor();
+            batch.setColor(r, g, b, a);
+            batch.draw(block, x, y - height, width, height);
+            batch.setColor(orig);
+        } else {
+            Color orig = batch.getColor();
+            batch.setColor(r, g, b, a);
+            batch.draw(tr, x, y - height, width, height);
+            batch.setColor(orig);
+        }
+    }
+
+    /**
+     * Use the specified Batch to draw a TextureRegion tinted with the specified LibGDX Color, with x and y
+     * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
+     * only if the supplied width and height do not match what its own dimensions are.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
+     * @param color the LibGDX Color to draw the char(s) with, all the same color
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     * @param width the width of the TextureRegion or solid block in pixels.
+     * @param height the height of the TextureRegion or solid block in pixels.
+     */
+    public void draw(Batch batch, TextureRegion tr, Color color, float x, float y, float width, float height) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        bmpFont.setColor(color);
+
+        if (tr == null) {
+            Color orig = batch.getColor();
+            batch.setColor(color);
+            batch.draw(block, x, y - height, width, height);
+            batch.setColor(orig);
+        } else {
+            Color orig = batch.getColor();
+            batch.setColor(color);
+            batch.draw(tr, x, y - height, width, height);
+            batch.setColor(orig);
+        }
+    }
+
+    /**
+     * Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
+     * for preparing glyphs for animation effects, and is used internally for this purpose.
+     * @param s a String to make into an Actor, which can be null for a solid block.
+     * @param color a Color to tint s with.
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(String s, Color color) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -476,6 +689,58 @@ public class TextCellFactory {
             lb.setColor(color);
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
+        }
+    }
+
+    /**
+     * Converts a TextureRegion into an Image, or if the argument s is null, creates an Image of a solid block. Can be
+     * used for preparing images for animation effects. Stretches the TextureRegion to match a single cell's dimensions.
+     * @param tr a TextureRegion to make into an Actor, which can be null for a solid block.
+     * @param color a Color to tint tr with.
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(TextureRegion tr, Color color) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (tr == null) {
+            Image im = new Image(block);
+            im.setColor(color);
+            im.setSize(width, height);
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else {
+            Image im = new Image(tr);
+            im.setColor(color);
+            im.setSize(width, height);
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        }
+    }
+
+    /**
+     * Converts a TextureRegion into an Image, or if the argument s is null, creates an Image of a solid block. Can be
+     * used for preparing images for animation effects. Ensures the returned Image has the given width and height.
+     * @param tr a TextureRegion to make into an Actor, which can be null for a solid block.
+     * @param color a Color to tint tr with.
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(TextureRegion tr, Color color, float width, float height) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (tr == null) {
+            Image im = new Image(block);
+            im.setColor(color);
+            im.setSize(width, height);
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else {
+            Image im = new Image(tr);
+            im.setColor(color);
+            im.setSize(width, height);
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
         }
     }
 

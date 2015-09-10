@@ -31,8 +31,8 @@ public class DefaultResources {
         return square;
     }
     /**
-     * Returns a 12x12px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
-     * @return the BitmapFont object representing Zodiac-Square.ttf at size 16 pt.
+     * Returns a 24x24px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
+     * @return the BitmapFont object representing Zodiac-Square.ttf at size 32 pt.
      */
     public static BitmapFont getLargeFont()
     {
@@ -62,8 +62,8 @@ public class DefaultResources {
     }
 
     /**
-     * Returns a 6x12px, narrow and curving font as an embedded resource. Caches it for later calls.
-     * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 16 pt.
+     * Returns a 12x24px, narrow and curving font as an embedded resource. Caches it for later calls.
+     * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 32 pt.
      */
     public static BitmapFont getLargeNarrowFont()
     {
@@ -78,7 +78,7 @@ public class DefaultResources {
     }
 
     /**
-     * Returns a 6x12px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
+     * Returns a 6x16px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
      * @return the BitmapFont object representing Mandrill.ttf at size 16 pt.
      */
     public static BitmapFont getDefaultUnicodeFont()
@@ -94,7 +94,7 @@ public class DefaultResources {
     }
 
     /**
-     * Returns a 6x12px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
+     * Returns a 12x32px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
      * @return the BitmapFont object representing Mandrill.ttf at size 32 pt.
      */
     public static BitmapFont getLargeUnicodeFont()
