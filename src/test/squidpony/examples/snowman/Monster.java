@@ -1,6 +1,6 @@
 package squidpony.examples.snowman;
 
-import squidpony.SColor;
+import squidpony.squidgrid.gui.SColor;
 
 /**
  * This class represents an enemy creature.

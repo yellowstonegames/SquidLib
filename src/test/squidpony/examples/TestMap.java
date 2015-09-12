@@ -1,6 +1,6 @@
 package squidpony.examples;
 
-import squidpony.SColor;
+import squidpony.squidgrid.gui.SColor;
 
 /**
  * This class holds the items needed for constructing and using a test map for various grid algorithms.

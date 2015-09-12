@@ -2,7 +2,6 @@ package squidpony.examples;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -13,8 +12,8 @@ import java.util.Queue;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.event.MouseInputListener;
-import squidpony.SColor;
-import squidpony.SColorFactory;
+import squidpony.squidgrid.gui.SColor;
+import squidpony.squidgrid.gui.SColorFactory;
 import squidpony.squidgrid.gui.SquidMouse;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
@@ -324,7 +323,7 @@ public class FieldOfViewDemo {
         litNear = SColorFactory.asSColor(panel.castColorPanel.getBackground().getRGB());
         litFar = SColorFactory.asSColor(panel.fadeColorPanel.getBackground().getRGB());
         incomingLight = panel.getFOVSolver().calculateFOV(resistances, startx, starty, lightForce, panel.getStrategy());
-        SColorFactory.addPallet("light", SColorFactory.asGradient(litNear, litFar));
+        SColorFactory.addPalette("light", SColorFactory.asGradient(litNear, litFar));
 
         if (panel.placeLightSourceBox.isSelected()) {
             lightSource[startx][starty] = true;
@@ -347,7 +346,7 @@ public class FieldOfViewDemo {
                         clean[x][y] = false;
                         if (!lightSource[x][y]) {//don't add extra light to light sources
                             double bright = 1 - incomingLight[x][y];
-                            lighting[x][y] = SColorFactory.add(lighting[x][y], SColorFactory.fromPallet("light", (float) bright));
+                            lighting[x][y] = SColorFactory.add(lighting[x][y], SColorFactory.fromPalette("light", (float) bright));
                         }
                         if (x == startx && y == starty) {//light source is given it's full light
                             lighting[x][y] = litNear;
@@ -357,7 +356,7 @@ public class FieldOfViewDemo {
                     if (panel.playerCastsLightBox.isSelected()) {
                         if (incomingLight[x][y] > 0) {
                             double bright = 1 - incomingLight[x][y];
-                            playerLight[x][y] = SColorFactory.fromPallet("light", (float) bright);
+                            playerLight[x][y] = SColorFactory.fromPalette("light", (float) bright);
                             clean[x][y] = false;
                         } else if (!playerLight[x][y].equals(SColor.BLACK)) {
                             playerLight[x][y] = SColor.BLACK;

@@ -1,6 +1,5 @@
 package squidpony.squidgrid.gui;
 
-import squidpony.Colors;
 import squidpony.annotation.Beta;
 
 import javax.swing.JLayeredPane;

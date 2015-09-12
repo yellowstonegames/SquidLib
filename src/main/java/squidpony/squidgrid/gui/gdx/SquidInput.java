@@ -2,7 +2,6 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.utils.CharArray;
-import com.badlogic.gdx.utils.IntArray;
 
 /**
  * This input processing class can handle mouse and keyboard input, using a squidpony.squidgrid.gui.gdx.SquidMouse for

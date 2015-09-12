@@ -1,6 +1,6 @@
 package squidpony.examples;
 
-import squidpony.Colors;
+import squidpony.squidgrid.gui.Colors;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
@@ -17,7 +17,6 @@ import squidpony.squidmath.RNG;
 import javax.swing.JFrame;
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
