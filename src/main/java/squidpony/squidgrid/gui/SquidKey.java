@@ -49,16 +49,10 @@ public class SquidKey implements KeyListener, Iterable<KeyEvent>, Iterator<KeyEv
     private boolean blockOnEmpty, ignoreInput = false;
 
     /**
-     * Creates a new listener which can optionally block when no input is currently available and
-     * will capture on key up or key down depending on the parameters.
-     *
-     * @param blockOnEmpty if true then this object will wait until there is input before returning
-     * from a request for the next event
-     * @param type
+     * A constructor completely equivalent to {@code new SquidKey(blockOnEmpty, type, false)}.
      */
     public SquidKey(boolean blockOnEmpty, CaptureType type) {
-        this.blockOnEmpty = blockOnEmpty;
-        this.type = type;
+    	this(blockOnEmpty, type, false);
     }
 
     /**
@@ -68,6 +62,8 @@ public class SquidKey implements KeyListener, Iterable<KeyEvent>, Iterator<KeyEv
      * @param blockOnEmpty if true then this object will wait until there is input before returning
      * from a request for the next event
      * @param type
+	 * @param ignoreInput
+	 *            Whether to initially ignore input.
      */
     public SquidKey(boolean blockOnEmpty, CaptureType type, boolean ignoreInput) {
         this.blockOnEmpty = blockOnEmpty;
