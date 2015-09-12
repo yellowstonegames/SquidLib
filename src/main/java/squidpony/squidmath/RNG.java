@@ -1,6 +1,11 @@
 package squidpony.squidmath;
 
+import java.awt.Point;
+import java.util.Collections;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Random;
 
@@ -139,6 +144,11 @@ public class RNG {
     /**
      * Returns a random elements from the provided queue. If the queue is empty
      * then null is returned.
+     * 
+	 * <p>
+	 * Beware that this method allocates a copy of {@code list}, hence it's
+	 * quite costly.
+	 * </p>
      *
      * @param <T> the type of the returned object
      * @param list the list to get an element from
@@ -150,6 +160,73 @@ public class RNG {
         }
         return (T) list.toArray()[nextInt(list.size())];
     }
+
+	/**
+	 * @param list
+	 *            A list <b>with a constant-time {@link List#get(int)}
+	 *            method</b> (otherwise performances are degraded).
+	 * @return An {@link Iterable} that iterates over {@code list} but start at
+	 *         a random index. If the chosen index is {@code i}, the iterator
+	 *         will return
+	 *         {@code list[i]; list[i+1]; ...; list[list.length() - 1]; list[0]; list[i-1]}
+	 *         .
+	 * 
+	 *         <p>
+	 *         You should not modify {@code list} while you use the returned
+	 *         reference. And there'll be no
+	 *         {@link ConcurrentModificationException} to detect such erroneous
+	 *         uses.
+	 *         </p>
+	 */
+	public <T> Iterable<T> getRandomStartIterable(List<T> list) {
+		final int sz = list.size();
+		if (sz == 0)
+			return () -> Collections.<T> emptyList().iterator();
+
+		/*
+		 * Here's a tricky bit: Defining 'start' here means that every Iterator
+		 * returned by the returned Iterable will have the same iteration order.
+		 * In other words, if you use more than once the returned Iterable,
+		 * you'll will see elements in the same order every time, which is
+		 * desirable.
+		 */
+		final int start = nextInt(sz);
+
+		return () -> new Iterator<T>() {
+
+			int next = -1;
+
+			@Override
+			public boolean hasNext() {
+				return next != start;
+			}
+
+			@Override
+			public T next() {
+				if (next == start)
+					throw new NoSuchElementException();
+				if (next == -1)
+					/* First call */
+					next = start;
+				final T result = list.get(next);
+				if (next == sz - 1)
+					/*
+					 * Reached the list's end, let's continue from the list's
+					 * left.
+					 */
+					next = 0;
+				else
+					next++;
+				return result;
+			}
+
+			@Override
+			public String toString() {
+				return "RandomStartIterator at index " + next;
+			}
+		};
+	}
+
 
     /**
      * @return a value from the gaussian distribution
