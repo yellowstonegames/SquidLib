@@ -1,12 +1,11 @@
 package squidpony.examples;
 
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import squidpony.SColor;
+import squidpony.squidgrid.gui.SColor;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidgrid.gui.TextCellFactory;
 import squidpony.squidmath.Coord;

@@ -1,12 +1,11 @@
 package squidpony.squidgrid.mapping;
 
-import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import squidpony.SColor;
-import squidpony.SColorFactory;
+import squidpony.squidgrid.gui.SColor;
+import squidpony.squidgrid.gui.SColorFactory;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.gui.SquidPanel;
 import squidpony.squidmath.Coord;

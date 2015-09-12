@@ -14,14 +14,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.JLayeredPane;
-import squidpony.SColor;
+
 import squidpony.squidgrid.gui.animation.Animation;
 import squidpony.squidgrid.gui.animation.AnimationManager;
 import squidpony.squidgrid.gui.animation.BumpAnimation;
 import squidpony.squidgrid.gui.animation.SlideAnimation;
 import squidpony.squidgrid.gui.animation.WiggleAnimation;
 import squidpony.squidgrid.Direction;
-import squidpony.squidmath.Coord;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.

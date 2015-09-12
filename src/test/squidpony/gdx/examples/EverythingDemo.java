@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import squidpony.SColor;
+import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
@@ -24,7 +24,6 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-import java.awt.Point;
 import java.util.*;
 
 public class EverythingDemo extends ApplicationAdapter {
@@ -48,7 +47,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private double counter;
     private boolean[][] seen;
     private int health = 7;
-    private static final Color bgColor = SquidLayers.awtColorToGDX(SColor.DARK_SLATE_GRAY);
+    private static final Color bgColor = SColor.DARK_SLATE_GRAY;
     private HashMap<AnimatedEntity, Integer> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage;

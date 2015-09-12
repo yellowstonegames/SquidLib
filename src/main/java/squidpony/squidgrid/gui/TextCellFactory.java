@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import squidpony.SColor;
+
 import squidpony.squidgrid.Direction;
 
 /**

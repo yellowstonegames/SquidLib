@@ -1,20 +1,21 @@
-package squidpony;
+package squidpony.squidgrid.gui;
 
 import java.awt.Color;
 import java.util.Objects;
 
 /**
- * The color constants from SColor, but without extending color or storing names.
+ * Allows for the use of custom colors with custom names.
  *
- * This is useful for editors like IntelliJ IDEA that show Color (but not SColor) easily.
+ * These colors are comparable for equality but the ordering of them is based on
+ * their hex values.
  *
- * Has some built in palettes available as Color arrays.
+ * Has some built in palettes available as SColor arrays.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
- * @author Tommy Ettinger
  */
-public class Colors {
-    private Colors() { }
+public class SColor extends Color {
+
+    private String name = "Unnamed";
     /**
      * Color constant<PRE>
      *<font style="background-color: #f0f8ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #f0f8ff; color: #000000">&nbsp;@&nbsp;</font>
@@ -25,7 +26,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #f0f8ff">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #f0f8ff">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #f0f8ff">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #f0f8ff">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ALICE_BLUE = new Color(0xf0f8ff);
+    public static final SColor ALICE_BLUE = new SColor(0xf0f8ff, "Alice Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E32636; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E32636; color: #000000">&nbsp;@&nbsp;</font>
@@ -36,7 +37,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E32636">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #E32636">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #E32636">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #E32636">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ALIZARIN = new Color(0xE32636);
+    public static final SColor ALIZARIN = new SColor(0xE32636, "Alizarin");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6A432D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6A432D; color: #000000">&nbsp;@&nbsp;</font>
@@ -47,7 +48,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6A432D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ALOEWOOD = new Color(0x6A432D);
+    public static final SColor ALOEWOOD = new SColor(0x6A432D, "Aloewood");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5A6457; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5A6457; color: #000000">&nbsp;@&nbsp;</font>
@@ -58,10 +59,9 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5A6457">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ALOEWOOD_BROWN = new Color(0x5A6457);
+    public static final SColor ALOEWOOD_BROWN = new SColor(0x5A6457, "Aloewood Brown");
     /**
      * Color constant<PRE>
-     *
      *<font style="background-color: #E52B50; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E52B50; color: #000000">&nbsp;@&nbsp;</font>
      *<font style="background-color: #E52B50; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #E52B50">&nbsp;@&nbsp;</font><font style="background-color: #888888; color: #E52B50">&nbsp;@&nbsp;</font><font style="background-color: #ffffff; color: #E52B50">&nbsp;@&nbsp;</font><font style="background-color: #E52B50; color: #888888">&nbsp;@&nbsp;</font>
      *<font style="background-color: #E52B50; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E52B50; color: #ffffff">&nbsp;@&nbsp;</font>
@@ -70,7 +70,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E52B50">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #E52B50">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #E52B50">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #E52B50">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #E52B50">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AMARANTH = new Color(0xE52B50);
+    public static final SColor AMARANTH = new SColor(0xE52B50, "Amaranth");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFBF00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFBF00; color: #000000">&nbsp;@&nbsp;</font>
@@ -81,7 +81,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFBF00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #FFBF00">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #FFBF00">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #FFBF00">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #FFBF00">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AMBER = new Color(0xFFBF00);
+    public static final SColor AMBER = new SColor(0xFFBF00, "Amber");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CA6924; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CA6924; color: #000000">&nbsp;@&nbsp;</font>
@@ -92,7 +92,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CA6924">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AMBER_DYE = new Color(0xCA6924);
+    public static final SColor AMBER_DYE = new SColor(0xCA6924, "Amber Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9966CC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9966CC; color: #000000">&nbsp;@&nbsp;</font>
@@ -103,7 +103,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9966CC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #9966CC">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #9966CC">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #9966CC">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #9966CC">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AMETHYST = new Color(0x9966CC);
+    public static final SColor AMETHYST = new SColor(0x9966CC, "Amethyst");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F3C13A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F3C13A; color: #000000">&nbsp;@&nbsp;</font>
@@ -114,7 +114,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F3C13A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AMUR_CORK_TREE = new Color(0xF3C13A);
+    public static final SColor AMUR_CORK_TREE = new SColor(0xF3C13A, "Amur Cork Tree");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FBCEB1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FBCEB1; color: #000000">&nbsp;@&nbsp;</font>
@@ -125,7 +125,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FBCEB1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #FBCEB1">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #FBCEB1">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #FBCEB1">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #FBCEB1">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color APRICOT = new Color(0xFBCEB1);
+    public static final SColor APRICOT = new SColor(0xFBCEB1, "Apricot");
     /**
      * Duplicated as CYAN for backwards compatability Color constant<PRE>
      *<font style="background-color: #00FFFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00FFFF; color: #000000">&nbsp;@&nbsp;</font>
@@ -136,7 +136,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00FFFF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #00FFFF">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #00FFFF">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #00FFFF">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #00FFFF">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AQUA = new Color(0x00FFFF);
+    public static final SColor AQUA = new SColor(0x00FFFF, "Aqua");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7FFFD4; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7FFFD4; color: #000000">&nbsp;@&nbsp;</font>
@@ -147,7 +147,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7FFFD4">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #7FFFD4">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #7FFFD4">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #7FFFD4">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #7FFFD4">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AQUAMARINE = new Color(0x7FFFD4);
+    public static final SColor AQUAMARINE = new SColor(0x7FFFD4, "Aquamarine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4B5320; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4B5320; color: #000000">&nbsp;@&nbsp;</font>
@@ -158,7 +158,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4B5320">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #4B5320">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #4B5320">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #4B5320">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #4B5320">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ARMY_GREEN = new Color(0x4B5320);
+    public static final SColor ARMY_GREEN = new SColor(0x4B5320, "Army Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7BA05B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7BA05B; color: #000000">&nbsp;@&nbsp;</font>
@@ -169,7 +169,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7BA05B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #7BA05B">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #7BA05B">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #7BA05B">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #7BA05B">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ASPARAGUS = new Color(0x7BA05B);
+    public static final SColor ASPARAGUS = new SColor(0x7BA05B, "Asparagus");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF9966; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF9966; color: #000000">&nbsp;@&nbsp;</font>
@@ -180,7 +180,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF9966">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #FF9966">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #FF9966">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #FF9966">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #FF9966">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ATOMIC_TANGERINE = new Color(0xFF9966);
+    public static final SColor ATOMIC_TANGERINE = new SColor(0xFF9966, "Atomic Tangerine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6D351A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6D351A; color: #000000">&nbsp;@&nbsp;</font>
@@ -191,7 +191,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6D351A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #6D351A">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #6D351A">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #6D351A">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #6D351A">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AUBURN = new Color(0x6D351A);
+    public static final SColor AUBURN = new SColor(0x6D351A, "Auburn");
     /**
      * Color constant<PRE>
      *<font style="background-color: #007FFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #007FFF; color: #000000">&nbsp;@&nbsp;</font>
@@ -202,7 +202,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #007FFF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AZUL = new Color(0x007FFF);
+    public static final SColor AZUL = new SColor(0x007FFF, "Azul");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F0FFFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F0FFFF; color: #000000">&nbsp;@&nbsp;</font>
@@ -213,7 +213,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F0FFFF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color AZURE = new Color(0xF0FFFF);
+    public static final SColor AZURE = new SColor(0xF0FFFF, "Azure");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E0FFFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E0FFFF; color: #000000">&nbsp;@&nbsp;</font>
@@ -224,7 +224,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E0FFFF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BABY_BLUE = new Color(0xE0FFFF);
+    public static final SColor BABY_BLUE = new SColor(0xE0FFFF, "Baby Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #857C55; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #857C55; color: #000000">&nbsp;@&nbsp;</font>
@@ -235,7 +235,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #857C55">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BAIKO_BROWN = new Color(0x857C55);
+    public static final SColor BAIKO_BROWN = new SColor(0x857C55, "Baiko Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F5F5DC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F5F5DC; color: #000000">&nbsp;@&nbsp;</font>
@@ -246,7 +246,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F5F5DC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BEIGE = new Color(0xF5F5DC);
+    public static final SColor BEIGE = new SColor(0xF5F5DC, "Beige");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5D3F6A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5D3F6A; color: #000000">&nbsp;@&nbsp;</font>
@@ -257,7 +257,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5D3F6A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BELLFLOWER = new Color(0x5D3F6A);
+    public static final SColor BELLFLOWER = new SColor(0x5D3F6A, "Bellflower");
     /**
      * Color constant<PRE>
      *<font style="background-color: #913225; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #913225; color: #000000">&nbsp;@&nbsp;</font>
@@ -268,7 +268,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #913225">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BENI_DYE = new Color(0x913225);
+    public static final SColor BENI_DYE = new SColor(0x913225, "Beni Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #352925; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #352925; color: #000000">&nbsp;@&nbsp;</font>
@@ -279,7 +279,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #352925">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BETEL_NUT_DYE = new Color(0x352925);
+    public static final SColor BETEL_NUT_DYE = new SColor(0x352925, "Betel Nut Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B14A30; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B14A30; color: #000000">&nbsp;@&nbsp;</font>
@@ -290,7 +290,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B14A30">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BIRCH_BROWN = new Color(0xB14A30);
+    public static final SColor BIRCH_BROWN = new SColor(0xB14A30, "Birch Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #3D2B1F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3D2B1F; color: #000000">&nbsp;@&nbsp;</font>
@@ -301,7 +301,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3D2B1F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BISTRE = new Color(0x3D2B1F);
+    public static final SColor BISTRE = new SColor(0x3D2B1F, "Bistre");
     /**
      * Color constant<PRE>
      *<font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;@&nbsp;</font>
@@ -312,7 +312,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #000000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLACK = new Color(0x000000);
+    public static final SColor BLACK = new SColor(0x000000, "Black");
     /**
      * Color constant<PRE>
      *<font style="background-color: #252321; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #252321; color: #000000">&nbsp;@&nbsp;</font>
@@ -323,7 +323,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #252321">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLACK_CHESTNUT_OAK = new Color(0x252321);
+    public static final SColor BLACK_CHESTNUT_OAK = new SColor(0x252321, "Black Chestnut Oak");
     /**
      * Color constant<PRE>
      *<font style="background-color: #171412; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #171412; color: #000000">&nbsp;@&nbsp;</font>
@@ -334,7 +334,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #171412">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLACK_DYE = new Color(0x171412);
+    public static final SColor BLACK_DYE = new SColor(0x171412, "Black Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #351E1C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #351E1C; color: #000000">&nbsp;@&nbsp;</font>
@@ -345,7 +345,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #351E1C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLACK_KITE = new Color(0x351E1C);
+    public static final SColor BLACK_KITE = new SColor(0x351E1C, "Black Kite");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CF3A24; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CF3A24; color: #000000">&nbsp;@&nbsp;</font>
@@ -356,7 +356,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CF3A24">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLOOD = new Color(0xCF3A24);
+    public static final SColor BLOOD = new SColor(0xCF3A24, "Blood");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F35336; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F35336; color: #000000">&nbsp;@&nbsp;</font>
@@ -367,7 +367,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F35336">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLOOD_RED = new Color(0xF35336);
+    public static final SColor BLOOD_RED = new SColor(0xF35336, "Blood Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;@&nbsp;</font>
@@ -378,7 +378,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #0000ff">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #0000ff">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #0000ff">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #0000ff">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #0000ff">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLUE = new Color(0x0000ff);
+    public static final SColor BLUE = new SColor(0x0000ff, "Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #62693B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #62693B; color: #000000">&nbsp;@&nbsp;</font>
@@ -389,7 +389,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #62693B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLUE_BLACK_CRAYFISH = new Color(0x62693B);
+    public static final SColor BLUE_BLACK_CRAYFISH = new SColor(0x62693B, "Blue Black Crayfish");
     /**
      * Color constant<PRE>
      *<font style="background-color: #00DDDD; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00DDDD; color: #000000">&nbsp;@&nbsp;</font>
@@ -400,7 +400,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00DDDD">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLUE_GREEN = new Color(0x00DDDD);
+    public static final SColor BLUE_GREEN = new SColor(0x00DDDD, "Blue Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #3A6960; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3A6960; color: #000000">&nbsp;@&nbsp;</font>
@@ -411,7 +411,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3A6960">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLUE_GREEN_DYE = new Color(0x3A6960);
+    public static final SColor BLUE_GREEN_DYE = new SColor(0x3A6960, "Blue Green Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8A2BE2; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8A2BE2; color: #000000">&nbsp;@&nbsp;</font>
@@ -422,7 +422,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8A2BE2">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLUE_VIOLET = new Color(0x8A2BE2);
+    public static final SColor BLUE_VIOLET = new SColor(0x8A2BE2, "Blue Violet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2B2028; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2B2028; color: #000000">&nbsp;@&nbsp;</font>
@@ -433,7 +433,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2B2028">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BLUE_VIOLET_DYE = new Color(0x2B2028);
+    public static final SColor BLUE_VIOLET_DYE = new SColor(0x2B2028, "Blue Violet Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #542D24; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #542D24; color: #000000">&nbsp;@&nbsp;</font>
@@ -444,7 +444,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #542D24">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BOILED_RED_BEAN_BROWN = new Color(0x542D24);
+    public static final SColor BOILED_RED_BEAN_BROWN = new SColor(0x542D24, "Boiled Red Bean Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #0095B6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0095B6; color: #000000">&nbsp;@&nbsp;</font>
@@ -455,7 +455,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #0095B6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BONDI_BLUE = new Color(0x0095B6);
+    public static final SColor BONDI_BLUE = new SColor(0x0095B6, "Bondi Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B5A642; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B5A642; color: #000000">&nbsp;@&nbsp;</font>
@@ -466,7 +466,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B5A642">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BRASS = new Color(0xB5A642);
+    public static final SColor BRASS = new SColor(0xB5A642, "Brass");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E68364; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E68364; color: #000000">&nbsp;@&nbsp;</font>
@@ -477,7 +477,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E68364">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BREWED_MUSTARD_BROWN = new Color(0xE68364);
+    public static final SColor BREWED_MUSTARD_BROWN = new SColor(0xE68364, "Brewed Mustard Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CB7E1F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CB7E1F; color: #000000">&nbsp;@&nbsp;</font>
@@ -488,7 +488,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CB7E1F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BRIGHT_GOLD_BROWN = new Color(0xCB7E1F);
+    public static final SColor BRIGHT_GOLD_BROWN = new SColor(0xCB7E1F, "Bright Gold Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFA400; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFA400; color: #000000">&nbsp;@&nbsp;</font>
@@ -499,7 +499,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFA400">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BRIGHT_GOLDEN_YELLOW = new Color(0xFFA400);
+    public static final SColor BRIGHT_GOLDEN_YELLOW = new SColor(0xFFA400, "Bright Golden Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #66FF00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #66FF00; color: #000000">&nbsp;@&nbsp;</font>
@@ -510,7 +510,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #66FF00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BRIGHT_GREEN = new Color(0x66FF00);
+    public static final SColor BRIGHT_GREEN = new SColor(0x66FF00, "Bright Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF0080; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF0080; color: #000000">&nbsp;@&nbsp;</font>
@@ -521,7 +521,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF0080">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BRIGHT_PINK = new Color(0xFF0080);
+    public static final SColor BRIGHT_PINK = new SColor(0xFF0080, "Bright Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #08E8DE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #08E8DE; color: #000000">&nbsp;@&nbsp;</font>
@@ -532,7 +532,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #08E8DE">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BRIGHT_TURQUOISE = new Color(0x08E8DE);
+    public static final SColor BRIGHT_TURQUOISE = new SColor(0x08E8DE, "Bright Turquoise");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF55A3; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF55A3; color: #000000">&nbsp;@&nbsp;</font>
@@ -543,7 +543,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF55A3">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BRILLIANT_ROSE = new Color(0xFF55A3);
+    public static final SColor BRILLIANT_ROSE = new SColor(0xFF55A3, "Brilliant Rose");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CD7F32; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CD7F32; color: #000000">&nbsp;@&nbsp;</font>
@@ -554,7 +554,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CD7F32">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BRONZE = new Color(0xCD7F32);
+    public static final SColor BRONZE = new SColor(0xCD7F32, "Bronze");
     /**
      * Color constant<PRE>
      *<font style="background-color: #808000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #808000; color: #000000">&nbsp;@&nbsp;</font>
@@ -565,7 +565,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #808000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #808000">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #808000">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #808000">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #808000">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BROWN = new Color(0x808000);
+    public static final SColor BROWN = new SColor(0x808000, "Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4B3C39; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4B3C39; color: #000000">&nbsp;@&nbsp;</font>
@@ -576,7 +576,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4B3C39">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BROWN_RAT_GREY = new Color(0x4B3C39);
+    public static final SColor BROWN_RAT_GREY = new SColor(0x4B3C39, "Brown Rat Grey");
     /**
      * Color constant<PRE>
      *<font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;@&nbsp;</font>
@@ -587,7 +587,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #964B00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BROWNER = new Color(0x964B00);
+    public static final SColor BROWNER = new SColor(0x964B00, "Browner");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8C5939; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8C5939; color: #000000">&nbsp;@&nbsp;</font>
@@ -598,7 +598,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8C5939">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BRUSHWOOD_DYED = new Color(0x8C5939);
+    public static final SColor BRUSHWOOD_DYED = new SColor(0x8C5939, "Brushwood Dyed");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F0DC82; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F0DC82; color: #000000">&nbsp;@&nbsp;</font>
@@ -609,7 +609,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F0DC82">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BUFF = new Color(0xF0DC82);
+    public static final SColor BUFF = new SColor(0xF0DC82, "Buff");
     /**
      * Color constant<PRE>
      *<font style="background-color: #900020; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #900020; color: #000000">&nbsp;@&nbsp;</font>
@@ -620,7 +620,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #900020">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BURGUNDY = new Color(0x900020);
+    public static final SColor BURGUNDY = new SColor(0x900020, "Burgundy");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4D3B3C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4D3B3C; color: #000000">&nbsp;@&nbsp;</font>
@@ -631,7 +631,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4D3B3C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BURNT_BAMBOO = new Color(0x4D3B3C);
+    public static final SColor BURNT_BAMBOO = new SColor(0x4D3B3C, "Burnt Bamboo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CC5500; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CC5500; color: #000000">&nbsp;@&nbsp;</font>
@@ -642,7 +642,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CC5500">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BURNT_ORANGE = new Color(0xCC5500);
+    public static final SColor BURNT_ORANGE = new SColor(0xCC5500, "Burnt Orange");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E97451; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E97451; color: #000000">&nbsp;@&nbsp;</font>
@@ -653,7 +653,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E97451">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BURNT_SIENNA = new Color(0xE97451);
+    public static final SColor BURNT_SIENNA = new SColor(0xE97451, "Burnt Sienna");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8A3324; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8A3324; color: #000000">&nbsp;@&nbsp;</font>
@@ -664,7 +664,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8A3324">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color BURNT_UMBER = new Color(0x8A3324);
+    public static final SColor BURNT_UMBER = new SColor(0x8A3324, "Burnt Umber");
     /**
      * Color constant<PRE>
      *<font style="background-color: #78866B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #78866B; color: #000000">&nbsp;@&nbsp;</font>
@@ -675,7 +675,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #78866B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CAMO_GREEN = new Color(0x78866B);
+    public static final SColor CAMO_GREEN = new SColor(0x78866B, "Camo Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFB95A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFB95A; color: #000000">&nbsp;@&nbsp;</font>
@@ -686,7 +686,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFB95A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CAPE_JASMINE = new Color(0xFFB95A);
+    public static final SColor CAPE_JASMINE = new SColor(0xFFB95A, "Cape Jasmine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #592720; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #592720; color: #000000">&nbsp;@&nbsp;</font>
@@ -697,7 +697,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #592720">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CAPUT_MORTUUM = new Color(0x592720);
+    public static final SColor CAPUT_MORTUUM = new SColor(0x592720, "Caput Mortuum");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C41E3A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C41E3A; color: #000000">&nbsp;@&nbsp;</font>
@@ -708,7 +708,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C41E3A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CARDINAL = new Color(0xC41E3A);
+    public static final SColor CARDINAL = new SColor(0xC41E3A, "Cardinal");
     /**
      * Color constant<PRE>
      *<font style="background-color: #960018; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #960018; color: #000000">&nbsp;@&nbsp;</font>
@@ -719,7 +719,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #960018">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CARMINE = new Color(0x960018);
+    public static final SColor CARMINE = new SColor(0x960018, "Carmine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFA6C9; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFA6C9; color: #000000">&nbsp;@&nbsp;</font>
@@ -730,7 +730,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFA6C9">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CARNATION_PINK = new Color(0xFFA6C9);
+    public static final SColor CARNATION_PINK = new SColor(0xFFA6C9, "Carnation Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #99BADD; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #99BADD; color: #000000">&nbsp;@&nbsp;</font>
@@ -741,7 +741,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #99BADD">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CAROLINA_BLUE = new Color(0x99BADD);
+    public static final SColor CAROLINA_BLUE = new SColor(0x99BADD, "Carolina Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ED9121; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ED9121; color: #000000">&nbsp;@&nbsp;</font>
@@ -752,7 +752,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ED9121">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CARROT_ORANGE = new Color(0xED9121);
+    public static final SColor CARROT_ORANGE = new SColor(0xED9121, "Carrot Orange");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B64925; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B64925; color: #000000">&nbsp;@&nbsp;</font>
@@ -763,7 +763,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B64925">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CATTAIL = new Color(0xB64925);
+    public static final SColor CATTAIL = new SColor(0xB64925, "Cattail");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ACE1AF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ACE1AF; color: #000000">&nbsp;@&nbsp;</font>
@@ -774,7 +774,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ACE1AF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CELADON = new Color(0xACE1AF);
+    public static final SColor CELADON = new SColor(0xACE1AF, "Celadon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #819C8B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #819C8B; color: #000000">&nbsp;@&nbsp;</font>
@@ -785,7 +785,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #819C8B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CELADON_DYE = new Color(0x819C8B);
+    public static final SColor CELADON_DYE = new SColor(0x819C8B, "Celadon Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DE3163; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DE3163; color: #000000">&nbsp;@&nbsp;</font>
@@ -796,7 +796,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DE3163">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CERISE = new Color(0xDE3163);
+    public static final SColor CERISE = new SColor(0xDE3163, "Cerise");
     /**
      * Color constant<PRE>
      *<font style="background-color: #007BA7; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #007BA7; color: #000000">&nbsp;@&nbsp;</font>
@@ -807,7 +807,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #007BA7">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CERULEAN = new Color(0x007BA7);
+    public static final SColor CERULEAN = new SColor(0x007BA7, "Cerulean");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2A52BE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2A52BE; color: #000000">&nbsp;@&nbsp;</font>
@@ -818,7 +818,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2A52BE">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CERULEAN_BLUE = new Color(0x2A52BE);
+    public static final SColor CERULEAN_BLUE = new SColor(0x2A52BE, "Cerulean Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DFFF00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DFFF00; color: #000000">&nbsp;@&nbsp;</font>
@@ -829,7 +829,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DFFF00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHARTREUSE = new Color(0xDFFF00);
+    public static final SColor CHARTREUSE = new SColor(0xDFFF00, "Chartreuse");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7FFF00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7FFF00; color: #000000">&nbsp;@&nbsp;</font>
@@ -840,7 +840,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7FFF00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHARTREUSE_GREEN = new Color(0x7FFF00);
+    public static final SColor CHARTREUSE_GREEN = new SColor(0x7FFF00, "Chartreuse Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFB7C5; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFB7C5; color: #000000">&nbsp;@&nbsp;</font>
@@ -851,7 +851,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFB7C5">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHERRY_BLOSSOM = new Color(0xFFB7C5);
+    public static final SColor CHERRY_BLOSSOM = new SColor(0xFFB7C5, "Cherry Blossom");
     /**
      * Color constant<PRE>
      *<font style="background-color: #fcc9b9; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #fcc9b9; color: #000000">&nbsp;@&nbsp;</font>
@@ -862,7 +862,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #fcc9b9">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHERRY_BLOSSOM_DYE = new Color(0xfcc9b9);
+    public static final SColor CHERRY_BLOSSOM_DYE = new SColor(0xfcc9b9, "Cherry Blossom Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #AC8181; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AC8181; color: #000000">&nbsp;@&nbsp;</font>
@@ -873,7 +873,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #AC8181">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHERRY_BLOSSOM_MOUSE = new Color(0xAC8181);
+    public static final SColor CHERRY_BLOSSOM_MOUSE = new SColor(0xAC8181, "Cherry Blossom Mouse");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CD5C5C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CD5C5C; color: #000000">&nbsp;@&nbsp;</font>
@@ -884,7 +884,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CD5C5C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHESTNUT = new Color(0xCD5C5C);
+    public static final SColor CHESTNUT = new SColor(0xCD5C5C, "Chestnut");
     /**
      * Color constant<PRE>
      *<font style="background-color: #60281E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #60281E; color: #000000">&nbsp;@&nbsp;</font>
@@ -895,7 +895,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #60281E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHESTNUT_LEATHER_BROWN = new Color(0x60281E);
+    public static final SColor CHESTNUT_LEATHER_BROWN = new SColor(0x60281E, "Chestnut Leather Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8B352D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8B352D; color: #000000">&nbsp;@&nbsp;</font>
@@ -906,7 +906,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8B352D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHESTNUT_PLUM = new Color(0x8B352D);
+    public static final SColor CHESTNUT_PLUM = new SColor(0x8B352D, "Chestnut Plum");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B35C44; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B35C44; color: #000000">&nbsp;@&nbsp;</font>
@@ -917,7 +917,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B35C44">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHINESE_TEA_BROWN = new Color(0xB35C44);
+    public static final SColor CHINESE_TEA_BROWN = new SColor(0xB35C44, "Chinese Tea Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B7702D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B7702D; color: #000000">&nbsp;@&nbsp;</font>
@@ -928,7 +928,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B7702D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHINESE_TEA_YELLOW = new Color(0xB7702D);
+    public static final SColor CHINESE_TEA_YELLOW = new SColor(0xB7702D, "Chinese Tea Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7B3F00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7B3F00; color: #000000">&nbsp;@&nbsp;</font>
@@ -939,7 +939,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7B3F00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CHOCOLATE = new Color(0x7B3F00);
+    public static final SColor CHOCOLATE = new SColor(0x7B3F00, "Chocolate");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E34234; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E34234; color: #000000">&nbsp;@&nbsp;</font>
@@ -950,7 +950,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E34234">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CINNABAR = new Color(0xE34234);
+    public static final SColor CINNABAR = new SColor(0xE34234, "Cinnabar");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D2691E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D2691E; color: #000000">&nbsp;@&nbsp;</font>
@@ -961,7 +961,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D2691E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CINNAMON = new Color(0xD2691E);
+    public static final SColor CINNAMON = new SColor(0xD2691E, "Cinnamon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8F583C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8F583C; color: #000000">&nbsp;@&nbsp;</font>
@@ -972,7 +972,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8F583C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CLOVE_BROWN = new Color(0x8F583C);
+    public static final SColor CLOVE_BROWN = new SColor(0x8F583C, "Clove Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C66B27; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C66B27; color: #000000">&nbsp;@&nbsp;</font>
@@ -983,7 +983,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C66B27">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CLOVE_DYED = new Color(0xC66B27);
+    public static final SColor CLOVE_DYED = new SColor(0xC66B27, "Clove Dyed");
     /**
      * Color constant<PRE>
      *<font style="background-color: #181B26; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #181B26; color: #000000">&nbsp;@&nbsp;</font>
@@ -994,7 +994,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #181B26">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color COARSE_WOOL = new Color(0x181B26);
+    public static final SColor COARSE_WOOL = new SColor(0x181B26, "Coarse Wool");
     /**
      * Color constant<PRE>
      *<font style="background-color: #0047AB; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0047AB; color: #000000">&nbsp;@&nbsp;</font>
@@ -1005,7 +1005,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #0047AB">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color COBALT = new Color(0x0047AB);
+    public static final SColor COBALT = new SColor(0x0047AB, "Cobalt");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9D2933; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9D2933; color: #000000">&nbsp;@&nbsp;</font>
@@ -1016,7 +1016,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9D2933">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color COCHINEAL_RED = new Color(0x9D2933);
+    public static final SColor COCHINEAL_RED = new SColor(0x9D2933, "Cochineal Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9BDDFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9BDDFF; color: #000000">&nbsp;@&nbsp;</font>
@@ -1027,7 +1027,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9BDDFF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color COLUMBIA_BLUE = new Color(0x9BDDFF);
+    public static final SColor COLUMBIA_BLUE = new SColor(0x9BDDFF, "Columbia Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B87333; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B87333; color: #000000">&nbsp;@&nbsp;</font>
@@ -1038,7 +1038,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B87333">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color COPPER = new Color(0xB87333);
+    public static final SColor COPPER = new SColor(0xB87333, "Copper");
     /**
      * Color constant<PRE>
      *<font style="background-color: #996666; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #996666; color: #000000">&nbsp;@&nbsp;</font>
@@ -1049,7 +1049,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #996666">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color COPPER_ROSE = new Color(0x996666);
+    public static final SColor COPPER_ROSE = new SColor(0x996666, "Copper Rose");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF7F50; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF7F50; color: #000000">&nbsp;@&nbsp;</font>
@@ -1060,7 +1060,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF7F50">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CORAL = new Color(0xFF7F50);
+    public static final SColor CORAL = new SColor(0xFF7F50, "Coral");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F8674F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F8674F; color: #000000">&nbsp;@&nbsp;</font>
@@ -1071,7 +1071,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F8674F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CORAL_DYE = new Color(0xF8674F);
+    public static final SColor CORAL_DYE = new SColor(0xF8674F, "Coral Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF4040; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF4040; color: #000000">&nbsp;@&nbsp;</font>
@@ -1082,7 +1082,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF4040">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CORAL_RED = new Color(0xFF4040);
+    public static final SColor CORAL_RED = new SColor(0xFF4040, "Coral Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FBEC5D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FBEC5D; color: #000000">&nbsp;@&nbsp;</font>
@@ -1093,7 +1093,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FBEC5D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CORN = new Color(0xFBEC5D);
+    public static final SColor CORN = new SColor(0xFBEC5D, "Corn");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FAA945; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FAA945; color: #000000">&nbsp;@&nbsp;</font>
@@ -1104,7 +1104,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FAA945">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CORN_DYE = new Color(0xFAA945);
+    public static final SColor CORN_DYE = new SColor(0xFAA945, "Corn Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6495ED; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6495ED; color: #000000">&nbsp;@&nbsp;</font>
@@ -1115,7 +1115,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6495ED">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CORNFLOWER_BLUE = new Color(0x6495ED);
+    public static final SColor CORNFLOWER_BLUE = new SColor(0x6495ED, "Cornflower Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFF8E7; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFF8E7; color: #000000">&nbsp;@&nbsp;</font>
@@ -1126,7 +1126,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFF8E7">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color COSMIC_LATTE = new Color(0xFFF8E7);
+    public static final SColor COSMIC_LATTE = new SColor(0xFFF8E7, "Cosmic Latte");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFFDD0; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFFDD0; color: #000000">&nbsp;@&nbsp;</font>
@@ -1137,7 +1137,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFFDD0">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CREAM = new Color(0xFFFDD0);
+    public static final SColor CREAM = new SColor(0xFFFDD0, "Cream");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DC143C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DC143C; color: #000000">&nbsp;@&nbsp;</font>
@@ -1148,7 +1148,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DC143C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CRIMSON = new Color(0xDC143C);
+    public static final SColor CRIMSON = new SColor(0xDC143C, "Crimson");
     /**
      * Duplicated as AQUA for usability Color constant<PRE>
      *<font style="background-color: #00ffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ffff; color: #000000">&nbsp;@&nbsp;</font>
@@ -1159,7 +1159,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00ffff">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #00ffff">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #00ffff">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #00ffff">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #00ffff">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CYAN = new Color(0x00ffff);
+    public static final SColor CYAN = new SColor(0x00ffff, "Cyan");
     /**
      * Color constant<PRE>
      *<font style="background-color: #752E23; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #752E23; color: #000000">&nbsp;@&nbsp;</font>
@@ -1170,7 +1170,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #752E23">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CYPRESS_BARK = new Color(0x752E23);
+    public static final SColor CYPRESS_BARK = new SColor(0x752E23, "Cypress Bark");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6F3028; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6F3028; color: #000000">&nbsp;@&nbsp;</font>
@@ -1181,7 +1181,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6F3028">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color CYPRESS_BARK_RED = new Color(0x6F3028);
+    public static final SColor CYPRESS_BARK_RED = new SColor(0x6F3028, "Cypress Bark Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #0000c8; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000c8; color: #000000">&nbsp;@&nbsp;</font>
@@ -1192,7 +1192,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #0000c8">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #0000c8">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #0000c8">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #0000c8">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #0000c8">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_BLUE = new Color(0x0000c8);
+    public static final SColor DARK_BLUE = new SColor(0x0000c8, "Dark Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #192236; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #192236; color: #000000">&nbsp;@&nbsp;</font>
@@ -1203,7 +1203,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #192236">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_BLUE_DYE = new Color(0x192236);
+    public static final SColor DARK_BLUE_DYE = new SColor(0x192236, "Dark Blue Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #1B294B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #1B294B; color: #000000">&nbsp;@&nbsp;</font>
@@ -1214,7 +1214,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #1B294B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_BLUE_LAPIS_LAZULI = new Color(0x1B294B);
+    public static final SColor DARK_BLUE_LAPIS_LAZULI = new SColor(0x1B294B, "Dark Blue Lapis Lazuli");
     /**
      * Color constant<PRE>
      *<font style="background-color: #654321; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #654321; color: #000000">&nbsp;@&nbsp;</font>
@@ -1225,7 +1225,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #654321">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_BROWN = new Color(0x654321);
+    public static final SColor DARK_BROWN = new SColor(0x654321, "Dark Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #08457E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #08457E; color: #000000">&nbsp;@&nbsp;</font>
@@ -1236,7 +1236,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #08457E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_CERULEAN = new Color(0x08457E);
+    public static final SColor DARK_CERULEAN = new SColor(0x08457E, "Dark Cerulean");
     /**
      * Color constant<PRE>
      *<font style="background-color: #986960; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #986960; color: #000000">&nbsp;@&nbsp;</font>
@@ -1247,7 +1247,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #986960">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_CHESTNUT = new Color(0x986960);
+    public static final SColor DARK_CHESTNUT = new SColor(0x986960, "Dark Chestnut");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CD5B45; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CD5B45; color: #000000">&nbsp;@&nbsp;</font>
@@ -1258,7 +1258,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CD5B45">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_CORAL = new Color(0xCD5B45);
+    public static final SColor DARK_CORAL = new SColor(0xCD5B45, "Dark Coral");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B8860B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B8860B; color: #000000">&nbsp;@&nbsp;</font>
@@ -1269,7 +1269,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B8860B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_GOLDENROD = new Color(0xB8860B);
+    public static final SColor DARK_GOLDENROD = new SColor(0xB8860B, "Dark Goldenrod");
     /**
      * Color constant<PRE>
      *<font style="background-color: #404040; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #404040; color: #000000">&nbsp;@&nbsp;</font>
@@ -1280,7 +1280,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #404040">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #404040">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #404040">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #404040">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #404040">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_GRAY = new Color(0x404040);
+    public static final SColor DARK_GRAY = new SColor(0x404040, "Dark Gray");
     /**
      * Color constant<PRE>
      *<font style="background-color: #013220; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #013220; color: #000000">&nbsp;@&nbsp;</font>
@@ -1291,7 +1291,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #013220">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_GREEN = new Color(0x013220);
+    public static final SColor DARK_GREEN = new SColor(0x013220, "Dark Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #614E6E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #614E6E; color: #000000">&nbsp;@&nbsp;</font>
@@ -1302,7 +1302,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #614E6E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_INDIGO = new Color(0x614E6E);
+    public static final SColor DARK_INDIGO = new SColor(0x614E6E, "Dark Indigo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BDB76B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BDB76B; color: #000000">&nbsp;@&nbsp;</font>
@@ -1313,7 +1313,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BDB76B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_KHAKI = new Color(0xBDB76B);
+    public static final SColor DARK_KHAKI = new SColor(0xBDB76B, "Dark Khaki");
     /**
      * Color constant<PRE>
      *<font style="background-color: #03C03C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #03C03C; color: #000000">&nbsp;@&nbsp;</font>
@@ -1324,7 +1324,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #03C03C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_PASTEL_GREEN = new Color(0x03C03C);
+    public static final SColor DARK_PASTEL_GREEN = new SColor(0x03C03C, "Dark Pastel Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E75480; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E75480; color: #000000">&nbsp;@&nbsp;</font>
@@ -1335,7 +1335,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E75480">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_PINK = new Color(0xE75480);
+    public static final SColor DARK_PINK = new SColor(0xE75480, "Dark Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #560319; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #560319; color: #000000">&nbsp;@&nbsp;</font>
@@ -1346,7 +1346,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #560319">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_SCARLET = new Color(0x560319);
+    public static final SColor DARK_SCARLET = new SColor(0x560319, "Dark Scarlet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #800000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #800000; color: #000000">&nbsp;@&nbsp;</font>
@@ -1357,7 +1357,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #800000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #800000">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #800000">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #800000">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #800000">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_RED = new Color(0x800000);
+    public static final SColor DARK_RED = new SColor(0x800000, "Dark Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #23191E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #23191E; color: #000000">&nbsp;@&nbsp;</font>
@@ -1368,7 +1368,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #23191E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_RED_DYE = new Color(0x23191E);
+    public static final SColor DARK_RED_DYE = new SColor(0x23191E, "Dark Red Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E9967A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E9967A; color: #000000">&nbsp;@&nbsp;</font>
@@ -1379,7 +1379,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E9967A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_SALMON = new Color(0xE9967A);
+    public static final SColor DARK_SALMON = new SColor(0xE9967A, "Dark Salmon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2F4F4F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2F4F4F; color: #000000">&nbsp;@&nbsp;</font>
@@ -1390,7 +1390,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2F4F4F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_SLATE_GRAY = new Color(0x2F4F4F);
+    public static final SColor DARK_SLATE_GRAY = new SColor(0x2F4F4F, "Dark Slate Gray");
     /**
      * Color constant<PRE>
      *<font style="background-color: #177245; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #177245; color: #000000">&nbsp;@&nbsp;</font>
@@ -1401,7 +1401,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #177245">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_SPRING_GREEN = new Color(0x177245);
+    public static final SColor DARK_SPRING_GREEN = new SColor(0x177245, "Dark Spring Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #918151; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #918151; color: #000000">&nbsp;@&nbsp;</font>
@@ -1412,7 +1412,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #918151">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_TAN = new Color(0x918151);
+    public static final SColor DARK_TAN = new SColor(0x918151, "Dark Tan");
     /**
      * Color constant<PRE>
      *<font style="background-color: #00CED1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00CED1; color: #000000">&nbsp;@&nbsp;</font>
@@ -1423,7 +1423,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00CED1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_TURQUOISE = new Color(0x00CED1);
+    public static final SColor DARK_TURQUOISE = new SColor(0x00CED1, "Dark Turquoise");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9400D3; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9400D3; color: #000000">&nbsp;@&nbsp;</font>
@@ -1434,7 +1434,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9400D3">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DARK_VIOLET = new Color(0x9400D3);
+    public static final SColor DARK_VIOLET = new SColor(0x9400D3, "Dark Violet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FA7B62; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FA7B62; color: #000000">&nbsp;@&nbsp;</font>
@@ -1445,7 +1445,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FA7B62">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DAWN = new Color(0xFA7B62);
+    public static final SColor DAWN = new SColor(0xFA7B62, "Dawn");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF8936; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF8936; color: #000000">&nbsp;@&nbsp;</font>
@@ -1456,7 +1456,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF8936">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DAYLILY = new Color(0xFF8936);
+    public static final SColor DAYLILY = new SColor(0xFF8936, "Daylily");
     /**
      * Color constant<PRE>
      *<font style="background-color: #524B2A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #524B2A; color: #000000">&nbsp;@&nbsp;</font>
@@ -1467,7 +1467,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #524B2A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEAD_MANS_FINGERS_SEAWEED = new Color(0x524B2A);
+    public static final SColor DEAD_MANS_FINGERS_SEAWEED = new SColor(0x524B2A, "Dead Man's Fingers Seaweed");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D57835; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D57835; color: #000000">&nbsp;@&nbsp;</font>
@@ -1478,7 +1478,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D57835">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DECAYING_LEAVES = new Color(0xD57835);
+    public static final SColor DECAYING_LEAVES = new SColor(0xD57835, "Decaying Leaves");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DA3287; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DA3287; color: #000000">&nbsp;@&nbsp;</font>
@@ -1489,7 +1489,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DA3287">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEEP_CERISE = new Color(0xDA3287);
+    public static final SColor DEEP_CERISE = new SColor(0xDA3287, "Deep Cerise");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B94E48; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B94E48; color: #000000">&nbsp;@&nbsp;</font>
@@ -1500,7 +1500,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B94E48">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEEP_CHESTNUT = new Color(0xB94E48);
+    public static final SColor DEEP_CHESTNUT = new SColor(0xB94E48, "Deep Chestnut");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C154C1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C154C1; color: #000000">&nbsp;@&nbsp;</font>
@@ -1511,7 +1511,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C154C1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEEP_FUCHSIA = new Color(0xC154C1);
+    public static final SColor DEEP_FUCHSIA = new SColor(0xC154C1, "Deep Fuchsia");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9955BB; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9955BB; color: #000000">&nbsp;@&nbsp;</font>
@@ -1522,7 +1522,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9955BB">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEEP_LILAC = new Color(0x9955BB);
+    public static final SColor DEEP_LILAC = new SColor(0x9955BB, "Deep Lilac");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CD00CC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CD00CC; color: #000000">&nbsp;@&nbsp;</font>
@@ -1533,7 +1533,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CD00CC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEEP_MAGENTA = new Color(0xCD00CC);
+    public static final SColor DEEP_MAGENTA = new SColor(0xCD00CC, "Deep Magenta");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFCBA4; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFCBA4; color: #000000">&nbsp;@&nbsp;</font>
@@ -1544,7 +1544,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFCBA4">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEEP_PEACH = new Color(0xFFCBA4);
+    public static final SColor DEEP_PEACH = new SColor(0xFFCBA4, "Deep Peach");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF1493; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF1493; color: #000000">&nbsp;@&nbsp;</font>
@@ -1555,7 +1555,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF1493">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEEP_PINK = new Color(0xFF1493);
+    public static final SColor DEEP_PINK = new SColor(0xFF1493, "Deep Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #3A243B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3A243B; color: #000000">&nbsp;@&nbsp;</font>
@@ -1566,7 +1566,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3A243B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEEP_PURPLE = new Color(0x3A243B);
+    public static final SColor DEEP_PURPLE = new SColor(0x3A243B, "Deep Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7B3B3A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7B3B3A; color: #000000">&nbsp;@&nbsp;</font>
@@ -1577,7 +1577,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7B3B3A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DEEP_SCARLET = new Color(0x7B3B3A);
+    public static final SColor DEEP_SCARLET = new SColor(0x7B3B3A, "Deep Scarlet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #1560BD; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #1560BD; color: #000000">&nbsp;@&nbsp;</font>
@@ -1588,7 +1588,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #1560BD">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DENIM = new Color(0x1560BD);
+    public static final SColor DENIM = new SColor(0x1560BD, "Denim");
     /**
      * Color constant<PRE>
      *<font style="background-color: #3F313A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3F313A; color: #000000">&nbsp;@&nbsp;</font>
@@ -1599,7 +1599,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3F313A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DISAPPEARING_PURPLE = new Color(0x3F313A);
+    public static final SColor DISAPPEARING_PURPLE = new SColor(0x3F313A, "Disappearing Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CB6649; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CB6649; color: #000000">&nbsp;@&nbsp;</font>
@@ -1610,7 +1610,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CB6649">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DISTANT_RIVER_BROWN = new Color(0xCB6649);
+    public static final SColor DISTANT_RIVER_BROWN = new SColor(0xCB6649, "Distant River Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #1E90FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #1E90FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -1621,7 +1621,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #1E90FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DODGER_BLUE = new Color(0x1E90FF);
+    public static final SColor DODGER_BLUE = new SColor(0x1E90FF, "Dodger Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #755D5B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #755D5B; color: #000000">&nbsp;@&nbsp;</font>
@@ -1632,7 +1632,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #755D5B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DOVE_FEATHER_GREY = new Color(0x755D5B);
+    public static final SColor DOVE_FEATHER_GREY = new SColor(0x755D5B, "Dove Feather Grey");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7D4E2D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7D4E2D; color: #000000">&nbsp;@&nbsp;</font>
@@ -1643,7 +1643,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7D4E2D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DRIED_WEATHERED_BAMBOO = new Color(0x7D4E2D);
+    public static final SColor DRIED_WEATHERED_BAMBOO = new SColor(0x7D4E2D, "Dried Weathered Bamboo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4F4944; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4F4944; color: #000000">&nbsp;@&nbsp;</font>
@@ -1654,7 +1654,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4F4944">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color DULL_BLUE = new Color(0x4F4944);
+    public static final SColor DULL_BLUE = new SColor(0x4F4944, "Dull Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BE7F51; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BE7F51; color: #000000">&nbsp;@&nbsp;</font>
@@ -1665,7 +1665,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BE7F51">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color EARTHEN_YELLOW = new Color(0xBE7F51);
+    public static final SColor EARTHEN_YELLOW = new SColor(0xBE7F51, "Earthen Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF4E20; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF4E20; color: #000000">&nbsp;@&nbsp;</font>
@@ -1676,7 +1676,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF4E20">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color EARTHEN_YELLOW_RED_BROWN = new Color(0xFF4E20);
+    public static final SColor EARTHEN_YELLOW_RED_BROWN = new SColor(0xFF4E20, "Earthen Yellow Red Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C2B280; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C2B280; color: #000000">&nbsp;@&nbsp;</font>
@@ -1687,7 +1687,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C2B280">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ECRU = new Color(0xC2B280);
+    public static final SColor ECRU = new SColor(0xC2B280, "Ecru");
     /**
      * Color constant<PRE>
      *<font style="background-color: #A13D2D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #A13D2D; color: #000000">&nbsp;@&nbsp;</font>
@@ -1698,7 +1698,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #A13D2D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color EDO_BROWN = new Color(0xA13D2D);
+    public static final SColor EDO_BROWN = new SColor(0xA13D2D, "Edo Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFA631; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFA631; color: #000000">&nbsp;@&nbsp;</font>
@@ -1709,7 +1709,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFA631">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color EGG_DYE = new Color(0xFFA631);
+    public static final SColor EGG_DYE = new SColor(0xFFA631, "Egg Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ECBE9F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ECBE9F; color: #000000">&nbsp;@&nbsp;</font>
@@ -1720,7 +1720,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ECBE9F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color EGGSHELL_PAPER = new Color(0xECBE9F);
+    public static final SColor EGGSHELL_PAPER = new SColor(0xECBE9F, "Eggshell Paper");
     /**
      * Color constant<PRE>
      *<font style="background-color: #1034A6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #1034A6; color: #000000">&nbsp;@&nbsp;</font>
@@ -1731,7 +1731,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #1034A6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color EGYPTIAN_BLUE = new Color(0x1034A6);
+    public static final SColor EGYPTIAN_BLUE = new SColor(0x1034A6, "Egyptian Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7DF9FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7DF9FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -1742,7 +1742,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7DF9FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ELECTRIC_BLUE = new Color(0x7DF9FF);
+    public static final SColor ELECTRIC_BLUE = new SColor(0x7DF9FF, "Electric Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #00FF00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00FF00; color: #000000">&nbsp;@&nbsp;</font>
@@ -1753,7 +1753,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00FF00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ELECTRIC_GREEN = new Color(0x00FF00);
+    public static final SColor ELECTRIC_GREEN = new SColor(0x00FF00, "Electric Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6600FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6600FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -1764,7 +1764,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6600FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ELECTRIC_INDIGO = new Color(0x6600FF);
+    public static final SColor ELECTRIC_INDIGO = new SColor(0x6600FF, "Electric Indigo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CCFF00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CCFF00; color: #000000">&nbsp;@&nbsp;</font>
@@ -1775,7 +1775,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CCFF00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ELECTRIC_LIME = new Color(0xCCFF00);
+    public static final SColor ELECTRIC_LIME = new SColor(0xCCFF00, "Electric Lime");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BF00FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BF00FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -1786,7 +1786,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BF00FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ELECTRIC_PURPLE = new Color(0xBF00FF);
+    public static final SColor ELECTRIC_PURPLE = new SColor(0xBF00FF, "Electric Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #50C878; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #50C878; color: #000000">&nbsp;@&nbsp;</font>
@@ -1797,7 +1797,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #50C878">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color EMERALD = new Color(0x50C878);
+    public static final SColor EMERALD = new SColor(0x50C878, "Emerald");
     /**
      * Color constant<PRE>
      *<font style="background-color: #614051; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #614051; color: #000000">&nbsp;@&nbsp;</font>
@@ -1808,7 +1808,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #614051">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color EGGPLANT = new Color(0x614051);
+    public static final SColor EGGPLANT = new SColor(0x614051, "Eggplant");
     /**
      * Color constant<PRE>
      *<font style="background-color: #60281E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #60281E; color: #000000">&nbsp;@&nbsp;</font>
@@ -1819,7 +1819,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #60281E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FADED_CHINESE_TEA_BROWN = new Color(0x60281E);
+    public static final SColor FADED_CHINESE_TEA_BROWN = new SColor(0x60281E, "Faded Chinese Tea Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B0927A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B0927A; color: #000000">&nbsp;@&nbsp;</font>
@@ -1830,7 +1830,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B0927A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FADED_SEN_NO_RIKYUS_TEA = new Color(0xB0927A);
+    public static final SColor FADED_SEN_NO_RIKYUS_TEA = new SColor(0xB0927A, "Faded Den No Rikyu's Tea");
     /**
      * Color constant<PRE>
      *<font style="background-color: #43242A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #43242A; color: #000000">&nbsp;@&nbsp;</font>
@@ -1841,7 +1841,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #43242A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FAKE_PURPLE = new Color(0x43242A);
+    public static final SColor FAKE_PURPLE = new SColor(0x43242A, "Fake Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #801818; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #801818; color: #000000">&nbsp;@&nbsp;</font>
@@ -1852,7 +1852,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #801818">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FALU_RED = new Color(0x801818);
+    public static final SColor FALU_RED = new SColor(0x801818, "Falu Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4F7942; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4F7942; color: #000000">&nbsp;@&nbsp;</font>
@@ -1863,7 +1863,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4F7942">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FERN_GREEN = new Color(0x4F7942);
+    public static final SColor FERN_GREEN = new SColor(0x4F7942, "Fern Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #957B38; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #957B38; color: #000000">&nbsp;@&nbsp;</font>
@@ -1874,7 +1874,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #957B38">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FINCH_BROWN = new Color(0x957B38);
+    public static final SColor FINCH_BROWN = new SColor(0x957B38, "Finch Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B22222; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B22222; color: #000000">&nbsp;@&nbsp;</font>
@@ -1885,7 +1885,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B22222">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FIREBRICK = new Color(0xB22222);
+    public static final SColor FIREBRICK = new SColor(0xB22222, "Firebrick");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6B4423; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6B4423; color: #000000">&nbsp;@&nbsp;</font>
@@ -1896,7 +1896,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6B4423">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FLATTERY_BROWN = new Color(0x6B4423);
+    public static final SColor FLATTERY_BROWN = new SColor(0x6B4423, "Flattery Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #EEDC82; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EEDC82; color: #000000">&nbsp;@&nbsp;</font>
@@ -1907,7 +1907,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #EEDC82">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FLAX = new Color(0xEEDC82);
+    public static final SColor FLAX = new SColor(0xEEDC82, "Flax");
     /**
      * Color constant<PRE>
      *<font style="background-color: #473F2D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #473F2D; color: #000000">&nbsp;@&nbsp;</font>
@@ -1918,7 +1918,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #473F2D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FLIRTATIOUS_INDIGO_TEA = new Color(0x473F2D);
+    public static final SColor FLIRTATIOUS_INDIGO_TEA = new SColor(0x473F2D, "Flirtatious Indigo Tea");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFB94E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFB94E; color: #000000">&nbsp;@&nbsp;</font>
@@ -1929,7 +1929,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFB94E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FLORAL_LEAF = new Color(0xFFB94E);
+    public static final SColor FLORAL_LEAF = new SColor(0xFFB94E, "Floral Leaf");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C91F37; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C91F37; color: #000000">&nbsp;@&nbsp;</font>
@@ -1940,7 +1940,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C91F37">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FOREIGN_CRIMSON = new Color(0xC91F37);
+    public static final SColor FOREIGN_CRIMSON = new SColor(0xC91F37, "Foreign Crimson");
     /**
      * Color constant<PRE>
      *<font style="background-color: #228B22; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #228B22; color: #000000">&nbsp;@&nbsp;</font>
@@ -1951,7 +1951,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #228B22">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FOREST_GREEN = new Color(0x228B22);
+    public static final SColor FOREST_GREEN = new SColor(0x228B22, "Forest Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #985629; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #985629; color: #000000">&nbsp;@&nbsp;</font>
@@ -1962,7 +1962,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #985629">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FOX = new Color(0x985629);
+    public static final SColor FOX = new SColor(0x985629, "Fox");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2E372E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2E372E; color: #000000">&nbsp;@&nbsp;</font>
@@ -1973,7 +1973,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2E372E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FRAGILE_SEAWEED_BROWN = new Color(0x2E372E);
+    public static final SColor FRAGILE_SEAWEED_BROWN = new SColor(0x2E372E, "Fragile Seaweed Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F64A8A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F64A8A; color: #000000">&nbsp;@&nbsp;</font>
@@ -1984,7 +1984,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F64A8A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FRENCH_ROSE = new Color(0xF64A8A);
+    public static final SColor FRENCH_ROSE = new SColor(0xF64A8A, "French Rose");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5B8930; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5B8930; color: #000000">&nbsp;@&nbsp;</font>
@@ -1995,7 +1995,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5B8930">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FRESH_ONION = new Color(0x5B8930);
+    public static final SColor FRESH_ONION = new SColor(0x5B8930, "Fresh Onion");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF77FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF77FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -2006,7 +2006,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF77FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color FUCSHIA_PINK = new Color(0xFF77FF);
+    public static final SColor FUCSHIA_PINK = new SColor(0xFF77FF, "Fucshia Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E49B0F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E49B0F; color: #000000">&nbsp;@&nbsp;</font>
@@ -2017,7 +2017,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E49B0F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GAMBOGE = new Color(0xE49B0F);
+    public static final SColor GAMBOGE = new SColor(0xE49B0F, "Gamboge");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFB61E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFB61E; color: #000000">&nbsp;@&nbsp;</font>
@@ -2028,7 +2028,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFB61E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GAMBOGE_DYE = new Color(0xFFB61E);
+    public static final SColor GAMBOGE_DYE = new SColor(0xFFB61E, "Gamboge Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D34E36; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D34E36; color: #000000">&nbsp;@&nbsp;</font>
@@ -2039,7 +2039,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D34E36">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GLAZED_PERSIMMON = new Color(0xD34E36);
+    public static final SColor GLAZED_PERSIMMON = new SColor(0xD34E36, "Glazed Persimmon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D4AF37; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D4AF37; color: #000000">&nbsp;@&nbsp;</font>
@@ -2050,7 +2050,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D4AF37">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GOLD = new Color(0xD4AF37);
+    public static final SColor GOLD = new SColor(0xD4AF37, "Gold");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFD700; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFD700; color: #000000">&nbsp;@&nbsp;</font>
@@ -2061,7 +2061,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFD700">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GOLDEN = new Color(0xFFD700);
+    public static final SColor GOLDEN = new SColor(0xFFD700, "Golden");
     /**
      * Color constant<PRE>
      *<font style="background-color: #996515; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #996515; color: #000000">&nbsp;@&nbsp;</font>
@@ -2072,7 +2072,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #996515">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GOLDEN_BROWN = new Color(0x996515);
+    public static final SColor GOLDEN_BROWN = new SColor(0x996515, "Golden Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C66B27; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C66B27; color: #000000">&nbsp;@&nbsp;</font>
@@ -2083,7 +2083,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C66B27">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GOLDEN_BROWN_DYE = new Color(0xC66B27);
+    public static final SColor GOLDEN_BROWN_DYE = new SColor(0xC66B27, "Golden Brown Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E29C45; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E29C45; color: #000000">&nbsp;@&nbsp;</font>
@@ -2094,7 +2094,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E29C45">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GOLDEN_FALLEN_LEAVES = new Color(0xE29C45);
+    public static final SColor GOLDEN_FALLEN_LEAVES = new SColor(0xE29C45, "Golden Fallen Leaves");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BB8141; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BB8141; color: #000000">&nbsp;@&nbsp;</font>
@@ -2105,7 +2105,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BB8141">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GOLDEN_OAK = new Color(0xBB8141);
+    public static final SColor GOLDEN_OAK = new SColor(0xBB8141, "Golden Oak");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFDF00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFDF00; color: #000000">&nbsp;@&nbsp;</font>
@@ -2116,7 +2116,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFDF00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GOLDEN_YELLOW = new Color(0xFFDF00);
+    public static final SColor GOLDEN_YELLOW = new SColor(0xFFDF00, "Golden Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DAA520; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DAA520; color: #000000">&nbsp;@&nbsp;</font>
@@ -2127,7 +2127,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DAA520">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GOLDENROD = new Color(0xDAA520);
+    public static final SColor GOLDENROD = new SColor(0xDAA520, "Goldenrod");
     /**
      * Color constant<PRE>
      *<font style="background-color: #203838; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #203838; color: #000000">&nbsp;@&nbsp;</font>
@@ -2138,7 +2138,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #203838">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GORYEO_STOREROOM = new Color(0x203838);
+    public static final SColor GORYEO_STOREROOM = new SColor(0x203838, "Goryeo Storeroom");
     /**
      * Color constant<PRE>
      *<font style="background-color: #63424B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #63424B; color: #000000">&nbsp;@&nbsp;</font>
@@ -2149,7 +2149,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #63424B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GRAPE_MOUSE = new Color(0x63424B);
+    public static final SColor GRAPE_MOUSE = new SColor(0x63424B, "Grape Mouse");
     /**
      * Color constant<PRE>
      *<font style="background-color: #808080; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #808080; color: #000000">&nbsp;@&nbsp;</font>
@@ -2160,7 +2160,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #808080">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #808080">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #808080">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #808080">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #808080">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GRAY = new Color(0x808080);
+    public static final SColor GRAY = new SColor(0x808080, "Gray");
     /**
      * Color constant<PRE>
      *<font style="background-color: #465945; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #465945; color: #000000">&nbsp;@&nbsp;</font>
@@ -2171,7 +2171,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #465945">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GRAY_ASPARAGUS = new Color(0x465945);
+    public static final SColor GRAY_ASPARAGUS = new SColor(0x465945, "Gray Asparagus");
     /**
      * Color constant<PRE>
      *<font style="background-color: #008000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #008000; color: #000000">&nbsp;@&nbsp;</font>
@@ -2182,7 +2182,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #008000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #008000">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #008000">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #008000">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #008000">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GREEN = new Color(0x008000);
+    public static final SColor GREEN = new SColor(0x008000, "Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BDA928; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BDA928; color: #000000">&nbsp;@&nbsp;</font>
@@ -2193,7 +2193,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BDA928">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GREENFINCH = new Color(0xBDA928);
+    public static final SColor GREENFINCH = new SColor(0xBDA928, "Greenfinch");
     /**
      * Color constant<PRE>
      *<font style="background-color: #006442; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #006442; color: #000000">&nbsp;@&nbsp;</font>
@@ -2204,7 +2204,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #006442">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GREEN_BAMBOO = new Color(0x006442);
+    public static final SColor GREEN_BAMBOO = new SColor(0x006442, "Green Bamboo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #824B35; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #824B35; color: #000000">&nbsp;@&nbsp;</font>
@@ -2215,7 +2215,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #824B35">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GREEN_TEA_DYE = new Color(0x824B35);
+    public static final SColor GREEN_TEA_DYE = new SColor(0x824B35, "Green Tea Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ADFF2F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ADFF2F; color: #000000">&nbsp;@&nbsp;</font>
@@ -2226,7 +2226,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ADFF2F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GREEN_YELLOW = new Color(0xADFF2F);
+    public static final SColor GREEN_YELLOW = new SColor(0xADFF2F, "Green Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #656255; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #656255; color: #000000">&nbsp;@&nbsp;</font>
@@ -2237,7 +2237,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #656255">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color GREYISH_DARK_GREEN = new Color(0x656255);
+    public static final SColor GREYISH_DARK_GREEN = new SColor(0x656255, "Greyish Dark Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8D608C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8D608C; color: #000000">&nbsp;@&nbsp;</font>
@@ -2248,7 +2248,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8D608C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color HALF_PURPLE = new Color(0x8D608C);
+    public static final SColor HALF_PURPLE = new SColor(0x8D608C, "Half Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5218FA; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5218FA; color: #000000">&nbsp;@&nbsp;</font>
@@ -2259,7 +2259,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5218FA">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color HAN_PURPLE = new Color(0x5218FA);
+    public static final SColor HAN_PURPLE = new SColor(0x5218FA, "Han Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #757D75; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #757D75; color: #000000">&nbsp;@&nbsp;</font>
@@ -2270,7 +2270,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #757D75">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color HARBOR_RAT = new Color(0x757D75);
+    public static final SColor HARBOR_RAT = new SColor(0x757D75, "Harbor Rat");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DF73FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DF73FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -2281,7 +2281,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DF73FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color HELIOTROPE = new Color(0xDF73FF);
+    public static final SColor HELIOTROPE = new SColor(0xDF73FF, "Heliotrope");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F400A1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F400A1; color: #000000">&nbsp;@&nbsp;</font>
@@ -2292,7 +2292,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F400A1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color HOLLYWOOD_CERISE = new Color(0xF400A1);
+    public static final SColor HOLLYWOOD_CERISE = new SColor(0xF400A1, "Hollywood Cerise");
     /**
      * Color constant<PRE>
      *<font style="background-color: #3D5D42; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3D5D42; color: #000000">&nbsp;@&nbsp;</font>
@@ -2303,7 +2303,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3D5D42">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color HORSETAIL = new Color(0x3D5D42);
+    public static final SColor HORSETAIL = new SColor(0x3D5D42, "Horsetail");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF00CC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF00CC; color: #000000">&nbsp;@&nbsp;</font>
@@ -2314,7 +2314,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF00CC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color HOT_MAGENTA = new Color(0xFF00CC);
+    public static final SColor HOT_MAGENTA = new SColor(0xFF00CC, "Hot Magenta");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF69B4; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF69B4; color: #000000">&nbsp;@&nbsp;</font>
@@ -2325,7 +2325,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF69B4">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color HOT_PINK = new Color(0xFF69B4);
+    public static final SColor HOT_PINK = new SColor(0xFF69B4, "Hot Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4C221B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4C221B; color: #000000">&nbsp;@&nbsp;</font>
@@ -2336,7 +2336,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4C221B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color IBIS = new Color(0x4C221B);
+    public static final SColor IBIS = new SColor(0x4C221B, "Iris");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F58F84; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F58F84; color: #000000">&nbsp;@&nbsp;</font>
@@ -2347,7 +2347,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F58F84">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color IBIS_WING = new Color(0xF58F84);
+    public static final SColor IBIS_WING = new SColor(0xF58F84, "Ibis Wing");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4B0082; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4B0082; color: #000000">&nbsp;@&nbsp;</font>
@@ -2358,7 +2358,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4B0082">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color INDIGO = new Color(0x4B0082);
+    public static final SColor INDIGO = new SColor(0x4B0082, "Indigo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #00416A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00416A; color: #000000">&nbsp;@&nbsp;</font>
@@ -2369,7 +2369,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00416A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color INDIGO_DYE = new Color(0x00416A);
+    public static final SColor INDIGO_DYE = new SColor(0x00416A, "Indigo Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #393432; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #393432; color: #000000">&nbsp;@&nbsp;</font>
@@ -2380,7 +2380,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #393432">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color INDIGO_INK_BROWN = new Color(0x393432);
+    public static final SColor INDIGO_INK_BROWN = new SColor(0x393432, "Indigo Ink Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #EBF6F7; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EBF6F7; color: #000000">&nbsp;@&nbsp;</font>
@@ -2391,7 +2391,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #EBF6F7">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color INDIGO_WHITE = new Color(0xEBF6F7);
+    public static final SColor INDIGO_WHITE = new SColor(0xEBF6F7, "Indigo White");
     /**
      * Color constant<PRE>
      *<font style="background-color: #27221F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #27221F; color: #000000">&nbsp;@&nbsp;</font>
@@ -2402,7 +2402,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #27221F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color INK = new Color(0x27221F);
+    public static final SColor INK = new SColor(0x27221F, "Ink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2D4436; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2D4436; color: #000000">&nbsp;@&nbsp;</font>
@@ -2413,7 +2413,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2D4436">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color INSECT_SCREEN = new Color(0x2D4436);
+    public static final SColor INSECT_SCREEN = new SColor(0x2D4436, "Insect Screen");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C6C2B6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C6C2B6; color: #000000">&nbsp;@&nbsp;</font>
@@ -2424,7 +2424,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C6C2B6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color INSIDE_OF_A_BOTTLE = new Color(0xC6C2B6);
+    public static final SColor INSIDE_OF_A_BOTTLE = new SColor(0xC6C2B6, "Inside Of A Bottle");
     /**
      * Color constant<PRE>
      *<font style="background-color: #002FA7; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #002FA7; color: #000000">&nbsp;@&nbsp;</font>
@@ -2435,7 +2435,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #002FA7">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color INTERNATIONAL_KLEIN_BLUE = new Color(0x002FA7);
+    public static final SColor INTERNATIONAL_KLEIN_BLUE = new SColor(0x002FA7, "International Klein Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF4F00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF4F00; color: #000000">&nbsp;@&nbsp;</font>
@@ -2446,7 +2446,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF4F00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color INTERNATIONAL_ORANGE = new Color(0xFF4F00);
+    public static final SColor INTERNATIONAL_ORANGE = new SColor(0xFF4F00, "International Orange");
     /**
      * Color constant<PRE>
      *<font style="background-color: #763568; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #763568; color: #000000">&nbsp;@&nbsp;</font>
@@ -2457,7 +2457,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #763568">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color IRIS = new Color(0x763568);
+    public static final SColor IRIS = new SColor(0x763568, "Iris");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2B3733; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2B3733; color: #000000">&nbsp;@&nbsp;</font>
@@ -2468,7 +2468,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2B3733">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color IRON = new Color(0x2B3733);
+    public static final SColor IRON = new SColor(0x2B3733, "Iron");
     /**
      * Color constant<PRE>
      *<font style="background-color: #344D56; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #344D56; color: #000000">&nbsp;@&nbsp;</font>
@@ -2479,7 +2479,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #344D56">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color IRONHEAD_FLOWER = new Color(0x344D56);
+    public static final SColor IRONHEAD_FLOWER = new SColor(0x344D56, "Ironhead Flower");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2B3736; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2B3736; color: #000000">&nbsp;@&nbsp;</font>
@@ -2490,7 +2490,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2B3736">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color IRON_STORAGE = new Color(0x2B3736);
+    public static final SColor IRON_STORAGE = new SColor(0x2B3736, "Iron Storage");
     /**
      * Color constant<PRE>
      *<font style="background-color: #009000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #009000; color: #000000">&nbsp;@&nbsp;</font>
@@ -2501,7 +2501,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #009000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ISLAMIC_GREEN = new Color(0x009000);
+    public static final SColor ISLAMIC_GREEN = new SColor(0x009000, "Islamic Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFFFF0; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFFFF0; color: #000000">&nbsp;@&nbsp;</font>
@@ -2512,7 +2512,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFFFF0">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color IVORY = new Color(0xFFFFF0);
+    public static final SColor IVORY = new SColor(0xFFFFF0, "Ivory");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5E5545; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5E5545; color: #000000">&nbsp;@&nbsp;</font>
@@ -2523,7 +2523,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5E5545">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color IWAI_BROWN = new Color(0x5E5545);
+    public static final SColor IWAI_BROWN = new SColor(0x5E5545, "Iwai Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #00A86B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00A86B; color: #000000">&nbsp;@&nbsp;</font>
@@ -2534,7 +2534,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00A86B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color JADE = new Color(0x00A86B);
+    public static final SColor JADE = new SColor(0x00A86B, "Jade");
     /**
      * Color constant<PRE>
      *<font style="background-color: #264348; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #264348; color: #000000">&nbsp;@&nbsp;</font>
@@ -2545,7 +2545,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #264348">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color JAPANESE_INDIGO = new Color(0x264348);
+    public static final SColor JAPANESE_INDIGO = new SColor(0x264348, "Japanese Indigo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7F5D3B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7F5D3B; color: #000000">&nbsp;@&nbsp;</font>
@@ -2556,7 +2556,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7F5D3B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color JAPANESE_IRIS = new Color(0x7F5D3B);
+    public static final SColor JAPANESE_IRIS = new SColor(0x7F5D3B, "Japanese Iris");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8c9c76; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8c9c76; color: #000000">&nbsp;@&nbsp;</font>
@@ -2567,7 +2567,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8c9c76">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color JAPANESE_PALE_BLUE = new Color(0x8c9c76);
+    public static final SColor JAPANESE_PALE_BLUE = new SColor(0x8c9c76, "Japanese Pale Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E2B13C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E2B13C; color: #000000">&nbsp;@&nbsp;</font>
@@ -2578,7 +2578,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E2B13C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color JAPANESE_TRIANDRA_GRASS = new Color(0xE2B13C);
+    public static final SColor JAPANESE_TRIANDRA_GRASS = new SColor(0xE2B13C, "Japanese Triandra Grass");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4CBB17; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4CBB17; color: #000000">&nbsp;@&nbsp;</font>
@@ -2589,7 +2589,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4CBB17">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color KELLY_GREEN = new Color(0x4CBB17);
+    public static final SColor KELLY_GREEN = new SColor(0x4CBB17, "Kelly Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C3B091; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C3B091; color: #000000">&nbsp;@&nbsp;</font>
@@ -2600,7 +2600,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C3B091">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color KHAKI = new Color(0xC3B091);
+    public static final SColor KHAKI = new SColor(0xC3B091, "Khaki");
     /**
      * Color constant<PRE>
      *<font style="background-color: #3D4C51; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3D4C51; color: #000000">&nbsp;@&nbsp;</font>
@@ -2611,7 +2611,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3D4C51">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color KIMONO_STORAGE = new Color(0x3D4C51);
+    public static final SColor KIMONO_STORAGE = new SColor(0x3D4C51, "Kimono Storage");
     /**
      * Color constant<PRE>
      *<font style="background-color: #1F4788; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #1F4788; color: #000000">&nbsp;@&nbsp;</font>
@@ -2622,7 +2622,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #1F4788">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAPIS_LAZULI = new Color(0x1F4788);
+    public static final SColor LAPIS_LAZULI = new SColor(0x1F4788, "Lapis Lazuli");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B57EDC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B57EDC; color: #000000">&nbsp;@&nbsp;</font>
@@ -2633,7 +2633,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B57EDC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAVENDER_FLORAL = new Color(0xB57EDC);
+    public static final SColor LAVENDER_FLORAL = new SColor(0xB57EDC, "Lavender Floral");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E6E6FA; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E6E6FA; color: #000000">&nbsp;@&nbsp;</font>
@@ -2644,7 +2644,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E6E6FA">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAVENDER = new Color(0xE6E6FA);
+    public static final SColor LAVENDER = new SColor(0xE6E6FA, "Lavender");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CCCCFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CCCCFF; color: #000000">&nbsp;@&nbsp;</font>
@@ -2655,7 +2655,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CCCCFF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAVENDER_BLUE = new Color(0xCCCCFF);
+    public static final SColor LAVENDER_BLUE = new SColor(0xCCCCFF, "Lavender Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFF0F5; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFF0F5; color: #000000">&nbsp;@&nbsp;</font>
@@ -2666,7 +2666,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFF0F5">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAVENDER_BLUSH = new Color(0xFFF0F5);
+    public static final SColor LAVENDER_BLUSH = new SColor(0xFFF0F5, "Lavender Blush");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C4C3D0; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C4C3D0; color: #000000">&nbsp;@&nbsp;</font>
@@ -2677,7 +2677,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C4C3D0">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAVENDER_GRAY = new Color(0xC4C3D0);
+    public static final SColor LAVENDER_GRAY = new SColor(0xC4C3D0, "Lavender Gray");
     /**
      * Color constant<PRE>
      *<font style="background-color: #EE82EE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EE82EE; color: #000000">&nbsp;@&nbsp;</font>
@@ -2688,7 +2688,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #EE82EE">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAVENDER_MAGENTA = new Color(0xEE82EE);
+    public static final SColor LAVENDER_MAGENTA = new SColor(0xEE82EE, "Lavender Magenta");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FBAED2; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FBAED2; color: #000000">&nbsp;@&nbsp;</font>
@@ -2699,7 +2699,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FBAED2">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAVENDER_PINK = new Color(0xFBAED2);
+    public static final SColor LAVENDER_PINK = new SColor(0xFBAED2, "Lavender Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #967BB6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #967BB6; color: #000000">&nbsp;@&nbsp;</font>
@@ -2710,7 +2710,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #967BB6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAVENDER_PURPLE = new Color(0x967BB6);
+    public static final SColor LAVENDER_PURPLE = new SColor(0x967BB6, "Lavender Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FBA0E3; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FBA0E3; color: #000000">&nbsp;@&nbsp;</font>
@@ -2721,7 +2721,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FBA0E3">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAVENDER_ROSE = new Color(0xFBA0E3);
+    public static final SColor LAVENDER_ROSE = new SColor(0xFBA0E3, "Lavender Rose");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7CFC00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7CFC00; color: #000000">&nbsp;@&nbsp;</font>
@@ -2732,7 +2732,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7CFC00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LAWN_GREEN = new Color(0x7CFC00);
+    public static final SColor LAWN_GREEN = new SColor(0x7CFC00, "Lawn Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2E211B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2E211B; color: #000000">&nbsp;@&nbsp;</font>
@@ -2743,7 +2743,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2E211B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LEGAL_DYE = new Color(0x2E211B);
+    public static final SColor LEGAL_DYE = new SColor(0x2E211B, "Legal Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FDE910; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FDE910; color: #000000">&nbsp;@&nbsp;</font>
@@ -2754,7 +2754,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FDE910">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LEMON = new Color(0xFDE910);
+    public static final SColor LEMON = new SColor(0xFDE910, "Lemon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFFACD; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFFACD; color: #000000">&nbsp;@&nbsp;</font>
@@ -2765,7 +2765,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFFACD">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LEMON_CHIFFON = new Color(0xFFFACD);
+    public static final SColor LEMON_CHIFFON = new SColor(0xFFFACD, "Lemon Chiffon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ADD8E6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ADD8E6; color: #000000">&nbsp;@&nbsp;</font>
@@ -2776,7 +2776,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ADD8E6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_BLUE = new Color(0xADD8E6);
+    public static final SColor LIGHT_BLUE = new SColor(0xADD8E6, "Light Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #48929B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #48929B; color: #000000">&nbsp;@&nbsp;</font>
@@ -2787,7 +2787,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #48929B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_BLUE_DYE = new Color(0x48929B);
+    public static final SColor LIGHT_BLUE_DYE = new SColor(0x48929B, "Light Blue Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #1D697C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #1D697C; color: #000000">&nbsp;@&nbsp;</font>
@@ -2798,7 +2798,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #1D697C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_BLUE_FLOWER = new Color(0x1D697C);
+    public static final SColor LIGHT_BLUE_FLOWER = new SColor(0x1D697C, "Light Blue Flower");
     /**
      * Color constant<PRE>
      *<font style="background-color: #044F67; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #044F67; color: #000000">&nbsp;@&nbsp;</font>
@@ -2809,7 +2809,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #044F67">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_BLUE_SILK = new Color(0x044F67);
+    public static final SColor LIGHT_BLUE_SILK = new SColor(0x044F67, "Light Blue Silk");
     /**
      * Color constant<PRE>
      *<font style="background-color: #c0c0c0; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #c0c0c0; color: #000000">&nbsp;@&nbsp;</font>
@@ -2820,7 +2820,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #c0c0c0">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #c0c0c0">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #c0c0c0">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #c0c0c0">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #c0c0c0">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_GRAY = new Color(0xc0c0c0);
+    public static final SColor LIGHT_GRAY = new SColor(0xc0c0c0, "Light Gray");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F0E68C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F0E68C; color: #000000">&nbsp;@&nbsp;</font>
@@ -2831,7 +2831,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F0E68C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_KHAKI = new Color(0xF0E68C);
+    public static final SColor LIGHT_KHAKI = new SColor(0xF0E68C, "Light Khaki");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BFFF00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BFFF00; color: #000000">&nbsp;@&nbsp;</font>
@@ -2842,7 +2842,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BFFF00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_LIME = new Color(0xBFFF00);
+    public static final SColor LIGHT_LIME = new SColor(0xBFFF00, "Light Lime");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B03060; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B03060; color: #000000">&nbsp;@&nbsp;</font>
@@ -2853,7 +2853,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B03060">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_MAROON = new Color(0xB03060);
+    public static final SColor LIGHT_MAROON = new SColor(0xB03060, "Light Maroon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFB6C1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFB6C1; color: #000000">&nbsp;@&nbsp;</font>
@@ -2864,7 +2864,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFB6C1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_PINK = new Color(0xFFB6C1);
+    public static final SColor LIGHT_PINK = new SColor(0xFFB6C1, "Light Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #EE82EE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EE82EE; color: #000000">&nbsp;@&nbsp;</font>
@@ -2875,7 +2875,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #EE82EE">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_VIOLET = new Color(0xEE82EE);
+    public static final SColor LIGHT_VIOLET = new SColor(0xEE82EE, "Light Violet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F7BB7D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F7BB7D; color: #000000">&nbsp;@&nbsp;</font>
@@ -2886,7 +2886,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F7BB7D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIGHT_YELLOW_DYE = new Color(0xF7BB7D);
+    public static final SColor LIGHT_YELLOW_DYE = new SColor(0xF7BB7D, "Light Yellow Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C8A2C8; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C8A2C8; color: #000000">&nbsp;@&nbsp;</font>
@@ -2897,7 +2897,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C8A2C8">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LILAC = new Color(0xC8A2C8);
+    public static final SColor LILAC = new SColor(0xC8A2C8, "Lilac");
     /**
      * Duplicated as LIGHT_GREEN for usability Color constant<PRE>
      *<font style="background-color: #00FF00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00FF00; color: #000000">&nbsp;@&nbsp;</font>
@@ -2908,7 +2908,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00FF00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #00FF00">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #00FF00">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #00FF00">&nbsp;@&nbsp;</font><font style="background-color: #964B00; color: #00FF00">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964B00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIME = new Color(0x00FF00);
+    public static final SColor LIME = new SColor(0x00FF00, "Lime");
     /**
      * Color constant<PRE>
      *<font style="background-color: #32CD32; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #32CD32; color: #000000">&nbsp;@&nbsp;</font>
@@ -2919,7 +2919,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #32CD32">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LIME_GREEN = new Color(0x32CD32);
+    public static final SColor LIME_GREEN = new SColor(0x32CD32, "Lime Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FAF0E6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FAF0E6; color: #000000">&nbsp;@&nbsp;</font>
@@ -2930,7 +2930,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FAF0E6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LINEN = new Color(0xFAF0E6);
+    public static final SColor LINEN = new SColor(0xFAF0E6, "Linen");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B95754; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B95754; color: #000000">&nbsp;@&nbsp;</font>
@@ -2941,7 +2941,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B95754">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LONG_SPRING = new Color(0xB95754);
+    public static final SColor LONG_SPRING = new SColor(0xB95754, "Long Spring");
     /**
      * Color constant<PRE>
      *<font style="background-color: #AB6134; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AB6134; color: #000000">&nbsp;@&nbsp;</font>
@@ -2952,7 +2952,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #AB6134">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LOQUAT_BROWN = new Color(0xAB6134);
+    public static final SColor LOQUAT_BROWN = new SColor(0xAB6134, "Loquat Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7F6B5D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7F6B5D; color: #000000">&nbsp;@&nbsp;</font>
@@ -2963,7 +2963,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7F6B5D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color LYE = new Color(0x7F6B5D);
+    public static final SColor LYE = new SColor(0x7F6B5D, "Lye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CA1F7B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CA1F7B; color: #000000">&nbsp;@&nbsp;</font>
@@ -2974,7 +2974,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CA1F7B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MAGENTA_DYE = new Color(0xCA1F7B);
+    public static final SColor MAGENTA_DYE = new SColor(0xCA1F7B, "Magenta Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #AAF0D1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AAF0D1; color: #000000">&nbsp;@&nbsp;</font>
@@ -2985,7 +2985,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #AAF0D1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MAGIC_MINT = new Color(0xAAF0D1);
+    public static final SColor MAGIC_MINT = new SColor(0xAAF0D1, "Magic Mint");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F8F4FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F8F4FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -2996,7 +2996,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F8F4FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MAGNOLIA = new Color(0xF8F4FF);
+    public static final SColor MAGNOLIA = new SColor(0xF8F4FF, "Magnolia");
     /**
      * Color constant<PRE>
      *<font style="background-color: #0BDA51; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0BDA51; color: #000000">&nbsp;@&nbsp;</font>
@@ -3007,7 +3007,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #0BDA51">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MALACHITE = new Color(0x0BDA51);
+    public static final SColor MALACHITE = new SColor(0x0BDA51, "Malachite");
     /**
      * Color constant<PRE>
      *<font style="background-color: #800000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #800000; color: #000000">&nbsp;@&nbsp;</font>
@@ -3018,7 +3018,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #800000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MAROON = new Color(0x800000);
+    public static final SColor MAROON = new SColor(0x800000, "Maroon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ff00ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ff00ff; color: #000000">&nbsp;@&nbsp;</font>
@@ -3029,7 +3029,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ff00ff">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #ff00ff">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #ff00ff">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #ff00ff">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #ff00ff">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MAGENTA = new Color(0xff00ff);
+    public static final SColor MAGENTA = new SColor(0xff00ff, "Magenta");
     /**
      * Color constant<PRE>
      *<font style="background-color: #73C2FB; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #73C2FB; color: #000000">&nbsp;@&nbsp;</font>
@@ -3040,7 +3040,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #73C2FB">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MAYA_BLUE = new Color(0x73C2FB);
+    public static final SColor MAYA_BLUE = new SColor(0x73C2FB, "Maya Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E0B0FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E0B0FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -3051,7 +3051,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E0B0FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MAUVE = new Color(0xE0B0FF);
+    public static final SColor MAUVE = new SColor(0xE0B0FF, "Mauve");
     /**
      * Color constant<PRE>
      *<font style="background-color: #915F6D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #915F6D; color: #000000">&nbsp;@&nbsp;</font>
@@ -3062,7 +3062,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #915F6D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MAUVE_TAUPE = new Color(0x915F6D);
+    public static final SColor MAUVE_TAUPE = new SColor(0x915F6D, "Mauve Taupe");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F9906F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F9906F; color: #000000">&nbsp;@&nbsp;</font>
@@ -3073,7 +3073,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F9906F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MEAT = new Color(0xF9906F);
+    public static final SColor MEAT = new SColor(0xF9906F, "Meat");
     /**
      * Color constant<PRE>
      *<font style="background-color: #0000CD; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000CD; color: #000000">&nbsp;@&nbsp;</font>
@@ -3084,7 +3084,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #0000CD">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MEDIUM_BLUE = new Color(0x0000CD);
+    public static final SColor MEDIUM_BLUE = new SColor(0x0000CD, "Medium Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #AF4035; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AF4035; color: #000000">&nbsp;@&nbsp;</font>
@@ -3095,7 +3095,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #AF4035">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MEDIUM_CARMINE = new Color(0xAF4035);
+    public static final SColor MEDIUM_CARMINE = new SColor(0xAF4035, "Medium Carmine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #c93756; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #c93756; color: #000000">&nbsp;@&nbsp;</font>
@@ -3106,7 +3106,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #c93756">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MEDIUM_CRIMSON = new Color(0xc93756);
+    public static final SColor MEDIUM_CRIMSON = new SColor(0xc93756, "Medium Crimson");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CC99CC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CC99CC; color: #000000">&nbsp;@&nbsp;</font>
@@ -3117,7 +3117,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CC99CC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MEDIUM_LAVENDER_MAGENTA = new Color(0xCC99CC);
+    public static final SColor MEDIUM_LAVENDER_MAGENTA = new SColor(0xCC99CC, "Medium Lavender Magenta");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9370DB; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9370DB; color: #000000">&nbsp;@&nbsp;</font>
@@ -3128,7 +3128,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9370DB">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MEDIUM_PURPLE = new Color(0x9370DB);
+    public static final SColor MEDIUM_PURPLE = new SColor(0x9370DB, "Medium Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #00FA9A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00FA9A; color: #000000">&nbsp;@&nbsp;</font>
@@ -3139,7 +3139,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00FA9A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MEDIUM_SPRING_GREEN = new Color(0x00FA9A);
+    public static final SColor MEDIUM_SPRING_GREEN = new SColor(0x00FA9A, "Medium Spring Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2A606B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2A606B; color: #000000">&nbsp;@&nbsp;</font>
@@ -3150,7 +3150,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2A606B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MIDORI = new Color(0x2A606B);
+    public static final SColor MIDORI = new SColor(0x2A606B, "Midori");
     /**
      * Color constant<PRE>
      *<font style="background-color: #003366; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #003366; color: #000000">&nbsp;@&nbsp;</font>
@@ -3161,7 +3161,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #003366">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MIDNIGHT_BLUE = new Color(0x003366);
+    public static final SColor MIDNIGHT_BLUE = new SColor(0x003366, "Midnight Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #98FF98; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #98FF98; color: #000000">&nbsp;@&nbsp;</font>
@@ -3172,7 +3172,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #98FF98">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MINT_GREEN = new Color(0x98FF98);
+    public static final SColor MINT_GREEN = new SColor(0x98FF98, "Mint Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFE4E1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFE4E1; color: #000000">&nbsp;@&nbsp;</font>
@@ -3183,7 +3183,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFE4E1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MISTY_ROSE = new Color(0xFFE4E1);
+    public static final SColor MISTY_ROSE = new SColor(0xFFE4E1, "Misty Rose");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8B7D3A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8B7D3A; color: #000000">&nbsp;@&nbsp;</font>
@@ -3194,7 +3194,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8B7D3A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MOSS = new Color(0x8B7D3A);
+    public static final SColor MOSS = new SColor(0x8B7D3A, "Moss");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ADDFAD; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ADDFAD; color: #000000">&nbsp;@&nbsp;</font>
@@ -3205,7 +3205,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ADDFAD">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MOSS_GREEN = new Color(0xADDFAD);
+    public static final SColor MOSS_GREEN = new SColor(0xADDFAD, "Moss Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #997A8D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #997A8D; color: #000000">&nbsp;@&nbsp;</font>
@@ -3216,7 +3216,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #997A8D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MOUNTBATTEN_PINK = new Color(0x997A8D);
+    public static final SColor MOUNTBATTEN_PINK = new SColor(0x997A8D, "Mountbatten Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5C544E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5C544E; color: #000000">&nbsp;@&nbsp;</font>
@@ -3227,7 +3227,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5C544E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MOUSY_INDIGO = new Color(0x5C544E);
+    public static final SColor MOUSY_INDIGO = new SColor(0x5C544E, "Mousy Indigo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #766980; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #766980; color: #000000">&nbsp;@&nbsp;</font>
@@ -3238,7 +3238,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #766980">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MOUSY_WISTERIA = new Color(0x766980);
+    public static final SColor MOUSY_WISTERIA = new SColor(0x766980, "Mousy Wisteria");
     /**
      * Color constant<PRE>
      *<font style="background-color: #59292C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #59292C; color: #000000">&nbsp;@&nbsp;</font>
@@ -3249,7 +3249,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #59292C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MULBERRY = new Color(0x59292C);
+    public static final SColor MULBERRY = new SColor(0x59292C, "Mulberry");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C57F2E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C57F2E; color: #000000">&nbsp;@&nbsp;</font>
@@ -3260,7 +3260,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C57F2E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MULBERRY_DYED = new Color(0xC57F2E);
+    public static final SColor MULBERRY_DYED = new SColor(0xC57F2E, "Mulberry Dyed");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFDB58; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFDB58; color: #000000">&nbsp;@&nbsp;</font>
@@ -3271,7 +3271,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFDB58">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MUSTARD = new Color(0xFFDB58);
+    public static final SColor MUSTARD = new SColor(0xFFDB58, "Mustard");
     /**
      * Color constant<PRE>
      *<font style="background-color: #21421E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #21421E; color: #000000">&nbsp;@&nbsp;</font>
@@ -3282,7 +3282,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #21421E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color MYRTLE = new Color(0x21421E);
+    public static final SColor MYRTLE = new SColor(0x21421E, "Myrtle");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFDEAD; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFDEAD; color: #000000">&nbsp;@&nbsp;</font>
@@ -3293,7 +3293,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFDEAD">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color NAVAJO_WHITE = new Color(0xFFDEAD);
+    public static final SColor NAVAJO_WHITE = new SColor(0xFFDEAD, "Navajo White");
     /**
      * Color constant<PRE>
      *<font style="background-color: #000080; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000080; color: #000000">&nbsp;@&nbsp;</font>
@@ -3304,7 +3304,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #000080">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color NAVY_BLUE = new Color(0x000080);
+    public static final SColor NAVY_BLUE = new SColor(0x000080, "Navy Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #191F45; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #191F45; color: #000000">&nbsp;@&nbsp;</font>
@@ -3315,7 +3315,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #191F45">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color NAVY_BLUE_BELLFLOWER = new Color(0x191F45);
+    public static final SColor NAVY_BLUE_BELLFLOWER = new SColor(0x191F45, "Navy Blue Bellflower");
     /**
      * Color constant<PRE>
      *<font style="background-color: #003171; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #003171; color: #000000">&nbsp;@&nbsp;</font>
@@ -3326,7 +3326,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #003171">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color NAVY_BLUE_DYE = new Color(0x003171);
+    public static final SColor NAVY_BLUE_DYE = new SColor(0x003171, "Navy Blue Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #006C7F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #006C7F; color: #000000">&nbsp;@&nbsp;</font>
@@ -3337,7 +3337,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #006C7F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color NEW_BRIDGE = new Color(0x006C7F);
+    public static final SColor NEW_BRIDGE = new SColor(0x006C7F, "New Bridge");
     /**
      * Color constant<PRE>
      *<font style="background-color: #645530; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #645530; color: #000000">&nbsp;@&nbsp;</font>
@@ -3348,7 +3348,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #645530">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color NIGHTINGALE = new Color(0x645530);
+    public static final SColor NIGHTINGALE = new SColor(0x645530, "Nightingale");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5C4827; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5C4827; color: #000000">&nbsp;@&nbsp;</font>
@@ -3359,7 +3359,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5C4827">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color NIGHTINGALE_BROWN = new Color(0x5C4827);
+    public static final SColor NIGHTINGALE_BROWN = new SColor(0x5C4827, "Nightingale Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CC7722; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CC7722; color: #000000">&nbsp;@&nbsp;</font>
@@ -3370,7 +3370,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CC7722">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OCHRE = new Color(0xCC7722);
+    public static final SColor OCHRE = new SColor(0xCC7722, "Ochre");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5E644F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5E644F; color: #000000">&nbsp;@&nbsp;</font>
@@ -3381,7 +3381,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5E644F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OLD_BAMBOO = new Color(0x5E644F);
+    public static final SColor OLD_BAMBOO = new SColor(0x5E644F, "Old Bamboo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CFB53B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CFB53B; color: #000000">&nbsp;@&nbsp;</font>
@@ -3392,7 +3392,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CFB53B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OLD_GOLD = new Color(0xCFB53B);
+    public static final SColor OLD_GOLD = new SColor(0xCFB53B, "Old Gold");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FDF5E6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FDF5E6; color: #000000">&nbsp;@&nbsp;</font>
@@ -3403,7 +3403,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FDF5E6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OLD_LACE = new Color(0xFDF5E6);
+    public static final SColor OLD_LACE = new SColor(0xFDF5E6, "Old Lace");
     /**
      * Color constant<PRE>
      *<font style="background-color: #796878; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #796878; color: #000000">&nbsp;@&nbsp;</font>
@@ -3414,7 +3414,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #796878">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OLD_LAVENDER = new Color(0x796878);
+    public static final SColor OLD_LAVENDER = new SColor(0x796878, "Old Lavender");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C08081; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C08081; color: #000000">&nbsp;@&nbsp;</font>
@@ -3425,7 +3425,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C08081">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OLD_ROSE = new Color(0xC08081);
+    public static final SColor OLD_ROSE = new SColor(0xC08081, "Old Rose");
     /**
      * Color constant<PRE>
      *<font style="background-color: #808000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #808000; color: #000000">&nbsp;@&nbsp;</font>
@@ -3436,7 +3436,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #808000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OLIVE = new Color(0x808000);
+    public static final SColor OLIVE = new SColor(0x808000, "Olive");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6B8E23; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6B8E23; color: #000000">&nbsp;@&nbsp;</font>
@@ -3447,7 +3447,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6B8E23">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OLIVE_DRAB = new Color(0x6B8E23);
+    public static final SColor OLIVE_DRAB = new SColor(0x6B8E23, "Olive Drab");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9AB973; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9AB973; color: #000000">&nbsp;@&nbsp;</font>
@@ -3458,7 +3458,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9AB973">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OLIVINE = new Color(0x9AB973);
+    public static final SColor OLIVINE = new SColor(0x9AB973, "Olivine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #364141; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #364141; color: #000000">&nbsp;@&nbsp;</font>
@@ -3469,7 +3469,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #364141">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ONANDO = new Color(0x364141);
+    public static final SColor ONANDO = new SColor(0x364141, "Onando");
     /**
      * Color constant<PRE>
      *<font style="background-color: #f08f90; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #f08f90; color: #000000">&nbsp;@&nbsp;</font>
@@ -3480,7 +3480,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #f08f90">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #f08f90">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #f08f90">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #f08f90">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #f08f90">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ONE_KIN_DYE = new Color(0xf08f90);
+    public static final SColor ONE_KIN_DYE = new SColor(0xf08f90, "One Kin Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4D646C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4D646C; color: #000000">&nbsp;@&nbsp;</font>
@@ -3491,7 +3491,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4D646C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OPPOSITE_FLOWER = new Color(0x4D646C);
+    public static final SColor OPPOSITE_FLOWER = new SColor(0x4D646C, "Opposite Flower");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ffc800; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffc800; color: #000000">&nbsp;@&nbsp;</font>
@@ -3502,7 +3502,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ffc800">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #ffc800">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #ffc800">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #ffc800">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #ffc800">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ORANGE = new Color(0xffc800);
+    public static final SColor ORANGE = new SColor(0xffc800, "Orange");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFA000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFA000; color: #000000">&nbsp;@&nbsp;</font>
@@ -3513,7 +3513,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFA000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ORANGE_PEEL = new Color(0xFFA000);
+    public static final SColor ORANGE_PEEL = new SColor(0xFFA000, "Orange Peel");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF4500; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF4500; color: #000000">&nbsp;@&nbsp;</font>
@@ -3524,7 +3524,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F8F4FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ORANGE_RED = new Color(0xFF4500);
+    public static final SColor ORANGE_RED = new SColor(0xFF4500, "Orange Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DC3023; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DC3023; color: #000000">&nbsp;@&nbsp;</font>
@@ -3535,7 +3535,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DC3023">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ORANGUTAN = new Color(0xDC3023);
+    public static final SColor ORANGUTAN = new SColor(0xDC3023, "Orangutan");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DA70D6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DA70D6; color: #000000">&nbsp;@&nbsp;</font>
@@ -3546,7 +3546,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DA70D6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ORCHID = new Color(0xDA70D6);
+    public static final SColor ORCHID = new SColor(0xDA70D6, "Orchid");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E35C38; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E35C38; color: #000000">&nbsp;@&nbsp;</font>
@@ -3557,7 +3557,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E35C38">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color OVERDYED_RED_BROWN = new Color(0xE35C38);
+    public static final SColor OVERDYED_RED_BROWN = new SColor(0xE35C38, "Overdyed Red Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #AFEEEE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AFEEEE; color: #000000">&nbsp;@&nbsp;</font>
@@ -3568,7 +3568,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #AFEEEE">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_BLUE = new Color(0xAFEEEE);
+    public static final SColor PALE_BLUE = new SColor(0xAFEEEE, "Pale Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #987654; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #987654; color: #000000">&nbsp;@&nbsp;</font>
@@ -3579,7 +3579,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #987654">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_BROWN = new Color(0x987654);
+    public static final SColor PALE_BROWN = new SColor(0x987654, "Pale Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #AF4035; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AF4035; color: #000000">&nbsp;@&nbsp;</font>
@@ -3590,7 +3590,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #AF4035">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_CARMINE = new Color(0xAF4035);
+    public static final SColor PALE_CARMINE = new SColor(0xAF4035, "Pale Carmine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DDADAF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DDADAF; color: #000000">&nbsp;@&nbsp;</font>
@@ -3601,7 +3601,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DDADAF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_CHESTNUT = new Color(0xDDADAF);
+    public static final SColor PALE_CHESTNUT = new SColor(0xDDADAF, "Pale Chestnut");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ABCDEF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ABCDEF; color: #000000">&nbsp;@&nbsp;</font>
@@ -3612,7 +3612,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ABCDEF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_CORNFLOWER_BLUE = new Color(0xABCDEF);
+    public static final SColor PALE_CORNFLOWER_BLUE = new SColor(0xABCDEF, "Pale Cornflower Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #f2666c; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #f2666c; color: #000000">&nbsp;@&nbsp;</font>
@@ -3623,7 +3623,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #f2666c">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_CRIMSON = new Color(0xf2666c);
+    public static final SColor PALE_CRIMSON = new SColor(0xf2666c, "Pale Crimson");
     /**
      * Color constant<PRE>
      *<font style="background-color: #AA8736; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AA8736; color: #000000">&nbsp;@&nbsp;</font>
@@ -3634,7 +3634,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #AA8736">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_FALLEN_LEAVES = new Color(0xAA8736);
+    public static final SColor PALE_FALLEN_LEAVES = new SColor(0xAA8736, "Pale Fallen Leaves");
     /**
      * Color constant<PRE>
      *<font style="background-color: #749F8D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #749F8D; color: #000000">&nbsp;@&nbsp;</font>
@@ -3645,7 +3645,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #749F8D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_GREEN_ONION = new Color(0x749F8D);
+    public static final SColor PALE_GREEN_ONION = new SColor(0x749F8D, "Pale Green Onion");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFA565; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFA565; color: #000000">&nbsp;@&nbsp;</font>
@@ -3656,7 +3656,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFA565">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_INCENSE = new Color(0xFFA565);
+    public static final SColor PALE_INCENSE = new SColor(0xFFA565, "Pale Incense");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F984E5; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F984E5; color: #000000">&nbsp;@&nbsp;</font>
@@ -3667,7 +3667,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F984E5">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_MAGENTA = new Color(0xF984E5);
+    public static final SColor PALE_MAGENTA = new SColor(0xF984E5, "Pale Magenta");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BBA46D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BBA46D; color: #000000">&nbsp;@&nbsp;</font>
@@ -3678,7 +3678,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BBA46D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_OAK = new Color(0xBBA46D);
+    public static final SColor PALE_OAK = new SColor(0xBBA46D, "Pale Oak");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FCA474; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FCA474; color: #000000">&nbsp;@&nbsp;</font>
@@ -3689,7 +3689,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FCA474">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_PERSIMMON = new Color(0xFCA474);
+    public static final SColor PALE_PERSIMMON = new SColor(0xFCA474, "Pale Persimmon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FADADD; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FADADD; color: #000000">&nbsp;@&nbsp;</font>
@@ -3700,7 +3700,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FADADD">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_PINK = new Color(0xFADADD);
+    public static final SColor PALE_PINK = new SColor(0xFADADD, "Pale Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DB7093; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DB7093; color: #000000">&nbsp;@&nbsp;</font>
@@ -3711,7 +3711,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DB7093">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_RED_VIOLET = new Color(0xDB7093);
+    public static final SColor PALE_RED_VIOLET = new SColor(0xDB7093, "Pale Red Violet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8DB255; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8DB255; color: #000000">&nbsp;@&nbsp;</font>
@@ -3722,7 +3722,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8DB255">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PALE_YOUNG_GREEN_ONION = new Color(0x8DB255);
+    public static final SColor PALE_YOUNG_GREEN_ONION = new SColor(0x8DB255, "Pale Young Green Onion");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFEFD5; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFEFD5; color: #000000">&nbsp;@&nbsp;</font>
@@ -3733,7 +3733,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFEFD5">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PAPAYA_WHIP = new Color(0xFFEFD5);
+    public static final SColor PAPAYA_WHIP = new SColor(0xFFEFD5, "Papaya Whip");
     /**
      * Color constant<PRE>
      *<font style="background-color: #77DD77; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #77DD77; color: #000000">&nbsp;@&nbsp;</font>
@@ -3744,7 +3744,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #77DD77">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PASTEL_GREEN = new Color(0x77DD77);
+    public static final SColor PASTEL_GREEN = new SColor(0x77DD77, "Pastel Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFD1DC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFD1DC; color: #000000">&nbsp;@&nbsp;</font>
@@ -3755,7 +3755,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFD1DC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PASTEL_PINK = new Color(0xFFD1DC);
+    public static final SColor PASTEL_PINK = new SColor(0xFFD1DC, "Pastel Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #407A52; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #407A52; color: #000000">&nbsp;@&nbsp;</font>
@@ -3766,7 +3766,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #407A52">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PATINA = new Color(0x407A52);
+    public static final SColor PATINA = new SColor(0x407A52, "Patina");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D9B611; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D9B611; color: #000000">&nbsp;@&nbsp;</font>
@@ -3777,7 +3777,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D9B611">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PATRINIA_FLOWER = new Color(0xD9B611);
+    public static final SColor PATRINIA_FLOWER = new SColor(0xD9B611, "Patrinia Flower");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFE5B4; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFE5B4; color: #000000">&nbsp;@&nbsp;</font>
@@ -3788,7 +3788,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFE5B4">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PEACH = new Color(0xFFE5B4);
+    public static final SColor PEACH = new SColor(0xFFE5B4, "Peach");
     /**
      * Color constant<PRE>
      *<font style="background-color: #f47983; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #f47983; color: #000000">&nbsp;@&nbsp;</font>
@@ -3799,7 +3799,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #f47983">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PEACH_DYE = new Color(0xf47983);
+    public static final SColor PEACH_DYE = new SColor(0xf47983, "Peach Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFCC99; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFCC99; color: #000000">&nbsp;@&nbsp;</font>
@@ -3810,7 +3810,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFCC99">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PEACH_ORANGE = new Color(0xFFCC99);
+    public static final SColor PEACH_ORANGE = new SColor(0xFFCC99, "Peach Orange");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FADFAD; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FADFAD; color: #000000">&nbsp;@&nbsp;</font>
@@ -3821,7 +3821,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FADFAD">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PEACH_YELLOW = new Color(0xFADFAD);
+    public static final SColor PEACH_YELLOW = new SColor(0xFADFAD, "Peach Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D1E231; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D1E231; color: #000000">&nbsp;@&nbsp;</font>
@@ -3832,7 +3832,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D1E231">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PEAR = new Color(0xD1E231);
+    public static final SColor PEAR = new SColor(0xD1E231, "Pear");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CCCCFF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CCCCFF; color: #000000">&nbsp;@&nbsp;</font>
@@ -3843,7 +3843,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CCCCFF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PERIWINKLE = new Color(0xCCCCFF);
+    public static final SColor PERIWINKLE = new SColor(0xCCCCFF, "Periwinkle");
     /**
      * Color constant<PRE>
      *<font style="background-color: #1C39BB; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #1C39BB; color: #000000">&nbsp;@&nbsp;</font>
@@ -3854,7 +3854,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #1C39BB">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PERSIAN_BLUE = new Color(0x1C39BB);
+    public static final SColor PERSIAN_BLUE = new SColor(0x1C39BB, "Persian Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #00A693; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00A693; color: #000000">&nbsp;@&nbsp;</font>
@@ -3865,7 +3865,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00A693">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PERSIAN_GREEN = new Color(0x00A693);
+    public static final SColor PERSIAN_GREEN = new SColor(0x00A693, "Persian Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #32127A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #32127A; color: #000000">&nbsp;@&nbsp;</font>
@@ -3876,7 +3876,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #32127A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PERSIAN_INDIGO = new Color(0x32127A);
+    public static final SColor PERSIAN_INDIGO = new SColor(0x32127A, "Persian Indigo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CC3333; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CC3333; color: #000000">&nbsp;@&nbsp;</font>
@@ -3887,7 +3887,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CC3333">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PERSIAN_RED = new Color(0xCC3333);
+    public static final SColor PERSIAN_RED = new SColor(0xCC3333, "Persian Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F77FBE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F77FBE; color: #000000">&nbsp;@&nbsp;</font>
@@ -3898,7 +3898,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F77FBE">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PERSIAN_PINK = new Color(0xF77FBE);
+    public static final SColor PERSIAN_PINK = new SColor(0xF77FBE, "Persian Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FE28A2; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FE28A2; color: #000000">&nbsp;@&nbsp;</font>
@@ -3909,7 +3909,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FE28A2">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PERSIAN_ROSE = new Color(0xFE28A2);
+    public static final SColor PERSIAN_ROSE = new SColor(0xFE28A2, "Persian Rose");
     /**
      * Color constant<PRE>
      *<font style="background-color: #EC5800; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EC5800; color: #000000">&nbsp;@&nbsp;</font>
@@ -3920,7 +3920,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #EC5800">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PERSIMMON = new Color(0xEC5800);
+    public static final SColor PERSIMMON = new SColor(0xEC5800, "Persimmon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #934337; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #934337; color: #000000">&nbsp;@&nbsp;</font>
@@ -3931,7 +3931,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #934337">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PERSIMMON_JUICE = new Color(0x934337);
+    public static final SColor PERSIMMON_JUICE = new SColor(0x934337, "Persimmon Juice");
     /**
      * Color constant<PRE>
      *<font style="background-color: #333399; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #333399; color: #000000">&nbsp;@&nbsp;</font>
@@ -3942,7 +3942,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #333399">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PIGMENT_BLUE = new Color(0x333399);
+    public static final SColor PIGMENT_BLUE = new SColor(0x333399, "Pigment Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #01796F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #01796F; color: #000000">&nbsp;@&nbsp;</font>
@@ -3953,7 +3953,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #01796F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PINE_GREEN = new Color(0x01796F);
+    public static final SColor PINE_GREEN = new SColor(0x01796F, "Pine Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #454D32; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #454D32; color: #000000">&nbsp;@&nbsp;</font>
@@ -3964,7 +3964,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #454D32">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PINE_NEEDLE = new Color(0x454D32);
+    public static final SColor PINE_NEEDLE = new SColor(0x454D32, "Pine Needle");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ffafaf; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffafaf; color: #000000">&nbsp;@&nbsp;</font>
@@ -3975,7 +3975,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ffafaf">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #ffafaf">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #ffafaf">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #ffafaf">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #ffafaf">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PINK = new Color(0xffafaf);
+    public static final SColor PINK = new SColor(0xffafaf, "Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF9966; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF9966; color: #000000">&nbsp;@&nbsp;</font>
@@ -3986,7 +3986,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF9966">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PINK_ORANGE = new Color(0xFF9966);
+    public static final SColor PINK_ORANGE = new SColor(0xFF9966, "Pink Orange");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6E5F57; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6E5F57; color: #000000">&nbsp;@&nbsp;</font>
@@ -3997,7 +3997,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6E5F57">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PLAIN_MOUSE = new Color(0x6E5F57);
+    public static final SColor PLAIN_MOUSE = new SColor(0x6E5F57, "Plain Mosue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E5E4E2; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E5E4E2; color: #000000">&nbsp;@&nbsp;</font>
@@ -4008,7 +4008,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E5E4E2">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PLATINUM = new Color(0xE5E4E2);
+    public static final SColor PLATINUM = new SColor(0xE5E4E2, "Platinum");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CC99CC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CC99CC; color: #000000">&nbsp;@&nbsp;</font>
@@ -4019,7 +4019,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CC99CC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PLUM = new Color(0xCC99CC);
+    public static final SColor PLUM = new SColor(0xCC99CC, "Plum");
     /**
      * Color constant<PRE>
      *<font style="background-color: #97645A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #97645A; color: #000000">&nbsp;@&nbsp;</font>
@@ -4030,7 +4030,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #97645A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PLUM_BLOSSOM_MOUSE = new Color(0x97645A);
+    public static final SColor PLUM_BLOSSOM_MOUSE = new SColor(0x97645A, "Plum Blossom Mouse");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FA9258; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FA9258; color: #000000">&nbsp;@&nbsp;</font>
@@ -4041,7 +4041,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FA9258">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PLUM_DYED = new Color(0xFA9258);
+    public static final SColor PLUM_DYED = new SColor(0xFA9258, "Plum Dyed");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8F4155; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8F4155; color: #000000">&nbsp;@&nbsp;</font>
@@ -4052,7 +4052,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8F4155">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PLUM_PURPLE = new Color(0x8F4155);
+    public static final SColor PLUM_PURPLE = new SColor(0x8F4155, "Plum Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9F5233; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9F5233; color: #000000">&nbsp;@&nbsp;</font>
@@ -4063,7 +4063,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9F5233">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color POLISHED_BROWN = new Color(0x9F5233);
+    public static final SColor POLISHED_BROWN = new SColor(0x9F5233, "Polished Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B0E0E6; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B0E0E6; color: #000000">&nbsp;@&nbsp;</font>
@@ -4074,7 +4074,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B0E0E6">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color POWDER_BLUE = new Color(0xB0E0E6);
+    public static final SColor POWDER_BLUE = new SColor(0xB0E0E6, "Powder Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #003153; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #003153; color: #000000">&nbsp;@&nbsp;</font>
@@ -4085,7 +4085,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #003153">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PRUSSIAN_BLUE = new Color(0x003153);
+    public static final SColor PRUSSIAN_BLUE = new SColor(0x003153, "Prussian Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #DD00FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #DD00FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -4096,7 +4096,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #DD00FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PSYCHEDELIC_PURPLE = new Color(0xDD00FF);
+    public static final SColor PSYCHEDELIC_PURPLE = new SColor(0xDD00FF, "Psychedelic Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CC8899; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CC8899; color: #000000">&nbsp;@&nbsp;</font>
@@ -4107,7 +4107,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CC8899">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PUCE = new Color(0xCC8899);
+    public static final SColor PUCE = new SColor(0xCC8899, "Puce");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF7518; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF7518; color: #000000">&nbsp;@&nbsp;</font>
@@ -4118,7 +4118,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF7518">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PUMPKIN = new Color(0xFF7518);
+    public static final SColor PUMPKIN = new SColor(0xFF7518, "Pumpkin");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C3272B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C3272B; color: #000000">&nbsp;@&nbsp;</font>
@@ -4129,7 +4129,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C3272B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PURE_CRIMSON = new Color(0xC3272B);
+    public static final SColor PURE_CRIMSON = new SColor(0xC3272B, "Pure Crimson");
     /**
      * Color constant<PRE>
      *<font style="background-color: #800080; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #800080; color: #000000">&nbsp;@&nbsp;</font>
@@ -4140,7 +4140,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #800080">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #800080">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #800080">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #800080">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #800080">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PURPLE = new Color(0x800080);
+    public static final SColor PURPLE = new SColor(0x800080, "Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4F284B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4F284B; color: #000000">&nbsp;@&nbsp;</font>
@@ -4151,7 +4151,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4F284B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PURPLE_DYE = new Color(0x4F284B);
+    public static final SColor PURPLE_DYE = new SColor(0x4F284B, "Purple Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #512C31; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #512C31; color: #000000">&nbsp;@&nbsp;</font>
@@ -4162,7 +4162,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #512C31">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PURPLE_KITE = new Color(0x512C31);
+    public static final SColor PURPLE_KITE = new SColor(0x512C31, "Purple Kite");
     /**
      * Color constant<PRE>
      *<font style="background-color: #50404D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #50404D; color: #000000">&nbsp;@&nbsp;</font>
@@ -4173,7 +4173,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #50404D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color PURPLE_TAUPE = new Color(0x50404D);
+    public static final SColor PURPLE_TAUPE = new SColor(0x50404D, "Purple Taupe");
     /**
      * Color constant<PRE>
      *<font style="background-color: #491E3C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #491E3C; color: #000000">&nbsp;@&nbsp;</font>
@@ -4184,7 +4184,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #491E3C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RABBIT_EAR_IRIS = new Color(0x491E3C);
+    public static final SColor RABBIT_EAR_IRIS = new SColor(0x491E3C, "Rabbit Ear Iris");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E3B130; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E3B130; color: #000000">&nbsp;@&nbsp;</font>
@@ -4195,7 +4195,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E3B130">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RAPEBLOSSOM_BROWN = new Color(0xE3B130);
+    public static final SColor RAPEBLOSSOM_BROWN = new SColor(0xE3B130, "Rapeblossom Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #A17917; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #A17917; color: #000000">&nbsp;@&nbsp;</font>
@@ -4206,7 +4206,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #A17917">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RAPESEED_OIL = new Color(0xA17917);
+    public static final SColor RAPESEED_OIL = new SColor(0xA17917, "Rapeseed Oil");
     /**
      * Color constant<PRE>
      *<font style="background-color: #734A12; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #734A12; color: #000000">&nbsp;@&nbsp;</font>
@@ -4217,7 +4217,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #734A12">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RAW_UMBER = new Color(0x734A12);
+    public static final SColor RAW_UMBER = new SColor(0x734A12, "Raw Umber");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E30B5C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E30B5C; color: #000000">&nbsp;@&nbsp;</font>
@@ -4228,7 +4228,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E30B5C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RAZZMATAZZ = new Color(0xE30B5C);
+    public static final SColor RAZZMATAZZ = new SColor(0xE30B5C, "Razzamatazz");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ff0000; color: #000000">&nbsp;@&nbsp;</font>
@@ -4239,7 +4239,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ff0000">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #ff0000">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #ff0000">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #ff0000">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #ff0000">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED = new Color(0xff0000);
+    public static final SColor RED = new SColor(0xff0000, "Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #672422; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #672422; color: #000000">&nbsp;@&nbsp;</font>
@@ -4250,7 +4250,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #672422">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_BEAN = new Color(0x672422);
+    public static final SColor RED_BEAN = new SColor(0x672422, "Red Bean");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9D2B22; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9D2B22; color: #000000">&nbsp;@&nbsp;</font>
@@ -4261,7 +4261,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9D2B22">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_BIRCH = new Color(0x9D2B22);
+    public static final SColor RED_BIRCH = new SColor(0x9D2B22, "Red Birch");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F07F5E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F07F5E; color: #000000">&nbsp;@&nbsp;</font>
@@ -4272,7 +4272,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F07F5E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_INCENSE = new Color(0xF07F5E);
+    public static final SColor RED_INCENSE = new SColor(0xF07F5E, "Red Incense");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FB8136; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FB8136; color: #000000">&nbsp;@&nbsp;</font>
@@ -4283,7 +4283,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FB8136">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_DYE_TURMERIC = new Color(0xFB8136);
+    public static final SColor RED_DYE_TURMERIC = new SColor(0xFB8136, "Red Dye Turmeric");
     /**
      * Color constant<PRE>
      *<font style="background-color: #913228; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #913228; color: #000000">&nbsp;@&nbsp;</font>
@@ -4294,7 +4294,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #913228">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_KITE = new Color(0x913228);
+    public static final SColor RED_KITE = new SColor(0x913228, "Red Kite");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9F5233; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9F5233; color: #000000">&nbsp;@&nbsp;</font>
@@ -4305,7 +4305,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9F5233">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_OCHRE = new Color(0x9F5233);
+    public static final SColor RED_OCHRE = new SColor(0x9F5233, "Red Ochre");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ED1C24; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ED1C24; color: #000000">&nbsp;@&nbsp;</font>
@@ -4316,7 +4316,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ED1C24">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_PIGMENT = new Color(0xED1C24);
+    public static final SColor RED_PIGMENT = new SColor(0xED1C24, "Red Pigment");
     /**
      * Color constant<PRE>
      *<font style="background-color: #db5a6b; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #db5a6b; color: #000000">&nbsp;@&nbsp;</font>
@@ -4327,7 +4327,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #db5a6b">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #db5a6b;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_PLUM = new Color(0xdb5a6b);
+    public static final SColor RED_PLUM = new SColor(0xdb5a6b, "Red Plum");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C71585; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C71585; color: #000000">&nbsp;@&nbsp;</font>
@@ -4338,7 +4338,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C71585">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_VIOLET = new Color(0xC71585);
+    public static final SColor RED_VIOLET = new SColor(0xC71585, "Red Violet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BB7796; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BB7796; color: #000000">&nbsp;@&nbsp;</font>
@@ -4349,7 +4349,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BB7796">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RED_WISTERIA = new Color(0xBB7796);
+    public static final SColor RED_WISTERIA = new SColor(0xBB7796, "Red Wisteria");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D70040; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D70040; color: #000000">&nbsp;@&nbsp;</font>
@@ -4360,7 +4360,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D70040">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RICH_CARMINE = new Color(0xD70040);
+    public static final SColor RICH_CARMINE = new SColor(0xD70040, "Rich Carmine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F57F4F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F57F4F; color: #000000">&nbsp;@&nbsp;</font>
@@ -4371,7 +4371,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F57F4F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RICH_GARDENIA = new Color(0xF57F4F);
+    public static final SColor RICH_GARDENIA = new SColor(0xF57F4F, "Rich Gardenia");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF7952; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF7952; color: #000000">&nbsp;@&nbsp;</font>
@@ -4382,7 +4382,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF7952">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RINSED_OUT_RED = new Color(0xFF7952);
+    public static final SColor RINSED_OUT_RED = new SColor(0xFF7952, "Rinsed Out Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #534A32; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #534A32; color: #000000">&nbsp;@&nbsp;</font>
@@ -4393,7 +4393,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #534A32">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RIKAN_BROWN = new Color(0x534A32);
+    public static final SColor RIKAN_BROWN = new SColor(0x534A32, "Rikan Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #00CCCC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00CCCC; color: #000000">&nbsp;@&nbsp;</font>
@@ -4404,7 +4404,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00CCCC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ROBIN_EGG_BLUE = new Color(0x00CCCC);
+    public static final SColor ROBIN_EGG_BLUE = new SColor(0x00CCCC, "Robin Egg Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF007F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF007F; color: #000000">&nbsp;@&nbsp;</font>
@@ -4415,7 +4415,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF007F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ROSE = new Color(0xFF007F);
+    public static final SColor ROSE = new SColor(0xFF007F, "Rose");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E32636; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E32636; color: #000000">&nbsp;@&nbsp;</font>
@@ -4426,7 +4426,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E32636">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ROSE_MADDER = new Color(0xE32636);
+    public static final SColor ROSE_MADDER = new SColor(0xE32636, "Rose Madder");
     /**
      * Color constant<PRE>
      *<font style="background-color: #905D5D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #905D5D; color: #000000">&nbsp;@&nbsp;</font>
@@ -4437,7 +4437,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #905D5D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ROSE_TAUPE = new Color(0x905D5D);
+    public static final SColor ROSE_TAUPE = new SColor(0x905D5D, "Rose Taupe");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4169E1; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4169E1; color: #000000">&nbsp;@&nbsp;</font>
@@ -4448,7 +4448,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4169E1">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ROYAL_BLUE = new Color(0x4169E1);
+    public static final SColor ROYAL_BLUE = new SColor(0x4169E1, "Royal Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6B3FA0; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6B3FA0; color: #000000">&nbsp;@&nbsp;</font>
@@ -4459,7 +4459,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6B3FA0">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ROYAL_PURPLE = new Color(0x6B3FA0);
+    public static final SColor ROYAL_PURPLE = new SColor(0x6B3FA0, "Royal Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E0115F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E0115F; color: #000000">&nbsp;@&nbsp;</font>
@@ -4470,7 +4470,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E0115F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RUBY = new Color(0xE0115F);
+    public static final SColor RUBY = new SColor(0xE0115F, "Ruby");
     /**
      * Color constant<PRE>
      *<font style="background-color: #80461B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #80461B; color: #000000">&nbsp;@&nbsp;</font>
@@ -4481,7 +4481,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #80461B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RUSSET = new Color(0x80461B);
+    public static final SColor RUSSET = new SColor(0x80461B, "Russet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B7410E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B7410E; color: #000000">&nbsp;@&nbsp;</font>
@@ -4492,7 +4492,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B7410E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RUST = new Color(0xB7410E);
+    public static final SColor RUST = new SColor(0xB7410E, "Rust");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6A7F7A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6A7F7A; color: #000000">&nbsp;@&nbsp;</font>
@@ -4503,7 +4503,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6A7F7A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RUSTED_LIGHT_BLUE = new Color(0x6A7F7A);
+    public static final SColor RUSTED_LIGHT_BLUE = new SColor(0x6A7F7A, "Rusted Light Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #898A74; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #898A74; color: #000000">&nbsp;@&nbsp;</font>
@@ -4514,7 +4514,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #898A74">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RUSTY_CELADON = new Color(0x898A74);
+    public static final SColor RUSTY_CELADON = new SColor(0x898A74, "Rusty Celadon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #455859; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #455859; color: #000000">&nbsp;@&nbsp;</font>
@@ -4525,7 +4525,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #455859">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RUSTY_STORAGE = new Color(0x455859);
+    public static final SColor RUSTY_STORAGE = new SColor(0x455859, "Rusty Storage");
     /**
      * Color constant<PRE>
      *<font style="background-color: #3a403b; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3a403b; color: #000000">&nbsp;@&nbsp;</font>
@@ -4536,7 +4536,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3a403b">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color RUSTY_STOREROOM = new Color(0x3a403b);
+    public static final SColor RUSTY_STOREROOM = new SColor(0x3a403b, "Rusty Storeroom");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF6600; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF6600; color: #000000">&nbsp;@&nbsp;</font>
@@ -4547,7 +4547,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF6600">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SAFETY_ORANGE = new Color(0xFF6600);
+    public static final SColor SAFETY_ORANGE = new SColor(0xFF6600, "Safety Orange");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5A4F74; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5A4F74; color: #000000">&nbsp;@&nbsp;</font>
@@ -4558,7 +4558,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5A4F74">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SAFFLOWER = new Color(0x5A4F74);
+    public static final SColor SAFFLOWER = new SColor(0x5A4F74, "Safflower");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F4C430; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F4C430; color: #000000">&nbsp;@&nbsp;</font>
@@ -4569,7 +4569,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F4C430">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SAFFRON = new Color(0xF4C430);
+    public static final SColor SAFFRON = new SColor(0xF4C430, "Saffron");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF8C69; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF8C69; color: #000000">&nbsp;@&nbsp;</font>
@@ -4580,7 +4580,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF8C69">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SALMON = new Color(0xFF8C69);
+    public static final SColor SALMON = new SColor(0xFF8C69, "Salmon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F4A460; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F4A460; color: #000000">&nbsp;@&nbsp;</font>
@@ -4591,7 +4591,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F4A460">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SANDY_BROWN = new Color(0xF4A460);
+    public static final SColor SANDY_BROWN = new SColor(0xF4A460, "Sandy Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #92000A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #92000A; color: #000000">&nbsp;@&nbsp;</font>
@@ -4602,7 +4602,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #92000A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SANGRIA = new Color(0x92000A);
+    public static final SColor SANGRIA = new SColor(0x92000A, "Sangria");
     /**
      * Color constant<PRE>
      *<font style="background-color: #082567; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #082567; color: #000000">&nbsp;@&nbsp;</font>
@@ -4613,7 +4613,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #082567">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SAPPHIRE = new Color(0x082567);
+    public static final SColor SAPPHIRE = new SColor(0x082567, "Sapphire");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7E2639; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7E2639; color: #000000">&nbsp;@&nbsp;</font>
@@ -4624,7 +4624,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7E2639">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SAPPANWOOD = new Color(0x7E2639);
+    public static final SColor SAPPANWOOD = new SColor(0x7E2639, "Sappanwood");
     /**
      * Color constant<PRE>
      *<font style="background-color: #A24F46; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #A24F46; color: #000000">&nbsp;@&nbsp;</font>
@@ -4635,7 +4635,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #A24F46">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SAPPANWOOD_INCENSE = new Color(0xA24F46);
+    public static final SColor SAPPANWOOD_INCENSE = new SColor(0xA24F46, "Sappanwood Incense");
     /**
      * Color constant<PRE>
      *<font style="background-color: #EC956C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EC956C; color: #000000">&nbsp;@&nbsp;</font>
@@ -4646,7 +4646,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #EC956C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SAWTOOTH_OAK = new Color(0xEC956C);
+    public static final SColor SAWTOOTH_OAK = new SColor(0xEC956C, "Sawtooth Oak");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF2400; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF2400; color: #000000">&nbsp;@&nbsp;</font>
@@ -4657,7 +4657,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF2400">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SCARLET = new Color(0xFF2400);
+    public static final SColor SCARLET = new SColor(0xFF2400, "Scarlet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFD800; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFD800; color: #000000">&nbsp;@&nbsp;</font>
@@ -4668,7 +4668,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFD800">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SCHOOL_BUS_YELLOW = new Color(0xFFD800);
+    public static final SColor SCHOOL_BUS_YELLOW = new SColor(0xFFD800, "School Bus Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #351F19; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #351F19; color: #000000">&nbsp;@&nbsp;</font>
@@ -4679,7 +4679,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #351F19">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SCORTCHED_BROWN = new Color(0x351F19);
+    public static final SColor SCORTCHED_BROWN = new SColor(0x351F19, "Scortched Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #2E8B57; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2E8B57; color: #000000">&nbsp;@&nbsp;</font>
@@ -4690,7 +4690,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #2E8B57">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SEA_GREEN = new Color(0x2E8B57);
+    public static final SColor SEA_GREEN = new SColor(0x2E8B57, "Sea Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFF5EE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFF5EE; color: #000000">&nbsp;@&nbsp;</font>
@@ -4701,7 +4701,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFF5EE">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SEASHELL = new Color(0xFFF5EE);
+    public static final SColor SEASHELL = new SColor(0xFFF5EE, "Seashell");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFBA00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFBA00; color: #000000">&nbsp;@&nbsp;</font>
@@ -4712,7 +4712,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFBA00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SELECTIVE_YELLOW = new Color(0xFFBA00);
+    public static final SColor SELECTIVE_YELLOW = new SColor(0xFFBA00, "Selective Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #826B58; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #826B58; color: #000000">&nbsp;@&nbsp;</font>
@@ -4723,7 +4723,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #826B58">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SEN_NO_RIKYUS_TEA = new Color(0x826B58);
+    public static final SColor SEN_NO_RIKYUS_TEA = new SColor(0x826B58, "Sen No Riyu's Tea");
     /**
      * Color constant<PRE>
      *<font style="background-color: #704214; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #704214; color: #000000">&nbsp;@&nbsp;</font>
@@ -4734,7 +4734,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #704214">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SEPIA = new Color(0x704214);
+    public static final SColor SEPIA = new SColor(0x704214, "Sepia");
     /**
      * Color constant<PRE>
      *<font style="background-color: #009E60; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #009E60; color: #000000">&nbsp;@&nbsp;</font>
@@ -4745,7 +4745,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #009E60">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SHAMROCK_GREEN = new Color(0x009E60);
+    public static final SColor SHAMROCK_GREEN = new SColor(0x009E60, "Shamrock Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FC0FC0; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FC0FC0; color: #000000">&nbsp;@&nbsp;</font>
@@ -4756,7 +4756,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F8F4FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SHOCKING_PINK = new Color(0xFC0FC0);
+    public static final SColor SHOCKING_PINK = new SColor(0xFC0FC0, "Shocking Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5E2824; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5E2824; color: #000000">&nbsp;@&nbsp;</font>
@@ -4767,7 +4767,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5E2824">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SHRIMP_BROWN = new Color(0x5E2824);
+    public static final SColor SHRIMP_BROWN = new SColor(0x5E2824, "Shrimp Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #354E4B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #354E4B; color: #000000">&nbsp;@&nbsp;</font>
@@ -4778,7 +4778,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #354E4B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SILK_CREPE_BROWN = new Color(0x354E4B);
+    public static final SColor SILK_CREPE_BROWN = new SColor(0x354E4B, "Silk Crepe Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C0C0C0; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C0C0C0; color: #000000">&nbsp;@&nbsp;</font>
@@ -4789,7 +4789,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C0C0C0">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SILVER = new Color(0xC0C0C0);
+    public static final SColor SILVER = new SColor(0xC0C0C0, "Silver");
     /**
      * Color constant<PRE>
      *<font style="background-color: #97867C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #97867C; color: #000000">&nbsp;@&nbsp;</font>
@@ -4800,7 +4800,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #97867C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SILVER_GREY = new Color(0x97867C);
+    public static final SColor SILVER_GREY = new SColor(0x97867C, "Silver Grey");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BC2D29; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BC2D29; color: #000000">&nbsp;@&nbsp;</font>
@@ -4811,7 +4811,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BC2D29">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SILVERED_RED = new Color(0xBC2D29);
+    public static final SColor SILVERED_RED = new SColor(0xBC2D29, "Silvered Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4C3D30; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4C3D30; color: #000000">&nbsp;@&nbsp;</font>
@@ -4822,7 +4822,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4C3D30">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SIMMERED_SEAWEED = new Color(0x4C3D30);
+    public static final SColor SIMMERED_SEAWEED = new SColor(0x4C3D30, "Simmered Seawead");
     /**
      * Color constant<PRE>
      *<font style="background-color: #7A942E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #7A942E; color: #000000">&nbsp;@&nbsp;</font>
@@ -4833,7 +4833,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #7A942E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SISKIN_SPROUT_YELLOW = new Color(0x7A942E);
+    public static final SColor SISKIN_SPROUT_YELLOW = new SColor(0x7A942E, "Siskin Sprout Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4D8FAC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4D8FAC; color: #000000">&nbsp;@&nbsp;</font>
@@ -4844,7 +4844,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4D8FAC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SKY = new Color(0x4D8FAC);
+    public static final SColor SKY = new SColor(0x4D8FAC, "Sky");
     /**
      * Color constant<PRE>
      *<font style="background-color: #87CEEB; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #87CEEB; color: #000000">&nbsp;@&nbsp;</font>
@@ -4855,7 +4855,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #87CEEB">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SKY_BLUE = new Color(0x87CEEB);
+    public static final SColor SKY_BLUE = new SColor(0x87CEEB, "Sky Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #708090; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #708090; color: #000000">&nbsp;@&nbsp;</font>
@@ -4866,7 +4866,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #708090">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SLATE_GRAY = new Color(0x708090);
+    public static final SColor SLATE_GRAY = new SColor(0x708090, "Slate Gray");
     /**
      * Color constant<PRE>
      *<font style="background-color: #003399; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #003399; color: #000000">&nbsp;@&nbsp;</font>
@@ -4877,7 +4877,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #003399">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SMALT = new Color(0x003399);
+    public static final SColor SMALT = new SColor(0x003399, "Smalt");
     /**
      * Color constant<PRE>
      *<font style="background-color: #593A27; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #593A27; color: #000000">&nbsp;@&nbsp;</font>
@@ -4888,7 +4888,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #593A27">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SOOTY_BAMBOO = new Color(0x593A27);
+    public static final SColor SOOTY_BAMBOO = new SColor(0x593A27, "Sooty Bamboo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4D4B3A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4D4B3A; color: #000000">&nbsp;@&nbsp;</font>
@@ -4899,7 +4899,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4D4B3A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SOOTY_WILLOW_BAMBOO = new Color(0x4D4B3A);
+    public static final SColor SOOTY_WILLOW_BAMBOO = new SColor(0x4D4B3A, "Sooty Willow Bamboo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8C4736; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8C4736; color: #000000">&nbsp;@&nbsp;</font>
@@ -4910,7 +4910,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8C4736">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SPARROW_BROWN = new Color(0x8C4736);
+    public static final SColor SPARROW_BROWN = new SColor(0x8C4736, "Sparrow Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #A7FC00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #A7FC00; color: #000000">&nbsp;@&nbsp;</font>
@@ -4921,7 +4921,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #A7FC00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SPRING_BUD = new Color(0xA7FC00);
+    public static final SColor SPRING_BUD = new SColor(0xA7FC00, "Spring Bud");
     /**
      * Color constant<PRE>
      *<font style="background-color: #00FF7F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00FF7F; color: #000000">&nbsp;@&nbsp;</font>
@@ -4932,7 +4932,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #00FF7F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SPRING_GREEN = new Color(0x00FF7F);
+    public static final SColor SPRING_GREEN = new SColor(0x00FF7F, "Spring Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #78779B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #78779B; color: #000000">&nbsp;@&nbsp;</font>
@@ -4943,7 +4943,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #78779B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color STAINED_RED = new Color(0x78779B);
+    public static final SColor STAINED_RED = new SColor(0x78779B, "Stained Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D3B17D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D3B17D; color: #000000">&nbsp;@&nbsp;</font>
@@ -4954,7 +4954,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D3B17D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color STEAMED_CHESTNUT = new Color(0xD3B17D);
+    public static final SColor STEAMED_CHESTNUT = new SColor(0xD3B17D, "Steamed Chestnut");
     /**
      * Color constant<PRE>
      *<font style="background-color: #4682B4; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #4682B4; color: #000000">&nbsp;@&nbsp;</font>
@@ -4965,7 +4965,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #4682B4">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color STEEL_BLUE = new Color(0x4682B4);
+    public static final SColor STEEL_BLUE = new SColor(0x4682B4, "Steel Blue");
     /**
      * Color constant<PRE>
      *<font style="background-color: #3D4035; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3D4035; color: #000000">&nbsp;@&nbsp;</font>
@@ -4976,7 +4976,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3D4035">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color STOREROOM_BROWN = new Color(0x3D4035);
+    public static final SColor STOREROOM_BROWN = new SColor(0x3D4035, "Storeroom Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFA26B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFA26B; color: #000000">&nbsp;@&nbsp;</font>
@@ -4987,7 +4987,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFA26B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color STYLISH_PERSIMMON = new Color(0xFFA26B);
+    public static final SColor STYLISH_PERSIMMON = new SColor(0xFFA26B, "Stylish Persimnmon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #592B1F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #592B1F; color: #000000">&nbsp;@&nbsp;</font>
@@ -4998,7 +4998,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #592B1F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SUMAC = new Color(0x592B1F);
+    public static final SColor SUMAC = new SColor(0x592B1F, "Sumac");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E08A1E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E08A1E; color: #000000">&nbsp;@&nbsp;</font>
@@ -5009,7 +5009,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E08A1E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color SUMAC_DYED = new Color(0xE08A1E);
+    public static final SColor SUMAC_DYED = new SColor(0xE08A1E, "Sumac Dyed");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D2B48C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D2B48C; color: #000000">&nbsp;@&nbsp;</font>
@@ -5020,7 +5020,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D2B48C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TAN = new Color(0xD2B48C);
+    public static final SColor TAN = new SColor(0xD2B48C, "Tan");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F28500; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F28500; color: #000000">&nbsp;@&nbsp;</font>
@@ -5031,7 +5031,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F28500">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TANGERINE = new Color(0xF28500);
+    public static final SColor TANGERINE = new SColor(0xF28500, "Tangerine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFCC00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFCC00; color: #000000">&nbsp;@&nbsp;</font>
@@ -5042,7 +5042,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFCC00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TANGERINE_YELLOW = new Color(0xFFCC00);
+    public static final SColor TANGERINE_YELLOW = new SColor(0xFFCC00, "Tangerine Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #976E9A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #976E9A; color: #000000">&nbsp;@&nbsp;</font>
@@ -5053,7 +5053,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #976E9A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TATARIAN_ASTER = new Color(0x976E9A);
+    public static final SColor TATARIAN_ASTER = new SColor(0x976E9A, "Tatarian Aster");
     /**
      * Color constant<PRE>
      *<font style="background-color: #483C32; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #483C32; color: #000000">&nbsp;@&nbsp;</font>
@@ -5064,7 +5064,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #483C32">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TAUPE = new Color(0x483C32);
+    public static final SColor TAUPE = new SColor(0x483C32, "Taupe");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CD5700; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CD5700; color: #000000">&nbsp;@&nbsp;</font>
@@ -5075,7 +5075,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CD5700">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TAWNY = new Color(0xCD5700);
+    public static final SColor TAWNY = new SColor(0xCD5700, "Tawny");
     /**
      * Color constant<PRE>
      *<font style="background-color: #665343; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #665343; color: #000000">&nbsp;@&nbsp;</font>
@@ -5086,7 +5086,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #665343">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TEA_GARDEN_CONTEMPLATION = new Color(0x665343);
+    public static final SColor TEA_GARDEN_CONTEMPLATION = new SColor(0x665343, "Tead Garden Contemplation");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D0F0C0; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D0F0C0; color: #000000">&nbsp;@&nbsp;</font>
@@ -5097,7 +5097,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D0F0C0">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TEA_GREEN = new Color(0xD0F0C0);
+    public static final SColor TEA_GREEN = new SColor(0xD0F0C0, "Tea Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F88379; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F88379; color: #000000">&nbsp;@&nbsp;</font>
@@ -5108,7 +5108,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F88379">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TEA_ORANGE = new Color(0xF88379);
+    public static final SColor TEA_ORANGE = new SColor(0xF88379, "Tea Orange");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F4C2C2; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F4C2C2; color: #000000">&nbsp;@&nbsp;</font>
@@ -5119,7 +5119,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F4C2C2">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TEA_ROSE = new Color(0xF4C2C2);
+    public static final SColor TEA_ROSE = new SColor(0xF4C2C2, "Tea Rose");
     /**
      * Color constant<PRE>
      *<font style="background-color: #008080; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #008080; color: #000000">&nbsp;@&nbsp;</font>
@@ -5130,7 +5130,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #008080">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #800080">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #008080">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #008080">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #008080">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TEAL = new Color(0x008080);
+    public static final SColor TEAL = new SColor(0x008080, "Teal");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E2725B; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E2725B; color: #000000">&nbsp;@&nbsp;</font>
@@ -5141,7 +5141,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E2725B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TERRA_COTTA = new Color(0xE2725B);
+    public static final SColor TERRA_COTTA = new SColor(0xE2725B, "Terra Cotta");
     /**
      * Color constant<PRE>
      *<font style="background-color: #A87CA0; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #A87CA0; color: #000000">&nbsp;@&nbsp;</font>
@@ -5152,7 +5152,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #A87CA0">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color THIN_VIOLET = new Color(0xA87CA0);
+    public static final SColor THIN_VIOLET = new SColor(0xA87CA0, "Thin Violet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #D8BFD8; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #D8BFD8; color: #000000">&nbsp;@&nbsp;</font>
@@ -5163,7 +5163,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #D8BFD8">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color THISTLE = new Color(0xD8BFD8);
+    public static final SColor THISTLE = new SColor(0xD8BFD8, "Thistle");
     /**
      * Color constant<PRE>
      *<font style="background-color: #317589; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #317589; color: #000000">&nbsp;@&nbsp;</font>
@@ -5174,7 +5174,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #317589">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color THOUSAND_HERB = new Color(0x317589);
+    public static final SColor THOUSAND_HERB = new SColor(0x317589, "Thousand Herb");
     /**
      * Color constant<PRE>
      *<font style="background-color: #3B3429; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #3B3429; color: #000000">&nbsp;@&nbsp;</font>
@@ -5185,7 +5185,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3B3429">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color THOUSAND_YEAR_OLD_BROWN = new Color(0x3B3429);
+    public static final SColor THOUSAND_YEAR_OLD_BROWN = new SColor(0x3B3429, "Thousand Year Old Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #374231; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #374231; color: #000000">&nbsp;@&nbsp;</font>
@@ -5196,7 +5196,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #374231">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color THOUSAND_YEAR_OLD_GREEN = new Color(0x374231);
+    public static final SColor THOUSAND_YEAR_OLD_GREEN = new SColor(0x374231, "Thousand Year Old Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F7665A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F7665A; color: #000000">&nbsp;@&nbsp;</font>
@@ -5207,7 +5207,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F7665A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color THRICE_DYED_CRIMSON = new Color(0xF7665A);
+    public static final SColor THRICE_DYED_CRIMSON = new SColor(0xF7665A, "Thrice Dyed Crimson");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FF6347; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FF6347; color: #000000">&nbsp;@&nbsp;</font>
@@ -5218,7 +5218,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FF6347">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TOMATO = new Color(0xFF6347);
+    public static final SColor TOMATO = new SColor(0xFF6347, "Tomato");
     /**
      * Color constant<PRE>
      *<font style="background-color: #A4345D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #A4345D; color: #000000">&nbsp;@&nbsp;</font>
@@ -5229,7 +5229,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #A4345D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TREE_PEONY = new Color(0xA4345D);
+    public static final SColor TREE_PEONY = new SColor(0xA4345D, "Tree Peony");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFC0CB; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFC0CB; color: #000000">&nbsp;@&nbsp;</font>
@@ -5240,7 +5240,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFC0CB">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TRUE_PINK = new Color(0xFFC0CB);
+    public static final SColor TRUE_PINK = new SColor(0xFFC0CB, "True Pink");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8F1D21; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8F1D21; color: #000000">&nbsp;@&nbsp;</font>
@@ -5251,7 +5251,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8F1D21">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TRUE_RED = new Color(0x8F1D21);
+    public static final SColor TRUE_RED = new SColor(0x8F1D21, "True Red");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E69B3A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E69B3A; color: #000000">&nbsp;@&nbsp;</font>
@@ -5262,7 +5262,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E69B3A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TURMERIC = new Color(0xE69B3A);
+    public static final SColor TURMERIC = new SColor(0xE69B3A, "Turmeric");
     /**
      * Color constant<PRE>
      *<font style="background-color: #30D5C8; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #30D5C8; color: #000000">&nbsp;@&nbsp;</font>
@@ -5273,7 +5273,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #30D5C8">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TURQUOISE = new Color(0x30D5C8);
+    public static final SColor TURQUOISE = new SColor(0x30D5C8, "Turquoise");
     /**
      * Color constant<PRE>
      *<font style="background-color: #66023C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #66023C; color: #000000">&nbsp;@&nbsp;</font>
@@ -5284,7 +5284,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #66023C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color TYRIAN_PURPLE = new Color(0x66023C);
+    public static final SColor TYRIAN_PURPLE = new SColor(0x66023C, "Tyrian Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #120A8F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #120A8F; color: #000000">&nbsp;@&nbsp;</font>
@@ -5295,7 +5295,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #120A8F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ULTRAMARINE = new Color(0x120A8F);
+    public static final SColor ULTRAMARINE = new SColor(0x120A8F, "Ultramarine");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5D8CAE; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5D8CAE; color: #000000">&nbsp;@&nbsp;</font>
@@ -5306,7 +5306,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5D8CAE">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ULTRAMARINE_DYE = new Color(0x5D8CAE);
+    public static final SColor ULTRAMARINE_DYE = new SColor(0x5D8CAE, "Ultramarine Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #FFDDCA; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #FFDDCA; color: #000000">&nbsp;@&nbsp;</font>
@@ -5317,7 +5317,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #FFDDCA">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color UNBLEACHED_SILK = new Color(0xFFDDCA);
+    public static final SColor UNBLEACHED_SILK = new SColor(0xFFDDCA, "Unbleached Silk");
     /**
      * Color constant<PRE>
      *<font style="background-color: #785E49; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #785E49; color: #000000">&nbsp;@&nbsp;</font>
@@ -5328,7 +5328,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #785E49">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color UNDRIED_WALL = new Color(0x785E49);
+    public static final SColor UNDRIED_WALL = new SColor(0x785E49, "Undried Wall");
     /**
      * Color constant<PRE>
      *<font style="background-color: #44312E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #44312E; color: #000000">&nbsp;@&nbsp;</font>
@@ -5339,7 +5339,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #44312E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color VANISHING_RED_MOUSE = new Color(0x44312E);
+    public static final SColor VANISHING_RED_MOUSE = new SColor(0x44312E, "Vanishing Red Mouse");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C5B358; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C5B358; color: #000000">&nbsp;@&nbsp;</font>
@@ -5350,7 +5350,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C5B358">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color VEGAS_GOLD = new Color(0xC5B358);
+    public static final SColor VEGAS_GOLD = new SColor(0xC5B358, "Vegas Gold");
     /**
      * Color constant<PRE>
      *<font style="background-color: #224634; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #224634; color: #000000">&nbsp;@&nbsp;</font>
@@ -5361,7 +5361,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #224634">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color VELVET = new Color(0x224634);
+    public static final SColor VELVET = new SColor(0x224634, "Velvet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #E34234; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #E34234; color: #000000">&nbsp;@&nbsp;</font>
@@ -5372,7 +5372,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #E34234">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color VERMILION = new Color(0xE34234);
+    public static final SColor VERMILION = new SColor(0xE34234, "Vermillion");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6D2B50; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6D2B50; color: #000000">&nbsp;@&nbsp;</font>
@@ -5383,7 +5383,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6D2B50">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color VINE_GRAPE = new Color(0x6D2B50);
+    public static final SColor VINE_GRAPE = new SColor(0x6D2B50, "Vine Grape");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8B00FF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8B00FF; color: #000000">&nbsp;@&nbsp;</font>
@@ -5394,7 +5394,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8B00FF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color VIOLET = new Color(0x8B00FF);
+    public static final SColor VIOLET = new SColor(0x8B00FF, "Violet");
     /**
      * Color constant<PRE>
      *<font style="background-color: #5B3256; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #5B3256; color: #000000">&nbsp;@&nbsp;</font>
@@ -5405,7 +5405,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #5B3256">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color VIOLET_DYE = new Color(0x5B3256);
+    public static final SColor VIOLET_DYE = new SColor(0x5B3256, "Violet Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #40826D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #40826D; color: #000000">&nbsp;@&nbsp;</font>
@@ -5416,7 +5416,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #40826D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color VIRIDIAN = new Color(0x40826D);
+    public static final SColor VIRIDIAN = new SColor(0x40826D, "Viridian");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9F7462; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9F7462; color: #000000">&nbsp;@&nbsp;</font>
@@ -5427,7 +5427,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9F7462">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WALNUT = new Color(0x9F7462);
+    public static final SColor WALNUT = new SColor(0x9F7462, "Walnut");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ffb3a7; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffb3a7; color: #000000">&nbsp;@&nbsp;</font>
@@ -5438,7 +5438,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ffb3a7">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WASHED_OUT_CRIMSON = new Color(0xffb3a7);
+    public static final SColor WASHED_OUT_CRIMSON = new SColor(0xffb3a7, "Washed Out Crimson");
     /**
      * Color constant<PRE>
      *<font style="background-color: #EC8254; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EC8254; color: #000000">&nbsp;@&nbsp;</font>
@@ -5449,7 +5449,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #EC8254">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WASHED_OUT_PERSIMMON = new Color(0xEC8254);
+    public static final SColor WASHED_OUT_PERSIMMON = new SColor(0xEC8254, "Washed Out Persimmon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #86ABA5; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #86ABA5; color: #000000">&nbsp;@&nbsp;</font>
@@ -5460,7 +5460,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #86ABA5">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WATER = new Color(0x86ABA5);
+    public static final SColor WATER = new SColor(0x86ABA5, "Water");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B56C60; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B56C60; color: #000000">&nbsp;@&nbsp;</font>
@@ -5471,7 +5471,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B56C60">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WATER_PERSIMMON = new Color(0xB56C60);
+    public static final SColor WATER_PERSIMMON = new SColor(0xB56C60, "Water Persimmon");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F5DEB3; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F5DEB3; color: #000000">&nbsp;@&nbsp;</font>
@@ -5482,7 +5482,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #F5DEB3">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WHEAT = new Color(0xF5DEB3);
+    public static final SColor WHEAT = new SColor(0xF5DEB3, "Wheat");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;@&nbsp;</font>
@@ -5493,7 +5493,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ffffff">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #ffffff">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #ffffff">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #ffffff">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #ffffff">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WHITE = new Color(0xffffff);
+    public static final SColor WHITE = new SColor(0xffffff, "White");
     /**
      * Color constant<PRE>
      *<font style="background-color: #B9A193; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #B9A193; color: #000000">&nbsp;@&nbsp;</font>
@@ -5504,7 +5504,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #B9A193">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WHITE_MOUSE = new Color(0xB9A193);
+    public static final SColor WHITE_MOUSE = new SColor(0xB9A193, "white Mouse");
     /**
      * Color constant<PRE>
      *<font style="background-color: #CE9F6F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CE9F6F; color: #000000">&nbsp;@&nbsp;</font>
@@ -5515,7 +5515,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #CE9F6F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WHITE_OAK = new Color(0xCE9F6F);
+    public static final SColor WHITE_OAK = new SColor(0xCE9F6F, "White Oak");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C48E69; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C48E69; color: #000000">&nbsp;@&nbsp;</font>
@@ -5526,7 +5526,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C48E69">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WHITE_TEA_DYE = new Color(0xC48E69);
+    public static final SColor WHITE_TEA_DYE = new SColor(0xC48E69, "White Tea Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #A5BA93; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #A5BA93; color: #000000">&nbsp;@&nbsp;</font>
@@ -5537,7 +5537,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #3A5BA93">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WHITISH_GREEN = new Color(0xA5BA93);
+    public static final SColor WHITISH_GREEN = new SColor(0xA5BA93, "Whitish Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #8C9E5E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #8C9E5E; color: #000000">&nbsp;@&nbsp;</font>
@@ -5548,7 +5548,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #8C9E5E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WILLOW_DYE = new Color(0x8C9E5E);
+    public static final SColor WILLOW_DYE = new SColor(0x8C9E5E, "Willow Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #817B69; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #817B69; color: #000000">&nbsp;@&nbsp;</font>
@@ -5559,7 +5559,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #817B69">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WILLOW_GREY = new Color(0x817B69);
+    public static final SColor WILLOW_GREY = new SColor(0x817B69, "Willow Grey");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9C8A4D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9C8A4D; color: #000000">&nbsp;@&nbsp;</font>
@@ -5570,7 +5570,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9C8A4D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WILLOW_TEA = new Color(0x9C8A4D);
+    public static final SColor WILLOW_TEA = new SColor(0x9C8A4D, "Willow Tea");
     /**
      * Color constant<PRE>
      *<font style="background-color: #AB4C3D; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #AB4C3D; color: #000000">&nbsp;@&nbsp;</font>
@@ -5581,7 +5581,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #AB4C3D">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WILTED_LAWN_CLIPPINGS = new Color(0xAB4C3D);
+    public static final SColor WILTED_LAWN_CLIPPINGS = new SColor(0xAB4C3D, "Wilted Lawn Clippings");
     /**
      * Color constant<PRE>
      *<font style="background-color: #BCB58C; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #BCB58C; color: #000000">&nbsp;@&nbsp;</font>
@@ -5592,7 +5592,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #BCB58C">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WILLOW_LEAVES_UNDERSIDE = new Color(0xBCB58C);
+    public static final SColor WILLOW_LEAVES_UNDERSIDE = new SColor(0xBCB58C, "Willow Leaves Underside");
     /**
      * Color constant<PRE>
      *<font style="background-color: #C9A0DC; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #C9A0DC; color: #000000">&nbsp;@&nbsp;</font>
@@ -5603,7 +5603,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #C9A0DC">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WISTERIA = new Color(0xC9A0DC);
+    public static final SColor WISTERIA = new SColor(0xC9A0DC, "Wisteria");
     /**
      * Color constant<PRE>
      *<font style="background-color: #89729E; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #89729E; color: #000000">&nbsp;@&nbsp;</font>
@@ -5614,7 +5614,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #89729E">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WISTERIA_DYE = new Color(0x89729E);
+    public static final SColor WISTERIA_DYE = new SColor(0x89729E, "Wisteria Dye");
     /**
      * Color constant<PRE>
      *<font style="background-color: #875F9A; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #875F9A; color: #000000">&nbsp;@&nbsp;</font>
@@ -5625,7 +5625,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #875F9A">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color WISTERIA_PURPLE = new Color(0x875F9A);
+    public static final SColor WISTERIA_PURPLE = new SColor(0x875F9A, "Wisteria Purple");
     /**
      * Color constant<PRE>
      *<font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;@&nbsp;</font>
@@ -5636,7 +5636,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #ffff00">&nbsp;@&nbsp;</font><font style="background-color: #ffff00; color: #ffff00">&nbsp;@&nbsp;</font><font style="background-color: #00ff00; color: #ffff00">&nbsp;@&nbsp;</font><font style="background-color: #0000ff; color: #ffff00">&nbsp;@&nbsp;</font><font style="background-color: #964b00; color: #ffff00">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color YELLOW = new Color(0xffff00);
+    public static final SColor YELLOW = new SColor(0xffff00, "Yellow");
     /**
      * Color constant<PRE>
      *<font style="background-color: #9ACD32; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #9ACD32; color: #000000">&nbsp;@&nbsp;</font>
@@ -5647,7 +5647,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #9ACD32">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color YELLOW_GREEN = new Color(0x9ACD32);
+    public static final SColor YELLOW_GREEN = new SColor(0x9ACD32, "Yellow Green");
     /**
      * Color constant<PRE>
      *<font style="background-color: #896C39; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #896C39; color: #000000">&nbsp;@&nbsp;</font>
@@ -5658,7 +5658,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #896C39">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color YELLOW_SEA_PINE_BROWN = new Color(0x896C39);
+    public static final SColor YELLOW_SEA_PINE_BROWN = new SColor(0x896C39, "Yellow Sea Pine Brown");
     /**
      * Color constant<PRE>
      *<font style="background-color: #6b9362; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #6b9362; color: #000000">&nbsp;@&nbsp;</font>
@@ -5669,7 +5669,7 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #6b9362">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color YOUNG_BAMBOO = new Color(0x6b9362);
+    public static final SColor YOUNG_BAMBOO = new SColor(0x6b9362, "Young Bamboo");
     /**
      * Color constant<PRE>
      *<font style="background-color: #EBC2AF; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #EBC2AF; color: #000000">&nbsp;@&nbsp;</font>
@@ -5680,180 +5680,333 @@ public class Colors {
      *<font style="background-color: #ff0000; color: #EBC2AF">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public final static Color ZINNWALDITE = new Color(0xEBC2AF);
+    public static final SColor ZINNWALDITE = new SColor(0xEBC2AF, "Zinnwaldite");
     /**
      * A color constant that is fully transparent. The RGB portion is Black, but
      * should not render when used in a method that respects alpha values.
      */
-    public final static Color TRANSPARENT = new Color(0, 0, 0, 0);
+    public static final SColor TRANSPARENT = new SColor(0x00000000, "Transparent", true);
     /**
      * This array is loaded with the colors found in the rainbow, in the
      * standard ROYGBIV order.
      */
-    public static Color[] RAINBOW = {
-            RED_PIGMENT, ORANGE_PEEL, YELLOW, GREEN, BLUE, INDIGO_DYE, VIOLET};
+    public static SColor[] RAINBOW = {
+        RED_PIGMENT, ORANGE_PEEL, YELLOW, GREEN, BLUE, INDIGO_DYE, VIOLET};
     /**
      * This array is loaded with the colors from the traditional Japanese
      * Red-Violet Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static Color[] RED_VIOLET_SERIES = {
-            ONE_KIN_DYE, RED_PLUM, CHERRY_BLOSSOM_DYE, PALE_CRIMSON, PEACH_DYE, MEDIUM_CRIMSON, WASHED_OUT_CRIMSON};
+    public static SColor[] RED_VIOLET_SERIES = {
+        ONE_KIN_DYE, RED_PLUM, CHERRY_BLOSSOM_DYE, PALE_CRIMSON, PEACH_DYE, MEDIUM_CRIMSON, WASHED_OUT_CRIMSON};
     /**
      * This array is loaded with the colors from the traditional Japanese Red
      * Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static Color[] RED_SERIES = {
-            IBIS_WING, LONG_SPRING, COCHINEAL_RED, THRICE_DYED_CRIMSON, PLUM_BLOSSOM_MOUSE, PURE_CRIMSON, RED_BEAN,
-            SHRIMP_BROWN, DAWN, ORANGUTAN, PERSIMMON_JUICE, RED_KITE, BLACK_KITE, GLAZED_PERSIMMON, EDO_BROWN,
-            CYPRESS_BARK, RINSED_OUT_RED, BREWED_MUSTARD_BROWN, OVERDYED_RED_BROWN, CHINESE_TEA_BROWN, FADED_CHINESE_TEA_BROWN,
-            CHESTNUT_LEATHER_BROWN, IBIS, CHERRY_BLOSSOM_MOUSE, FOREIGN_CRIMSON, DEEP_SCARLET, WATER_PERSIMMON,
-            SAPPANWOOD_INCENSE, TRUE_RED, SILVERED_RED, CHESTNUT_PLUM, CORAL_DYE, WILTED_LAWN_CLIPPINGS, RED_BIRCH,
-            CYPRESS_BARK_RED, BLOOD_RED, BLOOD, BENI_DYE, MEAT, RED_INCENSE, EARTHEN_YELLOW_RED_BROWN, DISTANT_RIVER_BROWN,
-            BIRCH_BROWN, SPARROW_BROWN, BOILED_RED_BEAN_BROWN};
+    public static SColor[] RED_SERIES = {
+        IBIS_WING, LONG_SPRING, COCHINEAL_RED, THRICE_DYED_CRIMSON, PLUM_BLOSSOM_MOUSE, PURE_CRIMSON, RED_BEAN,
+        SHRIMP_BROWN, DAWN, ORANGUTAN, PERSIMMON_JUICE, RED_KITE, BLACK_KITE, GLAZED_PERSIMMON, EDO_BROWN,
+        CYPRESS_BARK, RINSED_OUT_RED, BREWED_MUSTARD_BROWN, OVERDYED_RED_BROWN, CHINESE_TEA_BROWN, FADED_CHINESE_TEA_BROWN,
+        CHESTNUT_LEATHER_BROWN, IBIS, CHERRY_BLOSSOM_MOUSE, FOREIGN_CRIMSON, DEEP_SCARLET, WATER_PERSIMMON,
+        SAPPANWOOD_INCENSE, TRUE_RED, SILVERED_RED, CHESTNUT_PLUM, CORAL_DYE, WILTED_LAWN_CLIPPINGS, RED_BIRCH,
+        CYPRESS_BARK_RED, BLOOD_RED, BLOOD, BENI_DYE, MEAT, RED_INCENSE, EARTHEN_YELLOW_RED_BROWN, DISTANT_RIVER_BROWN,
+        BIRCH_BROWN, SPARROW_BROWN, BOILED_RED_BEAN_BROWN};
     /**
      * This array is loaded with the colors from the traditional Japanese Yellow
      * Red Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static Color[] YELLOW_RED_SERIES = {
-            WALNUT, SUMAC, RICH_GARDENIA, RED_OCHRE, POLISHED_BROWN, STYLISH_PERSIMMON, DAYLILY, RED_DYE_TURMERIC,
-            LEGAL_DYE, AMBER_DYE, DECAYING_LEAVES, CLOVE_DYED, BRUSHWOOD_DYED, SOOTY_BAMBOO, EARTHEN_YELLOW, CHINESE_TEA_YELLOW,
-            CATTAIL, SCORTCHED_BROWN, WASHED_OUT_PERSIMMON, SAWTOOTH_OAK, GREEN_TEA_DYE, PALE_PERSIMMON, PLUM_DYED,
-            CLOVE_BROWN, LOQUAT_BROWN, PALE_INCENSE, GOLDEN_BROWN_DYE, FOX, ALOEWOOD, WHITE_TEA_DYE,
-            DRIED_WEATHERED_BAMBOO, FLATTERY_BROWN};
+    public static SColor[] YELLOW_RED_SERIES = {
+        WALNUT, SUMAC, RICH_GARDENIA, RED_OCHRE, POLISHED_BROWN, STYLISH_PERSIMMON, DAYLILY, RED_DYE_TURMERIC,
+        LEGAL_DYE, AMBER_DYE, DECAYING_LEAVES, CLOVE_DYED, BRUSHWOOD_DYED, SOOTY_BAMBOO, EARTHEN_YELLOW, CHINESE_TEA_YELLOW,
+        CATTAIL, SCORTCHED_BROWN, WASHED_OUT_PERSIMMON, SAWTOOTH_OAK, GREEN_TEA_DYE, PALE_PERSIMMON, PLUM_DYED,
+        CLOVE_BROWN, LOQUAT_BROWN, PALE_INCENSE, GOLDEN_BROWN_DYE, FOX, ALOEWOOD, WHITE_TEA_DYE,
+        DRIED_WEATHERED_BAMBOO, FLATTERY_BROWN};
     /**
      * This array is loaded with the colors from the traditional Japanese Yellow
      * Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static Color[] YELLOW_SERIES = {
-            LIGHT_YELLOW_DYE, EGG_DYE, BRIGHT_GOLD_BROWN, UNDRIED_WALL, CORN_DYE, GOLDEN_OAK, FLORAL_LEAF, TURMERIC,
-            FADED_SEN_NO_RIKYUS_TEA, LYE, TEA_GARDEN_CONTEMPLATION, RAPESEED_OIL, NIGHTINGALE_BROWN, JAPANESE_TRIANDRA_GRASS,
-            STEAMED_CHESTNUT, FINCH_BROWN, NIGHTINGALE, BRIGHT_GOLDEN_YELLOW, SUMAC_DYED, MULBERRY_DYED, CAPE_JASMINE,
-            WHITE_OAK, GAMBOGE_DYE, EGGSHELL_PAPER, GOLDEN_FALLEN_LEAVES, SEN_NO_RIKYUS_TEA, JAPANESE_IRIS,
-            SIMMERED_SEAWEED, YELLOW_SEA_PINE_BROWN, RAPEBLOSSOM_BROWN, AMUR_CORK_TREE, PALE_FALLEN_LEAVES, PATRINIA_FLOWER};
+    public static SColor[] YELLOW_SERIES = {
+        LIGHT_YELLOW_DYE, EGG_DYE, BRIGHT_GOLD_BROWN, UNDRIED_WALL, CORN_DYE, GOLDEN_OAK, FLORAL_LEAF, TURMERIC,
+        FADED_SEN_NO_RIKYUS_TEA, LYE, TEA_GARDEN_CONTEMPLATION, RAPESEED_OIL, NIGHTINGALE_BROWN, JAPANESE_TRIANDRA_GRASS,
+        STEAMED_CHESTNUT, FINCH_BROWN, NIGHTINGALE, BRIGHT_GOLDEN_YELLOW, SUMAC_DYED, MULBERRY_DYED, CAPE_JASMINE,
+        WHITE_OAK, GAMBOGE_DYE, EGGSHELL_PAPER, GOLDEN_FALLEN_LEAVES, SEN_NO_RIKYUS_TEA, JAPANESE_IRIS,
+        SIMMERED_SEAWEED, YELLOW_SEA_PINE_BROWN, RAPEBLOSSOM_BROWN, AMUR_CORK_TREE, PALE_FALLEN_LEAVES, PATRINIA_FLOWER};
     /**
      * This array is loaded with the colors from the traditional Japanese Yellow
      * Green Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static Color[] YELLOW_GREEN_SERIES = {
-            GREENFINCH, WILLOW_TEA, FLIRTATIOUS_INDIGO_TEA, DEAD_MANS_FINGERS_SEAWEED, BAIKO_BROWN, SISKIN_SPROUT_YELLOW,
-            WILLOW_LEAVES_UNDERSIDE, WILLOW_DYE, BLUE_BLACK_CRAYFISH, PALE_OAK, RIKAN_BROWN, MOSS, THOUSAND_YEAR_OLD_BROWN,
-            IWAI_BROWN, SOOTY_WILLOW_BAMBOO, PALE_YOUNG_GREEN_ONION, FRESH_ONION, PINE_NEEDLE};
+    public static SColor[] YELLOW_GREEN_SERIES = {
+        GREENFINCH, WILLOW_TEA, FLIRTATIOUS_INDIGO_TEA, DEAD_MANS_FINGERS_SEAWEED, BAIKO_BROWN, SISKIN_SPROUT_YELLOW,
+        WILLOW_LEAVES_UNDERSIDE, WILLOW_DYE, BLUE_BLACK_CRAYFISH, PALE_OAK, RIKAN_BROWN, MOSS, THOUSAND_YEAR_OLD_BROWN,
+        IWAI_BROWN, SOOTY_WILLOW_BAMBOO, PALE_YOUNG_GREEN_ONION, FRESH_ONION, PINE_NEEDLE};
     /**
      * This array is loaded with the colors from the traditional Japanese Blue
      * Green Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static Color[] BLUE_GREEN_SERIES = {
-            JAPANESE_PALE_BLUE, WILLOW_GREY, THOUSAND_YEAR_OLD_GREEN, WHITISH_GREEN, PATINA, STOREROOM_BROWN, GREYISH_DARK_GREEN,
-            INSECT_SCREEN, ALOEWOOD_BROWN, CELADON_DYE, RUSTY_STOREROOM, SILK_CREPE_BROWN, YOUNG_BAMBOO, OLD_BAMBOO,
-            MIDORI, RUSTY_CELADON, HORSETAIL, GREEN_BAMBOO, VELVET, FRAGILE_SEAWEED_BROWN, PALE_GREEN_ONION, BLUE_GREEN_DYE,
-            IRON, GORYEO_STOREROOM};
+    public static SColor[] BLUE_GREEN_SERIES = {
+        JAPANESE_PALE_BLUE, WILLOW_GREY, THOUSAND_YEAR_OLD_GREEN, WHITISH_GREEN, PATINA, STOREROOM_BROWN, GREYISH_DARK_GREEN,
+        INSECT_SCREEN, ALOEWOOD_BROWN, CELADON_DYE, RUSTY_STOREROOM, SILK_CREPE_BROWN, YOUNG_BAMBOO, OLD_BAMBOO,
+        MIDORI, RUSTY_CELADON, HORSETAIL, GREEN_BAMBOO, VELVET, FRAGILE_SEAWEED_BROWN, PALE_GREEN_ONION, BLUE_GREEN_DYE,
+        IRON, GORYEO_STOREROOM};
     /**
      * This array is loaded with the colors from the traditional Japanese Blue
      * Violet Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static Color[] BLUE_VIOLET_SERIES = {
-            HARBOR_RAT, IRON_STORAGE, RUSTED_LIGHT_BLUE, LIGHT_BLUE_DYE, RUSTY_STORAGE, JAPANESE_INDIGO, LIGHT_BLUE_FLOWER,
-            OPPOSITE_FLOWER, IRONHEAD_FLOWER, SKY, ULTRAMARINE_DYE, COARSE_WOOL, NAVY_BLUE_DYE, STAINED_RED, MOUSY_WISTERIA,
-            WISTERIA_DYE, DULL_BLUE, WATER, INSIDE_OF_A_BOTTLE, NEW_BRIDGE, MOUSY_INDIGO, ONANDO, THOUSAND_HERB, LIGHT_BLUE_SILK,
-            KIMONO_STORAGE, BLACK_CHESTNUT_OAK, DARK_BLUE_DYE, LAPIS_LAZULI, DARK_BLUE_LAPIS_LAZULI, NAVY_BLUE_BELLFLOWER,
-            SAFFLOWER, DARK_INDIGO};
+    public static SColor[] BLUE_VIOLET_SERIES = {
+        HARBOR_RAT, IRON_STORAGE, RUSTED_LIGHT_BLUE, LIGHT_BLUE_DYE, RUSTY_STORAGE, JAPANESE_INDIGO, LIGHT_BLUE_FLOWER,
+        OPPOSITE_FLOWER, IRONHEAD_FLOWER, SKY, ULTRAMARINE_DYE, COARSE_WOOL, NAVY_BLUE_DYE, STAINED_RED, MOUSY_WISTERIA,
+        WISTERIA_DYE, DULL_BLUE, WATER, INSIDE_OF_A_BOTTLE, NEW_BRIDGE, MOUSY_INDIGO, ONANDO, THOUSAND_HERB, LIGHT_BLUE_SILK,
+        KIMONO_STORAGE, BLACK_CHESTNUT_OAK, DARK_BLUE_DYE, LAPIS_LAZULI, DARK_BLUE_LAPIS_LAZULI, NAVY_BLUE_BELLFLOWER,
+        SAFFLOWER, DARK_INDIGO};
     /**
      * This array is loaded with the colors from the traditional Japanese Violet
      * Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static Color[] VIOLET_SERIES = {
-            WISTERIA_PURPLE, TATARIAN_ASTER, BLUE_VIOLET_DYE, THIN_VIOLET, VIOLET_DYE, DARK_RED_DYE, RED_WISTERIA,
-            DOVE_FEATHER_GREY, VINE_GRAPE, TREE_PEONY, FAKE_PURPLE, SAPPANWOOD, VANISHING_RED_MOUSE, BELLFLOWER,
-            DISAPPEARING_PURPLE, DEEP_PURPLE, HALF_PURPLE, PURPLE_DYE, IRIS, RABBIT_EAR_IRIS, GRAPE_MOUSE, BURNT_BAMBOO,
-            PLUM_PURPLE, PURPLE_KITE, MULBERRY};
+    public static SColor[] VIOLET_SERIES = {
+        WISTERIA_PURPLE, TATARIAN_ASTER, BLUE_VIOLET_DYE, THIN_VIOLET, VIOLET_DYE, DARK_RED_DYE, RED_WISTERIA,
+        DOVE_FEATHER_GREY, VINE_GRAPE, TREE_PEONY, FAKE_PURPLE, SAPPANWOOD, VANISHING_RED_MOUSE, BELLFLOWER,
+        DISAPPEARING_PURPLE, DEEP_PURPLE, HALF_PURPLE, PURPLE_DYE, IRIS, RABBIT_EAR_IRIS, GRAPE_MOUSE, BURNT_BAMBOO,
+        PLUM_PURPLE, PURPLE_KITE, MULBERRY};
     /**
      * This array is loaded with the colors from the traditional Japanese
      * Achromatic Series found at the wikipedia site here:
      * http://en.wikipedia.org/wiki/Traditional_colors_of_Japan
      */
-    public static Color[] ACHROMATIC_SERIES = {
-            UNBLEACHED_SILK, SILVER_GREY, BROWN_RAT_GREY, BETEL_NUT_DYE, BLACK_DYE, WHITE_MOUSE, PLAIN_MOUSE,
-            INDIGO_INK_BROWN, INK, INDIGO_WHITE};
+    public static SColor[] ACHROMATIC_SERIES = {
+        UNBLEACHED_SILK, SILVER_GREY, BROWN_RAT_GREY, BETEL_NUT_DYE, BLACK_DYE, WHITE_MOUSE, PLAIN_MOUSE,
+        INDIGO_INK_BROWN, INK, INDIGO_WHITE};
     /**
-     * This array is loaded with all of the colors defined in Colors, in
+     * This array is loaded with all of the colors defined in SColor, in
      * arbitrary order.
      */
-    public static Color[] FULL_PALETTE = {ALICE_BLUE, ALIZARIN, ALOEWOOD, ALOEWOOD_BROWN, AMARANTH, AMBER,
-            AMBER_DYE, AMETHYST, AMUR_CORK_TREE, APRICOT, AQUA, AQUAMARINE, ARMY_GREEN, ASPARAGUS, ATOMIC_TANGERINE,
-            AUBURN, AZUL, AZURE, BABY_BLUE, BAIKO_BROWN, BEIGE, BELLFLOWER, BENI_DYE, BETEL_NUT_DYE, BIRCH_BROWN,
-            BISTRE, BLACK, BLACK_CHESTNUT_OAK, BLACK_DYE, BLACK_KITE, BLOOD, BLOOD_RED, BLUE, BLUE_BLACK_CRAYFISH,
-            BLUE_GREEN, BLUE_GREEN_DYE, BLUE_VIOLET, BLUE_VIOLET_DYE, BOILED_RED_BEAN_BROWN, BONDI_BLUE, BRASS,
-            BREWED_MUSTARD_BROWN, BRIGHT_GOLD_BROWN, BRIGHT_GOLDEN_YELLOW, BRIGHT_GREEN, BRIGHT_PINK,
-            BRIGHT_TURQUOISE, BRILLIANT_ROSE, BRONZE, BROWN, BROWN_RAT_GREY, BROWNER, BRUSHWOOD_DYED, BUFF,
-            BURGUNDY, BURNT_BAMBOO, BURNT_ORANGE, BURNT_SIENNA, BURNT_UMBER, CAMO_GREEN, CAPE_JASMINE,
-            CAPUT_MORTUUM, CARDINAL, CARMINE, CARNATION_PINK, CAROLINA_BLUE, CARROT_ORANGE, CATTAIL, CELADON,
-            CELADON_DYE, CERISE, CERULEAN, CERULEAN_BLUE, CHARTREUSE, CHARTREUSE_GREEN, CHERRY_BLOSSOM,
-            CHERRY_BLOSSOM_DYE, CHERRY_BLOSSOM_MOUSE, CHESTNUT, CHESTNUT_LEATHER_BROWN, CHESTNUT_PLUM,
-            CHINESE_TEA_BROWN, CHINESE_TEA_YELLOW, CHOCOLATE, CINNABAR, CINNAMON, CLOVE_BROWN, CLOVE_DYED,
-            COARSE_WOOL, COBALT, COCHINEAL_RED, COLUMBIA_BLUE, COPPER, COPPER_ROSE, CORAL, CORAL_DYE, CORAL_RED,
-            CORN, CORN_DYE, CORNFLOWER_BLUE, COSMIC_LATTE, CREAM, CRIMSON, CYAN, CYPRESS_BARK, CYPRESS_BARK_RED,
-            DARK_BLUE, DARK_BLUE_DYE, DARK_BLUE_LAPIS_LAZULI, DARK_BROWN, DARK_CERULEAN, DARK_CHESTNUT, DARK_CORAL,
-            DARK_GOLDENROD, DARK_GRAY, DARK_GREEN, DARK_INDIGO, DARK_KHAKI, DARK_PASTEL_GREEN, DARK_PINK,
-            DARK_SCARLET, DARK_RED, DARK_RED_DYE, DARK_SALMON, DARK_SLATE_GRAY, DARK_SPRING_GREEN, DARK_TAN,
-            DARK_TURQUOISE, DARK_VIOLET, DAWN, DAYLILY, DEAD_MANS_FINGERS_SEAWEED, DECAYING_LEAVES, DEEP_CERISE,
-            DEEP_CHESTNUT, DEEP_FUCHSIA, DEEP_LILAC, DEEP_MAGENTA, DEEP_PEACH, DEEP_PINK, DEEP_PURPLE, DEEP_SCARLET,
-            DENIM, DISAPPEARING_PURPLE, DISTANT_RIVER_BROWN, DODGER_BLUE, DOVE_FEATHER_GREY, DRIED_WEATHERED_BAMBOO,
-            DULL_BLUE, EARTHEN_YELLOW, EARTHEN_YELLOW_RED_BROWN, ECRU, EDO_BROWN, EGG_DYE, EGGSHELL_PAPER,
-            EGYPTIAN_BLUE, ELECTRIC_BLUE, ELECTRIC_GREEN, ELECTRIC_INDIGO, ELECTRIC_LIME, ELECTRIC_PURPLE, EMERALD,
-            EGGPLANT, FADED_CHINESE_TEA_BROWN, FADED_SEN_NO_RIKYUS_TEA, FAKE_PURPLE, FALU_RED, FERN_GREEN,
-            FINCH_BROWN, FIREBRICK, FLATTERY_BROWN, FLAX, FLIRTATIOUS_INDIGO_TEA, FLORAL_LEAF, FOREIGN_CRIMSON,
-            FOREST_GREEN, FOX, FRAGILE_SEAWEED_BROWN, FRENCH_ROSE, FRESH_ONION, FUCSHIA_PINK, GAMBOGE, GAMBOGE_DYE,
-            GLAZED_PERSIMMON, GOLD, GOLDEN, GOLDEN_BROWN, GOLDEN_BROWN_DYE, GOLDEN_FALLEN_LEAVES, GOLDEN_OAK,
-            GOLDEN_YELLOW, GOLDENROD, GORYEO_STOREROOM, GRAPE_MOUSE, GRAY, GRAY_ASPARAGUS, GREEN, GREENFINCH,
-            GREEN_BAMBOO, GREEN_TEA_DYE, GREEN_YELLOW, GREYISH_DARK_GREEN, HALF_PURPLE, HAN_PURPLE, HARBOR_RAT,
-            HELIOTROPE, HOLLYWOOD_CERISE, HORSETAIL, HOT_MAGENTA, HOT_PINK, IBIS, IBIS_WING, INDIGO, INDIGO_DYE,
-            INDIGO_INK_BROWN, INDIGO_WHITE, INK, INSECT_SCREEN, INSIDE_OF_A_BOTTLE, INTERNATIONAL_KLEIN_BLUE,
-            INTERNATIONAL_ORANGE, IRIS, IRON, IRONHEAD_FLOWER, IRON_STORAGE, ISLAMIC_GREEN, IVORY, IWAI_BROWN,
-            JADE, JAPANESE_INDIGO, JAPANESE_IRIS, JAPANESE_PALE_BLUE, JAPANESE_TRIANDRA_GRASS, KELLY_GREEN, KHAKI,
-            KIMONO_STORAGE, LAPIS_LAZULI, LAVENDER_FLORAL, LAVENDER, LAVENDER_BLUE, LAVENDER_BLUSH, LAVENDER_GRAY,
-            LAVENDER_MAGENTA, LAVENDER_PINK, LAVENDER_PURPLE, LAVENDER_ROSE, LAWN_GREEN, LEGAL_DYE, LEMON,
-            LEMON_CHIFFON, LIGHT_BLUE, LIGHT_BLUE_DYE, LIGHT_BLUE_FLOWER, LIGHT_BLUE_SILK, LIGHT_GRAY, LIGHT_KHAKI,
-            LIGHT_LIME, LIGHT_MAROON, LIGHT_PINK, LIGHT_VIOLET, LIGHT_YELLOW_DYE, LILAC, LIME, LIME_GREEN, LINEN,
-            LONG_SPRING, LOQUAT_BROWN, LYE, MAGENTA_DYE, MAGIC_MINT, MAGNOLIA, MALACHITE, MAROON, MAGENTA,
-            MAYA_BLUE, MAUVE, MAUVE_TAUPE, MEAT, MEDIUM_BLUE, MEDIUM_CARMINE, MEDIUM_CRIMSON,
-            MEDIUM_LAVENDER_MAGENTA, MEDIUM_PURPLE, MEDIUM_SPRING_GREEN, MIDORI, MIDNIGHT_BLUE, MINT_GREEN,
-            MISTY_ROSE, MOSS, MOSS_GREEN, MOUNTBATTEN_PINK, MOUSY_INDIGO, MOUSY_WISTERIA, MULBERRY, MULBERRY_DYED,
-            MUSTARD, MYRTLE, NAVAJO_WHITE, NAVY_BLUE, NAVY_BLUE_BELLFLOWER, NAVY_BLUE_DYE, NEW_BRIDGE, NIGHTINGALE,
-            NIGHTINGALE_BROWN, OCHRE, OLD_BAMBOO, OLD_GOLD, OLD_LACE, OLD_LAVENDER, OLD_ROSE, OLIVE, OLIVE_DRAB,
-            OLIVINE, ONANDO, ONE_KIN_DYE, OPPOSITE_FLOWER, ORANGE, ORANGE_PEEL, ORANGE_RED, ORANGUTAN, ORCHID,
-            OVERDYED_RED_BROWN, PALE_BLUE, PALE_BROWN, PALE_CARMINE, PALE_CHESTNUT, PALE_CORNFLOWER_BLUE,
-            PALE_CRIMSON, PALE_FALLEN_LEAVES, PALE_GREEN_ONION, PALE_INCENSE, PALE_MAGENTA, PALE_OAK, PALE_PERSIMMON,
-            PALE_PINK, PALE_RED_VIOLET, PALE_YOUNG_GREEN_ONION, PAPAYA_WHIP, PASTEL_GREEN, PASTEL_PINK, PATINA,
-            PATRINIA_FLOWER, PEACH, PEACH_DYE, PEACH_ORANGE, PEACH_YELLOW, PEAR, PERIWINKLE, PERSIAN_BLUE,
-            PERSIAN_GREEN, PERSIAN_INDIGO, PERSIAN_RED, PERSIAN_PINK, PERSIAN_ROSE, PERSIMMON, PERSIMMON_JUICE,
-            PIGMENT_BLUE, PINE_GREEN, PINE_NEEDLE, PINK, PINK_ORANGE, PLAIN_MOUSE, PLATINUM, PLUM,
-            PLUM_BLOSSOM_MOUSE, PLUM_DYED, PLUM_PURPLE, POLISHED_BROWN, POWDER_BLUE, PRUSSIAN_BLUE,
-            PSYCHEDELIC_PURPLE, PUCE, PUMPKIN, PURE_CRIMSON, PURPLE, PURPLE_DYE, PURPLE_KITE, PURPLE_TAUPE,
-            RABBIT_EAR_IRIS, RAPEBLOSSOM_BROWN, RAPESEED_OIL, RAW_UMBER, RAZZMATAZZ, RED, RED_BEAN, RED_BIRCH,
-            RED_INCENSE, RED_DYE_TURMERIC, RED_KITE, RED_OCHRE, RED_PIGMENT, RED_PLUM, RED_VIOLET, RED_WISTERIA,
-            RICH_CARMINE, RICH_GARDENIA, RINSED_OUT_RED, RIKAN_BROWN, ROBIN_EGG_BLUE, ROSE, ROSE_MADDER, ROSE_TAUPE,
-            ROYAL_BLUE, ROYAL_PURPLE, RUBY, RUSSET, RUST, RUSTED_LIGHT_BLUE, RUSTY_CELADON, RUSTY_STORAGE,
-            RUSTY_STOREROOM, SAFETY_ORANGE, SAFFLOWER, SAFFRON, SALMON, SANDY_BROWN, SANGRIA, SAPPHIRE, SAPPANWOOD,
-            SAPPANWOOD_INCENSE, SAWTOOTH_OAK, SCARLET, SCHOOL_BUS_YELLOW, SCORTCHED_BROWN, SEA_GREEN, SEASHELL,
-            SELECTIVE_YELLOW, SEN_NO_RIKYUS_TEA, SEPIA, SHAMROCK_GREEN, SHOCKING_PINK, SHRIMP_BROWN,
-            SILK_CREPE_BROWN, SILVER, SILVER_GREY, SILVERED_RED, SIMMERED_SEAWEED, SISKIN_SPROUT_YELLOW, SKY,
-            SKY_BLUE, SLATE_GRAY, SMALT, SOOTY_BAMBOO, SOOTY_WILLOW_BAMBOO, SPARROW_BROWN, SPRING_BUD,
-            SPRING_GREEN, STAINED_RED, STEAMED_CHESTNUT, STEEL_BLUE, STOREROOM_BROWN, STYLISH_PERSIMMON, SUMAC,
-            SUMAC_DYED, TAN, TANGERINE, TANGERINE_YELLOW, TATARIAN_ASTER, TAUPE, TAWNY, TEA_GARDEN_CONTEMPLATION,
-            TEA_GREEN, TEA_ORANGE, TEA_ROSE, TEAL, TERRA_COTTA, THIN_VIOLET, THISTLE, THOUSAND_HERB,
-            THOUSAND_YEAR_OLD_BROWN, THOUSAND_YEAR_OLD_GREEN, THRICE_DYED_CRIMSON, TOMATO, TREE_PEONY, TRUE_PINK,
-            TRUE_RED, TURMERIC, TURQUOISE, TYRIAN_PURPLE, ULTRAMARINE, ULTRAMARINE_DYE, UNBLEACHED_SILK,
-            UNDRIED_WALL, VANISHING_RED_MOUSE, VEGAS_GOLD, VELVET, VERMILION, VINE_GRAPE, VIOLET, VIOLET_DYE,
-            VIRIDIAN, WALNUT, WASHED_OUT_CRIMSON, WASHED_OUT_PERSIMMON, WATER, WATER_PERSIMMON, WHEAT, WHITE,
-            WHITE_MOUSE, WHITE_OAK, WHITE_TEA_DYE, WHITISH_GREEN, WILLOW_DYE, WILLOW_GREY, WILLOW_TEA,
-            WILTED_LAWN_CLIPPINGS, WILLOW_LEAVES_UNDERSIDE, WISTERIA, WISTERIA_DYE, WISTERIA_PURPLE, YELLOW,
-            YELLOW_GREEN, YELLOW_SEA_PINE_BROWN, YOUNG_BAMBOO, ZINNWALDITE};
+    public static SColor[] FULL_PALETTE = {ALICE_BLUE, ALIZARIN, ALOEWOOD, ALOEWOOD_BROWN, AMARANTH, AMBER,
+        AMBER_DYE, AMETHYST, AMUR_CORK_TREE, APRICOT, AQUA, AQUAMARINE, ARMY_GREEN, ASPARAGUS, ATOMIC_TANGERINE,
+        AUBURN, AZUL, AZURE, BABY_BLUE, BAIKO_BROWN, BEIGE, BELLFLOWER, BENI_DYE, BETEL_NUT_DYE, BIRCH_BROWN,
+        BISTRE, BLACK, BLACK_CHESTNUT_OAK, BLACK_DYE, BLACK_KITE, BLOOD, BLOOD_RED, BLUE, BLUE_BLACK_CRAYFISH,
+        BLUE_GREEN, BLUE_GREEN_DYE, BLUE_VIOLET, BLUE_VIOLET_DYE, BOILED_RED_BEAN_BROWN, BONDI_BLUE, BRASS,
+        BREWED_MUSTARD_BROWN, BRIGHT_GOLD_BROWN, BRIGHT_GOLDEN_YELLOW, BRIGHT_GREEN, BRIGHT_PINK,
+        BRIGHT_TURQUOISE, BRILLIANT_ROSE, BRONZE, BROWN, BROWN_RAT_GREY, BROWNER, BRUSHWOOD_DYED, BUFF,
+        BURGUNDY, BURNT_BAMBOO, BURNT_ORANGE, BURNT_SIENNA, BURNT_UMBER, CAMO_GREEN, CAPE_JASMINE,
+        CAPUT_MORTUUM, CARDINAL, CARMINE, CARNATION_PINK, CAROLINA_BLUE, CARROT_ORANGE, CATTAIL, CELADON,
+        CELADON_DYE, CERISE, CERULEAN, CERULEAN_BLUE, CHARTREUSE, CHARTREUSE_GREEN, CHERRY_BLOSSOM,
+        CHERRY_BLOSSOM_DYE, CHERRY_BLOSSOM_MOUSE, CHESTNUT, CHESTNUT_LEATHER_BROWN, CHESTNUT_PLUM,
+        CHINESE_TEA_BROWN, CHINESE_TEA_YELLOW, CHOCOLATE, CINNABAR, CINNAMON, CLOVE_BROWN, CLOVE_DYED,
+        COARSE_WOOL, COBALT, COCHINEAL_RED, COLUMBIA_BLUE, COPPER, COPPER_ROSE, CORAL, CORAL_DYE, CORAL_RED,
+        CORN, CORN_DYE, CORNFLOWER_BLUE, COSMIC_LATTE, CREAM, CRIMSON, CYAN, CYPRESS_BARK, CYPRESS_BARK_RED,
+        DARK_BLUE, DARK_BLUE_DYE, DARK_BLUE_LAPIS_LAZULI, DARK_BROWN, DARK_CERULEAN, DARK_CHESTNUT, DARK_CORAL,
+        DARK_GOLDENROD, DARK_GRAY, DARK_GREEN, DARK_INDIGO, DARK_KHAKI, DARK_PASTEL_GREEN, DARK_PINK,
+        DARK_SCARLET, DARK_RED, DARK_RED_DYE, DARK_SALMON, DARK_SLATE_GRAY, DARK_SPRING_GREEN, DARK_TAN,
+        DARK_TURQUOISE, DARK_VIOLET, DAWN, DAYLILY, DEAD_MANS_FINGERS_SEAWEED, DECAYING_LEAVES, DEEP_CERISE,
+        DEEP_CHESTNUT, DEEP_FUCHSIA, DEEP_LILAC, DEEP_MAGENTA, DEEP_PEACH, DEEP_PINK, DEEP_PURPLE, DEEP_SCARLET,
+        DENIM, DISAPPEARING_PURPLE, DISTANT_RIVER_BROWN, DODGER_BLUE, DOVE_FEATHER_GREY, DRIED_WEATHERED_BAMBOO,
+        DULL_BLUE, EARTHEN_YELLOW, EARTHEN_YELLOW_RED_BROWN, ECRU, EDO_BROWN, EGG_DYE, EGGSHELL_PAPER,
+        EGYPTIAN_BLUE, ELECTRIC_BLUE, ELECTRIC_GREEN, ELECTRIC_INDIGO, ELECTRIC_LIME, ELECTRIC_PURPLE, EMERALD,
+        EGGPLANT, FADED_CHINESE_TEA_BROWN, FADED_SEN_NO_RIKYUS_TEA, FAKE_PURPLE, FALU_RED, FERN_GREEN,
+        FINCH_BROWN, FIREBRICK, FLATTERY_BROWN, FLAX, FLIRTATIOUS_INDIGO_TEA, FLORAL_LEAF, FOREIGN_CRIMSON,
+        FOREST_GREEN, FOX, FRAGILE_SEAWEED_BROWN, FRENCH_ROSE, FRESH_ONION, FUCSHIA_PINK, GAMBOGE, GAMBOGE_DYE,
+        GLAZED_PERSIMMON, GOLD, GOLDEN, GOLDEN_BROWN, GOLDEN_BROWN_DYE, GOLDEN_FALLEN_LEAVES, GOLDEN_OAK,
+        GOLDEN_YELLOW, GOLDENROD, GORYEO_STOREROOM, GRAPE_MOUSE, GRAY, GRAY_ASPARAGUS, GREEN, GREENFINCH,
+        GREEN_BAMBOO, GREEN_TEA_DYE, GREEN_YELLOW, GREYISH_DARK_GREEN, HALF_PURPLE, HAN_PURPLE, HARBOR_RAT,
+        HELIOTROPE, HOLLYWOOD_CERISE, HORSETAIL, HOT_MAGENTA, HOT_PINK, IBIS, IBIS_WING, INDIGO, INDIGO_DYE,
+        INDIGO_INK_BROWN, INDIGO_WHITE, INK, INSECT_SCREEN, INSIDE_OF_A_BOTTLE, INTERNATIONAL_KLEIN_BLUE,
+        INTERNATIONAL_ORANGE, IRIS, IRON, IRONHEAD_FLOWER, IRON_STORAGE, ISLAMIC_GREEN, IVORY, IWAI_BROWN,
+        JADE, JAPANESE_INDIGO, JAPANESE_IRIS, JAPANESE_PALE_BLUE, JAPANESE_TRIANDRA_GRASS, KELLY_GREEN, KHAKI,
+        KIMONO_STORAGE, LAPIS_LAZULI, LAVENDER_FLORAL, LAVENDER, LAVENDER_BLUE, LAVENDER_BLUSH, LAVENDER_GRAY,
+        LAVENDER_MAGENTA, LAVENDER_PINK, LAVENDER_PURPLE, LAVENDER_ROSE, LAWN_GREEN, LEGAL_DYE, LEMON,
+        LEMON_CHIFFON, LIGHT_BLUE, LIGHT_BLUE_DYE, LIGHT_BLUE_FLOWER, LIGHT_BLUE_SILK, LIGHT_GRAY, LIGHT_KHAKI,
+        LIGHT_LIME, LIGHT_MAROON, LIGHT_PINK, LIGHT_VIOLET, LIGHT_YELLOW_DYE, LILAC, LIME, LIME_GREEN, LINEN,
+        LONG_SPRING, LOQUAT_BROWN, LYE, MAGENTA_DYE, MAGIC_MINT, MAGNOLIA, MALACHITE, MAROON, MAGENTA,
+        MAYA_BLUE, MAUVE, MAUVE_TAUPE, MEAT, MEDIUM_BLUE, MEDIUM_CARMINE, MEDIUM_CRIMSON,
+        MEDIUM_LAVENDER_MAGENTA, MEDIUM_PURPLE, MEDIUM_SPRING_GREEN, MIDORI, MIDNIGHT_BLUE, MINT_GREEN,
+        MISTY_ROSE, MOSS, MOSS_GREEN, MOUNTBATTEN_PINK, MOUSY_INDIGO, MOUSY_WISTERIA, MULBERRY, MULBERRY_DYED,
+        MUSTARD, MYRTLE, NAVAJO_WHITE, NAVY_BLUE, NAVY_BLUE_BELLFLOWER, NAVY_BLUE_DYE, NEW_BRIDGE, NIGHTINGALE,
+        NIGHTINGALE_BROWN, OCHRE, OLD_BAMBOO, OLD_GOLD, OLD_LACE, OLD_LAVENDER, OLD_ROSE, OLIVE, OLIVE_DRAB,
+        OLIVINE, ONANDO, ONE_KIN_DYE, OPPOSITE_FLOWER, ORANGE, ORANGE_PEEL, ORANGE_RED, ORANGUTAN, ORCHID,
+        OVERDYED_RED_BROWN, PALE_BLUE, PALE_BROWN, PALE_CARMINE, PALE_CHESTNUT, PALE_CORNFLOWER_BLUE,
+        PALE_CRIMSON, PALE_FALLEN_LEAVES, PALE_GREEN_ONION, PALE_INCENSE, PALE_MAGENTA, PALE_OAK, PALE_PERSIMMON,
+        PALE_PINK, PALE_RED_VIOLET, PALE_YOUNG_GREEN_ONION, PAPAYA_WHIP, PASTEL_GREEN, PASTEL_PINK, PATINA,
+        PATRINIA_FLOWER, PEACH, PEACH_DYE, PEACH_ORANGE, PEACH_YELLOW, PEAR, PERIWINKLE, PERSIAN_BLUE,
+        PERSIAN_GREEN, PERSIAN_INDIGO, PERSIAN_RED, PERSIAN_PINK, PERSIAN_ROSE, PERSIMMON, PERSIMMON_JUICE,
+        PIGMENT_BLUE, PINE_GREEN, PINE_NEEDLE, PINK, PINK_ORANGE, PLAIN_MOUSE, PLATINUM, PLUM,
+        PLUM_BLOSSOM_MOUSE, PLUM_DYED, PLUM_PURPLE, POLISHED_BROWN, POWDER_BLUE, PRUSSIAN_BLUE,
+        PSYCHEDELIC_PURPLE, PUCE, PUMPKIN, PURE_CRIMSON, PURPLE, PURPLE_DYE, PURPLE_KITE, PURPLE_TAUPE,
+        RABBIT_EAR_IRIS, RAPEBLOSSOM_BROWN, RAPESEED_OIL, RAW_UMBER, RAZZMATAZZ, RED, RED_BEAN, RED_BIRCH,
+        RED_INCENSE, RED_DYE_TURMERIC, RED_KITE, RED_OCHRE, RED_PIGMENT, RED_PLUM, RED_VIOLET, RED_WISTERIA,
+        RICH_CARMINE, RICH_GARDENIA, RINSED_OUT_RED, RIKAN_BROWN, ROBIN_EGG_BLUE, ROSE, ROSE_MADDER, ROSE_TAUPE,
+        ROYAL_BLUE, ROYAL_PURPLE, RUBY, RUSSET, RUST, RUSTED_LIGHT_BLUE, RUSTY_CELADON, RUSTY_STORAGE,
+        RUSTY_STOREROOM, SAFETY_ORANGE, SAFFLOWER, SAFFRON, SALMON, SANDY_BROWN, SANGRIA, SAPPHIRE, SAPPANWOOD,
+        SAPPANWOOD_INCENSE, SAWTOOTH_OAK, SCARLET, SCHOOL_BUS_YELLOW, SCORTCHED_BROWN, SEA_GREEN, SEASHELL,
+        SELECTIVE_YELLOW, SEN_NO_RIKYUS_TEA, SEPIA, SHAMROCK_GREEN, SHOCKING_PINK, SHRIMP_BROWN,
+        SILK_CREPE_BROWN, SILVER, SILVER_GREY, SILVERED_RED, SIMMERED_SEAWEED, SISKIN_SPROUT_YELLOW, SKY,
+        SKY_BLUE, SLATE_GRAY, SMALT, SOOTY_BAMBOO, SOOTY_WILLOW_BAMBOO, SPARROW_BROWN, SPRING_BUD,
+        SPRING_GREEN, STAINED_RED, STEAMED_CHESTNUT, STEEL_BLUE, STOREROOM_BROWN, STYLISH_PERSIMMON, SUMAC,
+        SUMAC_DYED, TAN, TANGERINE, TANGERINE_YELLOW, TATARIAN_ASTER, TAUPE, TAWNY, TEA_GARDEN_CONTEMPLATION,
+        TEA_GREEN, TEA_ORANGE, TEA_ROSE, TEAL, TERRA_COTTA, THIN_VIOLET, THISTLE, THOUSAND_HERB,
+        THOUSAND_YEAR_OLD_BROWN, THOUSAND_YEAR_OLD_GREEN, THRICE_DYED_CRIMSON, TOMATO, TREE_PEONY, TRUE_PINK,
+        TRUE_RED, TURMERIC, TURQUOISE, TYRIAN_PURPLE, ULTRAMARINE, ULTRAMARINE_DYE, UNBLEACHED_SILK,
+        UNDRIED_WALL, VANISHING_RED_MOUSE, VEGAS_GOLD, VELVET, VERMILION, VINE_GRAPE, VIOLET, VIOLET_DYE,
+        VIRIDIAN, WALNUT, WASHED_OUT_CRIMSON, WASHED_OUT_PERSIMMON, WATER, WATER_PERSIMMON, WHEAT, WHITE,
+        WHITE_MOUSE, WHITE_OAK, WHITE_TEA_DYE, WHITISH_GREEN, WILLOW_DYE, WILLOW_GREY, WILLOW_TEA,
+        WILTED_LAWN_CLIPPINGS, WILLOW_LEAVES_UNDERSIDE, WISTERIA, WISTERIA_DYE, WISTERIA_PURPLE, YELLOW,
+        YELLOW_GREEN, YELLOW_SEA_PINE_BROWN, YOUNG_BAMBOO, ZINNWALDITE};
+    /**
+     * This array is loaded with all of the colors defined in SColor, in
+     * arbitrary order.
+     *
+     * @deprecated Prefer FULL_PALETTE to this misspelled name; they are equivalent.
+     */
+    public static SColor[] FULL_PALLET = FULL_PALETTE;
+    /**
+     * A constructor with no passed values. Builds a white (opaque all channels)
+     * object.
+     */
+    public SColor() { //builds white
+        this(Color.WHITE.getRGB());
+    }
+
+    /**
+     * Creates a new color that's the same value as the passed in color.
+     *
+     * @param color
+     */
+    public SColor(Color color) {
+        this(color.getRGB());
+    }
+
+    /**
+     * Creates a new color that's the same value as the passed in color and
+     * given the provided name.
+     *
+     * @param color
+     * @param name
+     */
+    public SColor(Color color, String name) {
+        this(color.getRGB());
+        this.name = name;
+    }
+
+    /**
+     * Creates a new color that has the given combined RGB value.
+     *
+     * @param colorValue
+     */
+    public SColor(int colorValue) {
+        this(colorValue, Integer.toHexString(colorValue));
+    }
+
+    /**
+     * Creates a new color that has the given RGB value. If hasAlpha is false
+     * then alpha defaults to 255.
+     *
+     * @param colorValue
+     * @param hasAlpha
+     */
+    public SColor(int colorValue, boolean hasAlpha) {
+        this(colorValue, Integer.toHexString(colorValue), hasAlpha);
+    }
+
+    /**
+     * Creates a new color that has the given combined RGB value and the
+     * provided name.
+     *
+     * @param colorValue
+     * @param name
+     */
+    public SColor(int colorValue, String name) {
+        this(colorValue, name, false);
+    }
+
+    /**
+     * Creates a new color that has the given RGB value and name. If hasAlpha is
+     * false then alpha defaults to 255.
+     *
+     * @param colorValue
+     * @param name
+     * @param hasAlpha
+     */
+    public SColor(int colorValue, String name, boolean hasAlpha) {
+        super(colorValue, hasAlpha);
+        this.name = name;
+    }
+
+    /**
+     * Creates a new color that has the given RGB values.
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
+    public SColor(int r, int g, int b) {
+        super(r, g, b);
+        name = Integer.toHexString(getRGB());
+    }
+
+    /**
+     * Creates a new color that has the given ARGB values.
+     *
+     * @param r
+     * @param g
+     * @param b
+     * @param a
+     */
+    public SColor(int r, int g, int b, int a) {
+        super(r, g, b, a);
+        name = Integer.toHexString(getRGB());
+    }
+
+    /**
+     * Creates a new color that has the given RGB values and the provided name.
+     *
+     * @param r
+     * @param g
+     * @param b
+     * @param name
+     */
+    public SColor(int r, int g, int b, String name) {
+        super(r, g, b);
+        this.name = name;
+    }
+
+    /**
+     * Creates a new color that has the given ARGB values and the provided name.
+     *
+     * @param r
+     * @param g
+     * @param b
+     * @param a
+     * @param name
+     */
+    public SColor(int r, int g, int b, int a, String name) {
+        super(r, g, b, a);
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + super.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof SColor || other instanceof Color ? this.getRGB() == ((Color) other).getRGB() : false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 31 * hash + Objects.hashCode(this.name);
+        hash += 31 * hash + Objects.hashCode(this.getRGB());
+        return hash;
+    }
 }

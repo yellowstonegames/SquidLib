@@ -1,11 +1,10 @@
 package squidpony.squidgrid;
 
-import java.awt.Point;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.Point3D;
+import squidpony.squidmath.Coord3D;
 import squidpony.squidmath.RNG;
 
 /**
@@ -163,7 +162,7 @@ public enum Radius {
         return new Coord(x, y);
     }
 
-    public Point3D onUnitShape3D(double distance) {
+    public Coord3D onUnitShape3D(double distance) {
         if (rng == null) {
             rng = new RNG();
         }
@@ -174,7 +173,7 @@ public enum Radius {
             case DIAMOND:
             case CIRCLE:
                 Coord p = onUnitShape(distance);
-                return new Point3D(p.x, p.y, 0);//2D strategies
+                return new Coord3D(p.x, p.y, 0);//2D strategies
             case CUBE:
                 x = rng.between((int) -distance, (int) distance + 1);
                 y = rng.between((int) -distance, (int) distance + 1);
@@ -189,7 +188,7 @@ public enum Radius {
                 } while (radius(x, y, z) > distance);
         }
 
-        return new Point3D(x, y, z);
+        return new Coord3D(x, y, z);
     }
     public double volume2D(double radiusLength)
     {

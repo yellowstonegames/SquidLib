@@ -1,6 +1,5 @@
 package squidpony.squidmath;
 
-import java.awt.Point;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -40,7 +39,7 @@ public class Bresenham {
      */
     public static Queue<Coord> line2D(int startX, int startY, int endX, int endY) {
         Queue<Coord> line = new LinkedList<>();
-        Queue<Point3D> found = line3D(startX, startY, 0, endX, endY, 0);
+        Queue<Coord3D> found = line3D(startX, startY, 0, endX, endY, 0);
         while (!found.isEmpty()) {
             line.offer(found.poll());
         }
@@ -54,7 +53,7 @@ public class Bresenham {
      * @param b Point to end at. This will be the last element of the list.
      * @return A list of points between a and b.
      */
-    public static Queue<Point3D> line3D(Point3D a, Point3D b) {
+    public static Queue<Coord3D> line3D(Coord3D a, Coord3D b) {
         return line3D(a.x, a.y, a.z, b.x, b.y, b.z);
     }
 
@@ -69,8 +68,8 @@ public class Bresenham {
      * @param endz the z coordinate of the starting point
      * @return
      */
-    public static Queue<Point3D> line3D(int startx, int starty, int startz, int endx, int endy, int endz) {
-        Queue<Point3D> result = new LinkedList<>();
+    public static Queue<Coord3D> line3D(int startx, int starty, int startz, int endx, int endy, int endz) {
+        Queue<Coord3D> result = new LinkedList<>();
 
         int dx = endx - startx;
         int dy = endy - starty;
@@ -93,7 +92,7 @@ public class Bresenham {
             deltay = ay - (ax >> 1);
             deltaz = az - (ax >> 1);
             while (true) {
-                result.offer(new Point3D(x, y, z));
+                result.offer(new Coord3D(x, y, z));
                 if (x == endx) {
                     return result;
                 }
@@ -116,7 +115,7 @@ public class Bresenham {
             deltax = ax - (ay >> 1);
             deltaz = az - (ay >> 1);
             while (true) {
-                result.offer(new Point3D(x, y, z));
+                result.offer(new Coord3D(x, y, z));
                 if (y == endy) {
                     return result;
                 }
@@ -139,7 +138,7 @@ public class Bresenham {
             deltax = ax - (az >> 1);
             deltay = ay - (az >> 1);
             while (true) {
-                result.offer(new Point3D(x, y, z));
+                result.offer(new Coord3D(x, y, z));
                 if (z == endz) {
                     return result;
                 }

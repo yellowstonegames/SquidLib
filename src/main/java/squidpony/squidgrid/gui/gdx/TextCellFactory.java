@@ -12,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
-import java.awt.Color;
-
 /**
  * Class for creating text blocks.
  *
@@ -393,35 +391,6 @@ public class TextCellFactory {
         }
     }
     /**
-     * Use the specified Batch to draw a String (often just one char long) in the specified AWT Color, with x and y
-     * determining the world-space coordinates for the upper-left corner.
-     *
-     * @param batch the LibGDX Batch to do the drawing
-     * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
-     * @param color the java.awt.Color to draw the char(s) with, all the same color
-     * @param x x of the upper-left corner of the region of text in world coordinates.
-     * @param y y of the upper-left corner of the region of text in world coordinates.
-     */
-    public void draw(Batch batch, String s, Color color, float x, float y) {
-        if (!initialized) {
-            throw new IllegalStateException("This factory has not yet been initialized!");
-        }
-        if (s == null) {
-            com.badlogic.gdx.graphics.Color orig = batch.getColor();
-            batch.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
-            batch.draw(block, x, y - height, width, height);
-            batch.setColor(orig);
-        } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            com.badlogic.gdx.graphics.Color orig = batch.getColor();
-            batch.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
-            batch.draw(block, x, y - height, width * s.length(), height);
-            batch.setColor(orig);
-        } else {
-            bmpFont.setColor(color.getRed() / 255.0f, color.getGreen() / 255.0f, color.getBlue() / 255.0f, color.getAlpha() / 255.0f);
-            bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
-        }
-    }
-    /**
      * Use the specified Batch to draw a String (often just one char long) in the specified rgba color, with x and y
      * determining the world-space coordinates for the upper-left corner.
      *
@@ -464,7 +433,7 @@ public class TextCellFactory {
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
-    public void draw(Batch batch, String s, com.badlogic.gdx.graphics.Color color, float x, float y) {
+    public void draw(Batch batch, String s, Color color, float x, float y) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }

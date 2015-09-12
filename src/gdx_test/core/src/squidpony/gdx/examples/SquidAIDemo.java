@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import squidpony.squidgrid.gui.SColor;
 import squidpony.squidai.*;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
@@ -38,7 +39,8 @@ public class SquidAIDemo extends ApplicationAdapter {
     private int numMonsters = 16;
 
     private SquidInput input;
-    private static final Color bgColor = SColor.DARK_SLATE_GRAY;
+    private static final Color bgColor = SquidLayers.awtColorToGDX(SColor.DARK_SLATE_GRAY),
+            highlightColor = new Color(1.0f, 0.95f, 0.4f, 0.7f);
     private LinkedHashMap<AnimatedEntity, Integer> teamRed, teamBlue;
     private LinkedHashSet<Coord> redPlaces, bluePlaces;
     private Technique redCone, redCloud, blueBlast, blueBeam;

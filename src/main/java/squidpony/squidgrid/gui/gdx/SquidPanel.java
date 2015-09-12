@@ -11,7 +11,6 @@ import squidpony.squidgrid.Direction;
 import com.badlogic.gdx.graphics.Color;
 import squidpony.squidmath.Coord;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
