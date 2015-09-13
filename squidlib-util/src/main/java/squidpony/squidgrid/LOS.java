@@ -1,13 +1,12 @@
 package squidpony.squidgrid;
 
-
-import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordDouble;
 import squidpony.squidmath.Elias;
 
 /**
@@ -201,8 +200,8 @@ public class LOS {
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
 
-        Point2D.Double start = new Point2D.Double(startx, starty);
-        Point2D.Double end = new Point2D.Double(targetx, targety);
+        CoordDouble start = new CoordDouble(startx, starty);
+        CoordDouble end = new CoordDouble(targetx, targety);
         //find out which direction to step, on each axis
         int stepX = (int) Math.signum(end.x - start.x);
         int stepY = (int) Math.signum(end.y - start.y);
@@ -222,7 +221,7 @@ public class LOS {
         int endTileX = (int) end.x;
         int endTileY = (int) end.y;
 
-        Point2D.Double collisionPoint = new Point2D.Double();
+        CoordDouble collisionPoint = new CoordDouble();
         while (testX >= 0 && testX < width && testY >= 0 && testY < height && (testX != endTileX || testY != endTileY)) {
             lastPath.add(new Coord(testX, testY));
             if (maxX < maxY) {

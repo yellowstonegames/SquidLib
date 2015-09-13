@@ -9,7 +9,6 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 import squidpony.squidgrid.Spill;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;

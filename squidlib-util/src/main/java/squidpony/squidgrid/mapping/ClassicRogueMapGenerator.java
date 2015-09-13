@@ -154,12 +154,11 @@ public class ClassicRogueMapGenerator {
                 unconnected.add(rooms[x][y]);
             }
         }
-        Collections.shuffle(unconnected, rng.asRandom());
+        unconnected = rng.shuffle(unconnected);
 
-        List<Direction> dirToCheck;
+        Direction[]  dirToCheck;
         for (ClassicRogueRoom room : unconnected) {
-            dirToCheck = Arrays.asList(Direction.CARDINALS);
-            Collections.shuffle(dirToCheck, rng.asRandom());
+            dirToCheck = rng.shuffle(Direction.CARDINALS);
             for (Direction dir : dirToCheck) {
                 int nextX = room.x + dir.deltaX;
                 int nextY = room.y + dir.deltaY;
@@ -186,9 +185,8 @@ public class ClassicRogueMapGenerator {
                 ClassicRogueRoom room = rooms[x][y];
 
                 if (room.connections.isEmpty()) {
-                    List<Direction> dirToCheck = new LinkedList<>();
-                    dirToCheck.addAll(Arrays.asList(Direction.CARDINALS));
-                    Collections.shuffle(dirToCheck, rng.asRandom());
+                    List<Direction> dirToCheck = Arrays.asList(Direction.CARDINALS);
+                    dirToCheck = rng.shuffle(dirToCheck);
 
                     boolean validRoom = false;
                     ClassicRogueRoom otherRoom = null;
@@ -210,13 +208,10 @@ public class ClassicRogueMapGenerator {
 
                         if (otherRoom.connections.contains(room)) {
                             validRoom = false;
-                            continue;
                         }
-
-                        if (validRoom) {
+                        else {
                             break;
                         }
-
                     } while (!dirToCheck.isEmpty());
 
                     if (validRoom) {

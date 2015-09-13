@@ -1,11 +1,8 @@
 package squidpony.squidmath;
 
-import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Random;
 
@@ -162,72 +159,84 @@ public class RNG {
     }
 
 	/**
-	 * @param list
-	 *            A list <b>with a constant-time {@link List#get(int)}
-	 *            method</b> (otherwise performances are degraded).
-	 * @return An {@link Iterable} that iterates over {@code list} but start at
-	 *         a random index. If the chosen index is {@code i}, the iterator
-	 *         will return
-	 *         {@code list[i]; list[i+1]; ...; list[list.length() - 1]; list[0]; list[i-1]}
-	 *         .
-	 * 
-	 *         <p>
-	 *         You should not modify {@code list} while you use the returned
-	 *         reference. And there'll be no
-	 *         {@link ConcurrentModificationException} to detect such erroneous
-	 *         uses.
-	 *         </p>
+     * Given a {@link List} l, this selects a random element of l to be the first value in the returned list l2. It
+     * retains the order of elements in l after that random element and makes them follow the first element in l2, and
+     * loops around to use elements from the start of l after it has placed the last element of l into l2.
+     *
+     * Essentially, it does what it says on the tin. It randomly rotates the List l.
+     *
+	 * @param l
+	 *            A {@link List} that will not be modified by this method. All elements of this parameter will be
+     *            shared with the returned List.
+     * @param <T> No restrictions on type. Changes to elements of the returned List will be reflected in the parameter.
+     * @return A shallow copy of {@code l} that has been rotated so its first element has been randomly chosen
+     * from all possible elements but order is retained. Will "loop around" to contain element 0 of l after the last
+     * element of l, then element 1, etc.
 	 */
-	public <T> Iterable<T> getRandomStartIterable(List<T> list) {
-		final int sz = list.size();
+	public <T> List<T> randomRotation(final List<T> l) {
+		final int sz = l.size();
 		if (sz == 0)
-			return () -> Collections.<T> emptyList().iterator();
+			return Collections.<T>emptyList();
 
 		/*
-		 * Here's a tricky bit: Defining 'start' here means that every Iterator
-		 * returned by the returned Iterable will have the same iteration order.
-		 * In other words, if you use more than once the returned Iterable,
-		 * you'll will see elements in the same order every time, which is
-		 * desirable.
+		 * This returned an Iterable before, but it seems like this should be functionally equivalent.
+		 * Collections.rotate should prefer the best-performing way to rotate l, which would be an in-place
+		 * modification for ArrayLists and an append to a sublist for Lists that don't support efficient random access.
 		 */
-		final int start = nextInt(sz);
-
-		return () -> new Iterator<T>() {
-
-			int next = -1;
-
-			@Override
-			public boolean hasNext() {
-				return next != start;
-			}
-
-			@Override
-			public T next() {
-				if (next == start)
-					throw new NoSuchElementException();
-				if (next == -1)
-					/* First call */
-					next = start;
-				final T result = list.get(next);
-				if (next == sz - 1)
-					/*
-					 * Reached the list's end, let's continue from the list's
-					 * left.
-					 */
-					next = 0;
-				else
-					next++;
-				return result;
-			}
-
-			@Override
-			public String toString() {
-				return "RandomStartIterator at index " + next;
-			}
-		};
+        List<T> l2 = new ArrayList<T>(l);
+        Collections.rotate(l2, nextInt(sz));
+        return l2;
 	}
 
+    /**
+     * Exactly equivalent to {@code randomRotation}.
+     * @param list
+     *            A {@link List} that will not be modified by this method. All elements of this parameter will be
+     *            shared with the returned List.
+     * @param <T> No restrictions on type. Changes to elements of the returned List will be reflected in the parameter.
+     * @return A shallow copy of {@code list} that has been rotated so its first element has been randomly chosen
+     * from all possible elements but order is retained. Will "loop around" to contain element 0 of list after the last
+     * element of list, then element 1, etc.
+     */
+    public <T> List<T> getRandomStartIterable(final List<T> list) {
+        return randomRotation(list);
+    }
 
+    /**
+     * Shuffle an array using the Fisher-Yates algorithm.
+     * @param elements an array of T; will not be modified
+     * @param <T> can be any non-primitive type.
+     * @return a shuffled copy of elements
+     */
+    public <T> T[] shuffle(T[] elements)
+    {
+        T[] array = elements.clone();
+        int n = array.length;
+        for (int i = 0; i < n; i++)
+        {
+            int r = i + nextInt(n - i);
+            T t = array[r];
+            array[r] = array[i];
+            array[i] = t;
+        }
+        return array;
+    }
+    /**
+     * Shuffle a {@link List} using the Fisher-Yates algorithm.
+     * @param elements an array of T; will not be modified
+     * @param <T> can be any non-primitive type.
+     * @return a shuffled ArrayList containing the whole of elements in pseudo-random order.
+     */
+    public <T> ArrayList<T> shuffle(List<T> elements)
+    {
+        ArrayList<T> al = new ArrayList<T>(elements);
+        int n = al.size();
+        for (int i = 0; i < n; i++)
+        {
+            Collections.swap(al, i + nextInt(n - i), i);
+        }
+        return al;
+    }
     /**
      * @return a value from the gaussian distribution
      */

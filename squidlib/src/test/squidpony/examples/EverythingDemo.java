@@ -145,7 +145,7 @@ public class EverythingDemo {
                     // is more than one equally good best option.
                     Direction choice = null;
                     double best = 9999.0;
-                    for(Direction d : getToPlayer.shuffle(Direction.CARDINALS))
+                    for(Direction d : rng.shuffle(Direction.CARDINALS))
                     {
                         Coord tmp = new Coord(mon.getKey().x + d.deltaX, mon.getKey().y + d.deltaY);
                         if(pathMap[tmp.x][tmp.y] < best &&

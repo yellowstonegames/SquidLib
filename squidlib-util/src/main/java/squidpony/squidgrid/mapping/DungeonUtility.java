@@ -149,7 +149,7 @@ public class DungeonUtility {
         return stepped;
     }
     /**
-     * Finds a random java.awt.Coord where the x and y match up to a [x][y] location on map that has '.' as a value,
+     * Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value,
      * and a square of cells extending in the positive x and y directions with a side length of size must also have
      * '.' as their values.
      * Uses this class' rng field for pseudo-random number generation.
