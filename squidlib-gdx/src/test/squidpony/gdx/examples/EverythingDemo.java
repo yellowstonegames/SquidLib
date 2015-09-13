@@ -338,7 +338,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 // is more than one equally good best option.
                 Direction choice = null;
                 double best = 9999.0;
-                for(Direction d : getToPlayer.shuffle(Direction.OUTWARDS))
+                for(Direction d : rng.shuffle(Direction.OUTWARDS))
                 {
                     Coord tmp = new Coord(mon.getKey().gridX + d.deltaX, mon.getKey().gridY + d.deltaY);
                     if(pathMap[tmp.x][tmp.y] < best &&

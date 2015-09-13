@@ -3,10 +3,8 @@ package squidpony.squidai;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**

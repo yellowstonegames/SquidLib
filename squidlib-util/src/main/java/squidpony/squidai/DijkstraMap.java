@@ -893,7 +893,7 @@ public class DijkstraMap
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
             dirs[dirs0.length] = Direction.NONE;
@@ -1023,7 +1023,7 @@ public class DijkstraMap
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
             dirs[dirs0.length] = Direction.NONE;
@@ -1156,7 +1156,7 @@ public class DijkstraMap
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
             dirs[dirs0.length] = Direction.NONE;
@@ -1363,7 +1363,7 @@ public class DijkstraMap
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
             dirs[dirs0.length] = Direction.NONE;
@@ -1492,7 +1492,7 @@ public class DijkstraMap
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
             dirs[dirs0.length] = Direction.NONE;
@@ -1582,7 +1582,7 @@ public class DijkstraMap
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
             dirs[dirs0.length] = Direction.NONE;
@@ -1717,7 +1717,7 @@ public class DijkstraMap
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
             dirs[dirs0.length] = Direction.NONE;
@@ -1858,7 +1858,7 @@ public class DijkstraMap
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
             dirs[dirs0.length] = Direction.NONE;
@@ -1975,7 +1975,7 @@ public class DijkstraMap
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = shuffle((measurement == Measurement.MANHATTAN)
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
                     ? Direction.CARDINALS : Direction.OUTWARDS);
             Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
             dirs[dirs0.length] = Direction.NONE;
@@ -2056,24 +2056,6 @@ public class DijkstraMap
         return fill;
     }
 
-    /**
-     * Shuffle a Direction array, useful for making a path more random.
-     * @param dirs an array of Directions; will not be modified
-     * @return a shuffled copy of dirs
-     */
-    public Direction[] shuffle(Direction[] dirs)
-    {
-        Direction[] array = dirs.clone();
-        int n = array.length;
-        for (int i = 0; i < n; i++)
-        {
-            int r = i + (int)(rng.nextDouble() * (n - i));
-            Direction d = array[r];
-            array[r] = array[i];
-            array[i] = d;
-        }
-        return array;
-    }
     private static final double root2 = Math.sqrt(2.0);
     private double heuristic(Direction target) {
         switch (measurement) {

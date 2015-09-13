@@ -46,11 +46,11 @@ public class GrowingTreeMazeGenerator {
         ArrayList<Coord> deck = new ArrayList<>();
         deck.add(new Coord(x, y));
 
-        List<Direction> dirs = Arrays.asList(Direction.CARDINALS);
+        Direction[] dirs = Direction.CARDINALS;
         while (!deck.isEmpty()) {
             int i = choosing.chooseIndex(deck.size());
             Coord p = deck.get(i);
-            Collections.shuffle(dirs, rng.asRandom());
+            dirs = rng.shuffle(dirs);
 
             boolean foundNeighbor = false;
             for (Direction dir : dirs) {

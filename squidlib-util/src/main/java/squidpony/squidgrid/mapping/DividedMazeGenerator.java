@@ -1,8 +1,7 @@
 package squidpony.squidgrid.mapping;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Deque;
+import java.util.*;
+
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.RNG;
 
@@ -67,14 +66,14 @@ public class DividedMazeGenerator {
         stack.offer(new DividedMazeRoom(1, 1, width - 2, height - 2));
         while (!stack.isEmpty()) {
             DividedMazeRoom room = stack.pop();
-            Deque<Integer> availX = new ArrayDeque<>();
-            Deque<Integer> availY = new ArrayDeque<>();
+            ArrayList<Integer> availX = new ArrayList<Integer>(),
+                               availY = new ArrayList<Integer>();
 
             for (int x = room.left + 1; x < room.right; x++) {
                 boolean top = map[x][room.top - 1];
                 boolean bottom = map[x][room.bottom + 1];
                 if (top && bottom && x % 2 == 0) {
-                    availX.offer(x);
+                    availX.add(x);
                 }
             }
 
@@ -82,7 +81,7 @@ public class DividedMazeGenerator {
                 boolean left = map[room.left - 1][y];
                 boolean right = map[room.right + 1][y];
                 if (left && right && y % 2 == 0) {
-                    availY.offer(y);
+                    availY.add(y);
                 }
             }
 
@@ -120,8 +119,7 @@ public class DividedMazeGenerator {
                 }
             }
 
-            Deque<Direction> dirs = new ArrayDeque<>();
-            dirs.addAll(Arrays.asList(Direction.CARDINALS));
+            List<Direction> dirs = Arrays.asList(Direction.CARDINALS);
             dirs.remove(rng.getRandomElement(dirs));
 
             for (Direction dir : dirs) {

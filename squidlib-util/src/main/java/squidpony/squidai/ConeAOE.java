@@ -5,7 +5,6 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
-import java.awt.*;
 import java.util.*;
 
 /**

@@ -4,8 +4,6 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-import java.awt.*;
-import java.awt.geom.Arc2D;
 import java.util.*;
 
 /**
@@ -468,24 +466,5 @@ public class SoundMap
             alerted.put(new Coord(critter.x, critter.y), gradientMap[critter.x][critter.y]);
         }
         return alerted;
-    }
-
-    /**
-     * Everybody do the Fisher-Yates Shuffle, come on.
-     * @param dirs
-     * @return
-     */
-    private Direction[] shuffle(Direction[] dirs)
-    {
-        Direction[] array = dirs.clone();
-        int n = array.length;
-        for (int i = 0; i < n; i++)
-        {
-            int r = i + (int)(rng.nextDouble() * (n - i));
-            Direction d = array[r];
-            array[r] = array[i];
-            array[i] = d;
-        }
-        return array;
     }
 }
