@@ -1,10 +1,6 @@
 package squidpony.squidmath;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 /**
  * A wrapper class for working with random number generators in a more friendly
@@ -179,7 +175,6 @@ public class RNG {
 			return Collections.<T>emptyList();
 
 		/*
-		 * This returned an Iterable before, but it seems like this should be functionally equivalent.
 		 * Collections.rotate should prefer the best-performing way to rotate l, which would be an in-place
 		 * modification for ArrayLists and an append to a sublist for Lists that don't support efficient random access.
 		 */
@@ -187,21 +182,78 @@ public class RNG {
         Collections.rotate(l2, nextInt(sz));
         return l2;
 	}
-
     /**
-     * Exactly equivalent to {@code randomRotation}.
+     * Get an Iterable that starts at a random location in list and continues on through list in its current order.
+     * Loops around to the beginning after it gets to the end, stops when it returns to the starting location.
      * @param list
-     *            A {@link List} that will not be modified by this method. All elements of this parameter will be
-     *            shared with the returned List.
-     * @param <T> No restrictions on type. Changes to elements of the returned List will be reflected in the parameter.
-     * @return A shallow copy of {@code list} that has been rotated so its first element has been randomly chosen
-     * from all possible elements but order is retained. Will "loop around" to contain element 0 of list after the last
-     * element of list, then element 1, etc.
+     *            A list <b>with a constant-time {@link List#get(int)}
+     *            method</b> (otherwise performances are degraded).
+     * @return An {@link Iterable} that iterates over {@code list} but start at
+     *         a random index. If the chosen index is {@code i}, the iterator
+     *         will return
+     *         {@code list[i]; list[i+1]; ...; list[list.length() - 1]; list[0]; list[i-1]}
+     *         .
+     *
+     * <p>
+     * You should not modify {@code list} while you use the returned
+     * reference. And there'll be no
+     * {@link ConcurrentModificationException} to detect such erroneous
+     * uses.
+     * </p>
      */
-    public <T> List<T> getRandomStartIterable(final List<T> list) {
-        return randomRotation(list);
-    }
+    public <T> Iterable<T> getRandomStartIterable(final List<T> list) {
+        final int sz = list.size();
+        if (sz == 0)
+            return Collections.<T> emptyList();
 
+		/*
+		 * Here's a tricky bit: Defining 'start' here means that every Iterator
+		 * returned by the returned Iterable will have the same iteration order.
+		 * In other words, if you use more than once the returned Iterable,
+		 * you'll will see elements in the same order every time, which is
+		 * desirable.
+		 */
+        final int start = nextInt(sz);
+
+        return new Iterable<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return new Iterator<T>() {
+
+                    int next = -1;
+
+                    @Override
+                    public boolean hasNext() {
+                        return next != start;
+                    }
+
+                    @Override
+                    public T next() {
+                        if (next == start)
+                            throw new NoSuchElementException();
+                        if (next == -1)
+					/* First call */
+                            next = start;
+                        final T result = list.get(next);
+                        if (next == sz - 1)
+					/*
+					 * Reached the list's end, let's continue from the list's
+					 * left.
+					 */
+                            next = 0;
+                        else
+                            next++;
+                        return result;
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "RandomStartIterator at index " + next;
+                    }
+                };
+            }
+        };
+    }
     /**
      * Shuffle an array using the Fisher-Yates algorithm.
      * @param elements an array of T; will not be modified
