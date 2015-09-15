@@ -63,13 +63,19 @@ public class AStarSearch {
      * other search types will return results based on intercardinal and
      * cardinal pathing.
      *
-     * @param map the search map
+     * @param map 
+	 *            the search map. It is not modified by this class, hence you can
+	 *            share this map among multiple instances.
      * @param type the manner of search
      */
     public AStarSearch(double[][] map, SearchType type) {
+        if (map == null)
+        	throw new NullPointerException("map should not be null when building an AStarSearch");
         this.map = map;
         width = map.length;
-        height = map[0].length;
+        height = width == 0 ? 0 : map[0].length;
+        if (type == null)
+        	throw new NullPointerException("SearchType should not be null when building an AStarSearch");
         this.type = type;
     }
 
@@ -208,14 +214,12 @@ public class AStarSearch {
     }
 
     /**
-     * Returns the current known shortest distance to the start position from
-     * the given position. If the current position cannot reach the start
-     * position or is invalid, -1 is returned.
-     *
-     * @param x
-     * @param y
-     * @return
-     */
+	 * @param x
+	 * @param y
+	 * @return The current known shortest distance to the start position from
+	 *         the given position. If the current position cannot reach the
+	 *         start position or is invalid, -1 is returned.
+	 */
     private double f(int x, int y) {
         double foundG = g(x, y);
         if (foundG < 0) {

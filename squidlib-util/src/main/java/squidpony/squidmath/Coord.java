@@ -85,6 +85,7 @@ public class Coord implements java.io.Serializable {
         this.y = y;
     }
 
+    @Override
     public String toString()
     {
         return "Coord (x " + x + ", y " + y + ")";
