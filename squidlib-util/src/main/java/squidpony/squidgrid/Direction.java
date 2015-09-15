@@ -213,6 +213,112 @@ public enum Direction {
         }
     }
 
+	/**
+	 * @return Whether this is a diagonal move.
+	 */
+	public boolean isDiagonal() {
+		switch (this) {
+		case DOWN_LEFT:
+		case DOWN_RIGHT:
+		case UP_LEFT:
+		case UP_RIGHT:
+			return true;
+		case DOWN:
+		case LEFT:
+		case NONE:
+		case RIGHT:
+		case UP:
+			return false;
+		}
+		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
+				this));
+	}
+
+	/**
+	 * @return {@code true} if {@code this} has an upward component.
+	 */
+	public boolean hasUp() {
+		switch (this) {
+		case UP:
+		case UP_LEFT:
+		case UP_RIGHT:
+			return true;
+		case DOWN:
+		case DOWN_LEFT:
+		case DOWN_RIGHT:
+		case LEFT:
+		case NONE:
+		case RIGHT:
+			return false;
+		}
+		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
+				this));
+	}
+
+	/**
+	 * @return {@code true} if {@code this} has a downward component.
+	 */
+	public boolean hasDown() {
+		switch (this) {
+		case DOWN:
+		case DOWN_LEFT:
+		case DOWN_RIGHT:
+			return true;
+		case LEFT:
+		case NONE:
+		case RIGHT:
+		case UP:
+		case UP_LEFT:
+		case UP_RIGHT:
+			return false;
+		}
+		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
+				this));
+	}
+
+	/**
+	 * @return {@code true} if {@code this} has a left component.
+	 */
+	public boolean hasLeft() {
+		switch (this) {
+		case DOWN_LEFT:
+		case LEFT:
+		case UP_LEFT:
+			return true;
+		case DOWN:
+		case DOWN_RIGHT:
+		case NONE:
+		case RIGHT:
+		case UP:
+		case UP_RIGHT:
+			return false;
+		}
+		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
+				this));
+	}
+
+	/**
+	 * @return {@code true} if {@code this} has a right component.
+	 */
+	public boolean hasRight() {
+		switch (this) {
+		case RIGHT:
+		case DOWN_RIGHT:
+		case UP_RIGHT:
+			return true;
+		case DOWN:
+		case NONE:
+		case UP:
+		case DOWN_LEFT:
+		case LEFT:
+		case UP_LEFT:
+			return false;
+		}
+		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
+				this));
+	}
+
+
     private Direction(int x, int y) {
         this.deltaX = x;
         this.deltaY = y;
