@@ -39,6 +39,7 @@ public class BeamAOE implements AOE {
     private char[][] dungeon;
     private DijkstraMap dijkstra;
     private Radius rt, limitType = null;
+    private Elias elias;
 
     private int minRange = 1, maxRange = 1;
     private Radius metric = Radius.SQUARE;
@@ -53,6 +54,7 @@ public class BeamAOE implements AOE {
         this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
         this.maxRange = this.length;
         this.radius = 0;
+        this.elias = new Elias();
     }
     public BeamAOE(Coord origin, Coord end, int radius)
     {
@@ -64,6 +66,7 @@ public class BeamAOE implements AOE {
         this.radius = radius;
         this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
         this.maxRange = this.length;
+        this.elias = new Elias();
     }
     public BeamAOE(Coord origin, Coord end, int radius, Radius radiusType)
     {
@@ -85,6 +88,7 @@ public class BeamAOE implements AOE {
         this.radius = radius;
         this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
         this.maxRange = this.length;
+        this.elias = new Elias();
     }
 
     public BeamAOE(Coord origin, double angle, int length)
@@ -99,6 +103,7 @@ public class BeamAOE implements AOE {
         this.length = length;
         this.maxRange = this.length;
         this.radius = 0;
+        this.elias = new Elias();
     }
     public BeamAOE(Coord origin, double angle, int length, int radius)
     {
@@ -112,6 +117,7 @@ public class BeamAOE implements AOE {
         this.radius = radius;
         this.length = length;
         this.maxRange = this.length;
+        this.elias = new Elias();
     }
     public BeamAOE(Coord origin, double angle, int length, int radius, Radius radiusType)
     {
@@ -135,10 +141,11 @@ public class BeamAOE implements AOE {
         this.radius = radius;
         this.length = length;
         this.maxRange = this.length;
+        this.elias = new Elias();
     }
     private double[][] initDijkstra()
     {
-        List<Coord> lit = Elias.line(origin, end, 0.4);
+        List<Coord> lit = elias.line(origin, end, 0.4);
 
         dijkstra.initialize(dungeon);
         for(Coord p : lit)
@@ -289,7 +296,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {
@@ -315,7 +322,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, ts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {
@@ -433,7 +440,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {
@@ -459,7 +466,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {
@@ -513,7 +520,7 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {

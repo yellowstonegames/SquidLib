@@ -40,7 +40,7 @@ public class LOS {
     private int type;
     private double[][] resistanceMap;
     private int startx, starty, targetx, targety;
-
+    private Elias elias = null;
     public Radius getRadiusStrategy() {
         return radiusStrategy;
     }
@@ -57,6 +57,8 @@ public class LOS {
 
     public LOS(int type) {
         this.type = type;
+        if(type == ELIAS)
+            elias = new Elias();
     }
 
     /**
@@ -267,7 +269,9 @@ public class LOS {
     }
 
     private boolean eliasReachable(Radius radiusStrategy) {
-        List<Coord> ePath = Elias.line(startx, starty, targetx, targety);
+        if(elias == null)
+            elias = new Elias();
+        List<Coord> ePath = elias.line(startx, starty, targetx, targety);
         lastPath = new LinkedList<>(ePath);//save path for later retreival
 
         HashMap<eliasWorker, Thread> pool = new HashMap<>();

@@ -30,6 +30,7 @@ public class NamegenPanel extends javax.swing.JPanel {
         starters.put("Viking Style", WeightedLetterNamegen.VIKING_STYLE_NAMES);
         starters.put("USA Male First Name", WeightedLetterNamegen.COMMON_USA_MALE_NAMES);
         starters.put("USA Last Name", WeightedLetterNamegen.COMMON_USA_LAST_NAMES);
+        starters.put("Lovecraft Mythos Style", WeightedLetterNamegen.LOVECRAFT_MYTHOS_NAMES);
 
         inputComboBox.setModel(new DefaultComboBoxModel(starters.keySet().toArray()));
         inputComboBox.setSelectedIndex(0);

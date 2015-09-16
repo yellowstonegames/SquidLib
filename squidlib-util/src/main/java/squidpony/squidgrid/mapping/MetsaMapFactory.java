@@ -6,6 +6,7 @@ import squidpony.annotation.Beta;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
 
 import static java.lang.Math.round;
 
@@ -20,15 +21,8 @@ import static java.lang.Math.round;
 public class MetsaMapFactory {
     //HEIGHT LIMITS
 
-    static private double SEALEVEL = 0,
-            BEACHLEVEL = 0.05,
-            PLAINSLEVEL = 0.3,
-            MOUNTAINLEVEL = 0.45,
-            SNOWLEVEL = 0.63,
-            DEEPSEA = -0.1;
-//BIOMESTUFF
+    //BIOMESTUFF
     static private final double POLARLIMIT = 0.5, DESERTLIMIT = 0.1;
-    static private final int CITY_COLOR = 0x444444;
 
 //SHADOW
     static private final double SHADOWLIMIT = 0.01;
@@ -112,7 +106,7 @@ public class MetsaMapFactory {
     }
 
     private double[][] makeHeightMap() {
-        double[][] map = MapFactory.heightMap(width, height);
+        double[][] map = MapFactory.heightMap(width, height, new StatefulRNG());
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -122,7 +116,6 @@ public class MetsaMapFactory {
                 }
             }
         }
-        SNOWLEVEL = highn - 0.05;
 
         return map;
     }
@@ -167,6 +160,9 @@ public class MetsaMapFactory {
     private double[][] makeWeightedMap(double[][] map) {
         //Weighted map for road
         double weightedMap[][] = new double[width][height];
+        double SEALEVEL = 0;
+        double BEACHLEVEL = 0.05;
+        double PLAINSLEVEL = 0.3;
         for (int i = 0; i < width / 4; i++) {
             for (int j = 0; j < height / 4; j++) {
                 weightedMap[i][j] = 0;

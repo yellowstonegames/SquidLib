@@ -75,7 +75,7 @@ public class FOV {
     private int startx, starty, width, height;
     private Radius radiusStrategy;
     private Comparator<Coord> comp;
-    private static Direction[] ccw = new Direction[]
+    private static final Direction[] ccw = new Direction[]
             {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
             ccw_full = new Direction[]{Direction.RIGHT, Direction.UP_RIGHT, Direction.UP, Direction.UP_LEFT,
             Direction.LEFT, Direction.DOWN_LEFT, Direction.DOWN, Direction.DOWN_RIGHT};

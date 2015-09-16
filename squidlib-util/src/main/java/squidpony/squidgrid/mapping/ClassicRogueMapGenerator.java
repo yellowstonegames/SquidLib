@@ -67,7 +67,7 @@ public class ClassicRogueMapGenerator {
         }
     }
 
-    private static final RNG rng = new RNG();
+    private RNG rng = new RNG();
 
     private int horizontalRooms, verticalRooms, dungeonWidth, dungeonHeight,
             minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight;

@@ -11,9 +11,6 @@ import squidpony.squidmath.RNG;
  */
 @Beta
 public class MapFactory {
-
-    private static final RNG rng = new RNG();
-
     /**
      * Returns a randomly generated map of doubles. Commonly referred to as a
      * Height Map.
@@ -22,7 +19,7 @@ public class MapFactory {
      * @param height in cells
      * @return the created map
      */
-    public static double[][] heightMap(int width, int height) {
+    public static double[][] heightMap(int width, int height, RNG rng) {
         double[][] heightMap = new double[width][height];
         int perldivisors[] = new int[]{1, 1, 2, 4, 8, 16, 64};
 

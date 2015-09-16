@@ -19,9 +19,10 @@ import squidpony.annotation.Beta;
 public class Dice {
 
     private static final Pattern guessPattern = Pattern.compile("\\s*(\\d+)?\\s*(?:([:])\\s*(\\d+))??\\s*(?:([d:])\\s*(\\d+))?\\s*(?:([+-/*])\\s*(\\d+))?\\s*");
-    private static RNG rng = new RNG();
+    private RNG rng = new RNG();
 
     private Dice() {
+
     }
 
     /**
@@ -32,8 +33,8 @@ public class Dice {
      *
      * @param rng the source of randomness
      */
-    public static void setRandom(RNG rng) {
-        Dice.rng = rng;
+    public void setRandom(RNG rng) {
+        this.rng = rng;
     }
 
     /**
@@ -45,7 +46,7 @@ public class Dice {
      * @param sides number of sides on the dice
      * @return sum of best n out of <em>dice</em><b>d</b><em>sides</em>
      */
-    public static int bestOf(int n, int dice, int sides) {
+    public int bestOf(int n, int dice, int sides) {
         int rolls = Math.min(n, dice);
         ArrayList<Integer> results = new ArrayList<>(dice);
         int ret = 0;
@@ -64,7 +65,7 @@ public class Dice {
      * @param pool the dice to pick from
      * @return the sum
      */
-    public static int bestOf(int n, List<Integer> pool) {
+    public int bestOf(int n, List<Integer> pool) {
         int rolls = Math.min(n, pool.size());
         Collections.sort(pool);
 
@@ -84,7 +85,7 @@ public class Dice {
      * @param group string encoded roll grouping
      * @return the sum
      */
-    public static int bestOf(int n, int dice, String group) {
+    public int bestOf(int n, int dice, String group) {
         int rolls = Math.min(n, dice);
         ArrayList<Integer> results = new ArrayList<>(dice);
 
@@ -102,7 +103,7 @@ public class Dice {
      * @param sides number of sides on the rollDice
      * @return sum of rollDice
      */
-    public static int rollDice(int n, int sides) {
+    public int rollDice(int n, int sides) {
         int ret = 0;
         for (int i = 0; i < n; i++) {
             ret += rng.nextInt(sides) + 1;
@@ -118,7 +119,7 @@ public class Dice {
      * @param sides number of sides on each die
      * @return list of results
      */
-    public static List<Integer> independentRolls(int n, int sides) {
+    public List<Integer> independentRolls(int n, int sides) {
         List<Integer> ret = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             ret.add(rng.nextInt(sides) + 1);
@@ -140,7 +141,7 @@ public class Dice {
      * @param group string encoded roll grouping
      * @return random number
      */
-    public static int rollGroup(String group) {//TODO -- rework to tokenize and allow multiple chained operations
+    public int rollGroup(String group) {//TODO -- rework to tokenize and allow multiple chained operations
         Matcher mat = guessPattern.matcher(group);
         int ret = 0;
 

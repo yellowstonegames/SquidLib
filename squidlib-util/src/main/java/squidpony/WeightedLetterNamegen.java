@@ -41,25 +41,28 @@ public class WeightedLetterNamegen {
     public static final String[] STAR_WARS_STYLE_NAMES = new String[]{
         "Lutoif Vap",
         "Nasoi Seert",
-        "Bispai Sose",
-        "Vainau Brairkau",
+        "Jitpai Sose",
+        "Vainau Jairkau",
         "Tirka Kist",
-        "Boush Wofe",
+        "Boush",
+        "Wofe",
         "Vouxoin Voges",
         "Koux Boiti",
-        "Loim Gaungu",
+        "Loim",
+        "Gaungu",
         "Mut Tep",
         "Foimo Saispi",
         "Toneeg Vaiba",
         "Nix Nast",
         "Gup Dangisp",
         "Distark Toonausp",
-        "Tex Brirki",
+        "Tex Brinki",
         "Kat Tosha",
         "Tauna Foip",
         "Frip Cex",
         "Fexa Lun",
-        "Tafa Zeesheerk",
+        "Tafa",
+        "Zeesheerk",
         "Cremoim Kixoop",
         "Tago"
     };
@@ -118,8 +121,8 @@ public class WeightedLetterNamegen {
         "Roger"
     };
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="USA last nams static name list">
-    public static final String[] COMMON_USA_LAST_NAMES = new String[]{
+//<editor-fold defaultstate="collapsed" desc="USA last names static name list">
+public static final String[] COMMON_USA_LAST_NAMES = new String[]{
         "Smith",
         "Johnson",
         "Williams",
@@ -140,6 +143,48 @@ public class WeightedLetterNamegen {
         "Lewis",
         "Robinson",
         "Walker"
+};
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Lovecraft Mythos style static name list">
+    public static final String[] LOVECRAFT_MYTHOS_NAMES = new String[]{
+        "Koth",
+        "Ghlatelilt",
+        "Siarlut",
+        "Nyogongogg",
+        "Nyialan",
+        "Nyithiark",
+        "Lyun",
+        "Kethoshigr",
+        "Shobik",
+        "Tekogr",
+        "Hru-yn",
+        "Lya-ehibos",
+        "Hruna-oma-ult",
+        "Shabo'en",
+        "Shrashangal",
+        "Shukhaniark",
+        "Thaghum",
+        "Shrilang",
+        "Lukhungu'ith",
+        "Nyun",
+        "Nyia-ongin",
+        "Shogia-usun",
+        "Lyu-yl",
+        "Liathiagragr",
+        "Lyathagg",
+        "Hri'osurkut",
+        "Shothegh",
+        "No-orleshigh",
+        "Zvriangekh",
+        "Nyesashiv",
+        "Lyarkio",
+        "Le'akh",
+        "Liashi-en",
+        "Shurkano'um",
+        "Hrakhanoth",
+        "Ghlotsuban",
+        "Cthitughias",
+        "Ftanugh"
     };
 //</editor-fold>
 
@@ -190,7 +235,7 @@ public class WeightedLetterNamegen {
     }
 
     /**
-     * Initialization, statistically measures letter likelyhood.
+     * Initialization, statistically measures letter likelihood.
      */
     private void init() {
         sizes = new ArrayList<>();
@@ -293,7 +338,7 @@ public class WeightedLetterNamegen {
             }
         }
 
-        return result.toArray(new String[]{});
+        return result.toArray(new String[result.size()]);
     }
 
     /**

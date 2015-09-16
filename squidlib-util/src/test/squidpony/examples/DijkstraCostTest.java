@@ -33,10 +33,10 @@ public class DijkstraCostTest {
             dijkstra.initializeCost(costs);
             System.out.println(dg);
 
-            Coord goal1 = DungeonUtility.randomFloor(dun),
-                    goal2 = DungeonUtility.randomFloor(dun), goal3 = DungeonUtility.randomFloor(dun),
-                    goal4 = DungeonUtility.randomMatchingTile(dun, '~'), goal5 = DungeonUtility.randomMatchingTile(dun, '~'),
-                    entry = DungeonUtility.randomMatchingTile(dun, '~');
+            Coord goal1 = dg.utility.randomFloor(dun),
+                    goal2 = dg.utility.randomFloor(dun), goal3 = dg.utility.randomFloor(dun),
+                    goal4 = dg.utility.randomMatchingTile(dun, '~'), goal5 = dg.utility.randomMatchingTile(dun, '~'),
+                    entry = dg.utility.randomMatchingTile(dun, '~');
 
             dijkstra.findPath(10, null, null, entry, goal1, goal2, goal3, goal4, goal5);
             double[][] gm = dijkstra.gradientMap;
@@ -89,13 +89,13 @@ public class DijkstraCostTest {
 
             System.out.println(dg);
 
-            goal1 = DungeonUtility.randomFloor(dun);
-            goal2 = DungeonUtility.randomFloor(dun);
-            goal3 = DungeonUtility.randomFloor(dun);
-            goal4 = DungeonUtility.randomFloor(dun);
-            goal5 = DungeonUtility.randomFloor(dun);
+            goal1 = dg.utility.randomFloor(dun);
+            goal2 = dg.utility.randomFloor(dun);
+            goal3 = dg.utility.randomFloor(dun);
+            goal4 = dg.utility.randomFloor(dun);
+            goal5 = dg.utility.randomFloor(dun);
 
-            entry = DungeonUtility.randomFloor(dun);
+            entry = dg.utility.randomFloor(dun);
 
             dijkstra.findPath(13, null, null, entry, goal1, goal2, goal3, goal4, goal5);
 
@@ -149,13 +149,13 @@ public class DijkstraCostTest {
             dijkstra.initializeCost(costs);
             System.out.println(dg);
 
-            goal1 = DungeonUtility.randomFloor(dun);
-            goal2 = DungeonUtility.randomFloor(dun);
-            goal3 = DungeonUtility.randomFloor(dun);
-            goal4 = DungeonUtility.randomFloor(dun);
-            goal5 = DungeonUtility.randomFloor(dun);
+            goal1 = dg.utility.randomFloor(dun);
+            goal2 = dg.utility.randomFloor(dun);
+            goal3 = dg.utility.randomFloor(dun);
+            goal4 = dg.utility.randomFloor(dun);
+            goal5 = dg.utility.randomFloor(dun);
 
-            entry = DungeonUtility.randomFloor(dun);
+            entry = dg.utility.randomFloor(dun);
 
             LOS los = new LOS();
             los.setRadiusStrategy(Radius.DIAMOND);
