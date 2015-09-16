@@ -59,7 +59,6 @@ public enum Radius {
      */
     SPHERE;
 
-    private static RNG rng = null;//lazy instantiation
     private static final double PI2 = Math.PI * 2;
     public double radius(int startx, int starty, int startz, int endx, int endy, int endz) {
         return radius((double) startx, (double) starty, (double) startz, (double) endx, (double) endy, (double) endz);
@@ -115,11 +114,7 @@ public enum Radius {
         return radius(dx, dy, 0);
     }
 
-    public Coord onUnitShape(double distance) {
-        if (rng == null) {
-            rng = new RNG();
-        }
-
+    public Coord onUnitShape(double distance, RNG rng) {
         int x = 0, y = 0;
         switch (this) {
             case SQUARE:
@@ -162,17 +157,13 @@ public enum Radius {
         return new Coord(x, y);
     }
 
-    public Coord3D onUnitShape3D(double distance) {
-        if (rng == null) {
-            rng = new RNG();
-        }
-
+    public Coord3D onUnitShape3D(double distance, RNG rng) {
         int x = 0, y = 0, z = 0;
         switch (this) {
             case SQUARE:
             case DIAMOND:
             case CIRCLE:
-                Coord p = onUnitShape(distance);
+                Coord p = onUnitShape(distance, rng);
                 return new Coord3D(p.x, p.y, 0);//2D strategies
             case CUBE:
                 x = rng.between((int) -distance, (int) distance + 1);

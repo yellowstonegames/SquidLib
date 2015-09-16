@@ -1,6 +1,12 @@
 package squidpony.squidmath;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+import java.util.Random;
 
 /**
  * A wrapper class for working with random number generators in a more friendly
@@ -197,7 +203,7 @@ public class RNG {
      * <p>
      * You should not modify {@code list} while you use the returned
      * reference. And there'll be no
-     * {@link ConcurrentModificationException} to detect such erroneous
+     * ConcurrentModificationException to detect such erroneous
      * uses.
      * </p>
      */
@@ -339,10 +345,18 @@ public class RNG {
         return next(24) / ((float) (1 << 24));
     }
 
+    /**
+     * Get a random bit of state, interpreted as true or false with approximately equal likelihood.
+     * @return a random boolean.
+     */
     public boolean nextBoolean() {
         return next(1) != 0;
     }
 
+    /**
+     * Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).
+     * @return a 64-bit random long.
+     */
     public long nextLong() {
         return ((long) (next(32)) << 32) + next(32);
     }
@@ -370,10 +384,19 @@ public class RNG {
         return r;
     }
 
+    /**
+     * Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).
+     * @return a 32-bit random int.
+     */
     public int nextInt() {
         return next(32);
     }
 
+    /**
+     * Get up to 32 bits (inclusive) of random state from the RandomnessSource.
+     * @param bits 1 to 32
+     * @return a random number that fits in the specified number of bits.
+     */
     public int next(int bits) {
         return random.next(bits);
     }
