@@ -83,7 +83,7 @@ public class Spill {
      * The LightRNG used as a RandomnessSource for the RNG this object uses. Can have its state read and set.
      */
     public LightRNG lrng;
-    private static int frustration = 0;
+    private int frustration = 0;
 
     private boolean initialized = false;
     /**

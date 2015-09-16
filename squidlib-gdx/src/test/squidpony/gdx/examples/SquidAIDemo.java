@@ -83,12 +83,12 @@ public class SquidAIDemo extends ApplicationAdapter {
         bluePlaces = new LinkedHashSet<Coord>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Coord monPos = DungeonUtility.randomFloor(placement);
+            Coord monPos = dungeonGen.utility.randomFloor(placement);
             placement[monPos.x][monPos.y] = 'R';
             teamRed.put(display.animateActor(monPos.x, monPos.y, "50", 11, true), 50);
             redPlaces.add(monPos);
 
-            Coord monPosBlue = DungeonUtility.randomFloor(placement);
+            Coord monPosBlue = dungeonGen.utility.randomFloor(placement);
             placement[monPosBlue.x][monPosBlue.y] = 'B';
             teamBlue.put(display.animateActor(monPosBlue.x, monPosBlue.y, "50", 25, true), 50);
             bluePlaces.add(monPosBlue);

@@ -1,7 +1,9 @@
 package squidpony.squidmath;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 /**
  * An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.
@@ -31,9 +33,6 @@ import java.util.Queue;
  * Created by Tommy Ettinger on 5/2/2015.
  */
 public class DharmaRNG extends RNG {
-
-    /** The current index in the sequence. Starts at 1, not 0, because 0 acts differently and shouldn't be typical.*/
-    private int seed = 1;
 
     /** Used to tweak the generator toward high or low values. */
     private double fairness = 0.54;
@@ -129,6 +128,7 @@ public class DharmaRNG extends RNG {
      *
      * @return a value between 0 (inclusive) and max (exclusive)
      */
+    @Override
     public double nextDouble(double max) {
         return this.nextDouble() * max;
     }
@@ -141,6 +141,7 @@ public class DharmaRNG extends RNG {
      * @param max the maximum bound on the return value (exclusive)
      * @return the found value
      */
+    @Override
     public double between(double min, double max) {
         return min + (max - min) * this.nextDouble();
     }
@@ -155,6 +156,7 @@ public class DharmaRNG extends RNG {
      * @param max the maximum bound on the return value (exclusive)
      * @return the found value
      */
+    @Override
     public int between(int min, int max) {
         return this.nextInt(max - min) + min;
     }
@@ -174,6 +176,7 @@ public class DharmaRNG extends RNG {
      * @param samples the number of samples to take
      * @return the found value
      */
+    @Override
     public int betweenWeighted(int min, int max, int samples) {
         int sum = 0;
         for (int i = 0; i < samples; i++) {
@@ -192,6 +195,7 @@ public class DharmaRNG extends RNG {
      * @param array the array to get an element from
      * @return the randomly selected element
      */
+    @Override
     public <T> T getRandomElement(T[] array) {
         if (array.length < 1) {
             return null;
@@ -207,6 +211,7 @@ public class DharmaRNG extends RNG {
      * @param list the list to get an element from
      * @return the randomly selected element
      */
+    @Override
     public <T> T getRandomElement(List<T> list) {
         if (list.size() <= 0) {
             return null;
@@ -222,6 +227,7 @@ public class DharmaRNG extends RNG {
      * @param list the list to get an element from
      * @return the randomly selected element
      */
+    @Override
     public <T> T getRandomElement(Queue<T> list) {
         if (list.isEmpty()) {
             return null;
@@ -232,6 +238,7 @@ public class DharmaRNG extends RNG {
     /**
      * @return a value from the gaussian distribution
      */
+    @Override
     public synchronized double nextGaussian() {
         if (haveNextNextGaussian) {
             haveNextNextGaussian = false;
@@ -348,4 +355,48 @@ public class DharmaRNG extends RNG {
 
     }
 
+    @Override
+    public Random asRandom() {
+        return super.asRandom();
+    }
+
+    @Override
+    public <T> List<T> randomRotation(List<T> l) {
+        return super.randomRotation(l);
+    }
+
+    @Override
+    public <T> Iterable<T> getRandomStartIterable(List<T> list) {
+        return super.getRandomStartIterable(list);
+    }
+
+    @Override
+    public <T> T[] shuffle(T[] elements) {
+        return super.shuffle(elements);
+    }
+
+    @Override
+    public <T> ArrayList<T> shuffle(List<T> elements) {
+        return super.shuffle(elements);
+    }
+
+    @Override
+    public float nextFloat() {
+        return (float)nextDouble();
+    }
+
+    @Override
+    public boolean nextBoolean() {
+        return nextDouble() >= 0.5;
+    }
+
+    @Override
+    public RandomnessSource getRandomness() {
+        return random;
+    }
+
+    @Override
+    public void setRandomness(RandomnessSource random) {
+        this.random = random;
+    }
 }

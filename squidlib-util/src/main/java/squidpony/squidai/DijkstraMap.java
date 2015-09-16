@@ -113,8 +113,8 @@ public class DijkstraMap
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
     public RNG rng;
-    private static int frustration = 0;
-
+    private int frustration = 0;
+    private DungeonUtility utility;
     public Coord[][] targetMap;
 
 
@@ -132,6 +132,7 @@ public class DijkstraMap
      */
     public DijkstraMap() {
         rng = new RNG(new LightRNG());
+        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -147,6 +148,7 @@ public class DijkstraMap
      */
     public DijkstraMap(RNG random) {
         rng = random;
+        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -161,6 +163,7 @@ public class DijkstraMap
      */
     public DijkstraMap(final double[][] level) {
         rng = new RNG(new LightRNG());
+        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -176,6 +179,7 @@ public class DijkstraMap
      */
     public DijkstraMap(final double[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
+        utility = new DungeonUtility(rng);
         this.measurement = measurement;
         path = new ArrayList<Coord>();
 
@@ -196,6 +200,7 @@ public class DijkstraMap
      */
     public DijkstraMap(final char[][] level) {
         rng = new RNG(new LightRNG());
+        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -214,6 +219,7 @@ public class DijkstraMap
      */
     public DijkstraMap(final char[][] level, char alternateWall) {
         rng = new RNG(new LightRNG());
+        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -234,6 +240,7 @@ public class DijkstraMap
      */
     public DijkstraMap(final char[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
+        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
         this.measurement = measurement;
 
@@ -1412,8 +1419,8 @@ public class DijkstraMap
         frustration = 0;
         goals.clear();
         if(path.isEmpty())
-            path = findPath(moveLength, impassable, friends, start, DungeonUtility.randomFloor(dungeon),
-                    DungeonUtility.randomFloor(dungeon), DungeonUtility.randomFloor(dungeon));
+            path = findPath(moveLength, impassable, friends, start, utility.randomFloor(dungeon),
+                    utility.randomFloor(dungeon), utility.randomFloor(dungeon));
         return path;
     }
 

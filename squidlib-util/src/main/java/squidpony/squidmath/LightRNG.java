@@ -16,7 +16,7 @@ package squidpony.squidmath;
  * @author Sebastiano Vigna
  * @author Tommy Ettinger
  */
-public class LightRNG implements RandomnessSource
+public class LightRNG implements RandomnessSource, StatefulRandomness
 {
     private static final long serialVersionUID = 3L;
     /** 2 raised to the 53, - 1. */

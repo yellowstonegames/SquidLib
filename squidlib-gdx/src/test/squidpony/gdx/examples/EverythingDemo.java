@@ -83,13 +83,13 @@ public class EverythingDemo extends ApplicationAdapter {
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
         char[][] placement = DungeonUtility.closeDoors(bareDungeon);
-        Coord pl = DungeonUtility.randomFloor(placement);
+        Coord pl = dungeonGen.utility.randomFloor(placement);
         placement[pl.x][pl.y] = '@';
         int numMonsters = 25;
         monsters = new HashMap<AnimatedEntity, Integer>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Coord monPos = DungeonUtility.randomFloor(placement);
+            Coord monPos = dungeonGen.utility.randomFloor(placement);
             placement[monPos.x][monPos.y] = 'M';
             monsters.put(display.animateActor(monPos.x, monPos.y, 'M', 11), 0);
 

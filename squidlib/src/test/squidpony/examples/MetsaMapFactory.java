@@ -12,6 +12,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 import squidpony.squidgrid.mapping.MapFactory;
+import squidpony.squidmath.StatefulRNG;
 
 import static java.lang.Math.round;
 
@@ -136,7 +137,7 @@ public class MetsaMapFactory {
     }
 
     private double[][] makeHeightMap() {
-        double[][] map = MapFactory.heightMap(width, height);
+        double[][] map = MapFactory.heightMap(width, height, new StatefulRNG());
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {

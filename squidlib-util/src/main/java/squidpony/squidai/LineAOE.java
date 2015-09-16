@@ -34,7 +34,7 @@ public class LineAOE implements AOE {
     private char[][] dungeon;
     private DijkstraMap dijkstra;
     private Radius rt, limitType = null;
-
+    private Elias elias;
     private int minRange = 1, maxRange = 1;
     private Radius metric = Radius.SQUARE;
     public LineAOE(Coord origin, Coord end)
@@ -45,6 +45,7 @@ public class LineAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.radius = 0;
+        this.elias = new Elias();
     }
     public LineAOE(Coord origin, Coord end, int radius)
     {
@@ -54,6 +55,7 @@ public class LineAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.radius = radius;
+        this.elias = new Elias();
     }
     public LineAOE(Coord origin, Coord end, int radius, Radius radiusType)
     {
@@ -73,6 +75,7 @@ public class LineAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.radius = radius;
+        this.elias = new Elias();
     }
     public LineAOE(Coord origin, Coord end, int radius, Radius radiusType, int minRange, int maxRange)
     {
@@ -94,10 +97,11 @@ public class LineAOE implements AOE {
         this.radius = radius;
         this.minRange = minRange;
         this.maxRange = maxRange;
+        this.elias = new Elias();
     }
     private double[][] initDijkstra()
     {
-        List<Coord> lit = Elias.line(origin, end);
+        List<Coord> lit = elias.line(origin, end);
 
         dijkstra.initialize(dungeon);
         for(Coord p : lit)
@@ -249,7 +253,7 @@ public class LineAOE implements AOE {
             t = exs[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {
@@ -275,7 +279,7 @@ public class LineAOE implements AOE {
             t = ts[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {
@@ -394,7 +398,7 @@ public class LineAOE implements AOE {
             t = exs[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {
@@ -419,7 +423,7 @@ public class LineAOE implements AOE {
             t = pts[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {
@@ -472,7 +476,7 @@ public class LineAOE implements AOE {
             t = lts[i - pts.length];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = Elias.line(origin, t, 0.4);
+            List<Coord> lit = elias.line(origin, t, 0.4);
 
             for(Coord p : lit)
             {

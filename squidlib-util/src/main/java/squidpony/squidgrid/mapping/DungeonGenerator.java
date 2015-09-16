@@ -49,6 +49,7 @@ public class DungeonGenerator {
      */
     public HashMap<FillEffect, Integer> fx;
     private DungeonBoneGen gen;
+    public DungeonUtility utility;
     private int height, width;
     public RNG rng;
 
@@ -104,6 +105,7 @@ public class DungeonGenerator {
     {
         rng = new RNG(new LightRNG());
         gen = new DungeonBoneGen(rng);
+        utility = new DungeonUtility(rng);
         height = 40;
         width = 40;
         fx = new HashMap<FillEffect, Integer>();
@@ -119,6 +121,7 @@ public class DungeonGenerator {
     {
         rng = new RNG(new LightRNG());
         gen = new DungeonBoneGen(rng);
+        utility = new DungeonUtility(rng);
         this.height = height;
         this.width = width;
         fx = new HashMap<FillEffect, Integer>();
@@ -135,6 +138,7 @@ public class DungeonGenerator {
     {
         this.rng = rng;
         gen = new DungeonBoneGen(rng);
+        utility = new DungeonUtility(rng);
         this.height = height;
         this.width = width;
         fx = new HashMap<FillEffect, Integer>();
@@ -148,6 +152,7 @@ public class DungeonGenerator {
     {
         rng = new RNG(copying.rng.getRandomness());
         gen = new DungeonBoneGen(rng);
+        utility = new DungeonUtility(rng);
         height = copying.height;
         width = copying.width;
         fx = new HashMap<FillEffect, Integer>(copying.fx);
@@ -322,12 +327,11 @@ public class DungeonGenerator {
      */
     public char[][] generate(TilesetType kind)
     {
-        DungeonUtility.rng = rng;
         char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {
-            dijkstra.setGoal(DungeonUtility.randomFloor(map));
+            dijkstra.setGoal(utility.randomFloor(map));
             dijkstra.scan(null);
             frustrated++;
         }while (dijkstra.getMappedCount() < width + height && frustrated < 10);
@@ -463,7 +467,7 @@ public class DungeonGenerator {
             int frustration = 0;
             while (bonusVolume > 0 && frustration < 50)
             {
-                Coord entry = DungeonUtility.randomFloor(map);
+                Coord entry = utility.randomFloor(map);
                 ArrayList<Coord> finisher = spill.start(entry, bonusVolume, obstacles);
                 for(Coord p : finisher)
                 {

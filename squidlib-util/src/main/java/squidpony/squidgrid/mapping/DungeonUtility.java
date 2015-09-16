@@ -1,9 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.PerlinNoise;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 
 import java.util.Map;
@@ -17,17 +14,27 @@ import java.util.Map;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonUtility {
+
+    public DungeonUtility()
+    {
+        rng = new StatefulRNG();
+    }
+    public DungeonUtility(RNG rng)
+    {
+        this.rng = rng;
+    }
+
     /**
      * The random number generator that will be used for all methods in this class with a random component.
      */
-    public static RNG rng = new RNG(new LightRNG());
+    public RNG rng;
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value.
      * Uses this class' rng field for pseudo-random number generation.
      * @param map
      * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
      */
-    public static Coord randomFloor(char[][] map)
+    public Coord randomFloor(char[][] map)
     {
         int width = map.length;
         int height = map[0].length;
@@ -70,7 +77,7 @@ public class DungeonUtility {
      * @param map
      * @return a Coord that corresponds to a map element equal to tile, or null if tile cannot be found or if map is too small.
      */
-    public static Coord randomMatchingTile(char[][] map, char tile)
+    public Coord randomMatchingTile(char[][] map, char tile)
     {
         int width = map.length;
         int height = map[0].length;
@@ -118,7 +125,7 @@ public class DungeonUtility {
      * @param eightWay
      * @return
      */
-    public static Coord randomStep(char[][] map, Coord start, boolean eightWay)
+    public Coord randomStep(char[][] map, Coord start, boolean eightWay)
     {
         int width = map.length;
         int height = map[0].length;
@@ -157,7 +164,7 @@ public class DungeonUtility {
      * @param size
      * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
      */
-    public static Coord randomFloorLarge(char[][] map, int size)
+    public Coord randomFloorLarge(char[][] map, int size)
     {
         int width = map.length;
         int height = map[0].length;

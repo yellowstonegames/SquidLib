@@ -21,15 +21,15 @@ import squidpony.annotation.Beta;
 @Beta
 public class Elias {
 
-    static private List<Coord> path;
-    static private float[][] lightMap;
-    static private int width, height;
-    static private double threshold = 0.0;
+    private List<Coord> path;
+    private float[][] lightMap;
+    private int width, height;
+    private double threshold = 0.0;
 
-    private Elias() {
+    public Elias() {
     }
 
-    public synchronized static float[][] lightMap(double startx, double starty, double endx, double endy) {
+    public synchronized float[][] lightMap(double startx, double starty, double endx, double endy) {
         line(startx, starty, endx, endy);
         return lightMap;
     }
@@ -43,7 +43,7 @@ public class Elias {
      * @param endy
      * @return
      */
-    public synchronized static List<Coord> line(double startx, double starty, double endx, double endy) {
+    public synchronized List<Coord> line(double startx, double starty, double endx, double endy) {
         path = new LinkedList<>();
         width = (int) (Math.max(startx, endx) + 1);
         height = (int) (Math.max(starty, endy) + 1);
@@ -61,7 +61,7 @@ public class Elias {
      * @param brightnessThreshold between 0.0 (default) and 1.0; only Points with higher brightness will be included
      * @return
      */
-    public synchronized static List<Coord> line(double startx, double starty, double endx, double endy,
+    public synchronized List<Coord> line(double startx, double starty, double endx, double endy,
                                                 double brightnessThreshold) {
         threshold = brightnessThreshold;
         path = new LinkedList<>();
@@ -71,14 +71,14 @@ public class Elias {
         runLine(startx, starty, endx, endy);
         return path;
     }
-    public synchronized static List<Coord> line(Coord start, Coord end) {
+    public synchronized List<Coord> line(Coord start, Coord end) {
         return line(start.x, start.y, end.x, end.y);
     }
-    public synchronized static List<Coord> line(Coord start, Coord end, double brightnessThreshold) {
+    public synchronized List<Coord> line(Coord start, Coord end, double brightnessThreshold) {
         return line(start.x, start.y, end.x, end.y, brightnessThreshold);
     }
 
-    public synchronized static List<Coord> getLastPath()
+    public synchronized List<Coord> getLastPath()
     {
         return path;
     }
@@ -90,7 +90,7 @@ public class Elias {
      * @param y
      * @param c
      */
-    private static void mark(double x, double y, double c) {
+    private void mark(double x, double y, double c) {
         //check bounds overflow from antialiasing
         if (x >= 0 && x < width && y >= 0 && y < height && c > threshold) {
             path.add(new Coord((int) x, (int) y));
@@ -98,7 +98,7 @@ public class Elias {
         }
     }
 
-    private static double trunc(double x) {
+    private double trunc(double x) {
         if (x < 0) {
             return Math.ceil(x);
         } else {
@@ -106,15 +106,15 @@ public class Elias {
         }
     }
 
-    private static double frac(double x) {
+    private double frac(double x) {
         return x - trunc(x);
     }
 
-    private static double invfrac(double x) {
+    private double invfrac(double x) {
         return 1 - frac(x);
     }
 
-    private static void runLine(double startx, double starty, double endx, double endy) {
+    private void runLine(double startx, double starty, double endx, double endy) {
         double x1 = startx, y1 = starty, x2 = endx, y2 = endy;
         double grad, xd, yd, length, xm, ym, xgap, ygap, xend, yend, xf, yf, brightness1, brightness2;
         int x, y, ix1, ix2, iy1, iy2;
