@@ -65,13 +65,13 @@ public class RandomOnUnitShapeDemo {
         boolean[][] map = new boolean[width][height];
         int offset = width / 3 - 3;
         for (int i = 0; i < width * height / 10; i++) {
-            Coord3D p = Radius.SPHERE.onUnitShape3D(offset / 2);
+            Coord3D p = Radius.SPHERE.onUnitShape3D(offset / 2, rng);
             map[p.x + 1 + offset / 2][p.y + (height) / 2] = true;
 
-            p = Radius.OCTAHEDRON.onUnitShape3D(offset / 2);
+            p = Radius.OCTAHEDRON.onUnitShape3D(offset / 2, rng);
             map[p.x + 3 + 3 * offset / 2][p.y + (height) / 2] = true;
 
-            p = Radius.CUBE.onUnitShape3D(offset / 2);
+            p = Radius.CUBE.onUnitShape3D(offset / 2, rng);
             map[p.x + 5 + 5 * offset / 2][p.y + (height) / 2] = true;
         }
 
