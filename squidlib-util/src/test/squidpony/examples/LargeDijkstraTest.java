@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -39,22 +40,18 @@ public class LargeDijkstraTest {
             LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
             RNG rng = new RNG(lrng);
             int size = 2;
-            DungeonUtility.rng = rng;
-            DungeonBoneGen dg = new DungeonBoneGen(rng);
+            DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
 
-            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            dg.wallWrap();
-
-            char[][] dun = dg.getDungeon();
+            char[][] dun = dg.generate();
             DijkstraMap dijkstra = new DijkstraMap(dun, m);
 
             System.out.println(dg);
 //            DungeonUtility.randomFloorLarge(dun, size);
 //            DungeonUtility.randomFloorLarge(dun, size);
-            Coord goal1 = DungeonUtility.randomFloorLarge(dun, size),
-                    goal2 = DungeonUtility.randomFloorLarge(dun, size), goal3 = DungeonUtility.randomFloorLarge(dun, size),
-                    goal4 = DungeonUtility.randomFloorLarge(dun, size), goal5 = DungeonUtility.randomFloorLarge(dun, size),
-                    entry = DungeonUtility.randomFloorLarge(dun, size);
+            Coord goal1 = dg.utility.randomFloorLarge(dun, size),
+                    goal2 = dg.utility.randomFloorLarge(dun, size), goal3 = dg.utility.randomFloorLarge(dun, size),
+                    goal4 = dg.utility.randomFloorLarge(dun, size), goal5 = dg.utility.randomFloorLarge(dun, size),
+                    entry = dg.utility.randomFloorLarge(dun, size);
 
             dijkstra.findPathLarge(size, 100, null, null, entry, goal1, goal2, goal3, goal4, goal5);
             double[][] gm = dijkstra.gradientMap;
@@ -86,24 +83,21 @@ public class LargeDijkstraTest {
 
             lrng.setState(0x57a8deadbeef0ffal);
             rng = new RNG(lrng);
-            DungeonUtility.rng = rng;
+            dg = new DungeonGenerator(40,40,rng);
 
-            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            dg.wallWrap();
-
-            dun = dg.getDungeon();
+            dun = dg.generate();
             dijkstra.initialize(dun);
 
             System.out.println(dg);
 //            DungeonUtility.randomFloorLarge(dun, size);
 //            DungeonUtility.randomFloorLarge(dun, size);
-            goal1 = DungeonUtility.randomFloorLarge(dun, size);
-            goal2 = DungeonUtility.randomFloorLarge(dun, size);
-            goal3 = DungeonUtility.randomFloorLarge(dun, size);
-            goal4 = DungeonUtility.randomFloorLarge(dun, size);
-            goal5 = DungeonUtility.randomFloorLarge(dun, size);
+            goal1 = dg.utility.randomFloorLarge(dun, size);
+            goal2 = dg.utility.randomFloorLarge(dun, size);
+            goal3 = dg.utility.randomFloorLarge(dun, size);
+            goal4 = dg.utility.randomFloorLarge(dun, size);
+            goal5 = dg.utility.randomFloorLarge(dun, size);
 
-            entry = DungeonUtility.randomFloorLarge(dun, size);
+            entry = dg.utility.randomFloorLarge(dun, size);
 
             dijkstra.findFleePathLarge(size, 100, 1.9, null, null, entry, goal1, goal2, goal3, goal4, goal5);
 
@@ -137,24 +131,21 @@ public class LargeDijkstraTest {
 
             lrng.setState(0x57a8deadbeef0ffal);
             rng = new RNG(lrng);
-            DungeonUtility.rng = rng;
+            dg = new DungeonGenerator(40, 40, rng);
 
-            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            dg.wallWrap();
-
-            dun = dg.getDungeon();
+            dun = dg.generate();
             dijkstra.initialize(dun);
 
             System.out.println(dg);
 //            DungeonUtility.randomFloorLarge(dun, size);
 //            DungeonUtility.randomFloorLarge(dun, size);
-            goal1 = DungeonUtility.randomFloorLarge(dun, size);
-            goal2 = DungeonUtility.randomFloorLarge(dun, size);
-            goal3 = DungeonUtility.randomFloorLarge(dun, size);
-            goal4 = DungeonUtility.randomFloorLarge(dun, size);
-            goal5 = DungeonUtility.randomFloorLarge(dun, size);
+            goal1 = dg.utility.randomFloorLarge(dun, size);
+            goal2 = dg.utility.randomFloorLarge(dun, size);
+            goal3 = dg.utility.randomFloorLarge(dun, size);
+            goal4 = dg.utility.randomFloorLarge(dun, size);
+            goal5 = dg.utility.randomFloorLarge(dun, size);
 
-            entry = DungeonUtility.randomFloorLarge(dun, size);
+            entry = dg.utility.randomFloorLarge(dun, size);
 
             LOS los = new LOS();
             if(m == DijkstraMap.Measurement.MANHATTAN)

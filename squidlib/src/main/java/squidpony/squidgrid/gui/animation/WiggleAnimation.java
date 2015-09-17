@@ -21,7 +21,7 @@ public class WiggleAnimation extends AbstractAnimation {
     private long stopTime = 0;//0 indicates that it is continuous
     private Point2D.Double location = new Point2D.Double(0, 0);
     private double impulse;//speed to move
-    private Coord targetMovement = new Coord(0, 0);
+    private Coord targetMovement = Coord.get(0, 0);
     private static Random rng = new Random();
 
     public WiggleAnimation(BufferedImage image, Point start, double impulse, Point maxDistance, long duration) {
@@ -41,23 +41,23 @@ public class WiggleAnimation extends AbstractAnimation {
     public void actionPerformed(ActionEvent ae) {
         if (targetMovement.x == 0) {
             int targetx = rng.nextInt(end.x * 2 + 1) + start.x - end.x;
-            targetMovement.x = (int) (targetx - location.x);
+            targetMovement = targetMovement.setX((int) (targetx - location.x));
         } else if (targetMovement.x < 0) {
-            targetMovement.x = Math.min(0, targetMovement.x + (int) (impulse + location.x % 1));
+            targetMovement = targetMovement.setX(Math.min(0, targetMovement.x + (int) (impulse + location.x % 1)));
             location.x = Math.max(location.x - impulse, start.x - end.x);
         } else {//targetMovement.x > 0
-            targetMovement.x = Math.max(0, targetMovement.x - (int) (impulse + location.x % 1));
+            targetMovement = targetMovement.setX(Math.max(0, targetMovement.x - (int) (impulse + location.x % 1)));
             location.x = Math.min(location.x + impulse, start.x + end.x);
         }
 
         if (targetMovement.y == 0) {
             int targety = rng.nextInt(end.y * 2 + 1) + start.y - end.y;
-            targetMovement.y = (int) (targety - location.y);
+            targetMovement = targetMovement.setY((int) (targety - location.y));
         } else if (targetMovement.y < 0) {
-            targetMovement.y = Math.min(0, targetMovement.y + (int) (impulse + location.y % 1));
+            targetMovement = targetMovement.setY(Math.min(0, targetMovement.y + (int) (impulse + location.y % 1)));
             location.y = Math.max(location.y - impulse, start.y - end.y);
         } else {//targetMovement.y > 0
-            targetMovement.y = Math.max(0, targetMovement.y - (int) (impulse + location.y % 1));
+            targetMovement = targetMovement.setY(Math.max(0, targetMovement.y - (int) (impulse + location.y % 1)));
             location.y = Math.min(location.y + impulse, start.y + end.y);
         }
 

@@ -154,7 +154,7 @@ public enum Radius {
                 y = (int) Math.round(Math.sin(theta) * radius);
         }
 
-        return new Coord(x, y);
+        return Coord.get(x, y);
     }
 
     public Coord3D onUnitShape3D(double distance, RNG rng) {
@@ -235,14 +235,14 @@ public enum Radius {
                 for (int i = center.x - radiusLength; i <= center.x + radiusLength; i++) {
                     int x = i;
                     if(!surpassEdges) x = clamp(i, 0, width);
-                    rim.add(new Coord(x, clamp(center.y - radiusLength, 0, height)));
-                    rim.add(new Coord(x, clamp(center.y + radiusLength, 0, height)));
+                    rim.add(Coord.get(x, clamp(center.y - radiusLength, 0, height)));
+                    rim.add(Coord.get(x, clamp(center.y + radiusLength, 0, height)));
                 }
                 for (int j = center.y - radiusLength; j <= center.y + radiusLength; j++) {
                     int y = j;
                     if(!surpassEdges) y = clamp(j, 0, height);
-                    rim.add(new Coord(clamp(center.x - radiusLength, 0, height), y));
-                    rim.add(new Coord(clamp(center.x + radiusLength, 0, height), y));
+                    rim.add(Coord.get(clamp(center.x - radiusLength, 0, height), y));
+                    rim.add(Coord.get(clamp(center.x + radiusLength, 0, height), y));
                 }
             }
             break;
@@ -258,22 +258,22 @@ public enum Radius {
                         yUp = clamp(yUp, 0, height);
                     }
 
-                    rim.add(new Coord(xDown, center.y));
-                    rim.add(new Coord(xUp, center.y));
-                    rim.add(new Coord(center.x, yDown));
-                    rim.add(new Coord(center.x, yUp));
+                    rim.add(Coord.get(xDown, center.y));
+                    rim.add(Coord.get(xUp, center.y));
+                    rim.add(Coord.get(center.x, yDown));
+                    rim.add(Coord.get(center.x, yUp));
 
                     for (int i = xDown + 1, c = 1; i < center.x; i++, c++) {
                         int x = i;
                         if(!surpassEdges) x = clamp(i, 0, width);
-                        rim.add(new Coord(x, clamp(center.y - c, 0, height)));
-                        rim.add(new Coord(x, clamp(center.y + c, 0, height)));
+                        rim.add(Coord.get(x, clamp(center.y - c, 0, height)));
+                        rim.add(Coord.get(x, clamp(center.y + c, 0, height)));
                     }
                     for (int i = center.x + 1, c = 1; i < center.x + radiusLength; i++, c++) {
                         int x = i;
                         if(!surpassEdges) x = clamp(i, 0, width);
-                        rim.add(new Coord(x, clamp(center.y + radiusLength - c, 0, height)));
-                        rim.add(new Coord(x, clamp(center.y - radiusLength + c, 0, height)));
+                        rim.add(Coord.get(x, clamp(center.y + radiusLength - c, 0, height)));
+                        rim.add(Coord.get(x, clamp(center.y - radiusLength + c, 0, height)));
                     }
                 }
             }
@@ -294,7 +294,7 @@ public enum Radius {
                             x = clamp(x, 0, width);
                             y = clamp(y, 0, height);
                         }
-                        Coord p = new Coord(x, y);
+                        Coord p = Coord.get(x, y);
                         boolean test = rim.contains(p);
 
                         rim.add(p);
@@ -313,13 +313,13 @@ public enum Radius {
     {
         if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height ||
                 middle.x < 0 || middle.x >= width || middle.y < 0 || middle.y > height))
-            return new Coord(0, 0);
+            return Coord.get(0, 0);
         if(radiusLength < 1) {
             return center;
         }
         double theta = Math.atan2(middle.y - center.y, middle.x - center.x);
 
-        Coord end = new Coord(middle.x, middle.y);
+        Coord end = Coord.get(middle.x, middle.y);
         switch (this) {
             case SQUARE:
             case CUBE:
@@ -331,15 +331,15 @@ public enum Radius {
                 {
                     while (this.radius(center.x, center.y, end.x, end.y) < radiusLength) {
                         rad2++;
-                        end.x = (int) Math.round(Math.cos(theta) * rad2) + center.x;
-                        end.y = (int) Math.round(Math.sin(theta) * rad2) + center.y;
+                        end = Coord.get((int) Math.round(Math.cos(theta) * rad2) + center.x
+                                , (int) Math.round(Math.sin(theta) * rad2) + center.y);
                     }
                 }
                 else {
                     while (this.radius(center.x, center.y, end.x, end.y) < radiusLength) {
                         rad2++;
-                        end.x = clamp((int) Math.round(Math.cos(theta) * rad2) + center.x, 0, width);
-                        end.y = clamp((int) Math.round(Math.sin(theta) * rad2) + center.y, 0, height);
+                        end = Coord.get(clamp((int) Math.round(Math.cos(theta) * rad2) + center.x, 0, width)
+                                      , clamp((int) Math.round(Math.sin(theta) * rad2) + center.y, 0, height));
                         if (end.x == 0 || end.x == width - 1 || end.y == 0 || end.y == height - 1)
                             return end;
                     }
@@ -349,8 +349,8 @@ public enum Radius {
             }
             default:
             {
-                end.x = (int) Math.round(Math.cos(theta) * radiusLength) + center.x;
-                end.y = (int) Math.round(Math.sin(theta) * radiusLength) + center.y;
+                end = Coord.get(clamp( (int) Math.round(Math.cos(theta) * radiusLength) + center.x, 0, width)
+                        ,clamp( (int) Math.round(Math.sin(theta) * radiusLength) + center.y, 0, height));
                 if(!surpassEdges) {
                     long edgeLength = 0;
 //                    if (end.x == 0 || end.x == width - 1 || end.y == 0 || end.y == height - 1)
@@ -359,14 +359,14 @@ public enum Radius {
                         // wow, we lucked out here. the only situation where cos(angle) is 0 is if the angle aims
                         // straight up or down, and then x cannot be < 0 or >= width.
                         edgeLength = Math.round((0 - center.x) / Math.cos(theta));
-                        end.y = (int) Math.round(Math.sin(theta) * edgeLength) + center.y;
+                        end = end.setY(clamp((int) Math.round(Math.sin(theta) * edgeLength) + center.y, 0, height));
                     }
                     else if(end.x >= width)
                     {
                         // wow, we lucked out here. the only situation where cos(angle) is 0 is if the angle aims
                         // straight up or down, and then x cannot be < 0 or >= width.
                         edgeLength = Math.round((width - 1 - center.x) / Math.cos(theta));
-                        end.y = (int) Math.round(Math.sin(theta) * edgeLength) + center.y;
+                        end = end.setY(clamp((int) Math.round(Math.sin(theta) * edgeLength) + center.y, 0, height));
                     }
 
                     if (end.y < 0)
@@ -374,17 +374,15 @@ public enum Radius {
                         // wow, we lucked out here. the only situation where sin(angle) is 0 is if the angle aims
                         // straight left or right, and then y cannot be < 0 or >= height.
                         edgeLength = Math.round((0 - center.y) / Math.sin(theta));
-                        end.x = (int) Math.round(Math.cos(theta) * edgeLength) + center.x;
+                        end = end.setX(clamp((int) Math.round(Math.cos(theta) * edgeLength) + center.x, 0, width));
                     }
                     else if(end.y >= height)
                     {
                         // wow, we lucked out here. the only situation where sin(angle) is 0 is if the angle aims
                         // straight left or right, and then y cannot be < 0 or >= height.
                         edgeLength = Math.round((height - 1 - center.y) / Math.sin(theta));
-                        end.x = (int) Math.round(Math.cos(theta) * edgeLength) + center.x;
+                        end = end.setX(clamp((int) Math.round(Math.cos(theta) * edgeLength) + center.x, 0, width));
                     }
-                    end.x = clamp(end.x, 0, width);
-                    end.y = clamp(end.y, 0, height);
                 }
                 return end;
             }

@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -20,21 +21,16 @@ public class DijkstraDungeonTest {
         for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {
             LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
             RNG rng = new RNG(lrng);
-            DungeonUtility.rng = rng;
-            DungeonBoneGen dg = new DungeonBoneGen(rng);
-
-            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            dg.wallWrap();
-
-            char[][] dun = dg.getDungeon();
+            DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
+            char[][] dun = dg.generate();
             DijkstraMap dijkstra = new DijkstraMap(dun, m);
 
             System.out.println(dg);
 
-            Coord goal1 = DungeonUtility.randomFloor(dun),
-                    goal2 = DungeonUtility.randomFloor(dun), goal3 = DungeonUtility.randomFloor(dun),
-                    goal4 = DungeonUtility.randomFloor(dun), goal5 = DungeonUtility.randomFloor(dun),
-                    entry = DungeonUtility.randomFloor(dun);
+            Coord goal1 = dg.utility.randomFloor(dun),
+                    goal2 = dg.utility.randomFloor(dun), goal3 = dg.utility.randomFloor(dun),
+                    goal4 = dg.utility.randomFloor(dun), goal5 = dg.utility.randomFloor(dun),
+                    entry = dg.utility.randomFloor(dun);
 
             dijkstra.findPath(100, null, null, entry, goal1, goal2, goal3, goal4, goal5);
             double[][] gm = dijkstra.gradientMap;
@@ -63,23 +59,20 @@ public class DijkstraDungeonTest {
 
             lrng.setState(0x57a8deadbeef0ffal);
             rng = new RNG(lrng);
-            DungeonUtility.rng = rng;
+            dg = new DungeonGenerator(40, 40, rng);
 
-            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            dg.wallWrap();
-
-            dun = dg.getDungeon();
+            dun = dg.generate();
             dijkstra.initialize(dun);
 
             System.out.println(dg);
 
-            goal1 = DungeonUtility.randomFloor(dun);
-            goal2 = DungeonUtility.randomFloor(dun);
-            goal3 = DungeonUtility.randomFloor(dun);
-            goal4 = DungeonUtility.randomFloor(dun);
-            goal5 = DungeonUtility.randomFloor(dun);
+            goal1 = dg.utility.randomFloor(dun);
+            goal2 = dg.utility.randomFloor(dun);
+            goal3 = dg.utility.randomFloor(dun);
+            goal4 = dg.utility.randomFloor(dun);
+            goal5 = dg.utility.randomFloor(dun);
 
-            entry = DungeonUtility.randomFloor(dun);
+            entry = dg.utility.randomFloor(dun);
 
             dijkstra.findFleePath(100, 1.9, null, null, entry, goal1, goal2, goal3, goal4, goal5);
 
@@ -111,23 +104,20 @@ public class DijkstraDungeonTest {
 
             lrng.setState(0x57a8deadbeef0ffal);
             rng = new RNG(lrng);
-            DungeonUtility.rng = rng;
+            dg = new DungeonGenerator(40, 40, rng);
 
-            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            dg.wallWrap();
-
-            dun = dg.getDungeon();
+            dun = dg.generate();
             dijkstra.initialize(dun);
 
             System.out.println(dg);
 
-            goal1 = DungeonUtility.randomFloor(dun);
-            goal2 = DungeonUtility.randomFloor(dun);
-            goal3 = DungeonUtility.randomFloor(dun);
-            goal4 = DungeonUtility.randomFloor(dun);
-            goal5 = DungeonUtility.randomFloor(dun);
+            goal1 = dg.utility.randomFloor(dun);
+            goal2 = dg.utility.randomFloor(dun);
+            goal3 = dg.utility.randomFloor(dun);
+            goal4 = dg.utility.randomFloor(dun);
+            goal5 = dg.utility.randomFloor(dun);
 
-            entry = DungeonUtility.randomFloor(dun);
+            entry = dg.utility.randomFloor(dun);
 
             LOS los = new LOS();
             los.setRadiusStrategy(Radius.DIAMOND);

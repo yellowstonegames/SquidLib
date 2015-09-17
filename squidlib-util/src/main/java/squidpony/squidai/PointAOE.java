@@ -36,7 +36,7 @@ public class PointAOE implements AOE {
 
     private PointAOE()
     {
-        center = new Coord(1, 1);
+        center = Coord.get(1, 1);
     }
 
     public Coord getCenter() {
@@ -174,7 +174,7 @@ public class PointAOE implements AOE {
                         ctr++;
                 }
                 if(ctr > 0)
-                    locs.get(totalTargets - ctr).add(new Coord(x, y));
+                    locs.get(totalTargets - ctr).add(Coord.get(x, y));
             }
         }
         Coord it;
@@ -205,7 +205,7 @@ public class PointAOE implements AOE {
                                     ctr++;
                             }
                             if(ctr > 0)
-                                locs.get(totalTargets - ctr).add(new Coord(x, y));
+                                locs.get(totalTargets - ctr).add(Coord.get(x, y));
                         }
                     }
                 }
@@ -222,7 +222,7 @@ public class PointAOE implements AOE {
     @Override
     public LinkedHashMap<Coord, Double> findArea() {
         LinkedHashMap<Coord, Double> ret = new LinkedHashMap<Coord, Double>(1);
-        ret.put(new Coord(center.x, center.y), 1.0);
+        ret.put(Coord.get(center.x, center.y), 1.0);
         return ret;
     }
 

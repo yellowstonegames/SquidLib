@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -23,23 +24,19 @@ public class SpillTest {
         for (Spill.Measurement m : Spill.Measurement.values()) {
             LightRNG lrng = new LightRNG(0x1337deadbeefc000l);
             RNG rng = new RNG(lrng);
-            DungeonUtility.rng = rng;
-            DungeonBoneGen dg = new DungeonBoneGen(rng);
+            DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
 
-            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            dg.wallWrap();
-
-            char[][] dun = dg.getDungeon();
+            char[][] dun = dg.generate();
             Spill spreader = new Spill(dun, m);
 
             System.out.println(dg);
 
-            Coord entry = DungeonUtility.randomFloor(dun);
+            Coord entry = dg.utility.randomFloor(dun);
             HashSet<Coord> impassable = new HashSet<Coord>();
-            impassable.add(new Coord(entry.x + 2, entry.y));
-            impassable.add(new Coord(entry.x - 2, entry.y));
-            impassable.add(new Coord(entry.x, entry.y + 2));
-            impassable.add(new Coord(entry.x, entry.y - 2));
+            impassable.add(Coord.get(entry.x + 2, entry.y));
+            impassable.add(Coord.get(entry.x - 2, entry.y));
+            impassable.add(Coord.get(entry.x, entry.y + 2));
+            impassable.add(Coord.get(entry.x, entry.y - 2));
             ArrayList<Coord> ordered = spreader.start(entry, 20, impassable);
             ordered.addAll(spreader.start(entry, 35, impassable));
             boolean[][] sm = spreader.spillMap;

@@ -2,7 +2,7 @@ package squidpony.squidmath;
 
 /**
  * Generic three dimensional coordinate class.
- *
+ * Not cached in a pool because it is rarely used internally.
  * @author Lewis Potter
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -22,6 +22,10 @@ public class Coord3D extends Coord {
         this.z = z;
     }
 
+    public static Coord3D get(int x, int y, int z)
+    {
+        return new Coord3D(x, y, z);
+    }
     /**
      * Returns the linear distance between this coordinate point and the
      * provided one.

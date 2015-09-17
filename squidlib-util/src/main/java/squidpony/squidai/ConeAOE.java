@@ -57,7 +57,7 @@ public class ConeAOE implements AOE {
     private ConeAOE()
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
-        this.origin = new Coord(1, 1);
+        this.origin = Coord.get(1, 1);
         this.radius = 1;
 //        this.startAngle = 0;
 //        this.endAngle = 90;
@@ -210,7 +210,7 @@ public class ConeAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         double[][] tmpfov;
-        Coord tempPt = new Coord(0, 0);
+        Coord tempPt = Coord.get(0, 0);
 
         for (int i = 0; i < exs.length; i++) {
             t = exs[i];
@@ -220,9 +220,9 @@ public class ConeAOE implements AOE {
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt.x = x;
+                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt.y = y;
+                    tempPt = tempPt.setY(y);
                     dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -294,7 +294,7 @@ public class ConeAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality) {
@@ -305,7 +305,7 @@ public class ConeAOE implements AOE {
                             ap.add(ts[i]);
                     }
                     if (ap.size() > 0) {
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
 
@@ -343,7 +343,7 @@ public class ConeAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
-        Coord tempPt = new Coord(0, 0);
+        Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
@@ -352,9 +352,9 @@ public class ConeAOE implements AOE {
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt.x = x;
+                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt.y = y;
+                    tempPt = tempPt.setY(y);
                     dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -475,7 +475,7 @@ public class ConeAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
 
                 }
@@ -495,7 +495,7 @@ public class ConeAOE implements AOE {
                             ap.add(lts[i - pts.length]);
                     }
                     if (ap.size() > 0) {
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
             }
@@ -551,7 +551,7 @@ public class ConeAOE implements AOE {
                     }
                 }
                 if(ctr > 0)
-                    locs.get(totalTargets - ctr).add(new Coord(x, y));
+                    locs.get(totalTargets - ctr).add(Coord.get(x, y));
             }
         }
         Coord it;
@@ -588,7 +588,7 @@ public class ConeAOE implements AOE {
                                 }
                             }
                             if(ctr > 0)
-                                locs.get(totalTargets - ctr).add(new Coord(x, y));
+                                locs.get(totalTargets - ctr).add(Coord.get(x, y));
                         }
                     }
                 }

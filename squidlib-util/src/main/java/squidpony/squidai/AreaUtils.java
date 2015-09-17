@@ -24,7 +24,7 @@ public class AreaUtils {
             for(int j = 0; j < map[i].length; j++)
             {
                 if(map[i][j])
-                    ret.put(new Coord(i, j), 1.0);
+                    ret.put(Coord.get(i, j), 1.0);
             }
         }
         return ret;
@@ -44,7 +44,7 @@ public class AreaUtils {
             for(int j = 0; j < map[i].length; j++)
             {
                 if(map[i][j] > 0.0)
-                    ret.put(new Coord(i, j), map[i][j]);
+                    ret.put(Coord.get(i, j), map[i][j]);
             }
         }
         return ret;
@@ -67,7 +67,7 @@ public class AreaUtils {
             for(int j = 0; j < map[i].length; j++)
             {
                 if(map[i][j] > cutoff)
-                    ret.put(new Coord(i, j), 1.0);
+                    ret.put(Coord.get(i, j), 1.0);
             }
         }
         return ret;
@@ -87,7 +87,7 @@ public class AreaUtils {
             for(int j = 0; j < map[i].length; j++)
             {
                 if(map[i][j] < DijkstraMap.WALL)
-                    ret.put(new Coord(i, j), 1.0);
+                    ret.put(Coord.get(i, j), 1.0);
             }
         }
         return ret;

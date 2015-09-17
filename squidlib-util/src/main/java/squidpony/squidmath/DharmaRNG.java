@@ -1,9 +1,6 @@
 package squidpony.squidmath;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 /**
  * An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.
@@ -232,7 +229,7 @@ public class DharmaRNG extends RNG {
         if (list.isEmpty()) {
             return null;
         }
-        return (T) list.toArray()[this.nextInt(list.size())];
+        return new ArrayList<T>(list).get(nextInt(list.size()));
     }
 
     /**

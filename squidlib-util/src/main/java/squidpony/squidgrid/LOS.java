@@ -172,7 +172,7 @@ public class LOS {
     private boolean bresenhamReachable(Radius radiusStrategy) {
         Queue<Coord> path = Bresenham.line2D(startx, starty, targetx, targety);
         lastPath = new LinkedList<>();
-        lastPath.add(new Coord(startx, starty));
+        lastPath.add(Coord.get(startx, starty));
         double force = 1;
         double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);
         double currentForce = force;
@@ -194,7 +194,7 @@ public class LOS {
 
     private boolean rayReachable(Radius radiusStrategy) {
         lastPath = new LinkedList<>();//save path for later retreival
-        lastPath.add(new Coord(startx, starty));
+        lastPath.add(Coord.get(startx, starty));
         if (startx == targetx && starty == targety) {//already there!
             return true;
         }
@@ -225,7 +225,7 @@ public class LOS {
 
         CoordDouble collisionPoint = new CoordDouble();
         while (testX >= 0 && testX < width && testY >= 0 && testY < height && (testX != endTileX || testY != endTileY)) {
-            lastPath.add(new Coord(testX, testY));
+            lastPath.add(Coord.get(testX, testY));
             if (maxX < maxY) {
                 maxX += deltaX;
                 testX += stepX;
@@ -262,7 +262,7 @@ public class LOS {
         }
 
         if (end.x >= 0 && end.x < width && end.y >= 0 && end.y < height) {
-            lastPath.add(new Coord((int) end.x, (int) end.y));
+            lastPath.add(Coord.get((int) end.x, (int) end.y));
         }
 
         return (int) end.x == targetx && (int) end.y == targety;

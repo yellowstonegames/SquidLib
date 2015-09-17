@@ -72,13 +72,13 @@ public class EverythingDemo {
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
         char[][] placement = DungeonUtility.closeDoors(bareDungeon);
-        player = DungeonUtility.randomFloor(placement);
+        player = dungeonGen.utility.randomFloor(placement);
         placement[player.x][player.y] = '@';
         int numMonsters = 25;
         monsters = new HashMap<Coord, Integer>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Coord monPos = DungeonUtility.randomFloor(placement);
+            Coord monPos = dungeonGen.utility.randomFloor(placement);
             monsters.put(monPos, 0);
             placement[monPos.x][monPos.y] = 'M';
         }
@@ -115,7 +115,7 @@ public class EverythingDemo {
                 // changes to the map mean the resistances for FOV need to be regenerated.
                 res = DungeonUtility.generateResistances(bareDungeon);
             } else {
-                player.move(player.x + xmod, player.y + ymod);
+                player = player.translate(xmod, ymod);
             }
             if(monsters.containsKey(player))
             {
@@ -147,7 +147,7 @@ public class EverythingDemo {
                     double best = 9999.0;
                     for(Direction d : rng.shuffle(Direction.CARDINALS))
                     {
-                        Coord tmp = new Coord(mon.getKey().x + d.deltaX, mon.getKey().y + d.deltaY);
+                        Coord tmp = Coord.get(mon.getKey().x + d.deltaX, mon.getKey().y + d.deltaY);
                         if(pathMap[tmp.x][tmp.y] < best &&
                                 !monsters.containsKey(tmp) && !newMons.containsKey(tmp))
                         {
@@ -159,7 +159,7 @@ public class EverythingDemo {
                     }
                     if(choice != null)
                     {
-                        Coord tmp = new Coord(mon.getKey().x + choice.deltaX, mon.getKey().y + choice.deltaY);
+                        Coord tmp = Coord.get(mon.getKey().x + choice.deltaX, mon.getKey().y + choice.deltaY);
                         // if we would move into the player, instead damage the player and give newMons the current
                         // position of this monster.
                         if(player.equals(tmp))

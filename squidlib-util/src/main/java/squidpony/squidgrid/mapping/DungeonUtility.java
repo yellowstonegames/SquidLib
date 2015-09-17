@@ -40,36 +40,36 @@ public class DungeonUtility {
         int height = map[0].length;
         if(width < 3 || height < 3)
             return null;
-        Coord pt = new Coord(rng.nextInt(width - 2) + 1, rng.nextInt(height - 2) + 1);
+        int x = rng.nextInt(width - 2) + 1, y = rng.nextInt(height - 2) + 1;
         for(int i = 0; i < 20; i++)
         {
-            if(map[pt.x][pt.y] == '.')
+            if(map[x][y] == '.')
             {
-                return pt;
+                return Coord.get(x, y);
             }
             else
             {
-                pt.x = rng.nextInt(width - 2) + 1;
-                pt.y = rng.nextInt(height - 2) + 1;
+                x = rng.nextInt(width - 2) + 1;
+                y = rng.nextInt(height - 2) + 1;
             }
         }
-        pt.x = 1;
-        pt.y = 1;
-        if(map[pt.x][pt.y] == '.')
-            return pt;
+        x = 1;
+        y = 1;
+        if(map[x][y] == '.')
+            return Coord.get(x, y);
 
-        while(map[pt.x][pt.y] != '.')
+        while(map[x][y] != '.')
         {
-            pt.x += 1;
-            if(pt.x >= width - 1)
+            x += 1;
+            if(x >= width - 1)
             {
-                pt.x = 1;
-                pt.y += 1;
+                x = 1;
+                y += 1;
             }
-            if(pt.y >= height - 1)
+            if(y >= height - 1)
                 return null;
         }
-        return pt;
+        return Coord.get(x, y);
     }
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has the same value as the
@@ -83,36 +83,36 @@ public class DungeonUtility {
         int height = map[0].length;
         if(width < 3 || height < 3)
             return null;
-        Coord pt = new Coord(rng.nextInt(width - 2) + 1, rng.nextInt(height - 2) + 1);
+        int x = rng.nextInt(width - 2) + 1, y = rng.nextInt(height - 2) + 1;
         for(int i = 0; i < 30; i++)
         {
-            if(map[pt.x][pt.y] == tile)
+            if(map[x][y] == tile)
             {
-                return pt;
+                return Coord.get(x, y);
             }
             else
             {
-                pt.x = rng.nextInt(width - 2) + 1;
-                pt.y = rng.nextInt(height - 2) + 1;
+                x = rng.nextInt(width - 2) + 1;
+                y = rng.nextInt(height - 2) + 1;
             }
         }
-        pt.x = 1;
-        pt.y = 1;
-        if(map[pt.x][pt.y] == tile)
-            return pt;
+        x = 1;
+        y = 1;
+        if(map[x][y] == tile)
+            return Coord.get(x, y);
 
-        while(map[pt.x][pt.y] != tile)
+        while(map[x][y] != tile)
         {
-            pt.x += 1;
-            if(pt.x >= width - 1)
+            x += 1;
+            if(x >= width - 1)
             {
-                pt.x = 1;
-                pt.y += 1;
+                x = 1;
+                y += 1;
             }
-            if(pt.y >= height - 1)
+            if(y >= height - 1)
                 return null;
         }
-        return pt;
+        return Coord.get(x, y);
     }
 
     /**
@@ -131,29 +131,25 @@ public class DungeonUtility {
         int height = map[0].length;
         if(width < 3 || height < 3 || start.x <= 0 || start.y <= 0 || start.x >= width - 1 || start.y >= height - 1)
             return null;
-        Coord stepped = new Coord(start.x, start.y);
+        Coord stepped = Coord.get(start.x, start.y);
 
         if(eightWay)
         {
             int mv = rng.nextInt(9);
-            stepped.translate((mv % 3) - 1, (mv / 3) - 1);
+            return stepped.translate((mv % 3) - 1, (mv / 3) - 1);
         }
         else
         {
             int mv = rng.nextInt(5);
             switch (mv)
             {
-                case 0: stepped.translate(-1, 0);
-                    break;
-                case 1: stepped.translate(1, 0);
-                    break;
-                case 2: stepped.translate(0, -1);
-                    break;
-                case 3: stepped.translate(0, 1);
-                    break;
+                case 0: return stepped.translate(-1, 0);
+                case 1: return stepped.translate(1, 0);
+                case 2: return stepped.translate(0, -1);
+                case 3: return stepped.translate(0, 1);
+                default: return stepped;
             }
         }
-        return stepped;
     }
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value,
@@ -170,48 +166,48 @@ public class DungeonUtility {
         int height = map[0].length;
         if(width < 4 || height < 4)
             return null;
-        Coord pt = new Coord(rng.nextInt(width - size), rng.nextInt(height - size));
+        int x = rng.nextInt(width - size), y = rng.nextInt(height - size);
         CELL:
-        for(int i = 0; i < 20; i++, pt.x = rng.nextInt(width - size), pt.y = rng.nextInt(height - size))
+        for(int i = 0; i < 20; i++, x = rng.nextInt(width - size), y = rng.nextInt(height - size))
         {
-            if(map[pt.x][pt.y] == '.')
+            if(map[x][y] == '.')
             {
-                for(int x = 0; x < size; x++)
+                for(int j = 0; j < size; j++)
                 {
-                    for(int y = 0; y < size; y++)
+                    for(int k = 0; k < size; k++)
                     {
-                        if(map[pt.x + x][pt.y + y] != '.')
+                        if(map[x + j][y + k] != '.')
                             continue CELL;
                     }
                 }
-                return pt;
+                return Coord.get(x, y);
             }
         }
-        pt.x = 1;
-        pt.y = 1;
+        x = 1;
+        y = 1;
 
         SLOW:
         while(true)
         {
-            pt.x += 1;
-            if(pt.x >= width - size)
+            x += 1;
+            if(x >= width - size)
             {
-                pt.x = 1;
-                pt.y += 1;
+                x = 1;
+                y += 1;
             }
-            if(pt.y >= height - size)
+            if(y >= height - size)
                 return null;
-            if(map[pt.x][pt.y] == '.')
+            if(map[x][y] == '.')
             {
-                for(int x = 0; x < size; x++)
+                for(int j = 0; j < size; j++)
                 {
-                    for(int y = 0; y < size; y++)
+                    for(int k = 0; k < size; k++)
                     {
-                        if(map[pt.x + x][pt.y + y] != '.')
+                        if(map[x + j][y + k] != '.')
                             continue SLOW;
                     }
                 }
-                return pt;
+                return Coord.get(x, y);
             }
         }
     }

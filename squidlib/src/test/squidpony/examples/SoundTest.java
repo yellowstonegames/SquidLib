@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -21,28 +22,24 @@ public class SoundTest {
         for (SoundMap.Measurement m : SoundMap.Measurement.values()) {
             LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
             RNG rng = new RNG(lrng);
-            DungeonUtility.rng = rng;
-            DungeonBoneGen dg = new DungeonBoneGen(rng);
+            DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
 
-            dg.generate(TilesetType.DEFAULT_DUNGEON, 40, 40);
-            dg.wallWrap();
-
-            char[][] dun = dg.getDungeon();
+            char[][] dun = dg.generate();
             SoundMap audio = new SoundMap(dun, m);
 
             System.out.println(dg);
 
             HashSet<Coord> dudes = new HashSet<Coord>(5);
-            dudes.add(DungeonUtility.randomFloor(dun));
-            dudes.add(DungeonUtility.randomFloor(dun));
-            dudes.add(DungeonUtility.randomFloor(dun));
-            dudes.add(DungeonUtility.randomFloor(dun));
-            dudes.add(DungeonUtility.randomFloor(dun));
+            dudes.add(dg.utility.randomFloor(dun));
+            dudes.add(dg.utility.randomFloor(dun));
+            dudes.add(dg.utility.randomFloor(dun));
+            dudes.add(dg.utility.randomFloor(dun));
+            dudes.add(dg.utility.randomFloor(dun));
 
             HashMap<Coord, Double> noises = new HashMap<Coord, Double>(8);
             for(int i = 0; i < 6; i++)
             {
-                noises.put(DungeonUtility.randomStep(dun, DungeonUtility.randomFloor(dun),
+                noises.put(dg.utility.randomStep(dun, dg.utility.randomFloor(dun),
                         (m == SoundMap.Measurement.CHEBYSHEV)), rng.nextDouble(10.0) + 1.0 + i);
             }
 

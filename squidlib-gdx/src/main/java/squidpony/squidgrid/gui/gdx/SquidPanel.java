@@ -448,7 +448,7 @@ public class SquidPanel extends Group {
     /*
     public void startAnimation(Actor a, int oldX, int oldY)
     {
-        Coord tmp = new Coord(oldX, oldY);
+        Coord tmp = Coord.get(oldX, oldY);
 
         tmp.x = Math.round(a.getX() / cellWidth);
         tmp.y = gridHeight - Math.round(a.getY() / cellHeight) - 1;

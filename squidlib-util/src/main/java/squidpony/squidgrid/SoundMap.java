@@ -281,7 +281,7 @@ public class SoundMap
      */
     public void setSound(int x, int y, double loudness) {
         if(!initialized) return;
-        Coord pt = new Coord(x, y);
+        Coord pt = Coord.get(x, y);
         if(sounds.containsKey(pt) && sounds.get(pt) >= loudness)
             return;
         sounds.put(pt, loudness);
@@ -309,7 +309,7 @@ public class SoundMap
      */
     public void removeSound(int x, int y) {
         if(!initialized) return;
-        Coord pt = new Coord(x, y);
+        Coord pt = Coord.get(x, y);
         if(sounds.containsKey(pt))
             sounds.remove(pt);
     }
@@ -364,13 +364,13 @@ public class SoundMap
     protected void setFresh(int x, int y, double counter) {
         if(!initialized) return;
         gradientMap[x][y] = counter;
-        fresh.put(new Coord(x, y), counter);
+        fresh.put(Coord.get(x, y), counter);
     }
 
     protected void setFresh(final Coord pt, double counter) {
         if(!initialized) return;
         gradientMap[pt.x][pt.y] = counter;
-        fresh.put(new Coord(pt.x, pt.y), counter);
+        fresh.put(Coord.get(pt.x, pt.y), counter);
     }
 
     /**
@@ -412,8 +412,7 @@ public class SoundMap
                 if(cell.getValue() <= 1) //We shouldn't assign values lower than 1.
                     continue;
                 for (int d = 0; d < dirs.length; d++) {
-                    Coord adj = new Coord(cell.getKey());
-                    adj.translate(dirs[d].deltaX, dirs[d].deltaY);
+                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
                     if(adj.x < 0 || adj.x >= width || adj.y < 0 || adj.y >= height)
                         continue;
                     if(physicalMap[cell.getKey().x][cell.getKey().y] == WALL && physicalMap[adj.x][adj.y] == WALL)
@@ -422,7 +421,7 @@ public class SoundMap
                         double v = cell.getValue() - 1 - ((physicalMap[adj.x][adj.y] == WALL) ? 1 : 0);
                         if (v > 0) {
                             gradientMap[adj.x][adj.y] = v;
-                            fresh.put(new Coord(adj.x, adj.y), v);
+                            fresh.put(Coord.get(adj.x, adj.y), v);
                             ++numAssigned;
                         }
                     }
@@ -463,7 +462,7 @@ public class SoundMap
         {
             if(critter.x < 0 || critter.x >= width || critter.y < 0 || critter.y >= height)
                 continue;
-            alerted.put(new Coord(critter.x, critter.y), gradientMap[critter.x][critter.y]);
+            alerted.put(Coord.get(critter.x, critter.y), gradientMap[critter.x][critter.y]);
         }
         return alerted;
     }

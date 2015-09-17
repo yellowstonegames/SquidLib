@@ -343,7 +343,7 @@ public class FOV {
 
     private void doRippleFOV(int x, int y) {
         Deque<Coord> dq = new LinkedList<>();
-        dq.offer(new Coord(x, y));
+        dq.offer(Coord.get(x, y));
         while (!dq.isEmpty()) {
             Coord p = dq.pop();
             if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
@@ -362,7 +362,7 @@ public class FOV {
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
-                        dq.offer(new Coord(x2, y2));//redo neighbors since this one's light changed
+                        dq.offer(Coord.get(x2, y2));//redo neighbors since this one's light changed
                     }
                 }
             }
@@ -372,7 +372,7 @@ public class FOV {
 
     private void doRippleFOVLimited(int x, int y) {
         Deque<Coord> dq = new LinkedList<>();
-        dq.offer(new Coord(x, y));
+        dq.offer(Coord.get(x, y));
         while (!dq.isEmpty()) {
             Coord p = dq.pop();
             if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
@@ -393,7 +393,7 @@ public class FOV {
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
-                        dq.offer(new Coord(x2, y2));//redo neighbors since this one's light changed
+                        dq.offer(Coord.get(x2, y2));//redo neighbors since this one's light changed
                     }
                 }
             }
@@ -410,7 +410,7 @@ public class FOV {
             int x2 = x + di.deltaX;
             int y2 = y + di.deltaY;
             if (x2 >= 0 && x2 < width && y2 >= 0 && y2 < height) {
-                neighbors.add(new Coord(x2, y2));
+                neighbors.add(Coord.get(x2, y2));
             }
         }
 

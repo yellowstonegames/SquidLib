@@ -93,7 +93,7 @@ public class Elias {
     private void mark(double x, double y, double c) {
         //check bounds overflow from antialiasing
         if (x >= 0 && x < width && y >= 0 && y < height && c > threshold) {
-            path.add(new Coord((int) x, (int) y));
+            path.add(Coord.get((int) x, (int) y));
             lightMap[(int) x][(int) y] = (float) c;
         }
     }

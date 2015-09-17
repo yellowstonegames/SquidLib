@@ -157,7 +157,7 @@ public class RNG {
         if (list.isEmpty()) {
             return null;
         }
-        return (T) list.toArray()[nextInt(list.size())];
+        return new ArrayList<T>(list).get(nextInt(list.size()));
     }
 
 	/**

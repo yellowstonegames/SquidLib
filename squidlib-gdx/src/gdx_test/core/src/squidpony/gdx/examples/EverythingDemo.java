@@ -104,7 +104,7 @@ public class EverythingDemo extends ApplicationAdapter {
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
 
         player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10), 30);
-        cursor = new Coord(-1, -1);
+        cursor = Coord.get(-1, -1);
         toCursor = new ArrayList<Coord>(10);
         awaitedMoves = new ArrayList<Coord>(10);
         playerToCursor = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
@@ -213,7 +213,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     if (toCursor.isEmpty()) {
                         cursor.x = screenX;
                         cursor.y = screenY;
-                        toCursor = playerToCursor.findPath(30, null, null, new Coord(player.gridX, player.gridY), cursor);
+                        toCursor = playerToCursor.findPath(30, null, null, Coord.get(player.gridX, player.gridY), cursor);
                     }
                     awaitedMoves = new ArrayList<>(toCursor);
                 }
@@ -238,7 +238,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 if(fovmap[screenX][screenY] > 0.0) {
                     cursor.x = screenX;
                     cursor.y = screenY;
-                    toCursor = playerToCursor.findPath(30, null, null, new Coord(player.gridX, player.gridY), cursor);
+                    toCursor = playerToCursor.findPath(30, null, null, Coord.get(player.gridX, player.gridY), cursor);
                 }
                 return false;
             }
@@ -321,7 +321,7 @@ public class EverythingDemo extends ApplicationAdapter {
         LinkedHashSet<Coord> monplaces = new LinkedHashSet<>(monsters.size());
         for(AnimatedEntity ae : monsters.keySet())
         {
-            monplaces.add(new Coord(ae.gridX, ae.gridY));
+            monplaces.add(Coord.get(ae.gridX, ae.gridY));
         }
         pathMap = getToPlayer.scan(monplaces);
 
@@ -340,7 +340,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 double best = 9999.0;
                 for(Direction d : rng.shuffle(Direction.OUTWARDS))
                 {
-                    Coord tmp = new Coord(mon.getKey().gridX + d.deltaX, mon.getKey().gridY + d.deltaY);
+                    Coord tmp = Coord.get(mon.getKey().gridX + d.deltaX, mon.getKey().gridY + d.deltaY);
                     if(pathMap[tmp.x][tmp.y] < best &&
                             !checkOverlap(mon.getKey(), tmp.x, tmp.y, nextMovePositions))
                     {
@@ -351,7 +351,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                 }
                 if(choice != null) {
-                    Coord tmp = new Coord(mon.getKey().gridX + choice.deltaX, mon.getKey().gridY + choice.deltaY);
+                    Coord tmp = Coord.get(mon.getKey().gridX + choice.deltaX, mon.getKey().gridY + choice.deltaY);
                     // if we would move into the player, instead damage the player and give newMons the current
                     // position of this monster.
                     if (player.gridX == tmp.x && player.gridY == tmp.y) {
@@ -365,7 +365,7 @@ public class EverythingDemo extends ApplicationAdapter {
                         /*if (fovmap[mon.getKey().x][mon.getKey().y] > 0.0) {
                             display.put(mon.getKey().x, mon.getKey().y, 'M', 11);
                         }*/
-                        nextMovePositions.add(new Coord(tmp.x, tmp.y));
+                        nextMovePositions.add(Coord.get(tmp.x, tmp.y));
                         display.slide(mon.getKey(), tmp.x, tmp.y);
                     }
                 }

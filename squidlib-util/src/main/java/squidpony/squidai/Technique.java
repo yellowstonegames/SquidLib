@@ -50,7 +50,7 @@ public class Technique {
     public String id;
     public AOE aoe;
     protected char[][] dungeon;
-    protected final static Coord DEFAULT_POINT = new Coord(0, 0);
+    protected final static Coord DEFAULT_POINT = Coord.get(0, 0);
 
     /**
      * Creates a Technique that can target any adjacent single Coord, using

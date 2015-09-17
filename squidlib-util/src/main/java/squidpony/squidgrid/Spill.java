@@ -347,7 +347,7 @@ public class Spill {
 
     protected void setFresh(int x, int y) {
         if(!initialized) return;
-        fresh.add(new Coord(x, y));
+        fresh.add(Coord.get(x, y));
     }
 
     protected void setFresh(final Coord pt) {
@@ -380,24 +380,23 @@ public class Spill {
             return null;
         spreadPattern = new ArrayList<Coord>(volume);
         spillMap[entry.x][entry.y] = true;
-        Coord temp = new Coord(0, 0);
-        for(int x = 0; x < spillMap.length; x++, temp.x = x)
+        Coord temp = Coord.get(0, 0);
+        for(int x = 0; x < spillMap.length; x++, temp = temp.setX(x))
         {
-            for(int y = 0; y < spillMap[x].length; y++, temp.y = y)
+            for(int y = 0; y < spillMap[x].length; y++, temp = temp.setY(y))
             {
                 if(spillMap[x][y] && !impassable.contains(temp))
-                    fresh.add(new Coord(temp));
+                    fresh.add(temp);
             }
         }
 
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (!fresh.isEmpty() && spreadPattern.size() < volume) {
-            Coord cell = (Coord) fresh.toArray()[rng.nextInt(fresh.size())];
+            Coord cell = fresh.toArray(new Coord[fresh.size()])[rng.nextInt(fresh.size())];
             spreadPattern.add(cell);
             spillMap[cell.x][cell.y] = true;
             for (int d = 0; d < dirs.length; d++) {
-                Coord adj = new Coord(cell);
-                adj.translate(dirs[d].deltaX, dirs[d].deltaY);
+                Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
                 double h = heuristic(dirs[d]);
                 if (physicalMap[adj.x][adj.y] && !spillMap[adj.x][adj.y] && !impassable.contains(adj) && rng.nextDouble() <= 1.0 / h) {
                     setFresh(adj);

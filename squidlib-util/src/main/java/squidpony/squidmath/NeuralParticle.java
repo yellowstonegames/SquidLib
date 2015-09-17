@@ -102,15 +102,15 @@ public class NeuralParticle {
             // Calculate unit vector
             double unitX = (randomPoint.x - nearestPoint.x) / pointDistance;
             double unitY = (randomPoint.y - nearestPoint.y) / pointDistance;
-            randomPoint.x = (int) (rng.between(minDistance, maxDistance + 1) * unitX + nearestPoint.x);
-            randomPoint.y = (int) (rng.between(minDistance, maxDistance + 1) * unitY + nearestPoint.y);
+            randomPoint = Coord.get( (int) (rng.between(minDistance, maxDistance + 1) * unitX + nearestPoint.x)
+                                   , (int) (rng.between(minDistance, maxDistance + 1) * unitY + nearestPoint.y));
         }
         return randomPoint;
     }
 
     private Coord nearestPoint(Coord point) {
         if (distribution.isEmpty()) {
-            Coord center = new Coord(width / 2, height / 2);
+            Coord center = Coord.get(width / 2, height / 2);
             distribution.add(center);
             return center;
         }
@@ -132,7 +132,7 @@ public class NeuralParticle {
     }
 
     private Coord randomPoint() {
-        return new Coord(rng.nextInt(width), rng.nextInt(height));
+        return Coord.get(rng.nextInt(width), rng.nextInt(height));
     }
 
 }

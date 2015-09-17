@@ -109,8 +109,8 @@ public class GridSearchTest {
             }
         }
         search = new AStarSearch(map, AStarSearch.SearchType.MANHATTAN);
-        start = new Coord(rng.nextInt(width), rng.nextInt(height));
-        target = new Coord(rng.nextInt(width), rng.nextInt(height));
+        start = Coord.get(rng.nextInt(width), rng.nextInt(height));
+        target = Coord.get(rng.nextInt(width), rng.nextInt(height));
         path = search.path(start.x, start.y, target.x, target.y);
 
 //        print();
