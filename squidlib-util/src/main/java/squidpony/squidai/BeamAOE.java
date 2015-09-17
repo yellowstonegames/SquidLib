@@ -98,7 +98,7 @@ public class BeamAOE implements AOE {
         rt = Radius.SQUARE;
         this.origin = origin;
         double theta = Math.toRadians(angle);
-        this.end = new Coord((int) round(cos(theta) * length) + origin.x,
+        this.end = Coord.get((int) round(cos(theta) * length) + origin.x,
                 (int) round(sin(theta) * length) + origin.y);
         this.length = length;
         this.maxRange = this.length;
@@ -112,7 +112,7 @@ public class BeamAOE implements AOE {
         rt = Radius.SQUARE;
         this.origin = origin;
         double theta = Math.toRadians(angle);
-        this.end = new Coord((int) round(cos(theta) * length) + origin.x,
+        this.end = Coord.get((int) round(cos(theta) * length) + origin.x,
                 (int) round(sin(theta) * length) + origin.y);
         this.radius = radius;
         this.length = length;
@@ -136,7 +136,7 @@ public class BeamAOE implements AOE {
         }
         this.origin = origin;
         double theta = Math.toRadians(angle);
-        this.end = new Coord((int) round(cos(theta) * length) + origin.x,
+        this.end = Coord.get((int) round(cos(theta) * length) + origin.x,
                 (int) round(sin(theta) * length) + origin.y);
         this.radius = radius;
         this.length = length;
@@ -291,7 +291,7 @@ public class BeamAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
-        Coord tempPt = new Coord(0, 0);
+        Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
@@ -306,9 +306,9 @@ public class BeamAOE implements AOE {
                 dt.partialScan(radius, null);
 
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt.x = x;
+                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt.y = y;
+                    tempPt = tempPt.setY(y);
                     dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -386,7 +386,7 @@ public class BeamAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality)
@@ -399,7 +399,7 @@ public class BeamAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
             }
@@ -435,7 +435,7 @@ public class BeamAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
-        Coord tempPt = new Coord(0, 0);
+        Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
@@ -450,9 +450,9 @@ public class BeamAOE implements AOE {
                 dt.partialScan(radius, null);
 
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt.x = x;
+                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt.y = y;
+                    tempPt = tempPt.setY(y);
                     dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR  || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -596,7 +596,7 @@ public class BeamAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality)
@@ -617,7 +617,7 @@ public class BeamAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
             }
@@ -655,7 +655,7 @@ public class BeamAOE implements AOE {
                             ctr++;
                     }
                     if(ctr > 0)
-                        locs.get(totalTargets - ctr).add(new Coord(x, y));
+                        locs.get(totalTargets - ctr).add(Coord.get(x, y));
                 }
             }
             Coord it;
@@ -683,7 +683,7 @@ public class BeamAOE implements AOE {
                                         ctr++;
                                 }
                                 if(ctr > 0)
-                                    locs.get(totalTargets - ctr).add(new Coord(x, y));
+                                    locs.get(totalTargets - ctr).add(Coord.get(x, y));
                             }
                         }
                     }

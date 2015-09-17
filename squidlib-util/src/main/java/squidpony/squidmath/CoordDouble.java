@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import java.util.DoubleSummaryStatistics;
 
 /**
+ * Coord using double values for x and y instead of int. Not pooled.
  * Created by Tommy Ettinger on 8/12/2015.
  */
 public class CoordDouble implements java.io.Serializable {
@@ -30,7 +31,10 @@ public class CoordDouble implements java.io.Serializable {
         this.x = other.x;
         this.y = other.y;
     }
-
+    public static CoordDouble get(double x, double y)
+    {
+        return new CoordDouble(x, y);
+    }
     public CoordDouble getLocation()
     {
         return new CoordDouble(x, y);

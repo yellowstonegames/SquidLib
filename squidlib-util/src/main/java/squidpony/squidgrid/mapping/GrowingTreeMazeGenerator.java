@@ -44,7 +44,7 @@ public class GrowingTreeMazeGenerator {
         y *= 2;
 
         ArrayList<Coord> deck = new ArrayList<>();
-        deck.add(new Coord(x, y));
+        deck.add(Coord.get(x, y));
 
         Direction[] dirs = Direction.CARDINALS;
         while (!deck.isEmpty()) {
@@ -64,7 +64,7 @@ public class GrowingTreeMazeGenerator {
 //                        }
                         map[x][y] = true;
                         map[p.x + dir.deltaX][p.y + dir.deltaY] = true;
-                        deck.add(new Coord(x, y));
+                        deck.add(Coord.get(x, y));
                         break;
                     }
                 }

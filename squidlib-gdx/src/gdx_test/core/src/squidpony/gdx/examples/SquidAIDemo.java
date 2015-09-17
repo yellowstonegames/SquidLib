@@ -97,7 +97,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         los = new LOS(LOS.BRESENHAM);
         res = DungeonUtility.generateResistances(bareDungeon);
 
-        ConeAOE cone = new ConeAOE(new Coord(0, 0), 9, 0, 60, Radius.CIRCLE);
+        ConeAOE cone = new ConeAOE(Coord.get(0, 0), 9, 0, 60, Radius.CIRCLE);
         cone.setMinRange(1);
         cone.setMaxRange(2);
         cone.setMetric(Radius.SQUARE);
@@ -105,7 +105,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         redCone = new Technique("Burning Breath", cone);
         redCone.setMap(bareDungeon);
 
-        BlastAOE blast = new BlastAOE(new Coord(0, 0), 3, Radius.CIRCLE);
+        BlastAOE blast = new BlastAOE(Coord.get(0, 0), 3, Radius.CIRCLE);
         blast.setMinRange(3);
         blast.setMaxRange(5);
         blast.setMetric(Radius.CIRCLE);
@@ -113,7 +113,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         blueBlast = new Technique("Winter Orb", blast);
         blueBlast.setMap(bareDungeon);
 
-        CloudAOE cloud = new CloudAOE(new Coord(0, 0), 20, Radius.DIAMOND);
+        CloudAOE cloud = new CloudAOE(Coord.get(0, 0), 20, Radius.DIAMOND);
         cloud.setMinRange(4);
         cloud.setMaxRange(7);
         cloud.setMetric(Radius.CIRCLE);
@@ -121,7 +121,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         redCloud = new Technique("Acid Mist", cloud);
         redCloud.setMap(bareDungeon);
 
-        BeamAOE beam = new BeamAOE(new Coord(0, 0), 0.0, 8, 1, Radius.DIAMOND);
+        BeamAOE beam = new BeamAOE(Coord.get(0, 0), 0.0, 8, 1, Radius.DIAMOND);
         beam.setMinRange(2);
         beam.setMaxRange(8);
         beam.setMetric(Radius.CIRCLE);
@@ -221,7 +221,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Coord(ae.gridX, ae.gridY);
+                    user = Coord.get(ae.gridX, ae.gridY);
                     break;
                 }
             }
@@ -239,7 +239,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Coord(ae.gridX, ae.gridY);
+                    user = Coord.get(ae.gridX, ae.gridY);
                     break;
                 }
             }
@@ -320,7 +320,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 if (i++ == idx) {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Coord(ae.gridX, ae.gridY);
+                    user = Coord.get(ae.gridX, ae.gridY);
                     break;
                 }
             }
@@ -335,7 +335,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 if (i++ == idx) {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Coord(ae.gridX, ae.gridY);
+                    user = Coord.get(ae.gridX, ae.gridY);
                     break;
                 }
             }
@@ -464,7 +464,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 if (i++ == blueIdx) {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Coord(ae.gridX, ae.gridY);
+                    user = Coord.get(ae.gridX, ae.gridY);
                     whichIdx = blueIdx;
                     break;
                 }
@@ -476,7 +476,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 if (i++ == redIdx) {
                     ae = entry.getKey();
                     health = entry.getValue();
-                    user = new Coord(ae.gridX, ae.gridY);
+                    user = Coord.get(ae.gridX, ae.gridY);
                     whichIdx = redIdx;
                     break;
                 }

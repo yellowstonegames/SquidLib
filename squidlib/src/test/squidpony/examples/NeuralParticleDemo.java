@@ -102,7 +102,7 @@ public class NeuralParticleDemo {
 
                 np = new NeuralParticle(width, height, radius, rng);
                 for (int i = 0; i < seeds; i++) {
-                    Coord p = new Coord(rng.nextInt(width), rng.nextInt(height));
+                    Coord p = Coord.get(rng.nextInt(width), rng.nextInt(height));
                     np.add(p);
                     back.put(p.x, p.y, SColor.SCARLET);
                     back.refresh();

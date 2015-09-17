@@ -126,7 +126,7 @@ public class CloudAOE implements AOE {
         LightRNG l = new LightRNG();
         this.seed = l.getState();
         this.spill = new Spill(new RNG(l));
-        this.center = new Coord(1, 1);
+        this.center = Coord.get(1, 1);
         this.volume = 1;
         this.spill.measurement = Spill.Measurement.MANHATTAN;
         rt = Radius.DIAMOND;
@@ -221,7 +221,7 @@ public class CloudAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
 
-        Coord tempPt = new Coord(0, 0);
+        Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -229,9 +229,9 @@ public class CloudAOE implements AOE {
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt.x = x;
+                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt.y = y;
+                    tempPt = tempPt.setY(y);
                     dungeonCopy[x][y] = (sp.spillMap[x][y] || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -309,7 +309,7 @@ public class CloudAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality)
@@ -322,7 +322,7 @@ public class CloudAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
             }
@@ -369,7 +369,7 @@ public class CloudAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
             Arrays.fill(dungeonPriorities[i], '#');
         }
-        Coord tempPt = new Coord(0, 0);
+        Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
@@ -377,9 +377,9 @@ public class CloudAOE implements AOE {
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt.x = x;
+                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt.y = y;
+                    tempPt = tempPt.setY(y);
                     dungeonCopy[x][y] = (sp.spillMap[x][y] || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -518,7 +518,7 @@ public class CloudAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality)
@@ -539,7 +539,7 @@ public class CloudAOE implements AOE {
                     }
 
                     if (ap.size() > 0) {
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
             }
@@ -586,7 +586,7 @@ public class CloudAOE implements AOE {
                         ctr += 1.0 - (tempRad / radius) * 0.5;
                 }
                 if(ctr >= 1)
-                    locs.get((int)(totalTargets - ctr)).add(new Coord(x, y));
+                    locs.get((int)(totalTargets - ctr)).add(Coord.get(x, y));
             }
         }
         Coord it;
@@ -618,7 +618,7 @@ public class CloudAOE implements AOE {
                                     ctr += 1.0 - (tempRad / radius) * 0.5;
                             }
                             if(ctr >= 1)
-                                locs.get((int)(totalTargets - ctr)).add(new Coord(x, y));
+                                locs.get((int)(totalTargets - ctr)).add(Coord.get(x, y));
                         }
                     }
                 }

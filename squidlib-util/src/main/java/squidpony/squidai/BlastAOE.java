@@ -45,7 +45,7 @@ public class BlastAOE implements AOE {
     private BlastAOE()
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
-        center = new Coord(1, 1);
+        center = Coord.get(1, 1);
         radius = 1;
         radiusType = Radius.DIAMOND;
     }
@@ -127,14 +127,14 @@ public class BlastAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         double[][] tmpfov;
-        Coord tempPt = new Coord(0, 0);
+        Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt.x = x;
+                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt.y = y;
+                    tempPt = tempPt.setY(y);
                     dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -213,7 +213,7 @@ public class BlastAOE implements AOE {
                     {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality) {
@@ -224,7 +224,7 @@ public class BlastAOE implements AOE {
                             ap.add(ts[i]);
                     }
                     if (ap.size() > 0) {
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
             }
@@ -270,15 +270,15 @@ public class BlastAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
-        Coord tempPt = new Coord(0, 0);
+        Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt.x = x;
+                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt.y = y;
+                    tempPt = tempPt.setY(y);
                     dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -400,7 +400,7 @@ public class BlastAOE implements AOE {
                     if(ap.size() > 0) {
                         bestQuality = qualityMap[x][y];
                         bestPoints.clear();
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality) {
@@ -419,7 +419,7 @@ public class BlastAOE implements AOE {
                             ap.add(lts[i - pts.length]);
                     }
                     if (ap.size() > 0) {
-                        bestPoints.put(new Coord(x, y), ap);
+                        bestPoints.put(Coord.get(x, y), ap);
                     }
                 }
             }
@@ -464,7 +464,7 @@ public class BlastAOE implements AOE {
                         ctr++;
                 }
                 if(ctr > 0)
-                    locs.get(totalTargets - ctr).add(new Coord(x, y));
+                    locs.get(totalTargets - ctr).add(Coord.get(x, y));
             }
         }
         Coord it;
@@ -495,7 +495,7 @@ public class BlastAOE implements AOE {
                                     ctr++;
                             }
                             if(ctr > 0)
-                                locs.get(totalTargets - ctr).add(new Coord(x, y));
+                                locs.get(totalTargets - ctr).add(Coord.get(x, y));
                         }
                     }
                 }

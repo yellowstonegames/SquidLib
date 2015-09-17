@@ -90,8 +90,8 @@ public class AStarSearch {
      * @return the shortest path, or null
      */
     public Queue<Coord> path(int startx, int starty, int targetx, int targety) {
-        start = new Coord(startx, starty);
-        target = new Coord(targetx, targety);
+        start = Coord.get(startx, starty);
+        target = Coord.get(targetx, targety);
         open.clear();
         finished = new boolean[width][height];
         parent = new Coord[width][height];
@@ -128,7 +128,7 @@ public class AStarSearch {
                 }
 
                 if (!finished[x][y]) {
-                    Coord test = new Coord(x, y);
+                    Coord test = Coord.get(x, y);
                     if (open.contains(test)) {
                         double parentG = g(parent[x][y].x, parent[x][y].y);
                         if (parentG < 0) {
@@ -139,11 +139,11 @@ public class AStarSearch {
                             continue;//not a valid point so skip ahead
                         }
                         if (parent[x][y] == null || parentG > g) {
-                            parent[x][y] = new Coord(p);
+                            parent[x][y] = p;
                         }
                     } else {
                         open.add(test);
-                        parent[x][y] = new Coord(p);
+                        parent[x][y] = p;
                     }
                 }
             }
