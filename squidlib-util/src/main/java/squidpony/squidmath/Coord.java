@@ -1,6 +1,5 @@
 package squidpony.squidmath;
 
-import java.awt.*;
 import java.util.Arrays;
 
 /**
