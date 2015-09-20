@@ -29,7 +29,7 @@ import squidpony.squidmath.RandomnessSource;
  * @author David Becker
  *
  */
-public final class PerformaneTest {
+public final class PerformanceTest {
 	// we want predictable outcome for our test
 	private static final RandomnessSource SOURCE = new LightRNG(0x1337BEEF);
 	private static final RNG RNG = new RNG(SOURCE);
@@ -37,10 +37,10 @@ public final class PerformaneTest {
 	// a 30 * 30 map should be enough
 	private static final int DIMENSION = 30;
 
-	private static final int NUM_THREADS = 4;
+	private static final int NUM_THREADS = 8;
 	private static final int NUM_TASKS = 100;
 
-	private PerformaneTest() {
+	private PerformanceTest() {
 	}
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
@@ -89,10 +89,10 @@ public final class PerformaneTest {
 			final LOS losBresenham = new LOS(LOS.BRESENHAM);
 			final LOS losElias = new LOS(LOS.ELIAS);
 			final LOS losRay = new LOS(LOS.RAY);
-			final int end = DIMENSION - 1;
+			final int end = DIMENSION - 2;
 
-			for (int x = 0; x < DIMENSION; x++) {
-				for (int y = 0; y < DIMENSION; y++) {
+			for (int x = 1; x < DIMENSION - 1; x++) {
+				for (int y = 1; y < DIMENSION - 1; y++) {
 					fovRipple.calculateFOV(res, x, y);
 					fovRippleL.calculateFOV(res, x, y);
 					fovRippleT.calculateFOV(res, x, y);
@@ -100,19 +100,19 @@ public final class PerformaneTest {
 					// fovRippleV.calculateFOV(res, x, y);
 					fovShadow.calculateFOV(res, x, y);
 
-					losBresenham.isReachable(map, x, y, 0, 0);
-					losBresenham.isReachable(map, x, y, 0, end);
-					losBresenham.isReachable(map, x, y, end, 0);
+					losBresenham.isReachable(map, x, y, 1, 1);
+					losBresenham.isReachable(map, x, y, 1, end);
+					losBresenham.isReachable(map, x, y, end, 1);
 					losBresenham.isReachable(map, x, y, end, end);
 
-					losElias.isReachable(map, x, y, 0, 0);
-					losElias.isReachable(map, x, y, 0, end);
-					losElias.isReachable(map, x, y, end, 0);
+					losElias.isReachable(map, x, y, 1, 1);
+					losElias.isReachable(map, x, y, 1, end);
+					losElias.isReachable(map, x, y, end, 1);
 					losElias.isReachable(map, x, y, end, end);
 
-					losRay.isReachable(map, x, y, 0, 0);
-					losRay.isReachable(map, x, y, 0, end);
-					losRay.isReachable(map, x, y, end, 0);
+					losRay.isReachable(map, x, y, 1, 1);
+					losRay.isReachable(map, x, y, 1, end);
+					losRay.isReachable(map, x, y, end, 1);
 					losRay.isReachable(map, x, y, end, end);
 				}
 			}
