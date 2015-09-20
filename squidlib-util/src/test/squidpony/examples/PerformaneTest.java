@@ -38,7 +38,7 @@ public final class PerformaneTest {
 	private static final int DIMENSION = 30;
 
 	private static final int NUM_THREADS = 4;
-	private static final int NUM_TASKS = 10;
+	private static final int NUM_TASKS = 100;
 
 	private PerformaneTest() {
 	}
@@ -56,12 +56,9 @@ public final class PerformaneTest {
 		System.out.println("invoking " + NUM_TASKS + " tasks on " + NUM_THREADS + " threads");
 		final List<Future<Long>> invoke = executor.invokeAll(tasks);
 
-		final int size = invoke.size();
-		long total = 0L;
 		for (Future<Long> future : invoke) {
-			total += future.get();
+			System.out.println(future.get());
 		}
-		System.out.println("arithmatic mean: " + total / size);
 		System.exit(0);
 	}
 
