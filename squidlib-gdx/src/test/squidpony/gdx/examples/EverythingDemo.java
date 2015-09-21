@@ -72,8 +72,6 @@ public class EverythingDemo extends ApplicationAdapter {
         lrng = new LightRNG(0x1337BEEF);
         rng = new RNG(lrng);
 
-        // this is normally important if you use a seeded RNG, but DungeonGenerator.generate() calls it already.
-//        DungeonUtility.rng = rng;
         dungeonGen = new DungeonGenerator(width, height, rng);
         dungeonGen.addWater(10);
         dungeonGen.addDoors(15, true);

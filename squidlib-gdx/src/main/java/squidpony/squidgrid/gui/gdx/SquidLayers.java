@@ -1,8 +1,8 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import squidpony.squidgrid.gui.gdx.SColor;
 import com.badlogic.gdx.graphics.Color;
 import squidpony.squidgrid.Direction;
 
@@ -1308,6 +1308,38 @@ public class SquidLayers extends Group {
         }
         return p.animateActor(x, y, doubleWidth, s, color);
     }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, Color color, int layer) {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                p = lightnessPanel;
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        return p.animateActor(x, y, tr, color);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, Color color, int layer, boolean doubleWidth, boolean stretch) {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                p = lightnessPanel;
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        return p.animateActor(x, y, doubleWidth, stretch, tr, color);
+    }
 
     public AnimatedEntity animateActor(int x, int y, String s, Color color) {
         return foregroundPanel.animateActor(x, y, s, color);
@@ -1331,6 +1363,50 @@ public class SquidLayers extends Group {
     }
     public AnimatedEntity animateActor(int x, int y, String s, int index, boolean doubleWidth) {
         return animateActor(x, y, s, palette.get(index), doubleWidth);
+    }
+
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, Color color) {
+        return foregroundPanel.animateActor(x, y, tr, color);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, Color color, boolean doubleWidth) {
+        return foregroundPanel.animateActor(x, y, doubleWidth, tr, color);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, Color color, boolean doubleWidth, boolean stretch) {
+        return foregroundPanel.animateActor(x, y, doubleWidth, stretch, tr, color);
+    }
+
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, ArrayList<Color> palette, int layer) {
+        return animateActor(x, y, tr, palette.get(index), layer);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, ArrayList<Color> palette, int layer, boolean doubleWidth) {
+        return animateActor(x, y, tr, palette.get(index), layer, doubleWidth, true);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, ArrayList<Color> palette, int layer, boolean doubleWidth, boolean stretch) {
+        return animateActor(x, y, tr, palette.get(index), layer, doubleWidth, stretch);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, ArrayList<Color> palette) {
+        return animateActor(x, y, tr, palette.get(index));
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, int layer) {
+        return animateActor(x, y, tr, palette.get(index), layer);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index) {
+        return animateActor(x, y, tr, palette.get(index));
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, boolean doubleWidth) {
+        return animateActor(x, y, tr, palette.get(index), doubleWidth);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, boolean doubleWidth, boolean stretch) {
+        return animateActor(x, y, tr, palette.get(index), doubleWidth, stretch);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr) {
+        return animateActor(x, y, tr, Color.WHITE);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, boolean doubleWidth) {
+        return animateActor(x, y, tr, Color.WHITE, doubleWidth);
+    }
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, boolean doubleWidth, boolean stretch) {
+        return animateActor(x, y, tr, Color.WHITE, doubleWidth, stretch);
     }
 
     public LinkedHashSet<AnimatedEntity> getAnimatedEntities(int layer) {

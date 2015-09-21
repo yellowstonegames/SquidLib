@@ -2,7 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -338,6 +338,13 @@ public class SquidPanel extends Group {
             ae.actor.act(Gdx.graphics.getDeltaTime());
         }
     }
+
+    /**
+     * Draws one AnimatedEntity, specifically the Actor it contains. Batch must be between start() and end()
+     * @param batch Must have start() called already but not stop() yet during this frame.
+     * @param parentAlpha This can be assumed to be 1.0f if you don't know it
+     * @param ae The AnimatedEntity to draw; the position to draw ae is stored inside it.
+     */
     public void drawActor(Batch batch, float parentAlpha, AnimatedEntity ae)
     {
             ae.actor.draw(batch, parentAlpha);
@@ -354,6 +361,15 @@ public class SquidPanel extends Group {
         }
         return  null;
     }
+
+    /**
+     * Create an AnimatedEntity at position x, y, using the char c in the given color.
+     * @param x
+     * @param y
+     * @param c
+     * @param color
+     * @return
+     */
     public AnimatedEntity animateActor(int x, int y, char c, Color color)
     {
         Actor a = textFactory.makeActor("" + c, color);
@@ -365,6 +381,16 @@ public class SquidPanel extends Group {
         return ae;
     }
 
+    /**
+     * Create an AnimatedEntity at position x, y, using the char c in the given color. If doubleWidth is true, treats
+     * the char c as the left char to be placed in a grid of 2-char cells.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param c
+     * @param color
+     * @return
+     */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, char c, Color color)
     {
         Actor a = textFactory.makeActor("" + c, color);
@@ -379,6 +405,14 @@ public class SquidPanel extends Group {
         return ae;
     }
 
+    /**
+     * Create an AnimatedEntity at position x, y, using the String s in the given color.
+     * @param x
+     * @param y
+     * @param s
+     * @param color
+     * @return
+     */
     public AnimatedEntity animateActor(int x, int y, String s, Color color)
     {
         Actor a = textFactory.makeActor(s, color);
@@ -390,6 +424,16 @@ public class SquidPanel extends Group {
         return ae;
     }
 
+    /**
+     * Create an AnimatedEntity at position x, y, using the String s in the given color. If doubleWidth is true, treats
+     * the String s as starting in the left cell of a pair to be placed in a grid of 2-char cells.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param s
+     * @param color
+     * @return
+     */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Color color)
     {
         Actor a = textFactory.makeActor(s, color);
@@ -403,15 +447,181 @@ public class SquidPanel extends Group {
         animatedEntities.add(ae);
         return ae;
     }
+
+    /**
+     * Create an AnimatedEntity at position x, y, using the char c with a color looked up by index in palette.
+     * @param x
+     * @param y
+     * @param c
+     * @param index
+     * @param palette
+     * @return
+     */
     public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette)
     {
         return animateActor(x, y, c, palette.get(index));
     }
+
+    /**
+     * Create an AnimatedEntity at position x, y, using the String s with a color looked up by index in palette.
+     * @param x
+     * @param y
+     * @param s
+     * @param index
+     * @param palette
+     * @return
+     */
     public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<Color> palette)
     {
         return animateActor(x, y, s, palette.get(index));
     }
 
+    /**
+     * Create an AnimatedEntity at position x, y, using a TextureRegion with no color modifications, which will be
+     * stretched to fit one cell.
+     * @param x
+     * @param y
+     * @param texture
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, TextureRegion texture)
+    {
+        Actor a = textFactory.makeActor(texture, Color.WHITE);
+        a.setName("");
+        a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y);
+        animatedEntities.add(ae);
+        return ae;
+    }
+
+    /**
+     * Create an AnimatedEntity at position x, y, using a TextureRegion with the given color, which will be
+     * stretched to fit one cell.
+     * @param x
+     * @param y
+     * @param texture
+     * @param color
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, TextureRegion texture, Color color)
+    {
+        Actor a = textFactory.makeActor(texture, color);
+        a.setName("");
+        a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y);
+        animatedEntities.add(ae);
+        return ae;
+    }
+
+    /**
+     * Create an AnimatedEntity at position x, y, using a TextureRegion with no color modifications, which will be
+     * stretched to fit one cell, or two cells if doubleWidth is true.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param texture
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture)
+    {
+        Actor a = textFactory.makeActor(texture, Color.WHITE, (doubleWidth ? 2 : 1) * cellWidth, cellHeight);
+        a.setName("");
+        if(doubleWidth)
+            a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+        else
+            a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
+
+    /**
+     * Create an AnimatedEntity at position x, y, using a TextureRegion with the given color, which will be
+     * stretched to fit one cell, or two cells if doubleWidth is true.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param texture
+     * @param color
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture, Color color) {
+        Actor a = textFactory.makeActor(texture, color, (doubleWidth ? 2 : 1) * cellWidth, cellHeight);
+        a.setName("");
+        if (doubleWidth)
+            a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+        else
+            a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
+
+    /**
+     * Create an AnimatedEntity at position x, y, using a TextureRegion with no color modifications, which, if and only
+     * if stretch is true, will be stretched to fit one cell, or two cells if doubleWidth is true. If stretch is false,
+     * this will preserve the existing size of texture.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param stretch
+     * @param texture
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, boolean stretch, TextureRegion texture)
+    {
+        Actor a = (stretch)
+                ? textFactory.makeActor(texture, Color.WHITE, (doubleWidth ? 2 : 1) * cellWidth, cellHeight)
+                : textFactory.makeActor(texture, Color.WHITE, texture.getRegionWidth(), texture.getRegionHeight());
+        a.setName("");
+        if(doubleWidth)
+            a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+        else
+            a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
+
+    /**
+     * Create an AnimatedEntity at position x, y, using a TextureRegion with the given color, which, if and only
+     * if stretch is true, will be stretched to fit one cell, or two cells if doubleWidth is true. If stretch is false,
+     * this will preserve the existing size of texture.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param stretch
+     * @param texture
+     * @param color
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, boolean stretch, TextureRegion texture, Color color) {
+
+        Actor a = (stretch)
+                ? textFactory.makeActor(texture, color, (doubleWidth ? 2 : 1) * cellWidth, cellHeight)
+                : textFactory.makeActor(texture, color, texture.getRegionWidth(), texture.getRegionHeight());
+        a.setName("");
+        if (doubleWidth)
+            a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+        else
+            a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
+
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
+
+    /**
+     * Created an Actor from the contents of the given x,y position on the grid.
+     * @param x
+     * @param y
+     * @return
+     */
     public Actor cellToActor(int x, int y)
     {
         if(contents[x][y] == null || contents[x][y].equals(""))
@@ -427,6 +637,13 @@ public class SquidPanel extends Group {
         return a;
     }
 
+    /**
+     * Created an Actor from the contents of the given x,y position on the grid.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @return
+     */
     public Actor cellToActor(int x, int y, boolean doubleWidth)
     {
         if(contents[x][y] == null || contents[x][y].equals(""))
