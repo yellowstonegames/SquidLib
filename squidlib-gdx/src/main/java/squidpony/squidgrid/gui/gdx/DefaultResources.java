@@ -20,7 +20,7 @@ public class DefaultResources {
             narrowNameLarge = "Rogue-Zodiac-12x24.fnt",
             unicodeNameLarge = "Mandrill-12x32.fnt",
             narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt";
-    public static TextureRegion tentacle = null;
+    public static TextureRegion tentacle2 = null;
     /**
      * Returns a 12x12px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
      * @return the BitmapFont object representing Zodiac-Square.ttf at size 16 pt.
@@ -138,14 +138,14 @@ public class DefaultResources {
      */
     public static TextureRegion getTentacle()
     {
-        if(tentacle == null)
+        if(tentacle2 == null)
         {
             try {
-                tentacle = new TextureRegion(new Texture(Gdx.files.classpath("Tentacle.png")));
+                tentacle2 = new TextureRegion(new Texture(Gdx.files.classpath("Tentacle.png")));
             } catch (Exception e) {
             }
         }
-        return tentacle;
+        return tentacle2;
     }
 
     /**
