@@ -19,7 +19,7 @@ import java.util.Random;
  */
 public class RNG {
 
-    protected static final double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53)
+    protected static final double DOUBLE_UNIT = 1.0 / (1L << 53);
     protected RandomnessSource random;
     protected double nextNextGaussian;
     protected boolean haveNextNextGaussian = false;
