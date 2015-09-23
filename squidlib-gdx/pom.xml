@@ -1,197 +1,143 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.squidpony</groupId>
-    <artifactId>squidlib-parent</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
-    <relativePath>../squidlib-parent</relativePath>
-  </parent>
-  <groupId>com.squidpony</groupId>
-  <artifactId>squidlib-gdx</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
-    <description>SquidLib LibGDX display code. Please refer to https://github.com/SquidPony/SquidLib .</description>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.squidpony</groupId>
+		<artifactId>squidlib-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+		<relativePath>../squidlib-parent</relativePath>
+	</parent>
+	<artifactId>squidlib-gdx</artifactId>
+	<description>SquidLib LibGDX display code. Please refer to https://github.com/SquidPony/SquidLib .</description>
 
-    <url>https://github.com/SquidPony/SquidLib</url>
+	<build>
+		<testSourceDirectory>src/test</testSourceDirectory>
+		<testOutputDirectory>target/classes</testOutputDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
 
-    <developers>
-        <developer>
-            <name>Eben Howard ( https://github.com/SquidPony )</name>
-            <email>example@example.com</email>
-        </developer>
-        <developer>
-            <name>Tommy Ettinger ( https://github.com/tommyettinger )</name>
-            <email>example@example.com</email>
-        </developer>
-    </developers>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-    <licenses>
-        <license>
-            <name>Apache Public License</name>
-            <url>
-                https://www.apache.org/licenses/LICENSE-2.0.html
-            </url>
-            <comments>LICENSE.txt</comments>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>package-jars</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<includePom>true</includePom>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<includePom>true</includePom>
+				</configuration>
+			</plugin>
 
-    <inceptionYear>2012</inceptionYear>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.3</version>
+				<inherited>true</inherited>
+				<executions>
+					<execution>
+						<id>package-jars</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<debug>true</debug>
+					<minmemory>256m</minmemory>
+					<maxmemory>1024m</maxmemory>
+					<quiet>true</quiet>
+					<doctitle>${project.name} ${project.version}</doctitle>
+					<windowtitle>${project.name} ${project.version}</windowtitle>
+					<testDoctitle>${project.name} ${project.version} (TEST API)</testDoctitle>
+					<testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>
+					<splitindex>true</splitindex>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<links>
+						<link>http://docs.oracle.com/javase/8/docs/api/</link>
+						<link>http://docs.oracle.com/javase/7/docs/api/</link>
+						<link>http://docs.oracle.com/javase/6/docs/api/</link>
+						<link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
+					</links>
+					<linksource>true</linksource>
+					<detectOfflineLinks>false</detectOfflineLinks>
+				</configuration>
+			</plugin>
 
-    <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  
-  <build>
-        <testSourceDirectory>src/test</testSourceDirectory>
-        <testOutputDirectory>target/classes</testOutputDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-            
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.6</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      
-                <plugin>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>2.4</version>
-                    <executions>
-                        <execution>
-                            <id>package-jars</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                                <goal>test-jar</goal>
-                            </goals>
-                            <configuration>
-                                <includePom>true</includePom>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <includePom>true</includePom>
-                    </configuration>
-                </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
+				<version>2.4</version> <executions> <execution> <phase>package</phase> <goals> 
+				<goal>shade</goal> </goals> <configuration> <outputFile>target/squidlib-demo-gdx.jar</outputFile> 
+				<transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
+				<mainClass>squidpony.gdx.examples.desktop.SquidAIDemoLauncher</mainClass> 
+				</transformer> </transformers> </configuration> </execution> </executions> 
+				</plugin> -->
+		</plugins>
+	</build>
+	<dependencies>
+		<!-- <dependency> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
+			<version>2.4</version> <type>maven-plugin</type> <scope>compile</scope> </dependency> -->
+		<dependency>
+			<groupId>com.squidpony</groupId>
+			<artifactId>squidlib-util</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
 
-                <plugin>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.3</version>
-                    <inherited>true</inherited>
-                    <executions>
-                        <execution>
-                            <id>package-jars</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                                <goal>test-jar</goal>
-                            </goals>
-                            <configuration>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <debug>true</debug>
-                        <minmemory>256m</minmemory>
-                        <maxmemory>1024m</maxmemory>
-                        <quiet>true</quiet>
-                        <doctitle>${project.name} ${project.version}</doctitle>
-                        <windowtitle>${project.name} ${project.version}</windowtitle>
-                        <testDoctitle>${project.name} ${project.version} (TEST API)</testDoctitle>
-                        <testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>
-                        <splitindex>true</splitindex>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                        <links>
-                            <link>http://docs.oracle.com/javase/8/docs/api/</link>
-                            <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                            <link>http://docs.oracle.com/javase/6/docs/api/</link>
-                            <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
-                        </links>
-                        <linksource>true</linksource>
-                        <detectOfflineLinks>false</detectOfflineLinks>
-                    </configuration>
-                </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <outputFile>target/squidlib-demo-gdx.jar</outputFile>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>squidpony.gdx.examples.desktop.SquidAIDemoLauncher</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
-        </plugins>
-    </build>
-    <dependencies>
-        <!--
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>2.4</version>
-            <type>maven-plugin</type>
-            <scope>compile</scope>
-        </dependency>
-        -->
-    <dependency>
-      <groupId>com.squidpony</groupId>
-      <artifactId>squidlib-util</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
-    </dependency>
-    
-        <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx</artifactId>
-            <version>1.6.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx-backend-lwjgl</artifactId>
-            <version>1.6.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx-platform</artifactId>
-            <version>1.6.5</version>
-            <classifier>natives-desktop</classifier>
-        </dependency>
-  </dependencies>
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx</artifactId>
+			<version>1.6.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-backend-lwjgl</artifactId>
+			<version>1.6.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-platform</artifactId>
+			<version>1.6.5</version>
+			<classifier>natives-desktop</classifier>
+		</dependency>
+	</dependencies>
 </project>
