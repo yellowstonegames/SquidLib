@@ -9,7 +9,6 @@
 		<groupId>com.squidpony</groupId>
 		<artifactId>squidlib-parent</artifactId>
 		<version>3.0.0-SNAPSHOT</version>
-		<relativePath>../squidlib-parent</relativePath>
 	</parent>
 
 	<name>SquidLib</name>
@@ -22,10 +21,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
+				<version>${maven.compiler.version}</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
 
@@ -108,16 +107,16 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
 			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
-				<version>2.4</version> <executions> <execution> <phase>package</phase> <goals> 
-				<goal>shade</goal> </goals> <configuration> <outputFile>target/squidlib-demo-gdx.jar</outputFile> 
-				<transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
-				<mainClass>squidpony.examples.EverythingDemo</mainClass> </transformer> </transformers> 
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId>
+				<version>2.4</version> <executions> <execution> <phase>package</phase> <goals>
+				<goal>shade</goal> </goals> <configuration> <outputFile>target/squidlib-demo-gdx.jar</outputFile>
+				<transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+				<mainClass>squidpony.examples.EverythingDemo</mainClass> </transformer> </transformers>
 				</configuration> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
 	<dependencies>
-		<!-- <dependency> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
+		<!-- <dependency> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId>
 			<version>2.4</version> <type>maven-plugin</type> <scope>compile</scope> </dependency> -->
 
 		<dependency>

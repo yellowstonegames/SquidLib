@@ -41,9 +41,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+		<maven.compiler.version>3.3</maven.compiler.version>
 		<encoding>UTF-8</encoding>
 		<findbugs.version>3.0.2</findbugs.version>
 		<cobertura.version>2.7</cobertura.version>
+		<jdk.version>1.7</jdk.version>
 	</properties>
 
 	<prerequisites>
@@ -64,11 +66,43 @@
 	<dependencies>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>squidlib</id>
+			<modules>
+				<module>squidlib</module>
+				<module>squidlib-util</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>squidlib-gdx</id>
+			<modules>
+				<module>squidlib</module>
+				<module>squidlib-util</module>
+				<module>squidlib-gdx</module>
+			</modules>
+		</profile>
+	</profiles>
+
 	<modules>
-		<module>../squidlib</module>
-		<module>../squidlib-util</module>
-		<module>../squidlib-gdx</module>
+		<module>squidlib</module>
+		<module>squidlib-util</module>
+		<module>squidlib-gdx</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.version}</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<reporting>
 		<plugins>
