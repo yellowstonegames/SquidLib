@@ -17,7 +17,8 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.RandomnessSource;
 
 /**
- * a simple performance test<br/>
+ * a simple performance test
+ *
  * steps taken:
  * <ul>
  * <li>generate dungeon</li>
