@@ -7,136 +7,34 @@
 		<groupId>com.squidpony</groupId>
 		<artifactId>squidlib-parent</artifactId>
 		<version>3.0.0-SNAPSHOT</version>
-		<relativePath>../squidlib-parent</relativePath>
 	</parent>
 	<artifactId>squidlib-gdx</artifactId>
+	<name>squidlib-gdx</name>
 	<description>SquidLib LibGDX display code. Please refer to https://github.com/SquidPony/SquidLib .</description>
 
-	<build>
-		<testSourceDirectory>src/test</testSourceDirectory>
-		<testOutputDirectory>target/classes</testOutputDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.6</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.4</version>
-				<executions>
-					<execution>
-						<id>package-jars</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
-						</goals>
-						<configuration>
-							<includePom>true</includePom>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-					<includePom>true</includePom>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
-				<inherited>true</inherited>
-				<executions>
-					<execution>
-						<id>package-jars</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
-						</goals>
-						<configuration>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-					<debug>true</debug>
-					<minmemory>256m</minmemory>
-					<maxmemory>1024m</maxmemory>
-					<quiet>true</quiet>
-					<doctitle>${project.name} ${project.version}</doctitle>
-					<windowtitle>${project.name} ${project.version}</windowtitle>
-					<testDoctitle>${project.name} ${project.version} (TEST API)</testDoctitle>
-					<testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>
-					<splitindex>true</splitindex>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<links>
-						<link>http://docs.oracle.com/javase/8/docs/api/</link>
-						<link>http://docs.oracle.com/javase/7/docs/api/</link>
-						<link>http://docs.oracle.com/javase/6/docs/api/</link>
-						<link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
-					</links>
-					<linksource>true</linksource>
-					<detectOfflineLinks>false</detectOfflineLinks>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.7</version>
-			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
-				<version>2.4</version> <executions> <execution> <phase>package</phase> <goals> 
-				<goal>shade</goal> </goals> <configuration> <outputFile>target/squidlib-demo-gdx.jar</outputFile> 
-				<transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
-				<mainClass>squidpony.gdx.examples.desktop.SquidAIDemoLauncher</mainClass> 
-				</transformer> </transformers> </configuration> </execution> </executions> 
-				</plugin> -->
-		</plugins>
-	</build>
 	<dependencies>
 		<!-- <dependency> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
 			<version>2.4</version> <type>maven-plugin</type> <scope>compile</scope> </dependency> -->
 		<dependency>
 			<groupId>com.squidpony</groupId>
-			<artifactId>squidlib-util</artifactId>
+			<artifactId>squidlib</artifactId>
 			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx</artifactId>
-			<version>1.6.5</version>
+			<version>${gdx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-backend-lwjgl</artifactId>
-			<version>1.6.5</version>
+			<version>${gdx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-platform</artifactId>
-			<version>1.6.5</version>
+			<version>${gdx.version}</version>
 			<classifier>natives-desktop</classifier>
 		</dependency>
 	</dependencies>
