@@ -42,10 +42,16 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 		<maven.compiler.version>3.3</maven.compiler.version>
+		<maven.javadoc.version>2.10.3</maven.javadoc.version>
+		<maven.resources.version>2.7</maven.resources.version>
+		<maven.source.version>2.4</maven.source.version>
+		<maven.gpg.version>1.6</maven.gpg.version>
 		<encoding>UTF-8</encoding>
 		<findbugs.version>3.0.2</findbugs.version>
 		<cobertura.version>2.7</cobertura.version>
 		<jdk.version>1.7</jdk.version>
+		<gdx.version>1.6.5</gdx.version>
+		<gson.version>2.3.1</gson.version>
 	</properties>
 
 	<prerequisites>
@@ -63,27 +69,6 @@
 		<url>git@github.com:SquidPony/SquidLib.git</url>
 	</scm>
 
-	<dependencies>
-	</dependencies>
-
-	<profiles>
-		<profile>
-			<id>squidlib</id>
-			<modules>
-				<module>squidlib</module>
-				<module>squidlib-util</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>squidlib-gdx</id>
-			<modules>
-				<module>squidlib</module>
-				<module>squidlib-util</module>
-				<module>squidlib-gdx</module>
-			</modules>
-		</profile>
-	</profiles>
-
 	<modules>
 		<module>squidlib</module>
 		<module>squidlib-util</module>
@@ -100,6 +85,83 @@
 					<source>${jdk.version}</source>
 					<target>${jdk.version}</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>${maven.gpg.version}</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven.source.version}</version>
+				<executions>
+					<execution>
+						<id>package-jars</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<includePom>true</includePom>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<includePom>true</includePom>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven.javadoc.version}</version>
+				<inherited>true</inherited>
+				<executions>
+					<execution>
+						<id>package-jars</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<debug>true</debug>
+					<minmemory>256m</minmemory>
+					<maxmemory>1024m</maxmemory>
+					<quiet>true</quiet>
+					<doctitle>${project.name} ${project.version}</doctitle>
+					<windowtitle>${project.name} ${project.version}</windowtitle>
+					<testDoctitle>${project.name} ${project.version} (TEST API)</testDoctitle>
+					<testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>
+					<splitindex>true</splitindex>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<links>
+						<link>http://docs.oracle.com/javase/8/docs/api/</link>
+						<link>http://docs.oracle.com/javase/7/docs/api/</link>
+						<link>http://docs.oracle.com/javase/6/docs/api/</link>
+						<link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
+					</links>
+					<linksource>true</linksource>
+					<detectOfflineLinks>false</detectOfflineLinks>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.version}</version>
 			</plugin>
 		</plugins>
 	</build>
