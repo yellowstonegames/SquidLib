@@ -46,6 +46,8 @@
 		<maven.resources.version>2.7</maven.resources.version>
 		<maven.source.version>2.4</maven.source.version>
 		<maven.gpg.version>1.6</maven.gpg.version>
+		<maven.jxr.version>2.5</maven.jxr.version>
+		<maven.pmd.version>3.5</maven.pmd.version>
 		<encoding>UTF-8</encoding>
 		<findbugs.version>3.0.2</findbugs.version>
 		<cobertura.version>2.7</cobertura.version>
@@ -168,6 +170,21 @@
 
 	<reporting>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${maven.jxr.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>${maven.pmd.version}</version>
+				<configuration>
+					<linkXref>true</linkXref>
+					<minimumTokens>100</minimumTokens>
+					<targetJdk>${jdk.version}</targetJdk>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
