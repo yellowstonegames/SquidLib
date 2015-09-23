@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.squidpony</groupId>
+	<artifactId>squidlib-parent</artifactId>
+	<version>3.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>squidlib-parent</name>
+
+	<description>Parent module for squidlib projects. Please do not depend on this module, and refer to https://github.com/SquidPony/SquidLib .</description>
+
+	<url>https://github.com/SquidPony/SquidLib</url>
+
+	<developers>
+		<developer>
+			<name>Eben Howard ( https://github.com/SquidPony )</name>
+			<email>example@example.com</email>
+		</developer>
+		<developer>
+			<name>Tommy Ettinger ( https://github.com/tommyettinger )</name>
+			<email>example@example.com</email>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache Public License</name>
+			<url>
+                https://www.apache.org/licenses/LICENSE-2.0.html
+            </url>
+			<comments>LICENSE.txt</comments>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<inceptionYear>2012</inceptionYear>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+		<maven.compiler.version>3.3</maven.compiler.version>
+		<maven.javadoc.version>2.10.3</maven.javadoc.version>
+		<maven.resources.version>2.7</maven.resources.version>
+		<maven.source.version>2.4</maven.source.version>
+		<maven.gpg.version>1.6</maven.gpg.version>
+		<maven.jxr.version>2.5</maven.jxr.version>
+		<maven.pmd.version>3.5</maven.pmd.version>
+		<encoding>UTF-8</encoding>
+		<findbugs.version>3.0.2</findbugs.version>
+		<cobertura.version>2.7</cobertura.version>
+		<jdk.version>1.7</jdk.version>
+		<gdx.version>1.6.5</gdx.version>
+		<gson.version>2.3.1</gson.version>
+	</properties>
+
+	<prerequisites>
+		<maven>3.0.3</maven>
+	</prerequisites>
+
+	<issueManagement>
+		<url>https://github.com/SquidPony/SquidLib/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<scm>
+		<connection>scm:git:git@github.com:SquidPony/SquidLib.git</connection>
+		<developerConnection>scm:git:git@github.com:SquidPony/SquidLib.git</developerConnection>
+		<url>git@github.com:SquidPony/SquidLib.git</url>
+	</scm>
+
+	<modules>
+		<module>squidlib</module>
+		<module>squidlib-util</module>
+		<module>squidlib-gdx</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.version}</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>${maven.gpg.version}</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven.source.version}</version>
+				<executions>
+					<execution>
+						<id>package-jars</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<includePom>true</includePom>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<includePom>true</includePom>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven.javadoc.version}</version>
+				<inherited>true</inherited>
+				<executions>
+					<execution>
+						<id>package-jars</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<debug>true</debug>
+					<minmemory>256m</minmemory>
+					<maxmemory>1024m</maxmemory>
+					<quiet>true</quiet>
+					<doctitle>${project.name} ${project.version}</doctitle>
+					<windowtitle>${project.name} ${project.version}</windowtitle>
+					<testDoctitle>${project.name} ${project.version} (TEST API)</testDoctitle>
+					<testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>
+					<splitindex>true</splitindex>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<links>
+						<link>http://docs.oracle.com/javase/8/docs/api/</link>
+						<link>http://docs.oracle.com/javase/7/docs/api/</link>
+						<link>http://docs.oracle.com/javase/6/docs/api/</link>
+						<link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
+					</links>
+					<linksource>true</linksource>
+					<detectOfflineLinks>false</detectOfflineLinks>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.version}</version>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${maven.jxr.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>${maven.pmd.version}</version>
+				<configuration>
+					<linkXref>true</linkXref>
+					<minimumTokens>100</minimumTokens>
+					<targetJdk>${jdk.version}</targetJdk>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>${findbugs.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${cobertura.version}</version>
+				<configuration>
+					<format>xml</format>
+					<maxmem>256m</maxmem>
+					<aggregate>true</aggregate>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+</project>
