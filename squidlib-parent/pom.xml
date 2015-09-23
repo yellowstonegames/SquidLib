@@ -42,8 +42,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 		<encoding>UTF-8</encoding>
+		<findbugs.version>3.0.2</findbugs.version>
+		<cobertura.version>2.7</cobertura.version>
 	</properties>
-	
+
 	<prerequisites>
 		<maven>3.0.3</maven>
 	</prerequisites>
@@ -61,9 +63,31 @@
 
 	<dependencies>
 	</dependencies>
+
 	<modules>
 		<module>../squidlib</module>
 		<module>../squidlib-util</module>
 		<module>../squidlib-gdx</module>
 	</modules>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>${findbugs.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${cobertura.version}</version>
+				<configuration>
+					<format>xml</format>
+					<maxmem>256m</maxmem>
+					<aggregate>true</aggregate>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
 </project>
