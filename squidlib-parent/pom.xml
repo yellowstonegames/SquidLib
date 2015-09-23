@@ -40,7 +40,24 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+		<encoding>UTF-8</encoding>
 	</properties>
+	
+	<prerequisites>
+		<maven>3.0.3</maven>
+	</prerequisites>
+
+	<issueManagement>
+		<url>https://github.com/SquidPony/SquidLib/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<scm>
+		<connection>scm:git:git@github.com:SquidPony/SquidLib.git</connection>
+		<developerConnection>scm:git:git@github.com:SquidPony/SquidLib.git</developerConnection>
+		<url>git@github.com:SquidPony/SquidLib.git</url>
+	</scm>
 
 	<dependencies>
 	</dependencies>

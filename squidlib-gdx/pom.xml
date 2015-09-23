@@ -9,40 +9,8 @@
 		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../squidlib-parent</relativePath>
 	</parent>
-	<groupId>com.squidpony</groupId>
 	<artifactId>squidlib-gdx</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
 	<description>SquidLib LibGDX display code. Please refer to https://github.com/SquidPony/SquidLib .</description>
-
-	<url>https://github.com/SquidPony/SquidLib</url>
-
-	<developers>
-		<developer>
-			<name>Eben Howard ( https://github.com/SquidPony )</name>
-			<email>example@example.com</email>
-		</developer>
-		<developer>
-			<name>Tommy Ettinger ( https://github.com/tommyettinger )</name>
-			<email>example@example.com</email>
-		</developer>
-	</developers>
-
-	<licenses>
-		<license>
-			<name>Apache Public License</name>
-			<url>
-                https://www.apache.org/licenses/LICENSE-2.0.html
-            </url>
-			<comments>LICENSE.txt</comments>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
-	<inceptionYear>2012</inceptionYear>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 
 	<build>
 		<testSourceDirectory>src/test</testSourceDirectory>
