@@ -54,6 +54,7 @@
 		<jdk.version>1.7</jdk.version>
 		<gdx.version>1.6.5</gdx.version>
 		<gson.version>2.3.1</gson.version>
+		<junit.version>4.11</junit.version>
 	</properties>
 
 	<prerequisites>
@@ -165,6 +166,8 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>${maven.resources.version}</version>
 			</plugin>
+
+
 		</plugins>
 	</build>
 
@@ -196,9 +199,10 @@
 				<version>${cobertura.version}</version>
 				<configuration>
 					<format>xml</format>
+					<format>html</format>
 					<maxmem>256m</maxmem>
 					<aggregate>true</aggregate>
-					<check/>
+					<check />
 				</configuration>
 			</plugin>
 		</plugins>

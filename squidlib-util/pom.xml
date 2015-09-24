@@ -7,8 +7,8 @@
 		<groupId>com.squidpony</groupId>
 		<artifactId>squidlib-parent</artifactId>
 		<version>3.0.0-SNAPSHOT</version>
-        <relativePath>../</relativePath>
-    </parent>
+		<relativePath>../</relativePath>
+	</parent>
 	<artifactId>squidlib-util</artifactId>
 	<name>squidlib-util</name>
 	<description>SquidLib platform-independent logic and utility code. Please refer to https://github.com/SquidPony/SquidLib .</description>
@@ -18,6 +18,12 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>${gson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
