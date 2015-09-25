@@ -39,7 +39,12 @@ public class LightRNGTest {
 		assertEquals(5747796768693156649L, rng.nextLong());
 		assertEquals(6394052312532759219L, rng.nextLong());
 		assertEquals(5L, rng.nextLong(1, 10));
-	}
+        assertEquals(77L, rng.nextLong(100));
+        assertEquals(19L, rng.nextLong(100));
+        assertEquals(66L, rng.nextLong(100));
+        assertEquals(14L, rng.nextLong(100));
+        assertEquals(7L, rng.nextLong(100));
+    }
 
 	@Test
 	public void testNextDouble() {
