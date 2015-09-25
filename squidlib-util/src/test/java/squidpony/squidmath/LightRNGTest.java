@@ -34,12 +34,16 @@ public class LightRNGTest {
 		LightRNG rng = new LightRNG(2L);
 		assertEquals(1857867792895824164L, rng.nextLong());
 		assertEquals(670810732413913090L, rng.nextLong());
-		// seems to always be 0 here, regardless of parameter...
 		assertEquals(0, rng.nextLong(100));
 		assertEquals(5850027601512104100L, rng.nextLong());
 		assertEquals(6973757869230453225L, rng.nextLong());
 		assertEquals(7841283713040272465L, rng.nextLong());
 		assertEquals(2, rng.nextLong(1, 10));
+		assertEquals(22, rng.nextLong(100));
+		assertEquals(38, rng.nextLong(100));
+		assertEquals(58, rng.nextLong(100));
+		assertEquals(39, rng.nextLong(100));
+		assertEquals(7, rng.nextLong(100));
 	}
 
 	@Test
