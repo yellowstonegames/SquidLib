@@ -82,7 +82,7 @@ public class XorRNG implements RandomnessSource {
     }
 
     public boolean nextBoolean() {
-        return (nextLong() & 1) != 0;
+        return (nextLong() & 1) != 0L;
     }
 
     public void nextBytes(final byte[] bytes) {

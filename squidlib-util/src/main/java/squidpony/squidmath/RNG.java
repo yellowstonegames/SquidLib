@@ -362,6 +362,28 @@ public class RNG {
     }
 
     /**
+     * Returns a random long below the given bound, or 0 if the bound is 0 or
+     * negative.
+     *
+     * @param bound the upper bound (exclusive)
+     * @return the found number
+     */
+    public long nextLong(long bound) {
+        if (bound <= 0) {
+            return 0;
+        }
+
+        long r = ((long)next(31) << 32) + next(32);
+        long m = bound - 1;
+        if ((bound & m) == 0) { // i.e., bound is a power of 2
+            r = (r & m);
+        } else {
+            for (long u = r; u - (r = u % bound) + m < 0; u = ((long)next(31) << 32) + next(32)) {
+            }
+        }
+        return r;
+    }
+    /**
      * Returns a random integer below the given bound, or 0 if the bound is 0 or
      * negative.
      *
