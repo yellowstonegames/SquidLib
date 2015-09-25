@@ -14,6 +14,7 @@ import junit.framework.Assert;
  *
  */
 public class LightRNGTest {
+	private static final double DELTA = 0.00000000001;
 	LightRNG l = new LightRNG();
 
 	@Test
@@ -49,20 +50,20 @@ public class LightRNGTest {
 	@Test
 	public void testNextDouble() {
 		l.state = 2L;
-		assertEquals(0.26476003824658223d, l.nextDouble(), 1 / 1000);
-		assertEquals(47.49520291591127, l.nextDouble(100), 1 / 1000);
+		assertEquals(0.26476003824658223d, l.nextDouble(), DELTA);
+		assertEquals(47.49520291591127, l.nextDouble(100), DELTA);
 	}
 
 	@Test
 	public void testNextFloat() {
 		l.setSeed(1L);
 		l.skip(5L);
-		assertEquals(0.13137388229370117, l.nextFloat(), 1 / 1000);
-		assertEquals(0.21186286211013794, l.nextFloat(), 1 / 1000);
-		assertEquals(0.8315069079399109, l.nextFloat(), 1 / 1000);
-		assertEquals(0.12255960702896118, l.nextFloat(), 1 / 1000);
-		assertEquals(0.3804868459701538, l.nextFloat(), 1 / 1000);
-		assertEquals(0.9763892889022827, l.nextFloat(), 1 / 1000);
+		assertEquals(0.13137388229370117, l.nextFloat(), DELTA);
+		assertEquals(0.21186286211013794, l.nextFloat(), DELTA);
+		assertEquals(0.8315069079399109, l.nextFloat(), DELTA);
+		assertEquals(0.12255960702896118, l.nextFloat(), DELTA);
+		assertEquals(0.3804868459701538, l.nextFloat(), DELTA);
+		assertEquals(0.9763892889022827, l.nextFloat(), DELTA);
 	}
 
 	@Test
