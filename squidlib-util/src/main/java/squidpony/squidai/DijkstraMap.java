@@ -1247,7 +1247,7 @@ public class DijkstraMap
         double[][] userDistanceMap = new double[width][height];
         double paidLength = 0.0;
 
-        LinkedHashSet friends;
+        LinkedHashSet<Coord> friends;
 
 
         for(int x = 0; x < width; x++) {
