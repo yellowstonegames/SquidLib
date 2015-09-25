@@ -19,55 +19,54 @@ public class LightRNGTest {
 	@Test
 	public void testNextInt() {
 		LightRNG rng = new LightRNG(1L);
-		assertEquals(0, rng.next(1));
+		assertEquals(1, rng.next(1));
 		assertEquals(3, rng.next(2));
-		assertEquals(1, rng.next(3));
+		assertEquals(6, rng.next(3));
 		assertEquals(11, rng.next(4));
 		assertEquals(1, rng.next(1));
-		assertEquals(1797366200, rng.nextInt());
+		assertEquals(-1877671296, rng.nextInt());
 		rng.setState(rng.state * 11234L);
-		assertEquals(174, rng.nextInt(10, 230));
+		assertEquals(210, rng.nextInt(10, 230));
 	}
 
 	@Test
 	public void testNextLong() {
 		LightRNG rng = new LightRNG(2L);
-		assertEquals(1857867792895824164L, rng.nextLong());
-		assertEquals(670810732413913090L, rng.nextLong());
-		// seems to always be 0 here, regardless of parameter...
-		assertEquals(0, rng.nextLong(100));
-		assertEquals(5850027601512104100L, rng.nextLong());
-		assertEquals(6973757869230453225L, rng.nextLong());
-		assertEquals(7841283713040272465L, rng.nextLong());
-		assertEquals(2, rng.nextLong(1, 10));
+        assertEquals(-7541218347953203506L, rng.nextLong());
+        assertEquals(-4627371582388691390L, rng.nextLong());
+		assertEquals(75L, rng.nextLong(100));
+		assertEquals(-4327252827158612380L, rng.nextLong());
+		assertEquals(5747796768693156649L, rng.nextLong());
+		assertEquals(6394052312532759219L, rng.nextLong());
+		assertEquals(5L, rng.nextLong(1, 10));
 	}
 
 	@Test
 	public void testNextDouble() {
 		l.state = 2L;
-		assertEquals(0.26476003824658223d, l.nextDouble(), 1 / 1000);
-		assertEquals(47.49520291591127, l.nextDouble(100), 1 / 1000);
+		assertEquals(0.756575637666822, l.nextDouble(), 1.0 / 1000.0);
+		assertEquals(25.855257359302918, l.nextDouble(100), 1.0 / 1000.0);
 	}
 
 	@Test
 	public void testNextFloat() {
 		l.setSeed(1L);
 		l.skip(5L);
-		assertEquals(0.13137388229370117, l.nextFloat(), 1 / 1000);
-		assertEquals(0.21186286211013794, l.nextFloat(), 1 / 1000);
-		assertEquals(0.8315069079399109, l.nextFloat(), 1 / 1000);
-		assertEquals(0.12255960702896118, l.nextFloat(), 1 / 1000);
-		assertEquals(0.3804868459701538, l.nextFloat(), 1 / 1000);
-		assertEquals(0.9763892889022827, l.nextFloat(), 1 / 1000);
+		assertEquals(0.0820694, l.nextFloat(), 1.0 / 1000.0);
+		assertEquals(0.21186286, l.nextFloat(), 1.0 / 1000.0);
+		assertEquals(0.15438014, l.nextFloat(), 1.0 / 1000.0);
+		assertEquals(0.4931283, l.nextFloat(), 1.0 / 1000.0);
+		assertEquals(0.38048685, l.nextFloat(), 1.0 / 1000.0);
+		assertEquals(0.33714873, l.nextFloat(), 1.0 / 1000.0);
 	}
 
 	@Test
 	public void testNextBoolean() {
 		l.setSeed(1L);
 		assertEquals(1L, l.getState());
+		assertTrue(l.nextBoolean());
+		assertTrue(l.nextBoolean());
 		assertFalse(l.nextBoolean());
-		assertTrue(l.nextBoolean());
-		assertTrue(l.nextBoolean());
 		assertTrue(l.nextBoolean());
 		assertTrue(l.nextBoolean());
 	}
