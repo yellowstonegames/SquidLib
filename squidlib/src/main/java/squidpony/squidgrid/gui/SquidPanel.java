@@ -13,8 +13,11 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 import javax.swing.JLayeredPane;
 
+import squidpony.panel.IColoredString;
+import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.gui.animation.Animation;
 import squidpony.squidgrid.gui.animation.AnimationManager;
 import squidpony.squidgrid.gui.animation.BumpAnimation;
@@ -33,7 +36,7 @@ import squidpony.squidgrid.Direction;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class SquidPanel extends JLayeredPane {
+public class SquidPanel extends JLayeredPane implements ISquidPanel<Color> {
 
     private static int DEFAULT_ANIMATION_DURATION = 200;
     private static Font DEFAULT_FONT = new Font("Helvetica", Font.PLAIN, 22);
@@ -155,7 +158,8 @@ public class SquidPanel extends JLayeredPane {
         SquidPanel.this.put(0, 0, chars);
     }
 
-    public void put(char[][] chars, Color[][] foregrounds) {//TODO - convert this to work with code points
+    @Override
+	public void put(char[][] chars, Color[][] foregrounds) {//TODO - convert this to work with code points
         SquidPanel.this.put(0, 0, chars, foregrounds);
     }
 
@@ -247,24 +251,25 @@ public class SquidPanel extends JLayeredPane {
         SquidPanel.this.put(xOffset, yOffset, string, defaultForeground);
     }
 
-    /**
-     * Puts the given string horizontally with the first character at the given offset.
-     *
-     * Does not word wrap. Characters that are not renderable (due to being at negative offsets or offsets greater than
-     * the grid size) will not be shown but will not cause any malfunctions.
-     *
-     * @param xOffset the x coordinate of the first character
-     * @param yOffset the y coordinate of the first character
-     * @param string the characters to be displayed
-     * @param foreground the color to draw the characters
-     */
-    public void put(int xOffset, int yOffset, String string, Color foreground) {//TODO - make this work with code points
+    @Override
+	public void put(int xOffset, int yOffset, String string, Color foreground) {//TODO - make this work with code points
         char[][] temp = new char[string.length()][1];
         for (int i = 0; i < string.length(); i++) {
             temp[i][0] = string.charAt(i);
         }
         SquidPanel.this.put(xOffset, yOffset, temp, foreground);
     }
+
+	@Override
+	public void put(int xOffset, int yOffset, IColoredString<? extends Color> cs) {
+		int x = xOffset;
+		for (IColoredString.Bucket<? extends Color> fragment : cs) {
+			final String s = fragment.getText();
+			final Color color = fragment.getColor();
+			put(x, yOffset, s, color == null ? getDefaultForegroundColor() : color);
+			x += s.length();
+		}
+	}
 
     /**
      * Puts the given string horizontally with the first character at the given offset.
@@ -317,21 +322,18 @@ public class SquidPanel extends JLayeredPane {
         redraw();
     }
 
-    /**
-     * Removes the contents of this cell, leaving a transparent space.
-     *
-     * @param x
-     * @param y
-     */
-    public void clear(int x, int y) {
+    @Override
+	public void clear(int x, int y) {
         this.put(x, y, SColor.TRANSPARENT);
     }
 
-    public void put(int x, int y, Color color) {
+    @Override
+	public void put(int x, int y, Color color) {
         put(x, y, textFactory.getSolid(color));
     }
 
-    public void put(int x, int y, char c) {
+    @Override
+	public void put(int x, int y, char c) {
         put(x, y, c, defaultForeground);
     }
 
@@ -346,7 +348,8 @@ public class SquidPanel extends JLayeredPane {
         put(x, y, code, defaultForeground);
     }
 
-    public void put(int x, int y, char c, Color color) {
+    @Override
+	public void put(int x, int y, char c, Color color) {
         put(x, y, (int) c, color);
     }
 
@@ -382,18 +385,18 @@ public class SquidPanel extends JLayeredPane {
         return cellHeight;
     }
 
-    public int gridHeight() {
+    @Override
+	public int gridHeight() {
         return gridHeight;
     }
 
-    public int gridWidth() {
+    @Override
+	public int gridWidth() {
         return gridWidth;
     }
 
-    /**
-     * Cause everything that has been prepared for drawing (such as with put) to actually be drawn.
-     */
-    public void refresh() {
+    @Override
+	public void refresh() {
         trimAnimations();
         redraw();
         repaint();
@@ -435,17 +438,14 @@ public class SquidPanel extends JLayeredPane {
 	 * @param defaultForeground
 	 *            A non-{@code null} color.
 	 */
+	@Override
 	public void setDefaultForeground(Color defaultForeground) {
 		if (defaultForeground == null)
 			throw new NullPointerException("A null default foreground color is forbidden");
 		this.defaultForeground = defaultForeground;
 	}
 
-	/**
-	 * @return The default foreground color (if none was set with
-	 *         {@link #setDefaultForeground(Color)}), or the last color set with
-	 *         {@link #setDefaultForeground(Color)}. Cannot be {@code null}.
-	 */
+	@Override
 	public Color getDefaultForegroundColor() {
 		return defaultForeground;
 	}
@@ -580,5 +580,10 @@ public class SquidPanel extends JLayeredPane {
     public boolean hasActiveAnimations() {
         return animations == null ? false : !animations.isEmpty();
     }
+
+	@Override
+	public ISquidPanel<Color> getBacker() {
+		return this;
+	}
 
 }
