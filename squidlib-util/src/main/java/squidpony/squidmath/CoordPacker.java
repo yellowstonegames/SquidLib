@@ -31,14 +31,14 @@ public class CoordPacker {
         }
     }
 
-    public static IntVLA pack(double[][] map)
+    public static short[] pack(double[][] map)
     {
         if(map == null || map.length == 0)
             throw new ArrayIndexOutOfBoundsException("CoordPacker.pack() must be given a non-empty array");
         int xSize = map.length, ySize = map[0].length;
         if(xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
-        IntVLA packing = new IntVLA(256);
+        ShortVLA packing = new ShortVLA(64);
         boolean on = false, current;
         int skip = 0;
         for(int i = 0; i < 0x10000; i++, skip++)
@@ -47,13 +47,59 @@ public class CoordPacker {
             current = map[hilbertX[i]][hilbertY[i]] > 0.0;
             if(current != on)
             {
-                packing.addPair(skip, i);
+                packing.add((short) skip);
                 skip = 0;
                 on = current;
             }
         }
-        packing.addPair(skip, 0xffff);
-        return packing;
+        if(!on)
+            packing.add((short)skip);
+        return packing.shrink();
+    }
+
+    public static short[] pack(boolean[][] map)
+    {
+        if(map == null || map.length == 0)
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.pack() must be given a non-empty array");
+        int xSize = map.length, ySize = map[0].length;
+        if(xSize > 256 || ySize > 256)
+            throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
+        ShortVLA packing = new ShortVLA(64);
+        boolean on = false, current;
+        int skip = 0;
+        for(int i = 0; i < 0x10000; i++, skip++)
+        {
+            if(hilbertX[i] >= xSize || hilbertY[i] >= ySize) continue;
+            current = map[hilbertX[i]][hilbertY[i]];
+            if(current != on)
+            {
+                packing.add((short) skip);
+                skip = 0;
+                on = current;
+            }
+        }
+        if(!on)
+            packing.add((short)skip);
+        return packing.shrink();
+    }
+
+    public static boolean[][] unpack(short[] packed, int width, int height)
+    {
+        if(packed == null || packed.length == 0)
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-empty array");
+        boolean[][] unpacked = new boolean[width][height];
+        boolean on = false;
+        int idx = 0;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip; idx++) {
+                    unpacked[hilbertX[idx]][hilbertY[idx]] = true;
+                }
+            } else {
+                idx += packed[p] & 0xffff;
+            }
+        }
+        return unpacked;
     }
 
     /**
