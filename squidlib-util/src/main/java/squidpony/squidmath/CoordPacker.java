@@ -40,10 +40,35 @@ public class CoordPacker {
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
         boolean on = false, current;
-        int skip = 0;
-        for(int i = 0; i < 0x10000; i++, skip++)
+        int skip = 0, limit = 0x10000;
+        if(ySize < 128) {
+            limit >>= 1;
+            if (xSize < 128) {
+                limit >>= 1;
+                if (xSize < 64) {
+                    limit >>= 1;
+                    if (ySize < 64) {
+                        limit >>= 1;
+                        if (ySize < 32) {
+                            limit >>= 1;
+                            if (xSize < 32) {
+                                limit >>= 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for(int i = 0; i < limit; i++, skip++)
         {
-            if(hilbertX[i] >= xSize || hilbertY[i] >= ySize) continue;
+            if(hilbertX[i] >= xSize || hilbertY[i] >= ySize) {
+                if(on) {
+                    on = false;
+                    packing.add((short) skip);
+                    skip = 0;
+                }
+                continue;
+            }
             current = map[hilbertX[i]][hilbertY[i]] > 0.0;
             if(current != on)
             {
@@ -66,10 +91,37 @@ public class CoordPacker {
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
         boolean on = false, current;
-        int skip = 0;
-        for(int i = 0; i < 0x10000; i++, skip++)
+        int skip = 0, limit = 0x10000;
+        if(ySize < 128) {
+            limit >>= 1;
+            if (xSize < 128) {
+                limit >>= 1;
+                if (xSize < 64) {
+                    limit >>= 1;
+                    if (ySize < 64) {
+                        limit >>= 1;
+                        if (ySize < 32) {
+                            limit >>= 1;
+                            if (xSize < 32) {
+                                limit >>= 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        for(int i = 0; i < limit; i++, skip++)
         {
-            if(hilbertX[i] >= xSize || hilbertY[i] >= ySize) continue;
+            if(hilbertX[i] >= xSize || hilbertY[i] >= ySize) {
+                if(on) {
+                    on = false;
+                    packing.add((short) skip);
+                    skip = 0;
+                }
+                continue;
+            }
             current = map[hilbertX[i]][hilbertY[i]];
             if(current != on)
             {
