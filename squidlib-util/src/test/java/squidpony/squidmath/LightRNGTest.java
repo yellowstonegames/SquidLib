@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.experimental.categories.Categories.ExcludeCategory;
 
-import junit.framework.Assert;
-
 /**
  * test to check if {@link LightRNG} returns predictable results
  * 

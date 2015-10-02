@@ -108,7 +108,7 @@ public class Coord implements java.io.Serializable {
             return false;
         }
     }
-    private static Coord[][] POOL = new Coord[256][256];
+    private static Coord[][] POOL = new Coord[259][259];
     static {
         int width = POOL.length, height = POOL[0].length;
         for (int i = 0; i < width; i++) {
