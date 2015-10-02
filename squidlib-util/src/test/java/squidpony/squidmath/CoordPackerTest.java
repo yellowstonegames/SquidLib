@@ -56,11 +56,22 @@ public class CoordPackerTest {
         Coord viewer = dungeonGenerator.utility.randomFloor(map);
         double[][] resMap = DungeonUtility.generateResistances(map);
         double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
-        IntVLA packed = CoordPacker.pack(seen);
-        assertEquals("Packed ints", 19, packed.size);
+        short[] packed = CoordPacker.pack(seen);
+        /*
+        System.out.print(packed[0]);
+        for (int i = 1; i < packed.length; i++) {
+            System.out.print(", " + (packed[i] & 0xffff));
+        }*/
+        assertEquals("Packed shorts", 19, packed.length);
         assertEquals("Unpacked doubles: ", 2100, seen.length * seen[0].length);
 
-        //map[viewer.x][viewer.y] = '@';
+        boolean[][]unpacked = CoordPacker.unpack(packed, seen.length, seen[0].length);
+        for (int i = 0; i < unpacked.length ; i++) {
+            for (int j = 0; j < unpacked[i].length; j++) {
+                assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
+            }
+        }
+            //map[viewer.x][viewer.y] = '@';
         //dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(map));
         //System.out.println(dungeonGenerator.toString());
     }
