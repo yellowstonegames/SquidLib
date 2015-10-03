@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.BitSet;
 
 /**
  * Created by Tommy Ettinger on 10/1/2015.
@@ -133,6 +134,75 @@ public class CoordPacker {
         if(!on)
             packing.add((short)skip);
         return packing.shrink();
+    }
+
+    public static short[][] packMulti(double[][] map, double... levels) {
+        if (levels == null || levels.length == 0)
+            throw new UnsupportedOperationException("Must be given at least one level");
+        if (levels.length > 63)
+            throw new UnsupportedOperationException(
+                    "Too many levels to efficiently pack; should be less than 64 but was given " +
+                            levels.length);
+        if (map == null || map.length == 0)
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.packMulti() must be given a non-empty array");
+        int xSize = map.length, ySize = map[0].length;
+        if (xSize > 256 || ySize > 256)
+            throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
+        int limit = 0x10000, llen = levels.length;
+        long on = 0, current = 0;
+        ShortVLA[] packing = new ShortVLA[llen];
+        int[] skip = new int[llen];
+
+        if (ySize < 128) {
+            limit >>= 1;
+            if (xSize < 128) {
+                limit >>= 1;
+                if (xSize < 64) {
+                    limit >>= 1;
+                    if (ySize < 64) {
+                        limit >>= 1;
+                        if (ySize < 32) {
+                            limit >>= 1;
+                            if (xSize < 32) {
+                                limit >>= 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        short[][] packed = new short[llen][];
+        for(int l = 0; l < llen; l++) {
+            packing[l] = new ShortVLA(64);
+            for (int i = 0; i < limit; i++, skip[l]++) {
+                if (hilbertX[i] >= xSize || hilbertY[i] >= ySize) {
+                    if ((on & (1L << l)) != 0L) {
+                        on ^= (1L << l);
+                        packing[l].add((short) skip[l]);
+                        skip[l] = 0;
+                    }
+                    continue;
+                }
+                // sets the bit at position l in current to 1 if the following is true, 0 if it is false:
+                //     map[hilbertX[i]][hilbertY[i]] > levels[l]
+                // looks more complicated than it is.
+                current ^= ((map[hilbertX[i]][hilbertY[i]] > levels[l] ? -1 : 0) ^ current) & (1 << l);
+                if (((current >> l) & 1L) != ((on >> l) & 1L)) {
+                    packing[l].add((short) skip[l]);
+                    skip[l] = 0;
+                    on = current;
+
+                    // sets the bit at position l in on to the same as the bit at position l in current.
+                    on ^= (-((current >> l) & 1L) ^ on) & (1L << l);
+
+                }
+            }
+
+            if (((on >> l) & 1L) == 0L)
+                packing[l].add((short) skip[l]);
+            packed[l] = packing[l].shrink();
+        }
+        return packed;
     }
 
     public static boolean[][] unpack(short[] packed, int width, int height)
