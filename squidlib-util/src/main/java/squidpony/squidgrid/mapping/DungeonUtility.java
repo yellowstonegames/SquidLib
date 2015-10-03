@@ -19,15 +19,19 @@ public class DungeonUtility {
     {
         rng = new StatefulRNG();
     }
-    public DungeonUtility(RNG rng)
+    public DungeonUtility(StatefulRNG rng)
     {
         this.rng = rng;
+    }
+    public DungeonUtility(RNG rng)
+    {
+        this.rng = new StatefulRNG(new LightRNG(rng.nextLong()));
     }
 
     /**
      * The random number generator that will be used for all methods in this class with a random component.
      */
-    public RNG rng;
+    public StatefulRNG rng;
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value.
      * Uses this class' rng field for pseudo-random number generation.

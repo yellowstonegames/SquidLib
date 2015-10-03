@@ -18,7 +18,7 @@ package squidpony.squidmath;
  */
 public class LightRNG implements RandomnessSource, StatefulRandomness
 {
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 4L;
     /** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
     /** 2 raised to the -53. */
@@ -50,9 +50,9 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
      */
     public long nextLong() {
         long z = ( state += 0x9E3779B97F4A7C15l );
-        z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9l;
-        z = (z ^ (z >> 27)) * 0x94D049BB133111EBl;
-        return z ^ (z >> 31);
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9l;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBl;
+        return z ^ (z >>> 31);
     }
 
     /**
@@ -140,7 +140,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
     }
 
     public boolean nextBoolean() {
-        return ( nextLong() & 1 ) != 0;
+        return ( nextLong() & 1 ) != 0L;
     }
 
     public void nextBytes( final byte[] bytes ) {

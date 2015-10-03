@@ -1,18 +1,21 @@
 package squidpony.squidgrid.gui.gdx;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
+import squidpony.panel.IColoredString;
+import squidpony.panel.ISquidPanel;
+import squidpony.squidgrid.Direction;
+import squidpony.squidmath.Coord;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
-import squidpony.squidgrid.Direction;
-import com.badlogic.gdx.graphics.Color;
-import squidpony.squidmath.Coord;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -25,7 +28,7 @@ import java.util.LinkedHashSet;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class SquidPanel extends Group {
+public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     public float DEFAULT_ANIMATION_DURATION = 0.12F;
     private int animationCount = 0;
@@ -103,7 +106,8 @@ public class SquidPanel extends Group {
         SquidPanel.this.put(0, 0, chars);
     }
 
-    public void put(char[][] chars, Color[][] foregrounds) {
+    @Override
+	public void put(char[][] chars, Color[][] foregrounds) {
         SquidPanel.this.put(0, 0, chars, foregrounds);
     }
 
@@ -181,18 +185,19 @@ public class SquidPanel extends Group {
         SquidPanel.this.put(xOffset, yOffset, string, defaultForeground);
     }
 
-    /**
-     * Puts the given string horizontally with the first character at the given offset.
-     *
-     * Does not word wrap. Characters that are not renderable (due to being at negative offsets or offsets greater than
-     * the grid size) will not be shown but will not cause any malfunctions.
-     *
-     * @param xOffset the x coordinate of the first character
-     * @param yOffset the y coordinate of the first character
-     * @param string the characters to be displayed
-     * @param foreground the color to draw the characters
-     */
-    public void put(int xOffset, int yOffset, String string, Color foreground) {
+	@Override
+	public void put(int xOffset, int yOffset, IColoredString<? extends Color> cs) {
+		int x = xOffset;
+		for (IColoredString.Bucket<? extends Color> fragment : cs) {
+			final String s = fragment.getText();
+			final Color color = fragment.getColor();
+			put(x, yOffset, s, color == null ? getDefaultForegroundColor() : color);
+			x += s.length();
+		}
+	}
+
+	@Override
+	public void put(int xOffset, int yOffset, String string, Color foreground) {
         char[][] temp = new char[string.length()][1];
         for (int i = 0; i < string.length(); i++) {
             temp[i][0] = string.charAt(i);
@@ -250,21 +255,18 @@ public class SquidPanel extends Group {
         }
     }
 
-    /**
-     * Removes the contents of this cell, leaving a transparent space.
-     *
-     * @param x
-     * @param y
-     */
-    public void clear(int x, int y) {
+    @Override
+	public void clear(int x, int y) {
         this.put(x, y, Color.CLEAR);
     }
 
-    public void put(int x, int y, Color color) {
+    @Override
+	public void put(int x, int y, Color color) {
         put(x, y, '\0', color);
     }
 
-    public void put(int x, int y, char c) {
+    @Override
+	public void put(int x, int y, char c) {
         put(x, y, c, defaultForeground);
     }
 
@@ -299,7 +301,8 @@ public class SquidPanel extends Group {
      * @param c
      * @param color
      */
-    public void put(int x, int y, char c, Color color) {
+    @Override
+	public void put(int x, int y, char c, Color color) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
@@ -315,11 +318,13 @@ public class SquidPanel extends Group {
         return cellHeight;
     }
 
-    public int gridHeight() {
+    @Override
+	public int gridHeight() {
         return gridHeight;
     }
 
-    public int gridWidth() {
+    @Override
+	public int gridWidth() {
         return gridWidth;
     }
 
@@ -350,9 +355,16 @@ public class SquidPanel extends Group {
             ae.actor.draw(batch, parentAlpha);
     }
 
-    public void setDefaultForeground(Color defaultForeground) {
+    @Override
+	public void setDefaultForeground(Color defaultForeground) {
         this.defaultForeground = defaultForeground;
     }
+
+	@Override
+	public Color getDefaultForegroundColor() {
+		return defaultForeground;
+	}
+
     public AnimatedEntity getAnimatedEntityByCell(int x, int y) {
         for(AnimatedEntity ae : animatedEntities)
         {
@@ -995,4 +1007,15 @@ public class SquidPanel extends Group {
     public LinkedHashSet<AnimatedEntity> getAnimatedEntities() {
         return animatedEntities;
     }
+
+	@Override
+	public void refresh() {
+		/* smelC: should we do something here ? */
+	}
+
+	@Override
+	public ISquidPanel<Color> getBacker() {
+		return this;
+	}
+
 }
