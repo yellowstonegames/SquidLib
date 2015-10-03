@@ -114,7 +114,6 @@ public class DijkstraMap
      */
     public RNG rng;
     private int frustration = 0;
-    private DungeonUtility utility;
     public Coord[][] targetMap;
 
 
@@ -132,7 +131,6 @@ public class DijkstraMap
      */
     public DijkstraMap() {
         rng = new RNG(new LightRNG());
-        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -148,7 +146,6 @@ public class DijkstraMap
      */
     public DijkstraMap(RNG random) {
         rng = random;
-        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -163,7 +160,6 @@ public class DijkstraMap
      */
     public DijkstraMap(final double[][] level) {
         rng = new RNG(new LightRNG());
-        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -179,7 +175,6 @@ public class DijkstraMap
      */
     public DijkstraMap(final double[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
-        utility = new DungeonUtility(rng);
         this.measurement = measurement;
         path = new ArrayList<Coord>();
 
@@ -200,7 +195,27 @@ public class DijkstraMap
      */
     public DijkstraMap(final char[][] level) {
         rng = new RNG(new LightRNG());
-        utility = new DungeonUtility(rng);
+        path = new ArrayList<Coord>();
+
+        goals = new LinkedHashMap<Coord, Double>();
+        fresh = new LinkedHashMap<Coord, Double>();
+        closed = new LinkedHashMap<Coord, Double>();
+        open = new LinkedHashMap<Coord, Double>();
+        initialize(level);
+    }
+
+    /**
+     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
+     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
+     * map that can be used here. Also takes an RNG that ensures predictable path choices given
+     * otherwise identical inputs and circumstances.
+     *
+     * @param level
+     * @param rng The RNG to use for certain decisions; only affects find* methods like findPath, not scan.
+     */
+    public DijkstraMap(final char[][] level, RNG rng) {
+        this.rng = rng;
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -219,7 +234,6 @@ public class DijkstraMap
      */
     public DijkstraMap(final char[][] level, char alternateWall) {
         rng = new RNG(new LightRNG());
-        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
 
         goals = new LinkedHashMap<Coord, Double>();
@@ -240,7 +254,6 @@ public class DijkstraMap
      */
     public DijkstraMap(final char[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
-        utility = new DungeonUtility(rng);
         path = new ArrayList<Coord>();
         this.measurement = measurement;
 
@@ -251,6 +264,27 @@ public class DijkstraMap
         initialize(level);
     }
 
+    /**
+     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
+     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
+     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
+     * map that can be used here. Also takes a distance measurement and an RNG that ensures
+     * predictable path choices given otherwise identical inputs and circumstances.
+     *
+     * @param level
+     * @param rng The RNG to use for certain decisions; only affects find* methods like findPath, not scan.
+     */
+    public DijkstraMap(final char[][] level, Measurement measurement, RNG rng) {
+        this.rng = rng;
+        path = new ArrayList<Coord>();
+        this.measurement = measurement;
+
+        goals = new LinkedHashMap<Coord, Double>();
+        fresh = new LinkedHashMap<Coord, Double>();
+        closed = new LinkedHashMap<Coord, Double>();
+        open = new LinkedHashMap<Coord, Double>();
+        initialize(level);
+    }
     /**
      * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
@@ -1408,9 +1442,6 @@ public class DijkstraMap
         }
         frustration = 0;
         goals.clear();
-        if(path.isEmpty())
-            path = findPath(moveLength, impassable, friends, start, utility.randomFloor(dungeon),
-                    utility.randomFloor(dungeon), utility.randomFloor(dungeon));
         return path;
     }
 
