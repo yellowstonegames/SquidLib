@@ -30,7 +30,7 @@ import squidpony.squidmath.RandomnessSource;
  * @author David Becker
  *
  */
-public final class PerformanceTest {
+public final class FOVLOSPerformanceTest {
 	// we want predictable outcome for our test
 	private static final RandomnessSource SOURCE = new LightRNG(0x1337BEEF);
 	private static final RNG RNG = new RNG(SOURCE);
@@ -41,7 +41,7 @@ public final class PerformanceTest {
 	private static final int NUM_THREADS = 8;
 	private static final int NUM_TASKS = 100;
 
-	private PerformanceTest() {
+	private FOVLOSPerformanceTest() {
 	}
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException {

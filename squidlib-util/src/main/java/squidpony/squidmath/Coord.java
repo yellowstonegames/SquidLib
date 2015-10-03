@@ -2,13 +2,21 @@ package squidpony.squidmath;
 
 import java.util.Arrays;
 
+import squidpony.squidgrid.Direction;
+
 /**
+ * A 2D coordinate.
+ * 
  * Created by Tommy Ettinger on 8/12/2015.
  */
 public class Coord implements java.io.Serializable {
     private static final long serialVersionUID = 300L;
-    public final int x;
-    public final int y;
+
+	/** The x-coordinate. */
+	public final int x;
+
+	/** The y-coordinate (the ordinate) */
+	public final int y;
 
     protected Coord()
     {
@@ -34,6 +42,16 @@ public class Coord implements java.io.Serializable {
     {
         return get(this.x + x, this.y + y);
     }
+
+	/**
+	 * @param d
+	 *            A non-{@code null} direction.
+	 * @return The coordinate obtained by applying {@code d} on {@code this}.
+	 */
+	public Coord translate(Direction d) {
+		return Coord.get(x + d.deltaX, y + d.deltaY);
+	}
+
     public double distance(double x2, double y2)
     {
         return Math.sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y));
@@ -90,7 +108,7 @@ public class Coord implements java.io.Serializable {
             return false;
         }
     }
-    private static Coord[][] POOL = new Coord[256][256];
+    private static Coord[][] POOL = new Coord[259][259];
     static {
         int width = POOL.length, height = POOL[0].length;
         for (int i = 0; i < width; i++) {

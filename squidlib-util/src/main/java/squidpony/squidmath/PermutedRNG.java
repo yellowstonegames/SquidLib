@@ -21,7 +21,7 @@ package squidpony.squidmath;
  */
 public class PermutedRNG implements RandomnessSource, StatefulRandomness
 {
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 4L;
     /** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
     /** 2 raised to the -53. */
@@ -55,10 +55,10 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      */
     public int nextInt() {
         long z = ( state += 0x9E3779B97F4A7C15l );
-        z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9l;
-        z = (z ^ (z >> 27)) * 0x94D049BB133111EBl;
-        z = z ^ (z >> 31);
-        return Integer.rotateRight((int)((z ^ (z >> 18)) >> 27), (int)(z >> 59));
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9l;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBl;
+        z = z ^ (z >>> 31);
+        return Integer.rotateRight((int)((z ^ (z >>> 18)) >>> 27), (int)(z >>> 59));
     }
     /**
      * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
@@ -68,7 +68,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      * @return
      */
     public long nextLong() {
-        return ((long)(nextInt()) << 32) | nextInt();
+        return ((long)nextInt() << 32) + nextInt();
     }
 
     /**
@@ -166,7 +166,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     }
 
     public boolean nextBoolean() {
-        return ( nextInt() & 1 ) != 0;
+        return ( nextInt() & 1 ) != 0L;
     }
 
     public void nextBytes( final byte[] bytes ) {
