@@ -69,7 +69,7 @@ public final class FOVLOSPerformanceTest {
 	 * @author David Becker
 	 *
 	 */
-	private static final class Test implements Callable<Long> {
+	private static final class Test extends AbstractPerformanceUnit {
 
 		private char[][] map;
 		private double[][] res;
@@ -80,8 +80,7 @@ public final class FOVLOSPerformanceTest {
 		}
 
 		@Override
-		public Long call() throws Exception {
-			final long timerStart = System.currentTimeMillis();
+		protected void doWork() {
 			final FOV fovRipple = new FOV(FOV.RIPPLE);
 			final FOV fovRippleL = new FOV(FOV.RIPPLE_LOOSE);
 			final FOV fovRippleT = new FOV(FOV.RIPPLE_TIGHT);
@@ -117,8 +116,6 @@ public final class FOVLOSPerformanceTest {
 					losRay.isReachable(map, x, y, end, end);
 				}
 			}
-			final long timerEnd = System.currentTimeMillis();
-			return timerEnd - timerStart;
 		}
 
 	}
