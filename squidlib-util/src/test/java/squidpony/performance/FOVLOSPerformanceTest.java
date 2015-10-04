@@ -30,7 +30,7 @@ import squidpony.squidmath.RandomnessSource;
  * @author David Becker
  *
  */
-public final class FOVLOSPerformanceTest extends AbstractPerformanceTest {
+final class FOVLOSPerformanceTest extends AbstractPerformanceTest {
 	// we want predictable outcome for our test
 	private static final RandomnessSource SOURCE = new LightRNG(0x1337BEEF);
 	private static final RNG RNG = new RNG(SOURCE);
@@ -40,7 +40,7 @@ public final class FOVLOSPerformanceTest extends AbstractPerformanceTest {
 	private final char[][] maps;
 	private final double[][] res;
 
-	private FOVLOSPerformanceTest() {
+	FOVLOSPerformanceTest() {
 		final DungeonGenerator generator = new DungeonGenerator(DIMENSION, DIMENSION, RNG);
 		maps = generator.generate();
 		res = DungeonUtility.generateResistances(maps);
