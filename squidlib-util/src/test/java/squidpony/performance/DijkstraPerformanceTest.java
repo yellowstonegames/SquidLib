@@ -1,4 +1,4 @@
-package squidpony.examples;
+package squidpony.performance;
 
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.FOV;
