@@ -1,4 +1,4 @@
-package squidpony.examples;
+package squidpony.performance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,37 +30,26 @@ import squidpony.squidmath.RandomnessSource;
  * @author David Becker
  *
  */
-public final class FOVLOSPerformanceTest {
+final class FOVLOSPerformanceTest extends AbstractPerformanceTest {
 	// we want predictable outcome for our test
 	private static final RandomnessSource SOURCE = new LightRNG(0x1337BEEF);
 	private static final RNG RNG = new RNG(SOURCE);
 
 	// a 30 * 30 map should be enough
 	private static final int DIMENSION = 30;
+	private final char[][] maps;
+	private final double[][] res;
 
-	private static final int NUM_THREADS = 8;
-	private static final int NUM_TASKS = 100;
-
-	private FOVLOSPerformanceTest() {
+	FOVLOSPerformanceTest() {
+		final DungeonGenerator generator = new DungeonGenerator(DIMENSION, DIMENSION, RNG);
+		maps = generator.generate();
+		res = DungeonUtility.generateResistances(maps);
+		createThreadList();
 	}
 
-	public static void main(String[] args) throws InterruptedException, ExecutionException {
-		final DungeonGenerator generator = new DungeonGenerator(DIMENSION, DIMENSION, RNG);
-		final char[][] map = generator.generate();
-		final double[][] res = DungeonUtility.generateResistances(map);
-
-		List<Callable<Long>> tasks = new ArrayList<>();
-		for (int i = 0; i < NUM_TASKS; i++) {
-			tasks.add(new Test(map, res));
-		}
-		ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
-		System.out.println("invoking " + NUM_TASKS + " tasks on " + NUM_THREADS + " threads");
-		final List<Future<Long>> invoke = executor.invokeAll(tasks);
-
-		for (Future<Long> future : invoke) {
-			System.out.println(future.get());
-		}
-		System.exit(0);
+	@Override
+	protected AbstractPerformanceUnit createWorkUnit() {
+		return new Test(maps, res);
 	}
 
 	/**
@@ -69,7 +58,7 @@ public final class FOVLOSPerformanceTest {
 	 * @author David Becker
 	 *
 	 */
-	private static final class Test implements Callable<Long> {
+	private static final class Test extends AbstractPerformanceUnit {
 
 		private char[][] map;
 		private double[][] res;
@@ -80,8 +69,7 @@ public final class FOVLOSPerformanceTest {
 		}
 
 		@Override
-		public Long call() throws Exception {
-			final long timerStart = System.currentTimeMillis();
+		protected void doWork() {
 			final FOV fovRipple = new FOV(FOV.RIPPLE);
 			final FOV fovRippleL = new FOV(FOV.RIPPLE_LOOSE);
 			final FOV fovRippleT = new FOV(FOV.RIPPLE_TIGHT);
@@ -117,8 +105,6 @@ public final class FOVLOSPerformanceTest {
 					losRay.isReachable(map, x, y, end, end);
 				}
 			}
-			final long timerEnd = System.currentTimeMillis();
-			return timerEnd - timerStart;
 		}
 
 	}
