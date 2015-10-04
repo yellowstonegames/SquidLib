@@ -1,4 +1,4 @@
-package squidpony.examples;
+package squidpony.performance;
 
 import java.util.ArrayList;
 import java.util.List;
