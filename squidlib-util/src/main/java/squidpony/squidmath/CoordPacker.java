@@ -9,12 +9,12 @@ import java.nio.ByteBuffer;
  * Provides static methods to encode Coords as single primitive ints in various ways, hence the namesake, but also
  * provides advanced methods to encode 2D arrays of various sorts produced by SquidLib in extremely memory-efficient
  * representations, and decode those representations to various types of 2D array on-demand.
- *
+ *<br>
  * NOTE: This class is atypically complex and low-level for SquidLib because it is attempting to attain some very
  * challenging performance gains. You should not consider it idiomatic SquidLib code or start modifying it unless
  * you have a good grasp of bitwise operations and the performance implications, particularly in regard to memory
  * consumption, that higher-level and more convenient Java programming techniques have.
- *
+ *<br>
  * The pack() methods in this class take a 2D array with a clear division between cells in an "on" state and cells in an
  * "off" state, and they produce a very tightly compressed short array that can be losslessly decompressed with the
  * unpack() methods to a boolean 2D array that stores equivalent on/off data to the input. The packMulti() method in
@@ -38,7 +38,7 @@ import java.nio.ByteBuffer;
  * then pass the short[][] and levels to unpackMultiDouble later, much of the same radius will be filled, but because
  * the sample value 0.1 was less than the smallest value in levels, its cell will be given 0.0. What was originally 0.45
  * will be given the next-lower levels value, 0.25; 0.8 will be given 0.75, and 1.0 will remain 1.0.
- *
+ *<br>
  * This compression is meant to produce a short[] or short[][] that uses as little memory as possible for the specific
  * case of compressing maps with these qualities:
  * <ul>
@@ -53,11 +53,10 @@ import java.nio.ByteBuffer;
  * the original double[][] (which wastefully represents 2 states with 8 bytes) yields memory usage ratios between
  * (choosing relatively optimal parameters) 0.00012051926586550049 in one of the best cases, and (choosing some very
  * poor parameters for the dungeon, but still using a realistic FOV map) 0.004162812210915819 in one of the worst.
- *
+ *<br>
  * This table shows the results for one run of pack() in a map with a "good size" and one run in a map with a "bad
  * size." Both the compression ratio vs. a double[][] that stores only whether a cell is on or off and a boolean[][]
  * that stores the same information are provided.
- *
  * <table>
  *     <tr>
  *         <th></th>
@@ -84,13 +83,12 @@ import java.nio.ByteBuffer;
  *         <td>0.02710843373493976</td>
  *     </tr>
  * </table>
- *
  * In the best-case scenario of packing a 240x240 double array to a short array encoding two states, the result
  * uses less than 1/8000 the memory that the input uses. Writing to disk can store both input and output more
  * efficiently, but the method used here should ensure that even encoding the input FOV map as a flat sequence of
  * single bits and compressing the file should still be on par with the output of pack() due to optimization to
  * ensure nearby cells on a map are compressed together.
- *
+ *<br>
  * The technique used by this class is to walk along a Hilbert Curve, storing whether the walk is traveling through
  * cells that are greater than 0.0 (on) or less than or equal to 0.0 (off), then encoding alternate shorts into the
  * short[] to be returned, with even-number indices (starting at 0) in the array corresponding to the number of
@@ -115,7 +113,7 @@ import java.nio.ByteBuffer;
  * <b>In shorter-than-short</b>, you'll get particularly good results for compression speed and compressed size with
  * maps approximately these sizes: 240x240, 240x120, 120x120, 60x120, 60x60, 60x30, 30x30. The biggest maps have the
  * best relative gain on compressed memory usage, and the smallest maps have the best compression speed.
- *
+ *<br>
  * The details of the algorithm are not terribly complex once you understand the Hilbert Curve. The simplified
  * version of the Hilbert Curve that SquidLib employs is essentially a path through a square grid (it must have side
  * lengths that are powers of 2, and SquidLib always uses 256), starting in the corner cell (x=0,y=0), ending in the
@@ -128,28 +126,29 @@ import java.nio.ByteBuffer;
  * blocking sections of FOV, the simplest paths of a wide zigzag from side-to-side, or an outward-going-in spiral, have
  * rather poor behavior when determining how much of an area they pass through contiguously. The contiguous area trait
  * is important because of the next step: Run-Length Encoding.
- *
+ *<br>
  * Run-Length Encoding is much simpler to explain than the Hilbert Curve, especially without visual aids. In the version
  * SquidLib uses, only on or off states need to be recorded, so the method used here is smaller and more efficient than
  * most methods that need to store repeated characters in strings (and letters, numbers, and punctuation clearly have
  * more than 2 states). The technique works like this:
- *
+ *<br>
  * Start in the "off" state, walk down the Hilbert Curve counting how many cells you walk through that are still "off,"
  * and when you encounter a cell that is "on," you write down how many cells were off, transition to the "on" state, and
  * keep walking the Hilbert Curve but now counting how many cells you walk through that are still "on." When you reach
  * an "off" cell, write down how many were "on," then start walking and counting again, with your count starting at 0.
- *
+ * Repeat until you reach the end of the Hilbert Curve (a shortcut allows many maps to stop much sooner).
+ *<br>
  * There are some additional traits that relate to the edge of the map being treated as "off" even though no
  * calculations are done for cells out of map bounds, and some optimizations that ensure that maps that are smaller than
- * a half, a quarter, or an eighth of the 256x256 curve in both dimensions (and sometimes only one) only need to walk a
+ * a half, a quarter, or an eighth of the 256x256 curve in both dimensions (and sometimes just one) only need to walk a
  * portion of the Hilbert Curve and simply skip the rest without walking it.
- *
+ *<br>
  * The Hilbert Curve has not been definitively proven to be the best possible path to ensure 1D distance and 2D location
  * are similar, but it has been extensively used for tasks that require similar locations for similar distances (in
  * particular, it has become useful in supercomputing clusters for allocating related work to physically nearby
  * machines), and since there hasn't been anything with better spatial properties discovered yet, this technique should
  * remain useful for some time.
-
+ * <br>
  * Created by Tommy Ettinger on 10/1/2015.
  * @author Tommy Ettinger
  */
@@ -184,7 +183,7 @@ public class CoordPacker {
      * relevant states and their positions as a boolean[][] (with false meaning 0 or less and true being any double
      * greater than 0). As stated in the class documentation, the compressed result is intended to use as little memory
      * as possible for most roguelike FOV maps.
-     *
+     *<br>
      * <b>To store more than two states</b>, you should use packMulti().
      *
      * @param map a double[][] that probably was returned by FOV. If you obtained a double[][] from DijkstraMap, it
@@ -308,10 +307,10 @@ public class CoordPacker {
      * in the {@link CoordPacker} class documentation. This short[][] can be passed to CoordPacker.unpackMultiDouble()
      * to restore the state at a position to the nearest state in levels, rounded down, and return a double[][] that
      * should preserve the states as closely as intended for most purposes.
-     *
+     *<br>
      * As stated in the class documentation, the compressed result is intended to use as little memory as possible for
      * most roguelike FOV maps.
-     *
+     *<br>
      * <b>To store only two states</b>, you should use pack(), unless the double[][] divides data into on and off based
      * on a relationship to some number other than 0.0. To (probably poorly?) pack all the walls (and any cells with
      * values higher than DijkstraMap.WALL) in a DijkstraMap's 2D array of doubles called dijkstraArray, you could call
