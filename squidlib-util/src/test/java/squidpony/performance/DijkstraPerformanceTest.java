@@ -33,12 +33,12 @@ import java.util.concurrent.*;
  * @author Tommy Ettinger
  *
  */
-public final class DijkstraPerformanceTest extends AbstractPerformanceTest {
+final class DijkstraPerformanceTest extends AbstractPerformanceTest {
 	// a 60 * 60 map should be more taxing
 	private static final int DIMENSION = 60, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
 	private final char[][] maps;
 
-	private DijkstraPerformanceTest() {
+	DijkstraPerformanceTest() {
 		final DungeonGenerator generator = new DungeonGenerator(DIMENSION, DIMENSION, RNG);
 		maps = generator.generate();
 		System.out.println(generator.toString());
