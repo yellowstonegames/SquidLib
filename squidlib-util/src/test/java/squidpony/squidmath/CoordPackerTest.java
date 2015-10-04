@@ -38,6 +38,14 @@ public class CoordPackerTest {
     {
         return arrayMemoryUsage(xSize, (((bytesPerItem * ySize + 12 - 1) / 8) + 1) * 8);
     }
+    public int arrayMemoryUsageJagged(short[][] arr)
+    {
+        int ctr = 0;
+        for (int i = 0; i < arr.length; i++) {
+            ctr += arrayMemoryUsage(arr[i].length, 2);
+        }
+        return (((ctr + 12 - 1) / 8) + 1) * 8;
+    }
 
     @Test
     public void testHilbertCurve() {
@@ -54,7 +62,7 @@ public class CoordPackerTest {
     @Test
     public void testPackOptimalParameters()
     {
-        RNG rng = new RNG(new LightRNG(0xAAAA2D2));
+        StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(240, 240, rng);
         dungeonGenerator.addDoors(15, true);
         dungeonGenerator.addWater(25);
@@ -96,7 +104,7 @@ public class CoordPackerTest {
     @Test
     public void testPackPoorParameters()
     {
-        RNG rng = new RNG(new LightRNG(0xAAAA2D2));
+        StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 70, rng);
         dungeonGenerator.addDoors(15, true);
         dungeonGenerator.addWater(25);
@@ -131,6 +139,95 @@ public class CoordPackerTest {
         for (int i = 0; i < unpacked.length ; i++) {
             for (int j = 0; j < unpacked[i].length; j++) {
                 assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
+            }
+        }
+    }
+
+    @Test
+    public void testPackMultiOptimalParameters()
+    {
+        StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
+        DungeonGenerator dungeonGenerator = new DungeonGenerator(240, 240, rng);
+        dungeonGenerator.addDoors(15, true);
+        dungeonGenerator.addWater(25);
+        dungeonGenerator.addTraps(2);
+        char[][] map = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+
+        FOV fov = new FOV(FOV.RIPPLE);
+        Coord viewer = dungeonGenerator.utility.randomFloor(map);
+
+        map[viewer.x][viewer.y] = '@';
+        dungeonGenerator.setDungeon(map);
+        System.out.println(dungeonGenerator.toString());
+
+        double[][] resMap = DungeonUtility.generateResistances(map);
+        double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
+        double[] lightLevels = new double[]{0.0, 0.125, 0.25, 0.125 * 3, 0.5, 0.125 * 5, 0.75, 0.125 * 7};
+        short[][] packed = CoordPacker.packMulti(seen, lightLevels);
+        /*
+        System.out.print(packed[0]);
+        for (int i = 1; i < packed.length; i++) {
+            System.out.print(", " + (packed[i] & 0xffff));
+        }*/
+        //assertEquals("Packed shorts", 19, packed.length);
+        //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+        System.out.println("Memory used by packed shorts (Appropriate):" +
+                arrayMemoryUsageJagged(packed) + " bytes");
+        System.out.println("Memory used by double[][] (Appropriate):" +
+                arrayMemoryUsage2D(240, 240, 8) + " bytes");
+        System.out.println("Compression (Appropriate):" +
+                100.0 * arrayMemoryUsageJagged(packed) / arrayMemoryUsage2D(240, 240, 8) + "%");
+        for(int ll = 0; ll < lightLevels.length; ll++) {
+            boolean[][] unpacked = CoordPacker.unpack(packed[ll], seen.length, seen[0].length);
+            for (int i = 0; i < unpacked.length; i++) {
+                for (int j = 0; j < unpacked[i].length; j++) {
+                    assertTrue((seen[i][j] > lightLevels[ll]) == unpacked[i][j]);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testPackMultiPoorParameters()
+    {
+        StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
+        DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 70, rng);
+        dungeonGenerator.addDoors(15, true);
+        dungeonGenerator.addWater(25);
+        dungeonGenerator.addTraps(2);
+        char[][] map = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+
+        FOV fov = new FOV(FOV.RIPPLE);
+        Coord viewer = dungeonGenerator.utility.randomFloor(map);
+
+        map[viewer.x][viewer.y] = '@';
+        dungeonGenerator.setDungeon(map);
+        System.out.println(dungeonGenerator.toString());
+
+        double[][] resMap = DungeonUtility.generateResistances(map);
+        double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
+        double[] lightLevels = new double[]{0.0, 0.125, 0.25, 0.125 * 3, 0.5, 0.125 * 5, 0.75, 0.125 * 7};
+        short[][] packed = CoordPacker.packMulti(seen, lightLevels);
+        /*
+        System.out.print(packed[0]);
+        for (int i = 1; i < packed.length; i++) {
+            System.out.print(", " + (packed[i] & 0xffff));
+        }*/
+        //assertEquals("Packed shorts", 29, packed.length);
+        //assertEquals("Unpacked doubles: ", 2100, seen.length * seen[0].length);
+        System.out.println("Memory used by packed shorts (Approaching Worst-Case):" +
+                arrayMemoryUsageJagged(packed) + " bytes");
+        System.out.println("Memory used by double[][] (Approaching Worst-Case):" +
+                arrayMemoryUsage2D(30, 70, 8) + " bytes");
+        System.out.println("Compression (Approaching Worst-Case):" +
+                100.0 * arrayMemoryUsageJagged(packed) / arrayMemoryUsage2D(30, 70, 8) + "%");
+
+        for(int ll = 0; ll < lightLevels.length; ll++) {
+            boolean[][] unpacked = CoordPacker.unpack(packed[ll], seen.length, seen[0].length);
+            for (int i = 0; i < unpacked.length; i++) {
+                for (int j = 0; j < unpacked[i].length; j++) {
+                    assertTrue((seen[i][j] > lightLevels[ll]) == unpacked[i][j]);
+                }
             }
         }
     }
