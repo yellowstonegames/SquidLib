@@ -3,7 +3,8 @@ package squidpony.performance;
 import java.util.concurrent.ExecutionException;
 
 /**
- * runs the predefined performance tests<br/>
+ * runs the predefined performance tests
+ * <br>
  * TODO convert into Mojo to be invoked from Maven
  * 
  * @author David Becker

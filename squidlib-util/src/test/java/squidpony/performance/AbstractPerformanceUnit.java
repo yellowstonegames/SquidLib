@@ -3,8 +3,8 @@ package squidpony.performance;
 import java.util.concurrent.Callable;
 
 /**
- * 
- * single unit of work intended to be used in a performance related test.</br>
+ * single unit of work intended to be used in a performance related test.
+ * <br>
  * provides a wrapper around {@link Callable} to return the time that the test
  * took to complete in ms
  * 

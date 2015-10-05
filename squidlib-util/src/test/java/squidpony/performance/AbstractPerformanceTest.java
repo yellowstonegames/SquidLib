@@ -12,7 +12,7 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.RandomnessSource;
 
 /**
- * super class for performance related tests.<br/>
+ * super class for performance related tests.<br>
  * 
  * @author David Becker
  *

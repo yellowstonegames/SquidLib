@@ -57,7 +57,8 @@ import java.nio.ByteBuffer;
  * This table shows the results for one run of pack() in a map with a "good size" and one run in a map with a "bad
  * size." Both the compression ratio vs. a double[][] that stores only whether a cell is on or off and a boolean[][]
  * that stores the same information are provided.
- * <table>
+ * <table BORDER CELLPADDING=3 CELLSPACING=1>
+ *     <caption>Memory Performance of CoordPacker</caption>
  *     <tr>
  *         <th></th>
  *         <th>Bytes of RAM used, double 2D array</th>
