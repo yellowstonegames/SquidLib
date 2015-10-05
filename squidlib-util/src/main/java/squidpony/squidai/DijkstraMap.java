@@ -910,8 +910,11 @@ public class DijkstraMap
                                      Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if(!initialized) return null;
         path = new ArrayList<Coord>();
+        LinkedHashSet<Coord> impassable2;
         if(impassable == null)
-            impassable = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
         if(onlyPassable == null)
             onlyPassable = new LinkedHashSet<Coord>();
 
@@ -921,7 +924,7 @@ public class DijkstraMap
         }
         if(goals.isEmpty())
             return path;
-        scan(impassable);
+        scan(impassable2);
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
@@ -958,8 +961,8 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    impassable.add(currentPos);
-                    return findPath(length, impassable, onlyPassable, start, targets);
+                    impassable2.add(currentPos);
+                    return findPath(length, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -1005,8 +1008,12 @@ public class DijkstraMap
             }
         }
         path = new ArrayList<Coord>();
+        LinkedHashSet<Coord> impassable2;
         if(impassable == null)
-            impassable = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
+
         if(onlyPassable == null)
             onlyPassable = new LinkedHashSet<Coord>();
 
@@ -1022,7 +1029,7 @@ public class DijkstraMap
         {
             measurement = Measurement.CHEBYSHEV;
         }
-        scan(impassable);
+        scan(impassable2);
         goals.clear();
 
         for(int x = 0; x < width; x++)
@@ -1047,7 +1054,7 @@ public class DijkstraMap
             }
         }
         measurement = mess;
-        scan(impassable);
+        scan(impassable2);
 
         Coord currentPos = start;
         double paidLength = 0.0;
@@ -1086,8 +1093,8 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    impassable.add(currentPos);
-                    return findAttackPath(moveLength, preferredRange, los, impassable, onlyPassable, start, targets);
+                    impassable2.add(currentPos);
+                    return findAttackPath(moveLength, preferredRange, los, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -1136,8 +1143,11 @@ public class DijkstraMap
             }
         }
         path = new ArrayList<Coord>();
+        LinkedHashSet<Coord> impassable2;
         if(impassable == null)
-            impassable = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
         if(onlyPassable == null)
             onlyPassable = new LinkedHashSet<Coord>();
 
@@ -1153,7 +1163,7 @@ public class DijkstraMap
         {
             measurement = Measurement.CHEBYSHEV;
         }
-        scan(impassable);
+        scan(impassable2);
         goals.clear();
 
         for(int x = 0; x < width; x++)
@@ -1179,7 +1189,7 @@ public class DijkstraMap
             }
         }
         measurement = mess;
-        scan(impassable);
+        scan(impassable2);
 
         Coord currentPos = start;
         double paidLength = 0.0;
@@ -1218,8 +1228,8 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    impassable.add(currentPos);
-                    return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable,
+                    impassable2.add(currentPos);
+                    return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
                             onlyPassable, start, targets);
                 }
                 break;
@@ -1294,8 +1304,12 @@ public class DijkstraMap
         path = new ArrayList<Coord>();
         if(targets == null || targets.size() == 0)
             return path;
+        LinkedHashSet<Coord> impassable2;
         if(impassable == null)
-            impassable = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
+
         if(allies == null)
             friends = new LinkedHashSet<Coord>();
         else
@@ -1306,7 +1320,7 @@ public class DijkstraMap
 
         resetMap();
         setGoal(start);
-        userDistanceMap = scan(impassable);
+        userDistanceMap = scan(impassable2);
         clearGoals();
         resetMap();
         for (Coord goal : targets) {
@@ -1322,7 +1336,7 @@ public class DijkstraMap
             measurement = Measurement.CHEBYSHEV;
         }
         */
-        scan(impassable);
+        scan(impassable2);
         clearGoals();
 
         Coord tempPt = Coord.get(0, 0);
@@ -1358,7 +1372,7 @@ public class DijkstraMap
                     gradientMap[x][y] = FLOOR;
             }
         }
-        scan(impassable);
+        scan(impassable2);
 
         double currentDistance = gradientMap[start.x][start.y];
         if(currentDistance <= moveLength)
@@ -1368,7 +1382,7 @@ public class DijkstraMap
 
             goals.clear();
             setGoal(start);
-            scan(impassable);
+            scan(impassable2);
             goals.clear();
             gradientMap[start.x][start.y] = moveLength;
 
@@ -1382,7 +1396,7 @@ public class DijkstraMap
             {
                 gradientMap[g.x][g.y] = 0.0 - worthMap[g.x][g.y];
             }*/
-            scan(impassable);
+            scan(impassable2);
 
         }
 
@@ -1414,8 +1428,8 @@ public class DijkstraMap
             {
                 if (friends.contains(currentPos)) {
                     closed.put(currentPos, WALL);
-                    impassable.add(currentPos);
-                    return findTechniquePath(moveLength, tech, dungeon, los, impassable,
+                    impassable2.add(currentPos);
+                    return findTechniquePath(moveLength, tech, dungeon, los, impassable2,
                             friends, start, targets);
                 }
                 break;
@@ -1431,8 +1445,8 @@ public class DijkstraMap
             if (paidLength > moveLength - 1.0) {
                 if (friends.contains(currentPos)) {
                     closed.put(currentPos, WALL);
-                    impassable.add(currentPos);
-                    return findTechniquePath(moveLength, tech, dungeon, los, impassable,
+                    impassable2.add(currentPos);
+                    return findTechniquePath(moveLength, tech, dungeon, los, impassable2,
                             friends, start, targets);
                 }
                 break;
@@ -1478,21 +1492,25 @@ public class DijkstraMap
                                          Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path = new ArrayList<Coord>();
-        if (impassable == null)
-            impassable = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> impassable2;
+        if(impassable == null)
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
+
         if (onlyPassable == null)
             onlyPassable = new LinkedHashSet<Coord>();
         if (fearSources == null || fearSources.length < 1) {
             path = new ArrayList<Coord>();
             return path;
         }
-        if (cachedSize == 1 && preferLongerPaths == cachedLongerPaths && impassable.equals(cachedImpassable) &&
+        if (cachedSize == 1 && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable) &&
                 fearSources.equals(cachedFearSources)) {
             gradientMap = cachedFleeMap;
         }
         else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new LinkedHashSet<Coord>(impassable);
+            cachedImpassable = new LinkedHashSet<Coord>(impassable2);
             cachedFearSources = fearSources.clone();
             cachedSize = 1;
             resetMap();
@@ -1502,14 +1520,14 @@ public class DijkstraMap
             if(goals.isEmpty())
                 return path;
 
-            scan(impassable);
+            scan(impassable2);
 
             for (int x = 0; x < gradientMap.length; x++) {
                 for (int y = 0; y < gradientMap[x].length; y++) {
                     gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : (0.0 - preferLongerPaths);
                 }
             }
-            scan(impassable);
+            scan(impassable2);
             cachedFleeMap = gradientMap.clone();
         }
         Coord currentPos = start;
@@ -1552,7 +1570,6 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    Set<Coord> impassable2 = impassable;
                     impassable2.add(currentPos);
                     return findFleePath(length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
@@ -1588,8 +1605,12 @@ public class DijkstraMap
                                      Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if(!initialized) return null;
         path = new ArrayList<Coord>();
+        LinkedHashSet<Coord> impassable2;
         if(impassable == null)
-            impassable = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
+
         if(onlyPassable == null)
             onlyPassable = new LinkedHashSet<Coord>();
 
@@ -1600,7 +1621,7 @@ public class DijkstraMap
         if(goals.isEmpty())
             return path;
 
-        scan(impassable, size);
+        scan(impassable2, size);
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
@@ -1638,8 +1659,8 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    impassable.add(currentPos);
-                    return findPathLarge(size, length, impassable, onlyPassable, start, targets);
+                    impassable2.add(currentPos);
+                    return findPathLarge(size, length, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -1688,8 +1709,12 @@ public class DijkstraMap
             }
         }
         path = new ArrayList<Coord>();
+        LinkedHashSet<Coord> impassable2;
         if(impassable == null)
-            impassable = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
+
         if(onlyPassable == null)
             onlyPassable = new LinkedHashSet<Coord>();
 
@@ -1705,7 +1730,7 @@ public class DijkstraMap
         {
             measurement = Measurement.CHEBYSHEV;
         }
-        scan(impassable, size);
+        scan(impassable2, size);
         goals.clear();
 
         for(int x = 0; x < width; x++)
@@ -1733,7 +1758,7 @@ public class DijkstraMap
             }
         }
         measurement = mess;
-        scan(impassable, size);
+        scan(impassable2, size);
 
         Coord currentPos = start;
         double paidLength = 0.0;
@@ -1771,8 +1796,8 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    impassable.add(currentPos);
-                    return findAttackPathLarge(size, moveLength, preferredRange, los, impassable, onlyPassable, start, targets);
+                    impassable2.add(currentPos);
+                    return findAttackPathLarge(size, moveLength, preferredRange, los, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -1825,8 +1850,12 @@ public class DijkstraMap
             }
         }
         path = new ArrayList<Coord>();
+        LinkedHashSet<Coord> impassable2;
         if(impassable == null)
-            impassable = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
+
         if(onlyPassable == null)
             onlyPassable = new LinkedHashSet<Coord>();
 
@@ -1842,7 +1871,7 @@ public class DijkstraMap
         {
             measurement = Measurement.CHEBYSHEV;
         }
-        scan(impassable, size);
+        scan(impassable2, size);
         goals.clear();
 
         for(int x = 0; x < width; x++)
@@ -1871,7 +1900,7 @@ public class DijkstraMap
             }
         }
         measurement = mess;
-        scan(impassable, size);
+        scan(impassable2, size);
 
         Coord currentPos = start;
         double paidLength = 0.0;
@@ -1910,8 +1939,8 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    impassable.add(currentPos);
-                    return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, impassable,
+                    impassable2.add(currentPos);
+                    return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
                             onlyPassable, start, targets);
                 }
                 break;
@@ -1955,21 +1984,25 @@ public class DijkstraMap
                                          Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path = new ArrayList<Coord>();
-        if (impassable == null)
-            impassable = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> impassable2;
+        if(impassable == null)
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
+
         if (onlyPassable == null)
             onlyPassable = new LinkedHashSet<Coord>();
         if (fearSources == null || fearSources.length < 1) {
             path = new ArrayList<Coord>();
             return path;
         }
-        if (size == cachedSize && preferLongerPaths == cachedLongerPaths && impassable.equals(cachedImpassable)
+        if (size == cachedSize && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable)
                 && fearSources.equals(cachedFearSources)) {
             gradientMap = cachedFleeMap;
         }
         else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new LinkedHashSet<Coord>(impassable);
+            cachedImpassable = new LinkedHashSet<Coord>(impassable2);
             cachedFearSources = fearSources.clone();
             cachedSize = size;
             resetMap();
@@ -1979,14 +2012,14 @@ public class DijkstraMap
             if(goals.isEmpty())
                 return path;
 
-            scan(impassable, size);
+            scan(impassable2, size);
 
             for (int x = 0; x < gradientMap.length; x++) {
                 for (int y = 0; y < gradientMap[x].length; y++) {
                     gradientMap[x][y] *= (gradientMap[x][y] >= FLOOR) ? 1.0 : (0.0 - preferLongerPaths);
                 }
             }
-            scan(impassable, size);
+            scan(impassable2, size);
             cachedFleeMap = gradientMap.clone();
         }
         Coord currentPos = start;
@@ -2031,8 +2064,8 @@ public class DijkstraMap
                 if (onlyPassable.contains(currentPos)) {
 
                     closed.put(currentPos, WALL);
-                    impassable.add(currentPos);
-                    return findFleePathLarge(size, length, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+                    impassable2.add(currentPos);
+                    return findFleePathLarge(size, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
                 break;
             }
