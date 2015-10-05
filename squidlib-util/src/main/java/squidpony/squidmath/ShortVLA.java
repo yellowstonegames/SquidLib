@@ -17,7 +17,7 @@ package squidpony.squidmath;
 
 import java.util.Arrays;
 
-/** A resizable, ordered or unordered short variable-length array. Avoids the boxing that occurs with ArrayList<Short>.
+/** A resizable, ordered or unordered short variable-length array. Avoids the boxing that occurs with {@code ArrayList<Short>}.
  * If unordered, this class avoids a memory copy when removing elements (the last element is moved to the removed
  * element's position).
  * Was called IntArray in libGDX; to avoid confusion with the fixed-length primitive array type, VLA (variable-length
