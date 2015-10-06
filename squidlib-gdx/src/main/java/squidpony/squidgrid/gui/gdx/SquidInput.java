@@ -262,7 +262,8 @@ public class SquidInput extends InputAdapter {
         queue.clear();
     }
 
-    public synchronized boolean keyDown (int keycode) {
+    @Override
+	public synchronized boolean keyDown (int keycode) {
         if(ignoreInput) return false;
         boolean alt = Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT),
                 ctrl = Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT),
@@ -280,41 +281,48 @@ public class SquidInput extends InputAdapter {
         return false;
     }
 
-    public synchronized boolean keyUp (int keycode) {
+    @Override
+	public synchronized boolean keyUp (int keycode) {
 //        queue.add(KEY_UP);
 //        queue.add(keycode);
         return false;
     }
 
-    public synchronized boolean keyTyped (char character) {
+    @Override
+	public synchronized boolean keyTyped (char character) {
         return false;
     }
 
-    public synchronized boolean touchDown (int screenX, int screenY, int pointer, int button) {
+    @Override
+	public synchronized boolean touchDown (int screenX, int screenY, int pointer, int button) {
         if(ignoreInput) return false;
         mouse.touchDown(screenX, screenY, pointer, button);
         return false;
     }
 
-    public synchronized boolean touchUp (int screenX, int screenY, int pointer, int button) {
+    @Override
+	public synchronized boolean touchUp (int screenX, int screenY, int pointer, int button) {
         if(ignoreInput) return false;
         mouse.touchUp(screenX, screenY, pointer, button);
         return false;
     }
 
-    public synchronized boolean touchDragged (int screenX, int screenY, int pointer) {
+    @Override
+	public synchronized boolean touchDragged (int screenX, int screenY, int pointer) {
         if(ignoreInput) return false;
         mouse.touchDragged(screenX, screenY, pointer);
         return false;
     }
 
-    public synchronized boolean mouseMoved (int screenX, int screenY) {
+    @Override
+	public synchronized boolean mouseMoved (int screenX, int screenY) {
         if(ignoreInput) return false;
         mouse.mouseMoved(screenX, screenY);
         return false;
     }
 
-    public synchronized boolean scrolled (int amount) {
+    @Override
+	public synchronized boolean scrolled (int amount) {
         if(ignoreInput) return false;
         mouse.scrolled(amount);
         return false;

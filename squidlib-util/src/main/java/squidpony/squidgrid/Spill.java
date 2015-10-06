@@ -83,7 +83,6 @@ public class Spill {
      * The LightRNG used as a RandomnessSource for the RNG this object uses. Can have its state read and set.
      */
     public LightRNG lrng;
-    private int frustration = 0;
 
     private boolean initialized = false;
     /**
@@ -323,7 +322,6 @@ public class Spill {
         resetMap();
         spreadPattern.clear();
         fresh.clear();
-        frustration = 0;
     }
 
     /**

@@ -51,7 +51,7 @@ public class RNG {
         if (ran == null) {
             ran = new Random() {
                 @Override
-                protected int next(int bits) {
+				protected int next(int bits) {
                     return super.next(bits);
                 }
             };
@@ -253,6 +253,11 @@ public class RNG {
                     }
 
                     @Override
+					public void remove() {
+                    	throw new UnsupportedOperationException();
+					}
+
+					@Override
                     public String toString() {
                         return "RandomStartIterator at index " + next;
                     }

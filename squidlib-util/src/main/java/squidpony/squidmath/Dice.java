@@ -49,7 +49,6 @@ public class Dice {
     public int bestOf(int n, int dice, int sides) {
         int rolls = Math.min(n, dice);
         ArrayList<Integer> results = new ArrayList<>(dice);
-        int ret = 0;
 
         for (int i = 0; i < dice; i++) {
             results.add(rollDice(1, sides));

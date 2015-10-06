@@ -542,7 +542,8 @@ public class DungeonBoneGen {
      *
      * @return
      */
-    public String toString() {
+    @Override
+	public String toString() {
         char[][] trans = new char[high][wide];
         for (int x = 0; x < wide; x++) {
             for (int y = 0; y < high; y++) {

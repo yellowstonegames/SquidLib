@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import squidpony.squidai.*;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
@@ -203,8 +204,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         int i = 0;
         DijkstraMap whichDijkstra;
         Technique whichTech;
-        Set<Coord> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
-        LinkedHashMap<AnimatedEntity, Integer> whichEnemyTeam = null;
+        Set<Coord> whichFoes, whichAllies = new LinkedHashSet<>(8);
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
@@ -214,7 +214,6 @@ public class SquidAIDemo extends ApplicationAdapter {
             whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
-            whichEnemyTeam = teamRed;
             for(Map.Entry<AnimatedEntity, Integer> entry : teamBlue.entrySet())
             {
                 if(i++ == idx)
@@ -232,7 +231,6 @@ public class SquidAIDemo extends ApplicationAdapter {
             whichTech = (idx % 2 == 0) ? redCloud : redCone;
             whichFoes = bluePlaces;
             whichAllies = redPlaces;
-            whichEnemyTeam = teamBlue;
             for(Map.Entry<AnimatedEntity, Integer> entry : teamRed.entrySet())
             {
                 if(i++ == idx)
@@ -282,7 +280,8 @@ public class SquidAIDemo extends ApplicationAdapter {
     }
 
     // check if a monster's movement would overlap with another monster.
-    private boolean checkOverlap(AnimatedEntity ae, int x, int y)
+    @SuppressWarnings("unused")
+	private boolean checkOverlap(AnimatedEntity ae, int x, int y)
     {
         for(AnimatedEntity mon : teamRed.keySet())
         {
@@ -300,7 +299,6 @@ public class SquidAIDemo extends ApplicationAdapter {
     private void postMove(int idx) {
 
         int i = 0;
-        DijkstraMap whichDijkstra;
         Technique whichTech;
         Set<Coord> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
         AnimatedEntity ae = null;
@@ -310,7 +308,6 @@ public class SquidAIDemo extends ApplicationAdapter {
         LinkedHashMap<AnimatedEntity, Integer> whichEnemyTeam = null;
         LinkedHashMap<Coord, Double> effects = null;
         if (blueTurn) {
-            whichDijkstra = getToRed;
             whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
@@ -325,7 +322,6 @@ public class SquidAIDemo extends ApplicationAdapter {
                 }
             }
         } else {
-            whichDijkstra = getToBlue;
             whichTech = (idx % 2 == 0) ? redCloud : redCone;
             whichFoes = bluePlaces;
             whichAllies = redPlaces;
@@ -456,15 +452,11 @@ public class SquidAIDemo extends ApplicationAdapter {
         }
         int i = 0;
         AnimatedEntity ae = null;
-        int health = 0;
-        Coord user = null;
         int whichIdx = 0;
         if(blueTurn) {
             for (Map.Entry<AnimatedEntity, Integer> entry : teamBlue.entrySet()) {
                 if (i++ == blueIdx) {
                     ae = entry.getKey();
-                    health = entry.getValue();
-                    user = Coord.get(ae.gridX, ae.gridY);
                     whichIdx = blueIdx;
                     break;
                 }
@@ -475,8 +467,6 @@ public class SquidAIDemo extends ApplicationAdapter {
             for (Map.Entry<AnimatedEntity, Integer> entry : teamRed.entrySet()) {
                 if (i++ == redIdx) {
                     ae = entry.getKey();
-                    health = entry.getValue();
-                    user = Coord.get(ae.gridX, ae.gridY);
                     whichIdx = redIdx;
                     break;
                 }

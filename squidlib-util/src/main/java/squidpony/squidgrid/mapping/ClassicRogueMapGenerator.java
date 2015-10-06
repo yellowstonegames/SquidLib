@@ -2,10 +2,10 @@ package squidpony.squidgrid.mapping;
 
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
@@ -367,6 +367,13 @@ public class ClassicRogueMapGenerator {
                 map[x][y] = Terrain.CLOSED_DOOR;
                 p = Coord.get(x, y + 1);
                 break;
+        case NONE:
+        	break;
+		case DOWN_LEFT:
+		case DOWN_RIGHT:
+		case UP_LEFT:
+		case UP_RIGHT:
+			throw new IllegalStateException("There should only be cardinal positions here");
         }
 
         return p;

@@ -8,7 +8,9 @@ package squidpony.squidmath;
  */
 public class Coord3D extends Coord {
 
-    public int z;
+	public int z;
+
+	private static final long serialVersionUID = 1835370798982845336L;
 
     /**
      * Creates a three dimensional coordinate with the given location.
