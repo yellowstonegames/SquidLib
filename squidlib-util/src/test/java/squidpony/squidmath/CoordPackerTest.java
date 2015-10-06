@@ -70,41 +70,85 @@ public class CoordPackerTest {
         char[][] map = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
 
         FOV fov = new FOV();
-        Coord viewer = dungeonGenerator.utility.randomFloor(map);
+        double[][] resMap = DungeonUtility.generateResistances(map), seen;
+        short[] packed;
+        boolean[][] unpacked;
+        int ramPacked = 0, ramBoolean = 0, ramDouble = 0;
+        Coord viewer;
+        for (int t = 0; t < 100; t++) {
+            viewer = dungeonGenerator.utility.randomFloor(map);
+            seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
+            packed = CoordPacker.pack(seen);
 
-        map[viewer.x][viewer.y] = '@';
-        dungeonGenerator.setDungeon(map);
-        //System.out.println(dungeonGenerator.toString());
-
-        double[][] resMap = DungeonUtility.generateResistances(map);
-        double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
-        short[] packed = CoordPacker.pack(seen);
-        /*
-        System.out.print(packed[0]);
-        for (int i = 1; i < packed.length; i++) {
-            System.out.print(", " + (packed[i] & 0xffff));
-        }*/
-        assertEquals("Packed shorts", 18, packed.length);
-        assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
-        System.out.println("Memory used by packed short[] (Appropriate):" +
-                arrayMemoryUsage(packed.length, 2) + " bytes");
-        System.out.println("Memory used by boolean[][] (Appropriate):" +
-                arrayMemoryUsage2D(240, 240, 1) + " bytes");
-        System.out.println("Memory used by original double[][] (Appropriate):" +
-                arrayMemoryUsage2D(240, 240, 8) + " bytes");
-        System.out.println("Compression, short[] vs. boolean[][] (Appropriate):" +
-                100.0 * arrayMemoryUsage(packed.length, 2) / arrayMemoryUsage2D(240, 240, 1) + "%");
-        System.out.println("Compression, short[] vs. double[][] (Appropriate):" +
-                100.0 * arrayMemoryUsage(packed.length, 2) / arrayMemoryUsage2D(240, 240, 8) + "%");
-
-        boolean[][]unpacked = CoordPacker.unpack(packed, seen.length, seen[0].length);
-        for (int i = 0; i < unpacked.length ; i++) {
-            for (int j = 0; j < unpacked[i].length; j++) {
-                assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
+            unpacked = CoordPacker.unpack(packed, seen.length, seen[0].length);
+            for (int i = 0; i < unpacked.length ; i++) {
+                for (int j = 0; j < unpacked[i].length; j++) {
+                    assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
+                }
             }
+            ramPacked += arrayMemoryUsage(packed.length, 2);
+            ramBoolean += arrayMemoryUsage2D(seen.length, seen[0].length, 1);
+            ramDouble += arrayMemoryUsage2D(seen.length, seen[0].length, 8);
         }
+        //assertEquals("Packed shorts", 18, packed.length);
+        //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+        System.out.println("Average Memory used by packed short[] (Appropriate):" +
+                ramPacked / 100.0 + " bytes");
+        System.out.println("Average Memory used by boolean[][] (Appropriate):" +
+                ramBoolean / 100.0 + " bytes");
+        System.out.println("Average Memory used by original double[][] (Appropriate):" +
+                ramDouble / 100.0 + " bytes");
+        System.out.println("Average Compression, short[] vs. boolean[][] (Appropriate):" +
+                100.0 * ramPacked / ramBoolean + "%");
+        System.out.println("Average Compression, short[] vs. double[][] (Appropriate):" +
+                100.0 * ramPacked / ramDouble + "%");
     }
 
+    @Test
+    public void testPackPoorParameters()
+    {
+        StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
+        DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 70, rng);
+        dungeonGenerator.addDoors(15, true);
+        dungeonGenerator.addWater(25);
+        dungeonGenerator.addTraps(2);
+        char[][] map = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+
+        FOV fov = new FOV();
+        double[][] resMap = DungeonUtility.generateResistances(map), seen;
+        short[] packed;
+        boolean[][] unpacked;
+        int ramPacked = 0, ramBoolean = 0, ramDouble = 0;
+        Coord viewer;
+        for (int t = 0; t < 100; t++) {
+            viewer = dungeonGenerator.utility.randomFloor(map);
+            seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
+            packed = CoordPacker.pack(seen);
+
+            unpacked = CoordPacker.unpack(packed, seen.length, seen[0].length);
+            for (int i = 0; i < unpacked.length ; i++) {
+                for (int j = 0; j < unpacked[i].length; j++) {
+                    assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
+                }
+            }
+            ramPacked += arrayMemoryUsage(packed.length, 2);
+            ramBoolean += arrayMemoryUsage2D(seen.length, seen[0].length, 1);
+            ramDouble += arrayMemoryUsage2D(seen.length, seen[0].length, 8);
+        }
+        //assertEquals("Packed shorts", 18, packed.length);
+        //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+        System.out.println("Average Memory used by packed short[] (Approaching Worst-Case):" +
+                ramPacked / 100.0 + " bytes");
+        System.out.println("Average Memory used by boolean[][] (Approaching Worst-Case):" +
+                ramBoolean / 100.0 + " bytes");
+        System.out.println("Average Memory used by original double[][] (Approaching Worst-Case):" +
+                ramDouble / 100.0 + " bytes");
+        System.out.println("Average Compression, short[] vs. boolean[][] (Approaching Worst-Case):" +
+                100.0 * ramPacked / ramBoolean + "%");
+        System.out.println("Average Compression, short[] vs. double[][] (Approaching Worst-Case):" +
+                100.0 * ramPacked / ramDouble + "%");
+    }
+    /*
     @Test
     public void testPackPoorParameters()
     {
@@ -125,11 +169,7 @@ public class CoordPackerTest {
         double[][] resMap = DungeonUtility.generateResistances(map);
         double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
         short[] packed = CoordPacker.pack(seen);
-        /*
-        System.out.print(packed[0]);
-        for (int i = 1; i < packed.length; i++) {
-            System.out.print(", " + (packed[i] & 0xffff));
-        }*/
+
         assertEquals("Packed shorts", 28, packed.length);
         assertEquals("Unpacked doubles: ", 2100, seen.length * seen[0].length);
         System.out.println("Memory used by packed short[] (Approaching Worst-Case):" +
@@ -150,7 +190,7 @@ public class CoordPackerTest {
             }
         }
     }
-
+    */
     @Test
     public void testPackMultiOptimalParameters()
     {
@@ -303,7 +343,7 @@ public class CoordPackerTest {
     }
 
 
-    @Test
+    //@Test
     public void testPackZOptimalParameters()
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
@@ -349,7 +389,7 @@ public class CoordPackerTest {
         }
     }
 
-    @Test
+    //@Test
     public void testPackZPoorParameters()
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
@@ -395,7 +435,7 @@ public class CoordPackerTest {
         }
     }
 
-    @Test
+    //@Test
     public void testPackMultiZOptimalParameters()
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
@@ -452,7 +492,7 @@ public class CoordPackerTest {
         }
     }
 
-    @Test
+    //@Test
     public void testPackMultiZPoorParameters() {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 70, rng);
