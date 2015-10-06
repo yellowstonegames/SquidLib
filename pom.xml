@@ -150,6 +150,7 @@
 					<testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>
 					<splitindex>true</splitindex>
 					<encoding>${project.build.sourceEncoding}</encoding>
+					<javadocVersion>${jdk.version}</javadocVersion>
 					<links>
 						<link>http://docs.oracle.com/javase/8/docs/api/</link>
 						<link>http://docs.oracle.com/javase/7/docs/api/</link>
