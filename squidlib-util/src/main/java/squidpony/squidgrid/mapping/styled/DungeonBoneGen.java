@@ -286,8 +286,11 @@ public class DungeonBoneGen {
     }
 
     private static String stringifyStream(InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
+        java.util.Scanner s = new java.util.Scanner(is);
+        s.useDelimiter("\\A");
+        String nx = s.hasNext() ? s.next() : "";
+        s.close();
+        return nx;
     }
 
     /**
