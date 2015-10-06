@@ -116,6 +116,13 @@ public class DividedMazeGenerator {
                             map[x2][y] = true;
                         }
                         break;
+                    case NONE:
+                    	break;
+				case DOWN_LEFT:
+				case DOWN_RIGHT:
+				case UP_LEFT:
+				case UP_RIGHT:
+					throw new IllegalStateException("There should only be cardinal directions here");
                 }
             }
 
@@ -136,6 +143,13 @@ public class DividedMazeGenerator {
                     case DOWN:
                         map[x2][rng.between(y2 + 1, room.bottom + 1)] = false;
                         break;
+                    case NONE:
+                    	break;
+				case DOWN_LEFT:
+				case DOWN_RIGHT:
+				case UP_LEFT:
+				case UP_RIGHT:
+					throw new IllegalStateException("There should only be cardinal directions here");
                 }
             }
 

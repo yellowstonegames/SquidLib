@@ -79,7 +79,6 @@ public class SoundMap
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
     public RNG rng;
-    private int frustration = 0;
 
     private boolean initialized = false;
     /**
@@ -267,7 +266,6 @@ public class SoundMap
         alerted.clear();
         fresh.clear();
         sounds.clear();
-        frustration = 0;
     }
 
     /**

@@ -42,13 +42,6 @@ public class BlastAOE implements AOE {
         this.minRange = minRange;
         this.maxRange = maxRange;
     }
-    private BlastAOE()
-    {
-        fov = new FOV(FOV.RIPPLE_LOOSE);
-        center = Coord.get(1, 1);
-        radius = 1;
-        radiusType = Radius.DIAMOND;
-    }
 
     public Coord getCenter() {
         return center;

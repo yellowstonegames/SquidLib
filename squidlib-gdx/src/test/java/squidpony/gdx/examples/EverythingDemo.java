@@ -325,7 +325,7 @@ public class EverythingDemo extends ApplicationAdapter {
         fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
         // handle monster turns
         ArrayList<Coord> nextMovePositions = new ArrayList<>(25);
-        for(HashMap.Entry<AnimatedEntity, Integer> mon : monsters.entrySet())
+        for(Map.Entry<AnimatedEntity, Integer> mon : monsters.entrySet())
         {
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
             if(mon.getValue() > 0 || fovmap[mon.getKey().gridX][mon.getKey().gridY] > 0.1)

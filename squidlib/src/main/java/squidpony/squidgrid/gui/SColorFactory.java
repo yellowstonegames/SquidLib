@@ -27,11 +27,11 @@ import squidpony.squidmath.RNG;
  */
 public class SColorFactory {
 
-    private static final TreeMap<String, SColor> nameLookup = new TreeMap<>();
-    private static final TreeMap<Integer, SColor> valueLookup = new TreeMap<>();
+    private static final TreeMap<String, SColor> nameLookup = new TreeMap<String, SColor>();
+    private static final TreeMap<Integer, SColor> valueLookup = new TreeMap<Integer, SColor>();
     private static RNG rng = new RNG();
-    private static Map<Integer, SColor> colorBag = new HashMap<>();
-    private static Map<String, ArrayList<SColor>> palettes = new HashMap<>();
+    private static Map<Integer, SColor> colorBag = new HashMap<Integer, SColor>();
+    private static Map<String, ArrayList<SColor>> palettes = new HashMap<String, ArrayList<SColor>>();
     private static int floor = 1;//what multiple to floor rgb values to in order to reduce total colors
 
     /**
@@ -167,7 +167,7 @@ public class SColorFactory {
      * areas that will not be revisited.
      */
     public static void emptyCache() {
-        colorBag = new HashMap<>();
+        colorBag = new HashMap<Integer, SColor>();
     }
 
     /**
@@ -383,7 +383,7 @@ public class SColorFactory {
 
         //get the gradient
         Queue<Coord3D> gradient = Bresenham.line3D(scolorToCoord3D(color1), scolorToCoord3D(color2));
-        ArrayList<SColor> ret = new ArrayList<>();
+        ArrayList<SColor> ret = new ArrayList<SColor>();
         for (Coord3D coord : gradient) {
             ret.add(coord3DToSColor(coord));
         }
@@ -496,7 +496,7 @@ public class SColorFactory {
      * @param palette
      */
     public static void addPalette(String name, ArrayList<SColor> palette) {
-        ArrayList<SColor> temp = new ArrayList<>();
+        ArrayList<SColor> temp = new ArrayList<SColor>();
 
         //make sure all the colors in the palette are also in the general color cache
         for (SColor sc : palette) {
@@ -514,7 +514,7 @@ public class SColorFactory {
      * @deprecated Prefer addPalette
      */
     public static void addPallet(String name, ArrayList<SColor> palette) {
-        ArrayList<SColor> temp = new ArrayList<>();
+        ArrayList<SColor> temp = new ArrayList<SColor>();
 
         //make sure all the colors in the palette are also in the general color cache
         for (SColor sc : palette) {

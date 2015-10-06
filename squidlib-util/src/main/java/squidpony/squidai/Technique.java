@@ -1,6 +1,5 @@
 package squidpony.squidai;
 
-import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
 import java.util.ArrayList;

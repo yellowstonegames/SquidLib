@@ -42,13 +42,6 @@ public class BurstAOE implements AOE {
         this.minRange = minRange;
         this.maxRange = maxRange;
     }
-    private BurstAOE()
-    {
-        fov = new FOV(FOV.SHADOW);
-        center = Coord.get(1, 1);
-        radius = 1;
-        radiusType = Radius.DIAMOND;
-    }
 
     public Coord getCenter() {
         return center;

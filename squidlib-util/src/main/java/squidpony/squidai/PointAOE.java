@@ -20,7 +20,6 @@ import java.util.Set;
 public class PointAOE implements AOE {
     private Coord center, origin = null;
     private Radius limitType = null;
-    private char[][] dungeon;
     private int minRange = 1, maxRange = 1;
     private Radius metric = Radius.SQUARE;
     public PointAOE(Coord center)
@@ -32,11 +31,6 @@ public class PointAOE implements AOE {
         this.center = center;
         this.minRange = minRange;
         this.maxRange = maxRange;
-    }
-
-    private PointAOE()
-    {
-        center = Coord.get(1, 1);
     }
 
     public Coord getCenter() {
@@ -216,7 +210,10 @@ public class PointAOE implements AOE {
 */
     @Override
     public void setMap(char[][] map) {
-        this.dungeon = map;
+		/*
+		 * Nothing do do. smelc's note: previously 'map' was assigned in a field
+		 * that was never redd.
+		 */
     }
 
     @Override
