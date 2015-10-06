@@ -158,7 +158,7 @@ public class CoordPacker {
     public static final int DEPTH = 8;
     private static final int BITS = DEPTH << 1;
 
-    private static short[] hilbertX = new short[0x10000], hilbertY = new short[0x10000];
+    public static short[] hilbertX = new short[0x10000], hilbertY = new short[0x10000], ALL_WALL = new short[0];
     static {
         ClassLoader cl = CoordPacker.class.getClassLoader();
         InputStream xStream = cl.getResourceAsStream("hilbert/x.bin"),
@@ -201,7 +201,7 @@ public class CoordPacker {
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
         boolean on = false, current;
-        int skip = 0, limit = 0x10000;
+        int skip = 0, limit = 0x10000, mapLimit = xSize * ySize;
         if(ySize <= 128) {
             limit >>= 1;
             if (xSize <= 128) {
@@ -220,7 +220,8 @@ public class CoordPacker {
                 }
             }
         }
-        for(int i = 0; i < limit; i++, skip++)
+
+        for(int i = 0, ml = 0; i < limit && ml < mapLimit; i++, skip++)
         {
             if(hilbertX[i] >= xSize || hilbertY[i] >= ySize) {
                 if(on) {
@@ -230,6 +231,7 @@ public class CoordPacker {
                 }
                 continue;
             }
+            ml++;
             current = map[hilbertX[i]][hilbertY[i]] > 0.0;
             if(current != on)
             {
@@ -240,6 +242,8 @@ public class CoordPacker {
         }
         if(on)
             packing.add((short)skip);
+        if(packing.size == 0)
+            return ALL_WALL;
         return packing.shrink();
     }
 
@@ -261,7 +265,7 @@ public class CoordPacker {
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
         boolean on = false, current;
-        int skip = 0, limit = 0x10000;
+        int skip = 0, limit = 0x10000, mapLimit = xSize * ySize;
         if(ySize <= 128) {
             limit >>= 1;
             if (xSize <= 128) {
@@ -280,7 +284,7 @@ public class CoordPacker {
                 }
             }
         }
-        for(int i = 0; i < limit; i++, skip++)
+        for(int i = 0, ml = 0; i < limit && ml < mapLimit; i++, skip++)
         {
             if(hilbertX[i] >= xSize || hilbertY[i] >= ySize) {
                 if(on) {
@@ -290,6 +294,7 @@ public class CoordPacker {
                 }
                 continue;
             }
+            ml++;
             current = map[hilbertX[i]][hilbertY[i]];
             if(current != on)
             {
@@ -300,6 +305,8 @@ public class CoordPacker {
         }
         if(on)
             packing.add((short)skip);
+        if(packing.size == 0)
+            return ALL_WALL;
         return packing.shrink();
     }
 
@@ -342,7 +349,7 @@ public class CoordPacker {
         int xSize = map.length, ySize = map[0].length;
         if (xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
-        int limit = 0x10000, llen = levels.length;
+        int limit = 0x10000, llen = levels.length, mapLimit = xSize * ySize;
         long on = 0, current = 0;
         ShortVLA[] packing = new ShortVLA[llen];
         int[] skip = new int[llen];
@@ -368,7 +375,7 @@ public class CoordPacker {
         short[][] packed = new short[llen][];
         for(int l = 0; l < llen; l++) {
             packing[l] = new ShortVLA(64);
-            for (int i = 0; i < limit; i++, skip[l]++) {
+            for (int i = 0, ml = 0; i < limit && ml < mapLimit; i++, skip[l]++) {
                 if (hilbertX[i] >= xSize || hilbertY[i] >= ySize) {
                     if ((on & (1L << l)) != 0L) {
                         on ^= (1L << l);
@@ -377,6 +384,7 @@ public class CoordPacker {
                     }
                     continue;
                 }
+                ml++;
                 // sets the bit at position l in current to 1 if the following is true, 0 if it is false:
                 //     map[hilbertX[i]][hilbertY[i]] >= levels[l]
                 // looks more complicated than it is.
@@ -394,7 +402,10 @@ public class CoordPacker {
 
             if (((on >> l) & 1L) == 1L)
                 packing[l].add((short) skip[l]);
-            packed[l] = packing[l].shrink();
+            if(packing[l].size == 0)
+                packed[l] = ALL_WALL;
+            else
+                packed[l] = packing[l].shrink();
         }
         return packed;
     }
@@ -415,9 +426,11 @@ public class CoordPacker {
      */
     public static boolean[][] unpack(short[] packed, int width, int height)
     {
-        if(packed == null || packed.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-empty array");
+        if(packed == null)
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-null array");
         boolean[][] unpacked = new boolean[width][height];
+        if(packed.length == 0)
+            return unpacked;
         boolean on = false;
         int idx = 0;
         for(int p = 0; p < packed.length; p++, on = !on) {
@@ -452,7 +465,8 @@ public class CoordPacker {
     public static double[][] unpackMultiDouble(short[][] packed, int width, int height, double[] levels)
     {
         if(packed == null || packed.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-empty array");
+            throw new ArrayIndexOutOfBoundsException(
+                    "CoordPacker.unpackMultiDouble() must be given a non-empty array");
         if (levels == null || levels.length != packed.length)
             throw new UnsupportedOperationException("The lengths of packed and levels must be equal");
         if (levels.length > 63)
@@ -491,7 +505,8 @@ public class CoordPacker {
     public static byte[][] unpackMultiByte(short[][] packed, int width, int height)
     {
         if(packed == null || packed.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-empty array");
+            throw new ArrayIndexOutOfBoundsException(
+                    "CoordPacker.unpackMultiByte() must be given a non-empty array");
         byte[][] unpacked = new byte[width][height];
         byte lPlus = 1;
         for(int l = 0; l < packed.length; l++, lPlus++) {
@@ -510,6 +525,25 @@ public class CoordPacker {
         return unpacked;
     }
 
+    /**
+     * Quickly determines if an x,y position is true or false in the given packed array, without unpacking it.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param x between 0 and 255, inclusive
+     * @param y between 0 and 255, inclusive
+     * @return true if the packed data stores true at the given x,y location, or false in any other case.
+     */
+    public static boolean queryPacked(short[] packed, int x, int y)
+    {
+        int hilbertDistance = posToHilbert(x, y), total = 0;
+        boolean on = false;
+        for(int p = 0; p < packed.length; p++, on = !on)
+        {
+            total += packed[p] & 0xffff;
+            if(hilbertDistance < total)
+                return on;
+        }
+        return false;
+    }
 
     /**
      * Compresses a double[][] (typically one generated by {@link squidpony.squidgrid.FOV}) that only stores two
@@ -531,7 +565,7 @@ public class CoordPacker {
     public static short[] packZ(double[][] map)
     {
         if(map == null || map.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.pack() must be given a non-empty array");
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.packZ() must be given a non-empty array");
         int xSize = map.length, ySize = map[0].length;
         if(xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
@@ -598,7 +632,7 @@ public class CoordPacker {
     public static short[] packZ(boolean[][] map)
     {
         if(map == null || map.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.pack() must be given a non-empty array");
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.packZ() must be given a non-empty array");
         int xSize = map.length, ySize = map[0].length;
         if(xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
@@ -687,7 +721,7 @@ public class CoordPacker {
                     "Too many levels to efficiently pack; should be less than 64 but was given " +
                             levels.length);
         if (map == null || map.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.packMulti() must be given a non-empty array");
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.packMultiZ() must be given a non-empty array");
         int xSize = map.length, ySize = map[0].length;
         if (xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
@@ -772,7 +806,7 @@ public class CoordPacker {
     public static boolean[][] unpackZ(short[] packed, int width, int height)
     {
         if(packed == null || packed.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-empty array");
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpackZ() must be given a non-empty array");
         boolean[][] unpacked = new boolean[width][height];
         boolean on = false;
         int idx = 0;
@@ -812,7 +846,8 @@ public class CoordPacker {
     public static double[][] unpackMultiDoubleZ(short[][] packed, int width, int height, double[] levels)
     {
         if(packed == null || packed.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-empty array");
+            throw new ArrayIndexOutOfBoundsException(
+                    "CoordPacker.unpackMultiDoubleZ() must be given a non-empty array");
         if (levels == null || levels.length != packed.length)
             throw new UnsupportedOperationException("The lengths of packed and levels must be equal");
         if (levels.length > 63)
@@ -855,7 +890,8 @@ public class CoordPacker {
     public static byte[][] unpackMultiByteZ(short[][] packed, int width, int height)
     {
         if(packed == null || packed.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-empty array");
+            throw new ArrayIndexOutOfBoundsException(
+                    "CoordPacker.unpackMultiByteZ() must be given a non-empty array");
         byte[][] unpacked = new byte[width][height];
         byte lPlus = 1;
         for(int l = 0; l < packed.length; l++, lPlus++) {
@@ -950,23 +986,64 @@ public class CoordPacker {
      * Takes an x, y position and returns the length to travel along the 256x256 Hilbert curve to reach that position.
      * This assumes x and y are between 0 and 255, inclusive.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param x
-     * @param y
-     * @return
+     * @param x between 0 and 255 inclusive
+     * @param y between 0 and 255 inclusive
+     * @return the distance to travel along the 256x256 Hilbert Curve to get to the given x, y point.
      */
     public static int posToHilbert( final int x, final int y )
     {
-        int hilbert = 0;
-        int remap = 0xb4;
-        int block = DEPTH;
+        int hilbert = 0, remap = 0xb4, mcode, hcode;
+        /*
         while( block > 0 )
         {
             --block;
-            int mcode = ( ( x >> block ) & 1 ) | ( ( ( y >> ( block ) ) & 1 ) << 1);
-            int hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+            mcode = ( ( x >> block ) & 1 ) | ( ( ( y >> ( block ) ) & 1 ) << 1);
+            hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
             remap ^= ( 0x82000028 >> ( hcode << 3 ) );
             hilbert = ( ( hilbert << 2 ) + hcode );
         }
+         */
+
+        mcode = ( ( x >> 7 ) & 1 ) | ( ( ( y >> ( 7 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 6 ) & 1 ) | ( ( ( y >> ( 6 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 5 ) & 1 ) | ( ( ( y >> ( 5 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 4 ) & 1 ) | ( ( ( y >> ( 4 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 3 ) & 1 ) | ( ( ( y >> ( 3 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 2 ) & 1 ) | ( ( ( y >> ( 2 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 1 ) & 1 ) | ( ( ( y >> ( 1 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( x & 1 ) | ( ( y & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
         return hilbert;
     }
     /**
@@ -974,8 +1051,8 @@ public class CoordPacker {
      * the length to travel along the 256x256 Hilbert curve to reach that position.
      * This uses 16 bits of the Morton code and requires that the code is non-negative.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param morton
-     * @return
+     * @param morton a Morton code that interleaves two 8-bit unsigned numbers, with x as index1 and y as index2.
+     * @return a distance to travel down the Hilbert Curve to reach the location that can be decoded from morton.
      */
     public static int mortonToHilbert( final int morton )
     {
@@ -999,8 +1076,8 @@ public class CoordPacker {
      * bits and x in the least significant bit. This variant uses a lookup table for the 256x256 Hilbert curve, which
      * should make it faster than calculating the position repeatedly.
      * The parameter hilbert is an int but only 16 unsigned bits are used.
-     * @param hilbert
-     * @return
+     * @param hilbert a distance to travel down the Hilbert Curve
+     * @return a Morton code that stores x and y interleaved; can be converted to a Coord with other methods.
      */
 
     public static int hilbertToMorton( final int hilbert )
@@ -1013,8 +1090,8 @@ public class CoordPacker {
      * in 2D space that corresponds to that point on the Hilbert curve. This variant uses a lookup table for the
      * 256x256 Hilbert curve, which should make it faster than calculating the position repeatedly.
      * The parameter hilbert is an int but only 16 unsigned bits are used.
-     * @param hilbert
-     * @return
+     * @param hilbert a distance to travel down the Hilbert Curve
+     * @return a Coord corresponding to the position in 2D space at the given distance down the Hilbert Curve
      */
     public static Coord hilbertToCoord( final int hilbert )
     {
@@ -1022,7 +1099,7 @@ public class CoordPacker {
     }
 
 
-    /**
+    /*
      * Takes a distance to travel along the 256x256 Hilbert curve and returns a Morton code representing the position
      * in 2D space that corresponds to that point on the Hilbert curve; the Morton code will have interleaved x and y
      * bits and x in the least significant bit. This variant does not use a lookup table, and is likely slower.
@@ -1030,6 +1107,7 @@ public class CoordPacker {
      * @param hilbert
      * @return
      */
+    /*
     public static int hilbertToMortonNoLUT( final int hilbert )
     {
         int morton = 0;
@@ -1045,7 +1123,8 @@ public class CoordPacker {
         }
         return morton;
     }
-    /**
+    */
+    /*
      * Takes a distance to travel along the 256x256 Hilbert curve and returns a Coord representing the position
      * in 2D space that corresponds to that point on the Hilbert curve. This variant does not use a lookup table,
      * and is likely slower.
@@ -1053,6 +1132,7 @@ public class CoordPacker {
      * @param hilbert
      * @return
      */
+    /*
     public static Coord hilbertToCoordNoLUT( final int hilbert )
     {
         int x = 0, y = 0;
@@ -1069,7 +1149,7 @@ public class CoordPacker {
         }
         return Coord.get(x, y);
     }
-
+    */
     /**
      * Takes a position as a Coord called pt and returns the length to travel along the 256x256 Hilbert curve to reach
      * that position.
@@ -1087,9 +1167,9 @@ public class CoordPacker {
      * index2 bits and index1 in the least significant bit. With this method, index1 and index2 can have up to 8 bits.
      * This returns a 16-bit Morton code and WILL encode information in the sign bit if the inputs are large enough.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param index1
-     * @param index2
-     * @return
+     * @param index1 a non-negative integer using at most 8 bits, to be placed in the "x" slots
+     * @param index2 a non-negative integer using at most 8 bits, to be placed in the "y" slots
+     * @return a Morton code/Z-Code that interleaves the two numbers into one 16-bit short
      */
     public static short zEncode(short index1, short index2)
     { // pack 2 8-bit (unsigned) indices into a 16-bit (signed...) Morton code/Z-Code
@@ -1114,9 +1194,9 @@ public class CoordPacker {
      * index2 bits and index1 in the least significant bit. With this method, index1 and index2 can have up to 8 bits.
      * This returns a 32-bit Morton code but only uses 16 bits, and will not encode information in the sign bit.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param index1
-     * @param index2
-     * @return
+     * @param index1 a non-negative integer using at most 8 bits, to be placed in the "x" slots
+     * @param index2 a non-negative integer using at most 8 bits, to be placed in the "y" slots
+     * @return a Morton code that interleaves the two numbers as one 32-bit int, but only in 16 bits of it
      */
     public static int mortonEncode(int index1, int index2)
     { // pack 2 8-bit (unsigned) indices into a 32-bit (signed...) Morton code
@@ -1141,9 +1221,9 @@ public class CoordPacker {
      * index2 bits and index1 in the least significant bit. With this method, index1 and index2 can have up to 16 bits.
      * This returns a 32-bit Morton code and may encode information in the sign bit.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param index1
-     * @param index2
-     * @return
+     * @param index1 a non-negative integer using at most 16 bits, to be placed in the "x" slots
+     * @param index2 a non-negative integer using at most 16 bits, to be placed in the "y" slots
+     * @return a Morton code that interleaves the two numbers as one 32-bit int
      */
     public static int mortonEncode16(int index1, int index2)
     { // pack 2 16-bit indices into a 32-bit Morton code
@@ -1173,8 +1253,8 @@ public class CoordPacker {
      * representing the x position.
      * This uses 16 bits of the 32-bit Morton code/Z-Code.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param morton
-     * @return
+     * @param morton A Morton code or Z-Code that interleaves two 8-bit numbers
+     * @return A short that represents the x position extracted from the Morton code/Z-Code
      */
     public static short zDecodeX( final int morton )
     { // unpack the 8-bit (unsigned) first index from a 16-bit (unsigned) Morton code/Z-Code
@@ -1193,8 +1273,8 @@ public class CoordPacker {
      * representing the y position.
      * This uses 16 bits of the 32-bit Morton code/Z-Code.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param morton
-     * @return
+     * @param morton A Morton code or Z-Code that interleaves two 8-bit numbers
+     * @return A short that represents the y position extracted from the Morton code/Z-Code
      */
     public static short zDecodeY( final int morton )
     { // unpack the 8-bit (unsigned) second index from a 16-bit (unsigned) Morton code/Z-Code
@@ -1214,8 +1294,8 @@ public class CoordPacker {
      * representing the same x, y position.
      * This uses 16 bits of the Morton code and requires that the code is non-negative.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param morton
-     * @return
+     * @param morton an int containing two interleaved numbers, from 0 to 255 each
+     * @return a Coord matching the x and y extracted from the Morton code
      */
     public static Coord mortonDecode( final int morton )
     { // unpack 2 8-bit (unsigned) indices from a 32-bit (signed...) Morton code
@@ -1243,8 +1323,8 @@ public class CoordPacker {
      * this method will not be cached if they have a x or y component greater than 255.
      * This uses 32 bits of the Morton code and will treat the sign bit as the most significant bit of y, unsigned.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param morton
-     * @return
+     * @param morton an int containing two interleaved shorts.
+     * @return a Coord matching the x and y extracted from the Morton code
      */
     public static Coord mortonDecode16( final int morton )
     { // unpack 2 16-bit indices from a 32-bit Morton code

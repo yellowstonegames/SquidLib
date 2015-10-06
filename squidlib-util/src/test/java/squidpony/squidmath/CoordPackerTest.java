@@ -30,13 +30,13 @@ public class CoordPackerTest {
             System.out.print((n & i) != 0 ? 1 : 0);
     }
 
-    public int arrayMemoryUsage(int length, int bytesPerItem)
+    public long arrayMemoryUsage(int length, long bytesPerItem)
     {
-        return (((bytesPerItem * length + 12 - 1) / 8) + 1) * 8;
+        return (((bytesPerItem * length + 12 - 1) / 8) + 1) * 8L;
     }
-    public int arrayMemoryUsage2D(int xSize, int ySize, int bytesPerItem)
+    public long arrayMemoryUsage2D(int xSize, int ySize, long bytesPerItem)
     {
-        return arrayMemoryUsage(xSize, (((bytesPerItem * ySize + 12 - 1) / 8) + 1) * 8);
+        return arrayMemoryUsage(xSize, (((bytesPerItem * ySize + 12 - 1) / 8) + 1) * 8L);
     }
     public int arrayMemoryUsageJagged(short[][] arr)
     {
@@ -102,6 +102,8 @@ public class CoordPackerTest {
                 100.0 * ramPacked / ramBoolean + "%");
         System.out.println("Average Compression, short[] vs. double[][] (Appropriate):" +
                 100.0 * ramPacked / ramDouble + "%");
+        System.out.println("FOV Map stored for every cell, booleans, 240x240: " +
+                arrayMemoryUsage2D(240, 240, arrayMemoryUsage2D(240, 240, 1)));
     }
 
     @Test
@@ -147,6 +149,8 @@ public class CoordPackerTest {
                 100.0 * ramPacked / ramBoolean + "%");
         System.out.println("Average Compression, short[] vs. double[][] (Approaching Worst-Case):" +
                 100.0 * ramPacked / ramDouble + "%");
+        System.out.println("FOV Map stored for every cell, booleans, 30x70: " +
+                arrayMemoryUsage2D(30, 70, arrayMemoryUsage2D(30, 70, 1)));
     }
     /*
     @Test
