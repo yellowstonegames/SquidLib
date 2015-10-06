@@ -35,7 +35,7 @@ public class SColorChooserPanel extends AbstractColorChooserPanel {
     private int colorWidth = 40;
     private ColorPanel displayPanel = new ColorPanel();
     private JScrollPane scrollPane = new JScrollPane();
-    private JComboBox colorComboBox = new JComboBox();
+    private JComboBox<String> colorComboBox = new JComboBox<String>();
     private JTextField colorName = new JTextField();
     private boolean initialized = false;
 
@@ -52,7 +52,7 @@ public class SColorChooserPanel extends AbstractColorChooserPanel {
         colorComboBox.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                colorComboBoxActionPerformed(evt);
+                colorComboBoxActionPerformed();
             }
         });
 
@@ -68,7 +68,8 @@ public class SColorChooserPanel extends AbstractColorChooserPanel {
         colorMap.put("Yellow Red Series", SColor.YELLOW_RED_SERIES);
         colorMap.put("Yellow Series", SColor.YELLOW_SERIES);
 
-        colorComboBox.setModel(new DefaultComboBoxModel(colorMap.keySet().toArray()));
+        colorComboBox.setModel(new DefaultComboBoxModel<String>(
+                colorMap.keySet().toArray(new String[colorMap.size()])));
         setLayout(new BorderLayout());
         add(colorComboBox, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
@@ -85,8 +86,10 @@ public class SColorChooserPanel extends AbstractColorChooserPanel {
         repaint();
     }
 
-    private void colorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
-        colors = colorMap.get((String) colorComboBox.getSelectedItem());
+    private void colorComboBoxActionPerformed() {
+        String s = colorComboBox.getItemAt(colorComboBox.getSelectedIndex());
+        if(s != null)
+            colors = colorMap.get(s);
         refreshPanel();
     }
 

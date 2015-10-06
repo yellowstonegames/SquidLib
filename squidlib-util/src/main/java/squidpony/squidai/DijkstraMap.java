@@ -2,7 +2,6 @@ package squidpony.squidai;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
-import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
