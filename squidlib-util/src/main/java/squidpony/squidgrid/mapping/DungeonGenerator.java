@@ -521,7 +521,8 @@ public class DungeonGenerator {
      *
      * @return
      */
-    public String toString() {
+    @Override
+	public String toString() {
         char[][] trans = new char[height][width];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {

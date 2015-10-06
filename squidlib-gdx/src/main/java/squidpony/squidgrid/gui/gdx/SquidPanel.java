@@ -912,7 +912,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void wiggle(int x, int y, float duration) {
         final Actor a = cellToActor(x, y);
-        final int nextX = x, nextY = y;
         if(a == null) return;
         if(duration < 0.02f) duration = 0.02f;
         animationCount++;

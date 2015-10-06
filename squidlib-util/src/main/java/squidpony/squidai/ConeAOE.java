@@ -30,7 +30,6 @@ public class ConeAOE implements AOE {
     private int minRange = 1, maxRange = 1;
     private Radius metric = Radius.SQUARE;
 
-    private final static double PI2 = Math.PI * 2;
     public ConeAOE(Coord origin, Coord endCenter, double span, Radius radiusType)
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
@@ -54,23 +53,13 @@ public class ConeAOE implements AOE {
         this.radiusType = radiusType;
     }
 
-    private ConeAOE()
-    {
-        fov = new FOV(FOV.RIPPLE_LOOSE);
-        this.origin = Coord.get(1, 1);
-        this.radius = 1;
-//        this.startAngle = 0;
-//        this.endAngle = 90;
-        this.angle = 45;
-        this.span = 90;
-        this.radiusType = Radius.DIAMOND;
-    }
-
-    public Coord getOrigin() {
+    @Override
+	public Coord getOrigin() {
         return origin;
     }
 
-    public void setOrigin(Coord origin) {
+    @Override
+	public void setOrigin(Coord origin) {
         this.origin = origin;
     }
 
@@ -244,7 +233,6 @@ public class ConeAOE implements AOE {
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
 
-            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0)
@@ -375,7 +363,6 @@ public class ConeAOE implements AOE {
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
 
-            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0){
@@ -415,7 +402,6 @@ public class ConeAOE implements AOE {
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
-            double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0){

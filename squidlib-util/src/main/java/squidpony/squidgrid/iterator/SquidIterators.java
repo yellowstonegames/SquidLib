@@ -109,6 +109,11 @@ public class SquidIterators {
 			}
 		}
 
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
 		protected boolean gridIsEmpty() {
 			return width == 0 || height == 0;
 		}
@@ -244,6 +249,11 @@ public class SquidIterators {
 			return next;
 		}
 
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
 	}
 
 	/* **************************************************************************************************** */
@@ -316,6 +326,11 @@ public class SquidIterators {
 			if (result == null)
 				throw new NoSuchElementException();
 			return result;
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
 		}
 
 		/*
@@ -432,6 +447,11 @@ public class SquidIterators {
 			if (prev == null)
 				throw new NoSuchElementException();
 			return prev;
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
 		}
 
 		protected Coord findNext() {

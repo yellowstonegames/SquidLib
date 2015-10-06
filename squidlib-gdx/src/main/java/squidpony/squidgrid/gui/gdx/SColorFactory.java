@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Coord3D;
 import squidpony.squidmath.RNG;
@@ -95,7 +96,8 @@ public class SColorFactory {
      * @param coef
      * @return
      */
-    private static int blend(int a, int b, double coef) {
+    @SuppressWarnings("unused")
+	private static int blend(int a, int b, double coef) {
         coef = MathUtils.clamp(coef, 0, 1);
         return (int) (a + (b - a) * coef);
     }
@@ -569,15 +571,4 @@ public class SColorFactory {
         return color1.getName() + " to " + color2.getName();
     }
 
-    /**
-     * 
-     * @param color1
-     * @param color2
-     * @return
-     * 
-     * @deprecated Prefer paletteNamer to this misspelled version.
-     */
-    private static String palletNamer(SColor color1, SColor color2) {
-        return  paletteNamer(color1, color2);
-    }
 }

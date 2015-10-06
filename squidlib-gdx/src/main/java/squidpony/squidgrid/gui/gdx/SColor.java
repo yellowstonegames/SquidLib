@@ -1,7 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
-import java.util.Objects;
 
 /**
  * Allows for the use of custom colors with custom names.

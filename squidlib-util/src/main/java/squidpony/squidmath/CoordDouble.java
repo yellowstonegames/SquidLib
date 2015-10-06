@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import java.util.DoubleSummaryStatistics;
-
 /**
  * Coord using double values for x and y instead of int. Not pooled.
  * Created by Tommy Ettinger on 8/12/2015.
@@ -92,7 +90,8 @@ public class CoordDouble implements java.io.Serializable {
         this.y = y;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return "Coord (x " + x + ", y " + y + ")";
     }

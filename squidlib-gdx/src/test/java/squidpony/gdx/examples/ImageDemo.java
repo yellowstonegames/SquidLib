@@ -18,16 +18,13 @@ import squidpony.squidmath.RNG;
 import java.util.HashMap;
 
 public class ImageDemo extends ApplicationAdapter {
-    private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
     SpriteBatch batch;
 
-    private Phase phase = Phase.WAIT;
     private RNG rng;
     private LightRNG lrng;
     private SquidLayers display;
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
-    private double[][] res;
     private int[][] colors, bgColors, lights;
     private int width, height;
     private int cellWidth, cellHeight;

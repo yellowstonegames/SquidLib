@@ -116,8 +116,8 @@ public class Elias {
 
     private void runLine(double startx, double starty, double endx, double endy) {
         double x1 = startx, y1 = starty, x2 = endx, y2 = endy;
-        double grad, xd, yd, length, xm, ym, xgap, ygap, xend, yend, xf, yf, brightness1, brightness2;
-        int x, y, ix1, ix2, iy1, iy2;
+        double grad, xd, yd, xgap, xend, yend, yf, brightness1, brightness2;
+        int x, ix1, ix2, iy1, iy2;
         boolean shallow = false;
 
         xd = x2 - x1;
