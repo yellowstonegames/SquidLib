@@ -2,7 +2,6 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.TimeUtils;
 
 /**
  * This wraps an InputProcessor, storing all key events and allowing them to be processed one at a time using next() or
@@ -165,44 +164,52 @@ public class SquidKey implements InputProcessor {
         queue.clear();
     }
 
-    public synchronized boolean keyDown (int keycode) {
+    @Override
+	public synchronized boolean keyDown (int keycode) {
         if(ignoreInput) return false;
         queue.add(KEY_DOWN);
         queue.add(keycode);
         return false;
     }
 
-    public synchronized boolean keyUp (int keycode) {
+    @Override
+	public synchronized boolean keyUp (int keycode) {
         if(ignoreInput) return false;
         queue.add(KEY_UP);
         queue.add(keycode);
         return false;
     }
 
-    public synchronized boolean keyTyped (char character) {
+    @Override
+	public synchronized boolean keyTyped (char character) {
         if(ignoreInput) return false;
         queue.add(KEY_TYPED);
         queue.add(character);
         return false;
     }
 
-    public synchronized boolean touchDown (int screenX, int screenY, int pointer, int button) {
+    @Override
+	public synchronized boolean touchDown (int screenX, int screenY, int pointer, int button) {
         return false;
     }
 
-    public synchronized boolean touchUp (int screenX, int screenY, int pointer, int button) {
+    @Override
+	public synchronized boolean touchUp (int screenX, int screenY, int pointer, int button) {
         return false;
     }
 
-    public synchronized boolean touchDragged (int screenX, int screenY, int pointer) {
+    @Override
+	public synchronized boolean touchDragged (int screenX, int screenY, int pointer) {
         return false;
     }
 
-    public synchronized boolean mouseMoved (int screenX, int screenY) {
+    @Override
+	public synchronized boolean mouseMoved (int screenX, int screenY) {
         return false;
     }
 
-    public synchronized boolean scrolled (int amount) {
+    @Override
+	public synchronized boolean scrolled (int amount) {
         return false;
     }
 

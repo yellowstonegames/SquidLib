@@ -2,12 +2,12 @@ package squidpony.squidgrid.mapping;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import squidpony.annotation.Beta;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
-
 import static java.lang.Math.round;
 
 /**
@@ -36,26 +36,21 @@ public class MetsaMapFactory {
      5 = snowcap
      6 = lowsea
      */
-    static private final int[] colors = new int[]{0x1560BD, 0xD2B48C, 0x7BA05B,
-        0x228B22, 0x708090, 0xf0f8ff, 0x007FFF};
-    static private final int[] polarcolors = colors;
 //            new SColor[]{SColor.DARK_SLATE_GRAY, SColor.SCHOOL_BUS_YELLOW, SColor.YELLOW_GREEN,
 //        SColor.GREEN_BAMBOO, SColorFactory.lighter(SColor.LIGHT_BLUE_SILK), SColor.ALICE_BLUE, SColor.AZUL};
-    static private final int[] desertcolors = colors;
 //            new SColor[]{SColor.DARK_SLATE_GRAY, SColor.SCHOOL_BUS_YELLOW, SColor.YELLOW_GREEN,
 //        SColor.GREEN_BAMBOO, SColorFactory.lighter(SColor.LIGHT_BLUE_SILK), SColor.ALICE_BLUE, SColor.AZUL};
 
     static private final int width = 1500;
     static private final int height = 1000;
-    static private final int scale = 1;
-    static private final int ROADS = 64;
     static private final int CITYAMOUNT = 14;
 
     private List<Coord> cities = new LinkedList<>();
     private final RNG rng = new RNG();
     private double highn = 0;
 
-    private int getShadow(int x, int y, double[][] map) {
+    @SuppressWarnings("unused")
+	private int getShadow(int x, int y, double[][] map) {
         if (x >= width - 1 || y <= 0) {
             return 0;
         }
@@ -89,7 +84,8 @@ public class MetsaMapFactory {
      * @param point
      * @return
      */
-    private Coord closestCity(Coord point) {
+    @SuppressWarnings("unused")
+	private Coord closestCity(Coord point) {
         double dist = 999999999, newdist;
         Coord closest = null;
         for (Coord c : cities) {
@@ -105,7 +101,8 @@ public class MetsaMapFactory {
         return closest;
     }
 
-    private double[][] makeHeightMap() {
+    @SuppressWarnings("unused")
+	private double[][] makeHeightMap() {
         double[][] map = MapFactory.heightMap(width, height, new StatefulRNG());
 
         for (int x = 0; x < width; x++) {
@@ -120,7 +117,8 @@ public class MetsaMapFactory {
         return map;
     }
 
-    private int[][] makeBiomeMap(double[][] map) {
+    @SuppressWarnings("unused")
+	private int[][] makeBiomeMap(double[][] map) {
         //biomes 0 normal 1 snow
         int biomeMap[][] = new int[width][height];
         for (int x = 0; x < width; x++) {
@@ -142,7 +140,8 @@ public class MetsaMapFactory {
         return biomeMap;
     }
 
-    private int[][] makeNationMap(double[][] map) {
+    @SuppressWarnings("unused")
+	private int[][] makeNationMap(double[][] map) {
         // nationmap, 4 times less accurate map used for nations -1 no nation
         int nationMap[][] = new int[width][height];
         for (int i = 0; i < width / 4; i++) {
@@ -157,7 +156,8 @@ public class MetsaMapFactory {
         return nationMap;
     }
 
-    private double[][] makeWeightedMap(double[][] map) {
+    @SuppressWarnings("unused")
+	private double[][] makeWeightedMap(double[][] map) {
         //Weighted map for road
         double weightedMap[][] = new double[width][height];
         double SEALEVEL = 0;
@@ -185,33 +185,6 @@ public class MetsaMapFactory {
             cities.add(Coord.get(4 * round(px / 4), 4 * round(py / 4)));
         }
         return weightedMap;
-    }
-
-    private void generateRoads() {
-        ////Generate a road
-//Queue results
-//if (ROADS > 0) {
-//            var graph = new Graph(weighedMap, {
-//                diagonal
-//        
-//            : true
-//    });
-//    console.log(cities.length);
-//            for (ii = 0; ii < cities.length; ii++) {
-//                var startc = cities[ii];
-//                console.log(start);
-//                var start = graph.grid[startc.x / 4][startc.y / 4];
-//                var endc = closestCity(cities[ii]);
-//                console.log(end);
-//                var end = graph.grid[endc.x / 4][endc.y / 4];
-//
-//                var res = astar.search(graph, start, end);
-//                if (res.length != 0) {
-//                    results.push(res);
-//                }
-//            }
-//
-//        }
     }
 
 }

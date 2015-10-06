@@ -157,11 +157,13 @@ public class BeamAOE implements AOE {
         return dijkstra.partialScan(radius, null);
     }
 
-    public Coord getOrigin() {
+    @Override
+	public Coord getOrigin() {
         return origin;
     }
 
-    public void setOrigin(Coord origin) {
+    @Override
+	public void setOrigin(Coord origin) {
         this.origin = origin;
         dijkstra.resetMap();
         dijkstra.clearGoals();

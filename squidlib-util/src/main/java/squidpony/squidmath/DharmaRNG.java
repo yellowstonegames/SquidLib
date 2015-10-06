@@ -294,7 +294,8 @@ public class DharmaRNG extends RNG {
      * @param bound the upper bound (exclusive)
      * @return the found number
      */
-    public long nextLong(long bound) {
+    @Override
+	public long nextLong(long bound) {
         if (bound <= 0) {
             return 0;
         }

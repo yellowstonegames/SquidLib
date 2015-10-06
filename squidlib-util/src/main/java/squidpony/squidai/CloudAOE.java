@@ -121,17 +121,6 @@ public class CloudAOE implements AOE {
         this.minRange = minRange;
         this.maxRange = maxRange;
     }
-    private CloudAOE()
-    {
-        LightRNG l = new LightRNG();
-        this.seed = l.getState();
-        this.spill = new Spill(new RNG(l));
-        this.center = Coord.get(1, 1);
-        this.volume = 1;
-        this.spill.measurement = Spill.Measurement.MANHATTAN;
-        rt = Radius.DIAMOND;
-        this.expanding = false;
-    }
 
     public Coord getCenter() {
         return center;
