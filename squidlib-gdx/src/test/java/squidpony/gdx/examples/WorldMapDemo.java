@@ -10,8 +10,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.MetsaMapFactory;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
 
 import java.util.List;
 
@@ -24,7 +22,6 @@ public class WorldMapDemo extends ApplicationAdapter {
     private int width, height;
     private int cellWidth, cellHeight;
     private SquidInput input;
-    private double counter;
     private static final Color bgColor = SColor.DARK_SLATE_GRAY;
     private Stage stage;
     //HEIGHT LIMITS
@@ -35,12 +32,9 @@ public class WorldMapDemo extends ApplicationAdapter {
             MOUNTAINLEVEL = 0.45,
             SNOWLEVEL = 0.63,
             DEEPSEA = -0.1;
-    //BIOMESTUFF
-    private final double POLARLIMIT = 0.5, DESERTLIMIT = 0.1;
+
     private final SColor CITY_COLOR = new SColor(0x444);
 
-    //SHADOW
-    private final double SHADOWLIMIT = 0.01;
     //COLORORDER
 /*
      0 = deepsea
@@ -60,9 +54,6 @@ public class WorldMapDemo extends ApplicationAdapter {
 //            new SColor[]{SColor.DARK_SLATE_GRAY, SColor.SCHOOL_BUS_YELLOW, SColor.YELLOW_GREEN,
 //        SColor.GREEN_BAMBOO, SColorFactory.lighter(SColor.LIGHT_BLUE_SILK), SColor.ALICE_BLUE, SColor.AZUL};
 
-    private final int scale = 1;
-    private final int ROADS = 64;
-    private final int CITYAMOUNT = 14;
     private double highn = 0;
     private int[][] biomeMap;
     private double[][] map;
