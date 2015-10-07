@@ -44,17 +44,58 @@ public class RNG {
         this.random = random;
     }
 
+    protected static class CustomRandom extends Random
+    {
+        private static long serialVersionUID = 1L;
+        private RandomnessSource randomnessSource;
+
+        /**
+         * Creates a new random number generator. This constructor sets
+         * the seed of the random number generator to a value very likely
+         * to be distinct from any other invocation of this constructor.
+         * @param randomnessSource a way to get random bits, supplied by RNG
+         */
+        public CustomRandom(RandomnessSource randomnessSource) {
+            super();
+            this.randomnessSource = randomnessSource;
+        }
+
+        /**
+         * Generates the next pseudorandom number. Subclasses should
+         * override this, as this is used by all other methods.
+         * <p>
+         * <p>The general contract of {@code next} is that it returns an
+         * {@code int} value and if the argument {@code bits} is between
+         * {@code 1} and {@code 32} (inclusive), then that many low-order
+         * bits of the returned value will be (approximately) independently
+         * chosen bit values, each of which is (approximately) equally
+         * likely to be {@code 0} or {@code 1}. The method {@code next} is
+         * implemented by class {@code Random} by atomically updating the seed to
+         * <pre>{@code (seed * 0x5DEECE66DL + 0xBL) & ((1L << 48) - 1)}</pre>
+         * and returning
+         * <pre>{@code (int)(seed >>> (48 - bits))}.</pre>
+         * <p>
+         * This is a linear congruential pseudorandom number generator, as
+         * defined by D. H. Lehmer and described by Donald E. Knuth in
+         * <i>The Art of Computer Programming,</i> Volume 3:
+         * <i>Seminumerical Algorithms</i>, section 3.2.1.
+         *
+         * @param bits random bits
+         * @return the next pseudorandom value from this random number
+         * generator's sequence
+         * @since 1.1
+         */
+        @Override
+        protected int next(int bits) {
+            return randomnessSource.next(bits);
+        }
+    }
     /**
-     * @return a Random instance that can be used for legacy compatability
+     * @return a Random instance that can be used for legacy compatibility
      */
     public Random asRandom() {
         if (ran == null) {
-            ran = new Random() {
-                @Override
-				protected int next(int bits) {
-                    return super.next(bits);
-                }
-            };
+            ran = new CustomRandom(random);
         }
         return ran;
     }
@@ -106,8 +147,7 @@ public class RNG {
             sum += between(min, max);
         }
 
-        int answer = Math.round((float) sum / samples);
-        return answer;
+        return Math.round((float) sum / samples);
     }
 
     /**
@@ -164,11 +204,13 @@ public class RNG {
      * Given a {@link List} l, this selects a random element of l to be the first value in the returned list l2. It
      * retains the order of elements in l after that random element and makes them follow the first element in l2, and
      * loops around to use elements from the start of l after it has placed the last element of l into l2.
-     *
+     * <br>
      * Essentially, it does what it says on the tin. It randomly rotates the List l.
+     * <br>
+     * If you only need to iterate through a collection starting at a random point, the method getRandomStartIterable()
+     * should have better performance.
      *
-	 * @param l
-	 *            A {@link List} that will not be modified by this method. All elements of this parameter will be
+	 * @param l A {@link List} that will not be modified by this method. All elements of this parameter will be
      *            shared with the returned List.
      * @param <T> No restrictions on type. Changes to elements of the returned List will be reflected in the parameter.
      * @return A shallow copy of {@code l} that has been rotated so its first element has been randomly chosen
@@ -191,21 +233,15 @@ public class RNG {
     /**
      * Get an Iterable that starts at a random location in list and continues on through list in its current order.
      * Loops around to the beginning after it gets to the end, stops when it returns to the starting location.
-     * @param list
-     *            A list <b>with a constant-time {@link List#get(int)}
-     *            method</b> (otherwise performances are degraded).
+     * <br>
+     * You should not modify {@code list} while you use the returned reference. And there'll be no
+     * ConcurrentModificationException to detect such erroneous uses.
+     * @param list A list <b>with a constant-time {@link List#get(int) method</b> (otherwise performance degrades).
      * @return An {@link Iterable} that iterates over {@code list} but start at
      *         a random index. If the chosen index is {@code i}, the iterator
-     *         will return
+     *         will return:
      *         {@code list[i]; list[i+1]; ...; list[list.length() - 1]; list[0]; list[i-1]}
-     *         .
      *
-     * <p>
-     * You should not modify {@code list} while you use the returned
-     * reference. And there'll be no
-     * ConcurrentModificationException to detect such erroneous
-     * uses.
-     * </p>
      */
     public <T> Iterable<T> getRandomStartIterable(final List<T> list) {
         final int sz = list.size();
