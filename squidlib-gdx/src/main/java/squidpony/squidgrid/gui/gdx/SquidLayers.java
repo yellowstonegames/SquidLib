@@ -29,6 +29,7 @@ public class SquidLayers extends Group {
     protected boolean[][] values;
     protected float animationDuration;
 
+    public static final char EMPTY_CELL = '\0';
     /**
      * The pixel width of the entire map.
      *
@@ -479,6 +480,20 @@ public class SquidLayers extends Group {
     }
 
     /**
+     * Place a char c into the foreground, with a foreground color specified by an index into the default palette.
+     *
+     * @param x               in grid cells.
+     * @param y               in grid cells.
+     * @param c               a character to be drawn in the foreground
+     * @param foreground    Color for the char being drawn
+     */
+    public SquidLayers put(int x, int y, char c, Color foreground) {
+        foregroundPanel.put(x, y, c, foreground);
+        values[x][y] = true;
+        return this;
+    }
+
+    /**
      * Place a char c into the foreground, with a foreground color specified by an index into the default palette, and a
      * background color specified in the same way.
      *
@@ -491,6 +506,22 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char c, int foregroundIndex, int backgroundIndex) {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
         backgroundPanel.put(x, y, backgroundIndex, palette);
+        values[x][y] = true;
+        return this;
+    }
+    /**
+     * Place a char c into the foreground, with a foreground color specified by an index into the default palette, and a
+     * background color specified in the same way.
+     *
+     * @param x               in grid cells.
+     * @param y               in grid cells.
+     * @param c               a character to be drawn in the foreground
+     * @param foreground    Color for the char being drawn
+     * @param background    Color for the background
+     */
+    public SquidLayers put(int x, int y, char c, Color foreground, Color background) {
+        foregroundPanel.put(x, y, c, foreground);
+        backgroundPanel.put(x, y, background);
         values[x][y] = true;
         return this;
     }
@@ -517,7 +548,6 @@ public class SquidLayers extends Group {
         backgroundPanel.put(x, y, backgroundIndex, palette);
         return this;
     }
-
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
      * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
@@ -539,6 +569,29 @@ public class SquidLayers extends Group {
 
         lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
         backgroundPanel.put(x, y, backgroundIndex, alternatePalette);
+        return this;
+    }
+
+    /**
+     * Place a char c into the foreground, with a foreground and background libGDX Color and a lightness variation for
+     * the background (0 is no change, 100 is very bright, -100 is very dark, anything past -150 or 150 will make the
+     * background almost fully black or white).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   a character to be drawn in the foreground
+     * @param foreground            Color for the char being drawn
+     * @param background            Color for the background
+     * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
+     */
+    public SquidLayers put(int x, int y, char c, Color foreground, Color background, int backgroundLightness) {
+        backgroundLightness = clamp(backgroundLightness, -255, 255);
+        foregroundPanel.put(x, y, c, foreground);
+        values[x][y] = true;
+        lightnesses[x][y] = 256 + backgroundLightness;
+
+        lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
+        backgroundPanel.put(x, y, background);
         return this;
     }
 
@@ -651,6 +704,31 @@ public class SquidLayers extends Group {
         }
         lightnessPanel.put(0, 0, lightnesses, lightingPalette);
         backgroundPanel.put(x, y, backgroundIndex, alternatePalette);
+        return this;
+    }
+    /**
+     * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
+     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
+     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   char[][] to be drawn in the foreground starting from x, y
+     * @param foregrounds     int[][] of indices into alternatePalette for the char being drawn
+     * @param backgrounds     int[][] of indices into alternatePalette for the background
+     * @param backgroundLightness int[][] with elements between -255 and 255 , lower darker, higher lighter.
+     */
+    public SquidLayers put(int x, int y, char[][] c, Color[][] foregrounds, Color[][] backgrounds, int[][] backgroundLightness) {
+
+        foregroundPanel.put(x, y, c, foregrounds);
+        for (int i = x; i < width && i < backgroundLightness.length; i++) {
+            for (int j = y; j < height && j < backgroundLightness[i].length; j++) {
+                lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
+                values[i][j] = true;
+            }
+        }
+        lightnessPanel.put(0, 0, lightnesses, lightingPalette);
+        backgroundPanel.put(x, y, backgrounds);
         return this;
     }
 
@@ -866,6 +944,38 @@ public class SquidLayers extends Group {
     }
 
     /**
+     * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
+     *
+     * @param layer            0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param x                in grid cells.
+     * @param y                in grid cells.
+     * @param c                char[][] to be drawn in the foreground starting from x, y
+     * @param colors          int[][] of indices into alternatePalette for the char being drawn
+     */
+    public SquidLayers putInto(int layer, int x, int y, char[][] c, Color[][] colors) {
+        SquidPanel p = backgroundPanel;
+        switch (layer) {
+            case 0:
+                break;
+            case 1:
+                p = lightnessPanel;
+                break;
+            case 2:
+                p = foregroundPanel;
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        p.put(x, y, c, colors);
+        for (int i = x; i < c.length && i < width; i++) {
+            for (int j = y; j < c[i].length && j < height; j++) {
+                values[i][j] = true;
+            }
+        }
+        return this;
+    }
+
+    /**
      * Put a string at the given x, y position, using the default color.
      *
      * @param x in grid cells.
@@ -928,6 +1038,24 @@ public class SquidLayers extends Group {
         foregroundPanel.put(x, y, s, alternatePalette.get(foregroundIndex));
         for (int i = x; i < s.length() && i < width; i++) {
             backgroundPanel.put(i, y, alternatePalette.get(backgroundIndex));
+        }
+        return this;
+    }
+    /**
+     * Put a string at the given x, y position, with the given indices for foreground and background color that look up
+     * their index in alternatePalette.
+     *
+     * @param x                in grid cells.
+     * @param y                in grid cells.
+     * @param s                the string to print
+     * @param foreground      the Color of the string's chars
+     * @param background      the Color of the background of the string
+     * @return this, for chaining
+     */
+    public SquidLayers putString(int x, int y, String s, Color foreground, Color background) {
+        foregroundPanel.put(x, y, s, foreground);
+        for (int i = x; i < s.length() && i < width; i++) {
+            backgroundPanel.put(i, y, background);
         }
         return this;
     }
