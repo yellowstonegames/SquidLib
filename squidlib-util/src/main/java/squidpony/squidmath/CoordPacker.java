@@ -527,7 +527,8 @@ public class CoordPacker {
 
     /**
      * Quickly determines if an x,y position is true or false in the given packed array, without unpacking it.
-     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
      * @param x between 0 and 255, inclusive
      * @param y between 0 and 255, inclusive
      * @return true if the packed data stores true at the given x,y location, or false in any other case.
@@ -543,6 +544,31 @@ public class CoordPacker {
                 return on;
         }
         return false;
+    }
+
+    /**
+     * Gets all positions that are "on" in the given packed array, without unpacking it, and returns them as a Coord[].
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @return a Coord[], ordered by distance along the Hilbert Curve, corresponding to all "on" cells in packed.
+     */
+    public static Coord[] allPacked(short[] packed)
+    {
+        ShortVLA vla = new ShortVLA(64);
+        boolean on = false;
+        int idx = 0;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                vla.addRange(idx, idx + (packed[p] & 0xffff));
+            }
+            idx += packed[p] & 0xffff;
+        }
+        short[] distances = vla.shrink();
+        Coord[] cs = new Coord[distances.length];
+        for (int i = 0; i < distances.length; i++) {
+            cs[i] = Coord.get(hilbertX[distances[i]], hilbertY[distances[i]]);
+        }
+        return cs;
     }
 
     /**

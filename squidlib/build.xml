@@ -10,7 +10,7 @@
 <project name="SquidLib" default="default" basedir=".">
     <description>Builds, tests, and runs the project SquidLib.</description>
     <import file="nbproject/build-impl.xml"/>
-	<target name="-post-jar" description="bundle sources and javadoc in a jar" depends="javadoc"> <jar compress="${jar.compress}" basedir="${src.dir}" jarfile="${dist.dir}/${application.title}-sources.jar"/> <jar compress="${jar.compress}" basedir="${dist.javadoc.dir}" jarfile="${dist.dir}/${application.title}-javadoc.jar"/> </target>
+	<target name="-post-jar" description="bundle sources and javadoc in a jar" depends="javadoc"> <jar compress="${jar.compress}" basedir="${src.dir}" jarfile="../dist/${application.title}-sources.jar"/> <jar compress="${jar.compress}" basedir="${dist.javadoc.dir}" jarfile="../dist/${application.title}-javadoc.jar"/> </target>
     <!--
 
     There exist several targets which are by default empty and which can be 
