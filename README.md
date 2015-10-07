@@ -7,6 +7,8 @@ SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, and other proj
 Current Features:
 --
 ###Ease Of Use
+
+[![Join the chat at https://gitter.im/SquidPony/SquidLib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SquidPony/SquidLib?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 -   Standard GUI notation of (x,y) locations within the grid
 -   Uses Swing components or the scene2d.ui classes from libGDX
   -   LibGDX is an optional dependency; if you don't use it, you don't need to include it (unless building SquidLib yourself)
