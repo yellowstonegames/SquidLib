@@ -6,17 +6,20 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.XorRNG;
 
 import java.math.BigInteger;
+import java.util.Random;
 
 /**
  * Created by Tommy Ettinger on 7/16/2015.
  */
 public class RNGTest {
-    private static int[][] ibits = new int[6][32], lbits = new int[6][64];
-    private static int[] ibitsTotal = new int[6], lbitsTotal = new int[6];
+    private static int[][] ibits = new int[9][32], lbits = new int[9][64];
+    private static int[] ibitsTotal = new int[9], lbitsTotal = new int[9];
     private static BigInteger[] counters = new BigInteger[]{ BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO,
+            BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO,
             BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO};
     private static String[] kindNames = new String[]{"Light", "Permuted", "Xor",
-                                           "Light+RNG", "Permuted+RNG", "Xor+RNG"};
+            "Light+RNG", "Permuted+RNG", "Xor+RNG",
+            "Light+asRandom", "Permuted+asRandom", "Xor+asRandom"};
 
     public static String binaryString(int n, int kind)
     {
@@ -44,73 +47,92 @@ public class RNGTest {
     }
     public static void main(String[] args)
     {
-        LightRNG light = new LightRNG(2L);
-        PermutedRNG perm = new PermutedRNG(2L);
-        XorRNG xor = new XorRNG(2L);
+        LightRNG light = new LightRNG(0xDADA157);
+        PermutedRNG perm = new PermutedRNG(0xDADA157);
+        XorRNG xor = new XorRNG(0xDADA157);
 
-        RNG lr = new RNG(new LightRNG(2L)),
-                pr = new RNG(new PermutedRNG(2L)),
-                xr = new RNG(new XorRNG(2L));
+        RNG lr = new RNG(new LightRNG(0xDADA157)),
+                pr = new RNG(new PermutedRNG(0xDADA157)),
+                xr = new RNG(new XorRNG(0xDADA157));
+        Random lrr = lr.asRandom(),
+               prr = pr.asRandom(),
+               xrr = xr.asRandom();
         int c = 0;
         for(int i = 0; i < 99; i++)
         {
             c = light.nextInt();
-            System.out.println("l  : " + binaryString(c, 0));
+            System.out.println("l   : " + binaryString(c, 0));
             c = perm.nextInt();
-            System.out.println("p  : " + binaryString(c, 1));
+            System.out.println("p   : " + binaryString(c, 1));
             c = xor.nextInt();
-            System.out.println("x  : " + binaryString(c, 2));
+            System.out.println("x   : " + binaryString(c, 2));
             c = lr.nextInt();
-            System.out.println("LR : " + binaryString(c, 3));
+            System.out.println("LR  : " + binaryString(c, 3));
             c = pr.nextInt();
-            System.out.println("PR : " + binaryString(c, 4));
+            System.out.println("PR  : " + binaryString(c, 4));
             c = xr.nextInt();
-            System.out.println("XR : " + binaryString(c, 5));
+            System.out.println("XR  : " + binaryString(c, 5));
+            c = lrr.nextInt();
+            System.out.println("LRR : " + binaryString(c, 6));
+            c = prr.nextInt();
+            System.out.println("PRR : " + binaryString(c, 7));
+            c = xrr.nextInt();
+            System.out.println("XRR : " + binaryString(c, 8));
             System.out.println();
         }
-        for(int k = 0; k < 6; k++) {
+        for(int k = 0; k < 9; k++) {
             for (int i = 31; i >= 0; i--) {
                 System.out.print(String.format("%02d ", ibits[k][i]));
             }
             System.out.println();
         }
 
-        for(int k = 0; k < 6; k++) {
+        for(int k = 0; k < 9; k++) {
             System.out.println(ibitsTotal[k]);
         }
 
-        light = new LightRNG(2L);
-        perm = new PermutedRNG(2L);
-        xor = new XorRNG(2L);
+        light = new LightRNG(0xDADA157);
+        perm = new PermutedRNG(0xDADA157);
+        xor = new XorRNG(0xDADA157);
 
-        lr = new RNG(new LightRNG(2L));
-        pr = new RNG(new PermutedRNG(2L));
-        xr = new RNG(new XorRNG(2L));
+        lr = new RNG(new LightRNG(0xDADA157));
+        pr = new RNG(new PermutedRNG(0xDADA157));
+        xr = new RNG(new XorRNG(0xDADA157));
+        lrr = lr.asRandom();
+        prr = pr.asRandom();
+        xrr = xr.asRandom();
+
         long l = 0;
         for(int i = 0; i < 99; i++)
         {
             l = light.nextLong();
-            System.out.println("l  : " + binaryString(l, 0));
+            System.out.println("l   : " + binaryString(l, 0));
             l = perm.nextLong();
-            System.out.println("p  : " + binaryString(l, 1));
+            System.out.println("p   : " + binaryString(l, 1));
             l = xor.nextLong();
-            System.out.println("x  : " + binaryString(l, 2));
+            System.out.println("x   : " + binaryString(l, 2));
             l = lr.nextLong();
-            System.out.println("LR : " + binaryString(l, 3));
+            System.out.println("LR  : " + binaryString(l, 3));
             l = pr.nextLong();
-            System.out.println("PR : " + binaryString(l, 4));
+            System.out.println("PR  : " + binaryString(l, 4));
             l = xr.nextLong();
-            System.out.println("XR : " + binaryString(l, 5));
+            System.out.println("XR  : " + binaryString(l, 5));
+            l = lrr.nextLong();
+            System.out.println("LRR : " + binaryString(l, 6));
+            l = prr.nextLong();
+            System.out.println("PRR : " + binaryString(l, 7));
+            l = xrr.nextLong();
+            System.out.println("XRR : " + binaryString(l, 8));
             System.out.println();
         }
-        for(int k = 0; k < 6; k++) {
+        for(int k = 0; k < 9; k++) {
             for (int i = 63; i >= 0; i--) {
                 System.out.print(String.format("%02d ", lbits[k][i]));
             }
             System.out.println();
         }
 
-        for(int k = 0; k < 6; k++) {
+        for(int k = 0; k < 9; k++) {
             System.out.println(kindNames[k] + " : ");
             System.out.println(lbitsTotal[k]);
             System.out.println(counters[k].toString());
