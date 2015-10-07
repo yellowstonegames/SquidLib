@@ -101,6 +101,17 @@ public class ShortVLA {
         size += length;
     }
 
+    public void addRange (int start, int end) {
+        short[] items = this.items;
+        int sizeNeeded = size + end - start;
+        if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
+        for(int r = start, i = size; r < end; r++, i++)
+        {
+            items[i] = (short)r;
+        }
+        size += end - start;
+    }
+
     public short get (int index) {
         if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
         return items[index];
