@@ -59,7 +59,6 @@ abstract class AbstractPerformanceTest {
 		for (Future<Long> future : invoke) {
 			System.out.println(future.get());
 		}
-		System.exit(0);
 	}
 
 }

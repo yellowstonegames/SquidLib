@@ -451,7 +451,7 @@ public class CoordPacker {
                 }
                 ml++;
                 // sets the bit at position l in current to 1 if the following is true, 0 if it is false:
-                //     map[hilbertX[i]][hilbertY[i]] >= levels[l]
+                //     map[hilbertX[i]][hilbertY[i]] > levels[l]
                 // looks more complicated than it is.
                 current ^= ((map[hilbertX[i]][hilbertY[i]] > levels[l] ? -1 : 0) ^ current) & (1 << l);
                 if (((current >> l) & 1L) != ((on >> l) & 1L)) {

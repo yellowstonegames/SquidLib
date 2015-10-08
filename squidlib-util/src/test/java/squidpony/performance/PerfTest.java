@@ -14,7 +14,7 @@ public class PerfTest {
 
 	// TODO add more tests when appropriate here
 	private static final AbstractPerformanceTest[] tests = new AbstractPerformanceTest[] {
-			new DijkstraPerformanceTest(), new FOVLOSPerformanceTest() };
+			new FOVLOSPerformanceTest(), new DijkstraPerformanceTest() };
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		for (AbstractPerformanceTest test : tests) {
