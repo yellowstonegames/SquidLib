@@ -66,15 +66,7 @@ public class FOV {
              * not lit, does not do percentages.
              */
             SHADOW = 5;
-
-    private double lightMap[][], map[][];
-    private boolean indirect[][];//marks indirect lighting for Ripple FOV
     private int type = SHADOW;
-    private int rippleNeighbors;
-    private double radius, decay, angle, span;
-    private int startx, starty, width, height;
-    private Radius radiusStrategy;
-    private Comparator<Coord> comp;
     private static final Direction[] ccw = new Direction[]
             {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
             ccw_full = new Direction[]{Direction.RIGHT, Direction.UP_RIGHT, Direction.UP, Direction.UP_LEFT,
@@ -84,8 +76,6 @@ public class FOV {
      * Creates a solver which will use the default SHADOW solver.
      */
     public FOV() {
-        lightMap = null;
-        map = null;
     }
 
     /**
@@ -94,51 +84,7 @@ public class FOV {
      * @param type
      */
     public FOV(int type) {
-        lightMap = null;
-        map = null;
         this.type = type;
-    }
-
-    /**
-     * Checks to see if the location is considered even partially lit.
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    public boolean isLit(int x, int y) {
-        return lightLevel(x, y) > 0;
-    }
-
-    /**
-     * Returns the light value at the given location.
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    public double lightLevel(int x, int y) {
-        if (lightMap == null) {
-            return 0;
-        } else {
-            return lightMap[x][y];
-        }
-    }
-
-    /**
-     * Returns the initial resistance value at the given point. If no
-     * calculation has yet been run, it returns 0.
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    public double resistance(int x, int y) {
-        if (map == null) {
-            return 0;
-        } else {
-            return map[x][y];
-        }
     }
 
     /**
@@ -196,57 +142,41 @@ public class FOV {
      * @return the computed light grid
      */
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius, Radius radiusTechnique) {
-        this.map = resistanceMap;
-        this.startx = startX;
-        this.starty = startY;
-        this.radius = Math.max(1, radius);
-        this.radiusStrategy = radiusTechnique;
-        this.comp = new Comparator<Coord>() {
-            @Override
-            public int compare(Coord pt1, Coord pt2) {
-                return (int)Math.signum(radiusStrategy.radius(startx, starty, pt1.x, pt1.y) -
-                        radiusStrategy.radius(startx, starty, pt2.x, pt2.y));
-            }
-        };
-        decay = 1.0 / radius;
 
-        width = resistanceMap.length;
-        height = resistanceMap[0].length;
+        double rad = Math.max(1, radius);
 
-        lightMap = new double[width][height];
-        lightMap[startx][starty] = 1;//make the starting space full power
+        double decay = 1.0 / rad;
 
+        int width = resistanceMap.length;
+        int height = resistanceMap[0].length;
+
+        double[][] lightMap = new double[width][height];
+        lightMap[startX][startY] = 1;//make the starting space full power
+
+        boolean[][] nearLight = new boolean[width][height];
         switch (type) {
             case RIPPLE:
-                indirect = new boolean[width][height];
-                rippleNeighbors = 2;
-                doRippleFOV(startx, starty);
+                lightMap = doRippleFOV(lightMap, 2, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
                 break;
             case RIPPLE_LOOSE:
-                indirect = new boolean[width][height];
-                rippleNeighbors = 3;
-                doRippleFOV(startx, starty);
+                lightMap = doRippleFOV(lightMap, 3, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
                 break;
             case RIPPLE_TIGHT:
-                indirect = new boolean[width][height];
-                rippleNeighbors = 1;
-                doRippleFOV(startx, starty);
+                lightMap = doRippleFOV(lightMap, 1, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
                 break;
             case RIPPLE_VERY_LOOSE:
-                indirect = new boolean[width][height];
-                rippleNeighbors = 6;
-                doRippleFOV(startx, starty);
+                lightMap = doRippleFOV(lightMap, 6, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
                 break;
             case SHADOW:
-               	// hotfix for infinite radius -> set to longest possible straight-line Manhattan distance instead
+               	// hotfix for too large radius -> set to longest possible straight-line Manhattan distance instead
                 // does not cause problems with brightness falloff because shadowcasting is on/off
             	// TODO do proper fix for shadowCast
-            	if (radius >= Integer.MAX_VALUE){
-            		this.radius = width + height;
+            	if (rad > width + height){
+            		rad = width + height;
             	}
                 for (Direction d : Direction.DIAGONALS) {
-                    shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0);
-                    shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY);
+                    shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique);
+                    shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique);
                 }
                 break;
         }
@@ -276,50 +206,40 @@ public class FOV {
      */
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
                                    Radius radiusTechnique, double angle, double span) {
-        this.map = resistanceMap;
-        this.startx = startX;
-        this.starty = startY;
-        this.radius = Math.max(1, radius);
 
-        this.angle = Math.toRadians((angle > 360.0 || angle < 0.0) ? Math.IEEEremainder(angle + 720.0, 360.0) : angle);
-        this.span = Math.toRadians(span);
-        this.radiusStrategy = radiusTechnique;
-        decay = 1.0 / radius;
-        this.comp = new Comparator<Coord>() {
-            @Override
-            public int compare(Coord pt1, Coord pt2) {
-                return (int)Math.signum(radiusStrategy.radius(startx, starty, pt1.x, pt1.y) -
-                        radiusStrategy.radius(startx, starty, pt2.x, pt2.y));
-            }
-        };
-        width = resistanceMap.length;
-        height = resistanceMap[0].length;
+        double rad = Math.max(1, radius);
 
-        lightMap = new double[width][height];
-        lightMap[startx][starty] = 1;//make the starting space full power
+        double decay = 1.0 / rad;
 
+        double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? Math.IEEEremainder(angle + 720.0, 360.0) : angle);
+        double span2 = Math.toRadians(span);
+        int width = resistanceMap.length;
+        int height = resistanceMap[0].length;
+
+        double[][] lightMap = new double[width][height];
+        lightMap[startX][startY] = 1;//make the starting space full power
+
+        boolean[][] nearLight = new boolean[width][height];
         switch (type) {
             case RIPPLE:
-                indirect = new boolean[width][height];
-                rippleNeighbors = 2;
-                doRippleFOVLimited(startx, starty);
+                lightMap = doRippleFOV(lightMap, 2, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
                 break;
             case RIPPLE_LOOSE:
-                indirect = new boolean[width][height];
-                rippleNeighbors = 3;
-                doRippleFOVLimited(startx, starty);
+                lightMap = doRippleFOV(lightMap, 3, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
                 break;
             case RIPPLE_TIGHT:
-                indirect = new boolean[width][height];
-                rippleNeighbors = 1;
-                doRippleFOVLimited(startx, starty);
+                lightMap = doRippleFOV(lightMap, 1, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
                 break;
             case RIPPLE_VERY_LOOSE:
-                indirect = new boolean[width][height];
-                rippleNeighbors = 6;
-                doRippleFOVLimited(startx, starty);
+                lightMap = doRippleFOV(lightMap, 6, startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
                 break;
             case SHADOW:
+                // hotfix for too large radius -> set to longest possible straight-line Manhattan distance instead
+                // does not cause problems with brightness falloff because shadowcasting is on/off
+                // TODO do proper fix for shadowCast
+                if (rad > width + height){
+                    rad = width + height;
+                }
                 int ctr = 0;
                 boolean started = false;
                 for (Direction d : ccw) {
@@ -330,8 +250,8 @@ public class FOV {
                     if (started) {
                         if(ctr < 4 && angle < Math.PI / 2.0 * (ctr - 1) - span / 2.0)
                             break;
-                        shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0);
-                        shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY);
+                        lightMap = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique, angle2, span2);
+                        lightMap = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique, angle2, span2);
                     }
                 }
                 break;
@@ -341,8 +261,10 @@ public class FOV {
     }
 
 
-    private void doRippleFOV(int x, int y) {
+    private double[][] doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
         Deque<Coord> dq = new LinkedList<>();
+        int width = lightMap.length;
+        int height = lightMap[0].length;
         dq.offer(Coord.get(x, y));
         while (!dq.isEmpty()) {
             Coord p = dq.pop();
@@ -358,7 +280,7 @@ public class FOV {
                     continue;
                 }
 
-                double surroundingLight = nearRippleLight(x2, y2);
+                double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy);
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
@@ -367,11 +289,15 @@ public class FOV {
                 }
             }
         }
+        return lightMap;
     }
 
 
-    private void doRippleFOVLimited(int x, int y) {
+
+    private double[][] doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy, double angle, double span) {
         Deque<Coord> dq = new LinkedList<>();
+        int width = lightMap.length;
+        int height = lightMap[0].length;
         dq.offer(Coord.get(x, y));
         while (!dq.isEmpty()) {
             Coord p = dq.pop();
@@ -383,13 +309,13 @@ public class FOV {
                 int x2 = p.x + dir.deltaX;
                 int y2 = p.y + dir.deltaY;
                 if (x2 < 0 || x2 >= width || y2 < 0 || y2 >= height //out of bounds
-                        || radiusStrategy.radius(startx, starty, x2, y2) >= radius + 1) {  //+1 to cover starting tile
+                        || radiusStrategy.radius(startx, starty, x2, y2) >= radius + 1) {//+1 to cover starting tile
                     continue;
                 }
                 double newAngle = Math.atan2(y2 - starty, x2 - startx) + Math.PI * 2;
                 if(Math.abs(Math.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0) continue;
 
-                double surroundingLight = nearRippleLight(x2, y2);
+                double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy );
                 if (lightMap[x2][y2] < surroundingLight) {
                     lightMap[x2][y2] = surroundingLight;
                     if (map[x2][y2] < 1) {//make sure it's not a wall
@@ -398,26 +324,40 @@ public class FOV {
                 }
             }
         }
+        return lightMap;
     }
 
-    private double nearRippleLight(int x, int y) {
+    private double nearRippleLight(int x, int y, int rippleNeighbors, int startx, int starty, double decay, double[][] lightMap, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
         if (x == startx && y == starty) {
             return 1;
         }
-
+        int width = lightMap.length;
+        int height = lightMap[0].length;
         List<Coord> neighbors = new ArrayList<>();
+        double tmpDistance = 0, testDistance;
+        Coord c;
         for (Direction di : Direction.OUTWARDS) {
             int x2 = x + di.deltaX;
             int y2 = y + di.deltaY;
             if (x2 >= 0 && x2 < width && y2 >= 0 && y2 < height) {
-                neighbors.add(Coord.get(x2, y2));
+                tmpDistance = radiusStrategy.radius(startx, starty, x2, y2);
+                int idx = 0;
+                for(int i = 0; i < neighbors.size() && i <= rippleNeighbors; i++)
+                {
+                    c = neighbors.get(i);
+                    testDistance = radiusStrategy.radius(startx, starty, c.x, c.y);
+                    if(tmpDistance < testDistance) {
+                        break;
+                    }
+                    idx++;
+                }
+                neighbors.add(idx, Coord.get(x2, y2));
             }
         }
 
         if (neighbors.isEmpty()) {
             return 0;
         }
-        Collections.sort(neighbors, comp);
         neighbors = neighbors.subList(0, rippleNeighbors);
 /*
         while (neighbors.size() > rippleNeighbors) {
@@ -451,11 +391,15 @@ public class FOV {
         return light;
     }
 
-    private void shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy) {
+    private double[][] shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                  double radius, int startx, int starty, double decay, double[][] lightMap,
+                                  double[][] map, Radius radiusStrategy) {
         double newStart = 0;
         if (start < end) {
-            return;
+            return lightMap;
         }
+        int width = lightMap.length;
+        int height = lightMap[0].length;
 
         boolean blocked = false;
         for (int distance = row; distance <= radius && !blocked; distance++) {
@@ -466,7 +410,7 @@ public class FOV {
                 double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
                 double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
 
-                if (!(currentX >= 0 && currentY >= 0 && currentX < this.width && currentY < this.height) || start < rightSlope) {
+                if (!(currentX >= 0 && currentY >= 0 && currentX < width && currentY < height) || start < rightSlope) {
                     continue;
                 } else if (end > leftSlope) {
                     break;
@@ -489,18 +433,23 @@ public class FOV {
                 } else {
                     if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
                         blocked = true;
-                        shadowCast(distance + 1, start, leftSlope, xx, xy, yx, yy);
+                        lightMap = shadowCast(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy);
                         newStart = rightSlope;
                     }
                 }
             }
         }
+        return lightMap;
     }
-    private void shadowCastLimited(int row, double start, double end, int xx, int xy, int yx, int yy) {
+    private double[][] shadowCastLimited(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                         double radius, int startx, int starty, double decay, double[][] lightMap,
+                                         double[][] map, Radius radiusStrategy, double angle, double span) {
         double newStart = 0;
         if (start < end) {
-            return;
+            return lightMap;
         }
+        int width = lightMap.length;
+        int height = lightMap[0].length;
 
         boolean blocked = false;
         for (int distance = row; distance <= radius && !blocked; distance++) {
@@ -511,7 +460,7 @@ public class FOV {
                 double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
                 double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
 
-                if (!(currentX >= 0 && currentY >= 0 && currentX < this.width && currentY < this.height) || start < rightSlope) {
+                if (!(currentX >= 0 && currentY >= 0 && currentX < width && currentY < height) || start < rightSlope) {
                     continue;
                 } else if (end > leftSlope) {
                     break;
@@ -535,11 +484,12 @@ public class FOV {
                 } else {
                     if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
                         blocked = true;
-                        shadowCastLimited(distance + 1, start, leftSlope, xx, xy, yx, yy);
+                        lightMap = shadowCastLimited(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy, angle, span);
                         newStart = rightSlope;
                     }
                 }
             }
         }
+        return lightMap;
     }
 }

@@ -176,10 +176,10 @@ public class SnowmanGame {
                 walls[x][y] = map[x][y].isWall() ? 1.0 : 0.0;
             }
         }
-        fov.calculateFOV(walls, player.x, player.y, width + height);
+        double[][] seen = fov.calculateFOV(walls, player.x, player.y, width + height);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                map[x][y].setSeen(fov.isLit(x, y));
+                map[x][y].setSeen(seen[x][y] > 0.0);
             }
         }
     }
