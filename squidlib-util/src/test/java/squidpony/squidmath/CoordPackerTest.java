@@ -13,12 +13,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.HashSet;
 
 
 /**
  * Created by Tommy Ettinger on 10/1/2015.
  */
 public class CoordPackerTest {
+    public static int FOV_RANGE = 12;
+    public static Radius RADIUS = Radius.SQUARE;
+
     public void printBits16(int n) {
         for (int i = 0x8000; i > 0; i >>= 1)
             System.out.print((n & i) > 0 ? 1 : 0);
@@ -76,7 +80,7 @@ public class CoordPackerTest {
         Coord viewer;
         for (int t = 0; t < 100; t++) {
             viewer = dungeonGenerator.utility.randomFloor(map);
-            seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
+            seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
             packed = CoordPacker.pack(seen);
 
             unpacked = CoordPacker.unpack(packed, seen.length, seen[0].length);
@@ -123,7 +127,7 @@ public class CoordPackerTest {
         Coord viewer;
         for (int t = 0; t < 100; t++) {
             viewer = dungeonGenerator.utility.randomFloor(map);
-            seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
+            seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
             packed = CoordPacker.pack(seen);
 
             unpacked = CoordPacker.unpack(packed, seen.length, seen[0].length);
@@ -197,61 +201,111 @@ public class CoordPackerTest {
     @Test
     public void testPackMultiOptimalParameters()
     {
-        StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(240, 240, rng);
-        dungeonGenerator.addDoors(15, true);
-        dungeonGenerator.addWater(25);
-        dungeonGenerator.addTraps(2);
-        char[][] map = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        for(int FOV_RANGE = 1; FOV_RANGE < 21; FOV_RANGE++) {
+            StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
+            DungeonGenerator dungeonGenerator = new DungeonGenerator(240, 240, rng);
+            dungeonGenerator.addDoors(15, true);
+            dungeonGenerator.addWater(25);
+            dungeonGenerator.addTraps(2);
+            char[][] map = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+            double[][] resMap = DungeonUtility.generateResistances(map), seen;
 
-        FOV fov = new FOV(FOV.RIPPLE);
-        Coord viewer = dungeonGenerator.utility.randomFloor(map);
+            FOV fov = new FOV(FOV.RIPPLE);
+            double[] packingLevels = CoordPacker.generatePackingLevels(FOV_RANGE),
+                    lightLevels = CoordPacker.generateLightLevels(FOV_RANGE);
+            short[][] packed;
+            int ramPacked = 0, ramFloat = 0, ramDouble = 0;
+            Coord viewer;
+            HashSet<Double> seenValues = new HashSet<Double>(FOV_RANGE * 2);
+            System.out.println("Packing levels at range " + FOV_RANGE + ": ");
+            for (Double d : packingLevels) {
+                System.out.print(d + "  ");
+            }
+            System.out.println();
+            System.out.println("Light levels at range " + FOV_RANGE + ": ");
+            for (Double d : lightLevels) {
+                System.out.print(d + "  ");
+            }
+            System.out.println();
 
-        //System.out.println(dungeonGenerator.toString());
+            for (int t = 0; t < 100; t++) {
+                viewer = dungeonGenerator.utility.randomFloor(map);
+                seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
+                packed = CoordPacker.packMulti(seen, packingLevels);
 
-        double[][] resMap = DungeonUtility.generateResistances(map);
-        double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
-        double[] lightLevels = new double[]{0.125, 0.25, 0.125 * 3, 0.5, 0.125 * 5, 0.75, 0.125 * 7, 1.0};
-        short[][] packed = CoordPacker.packMulti(seen, lightLevels);
-        System.out.println("Appropriate Parameter packed values");
-        for(int p = 0; p < packed.length; p++) {
-            System.out.print(packed[p][0]);
-            for (int i = 1; i < packed[p].length; i++) {
-                System.out.print(", " + (packed[p][i] & 0xffff));
+                for (int j = 0; j < seen[0].length; j++) {
+                    for (int i = 0; i < seen.length; i++) {
+                        seenValues.add(seen[i][j]);
+                    }
+                }
+
+                for (int ll = 0; ll < lightLevels.length; ll++) {
+                    boolean[][] unpackedB = CoordPacker.unpack(packed[ll], seen.length, seen[0].length);
+                    for (int i = 0; i < unpackedB.length; i++) {
+                        for (int j = 0; j < unpackedB[i].length; j++) {
+                            assertTrue((seen[i][j] > packingLevels[ll]) == unpackedB[i][j]);
+                        }
+                    }
+                    if (ll + 1 == lightLevels.length) {
+                        assertTrue(packed[ll].length == 2);
+                        assertTrue(CoordPacker.queryPacked(packed[ll], viewer.x, viewer.y));
+                    }
+                }
+                double[][] unpacked2 = CoordPacker.unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
+                for (int j = 0; j < seen[0].length; j++) {
+                    for (int i = 0; i < seen.length; i++) {
+                        if(Math.abs(seen[i][j] - unpacked2[i][j]) >= 0.75 / FOV_RANGE) {
+                            System.out.println( "seen " + seen[i][j] + ", unpacked " + unpacked2[i][j]);
+                            System.out.println(seen[i][j] - unpacked2[i][j]);
+
+                            System.out.println("Values present in seen at range " + FOV_RANGE + ": ");
+                            for (Double d : seenValues) {
+                                System.out.print(d + "  ");
+                            }
+                        }
+                        assertTrue(Math.abs(seen[i][j] - unpacked2[i][j]) < 0.75 / FOV_RANGE);
+                    }
+                }
+                ramPacked += arrayMemoryUsageJagged(packed);
+                ramFloat += arrayMemoryUsage2D(seen.length, seen[0].length, 4);
+                ramDouble += arrayMemoryUsage2D(seen.length, seen[0].length, 8);
+            }
+            //System.out.println(dungeonGenerator.toString());
+            /*
+            System.out.println("Appropriate Parameter packed values " + FOV_RANGE);
+            for (int p = 0; p < packed.length; p++) {
+                if (packed[p].length == 0) continue;
+                System.out.print(packed[p][0]);
+                for (int i = 1; i < packed[p].length; i++) {
+                    System.out.print(", " + (packed[p][i] & 0xffff));
+                }
+                System.out.println();
+            }*/
+            //assertEquals("Packed shorts", 19, packed.length);
+            //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+            System.out.println("Memory used by multi-packed short[][] (Appropriate " + FOV_RANGE + "):" +
+                    ramPacked / 100.0 + " bytes");
+            System.out.println("Memory used by double[][] (Appropriate " + FOV_RANGE + "):" +
+                    ramDouble / 100.0 + " bytes");
+            System.out.println("Memory used by float[][] (Appropriate " + FOV_RANGE + "):" +
+                    ramFloat / 100.0 + " bytes");
+            System.out.println("Compression vs. double[][] (Appropriate " + FOV_RANGE + "):" +
+                    100.0 * ramPacked / ramDouble + "%");
+            System.out.println("Compression vs. float[][] (Appropriate " + FOV_RANGE + "):" +
+                    100.0 * ramPacked / ramFloat + "%");
+        }
+        /*
+        byte[][] unpacked3 = CoordPacker.unpackMultiByte(packed, seen.length, seen[0].length);
+        for (int j = 0; j < seen[0].length; j++) {
+            for (int i = 0; i < seen.length; i++) {
+                System.out.print(String.format("%x", unpacked3[i][j]));
             }
             System.out.println();
         }
-        //assertEquals("Packed shorts", 19, packed.length);
-        //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
-        System.out.println("Memory used by multi-packed short[][] (Appropriate):" +
-                arrayMemoryUsageJagged(packed) + " bytes");
-        System.out.println("Memory used by double[][] (Appropriate):" +
-                arrayMemoryUsage2D(240, 240, 8) + " bytes");
-        System.out.println("Memory used by float[][] (Appropriate):" +
-                arrayMemoryUsage2D(240, 240, 4) + " bytes");
-        System.out.println("Compression vs. double[][] (Appropriate):" +
-                100.0 * arrayMemoryUsageJagged(packed) / arrayMemoryUsage2D(240, 240, 8) + "%");
-        System.out.println("Compression vs. float[][] (Appropriate):" +
-                100.0 * arrayMemoryUsageJagged(packed) / arrayMemoryUsage2D(240, 240, 4) + "%");
-        for(int ll = 0; ll < lightLevels.length; ll++) {
-            boolean[][] unpacked = CoordPacker.unpack(packed[ll], seen.length, seen[0].length);
-            for (int i = 0; i < unpacked.length; i++) {
-                for (int j = 0; j < unpacked[i].length; j++) {
-                    assertTrue((seen[i][j] >= lightLevels[ll]) == unpacked[i][j]);
-                }
-            }
-            if(ll + 1 == lightLevels.length)
-            {
-                assertTrue(packed[ll].length == 2);
-                assertTrue(CoordPacker.queryPacked(packed[ll], viewer.x, viewer.y));
-            }
-        }
-        double[][] unpacked2 = CoordPacker.unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
-        for (int i = 0; i < unpacked2.length; i++) {
-            for (int j = 0; j < unpacked2[i].length; j++) {
-                assertTrue(seen[i][j] == unpacked2[i][j]);
-            }
-        }
+        System.out.println();
+        */
+
+
         /*
         byte[][] unpacked3 = CoordPacker.unpackMultiByte(packed, seen.length, seen[0].length);
         for (int j = 0; j < seen[0].length; j++) {
@@ -271,84 +325,98 @@ public class CoordPackerTest {
 
     @Test
     public void testPackMultiPoorParameters() {
-        StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 70, rng);
-        dungeonGenerator.addDoors(15, true);
-        dungeonGenerator.addWater(25);
-        dungeonGenerator.addTraps(2);
-        char[][] map = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        for(int FOV_RANGE = 1; FOV_RANGE < 21; FOV_RANGE++) {
+            StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
+            DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 70, rng);
+            dungeonGenerator.addDoors(15, true);
+            dungeonGenerator.addWater(25);
+            dungeonGenerator.addTraps(2);
+            char[][] map = dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+            double[][] resMap = DungeonUtility.generateResistances(map), seen;
 
-        FOV fov = new FOV(FOV.RIPPLE);
-        Coord viewer = dungeonGenerator.utility.randomFloor(map);
+            FOV fov = new FOV(FOV.RIPPLE);
 
-        //System.out.println(dungeonGenerator.toString());
-
-        double[][] resMap = DungeonUtility.generateResistances(map);
-        double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
-        double[] lightLevels = new double[]{0.125, 0.25, 0.125 * 3, 0.5, 0.125 * 5, 0.75, 0.125 * 7, 1.0};
-        short[][] packed = CoordPacker.packMulti(seen, lightLevels);
-        System.out.println("Poor Parameter packed values");
-        for(int p = 0; p < packed.length; p++) {
-            System.out.print(packed[p][0]);
-            for (int i = 1; i < packed[p].length; i++) {
-                System.out.print(", " + (packed[p][i] & 0xffff));
+            double[] packingLevels = CoordPacker.generatePackingLevels(FOV_RANGE),
+                      lightLevels = CoordPacker.generateLightLevels(FOV_RANGE);
+            short[][] packed;
+            int ramPacked = 0, ramFloat = 0, ramDouble = 0;
+            Coord viewer;
+            HashSet<Double> seenValues = new HashSet<Double>(FOV_RANGE * 2);
+            System.out.println("Packing levels at range " + FOV_RANGE + ": ");
+            for (Double d : packingLevels) {
+                System.out.print(d + "  ");
             }
             System.out.println();
-        }
-        /*
-        System.out.print(packed[0]);
-        for (int i = 1; i < packed.length; i++) {
-            System.out.print(", " + (packed[i] & 0xffff));
-        }*/
-        //assertEquals("Packed shorts", 29, packed.length);
-        //assertEquals("Unpacked doubles: ", 2100, seen.length * seen[0].length);
-        System.out.println("Memory used by multi-packed short[][] (Approaching Worst-Case):" +
-                arrayMemoryUsageJagged(packed) + " bytes");
-        System.out.println("Memory used by double[][] (Approaching Worst-Case):" +
-                arrayMemoryUsage2D(30, 70, 8) + " bytes");
-        System.out.println("Memory used by float[][] (Approaching Worst-Case):" +
-                arrayMemoryUsage2D(30, 70, 4) + " bytes");
-        System.out.println("Compression vs. double[][] (Approaching Worst-Case):" +
-                100.0 * arrayMemoryUsageJagged(packed) / arrayMemoryUsage2D(30, 70, 8) + "%");
-        System.out.println("Compression vs. float[][] (Approaching Worst-Case):" +
-                100.0 * arrayMemoryUsageJagged(packed) / arrayMemoryUsage2D(30, 70, 4) + "%");
-
-        for (int ll = 0; ll < lightLevels.length; ll++) {
-            boolean[][] unpacked = CoordPacker.unpack(packed[ll], seen.length, seen[0].length);
-            for (int i = 0; i < unpacked.length; i++) {
-                for (int j = 0; j < unpacked[i].length; j++) {
-                    assertTrue((seen[i][j] >= lightLevels[ll]) == unpacked[i][j]);
+            System.out.println("Light levels at range " + FOV_RANGE + ": ");
+            for (Double d : lightLevels) {
+                System.out.print(d + "  ");
+            }
+            for (int t = 0; t < 100; t++) {
+                viewer = dungeonGenerator.utility.randomFloor(map);
+                seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
+                packed = CoordPacker.packMulti(seen, packingLevels);
+                for (int j = 0; j < seen[0].length; j++) {
+                    for (int i = 0; i < seen.length; i++) {
+                        seenValues.add(seen[i][j]);
+                    }
                 }
-            }
-            if(ll + 1 == lightLevels.length)
-            {
-                assertTrue(packed[ll].length == 2);
-                assertTrue(CoordPacker.queryPacked(packed[ll], viewer.x, viewer.y));
-            }
-        }
 
-        double[][] unpacked2 = CoordPacker.unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
-        for (int i = 0; i < unpacked2.length; i++) {
-            for (int j = 0; j < unpacked2[i].length; j++) {
-                assertTrue(seen[i][j] == unpacked2[i][j]);
+                for (int ll = 0; ll < lightLevels.length; ll++) {
+                    boolean[][] unpackedB = CoordPacker.unpack(packed[ll], seen.length, seen[0].length);
+                    for (int i = 0; i < unpackedB.length; i++) {
+                        for (int j = 0; j < unpackedB[i].length; j++) {
+                            assertTrue((seen[i][j] > packingLevels[ll]) == unpackedB[i][j]);
+                        }
+                    }
+                    if (ll + 1 == lightLevels.length) {
+                        assertTrue(packed[ll].length == 2);
+                        assertTrue(CoordPacker.queryPacked(packed[ll], viewer.x, viewer.y));
+                    }
+                }
+                double[][] unpacked2 = CoordPacker.unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
+                for (int j = 0; j < seen[0].length; j++) {
+                    for (int i = 0; i < seen.length; i++) {
+                        if(Math.abs(seen[i][j] - unpacked2[i][j]) >= 0.75 / FOV_RANGE)
+                        {
+                            System.out.println( "seen " + seen[i][j] + ", unpacked " + unpacked2[i][j]);
+                            System.out.println(seen[i][j] - unpacked2[i][j]);
+                            System.out.println("Values present in seen at range " + FOV_RANGE + ": ");
+                            for (Double d : seenValues) {
+                                System.out.print(d + "  ");
+                            }
+                            System.out.println();
+                        }
+                        assertTrue(Math.abs(seen[i][j] - unpacked2[i][j]) < 0.75 / FOV_RANGE);
+                    }
+                }
+                ramPacked += arrayMemoryUsageJagged(packed);
+                ramFloat += arrayMemoryUsage2D(seen.length, seen[0].length, 4);
+                ramDouble += arrayMemoryUsage2D(seen.length, seen[0].length, 8);
             }
+            //System.out.println(dungeonGenerator.toString());
+            /*
+            System.out.println("Appropriate Parameter packed values " + FOV_RANGE);
+            for (int p = 0; p < packed.length; p++) {
+                if (packed[p].length == 0) continue;
+                System.out.print(packed[p][0]);
+                for (int i = 1; i < packed[p].length; i++) {
+                    System.out.print(", " + (packed[p][i] & 0xffff));
+                }
+                System.out.println();
+            }*/
+            //assertEquals("Packed shorts", 19, packed.length);
+            //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+            System.out.println("Memory used by multi-packed short[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+                    ramPacked / 100.0 + " bytes");
+            System.out.println("Memory used by double[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+                    ramDouble / 100.0 + " bytes");
+            System.out.println("Memory used by float[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+                    ramFloat / 100.0 + " bytes");
+            System.out.println("Compression vs. double[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+                    100.0 * ramPacked / ramDouble + "%");
+            System.out.println("Compression vs. float[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
+                    100.0 * ramPacked / ramFloat + "%");
         }
-        /*
-        byte[][] unpacked3 = CoordPacker.unpackMultiByte(packed, seen.length, seen[0].length);
-        for (int j = 0; j < seen[0].length; j++) {
-            for (int i = 0; i < seen.length; i++) {
-                System.out.print(unpacked3[i][j]);
-            }
-            System.out.println();
-        }
-        System.out.println();
-        for (int j = 0; j < seen[0].length; j++) {
-            for (int i = 0; i < seen.length; i++) {
-                System.out.print((int) (seen[i][j] * 8.05));
-            }
-            System.out.println();
-        }
-        */
     }
 
 
