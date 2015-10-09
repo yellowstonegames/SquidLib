@@ -547,7 +547,7 @@ public class CoordPacker {
                 // sets the bit at position l in current to 1 if the following is true, 0 if it is false:
                 //     map[x][y] > l
                 // looks more complicated than it is.
-                current ^= ((map[x][y] > l ? -1 : 0) ^ current) & (1 << l);
+                current ^= ((map[x][y] > l ? -1L : 0L) ^ current) & (1L << l);
                 if (((current >> l) & 1L) != ((on >> l) & 1L)) {
                     packing[l].add((short) skip[l]);
                     skip[l] = 0;

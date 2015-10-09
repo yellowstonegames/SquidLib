@@ -15,27 +15,39 @@ public class FOVCacheTest {
     @Test
     public void testCacheAll()
     {
-        StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(60, 60, rng);
-        dungeonGenerator.addDoors(15, true);
-        dungeonGenerator.addWater(25);
-        dungeonGenerator.addTraps(2);
-        char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
+        int width = 60;
+        int height = 60;
+        for (long r = 0, seed = 0xF00D; r < 8; r++, seed ^= seed << 2) {
 
-        FOV fov = new FOV();
-        FOVCache cache = new FOVCache(fov, map, 16, Radius.CIRCLE, 4);
-        /*Coord walkable = dungeonGenerator.utility.randomFloor(map);
-        byte[][] gradient = cache.waveFOV(walkable.x, walkable.y);
-        for (int j = 0; j < map[0].length; j++) {
-            for (int i = 0; i < map.length; i++) {
-                if(gradient[i][j] > 0)
-                    System.out.print(gradient[i][j]);
-                else
-                    System.out.print(' ');
-                System.out.print(map[i][j]);
+
+            StatefulRNG rng = new StatefulRNG(new LightRNG(seed));
+            DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
+            dungeonGenerator.addDoors(15, true);
+            dungeonGenerator.addWater(25);
+            //dungeonGenerator.addTraps(2);
+            char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
+
+            FOV fov = new FOV();
+            FOVCache cache = new FOVCache(fov, map, 62, Radius.CIRCLE, 8);
+            Coord walkable = dungeonGenerator.utility.randomFloor(map);
+
+            cache.cacheAll();
+            byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
+            for (int j = 0; j < map[0].length; j++) {
+                for (int i = 0; i < map.length; i++) {
+                    if (gradient[i][j] > 0)
+                        System.out.print((char) (gradient[i][j] + 60));
+                    else
+                        System.out.print(' ');
+                    System.out.print(map[i][j]);
+                }
+                System.out.println();
             }
-            System.out.println();
+        }
+/*        for (int n = 1; n < 8; n++) {
+            System.out.println("With viewer at " + walkable.x + "," + walkable.y + " and target at " +
+                    (walkable.x - 1) + "," + (walkable.y + n) + ": Can they see each other? " +
+                    cache.isCellVisible(16, walkable.x, walkable.y, walkable.x - 1, walkable.y + n));
         }*/
-        cache.cacheAll();
     }
 }
