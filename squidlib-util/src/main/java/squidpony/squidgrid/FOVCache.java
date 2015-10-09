@@ -2,6 +2,7 @@ package squidpony.squidgrid;
 
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.ShortVLA;
 
 import java.util.ArrayList;
@@ -30,10 +31,11 @@ public class FOVCache {
     protected FOV fov;
     protected short[][] ALL_WALLS;
     private double[][] atan2Cache, directionAngles;
-    private byte[][] distanceCache;
+    private short[][] distanceCache;
     private Coord[][] waves;
     protected final int NUM_THREADS;
-    private static final double HALF_PI = Math.PI * 0.5, QUARTER_PI = Math.PI * 0.25125, PI2 = Math.PI * 2;
+    private static final double HALF_PI = Math.PI * 0.5, QUARTER_PI = Math.PI * 0.25125,
+            SLIVER_PI = Math.PI * 0.05, PI2 = Math.PI * 2;
     public FOVCache(FOV fov, char[][] map, int maxRadius, Radius radiusKind)
     {
         if(map == null || map.length == 0)
@@ -84,7 +86,7 @@ public class FOVCache {
     private void preloadMeasurements()
     {
         atan2Cache = new double[maxRadius * 2 + 1][maxRadius * 2 + 1];
-        distanceCache = new byte[maxRadius * 2 + 1][maxRadius * 2 + 1];
+        distanceCache = new short[maxRadius * 2 + 1][maxRadius * 2 + 1];
         waves = new Coord[maxRadius + 1][];
         waves[0] = new Coord[]{Coord.get(maxRadius, maxRadius)};
 
@@ -92,11 +94,11 @@ public class FOVCache {
         for (int i = 0; i < maxRadius + 1; i++) {
             positionsAtDistance[i] = new ShortVLA(i * 8 + 1);
         }
-        byte tmp, inverse_tmp;
+        short tmp, inverse_tmp;
         for (int i = 0; i <= maxRadius; i++) {
             for (int j = 0; j <= maxRadius; j++) {
                 tmp = distance(i, j);
-                inverse_tmp = (byte)(maxRadius * 2 - tmp);
+                inverse_tmp = (short)(maxRadius - tmp / 2);
 
                 atan2Cache[maxRadius + i][maxRadius + j] = Math.atan2(j, i);
                 if(tmp > 0) {
@@ -248,11 +250,17 @@ public class FOVCache {
         if (resMap[viewerX][viewerY] >= 1.0) {
             return ALL_WALLS;
         }
-        return packMulti(waveFOV(viewerX, viewerY), maxRadius);
+        return packMulti(waveFOV(viewerX, viewerY), maxRadius + 1);
     }
     public short[][] getCacheEntry(int x, int y)
     {
         return cache[x + y * width];
+    }
+
+    public boolean isCellVisible(int visionRange, int viewerX, int viewerY, int targetX, int targetY)
+    {
+        return queryPacked(cache[viewerX + viewerY  * width][maxRadius - visionRange], targetX, targetY) ||
+                queryPacked(cache[targetX + targetY  * width][maxRadius - visionRange], viewerX, viewerY);
     }
 
     public void cacheAll() {
@@ -301,6 +309,7 @@ public class FOVCache {
         Coord pt;
         double theta, angleCW, angleCCW, straight;
         byte dist;
+        boolean blockedCCW, blockedCW;
         for(int w = 0; w < waves.length; w++)
         {
             for(int c = 0; c < waves[w].length; c++)
@@ -311,7 +320,7 @@ public class FOVCache {
                 if(cx < width && cx >= 0 && cy < height && cy >= 0)
                 {
                     theta = atan2Cache[pt.x][pt.y];
-                    dist = (byte)(distanceCache[pt.x][pt.y] / 2);
+                    dist = (byte)(distanceCache[pt.x][pt.y ] + 1);
 
                     if(w <= 0)
                     {
@@ -324,11 +333,11 @@ public class FOVCache {
                             case 0:
                                 nearCCWx = pt.x - 1;
                                 nearCCWy = pt.y;
-                                angleCCW = directionAngles[0][1];
+                                angleCCW = directionAngles[0][1]; //atan2Cache[nearCCWx][nearCCWy];
                                 straight = angleCCW;
                                 nearCWx = pt.x - 1;
                                 nearCWy = pt.y - 1;
-                                angleCW = directionAngles[0][0];
+                                angleCW = directionAngles[0][0]; //atan2Cache[nearCWx][nearCWy];
                                 break;
                             //positive x, postive y, closer to y-axis
                             case 1:
@@ -365,7 +374,7 @@ public class FOVCache {
                             case -4:
                                 nearCWx = pt.x + 1;
                                 nearCWy = pt.y;
-                                angleCW = directionAngles[2][1];
+                                angleCW = -directionAngles[2][1];
                                 straight = angleCW;
                                 nearCCWx = pt.x + 1;
                                 nearCCWy = pt.y + 1;
@@ -407,29 +416,43 @@ public class FOVCache {
                         nearCWx += viewerX - maxRadius;
                         nearCCWy += viewerY - maxRadius;
                         nearCWy += viewerY - maxRadius;
+
+                        blockedCCW = resMap[nearCCWx][nearCCWy] > 0.5 ||
+                                angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius] >= PI2;
+                        blockedCW = resMap[nearCWx][nearCWy] > 0.5 ||
+                                angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius] >= PI2;
+
                         if( theta == 0 || theta == Math.PI || (Math.abs(theta) - HALF_PI < 0.005 && Math.abs(theta) - HALF_PI > -0.005))
                             angleMap[pt.x][pt.y] = (straight == angleCCW)
-                                    ?  (resMap[nearCCWx][nearCCWy] > 0.5)
+                                    ?  (blockedCCW)
                                       ? PI2
                                       : angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius]
-                                    : (resMap[nearCWx][nearCWy] > 0.5)
+                                    : (blockedCW)
                                       ? PI2
                                       : angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius];
                         else {
-                            if (resMap[nearCWx][nearCWy] > 0.5 && resMap[nearCCWx][nearCCWy] > 0.5) {
+                            if (blockedCW && blockedCCW) {
                                 angleMap[pt.x][pt.y] = PI2;
                                 continue;
                             }
-                            if (resMap[nearCWx][nearCWy] > 0.5) {
-                                angleMap[pt.x][pt.y] = Math.abs(theta - angleCCW);
-                            } else if (resMap[nearCCWx][nearCCWy] > 0.5) {
-                                angleMap[pt.x][pt.y] = Math.abs(angleCW - theta);
-                            } else {
-                                angleMap[pt.x][pt.y] = 0;
+                            if (blockedCW) {
+                                angleMap[pt.x][pt.y] = Math.abs(theta - angleCCW) + SLIVER_PI;
+                                        //angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius];
+                                        //Math.abs(angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius] -
+
+
+                                //angleMap[pt.x][pt.y] = Math.abs(theta - angleCCW) +
+                                //        angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius];
+
+                            } else if (blockedCCW) {
+                                angleMap[pt.x][pt.y] = Math.abs(angleCW - theta) + SLIVER_PI;
+                                //angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius];
+                                //angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius]
                             }
-                            angleMap[pt.x][pt.y] += 0.5 * (
-                                    angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius] +
-                                    angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius]);
+                            if (!blockedCW)
+                                angleMap[pt.x][pt.y] += 0.5 * angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius];
+                            if (!blockedCCW)
+                                angleMap[pt.x][pt.y] += 0.5 * angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius];
                         }
                         if(angleMap[pt.x][pt.y] <= QUARTER_PI)
                             gradientMap[cx][cy] = dist;
@@ -459,23 +482,23 @@ public class FOVCache {
                 return 2;
         }
     }
-    private byte distance(int x, int y) {
+    private short distance(int x, int y) {
         switch (radiusKind) {
             case CIRCLE:
             case SPHERE:
             {
                 if(x == y)
-                    return (byte)(3 * x);
+                    return (short)(3 * x);
                 else if(x < y)
-                    return (byte)(3 * x + 2 * (y - x));
+                    return (short)(3 * x + 2 * (y - x));
                 else
-                    return (byte)(3 * y + 2 * (x - y));
+                    return (short)(3 * y + 2 * (x - y));
             }
             case DIAMOND:
             case OCTAHEDRON:
-                return (byte)(2 * (x + y));
+                return (short)(2 * (x + y));
             default:
-                return (byte)(2 * Math.max(x, y));
+                return (short)(2 * Math.max(x, y));
         }
     }
 
