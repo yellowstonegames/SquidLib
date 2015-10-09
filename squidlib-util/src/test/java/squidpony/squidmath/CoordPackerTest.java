@@ -107,6 +107,8 @@ public class CoordPackerTest {
                 100.0 * ramPacked / ramDouble + "%");
         System.out.println("FOV Map stored for every cell, booleans, 240x240: " +
                 arrayMemoryUsage2D(240, 240, arrayMemoryUsage2D(240, 240, 1)));
+        System.out.println("FOV Map stored for every cell, floats, 240x240: " +
+                arrayMemoryUsage2D(240, 240, arrayMemoryUsage2D(240, 240, 4)));
     }
 
     @Test
@@ -154,6 +156,8 @@ public class CoordPackerTest {
                 100.0 * ramPacked / ramDouble + "%");
         System.out.println("FOV Map stored for every cell, booleans, 30x70: " +
                 arrayMemoryUsage2D(30, 70, arrayMemoryUsage2D(30, 70, 1)));
+        System.out.println("FOV Map stored for every cell, floats, 30x70: " +
+                arrayMemoryUsage2D(30, 70, arrayMemoryUsage2D(30, 70, 4)));
     }
     /*
     @Test
