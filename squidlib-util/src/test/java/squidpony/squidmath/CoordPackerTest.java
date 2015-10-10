@@ -63,6 +63,34 @@ public class CoordPackerTest {
     }
 
     @Test
+    public void testUnion() {
+        short[] union = CoordPacker.unionPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 12, 9, 1});
+        // 300, 5, 6, 8, 2, 4
+        // 290, 12, 9, 1
+        // =
+        // 290, 15, 6, 8, 2, 4
+        System.out.println("Union: ");
+        for (int i = 0; i < union.length; i++) {
+            System.out.print(union[i] + ", ");
+        }
+        System.out.println();
+        assertArrayEquals(new short[]{290, 15, 6, 8, 2, 4}, union);
+
+        short[] intersect = CoordPacker.intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 12, 9, 1});
+        // 300, 5, 6, 8, 2, 4
+        // 290, 12, 9, 1
+        // =
+        // 300, 2, 9, 1
+        System.out.println("Intersect: ");
+        for (int i = 0; i < intersect.length; i++) {
+            System.out.print(intersect[i] + ", ");
+        }
+        System.out.println();
+        assertArrayEquals(new short[]{300, 2, 9, 1}, intersect);
+
+
+    }
+    @Test
     public void testPackOptimalParameters()
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
@@ -221,6 +249,7 @@ public class CoordPackerTest {
             int ramPacked = 0, ramFloat = 0, ramDouble = 0;
             Coord viewer;
             HashSet<Double> seenValues = new HashSet<Double>(FOV_RANGE * 2);
+            /*
             System.out.println("Packing levels at range " + FOV_RANGE + ": ");
             for (Double d : packingLevels) {
                 System.out.print(d + "  ");
@@ -231,7 +260,7 @@ public class CoordPackerTest {
                 System.out.print(d + "  ");
             }
             System.out.println();
-
+            */
             for (int t = 0; t < 100; t++) {
                 viewer = dungeonGenerator.utility.randomFloor(map);
                 seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
@@ -258,6 +287,7 @@ public class CoordPackerTest {
                 double[][] unpacked2 = CoordPacker.unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
                 for (int j = 0; j < seen[0].length; j++) {
                     for (int i = 0; i < seen.length; i++) {
+                        /*
                         if(Math.abs(seen[i][j] - unpacked2[i][j]) >= 0.75 / FOV_RANGE) {
                             System.out.println( "seen " + seen[i][j] + ", unpacked " + unpacked2[i][j]);
                             System.out.println(seen[i][j] - unpacked2[i][j]);
@@ -267,9 +297,11 @@ public class CoordPackerTest {
                                 System.out.print(d + "  ");
                             }
                         }
+                        */
                         assertTrue(Math.abs(seen[i][j] - unpacked2[i][j]) < 0.75 / FOV_RANGE);
                     }
                 }
+
                 ramPacked += arrayMemoryUsageJagged(packed);
                 ramFloat += arrayMemoryUsage2D(seen.length, seen[0].length, 4);
                 ramDouble += arrayMemoryUsage2D(seen.length, seen[0].length, 8);
@@ -346,6 +378,7 @@ public class CoordPackerTest {
             int ramPacked = 0, ramFloat = 0, ramDouble = 0;
             Coord viewer;
             HashSet<Double> seenValues = new HashSet<Double>(FOV_RANGE * 2);
+            /*
             System.out.println("Packing levels at range " + FOV_RANGE + ": ");
             for (Double d : packingLevels) {
                 System.out.print(d + "  ");
@@ -355,6 +388,7 @@ public class CoordPackerTest {
             for (Double d : lightLevels) {
                 System.out.print(d + "  ");
             }
+            */
             for (int t = 0; t < 100; t++) {
                 viewer = dungeonGenerator.utility.randomFloor(map);
                 seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
@@ -380,6 +414,7 @@ public class CoordPackerTest {
                 double[][] unpacked2 = CoordPacker.unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
                 for (int j = 0; j < seen[0].length; j++) {
                     for (int i = 0; i < seen.length; i++) {
+                        /*
                         if(Math.abs(seen[i][j] - unpacked2[i][j]) >= 0.75 / FOV_RANGE)
                         {
                             System.out.println( "seen " + seen[i][j] + ", unpacked " + unpacked2[i][j]);
@@ -390,6 +425,7 @@ public class CoordPackerTest {
                             }
                             System.out.println();
                         }
+                        */
                         assertTrue(Math.abs(seen[i][j] - unpacked2[i][j]) < 0.75 / FOV_RANGE);
                     }
                 }
