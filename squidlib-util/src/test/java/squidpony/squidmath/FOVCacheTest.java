@@ -12,12 +12,11 @@ import squidpony.squidgrid.mapping.styled.TilesetType;
  * Created by Tommy Ettinger on 10/8/2015.
  */
 public class FOVCacheTest {
-    @Test
-    public void testCacheAll()
+    public static void main(String[] args)
     {
         int width = 60;
         int height = 60;
-        for (long r = 0, seed = 0xF00D; r < 8; r++, seed ^= seed << 2) {
+        for (long r = 0, seed = 0xD00D; r < 8; r++, seed ^= seed << 2) {
 
 
             StatefulRNG rng = new StatefulRNG(new LightRNG(seed));
@@ -28,7 +27,7 @@ public class FOVCacheTest {
             char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
 
             FOV fov = new FOV();
-            FOVCache cache = new FOVCache(fov, map, 62, Radius.CIRCLE, 8);
+            FOVCache cache = new FOVCache(fov, map, 20, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
 
             cache.cacheAll();
@@ -36,7 +35,7 @@ public class FOVCacheTest {
             for (int j = 0; j < map[0].length; j++) {
                 for (int i = 0; i < map.length; i++) {
                     if (gradient[i][j] > 0)
-                        System.out.print((char) (gradient[i][j] + 60));
+                        System.out.print((char) (gradient[i][j] + 65));
                     else
                         System.out.print(' ');
                     System.out.print(map[i][j]);
