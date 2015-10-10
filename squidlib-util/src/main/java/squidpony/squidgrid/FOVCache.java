@@ -2,11 +2,9 @@ package squidpony.squidgrid;
 
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.ShortVLA;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
