@@ -1102,8 +1102,8 @@ public class CoordPacker {
     /**
      * Encode a number n as a Gray code; Gray codes have a relation to the Hilbert curve and may be useful.
      * Source: http://xn--2-umb.com/15/hilbert , http://aggregate.org/MAGIC/#Gray%20Code%20Conversion
-     * @param n
-     * @return
+     * @param n any int
+     * @return the gray code for n
      */
     public static int grayEncode(int n){
         return n ^ (n >> 1);
@@ -1112,8 +1112,8 @@ public class CoordPacker {
     /**
      * Decode a number from a Gray code n; Gray codes have a relation to the Hilbert curve and may be useful.
      * Source: http://xn--2-umb.com/15/hilbert , http://aggregate.org/MAGIC/#Gray%20Code%20Conversion
-     * @param n
-     * @return
+     * @param n a gray code, as produced by grayEncode
+     * @return the decoded int
      */
     public static int grayDecode(int n) {
         int p = n;
@@ -1125,10 +1125,10 @@ public class CoordPacker {
     /**
      * Not currently used, may be used in the future.
      * Source: https://www.cs.dal.ca/research/techreports/cs-2006-07 ; algorithm provided in pseudocode
-     * @param n
-     * @param mask
-     * @param i
-     * @return
+     * @param n any int
+     * @param mask a bitmask that has some significance to the compacting algorithm
+     * @param i i is I have no clue
+     * @return some kind of magic
      */
     public static int grayCodeRank(int n, int mask, int i)
     {
@@ -1144,11 +1144,11 @@ public class CoordPacker {
     /**
      *
      * Source: https://www.cs.dal.ca/research/techreports/cs-2006-07 ; algorithm provided in pseudocode
-     * @param n
-     * @param mask
-     * @param altMask
-     * @param rank
-     * @return
+     * @param n a gray code, I think
+     * @param mask some bitmask or something? check the paper
+     * @param altMask another bitmask I guess, again, check the paper
+     * @param rank if I had to wager a guess, this is something about rank
+     * @return some other kind of magic
      */
     public static int grayCodeRankInverse(int n, int mask, int altMask, int rank)
     {

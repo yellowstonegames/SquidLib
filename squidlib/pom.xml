@@ -12,7 +12,7 @@
 		<relativePath>../</relativePath>
 	</parent>
 
-	<name>SquidLib</name>
+	<name>squidLib</name>
 	<description>SquidLib AWT display code. Please refer to https://github.com/SquidPony/SquidLib .</description>
 
 	<dependencies>

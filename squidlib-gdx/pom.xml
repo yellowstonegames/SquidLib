@@ -18,7 +18,7 @@
 			<version>2.4</version> <type>maven-plugin</type> <scope>compile</scope> </dependency> -->
 		<dependency>
 			<groupId>com.squidpony</groupId>
-			<artifactId>squidlib</artifactId>
+			<artifactId>squidlib-util</artifactId>
 			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 
