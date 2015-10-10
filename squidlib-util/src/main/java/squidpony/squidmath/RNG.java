@@ -236,7 +236,7 @@ public class RNG {
      * <br>
      * You should not modify {@code list} while you use the returned reference. And there'll be no
      * ConcurrentModificationException to detect such erroneous uses.
-     * @param list A list <b>with a constant-time {@link List#get(int) method</b> (otherwise performance degrades).
+     * @param list A list <b>with a constant-time {@link List#get(int)} method</b> (otherwise performance degrades).
      * @return An {@link Iterable} that iterates over {@code list} but start at
      *         a random index. If the chosen index is {@code i}, the iterator
      *         will return:
