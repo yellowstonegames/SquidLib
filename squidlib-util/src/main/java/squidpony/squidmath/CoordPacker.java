@@ -733,6 +733,151 @@ public class CoordPacker {
         return cs;
     }
 
+    public static short[] unionPacked(short[] left, short[] right)
+    {
+        if(left.length == 0)
+            return right;
+        if(right.length == 0)
+            return left;
+        ShortVLA packing = new ShortVLA(64);
+        boolean on = false, onLeft = false, onRight = false;
+        int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
+        while (elemLeft < left.length || elemRight < right.length) {
+            if (elemLeft >= left.length) {
+                totalLeft = 0xffff;
+                onLeft = false;
+            }
+            else if(totalLeft <= idx) {
+                totalLeft += left[elemLeft];
+            }
+            if(elemRight >= right.length) {
+                totalRight = 0xffff;
+                onRight = false;
+            }
+            else if(totalRight <= idx) {
+                totalRight += right[elemRight];
+            }
+            // 300, 5, 6, 8, 2, 4
+            // 290, 12, 9, 1
+            // =
+            // 290, 15, 6, 8, 2, 4
+            // 290 off in both, 10 in right, 2 in both, 3 in left, 6 off in both, 1 on in both, 7 on in left, 2 off in
+            //     both, 4 on in left
+            if(totalLeft < totalRight)
+            {
+                onLeft = !onLeft;
+                skip += totalLeft - idx;
+                idx = totalLeft;
+                if(on != (onLeft || onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemLeft++;
+            }
+            else if(totalLeft == totalRight)
+            {
+                onLeft = !onLeft;
+                onRight = !onRight;
+                skip += totalLeft - idx;
+                idx = totalLeft;
+                if(on != (onLeft || onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemLeft++;
+                elemRight++;
+
+            }
+            else
+            {
+                onRight = !onRight;
+                skip += totalRight - idx;
+                idx = totalRight;
+                if(on != (onLeft || onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemRight++;
+            }
+        }
+        return packing.shrink();
+    }
+    public static short[] intersectPacked(short[] left, short[] right)
+    {
+        if(left.length == 0)
+            return right;
+        if(right.length == 0)
+            return left;
+        ShortVLA packing = new ShortVLA(64);
+        boolean on = false, onLeft = false, onRight = false;
+        int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
+        while (elemLeft < left.length || elemRight < right.length) {
+            if (elemLeft >= left.length) {
+                totalLeft = 0xffff;
+                onLeft = false;
+            }
+            else if(totalLeft <= idx) {
+                totalLeft += left[elemLeft];
+            }
+            if(elemRight >= right.length) {
+                totalRight = 0xffff;
+                onRight = false;
+            }
+            else if(totalRight <= idx) {
+                totalRight += right[elemRight];
+            }
+            // 300, 5, 6, 8, 2, 4
+            // 290, 12, 9, 1
+            // =
+            // 300, 2, 9, 1
+            // 290 off in both, 10 in right, 2 in both, 3 in left, 6 off in both, 1 on in both, 7 on in left, 2 off in
+            //     both, 4 on in left
+            if(totalLeft < totalRight)
+            {
+                onLeft = !onLeft;
+                skip += totalLeft - idx;
+                idx = totalLeft;
+                if(on != (onLeft && onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemLeft++;
+            }
+            else if(totalLeft == totalRight)
+            {
+                onLeft = !onLeft;
+                onRight = !onRight;
+                skip += totalLeft - idx;
+                idx = totalLeft;
+                if(on != (onLeft && onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemLeft++;
+                elemRight++;
+
+            }
+            else
+            {
+                onRight = !onRight;
+                skip += totalRight - idx;
+                idx = totalRight;
+                if(on != (onLeft && onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemRight++;
+            }
+        }
+        return packing.shrink();
+    }
+
     /**
      * Compresses a double[][] (typically one generated by {@link squidpony.squidgrid.FOV}) that only stores two
      * relevant states (one of which should be 0 or less, the other greater than 0), returning a short[] as described in
