@@ -8,17 +8,18 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 
+import static org.junit.Assert.*;
+
 /**
  * Created by Tommy Ettinger on 10/8/2015.
  */
 public class FOVCacheTest {
-    public static void main(String[] args)
+    @Test
+    public void testCache()
     {
         int width = 60;
         int height = 60;
-        for (long r = 0, seed = 0xD00D; r < 8; r++, seed ^= seed << 2) {
-
-
+        for (long r = 0, seed = 0xCAB; r < 10; r++, seed ^= seed << 2) {
             StatefulRNG rng = new StatefulRNG(new LightRNG(seed));
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
             dungeonGenerator.addDoors(15, true);
@@ -27,26 +28,16 @@ public class FOVCacheTest {
             char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
 
             FOV fov = new FOV();
-            FOVCache cache = new FOVCache(fov, map, 20, Radius.CIRCLE, 8);
+            FOVCache cache = new FOVCache(fov, map, 10, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
-
+            byte[][] seen = cache.waveFOV(walkable.x, walkable.y);
             cache.cacheAll();
             byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
-            for (int j = 0; j < map[0].length; j++) {
-                for (int i = 0; i < map.length; i++) {
-                    if (gradient[i][j] > 0)
-                        System.out.print((char) (gradient[i][j] + 65));
-                    else
-                        System.out.print(' ');
-                    System.out.print(map[i][j]);
-                }
-                System.out.println();
+
+            for (int i = 0; i < seen.length; i++) {
+                assertArrayEquals(seen[i], gradient[i]);
             }
+
         }
-/*        for (int n = 1; n < 8; n++) {
-            System.out.println("With viewer at " + walkable.x + "," + walkable.y + " and target at " +
-                    (walkable.x - 1) + "," + (walkable.y + n) + ": Can they see each other? " +
-                    cache.isCellVisible(16, walkable.x, walkable.y, walkable.x - 1, walkable.y + n));
-        }*/
     }
 }

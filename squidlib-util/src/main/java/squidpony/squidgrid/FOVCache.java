@@ -267,13 +267,13 @@ public class FOVCache {
             units.add(new FOVUnit(i));
         }
         ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
-        long totalTime = System.currentTimeMillis(), threadTime = 0L;
+        //long totalTime = System.currentTimeMillis(), threadTime = 0L;
 
         try {
             final List<Future<Long>> invoke = executor.invokeAll(units);
             for (Future<Long> future : invoke) {
                 long t = future.get();
-                threadTime += t;
+                //threadTime += t;
                 //System.out.println(t);
             }
         } catch (InterruptedException e) {
@@ -281,10 +281,10 @@ public class FOVCache {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        totalTime = System.currentTimeMillis() - totalTime;
-        System.out.println("Total real time elapsed: " + totalTime);
-        System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
-
+        //totalTime = System.currentTimeMillis() - totalTime;
+        //System.out.println("Total real time elapsed: " + totalTime);
+        //System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
+        /*
         long totalRAM = 0;
         for (int c = 0; c < width * height; c++) {
             int ctr = 0;
@@ -292,8 +292,8 @@ public class FOVCache {
                 ctr += (((2 * cache[c][i].length + 12 - 1) / 8) + 1) * 8L;
             }
             totalRAM += (((ctr + 12 - 1) / 8) + 1) * 8;
-        }
-        System.out.println("Total memory used by cache: " + totalRAM);
+        }*/
+        //System.out.println("Total memory used by cache: " + totalRAM);
     }
 
 
