@@ -1,5 +1,5 @@
 # Build and Release Folders
-nbproject/private/
+squidlib/nbproject/
 build/
 libgdx libraries/
 target/
