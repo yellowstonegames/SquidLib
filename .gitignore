@@ -10,6 +10,12 @@ target/
 .classpath
 .project
 
+*.jar
+
+# javadoc
+*.html
+*.css
+
 
 # jEdit garbage
 *~
