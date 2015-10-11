@@ -19,7 +19,7 @@ public class FOVCacheDemo {
     {
         int width = 60;
         int height = 60;
-        for (long r = 0, seed = 0xD00D; r < 8; r++, seed ^= seed << 2) {
+        for (long r = 0, seed = 0xBEEF; r < 10; r++, seed ^= seed << 2) {
 
 
             StatefulRNG rng = new StatefulRNG(new LightRNG(seed));
@@ -29,8 +29,7 @@ public class FOVCacheDemo {
             //dungeonGenerator.addTraps(2);
             char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
 
-            FOV fov = new FOV();
-            FOVCache cache = new FOVCache(fov, map, 20, Radius.CIRCLE, 8);
+            FOVCache cache = new FOVCache(map, 16, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
 
             cache.cacheAll();

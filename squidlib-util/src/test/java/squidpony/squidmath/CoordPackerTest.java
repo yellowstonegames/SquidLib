@@ -76,6 +76,14 @@ public class CoordPackerTest {
         System.out.println();
         assertArrayEquals(new short[]{290, 15, 6, 8, 2, 4}, union);
 
+        union = CoordPacker.unionPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 10, 1});
+        System.out.println("Union: ");
+        for (int i = 0; i < union.length; i++) {
+            System.out.print(union[i] + ", ");
+        }
+        System.out.println();
+        assertArrayEquals(new short[]{290, 15, 5, 9, 2, 4}, union);
+
         short[] intersect = CoordPacker.intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 12, 9, 1});
         // 300, 5, 6, 8, 2, 4
         // 290, 12, 9, 1
@@ -87,6 +95,14 @@ public class CoordPackerTest {
         }
         System.out.println();
         assertArrayEquals(new short[]{300, 2, 9, 1}, intersect);
+
+        intersect = CoordPacker.intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 11, 1});
+        System.out.println("Intersect: ");
+        for (int i = 0; i < intersect.length; i++) {
+            System.out.print(intersect[i] + ", ");
+        }
+        System.out.println();
+        assertArrayEquals(new short[]{311, 1}, intersect);
 
 
     }

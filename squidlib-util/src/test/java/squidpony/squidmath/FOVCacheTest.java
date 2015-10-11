@@ -27,8 +27,7 @@ public class FOVCacheTest {
             //dungeonGenerator.addTraps(2);
             char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
 
-            FOV fov = new FOV();
-            FOVCache cache = new FOVCache(fov, map, 10, Radius.CIRCLE, 8);
+            FOVCache cache = new FOVCache(map, 10, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
             byte[][] seen = cache.waveFOV(walkable.x, walkable.y);
             cache.cacheAll();

@@ -25,6 +25,7 @@ public class FOVCache {
     protected Radius radiusKind;
 
     protected short[][][] cache;
+    protected short[][] losCache;
     protected boolean complete;
     protected FOV fov;
     protected short[][] ALL_WALLS;
@@ -34,7 +35,7 @@ public class FOVCache {
     protected final int NUM_THREADS;
     private static final double HALF_PI = Math.PI * 0.5, QUARTER_PI = Math.PI * 0.25125,
             SLIVER_PI = Math.PI * 0.05, PI2 = Math.PI * 2;
-    public FOVCache(FOV fov, char[][] map, int maxRadius, Radius radiusKind)
+    public FOVCache(char[][] map, int maxRadius, Radius radiusKind)
     {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
@@ -45,11 +46,12 @@ public class FOVCache {
             throw new UnsupportedOperationException("Map size is too large to efficiently cache, aborting");
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
-        this.fov = fov;
+        this.fov = new FOV(FOV.SHADOW);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
         cache = new short[width * height][][];
+        losCache = new short[width * height][];
         ALL_WALLS = new short[maxRadius][];
         for (int i = 0; i < maxRadius; i++) {
             ALL_WALLS[i] = ALL_WALL;
@@ -57,7 +59,7 @@ public class FOVCache {
         preloadMeasurements();
         complete = false;
     }
-    public FOVCache(FOV fov, char[][] map, int maxRadius, Radius radiusKind, int threadCount)
+    public FOVCache(char[][] map, int maxRadius, Radius radiusKind, int threadCount)
     {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
@@ -68,11 +70,12 @@ public class FOVCache {
             throw new UnsupportedOperationException("Map size is too large to efficiently cache, aborting");
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
-        this.fov = fov;
+        this.fov = new FOV(FOV.SHADOW);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
         cache = new short[width * height][][];
+        losCache = new short[width * height][];
         ALL_WALLS = new short[maxRadius][];
         for (int i = 0; i < maxRadius; i++) {
             ALL_WALLS[i] = ALL_WALL;
@@ -157,6 +160,17 @@ public class FOVCache {
     }
 
     /**
+     * Packs FOV for a point as a center, and returns it to be stored.
+     * @param index an int that stores the x,y center of FOV as calculated by: x + y * width
+     * @return a multi-packed series of progressively wider FOV radii
+     */
+    protected long storeCellLOS(int index) {
+        long startTime = System.currentTimeMillis();
+        losCache[index] = calculateCellLOS(index % width, index / width);
+        return System.currentTimeMillis() - startTime;
+    }
+
+    /**
      * Packs FOV for the given viewer's X and Y as a center, and returns the packed data to be stored.
      * @param viewerX an int less than 256 and less than width
      * @param viewerY an int less than 256 and less than height
@@ -236,6 +250,24 @@ public class FOVCache {
         }
         return packed;
     }
+
+    /**
+     * Packs FOV for the given viewer's X and Y as a center, and returns the packed data to be stored.
+     * @param viewerX an int less than 256 and less than width
+     * @param viewerY an int less than 256 and less than height
+     * @return a packed FOV map for radius 62
+     */
+    public short[] calculateCellLOS(int viewerX, int viewerY)
+    {
+        if(viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
+            return ALL_WALL;
+        if(resMap[viewerX][viewerY] >= 1.0)
+        {
+            return ALL_WALL;
+        }
+        return pack(fov.calculateFOV(resMap, viewerX, viewerY, 62, radiusKind));
+    }
+
     /**
      * Packs FOV for the given viewer's X and Y as a center, and returns the packed data to be stored.
      * @param viewerX an int less than 256 and less than width
@@ -262,18 +294,20 @@ public class FOVCache {
     }
 
     public void cacheAll() {
-        List<FOVUnit> units = new ArrayList<FOVUnit>(width * height);
+        List<LOSUnit> losUnits = new ArrayList<LOSUnit>(width * height);
+        List<FOVUnit> fovUnits = new ArrayList<FOVUnit>(width * height);
         for (int i = 0; i < width * height; i++) {
-            units.add(new FOVUnit(i));
+            losUnits.add(new LOSUnit(i));
+            fovUnits.add(new FOVUnit(i));
         }
         ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
-        //long totalTime = System.currentTimeMillis(), threadTime = 0L;
+        long totalTime = System.currentTimeMillis(), threadTime = 0L;
 
         try {
-            final List<Future<Long>> invoke = executor.invokeAll(units);
+            final List<Future<Long>> invoke = executor.invokeAll(losUnits);
             for (Future<Long> future : invoke) {
                 long t = future.get();
-                //threadTime += t;
+                threadTime += t;
                 //System.out.println(t);
             }
         } catch (InterruptedException e) {
@@ -281,19 +315,35 @@ public class FOVCache {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        //totalTime = System.currentTimeMillis() - totalTime;
-        //System.out.println("Total real time elapsed: " + totalTime);
-        //System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
-        /*
+
+        try {
+            final List<Future<Long>> invoke = executor.invokeAll(fovUnits);
+            for (Future<Long> future : invoke) {
+                long t = future.get();
+                threadTime += t;
+                //System.out.println(t);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        totalTime = System.currentTimeMillis() - totalTime;
+        System.out.println("Total real time elapsed: " + totalTime);
+        System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
+
         long totalRAM = 0;
         for (int c = 0; c < width * height; c++) {
-            int ctr = 0;
+            long ctr = 0, losCtr = 0;
             for (int i = 0; i < cache[c].length; i++) {
                 ctr += (((2 * cache[c][i].length + 12 - 1) / 8) + 1) * 8L;
             }
             totalRAM += (((ctr + 12 - 1) / 8) + 1) * 8;
-        }*/
-        //System.out.println("Total memory used by cache: " + totalRAM);
+
+            losCtr = (((2 * losCache[c].length + 12 - 1) / 8) + 1) * 8L;
+            totalRAM += (((losCtr + 12 - 1) / 8) + 1) * 8;
+        }
+        System.out.println("Total memory used by cache: " + totalRAM);
     }
 
 
@@ -517,6 +567,26 @@ public class FOVCache {
         @Override
         public Long call() throws Exception {
             return storeCellFOV(index);
+        }
+    }
+
+    public class LOSUnit implements Callable<Long>
+    {
+        protected int index;
+        public LOSUnit(int index)
+        {
+            this.index = index;
+        }
+
+        /**
+         * Computes a result, or throws an exception if unable to do so.
+         *
+         * @return computed result
+         * @throws Exception if unable to compute a result
+         */
+        @Override
+        public Long call() throws Exception {
+            return storeCellLOS(index);
         }
     }
 }
