@@ -5,6 +5,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.ShortVLA;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -21,10 +22,13 @@ public class FOVCache {
     protected int maxRadius;
     protected int width;
     protected int height;
+    protected int mapLimit;
+    protected int limit;
     protected double[][] resMap;
     protected Radius radiusKind;
 
     protected short[][][] cache;
+    protected short[][][] tmpCache;
     protected short[][] losCache;
     protected boolean complete;
     protected FOV fov;
@@ -34,6 +38,7 @@ public class FOVCache {
     private Coord[][] waves;
     protected final int NUM_THREADS;
     protected ExecutorService executor;
+    protected double fovPermissiveness;
     private static final double HALF_PI = Math.PI * 0.5, QUARTER_PI = Math.PI * 0.25125,
             SLIVER_PI = Math.PI * 0.05, PI2 = Math.PI * 2;
     public FOVCache(char[][] map, int maxRadius, Radius radiusKind)
@@ -46,17 +51,39 @@ public class FOVCache {
         height = map[0].length;
         if(width > 256 || height > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently cache, aborting");
+        mapLimit = width * height;
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
         this.fov = new FOV(FOV.SHADOW);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
-        cache = new short[width * height][][];
-        losCache = new short[width * height][];
-        ALL_WALLS = new short[maxRadius][];
-        for (int i = 0; i < maxRadius; i++) {
+        fovPermissiveness = 0.8;
+        cache = new short[mapLimit][][];
+        tmpCache = new short[mapLimit][][];
+        losCache = new short[mapLimit][];
+        ALL_WALLS = new short[maxRadius + 1][];
+        for (int i = 0; i < maxRadius + 1; i++) {
             ALL_WALLS[i] = ALL_WALL;
+        }
+        limit = 0x10000;
+        if(height <= 128) {
+            limit >>= 1;
+            if (width <= 128) {
+                limit >>= 1;
+                if (width <= 64) {
+                    limit >>= 1;
+                    if (height <= 64) {
+                        limit >>= 1;
+                        if (height <= 32) {
+                            limit >>= 1;
+                            if (width <= 32) {
+                                limit >>= 1;
+                            }
+                        }
+                    }
+                }
+            }
         }
         preloadMeasurements();
         complete = false;
@@ -71,17 +98,87 @@ public class FOVCache {
         height = map[0].length;
         if(width > 256 || height > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently cache, aborting");
+        mapLimit = width * height;
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
         this.fov = new FOV(FOV.SHADOW);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
-        cache = new short[width * height][][];
-        losCache = new short[width * height][];
+        fovPermissiveness = 0.8;
+        cache = new short[mapLimit][][];
+        tmpCache = new short[mapLimit][][];
+        losCache = new short[mapLimit][];
         ALL_WALLS = new short[maxRadius][];
         for (int i = 0; i < maxRadius; i++) {
             ALL_WALLS[i] = ALL_WALL;
+        }
+        limit = 0x10000;
+        if(height <= 128) {
+            limit >>= 1;
+            if (width <= 128) {
+                limit >>= 1;
+                if (width <= 64) {
+                    limit >>= 1;
+                    if (height <= 64) {
+                        limit >>= 1;
+                        if (height <= 32) {
+                            limit >>= 1;
+                            if (width <= 32) {
+                                limit >>= 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        preloadMeasurements();
+        complete = false;
+    }
+
+    public FOVCache(char[][] map, int maxRadius, Radius radiusKind, int threadCount, double permissiveness)
+    {
+        if(map == null || map.length == 0)
+            throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
+        NUM_THREADS = threadCount;
+        executor = Executors.newFixedThreadPool(NUM_THREADS);
+        width = map.length;
+        height = map[0].length;
+        if(width > 256 || height > 256)
+            throw new UnsupportedOperationException("Map size is too large to efficiently cache, aborting");
+        mapLimit = width * height;
+        if(maxRadius <= 0 || maxRadius >= 63)
+            throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
+        this.fov = new FOV(FOV.SHADOW);
+        resMap = DungeonUtility.generateResistances(map);
+        this.maxRadius = maxRadius;
+        this.radiusKind = radiusKind;
+        fovPermissiveness = permissiveness;
+        cache = new short[mapLimit][][];
+        tmpCache = new short[mapLimit][][];
+        losCache = new short[mapLimit][];
+        ALL_WALLS = new short[maxRadius][];
+        for (int i = 0; i < maxRadius; i++) {
+            ALL_WALLS[i] = ALL_WALL;
+        }
+        limit = 0x10000;
+        if(height <= 128) {
+            limit >>= 1;
+            if (width <= 128) {
+                limit >>= 1;
+                if (width <= 64) {
+                    limit >>= 1;
+                    if (height <= 64) {
+                        limit >>= 1;
+                        if (height <= 32) {
+                            limit >>= 1;
+                            if (width <= 32) {
+                                limit >>= 1;
+                            }
+                        }
+                    }
+                }
+            }
         }
         preloadMeasurements();
         complete = false;
@@ -174,6 +271,17 @@ public class FOVCache {
     }
 
     /**
+     * Uses previously cached FOV and .
+     * @param index an int that stores the x,y center of FOV as calculated by: x + y * width
+     * @return a multi-packed series of progressively wider FOV radii
+     */
+    protected long storeCellSymmetry(int index) {
+        long startTime = System.currentTimeMillis();
+        tmpCache[index] = permissiveSymmetry(index % width, index / width);
+        return System.currentTimeMillis() - startTime;
+    }
+
+    /**
      * Packs FOV for the given viewer's X and Y as a center, and returns the packed data to be stored.
      * @param viewerX an int less than 256 and less than width
      * @param viewerY an int less than 256 and less than height
@@ -187,32 +295,13 @@ public class FOVCache {
         {
             return ALL_WALLS;
         }
-        int limit = 0x10000, mapLimit = width * height, llen = maxRadius;
         long on = 0, current = 0;
-        ShortVLA[] packing = new ShortVLA[llen];
-        int[] skip = new int[llen];
-        if(height <= 128) {
-            limit >>= 1;
-            if (width <= 128) {
-                limit >>= 1;
-                if (width <= 64) {
-                    limit >>= 1;
-                    if (height <= 64) {
-                        limit >>= 1;
-                        if (height <= 32) {
-                            limit >>= 1;
-                            if (width <= 32) {
-                                limit >>= 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        ShortVLA[] packing = new ShortVLA[maxRadius];
+        int[] skip = new int[maxRadius];
         short x, y;
-        short[][] packed = new short[llen][];
+        short[][] packed = new short[maxRadius][];
         double[][] fovMap;
-        for(int l = 0; l < llen; l++) {
+        for(int l = 0; l < maxRadius; l++) {
 
             fovMap = fov.calculateFOV(resMap, viewerX, viewerY, l + 1, radiusKind);
             packing[l] = new ShortVLA(64);
@@ -290,6 +379,10 @@ public class FOVCache {
         return cache[x + y * width];
     }
 
+    public boolean queryCache(int visionRange, int viewerX, int viewerY, int targetX, int targetY)
+    {
+        return queryPacked(cache[viewerX + viewerY  * width][maxRadius - visionRange], targetX, targetY);
+    }
     public boolean isCellVisible(int visionRange, int viewerX, int viewerY, int targetX, int targetY)
     {
         return queryPacked(cache[viewerX + viewerY  * width][maxRadius - visionRange], targetX, targetY) ||
@@ -297,19 +390,19 @@ public class FOVCache {
     }
 
     public void cacheAllPerformance() {
-        List<LOSUnit> losUnits = new ArrayList<LOSUnit>(width * height);
-        List<FOVUnit> fovUnits = new ArrayList<FOVUnit>(width * height);
-        for (int i = 0; i < width * height; i++) {
+        List<LOSUnit> losUnits = new ArrayList<LOSUnit>(mapLimit);
+        List<FOVUnit> fovUnits = new ArrayList<FOVUnit>(mapLimit);
+        for (int i = 0; i < mapLimit; i++) {
             losUnits.add(new LOSUnit(i));
             fovUnits.add(new FOVUnit(i));
         }
-        long totalTime = System.currentTimeMillis(), threadTime = 0L;
+        //long totalTime = System.currentTimeMillis(), threadTime = 0L;
 
         try {
             final List<Future<Long>> invoke = executor.invokeAll(losUnits);
             for (Future<Long> future : invoke) {
                 long t = future.get();
-                threadTime += t;
+                //threadTime += t;
                 //System.out.println(t);
             }
         } catch (InterruptedException e) {
@@ -322,7 +415,7 @@ public class FOVCache {
             final List<Future<Long>> invoke = executor.invokeAll(fovUnits);
             for (Future<Long> future : invoke) {
                 long t = future.get();
-                threadTime += t;
+                //threadTime += t;
                 //System.out.println(t);
             }
         } catch (InterruptedException e) {
@@ -330,10 +423,10 @@ public class FOVCache {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        totalTime = System.currentTimeMillis() - totalTime;
-        System.out.println("Total real time elapsed: " + totalTime);
-        System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
-
+        //totalTime = System.currentTimeMillis() - totalTime;
+        //System.out.println("Total real time elapsed: " + totalTime);
+        //System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
+        /*
         long totalRAM = 0;
         for (int c = 0; c < width * height; c++) {
             long ctr = 0, losCtr = 0;
@@ -346,7 +439,7 @@ public class FOVCache {
             totalRAM += (((losCtr + 12 - 1) / 8) + 1) * 8;
         }
         System.out.println("Total memory used by cache: " + totalRAM);
-
+        */
         complete = true;
     }
 
@@ -506,7 +599,7 @@ public class FOVCache {
                             if (!blockedCCW)
                                 angleMap[pt.x][pt.y] += 0.5 * angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius];
                         }
-                        if(angleMap[pt.x][pt.y] <= QUARTER_PI)
+                        if(angleMap[pt.x][pt.y] <= fovPermissiveness)
                             gradientMap[cx][cy] = dist;
                         else
                             angleMap[pt.x][pt.y] = PI2;
@@ -518,13 +611,83 @@ public class FOVCache {
         return gradientMap;
     }
 
+    public short[][] permissiveSymmetry(int viewerX, int viewerY) {
+        if(!complete) throw new IllegalStateException(
+                "cacheAllPerformance() must be called before permissiveSymmetry() to fill the cache.");
+        if (viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
+            return ALL_WALLS;
+        if (resMap[viewerX][viewerY] >= 1.0) {
+            return ALL_WALLS;
+        }
+        short myHilbert = (short)posToHilbert(viewerX, viewerY);
+        ShortVLA packing = new ShortVLA(128);
+        short[][] packed = new short[maxRadius + 1][], cached = cache[viewerX + viewerY * width];
+        short[] knownSeen;
+        for (int l = 0; l < maxRadius + 1; l++) {
+            packing.clear();
+            knownSeen = allPackedHilbert(cached[maxRadius - l]);
+            Arrays.sort(knownSeen);
+            for (int x = Math.max(0, viewerX - l); x <= Math.min(viewerX + l, width - 1); x++) {
+                for (int y = Math.max(0, viewerY - l); y <= Math.min(viewerY + l, height - 1); y++) {
+                    if(cache[x + y * width] == ALL_WALLS)
+                        continue;
+                    if (radiusKind.radius(viewerX, viewerY, x, y) > l)
+                        continue;
+                    short i = (short) posToHilbert(x, y);
+                    if (Arrays.binarySearch(knownSeen, i) >= 0)
+                        continue;
+                    if (queryPackedHilbert(cache[x + y * width][maxRadius - l], myHilbert))
+                        packing.add(i);
+                }
+            }
+            packed[l] = insertSeveralPacked(cached[maxRadius - l], packing.shrink());
+        }
+        return packed;
+    }
+
     public void cacheAllQuality()
     {
+        long totalTime = System.currentTimeMillis(), threadTime = 0L;
         if(!complete)
             cacheAllPerformance();
-        short[][][] postCache = new short[width * height][][];
+        List<SymmetryUnit> symUnits = new ArrayList<SymmetryUnit>(mapLimit);
+        for (int i = 0; i < mapLimit; i++) {
+            symUnits.add(new SymmetryUnit(i));
+        }
+
+        try {
+            final List<Future<Long>> invoke = executor.invokeAll(symUnits);
+            for (Future<Long> future : invoke) {
+                long t = future.get();
+                threadTime += t;
+                //System.out.println(t);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        cache = tmpCache;
+        totalTime = System.currentTimeMillis() - totalTime;
+        System.out.println("Total real time elapsed : " + totalTime);
+        System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
+
+        long totalRAM = 0;
+        for (int c = 0; c < width * height; c++) {
+            long ctr = 0, losCtr = 0;
+            for (int i = 0; i < cache[c].length; i++) {
+                ctr += (((2 * cache[c][i].length + 12 - 1) / 8) + 1) * 8L;
+            }
+            totalRAM += (((ctr + 12 - 1) / 8) + 1) * 8;
+
+            losCtr = (((2 * losCache[c].length + 12 - 1) / 8) + 1) * 8L;
+            totalRAM += (((losCtr + 12 - 1) / 8) + 1) * 8;
+        }
+        System.out.println("Total memory used by cache: " + totalRAM);
 
     }
+
+
 
     private byte heuristic(Direction target) {
         switch (radiusKind) {
@@ -600,6 +763,25 @@ public class FOVCache {
         @Override
         public Long call() throws Exception {
             return storeCellLOS(index);
+        }
+    }
+    public class SymmetryUnit implements Callable<Long>
+    {
+        protected int index;
+        public SymmetryUnit(int index)
+        {
+            this.index = index;
+        }
+
+        /**
+         * Computes a result, or throws an exception if unable to do so.
+         *
+         * @return computed result
+         * @throws Exception if unable to compute a result
+         */
+        @Override
+        public Long call() throws Exception {
+            return storeCellSymmetry(index);
         }
     }
 }

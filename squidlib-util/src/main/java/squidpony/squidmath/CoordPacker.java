@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 
 /**
@@ -596,7 +597,7 @@ public class CoordPacker {
         short x =0, y = 0;
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
-                for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip; idx++) {
+                for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
                     x = hilbertX[idx];
                     y = hilbertY[idx];
                     if(x >= width || y >= height)
@@ -648,7 +649,7 @@ public class CoordPacker {
             int idx = 0;
             for (int p = 0; p < packed[l].length; p++, on = !on) {
                 if (on) {
-                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip; idx++) {
+                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
                         x = hilbertX[idx];
                         y = hilbertY[idx];
                         if(x >= width || y >= height)
@@ -688,7 +689,7 @@ public class CoordPacker {
             int idx = 0;
             for (int p = 0; p < packed[l].length; p++, on = !on) {
                 if (on) {
-                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip; idx++) {
+                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
                         x = hilbertX[idx];
                         y = hilbertY[idx];
                         if(x >= width || y >= height)
@@ -1032,6 +1033,35 @@ public class CoordPacker {
     {
         return unionPacked(original, new short[]{(short)posToHilbert(x, y), 1});
     }
+
+    /**
+     * Given one packed short array, original, and a number of Hilbert Curve indices, hilbert, this produces a packed
+     * short array that encodes "on" for any cell that was "on" in original, always encodes "on" for the position
+     * referred to by any element of hilbert, and encodes "off" for cells that were "off" in original and are not in any
+     * cell hilbert refers to. This method does not do any unpacking (which can be somewhat computationally expensive)
+     * and so should be strongly preferred when you have several Hilbert Curve indices, possibly nearby each other but
+     * just as possibly not, that you need inserted into a packed array.
+     * <br>
+     *     NOTE: this may not produce an optimally packed result, though the difference in memory consumption is likely
+     *     to be exceedingly small unless there are many nearby elements in hilbert (which may be a better use case for
+     *     unionPacked() anyway).
+     * @param original A packed array such as one produced by pack()
+     * @param hilbert an array or vararg of Hilbert Curve indices that should be inserted into the result
+     * @return A packed array that encodes "on" for all cells that are "on" in original or are in hilbert
+     */
+    public static short[] insertSeveralPacked(short[] original, short... hilbert)
+    {
+        Arrays.sort(hilbert);
+        short[] additions = new short[hilbert.length * 2];
+        short current;
+        for (int i = 0, total = 0; i < hilbert.length; i++) {
+            current = hilbert[i];
+            additions[i * 2] = (short)(current - total);
+            additions[i * 2 + 1] = 1;
+            total += current + 1;
+        }
+        return unionPacked(original, additions);
+    }
     /**
      * Given one packed short array, original, and a Hilbert Curve index, hilbert, this produces a packed short array
      * that encodes "on" for any cell that was "on" in original, unless it was the position referred to by hilbert, and
@@ -1062,6 +1092,36 @@ public class CoordPacker {
         return intersectPacked(original, new short[]{0, (short)posToHilbert(x, y), 1, -1});
     }
 
+    /**
+     * Given one packed short array, original, and a number of Hilbert Curve indices, hilbert, this produces a packed
+     * short array that encodes "on" for any cell that was "on" in original, unless it was a position referred to by
+     * hilbert, and encodes "off" for cells that were "off" in original and are a cell hilbert refers to. This method
+     * does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly preferred
+     * when you have several Hilbert Curve indices, possibly nearby each other but just as possibly not, that you need
+     * removed from a packed array.
+     * <br>
+     *     NOTE: this may not produce an optimally packed result, though the difference in memory consumption is likely
+     *     to be exceedingly small unless there are many nearby elements in hilbert (which may be a better use case for
+     *     differencePacked() anyway).
+     * @param original A packed array such as one produced by pack()
+     * @param hilbert an array or vararg of Hilbert Curve indices that should be inserted into the result
+     * @return A packed array that encodes "on" for all cells that are "on" in original or are in hilbert
+     */
+    public static short[] removeSeveralPacked(short[] original, short... hilbert)
+    {
+        Arrays.sort(hilbert);
+        short[] removals = new short[hilbert.length * 2 + 2];
+        short current;
+        removals[0] = 0;
+        for (int i = 0, total = 0; i < hilbert.length; i++) {
+            current = hilbert[i];
+            removals[i * 2 + 1] = (short)(current - total);
+            removals[i * 2 + 2] = 1;
+            total += current + 1;
+        }
+        removals[removals.length - 1] = -1;
+        return intersectPacked(original, removals);
+    }
 
     /**
      * Compresses a double[][] (typically one generated by {@link squidpony.squidgrid.FOV}) that only stores two
