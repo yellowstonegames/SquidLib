@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import org.junit.Test;
-import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -30,7 +29,7 @@ public class FOVCacheTest {
             FOVCache cache = new FOVCache(map, 10, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
             byte[][] seen = cache.waveFOV(walkable.x, walkable.y);
-            cache.cacheAll();
+            cache.cacheAllPerformance();
             byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
 
             for (int i = 0; i < seen.length; i++) {

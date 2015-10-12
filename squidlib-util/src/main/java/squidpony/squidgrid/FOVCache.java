@@ -33,6 +33,7 @@ public class FOVCache {
     private short[][] distanceCache;
     private Coord[][] waves;
     protected final int NUM_THREADS;
+    protected ExecutorService executor;
     private static final double HALF_PI = Math.PI * 0.5, QUARTER_PI = Math.PI * 0.25125,
             SLIVER_PI = Math.PI * 0.05, PI2 = Math.PI * 2;
     public FOVCache(char[][] map, int maxRadius, Radius radiusKind)
@@ -40,6 +41,7 @@ public class FOVCache {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
         NUM_THREADS = 8;
+        executor = Executors.newFixedThreadPool(NUM_THREADS);
         width = map.length;
         height = map[0].length;
         if(width > 256 || height > 256)
@@ -64,6 +66,7 @@ public class FOVCache {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
         NUM_THREADS = threadCount;
+        executor = Executors.newFixedThreadPool(NUM_THREADS);
         width = map.length;
         height = map[0].length;
         if(width > 256 || height > 256)
@@ -293,14 +296,13 @@ public class FOVCache {
                 queryPacked(cache[targetX + targetY  * width][maxRadius - visionRange], viewerX, viewerY);
     }
 
-    public void cacheAll() {
+    public void cacheAllPerformance() {
         List<LOSUnit> losUnits = new ArrayList<LOSUnit>(width * height);
         List<FOVUnit> fovUnits = new ArrayList<FOVUnit>(width * height);
         for (int i = 0; i < width * height; i++) {
             losUnits.add(new LOSUnit(i));
             fovUnits.add(new FOVUnit(i));
         }
-        ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
         long totalTime = System.currentTimeMillis(), threadTime = 0L;
 
         try {
@@ -344,6 +346,8 @@ public class FOVCache {
             totalRAM += (((losCtr + 12 - 1) / 8) + 1) * 8;
         }
         System.out.println("Total memory used by cache: " + totalRAM);
+
+        complete = true;
     }
 
 
@@ -513,6 +517,15 @@ public class FOVCache {
 
         return gradientMap;
     }
+
+    public void cacheAllQuality()
+    {
+        if(!complete)
+            cacheAllPerformance();
+        short[][][] postCache = new short[width * height][][];
+
+    }
+
     private byte heuristic(Direction target) {
         switch (radiusKind) {
             case CIRCLE:

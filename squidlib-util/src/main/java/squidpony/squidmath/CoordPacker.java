@@ -3,7 +3,6 @@ package squidpony.squidmath;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 
 /**
@@ -159,7 +158,8 @@ public class CoordPacker {
     public static final int DEPTH = 8;
     private static final int BITS = DEPTH << 1;
 
-    public static short[] hilbertX = new short[0x10000], hilbertY = new short[0x10000], ALL_WALL = new short[0];
+    public static short[] hilbertX = new short[0x10000], hilbertY = new short[0x10000],
+            ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
     static {
         ClassLoader cl = CoordPacker.class.getClassLoader();
         InputStream xStream = cl.getResourceAsStream("hilbert/x.bin"),
@@ -723,6 +723,30 @@ public class CoordPacker {
         }
         return false;
     }
+    /**
+     * Quickly determines if a Hilbert Curve index corresponds to true or false in the given packed array, without
+     * unpacking it.
+     * <br>
+     * Typically this method will not be needed by library-consuming code unless that code deals with Hilbert Curves in
+     * a frequent and deeply involved manner. It does have the potential to avoid converting to and from x,y coordinates
+     * and Hilbert Curve indices unnecessarily, which could matter for high-performance code.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @param hilbert a Hilbert Curve index, such as one taken directly from a packed short[] without extra processing
+     * @return true if the packed data stores true at the given Hilbert Curve index, or false in any other case.
+     */
+    public static boolean queryPackedHilbert(short[] packed, short hilbert)
+    {
+        int hilbertDistance = hilbert & 0xffff, total = 0;
+        boolean on = false;
+        for(int p = 0; p < packed.length; p++, on = !on)
+        {
+            total += packed[p] & 0xffff;
+            if(hilbertDistance < total)
+                return on;
+        }
+        return false;
+    }
 
     /**
      * Gets all positions that are "on" in the given packed array, without unpacking it, and returns them as a Coord[].
@@ -748,7 +772,40 @@ public class CoordPacker {
         }
         return cs;
     }
+    /**
+     * Gets all positions that are "on" in the given packed array, without unpacking it, and returns them as an array of
+     * Hilbert Curve indices.
+     * <br>
+     * Typically this method will not be needed by library-consuming code unless that code deals with Hilbert Curves in
+     * a frequent and deeply involved manner. It does have the potential to avoid converting to and from x,y coordinates
+     * and Hilbert Curve indices unnecessarily, which could matter for high-performance code.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @return a Hilbert Curve index array, in ascending distance order, corresponding to all "on" cells in packed.
+     */
+    public static short[] allPackedHilbert(short[] packed)
+    {
+        ShortVLA vla = new ShortVLA(64);
+        boolean on = false;
+        int idx = 0;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                vla.addRange(idx, idx + (packed[p] & 0xffff));
+            }
+            idx += packed[p] & 0xffff;
+        }
+        return vla.shrink();
+    }
 
+    /**
+     * Given two packed short arrays, left and right, this produces a packed short array that encodes "on" for any cell
+     * that was "on" in either left or in right, and only encodes "off" for cells that were off in both. This method
+     * does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly preferred
+     * when merging two pieces of packed data.
+     * @param left A packed array such as one produced by pack()
+     * @param right A packed array such as one produced by pack()
+     * @return A packed array that encodes "on" for all cells that were "on" in either left or right
+     */
     public static short[] unionPacked(short[] left, short[] right)
     {
         if(left.length == 0)
@@ -821,6 +878,16 @@ public class CoordPacker {
         }
         return packing.shrink();
     }
+
+    /**
+     * Given two packed short arrays, left and right, this produces a packed short array that encodes "on" for any cell
+     * that was "on" in both left and in right, and encodes "off" for cells that were off in either array. This method
+     * does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly preferred
+     * when finding the intersection of two pieces of packed data.
+     * @param left A packed array such as one produced by pack()
+     * @param right A packed array such as one produced by pack()
+     * @return A packed array that encodes "on" for all cells that were "on" in both left and right
+     */
     public static short[] intersectPacked(short[] left, short[] right)
     {
         if(left.length == 0)
@@ -849,8 +916,7 @@ public class CoordPacker {
             // 290, 12, 9, 1
             // =
             // 300, 2, 9, 1
-            // 290 off in both, 10 in right, 2 in both, 3 in left, 6 off in both, 1 on in both, 7 on in left, 2 off in
-            //     both, 4 on in left
+            // 300 off, 2 on, 9 off, 1 on
             if(totalLeft < totalRight)
             {
                 onLeft = !onLeft;
@@ -893,26 +959,107 @@ public class CoordPacker {
         }
         return packing.shrink();
     }
+
+    /**
+     * Given one packed short array, this produces a packed short array that is the exact opposite of the one passed in,
+     * that is, every "on" cell becomes "off" and every "off" cell becomes "on", including cells that were "off" because
+     * they were beyond the boundaries of the original 2D array passed to pack() or a similar method. This method does
+     * not do any unpacking (which can be somewhat computationally expensive), and actually requires among the lowest
+     * amounts of computation to get a result of any methods in CoordPacker. However, because it will cause cells to be
+     * considered "on" that would cause an exception if directly converted to x,y positions and accessed in the source
+     * 2D array, this method should primarily be used in conjunction with operations such as intersectPacked(), or have
+     * the checking for boundaries handled internally by unpack() or related methods such as unpackMultiDouble().
+     * @param original A packed array such as one produced by pack()
+     * @return A packed array that contains all cells that were "on" in either left or right
+     */
     public static short[] negatePacked(short[] original) {
         if (original.length <= 1) {
-            return new short[]{0, (short) 0xFFFF};
+            return ALL_ON;
         }
         if (original[0] == 0) {
             short[] copy = new short[original.length];
-            System.arraycopy(original, 0, copy, 1, original.length - 1);
+            System.arraycopy(original, 1, copy, 0, original.length - 1);
             copy[original.length - 1] = (short) 0xFFFF;
             return copy;
         }
-        short[] copy = new short[original.length];
+        short[] copy = new short[original.length + 2];
         copy[0] = 0;
-        System.arraycopy(original, 0, copy, 1, original.length - 1);
+        System.arraycopy(original, 0, copy, 1, original.length);
         copy[copy.length - 1] = (short) 0xFFFF;
         return copy;
     }
 
+    /**
+     * Given two packed short arrays, left and right, this produces a packed short array that encodes "on" for any cell
+     * that was "on" in left but "off" in right, and encodes "off" for cells that were "on" in right or "off" in left.
+     * This method does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly
+     * preferred when finding a region of one packed array that is not contained in another packed array.
+     * @param left A packed array such as one produced by pack()
+     * @param right A packed array such as one produced by pack()
+     * @return A packed array that encodes "on" for all cells that were "on" in both left and right
+     */
     public static short[] differencePacked(short[] left, short[] right)
     {
         return intersectPacked(left, negatePacked(right));
+    }
+
+    /**
+     * Given one packed short array, original, and a Hilbert Curve index, hilbert, this produces a packed short array
+     * that encodes "on" for any cell that was "on" in original, always encodes "on" for the position referred
+     * to by hilbert, and encodes "off" for cells that were "off" in original and are not the cell hilbert refers to.
+     * This method does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly
+     * preferred when finding a region of one packed array that is not contained in another packed array.
+     * @param original A packed array such as one produced by pack()
+     * @param hilbert A Hilbert Curve index that should be inserted into the result
+     * @return A packed array that encodes "on" for all cells that are "on" in original or correspond to hilbert
+     */
+    public static short[] insertPacked(short[] original, short hilbert)
+    {
+        return unionPacked(original, new short[]{hilbert, 1});
+    }
+    /**
+     * Given one packed short array, original, and a position as x,y numbers, this produces a packed short array
+     * that encodes "on" for any cell that was "on" in original, always encodes "on" for the position referred
+     * to by x and y, and encodes "off" for cells that were "off" in original and are not the cell x and y refer to.
+     * This method does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly
+     * preferred when finding a region of one packed array that is not contained in another packed array.
+     * @param original A packed array such as one produced by pack()
+     * @param x The x position at which to insert the "on" cell
+     * @param y The y position at which to insert the "on" cell
+     * @return A packed array that encodes "on" for all cells that are "on" in original or correspond to x,y
+     */
+    public static short[] insertPacked(short[] original, int x, int y)
+    {
+        return unionPacked(original, new short[]{(short)posToHilbert(x, y), 1});
+    }
+    /**
+     * Given one packed short array, original, and a Hilbert Curve index, hilbert, this produces a packed short array
+     * that encodes "on" for any cell that was "on" in original, unless it was the position referred to by hilbert, and
+     * encodes "off" for cells that were "off" in original or are the cell hilbert refers to.
+     * This method does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly
+     * preferred when finding a region of one packed array that is not contained in another packed array.
+     * @param original A packed array such as one produced by pack()
+     * @param hilbert A Hilbert Curve index that should be removed from the result
+     * @return A packed array that encodes "on" for all cells that are "on" in original and don't correspond to hilbert
+     */
+    public static short[] removePacked(short[] original, short hilbert)
+    {
+        return intersectPacked(original, new short[]{0, hilbert, 1, -1});
+    }
+    /**
+     * Given one packed short array, original, and a position as x,y numbers, this produces a packed short array that
+     * encodes "on" for any cell that was "on" in original, unless it was the position referred to by x and y, and
+     * encodes "off" for cells that were "off" in original or are the cell x and y refer to.
+     * This method does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly
+     * preferred when finding a region of one packed array that is not contained in another packed array.
+     * @param original A packed array such as one produced by pack()
+     * @param x The x position at which to remove any "on" cell
+     * @param y The y position at which to remove any "on" cell
+     * @return A packed array that encodes "on" for all cells that are "on" in original and don't correspond to x,y
+     */
+    public static short[] removePacked(short[] original, int x, int y)
+    {
+        return intersectPacked(original, new short[]{0, (short)posToHilbert(x, y), 1, -1});
     }
 
 
