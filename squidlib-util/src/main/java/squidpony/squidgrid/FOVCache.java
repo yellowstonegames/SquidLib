@@ -4,9 +4,7 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.ShortVLA;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -33,14 +31,31 @@ public class FOVCache {
     protected boolean complete;
     protected FOV fov;
     protected short[][] ALL_WALLS;
-    private double[][] atan2Cache, directionAngles;
-    private short[][] distanceCache;
-    private Coord[][] waves;
+    protected short[] wallMap;
+    protected double[][] atan2Cache, directionAngles;
+    protected short[][] distanceCache;
+    protected Coord[][] waves;
     protected final int NUM_THREADS;
     protected ExecutorService executor;
     protected double fovPermissiveness;
+    protected LinkedHashMap<Coord, Integer> lights;
+    protected Coord[] lightSources;
+    protected int[] lightBrightnesses;
     private static final double HALF_PI = Math.PI * 0.5, QUARTER_PI = Math.PI * 0.25125,
             SLIVER_PI = Math.PI * 0.05, PI2 = Math.PI * 2;
+
+    /**
+     * Create an FOVCache for a given map (as a char[][]), caching all FOV radii from 0 up to and including maxRadius,
+     * using the given Radius enum to determine FOV shape.  Upon calling cacheAllPerformance() or cacheAllQuality(),
+     * (collectively, the caching methods), the object this creates will run a medium-quality, fairly permissive FOV
+     * calculation for every cell on the map using 8 threads, and if cacheAllQuality() was called, will then ensure
+     * symmetry (if cell A can see cell B, then it will make cell B able to see cell A even if it couldn't in an earlier
+     * step). At the same time as the first caching method call, this will calculate Line of Sight at maximum range (62)
+     * for all cells. Walls will always have no cells in their FOV or LOS.
+     * @param map a char[][] as returned by SquidLib's map generators
+     * @param maxRadius the longest radius that will possibly need to be cached for FOV; LOS is separate
+     * @param radiusKind a Radius enum that determines the shape of each FOV area
+     */
     public FOVCache(char[][] map, int maxRadius, Radius radiusKind)
     {
         if(map == null || map.length == 0)
@@ -59,6 +74,7 @@ public class FOVCache {
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
+        lights = new LinkedHashMap<Coord, Integer>();
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -88,6 +104,20 @@ public class FOVCache {
         preloadMeasurements();
         complete = false;
     }
+
+    /**
+     * Create an FOVCache for a given map (as a char[][]), caching all FOV radii from 0 up to and including maxRadius,
+     * using the given Radius enum to determine FOV shape.  Upon calling cacheAllPerformance() or cacheAllQuality(),
+     * (collectively, the caching methods), the object this creates will run a medium-quality, fairly permissive FOV
+     * calculation for every cell on the map using a number of threads equal to threadCount, and if cacheAllQuality()
+     * was called, will then ensure symmetry (if cell A can see cell B, then it will make cell B able to see cell A even
+     * if it couldn't in an earlier step). At the same time as the first caching method call, this will calculate Line
+     * of Sight at maximum range (62) for all cells. Walls will always have no cells in their FOV or LOS.
+     * @param map a char[][] as returned by SquidLib's map generators
+     * @param maxRadius the longest radius that will possibly need to be cached for FOV; LOS is separate
+     * @param radiusKind a Radius enum that determines the shape of each FOV area
+     * @param threadCount how many threads to use during the full-map calculations
+     */
     public FOVCache(char[][] map, int maxRadius, Radius radiusKind, int threadCount)
     {
         if(map == null || map.length == 0)
@@ -106,6 +136,7 @@ public class FOVCache {
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
+        lights = new LinkedHashMap<Coord, Integer>();
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -136,7 +167,24 @@ public class FOVCache {
         complete = false;
     }
 
-    public FOVCache(char[][] map, int maxRadius, Radius radiusKind, int threadCount, double permissiveness)
+    /**
+     * Create an FOVCache for a given map (as a char[][]), caching all FOV radii from 0 up to and including maxRadius,
+     * using the given Radius enum to determine FOV shape.  Upon calling cacheAllPerformance() or cacheAllQuality(),
+     * (collectively, the caching methods), the object this creates will run a medium-quality, fairly permissive FOV
+     * calculation for every cell on the map using a number of threads equal to threadCount, and if cacheAllQuality()
+     * was called, will then ensure symmetry (if cell A can see cell B, then it will make cell B able to see cell A even
+     * if it couldn't in an earlier step). At the same time as the first caching method call, this will calculate Line
+     * of Sight at maximum range (62) for all cells. Walls will always have no cells in their FOV or LOS. This
+     * constructor also allows you to initialize light sources in the level using the lights parameter; any Coord keys
+     * should correspond to walkable cells (or they will be ignored), and the values will be the range those cells
+     * should light up. Light sources are only used by calculateAllQuality().
+     * @param map a char[][] as returned by SquidLib's map generators
+     * @param maxRadius the longest radius that will possibly need to be cached for FOV; LOS is separate
+     * @param radiusKind a Radius enum that determines the shape of each FOV area
+     * @param threadCount how many threads to use during the full-map calculations
+     * @param lights a Map of Coords (which should be walkable) to the radii they should light (not for moving lights)
+     */
+    public FOVCache(char[][] map, int maxRadius, Radius radiusKind, int threadCount, Map<Coord, Integer> lights)
     {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
@@ -153,7 +201,8 @@ public class FOVCache {
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
-        fovPermissiveness = (9 + permissiveness) * 0.1;
+        fovPermissiveness = 0.9;
+        this.lights = new LinkedHashMap<Coord, Integer>(lights);
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -186,6 +235,28 @@ public class FOVCache {
 
     private void preloadMeasurements()
     {
+        Iterator<Coord> it = lights.keySet().iterator();
+        Coord pos;
+        while (it.hasNext())
+        {
+            pos = it.next();
+            if(resMap[pos.x][pos.y] >= 1.0)
+                it.remove();
+        }
+        boolean[][] walls = new boolean[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                walls[i][j] = resMap[i][j] >= 1.0;
+            }
+        }
+        wallMap = pack(walls);
+        lightSources = lights.keySet().toArray(new Coord[lights.size()]);
+        lightBrightnesses = new int[lights.size()];
+        for (int i = 0; i < lightSources.length; i++) {
+            lightBrightnesses[i] = lights.get(lightSources[i]);
+        }
+
+
         atan2Cache = new double[maxRadius * 2 + 1][maxRadius * 2 + 1];
         distanceCache = new short[maxRadius * 2 + 1][maxRadius * 2 + 1];
         waves = new Coord[maxRadius + 1][];
@@ -390,6 +461,11 @@ public class FOVCache {
         return cache[x + y * width];
     }
 
+    public short[] getLOSEntry(int x, int y)
+    {
+        return losCache[x + y * width];
+    }
+
     public boolean queryCache(int visionRange, int viewerX, int viewerY, int targetX, int targetY)
     {
         return queryPacked(cache[viewerX + viewerY  * width][maxRadius - visionRange], targetX, targetY);
@@ -398,6 +474,10 @@ public class FOVCache {
     {
         return queryPacked(cache[viewerX + viewerY  * width][maxRadius - visionRange], targetX, targetY) ||
                 queryPacked(cache[targetX + targetY  * width][maxRadius - visionRange], viewerX, viewerY);
+    }
+    public boolean queryLOS(int viewerX, int viewerY, int targetX, int targetY)
+    {
+        return queryPacked(losCache[viewerX + viewerY  * width], targetX, targetY);
     }
 
     public void cacheAllPerformance() {
@@ -893,6 +973,7 @@ public class FOVCache {
         short myHilbert = (short)posToHilbert(viewerX, viewerY);
         ShortVLA packing = new ShortVLA(128);
         short[][] packed = new short[maxRadius + 1][], cached = cache[viewerX + viewerY * width];
+        short[] losCached = losCache[viewerX + viewerY * width];
         short[] knownSeen;
         for (int l = 0; l < maxRadius + 1; l++) {
             packing.clear();
@@ -912,7 +993,15 @@ public class FOVCache {
                 }
             }
             packed[maxRadius - l] = insertSeveralPacked(cached[maxRadius - l], packing.shrink());
+            Coord light;
+            for (int i = 0; i < lightSources.length; i++) {
+                light = lightSources[i];
+                packed[maxRadius - l] = unionPacked(packed[maxRadius - l], differencePacked(intersectPacked(losCached,
+                        cache[light.x + light.y * width][maxRadius - lightBrightnesses[i]]), wallMap));
+            }
         }
+
+
         return packed;
     }
 

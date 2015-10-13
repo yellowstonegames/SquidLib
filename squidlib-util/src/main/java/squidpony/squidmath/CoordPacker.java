@@ -891,10 +891,8 @@ public class CoordPacker {
      */
     public static short[] intersectPacked(short[] left, short[] right)
     {
-        if(left.length == 0)
-            return right;
-        if(right.length == 0)
-            return left;
+        if(left.length == 0 || right.length == 0)
+            return ALL_WALL;
         ShortVLA packing = new ShortVLA(64);
         boolean on = false, onLeft = false, onRight = false;
         int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
@@ -971,7 +969,7 @@ public class CoordPacker {
      * 2D array, this method should primarily be used in conjunction with operations such as intersectPacked(), or have
      * the checking for boundaries handled internally by unpack() or related methods such as unpackMultiDouble().
      * @param original A packed array such as one produced by pack()
-     * @return A packed array that contains all cells that were "on" in either left or right
+     * @return A packed array that contains all cells that were "off" in either left or right
      */
     public static short[] negatePacked(short[] original) {
         if (original.length <= 1) {
@@ -997,7 +995,7 @@ public class CoordPacker {
      * preferred when finding a region of one packed array that is not contained in another packed array.
      * @param left A packed array such as one produced by pack()
      * @param right A packed array such as one produced by pack()
-     * @return A packed array that encodes "on" for all cells that were "on" in both left and right
+     * @return A packed array that encodes "on" for all cells that were "on" in left and "off" in right
      */
     public static short[] differencePacked(short[] left, short[] right)
     {
