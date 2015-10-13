@@ -58,7 +58,7 @@ public class FOVCache {
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
-        fovPermissiveness = 0.8;
+        fovPermissiveness = 0.9;
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -105,7 +105,7 @@ public class FOVCache {
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
-        fovPermissiveness = 0.8;
+        fovPermissiveness = 0.9;
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -153,7 +153,7 @@ public class FOVCache {
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = maxRadius;
         this.radiusKind = radiusKind;
-        fovPermissiveness = permissiveness;
+        fovPermissiveness = (9 + permissiveness) * 0.1;
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -202,10 +202,21 @@ public class FOVCache {
                 inverse_tmp = (short)(maxRadius - tmp / 2);
 
                 atan2Cache[maxRadius + i][maxRadius + j] = Math.atan2(j, i);
+                if(atan2Cache[maxRadius + i][maxRadius + j] < 0)
+                    atan2Cache[maxRadius + i][maxRadius + j] += PI2;
                 if(tmp > 0) {
                     atan2Cache[maxRadius - i][maxRadius + j] = Math.atan2(j, -i);
+                    if(atan2Cache[maxRadius - i][maxRadius + j] < 0)
+                        atan2Cache[maxRadius - i][maxRadius + j] += PI2;
+
                     atan2Cache[maxRadius + i][maxRadius - j] = Math.atan2(-j, i);
+                    if(atan2Cache[maxRadius + i][maxRadius - j] < 0)
+                        atan2Cache[maxRadius + i][maxRadius - j] += PI2;
+
                     atan2Cache[maxRadius - i][maxRadius - j] = Math.atan2(-j, -i);
+                    if(atan2Cache[maxRadius - i][maxRadius - j] < 0)
+                        atan2Cache[maxRadius - i][maxRadius - j] += PI2;
+
                 }
                 if(tmp / 2 <= maxRadius) {
                     distanceCache[maxRadius + i][maxRadius + j] = inverse_tmp;
@@ -238,13 +249,13 @@ public class FOVCache {
         directionAngles = new double[3][3];
         directionAngles[0][0] = Math.atan2(1,1);
         directionAngles[0][1] = Math.atan2(0,1);
-        directionAngles[0][2] = Math.atan2(-1,1);
+        directionAngles[0][2] = Math.atan2(-1,1) + PI2;
         directionAngles[1][0] = Math.atan2(1,0);
         directionAngles[1][1] = 0;
-        directionAngles[1][2] = Math.atan2(-1,0);
+        directionAngles[1][2] = Math.atan2(-1,0) + PI2;
         directionAngles[2][0] = Math.atan2(1,-1);
         directionAngles[2][1] = Math.atan2(0,-1);
-        directionAngles[2][2] = Math.atan2(-1,-1);
+        directionAngles[2][2] = Math.atan2(-1,-1) + PI2;
     }
 
     /**
@@ -443,13 +454,271 @@ public class FOVCache {
         complete = true;
     }
 
+    //needs rewrite, must store the angle a ray traveled at to get around an obstacle, and propagate it to the end of
+    //the ray. It should check if the angle theta for a given point is too different from the angle in angleMap.
+    public byte[][] waveFOVWIP(int viewerX, int viewerY) {
+        byte[][] gradientMap = new byte[width][height];
+        double[][] angleMap = new double[2 * maxRadius + 1][2 * maxRadius + 1];
+        for (int i = 0; i < angleMap.length; i++) {
+            Arrays.fill(angleMap[i], -20);
+        }
+        gradientMap[viewerX][viewerY] = (byte)(2 * maxRadius);
+        Direction[] dirs = (radiusKind == Radius.DIAMOND || radiusKind == Radius.OCTAHEDRON)
+                ? Direction.CARDINALS : Direction.OUTWARDS;
+        int cx, cy, ccwAdjX, ccwAdjY, cwAdjX, cwAdjY, ccwGridX, ccwGridY, cwGridX, cwGridY;
+        Coord pt;
+        double theta, angleCW, angleCCW;
+        byte dist;
+        boolean blockedCCW, blockedCW, isStraightCCW;
+        for(int w = 0; w < waves.length; w++)
+        {
+            for(int c = 0; c < waves[w].length; c++)
+            {
+                pt = waves[w][c];
+                cx = viewerX - maxRadius + pt.x;
+                cy = viewerY - maxRadius + pt.y;
+                if(cx < width && cx >= 0 && cy < height && cy >= 0)
+                {
+                    theta = atan2Cache[pt.x][pt.y];
+                    dist = (byte)(distanceCache[pt.x][pt.y ] + 1);
+
+                    if(w <= 0)
+                    {
+                        gradientMap[cx][cy] = dist;
+                    }
+                    else {
+                        switch ((int) Math.floor(theta / QUARTER_PI)) {
+
+                            //positive x, postive y (lower on screen), closer to x-axis
+                            case 0:
+                                cwAdjX = pt.x - 1;
+                                cwAdjY = pt.y;
+                                angleCW = directionAngles[0][1];
+                                isStraightCCW = false;
+                                ccwAdjX = pt.x - 1;
+                                ccwAdjY = pt.y - 1;
+                                angleCCW = directionAngles[0][0];
+                                break;
+                            //positive x, postive y (lower on screen), closer to y-axis
+                            case 1:
+                                cwAdjX = pt.x - 1;
+                                cwAdjY = pt.y - 1;
+                                angleCW = directionAngles[0][0];
+                                ccwAdjX = pt.x;
+                                ccwAdjY = pt.y - 1;
+                                angleCCW = directionAngles[1][0];
+                                isStraightCCW = true;
+                                break;
+                            //negative x, postive y (lower on screen), closer to y-axis
+                            case 2:
+                                cwAdjX = pt.x;
+                                cwAdjY = pt.y - 1;
+                                angleCW = directionAngles[1][0];
+                                isStraightCCW = false;
+                                ccwAdjX = pt.x + 1;
+                                ccwAdjY = pt.y - 1;
+                                angleCCW = directionAngles[2][0];
+                                break;
+                            //negative x, postive y (lower on screen), closer to x-axis
+                            case 3:
+                                cwAdjX = pt.x + 1;
+                                cwAdjY = pt.y - 1;
+                                angleCW = directionAngles[2][0];
+                                ccwAdjX = pt.x + 1;
+                                ccwAdjY = pt.y;
+                                angleCCW = directionAngles[2][1];
+                                isStraightCCW = true;
+                                break;
+
+                            //negative x, negative y (higher on screen), closer to x-axis
+                            case 4:
+                                cwAdjX = pt.x + 1;
+                                cwAdjY = pt.y + 1;
+                                angleCW = directionAngles[2][2];
+                                ccwAdjX = pt.x + 1;
+                                ccwAdjY = pt.y;
+                                angleCCW = directionAngles[2][1];
+                                isStraightCCW = false;
+                                break;
+                            //negative x, negative y (higher on screen), closer to y-axis
+                            case 5:
+                                cwAdjX = pt.x + 1;
+                                cwAdjY = pt.y + 1;
+                                angleCW = directionAngles[2][2];
+                                ccwAdjX = pt.x;
+                                ccwAdjY = pt.y + 1;
+                                angleCCW = directionAngles[1][2];
+                                isStraightCCW = true;
+                                break;
+                            //positive x, negative y (higher on screen), closer to y-axis
+                            case 6:
+                                cwAdjX = pt.x;
+                                cwAdjY = pt.y + 1;
+                                angleCW = directionAngles[1][2];
+                                isStraightCCW = false;
+                                ccwAdjX = pt.x - 1;
+                                ccwAdjY = pt.y + 1;
+                                angleCCW = directionAngles[0][2];
+                                break;
+                            //positive x, negative y (higher on screen), closer to x-axis
+                            default:
+                                cwAdjX = pt.x - 1;
+                                cwAdjY = pt.y + 1;
+                                angleCW = directionAngles[0][2];
+                                ccwAdjX = pt.x - 1;
+                                ccwAdjY = pt.y;
+                                angleCCW = directionAngles[0][1];
+                                isStraightCCW = true;
+                                break;
+                        }
+                        /*
+                        angleCCW = (((Math.abs(atan2Cache[ccwAdjX][ccwAdjY] - angleCCW) > Math.PI)
+                                ? atan2Cache[ccwAdjX][ccwAdjY] + angleCCW + PI2
+                                : atan2Cache[ccwAdjX][ccwAdjY] + angleCCW)
+                                * 0.5) % PI2;
+                                //(angleCCW + atan2Cache[ccwAdjX][ccwAdjY]) * 0.5;
+                        angleCW = (((Math.abs(atan2Cache[cwAdjX][cwAdjY] - angleCW) > Math.PI)
+                                ? atan2Cache[cwAdjX][cwAdjY] + angleCW + PI2
+                                : atan2Cache[cwAdjX][cwAdjY] + angleCW)
+                                * 0.5) % PI2;
+                                //(angleCW + atan2Cache[cwAdjX][cwAdjY]) * 0.5;
+
+                         */
+                        angleCCW = atan2Cache[ccwAdjX][ccwAdjY];
+                        //(angleCCW + atan2Cache[ccwAdjX][ccwAdjY]) * 0.5;
+                        angleCW = atan2Cache[cwAdjX][cwAdjY];
+                        //(angleCW + atan2Cache[cwAdjX][cwAdjY]) * 0.5;
+
+
+                        cwGridX = cwAdjX + viewerX - maxRadius;
+                        ccwGridX = ccwAdjX + viewerX - maxRadius;
+                        cwGridY = cwAdjY + viewerY - maxRadius;
+                        ccwGridY = ccwAdjY + viewerY - maxRadius;
+
+                        blockedCW = cwGridX >= width || cwGridY >= height || cwGridX < 0 || cwGridY < 0 ||
+                                resMap[cwGridX][cwGridY] > 0.5 ||
+                                angleMap[cwAdjX][cwAdjY] >= PI2;
+                        blockedCCW = ccwGridX >= width || ccwGridY >= height || ccwGridX < 0 || ccwGridY < 0 ||
+                                resMap[ccwGridX][ccwGridY] > 0.5 ||
+                                angleMap[ccwAdjX][ccwAdjY] >= PI2;
+
+                        if (blockedCW && blockedCCW) {
+                            angleMap[pt.x][pt.y] = PI2;
+                            continue;
+                        }
+                        if (theta % (HALF_PI - 0.00125) < 0.005)
+                            if (isStraightCCW) {
+                                if (blockedCCW) {
+                                    angleMap[pt.x][pt.y] = PI2;
+                                    gradientMap[cx][cy] = dist;
+                                    continue;
+                                }
+                                else
+                                    angleMap[pt.x][pt.y] = theta;
+                            } else {
+                                if (blockedCW) {
+                                    angleMap[pt.x][pt.y] = PI2;
+                                    gradientMap[cx][cy] = dist;
+                                    continue;
+                                }
+                                else
+                                    angleMap[pt.x][pt.y] = theta;
+                            }
+                        else if(theta % (QUARTER_PI  - 0.0025) < 0.005)
+                            if (isStraightCCW) {
+                                if (blockedCW) {
+                                    angleMap[pt.x][pt.y] = PI2;
+                                    gradientMap[cx][cy] = dist;
+                                    continue;
+                                }
+                                else
+                                    angleMap[pt.x][pt.y] = theta;
+                            } else {
+                                if (blockedCCW) {
+                                    angleMap[pt.x][pt.y] = PI2;
+                                    gradientMap[cx][cy] = dist;
+                                    continue;
+                                }
+                                else
+                                    angleMap[pt.x][pt.y] = theta;
+                            }
+                        else {
+                            if (blockedCW) {
+                                angleMap[pt.x][pt.y] = angleMap[ccwAdjX][ccwAdjY];
+//                                angleMap[pt.x][pt.y] = Math.max(angleMap[ccwAdjX][ccwAdjY],
+//                                (theta - (angleCCW - theta + PI2) % PI2 * 0.5 + PI2) % PI2);
+//                                        (theta - angleCCW > Math.PI)
+//                                                ? (theta - (angleCCW - theta + PI2) * 0.5) % PI2
+//                                                : theta - (angleCCW - theta + PI2) % PI2 * 0.5;
+                                //angleMap[pt.x][pt.y] = angleCCW;
+
+                                // (((Math.abs(theta - angleCCW) > Math.PI)
+                                //        ? theta + angleCCW + PI2
+                                //        : theta + angleCCW)
+                                //        * 0.5) % PI2;
+                                //angleMap[cwAdjX - viewerX + maxRadius][cwAdjY - viewerY + maxRadius];
+                                //Math.abs(angleMap[cwAdjX - viewerX + maxRadius][cwAdjY - viewerY + maxRadius] -
+
+                                //angleMap[pt.x][pt.y] = Math.abs(theta - angleCCW) +
+                                //        angleMap[cwAdjX - viewerX + maxRadius][cwAdjY - viewerY + maxRadius];
+
+                            } else if (blockedCCW) {
+                                angleMap[pt.x][pt.y] = angleMap[cwAdjX][cwAdjY];
+//                                        angleMap[pt.x][pt.y] = Math.max(angleMap[cwAdjX][cwAdjY],
+//                                        (theta + (theta - angleCW + PI2) % PI2 * 0.5 + PI2) % PI2);
+//                                        (angleCW - theta > Math.PI)
+//                                                ? theta + (theta - angleCW + PI2) % PI2 * 0.5
+//                                                : (theta + (theta - angleCW + PI2) * 0.5) % PI2;
+                                        //angleCW;
+
+                                //angleMap[ccwAdjX - viewerX + maxRadius][ccwAdjY - viewerY + maxRadius];
+                                //angleMap[ccwAdjX - viewerX + maxRadius][ccwAdjY - viewerY + maxRadius]
+                            }
+                            else
+                            {
+                                double cwTemp = angleMap[cwAdjX][cwAdjY], ccwTemp = angleMap[ccwAdjX][ccwAdjY];
+                                if(cwTemp < 0)
+                                    cwTemp = (atan2Cache[cwAdjX][cwAdjY]);
+                                if(ccwTemp < 0)
+                                    ccwTemp = (atan2Cache[ccwAdjX][ccwAdjY]);
+                                if(cwTemp != atan2Cache[cwAdjX][cwAdjY] &&
+                                        ccwTemp != atan2Cache[ccwAdjX][ccwAdjY])
+                                    angleMap[pt.x][pt.y] = 0.5 * (cwTemp + ccwTemp);
+                                else if(ccwTemp != atan2Cache[ccwAdjX][ccwAdjY])
+                                    angleMap[pt.x][pt.y] = ccwTemp;
+                                else if(cwTemp != atan2Cache[cwAdjX][cwAdjY])
+                                    angleMap[pt.x][pt.y] = cwTemp;
+                                else
+                                    angleMap[pt.x][pt.y] = theta;
+                            }
+                            /*
+
+                            else if (!blockedCW)
+                                angleMap[pt.x][pt.y] = (angleMap[cwAdjX][cwAdjY] != atan2Cache[cwAdjX][cwAdjY])
+                                        ? angleMap[cwAdjX][cwAdjY]
+                                        : theta;
+                            else
+                                angleMap[pt.x][pt.y] = (angleMap[ccwAdjX][ccwAdjY] != atan2Cache[ccwAdjX][ccwAdjY])
+                                        ? angleMap[ccwAdjX][ccwAdjY]
+                                        : theta;
+                             */
+                        }
+                        if(Math.abs(angleMap[pt.x][pt.y] - theta) <= 0.001 || resMap[pt.x][pt.y] > 0.5)
+                            gradientMap[cx][cy] = dist;
+                        else
+                            angleMap[pt.x][pt.y] = PI2 * 2;
+                    }
+                }
+            }
+        }
+
+        return gradientMap;
+    }
 
     public byte[][] waveFOV(int viewerX, int viewerY) {
         byte[][] gradientMap = new byte[width][height];
         double[][] angleMap = new double[2 * maxRadius + 1][2 * maxRadius + 1];
         gradientMap[viewerX][viewerY] = (byte)(2 * maxRadius);
-        Direction[] dirs = (radiusKind == Radius.DIAMOND || radiusKind == Radius.OCTAHEDRON)
-                ? Direction.CARDINALS : Direction.OUTWARDS;
         int cx, cy, nearCWx, nearCWy, nearCCWx, nearCCWy;
         Coord pt;
         double theta, angleCW, angleCCW, straight;
@@ -516,7 +785,7 @@ public class FOVCache {
                                 break;
 
                             //negative x, negative y, closer to x-axis
-                            case -4:
+                            case 4:
                                 nearCWx = pt.x + 1;
                                 nearCWy = pt.y;
                                 angleCW = -directionAngles[2][1];
@@ -527,7 +796,7 @@ public class FOVCache {
 
                                 break;
                             //negative x, negative y, closer to y-axis
-                            case -3:
+                            case 5:
                                 nearCWx = pt.x;
                                 nearCWy = pt.y + 1;
                                 angleCW = directionAngles[1][2];
@@ -537,7 +806,7 @@ public class FOVCache {
                                 angleCCW = directionAngles[2][2];
                                 break;
                             //positive x, negative y, closer to y-axis
-                            case -2:
+                            case 6:
                                 nearCCWx = pt.x;
                                 nearCCWy = pt.y + 1;
                                 angleCCW = directionAngles[1][2];
@@ -570,11 +839,11 @@ public class FOVCache {
                         if( theta == 0 || theta == Math.PI || (Math.abs(theta) - HALF_PI < 0.005 && Math.abs(theta) - HALF_PI > -0.005))
                             angleMap[pt.x][pt.y] = (straight == angleCCW)
                                     ?  (blockedCCW)
-                                      ? PI2
-                                      : angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius]
+                                    ? PI2
+                                    : angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius]
                                     : (blockedCW)
-                                      ? PI2
-                                      : angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius];
+                                    ? PI2
+                                    : angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius];
                         else {
                             if (blockedCW && blockedCCW) {
                                 angleMap[pt.x][pt.y] = PI2;
@@ -582,8 +851,8 @@ public class FOVCache {
                             }
                             if (blockedCW) {
                                 angleMap[pt.x][pt.y] = Math.abs(theta - angleCCW) + SLIVER_PI;
-                                        //angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius];
-                                        //Math.abs(angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius] -
+                                //angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius];
+                                //Math.abs(angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius] -
 
 
                                 //angleMap[pt.x][pt.y] = Math.abs(theta - angleCCW) +
@@ -595,9 +864,11 @@ public class FOVCache {
                                 //angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius]
                             }
                             if (!blockedCW)
-                                angleMap[pt.x][pt.y] += 0.5 * angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius];
+                                angleMap[pt.x][pt.y] += 0.5 *
+                                        angleMap[nearCWx - viewerX + maxRadius][nearCWy - viewerY + maxRadius];
                             if (!blockedCCW)
-                                angleMap[pt.x][pt.y] += 0.5 * angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius];
+                                angleMap[pt.x][pt.y] += 0.5 *
+                                        angleMap[nearCCWx - viewerX + maxRadius][nearCCWy - viewerY + maxRadius];
                         }
                         if(angleMap[pt.x][pt.y] <= fovPermissiveness)
                             gradientMap[cx][cy] = dist;
@@ -640,7 +911,7 @@ public class FOVCache {
                         packing.add(i);
                 }
             }
-            packed[l] = insertSeveralPacked(cached[maxRadius - l], packing.shrink());
+            packed[maxRadius - l] = insertSeveralPacked(cached[maxRadius - l], packing.shrink());
         }
         return packed;
     }
