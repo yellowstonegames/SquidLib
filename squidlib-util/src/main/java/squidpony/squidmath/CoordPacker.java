@@ -816,7 +816,7 @@ public class CoordPacker {
         ShortVLA packing = new ShortVLA(64);
         boolean on = false, onLeft = false, onRight = false;
         int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
-        while (elemLeft < left.length || elemRight < right.length) {
+        while ((elemLeft < left.length || elemRight < right.length) && idx <= 0xffff) {
             if (elemLeft >= left.length) {
                 totalLeft = 0xffff;
                 onLeft = false;
@@ -898,7 +898,7 @@ public class CoordPacker {
         ShortVLA packing = new ShortVLA(64);
         boolean on = false, onLeft = false, onRight = false;
         int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
-        while (elemLeft < left.length || elemRight < right.length) {
+        while ((elemLeft < left.length || elemRight < right.length) && idx <= 0xffff) {
             if (elemLeft >= left.length) {
                 totalLeft = 0xffff;
                 onLeft = false;
@@ -1058,7 +1058,7 @@ public class CoordPacker {
             current = hilbert[i];
             additions[i * 2] = (short)(current - total);
             additions[i * 2 + 1] = 1;
-            total += current + 1;
+            total = current + 1;
         }
         return unionPacked(original, additions);
     }
@@ -1117,7 +1117,7 @@ public class CoordPacker {
             current = hilbert[i];
             removals[i * 2 + 1] = (short)(current - total);
             removals[i * 2 + 2] = 1;
-            total += current + 1;
+            total = current + 1;
         }
         removals[removals.length - 1] = -1;
         return intersectPacked(original, removals);
