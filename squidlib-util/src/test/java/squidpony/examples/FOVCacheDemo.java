@@ -10,6 +10,8 @@ import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 
+import java.util.LinkedHashMap;
+
 /**
  * Created by Tommy Ettinger on 10/8/2015.
  */
@@ -27,8 +29,14 @@ public class FOVCacheDemo {
             dungeonGenerator.addWater(25);
             //dungeonGenerator.addTraps(2);
             char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
-
-            FOVCache cache = new FOVCache(map, 16, Radius.CIRCLE, 8);
+            LinkedHashMap<Coord, Integer> lights = new LinkedHashMap<Coord, Integer>((width / 6) * (height / 6));
+            for (int i = 0; i < width / 6; i++) {
+                for (int j = 0; j < height / 4; j++) {
+                    lights.put(Coord.get(i * 6 + 3, j * 4 + i % 4), 2);
+                    map[i * 6 + 3][j * 4 + i % 4] = (map[i * 6 + 3][j * 4 + i % 4] == '#') ? '┼' : '^';
+                }
+            }
+            FOVCache cache = new FOVCache(map, 4, Radius.CIRCLE, 8, lights);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
 
             cache.cacheAllQuality();
