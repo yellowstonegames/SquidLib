@@ -389,4 +389,25 @@ public enum Radius {
         }
     }
 
+    /**
+     * Compares two Radius enums as if they are both in a 2D plane; that is, Radius.SPHERE is treated as equal to
+     * Radius.CIRCLE, Radius.CUBE is equal to Radius.SQUARE, and Radius.OCTAHEDRON is equal to Radius.DIAMOND.
+     * @param other the Radius to compare this to
+     * @return true if the 2D versions of both Radius enums are the same shape.
+     */
+    public boolean equals2D(Radius other)
+    {
+        switch (this)
+        {
+            case CIRCLE:
+            case SPHERE:
+                return (other == CIRCLE || other == SPHERE);
+            case SQUARE:
+            case CUBE:
+                return (other == SQUARE || other == CUBE);
+            default:
+                return (other == DIAMOND || other == OCTAHEDRON);
+        }
+    }
+
 }

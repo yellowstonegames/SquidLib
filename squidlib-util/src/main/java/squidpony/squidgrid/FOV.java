@@ -193,7 +193,7 @@ public class FOV {
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations are determined by the provided
      * RadiusStrategy. A conical section of FOV is lit by this method if
-     * startAngle and endAngle are not equal.
+     * span is greater than 0.
      *
      * @param resistanceMap the grid of cells to calculate on
      * @param startX the horizontal component of the starting location

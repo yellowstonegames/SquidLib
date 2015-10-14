@@ -35,19 +35,20 @@ public class FOVCacheTest {
             for (int i = 0; i < seen.length; i++) {
                 assertArrayEquals(seen[i], gradient[i]);
             }
-            cache.cacheAllQuality();
+            cache.awaitCacheQuality();
             boolean[][] mutual = CoordPacker.unpack(cache.getCacheEntry(walkable.x, walkable.y)[0], width, height);
             for (int i = 0; i < mutual.length; i++) {
                 for (int j = 0; j < mutual[i].length; j++) {
                     if(mutual[i][j] && map[i][j] != '#')
                     {
                         boolean sharing = cache.queryCache(10, i, j, walkable.x, walkable.y);
-                        if(!sharing)
-                            System.out.println("i: " + i + ", j: " + j + ", x: " + walkable.x + ", y: " + walkable.y);
+                        //if(!sharing)
+                        //    System.out.println("i: " + i + ", j: " + j + ", x: " + walkable.x + ", y: " + walkable.y);
                         assertTrue(sharing);
                     }
                 }
             }
+
 
 
         }
