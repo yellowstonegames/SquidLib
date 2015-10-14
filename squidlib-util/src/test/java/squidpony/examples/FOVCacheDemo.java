@@ -18,8 +18,8 @@ import java.util.LinkedHashMap;
 public class FOVCacheDemo {
     public static void main(String[] args)
     {
-        int width = 60;
-        int height = 60;
+        int width = 80;
+        int height = 30;
         for (long r = 0, seed = 0xBEEF; r < 10; r++, seed ^= seed << 2) {
 
 
@@ -38,8 +38,10 @@ public class FOVCacheDemo {
             }
             FOVCache cache = new FOVCache(map, 4, Radius.CIRCLE, 8, lights);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
-
-            cache.cacheAllQuality();
+            long time = System.currentTimeMillis();
+            cache.awaitCacheQuality();
+            time = System.currentTimeMillis() - time;
+            System.out.println("Time spent caching: " + time);
             byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
             for (int j = 0; j < map[0].length; j++) {
                 for (int i = 0; i < map.length; i++) {
@@ -51,6 +53,7 @@ public class FOVCacheDemo {
                 }
                 System.out.println();
             }
+            System.out.println();
         }
 /*        for (int n = 1; n < 8; n++) {
             System.out.println("With viewer at " + walkable.x + "," + walkable.y + " and target at " +

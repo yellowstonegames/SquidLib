@@ -665,6 +665,136 @@ public class CoordPacker {
     }
 
     /**
+     * Decompresses a short[][] returned by packMulti() and produces an approximation of the double[][] it compressed
+     * using the given levels double[] as the values to assign, but only using the innermost indices up to limit, as
+     * described in the {@link CoordPacker} class documentation. The length of levels and the length of the outer array
+     * of packed do not have to be equal. However, the levels array passed to this method should not be identical to the
+     * levels array passed to packMulti(); for FOV compression, you should get an array for levels using
+     * generatePackingLevels(), but for decompression, you should create levels using generateLightLevels(), which
+     * should more appropriately fit the desired output. Reusing the levels array used to pack the FOV will usually
+     * produce values at the edge of FOV that are less than 0.01 but greater than 0, and will have a maximum value
+     * somewhat less than 1.0; neither are usually desirable, but using a different array made with
+     * generateLightLevels() will produce doubles ranging from 1.0 / levels.length to 1.0 at the highest. Width and
+     * height do not technically need to match the dimensions of the original 2D array, but under most circumstances
+     * where they don't match, the data produced will be junk.
+     * @param packed a short[][] encoded by calling this class' packMulti() method on a 2D array.
+     * @param width the width of the 2D array that will be returned; should match the unpacked array's width.
+     * @param height the height of the 2D array that will be returned; should match the unpacked array's height.
+     * @param levels a double[] that must have the same length as packed, and will be used to assign cells in the
+     *               returned double[][] based on what levels parameter was used to compress packed
+     * @param limit the number of elements to consider from levels and packed, starting from the innermost.
+     * @return a double[][] where the values that corresponded to the nth value in the levels parameter used to
+     * compress packed will now correspond to the nth value in the levels parameter passed to this method.
+     */
+    public static double[][] unpackMultiDoublePartial(short[][] packed, int width, int height, double[] levels,
+                                                      int limit)
+    {
+        if(packed == null || packed.length == 0)
+            throw new ArrayIndexOutOfBoundsException(
+                    "CoordPacker.unpackMultiDouble() must be given a non-empty array");
+        if (levels == null || levels.length != packed.length)
+            throw new UnsupportedOperationException("The lengths of packed and levels must be equal");
+        if (levels.length > 63)
+            throw new UnsupportedOperationException(
+                    "Too many levels to be packed by CoordPacker; should be less than 64 but was given " +
+                            levels.length);
+        if(limit > levels.length)
+            limit = levels.length;
+        double[][] unpacked = new double[width][height];
+        short x= 0, y = 0;
+        for(int l = packed.length - limit; l < packed.length; l++) {
+            boolean on = false;
+            int idx = 0;
+            for (int p = 0; p < packed[l].length; p++, on = !on) {
+                if (on) {
+                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
+                        x = hilbertX[idx];
+                        y = hilbertY[idx];
+                        if(x >= width || y >= height)
+                            continue;
+                        unpacked[x][y] = levels[l];
+                    }
+                } else {
+                    idx += packed[l][p] & 0xffff;
+                }
+            }
+        }
+        return unpacked;
+    }
+
+    /**
+     * Decompresses a short[][] returned by packMulti() and produces an approximation of the double[][] it compressed
+     * using the given levels double[] as the values to assign, but only using the innermost indices up to limit, as
+     * described in the {@link CoordPacker} class documentation. The length of levels and the length of the outer array
+     * of packed do not have to be equal. However, the levels array passed to this method should not be identical to the
+     * levels array passed to packMulti(); for FOV compression, you should get an array for levels using
+     * generatePackingLevels(), but for decompression, you should create levels using generateLightLevels(), which
+     * should more appropriately fit the desired output. Reusing the levels array used to pack the FOV will usually
+     * produce values at the edge of FOV that are less than 0.01 but greater than 0, and will have a maximum value
+     * somewhat less than 1.0; neither are usually desirable, but using a different array made with
+     * generateLightLevels() will produce doubles ranging from 1.0 / levels.length to 1.0 at the highest. This method
+     * takes an angle and span as well as a centerX and centerY; the only values that will be greater than 0.0 in the
+     * result will be within the round-based conical section that could be produced by traveling from (centerX,centerY)
+     * along angle in a limitless line and expanding the cone to be span degrees broad (circularly), centered on angle.
+     * Width and height do not technically need to match the dimensions of the original 2D array, but under most
+     * circumstances where they don't match, the data produced will be junk.
+     * @param packed a short[][] encoded by calling this class' packMulti() method on a 2D array.
+     * @param width the width of the 2D array that will be returned; should match the unpacked array's width.
+     * @param height the height of the 2D array that will be returned; should match the unpacked array's height.
+     * @param levels a double[] that must have the same length as packed, and will be used to assign cells in the
+     *               returned double[][] based on what levels parameter was used to compress packed
+     * @param limit the number of elements to consider from levels and packed, starting from the innermost.
+     * @param centerX the x position of the corner or origin of the conical FOV
+     * @param centerY the y position of the corner or origin of the conical FOV
+     * @param angle the center of the conical area to limit this to, in degrees
+     * @param span the total span of the conical area to limit this to, in degrees
+     * @return a double[][] where the values that corresponded to the nth value in the levels parameter used to
+     * compress packed will now correspond to the nth value in the levels parameter passed to this method.
+     */
+    public static double[][] unpackMultiDoublePartialConical(short[][] packed, int width, int height, double[] levels,
+                                                      int limit, int centerX, int centerY, double angle, double span)
+    {
+        if(packed == null || packed.length == 0)
+            throw new ArrayIndexOutOfBoundsException(
+                    "CoordPacker.unpackMultiDouble() must be given a non-empty array");
+        if (levels == null || levels.length != packed.length)
+            throw new UnsupportedOperationException("The lengths of packed and levels must be equal");
+        if (levels.length > 63)
+            throw new UnsupportedOperationException(
+                    "Too many levels to be packed by CoordPacker; should be less than 64 but was given " +
+                            levels.length);
+        if(limit > levels.length)
+            limit = levels.length;
+
+        double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? Math.IEEEremainder(angle + 720.0, 360.0) : angle);
+        double span2 = Math.toRadians(span);
+        double[][] unpacked = new double[width][height];
+        short x= 0, y = 0;
+        for(int l = packed.length - limit; l < packed.length; l++) {
+            boolean on = false;
+            int idx = 0;
+            for (int p = 0; p < packed[l].length; p++, on = !on) {
+                if (on) {
+                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
+                        x = hilbertX[idx];
+                        y = hilbertY[idx];
+                        if(x >= width || y >= height)
+                            continue;
+                        double newAngle = Math.atan2(y - centerY, x - centerX) + Math.PI * 2;
+                        if(Math.abs(Math.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0)
+                            unpacked[x][y] = 0.0;
+                        else
+                            unpacked[x][y] = levels[l];
+                    }
+                } else {
+                    idx += packed[l][p] & 0xffff;
+                }
+            }
+        }
+        return unpacked;
+    }
+
+    /**
      * Decompresses a short[][] returned by packMulti() and produces a simple 2D array where the values are bytes
      * corresponding to 1 + the highest index into levels (that is, the original levels parameter passed to packMulti)
      * matched by a cell, or 0 if the cell didn't match any levels during compression, as described in the
@@ -969,7 +1099,7 @@ public class CoordPacker {
      * 2D array, this method should primarily be used in conjunction with operations such as intersectPacked(), or have
      * the checking for boundaries handled internally by unpack() or related methods such as unpackMultiDouble().
      * @param original A packed array such as one produced by pack()
-     * @return A packed array that contains all cells that were "off" in either left or right
+     * @return A packed array that encodes "on" all cells that were "off" in original
      */
     public static short[] negatePacked(short[] original) {
         if (original.length <= 1) {
@@ -1045,7 +1175,7 @@ public class CoordPacker {
      *     unionPacked() anyway).
      * @param original A packed array such as one produced by pack()
      * @param hilbert an array or vararg of Hilbert Curve indices that should be inserted into the result
-     * @return A packed array that encodes "on" for all cells that are "on" in original or are in hilbert
+     * @return A packed array that encodes "on" for all cells that are "on" in original or are contained in hilbert
      */
     public static short[] insertSeveralPacked(short[] original, short... hilbert)
     {
@@ -1103,7 +1233,7 @@ public class CoordPacker {
      *     differencePacked() anyway).
      * @param original A packed array such as one produced by pack()
      * @param hilbert an array or vararg of Hilbert Curve indices that should be inserted into the result
-     * @return A packed array that encodes "on" for all cells that are "on" in original or are in hilbert
+     * @return A packed array that encodes "on" for all cells that are "on" in original and aren't contained in hilbert
      */
     public static short[] removeSeveralPacked(short[] original, short... hilbert)
     {

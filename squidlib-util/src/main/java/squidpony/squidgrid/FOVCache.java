@@ -14,9 +14,46 @@ import java.util.concurrent.Future;
 import static squidpony.squidmath.CoordPacker.*;
 
 /**
+ * A combined FOV calculator, partial LOS calculator, FOV/LOS compressor, and tool to store/query/extract compressed
+ * FOV/LOS data. It operates on one level map at a time and stores FOV maps for all cells in a memory-efficient way,
+ * though it is likely to take too long to process large maps to be useful on those unless run before the player gets
+ * to that map. (Large here means more than 10,000 total cells, or 100 width * 100 height, but this rough upper bound is
+ * based on the capability of the machine running the calculations, and should be expected to be much lower on, for
+ * instance, older dual-core phones than newer quad-core desktops). There are a few ways to ensure FOVCache is done
+ * processing a map by the time a player gets to that map; the recommended approach for games with clearly defined,
+ * separate levels is to generate the first level as part of game startup, run your choice of cacheAllPerformance() or
+ * cacheAllQuality() immediately afterward (this will start calculation on a second thread), and when the map needs to
+ * be displayed (because gameplay has started and any character creation steps are done), to call the caching method's
+ * counterpart, either awaitCachePerformance() or awaitCacheQuality(), which will cause gameplay to be essentially
+ * frozen until the cache completes (you could display a loading message before calling it). The next part is more
+ * interesting; you should generate the second level immediately after the awaiting method finishes, before the player
+ * has approached the second level, and create another FOVCache object using the second level as its map, then call
+ * your choice of cacheAllPerformance() or cacheAllQuality() on the second level's FOVCache. This will calculate the
+ * cache, as before, on another thread, and you should call the appropriate awaiting method when the player is entering
+ * the second level (descending or ascending a staircase, for example). This time, as long as the player spent more than
+ * a few seconds on the first level for most maps, the cache should be pre-calculated and awaiting should take no time.
+ * <br>
+ * You can choose cacheAllPerformance() or cacheAllQuality() when using this class; the latter calls the former and so
+ * will always be slower, but the steps it performs are typically fairly quick to run and cacheAllQuality() should
+ * often be preferred, at least for smaller maps. Using cacheAllPerformance() produces asymmetric FOV frequently, and
+ * often has odd traits in regards to "corner peeking" and some other expected behaviors. Using cacheAllQuality() will
+ * check every cell that is within the maximum radius for each non-wall cell, and if any cell A can see cell B, but cell
+ * B could not yet see A, then B's cached FOV map will be altered so it can see A. The other step cacheAllQuality()
+ * provides is distant lighting; if lights have been passed to the constructor as a Map of Coord keys to Integer values,
+ * then the Coords in that Map that are walkable squares will emit light up to a radius equal to their value in that
+ * Map. Cells with distant lighting will always be in FOV if they could be seen at up to radius 62, which is calculated
+ * for every FOVCache as an LOS cache.
+ * <br>
+ * This class extends FOV and can be used as a replacement for FOV in some cases. Generally, FOVCache provides methods
+ * that allow faster manipulation and checks of certain values (such as a simple case of whether a cell can be seen from
+ * another cell at a given FOV radius), but will fall back to Shadowcasting FOV (without using the cache) if any calls
+ * to FOV methods are made that have not had their needed information cached. Uncached calls to FOV will not have some
+ * of the niceties FOVCache can provide, like distant lights.
  * Created by Tommy Ettinger on 10/7/2015.
+ * @author Tommy Ettinger
  */
-public class FOVCache {
+public class FOVCache extends FOV{
+
     protected int maxRadius;
     protected int width;
     protected int height;
@@ -24,11 +61,10 @@ public class FOVCache {
     protected int limit;
     protected double[][] resMap;
     protected Radius radiusKind;
-
     protected short[][][] cache;
     protected short[][][] tmpCache;
     protected short[][] losCache;
-    protected boolean complete;
+    protected boolean complete, qualityComplete;
     protected FOV fov;
     protected short[][] ALL_WALLS;
     protected short[] wallMap;
@@ -36,11 +72,13 @@ public class FOVCache {
     protected short[][] distanceCache;
     protected Coord[][] waves;
     protected final int NUM_THREADS;
-    protected ExecutorService executor;
+    private ExecutorService executor;
     protected double fovPermissiveness;
     protected LinkedHashMap<Coord, Integer> lights;
     protected Coord[] lightSources;
     protected int[] lightBrightnesses;
+    private double[] levels;
+    private Thread performanceThread = null, qualityThread = null;
     private static final double HALF_PI = Math.PI * 0.5, QUARTER_PI = Math.PI * 0.25125,
             SLIVER_PI = Math.PI * 0.05, PI2 = Math.PI * 2;
 
@@ -235,6 +273,7 @@ public class FOVCache {
 
     private void preloadMeasurements()
     {
+        levels = generateLightLevels(maxRadius);
         Iterator<Coord> it = lights.keySet().iterator();
         Coord pos;
         while (it.hasNext())
@@ -359,7 +398,7 @@ public class FOVCache {
      */
     protected long storeCellSymmetry(int index) {
         long startTime = System.currentTimeMillis();
-        tmpCache[index] = permissiveSymmetry(index % width, index / width);
+        tmpCache[index] = improveQuality(index % width, index / width);
         return System.currentTimeMillis() - startTime;
     }
 
@@ -480,59 +519,6 @@ public class FOVCache {
         return queryPacked(losCache[viewerX + viewerY  * width], targetX, targetY);
     }
 
-    public void cacheAllPerformance() {
-        List<LOSUnit> losUnits = new ArrayList<LOSUnit>(mapLimit);
-        List<FOVUnit> fovUnits = new ArrayList<FOVUnit>(mapLimit);
-        for (int i = 0; i < mapLimit; i++) {
-            losUnits.add(new LOSUnit(i));
-            fovUnits.add(new FOVUnit(i));
-        }
-        //long totalTime = System.currentTimeMillis(), threadTime = 0L;
-
-        try {
-            final List<Future<Long>> invoke = executor.invokeAll(losUnits);
-            for (Future<Long> future : invoke) {
-                long t = future.get();
-                //threadTime += t;
-                //System.out.println(t);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            final List<Future<Long>> invoke = executor.invokeAll(fovUnits);
-            for (Future<Long> future : invoke) {
-                long t = future.get();
-                //threadTime += t;
-                //System.out.println(t);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        //totalTime = System.currentTimeMillis() - totalTime;
-        //System.out.println("Total real time elapsed: " + totalTime);
-        //System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
-        /*
-        long totalRAM = 0;
-        for (int c = 0; c < width * height; c++) {
-            long ctr = 0, losCtr = 0;
-            for (int i = 0; i < cache[c].length; i++) {
-                ctr += (((2 * cache[c][i].length + 12 - 1) / 8) + 1) * 8L;
-            }
-            totalRAM += (((ctr + 12 - 1) / 8) + 1) * 8;
-
-            losCtr = (((2 * losCache[c].length + 12 - 1) / 8) + 1) * 8L;
-            totalRAM += (((losCtr + 12 - 1) / 8) + 1) * 8;
-        }
-        System.out.println("Total memory used by cache: " + totalRAM);
-        */
-        complete = true;
-    }
 
     //needs rewrite, must store the angle a ray traveled at to get around an obstacle, and propagate it to the end of
     //the ray. It should check if the angle theta for a given point is too different from the angle in angleMap.
@@ -962,9 +948,10 @@ public class FOVCache {
         return gradientMap;
     }
 
-    public short[][] permissiveSymmetry(int viewerX, int viewerY) {
+
+    public short[][] improveQuality(int viewerX, int viewerY) {
         if(!complete) throw new IllegalStateException(
-                "cacheAllPerformance() must be called before permissiveSymmetry() to fill the cache.");
+                "cacheAllPerformance() must be called before improveQuality() to fill the cache.");
         if (viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
             return ALL_WALLS;
         if (resMap[viewerX][viewerY] >= 1.0) {
@@ -1005,48 +992,75 @@ public class FOVCache {
         return packed;
     }
 
-    public void cacheAllQuality()
-    {
-        long totalTime = System.currentTimeMillis(), threadTime = 0L;
-        if(!complete)
-            cacheAllPerformance();
-        List<SymmetryUnit> symUnits = new ArrayList<SymmetryUnit>(mapLimit);
-        for (int i = 0; i < mapLimit; i++) {
-            symUnits.add(new SymmetryUnit(i));
-        }
-
-        try {
-            final List<Future<Long>> invoke = executor.invokeAll(symUnits);
-            for (Future<Long> future : invoke) {
-                long t = future.get();
-                threadTime += t;
-                //System.out.println(t);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        cache = tmpCache;
-        totalTime = System.currentTimeMillis() - totalTime;
-        System.out.println("Total real time elapsed : " + totalTime);
-        System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
-
-        long totalRAM = 0;
-        for (int c = 0; c < width * height; c++) {
-            long ctr = 0, losCtr = 0;
-            for (int i = 0; i < cache[c].length; i++) {
-                ctr += (((2 * cache[c][i].length + 12 - 1) / 8) + 1) * 8L;
-            }
-            totalRAM += (((ctr + 12 - 1) / 8) + 1) * 8;
-
-            losCtr = (((2 * losCache[c].length + 12 - 1) / 8) + 1) * 8L;
-            totalRAM += (((losCtr + 12 - 1) / 8) + 1) * 8;
-        }
-        System.out.println("Total memory used by cache: " + totalRAM);
-
+    /**
+     * Runs FOV calculations on another thread, without interrupting this one. Before using the cache, you should call
+     * awaitCachePerformance() to ensure this method has finished on its own thread, but be aware that this will cause
+     * the thread that calls awaitCachePerformance() to essentially freeze until FOV calculations are over.
+     */
+    public void cacheAllPerformance() {
+        if(performanceThread != null || complete)
+            return;
+        performanceThread = new Thread(new PerformanceUnit());
+        performanceThread.start();
     }
 
+    /**
+     * If FOV calculations from cacheAllPerformance() are being done on another thread, calling this method will make
+     * the current thread wait for the FOV calculations' thread to finish, "freezing" the current thread until it does.
+     * This ensures the cache will be complete after this method returns true, and if this method returns false, then
+     * something has gone wrong.
+     * @return true if cacheAllPerformance() has successfully completed, false otherwise.
+     */
+    public boolean awaitCachePerformance()
+    {
+        if(performanceThread == null)
+            cacheAllPerformance();
+        if(complete) return true;
+        try {
+            performanceThread.join();
+        } catch (InterruptedException e) {
+            return false;
+        }
+        return complete;
+    }
+
+    /**
+     * Runs FOV calculations on another thread, without interrupting this one, then performs additional quality tweaks
+     * and adds any distant lights, if there were any in the constructor. Before using the cache, you should call
+     * awaitCacheQuality() to ensure this method has finished on its own thread, but be aware that this will cause
+     * the thread that calls awaitCacheQuality() to essentially freeze until FOV calculations are over.
+     * <br>
+     * If you call this method, you do not need to call cacheAllPerformance() or awaitCachePerformance(), and in most
+     * cases you should avoid calling both this method and cacheAllPerformance(); this ensures you do not calculate the
+     * same data twice.
+     */
+    public void cacheAllQuality()
+    {
+        if(qualityThread != null || qualityComplete)
+            return;
+        qualityThread = new Thread(new QualityUnit());
+        qualityThread.start();
+    }
+
+    /**
+     * If FOV calculations from cacheAllQuality() are being done on another thread, calling this method will make
+     * the current thread wait for the FOV calculations' thread to finish, "freezing" the current thread until it does.
+     * This ensures the cache will be complete with the additional quality improvements such as distant lights after
+     * this method returns true, and if this method returns false, then something has gone wrong.
+     * @return true if cacheAllQuality() has successfully completed, false otherwise.
+     */
+    public boolean awaitCacheQuality()
+    {
+        if(qualityThread == null)
+            cacheAllQuality();
+        if(qualityComplete) return true;
+        try {
+            qualityThread.join();
+        } catch (InterruptedException e) {
+            return false;
+        }
+        return qualityComplete;
+    }
 
 
     private byte heuristic(Direction target) {
@@ -1086,7 +1100,270 @@ public class FOVCache {
         }
     }
 
-    public class FOVUnit implements Callable<Long>
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values represent a percentage
+     * of fully lit.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are based on the radiusKind given
+     * in construction. The light will be treated as having the maximum possible
+     * radius stored by this FOVCache.
+     * If the cache has not been fully constructed, this will compute a new FOV
+     * map using Shadow FOV instead of using the cache, and the result will not
+     * be cached.
+     *
+     * @param resistanceMap the grid of cells to calculate on
+     * @param startx        the horizontal component of the starting location
+     * @param starty        the vertical component of the starting location
+     * @return the computed light grid
+     */
+    @Override
+    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty) {
+        if(qualityComplete || complete)
+            return unpackMultiDouble(cache[startx + starty * width], width, height, levels);
+        else
+            return fov.calculateFOV(resistanceMap, startx, starty, maxRadius, radiusKind);
+    }
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values represent a percentage
+     * of fully lit.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are based on the radiusKind given
+     * in construction. The light will be treated as having the given radius, but
+     * if that is higher than the maximum possible radius stored by this FOVCache,
+     * it will compute a new FOV map using Shadow FOV instead of using the cache.
+     * If the cache has not been fully constructed, this will compute a new FOV
+     * map using Shadow FOV instead of using the cache, and the result will not
+     * be cached.
+     *
+     * @param resistanceMap the grid of cells to calculate on
+     * @param startx        the horizontal component of the starting location
+     * @param starty        the vertical component of the starting location
+     * @param radius        the distance the light will extend to
+     * @return the computed light grid
+     */
+    @Override
+    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius) {
+        if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius)
+            return unpackMultiDoublePartial(cache[startx + starty * width], width, height, levels,
+                    (int) Math.round(radius));
+        else
+            return fov.calculateFOV(resistanceMap, startx, starty, radius, radiusKind);
+    }
+
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values represent a percentage
+     * of fully lit.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are based on the radiusTechnique
+     * passed to this method, but will only use the cache if the Radius given is
+     * the same kind as the one given in construction. The light will be treated
+     * as having the given radius, but if that is higher than the maximum possible
+     * radius stored by this FOVCache, it will compute a new FOV map using Shadow
+     * FOV instead of using the cache.
+     * If the cache has not been fully constructed, this will compute a new FOV
+     * map using Shadow FOV instead of using the cache, and the result will not
+     * be cached.
+     *
+     * @param resistanceMap   the grid of cells to calculate on
+     * @param startX          the horizontal component of the starting location
+     * @param startY          the vertical component of the starting location
+     * @param radius          the distance the light will extend to
+     * @param radiusTechnique provides a means to calculate the radius as desired
+     * @return the computed light grid
+     */
+    @Override
+    public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
+                                   Radius radiusTechnique) {
+        if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius &&
+                radiusKind.equals2D(radiusTechnique))
+            return unpackMultiDoublePartial(cache[startX + startY * width], width, height, levels,
+                    (int)Math.round(radius));
+        else
+            return fov.calculateFOV(resistanceMap, startX, startY, radius, radiusTechnique);
+    }
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values represent a percentage
+     * of fully lit.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are based on the radiusTechnique
+     * passed to this method, but will only use the cache if the Radius given is
+     * the same kind as the one given in construction. The light will be treated
+     * as having the given radius, but if that is higher than the maximum possible
+     * radius stored by this FOVCache, it will compute a new FOV map using Shadow
+     * FOV instead of using the cache. A conical section of FOV is lit by this
+     * method if span is greater than 0.
+     *
+     * If the cache has not been fully constructed, this will compute a new FOV
+     * map using Shadow FOV instead of using the cache, and the result will not
+     * be cached.
+     *
+     * @param resistanceMap   the grid of cells to calculate on
+     * @param startX          the horizontal component of the starting location
+     * @param startY          the vertical component of the starting location
+     * @param radius          the distance the light will extend to
+     * @param radiusTechnique provides a means to calculate the radius as desired
+     * @param angle           the angle in degrees that will be the center of the FOV cone, 0 points right
+     * @param span            the angle in degrees that measures the full arc contained in the FOV cone
+     * @return the computed light grid
+     */
+    @Override
+    public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
+                                   Radius radiusTechnique, double angle, double span) {
+        if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius &&
+                radiusKind.equals2D(radiusTechnique))
+            return unpackMultiDoublePartialConical(cache[startX + startY * width], width, height, levels,
+                    (int) Math.round(radius), startX, startY, angle, span);
+        else
+            return fov.calculateFOV(resistanceMap, startX, startY, radius, radiusTechnique, angle, span);
+    }
+
+    protected class PerformanceUnit implements Runnable
+    {
+
+        /**
+         * When an object implementing interface <code>Runnable</code> is used
+         * to create a thread, starting the thread causes the object's
+         * <code>run</code> method to be called in that separately executing
+         * thread.
+         * <p>
+         * The general contract of the method <code>run</code> is that it may
+         * take any action whatsoever.
+         *
+         * @see Thread#run()
+         */
+        @Override
+        public void run() {
+            List<LOSUnit> losUnits = new ArrayList<LOSUnit>(mapLimit);
+            List<FOVUnit> fovUnits = new ArrayList<FOVUnit>(mapLimit);
+            for (int i = 0; i < mapLimit; i++) {
+                losUnits.add(new LOSUnit(i));
+                fovUnits.add(new FOVUnit(i));
+            }
+            //long totalTime = System.currentTimeMillis(), threadTime = 0L;
+
+            try {
+                final List<Future<Long>> invoke = executor.invokeAll(losUnits);
+                for (Future<Long> future : invoke) {
+                    future.get();
+                    //long t = future.get();
+                    //threadTime += t;
+                    //System.out.println(t);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                final List<Future<Long>> invoke = executor.invokeAll(fovUnits);
+                for (Future<Long> future : invoke) {
+                    future.get();
+                    //long t = future.get();
+                    //threadTime += t;
+                    //System.out.println(t);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            //totalTime = System.currentTimeMillis() - totalTime;
+            //System.out.println("Total real time elapsed: " + totalTime);
+            //System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
+        /*
+        long totalRAM = 0;
+        for (int c = 0; c < width * height; c++) {
+            long ctr = 0, losCtr = 0;
+            for (int i = 0; i < cache[c].length; i++) {
+                ctr += (((2 * cache[c][i].length + 12 - 1) / 8) + 1) * 8L;
+            }
+            totalRAM += (((ctr + 12 - 1) / 8) + 1) * 8;
+
+            losCtr = (((2 * losCache[c].length + 12 - 1) / 8) + 1) * 8L;
+            totalRAM += (((losCtr + 12 - 1) / 8) + 1) * 8;
+        }
+        System.out.println("Total memory used by cache: " + totalRAM);
+        */
+            complete = true;
+
+        }
+    }
+
+    protected class QualityUnit implements Runnable
+    {
+
+        /**
+         * When an object implementing interface <code>Runnable</code> is used
+         * to create a thread, starting the thread causes the object's
+         * <code>run</code> method to be called in that separately executing
+         * thread.
+         * <p>
+         * The general contract of the method <code>run</code> is that it may
+         * take any action whatsoever.
+         *
+         * @see Thread#run()
+         */
+        @Override
+        public void run() {
+            //long totalTime = System.currentTimeMillis(), threadTime = 0L;
+            if(!complete) {
+                cacheAllPerformance();
+                try {
+                    performanceThread.join();
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+            List<SymmetryUnit> symUnits = new ArrayList<SymmetryUnit>(mapLimit);
+            for (int i = 0; i < mapLimit; i++) {
+                symUnits.add(new SymmetryUnit(i));
+            }
+
+            try {
+                final List<Future<Long>> invoke = executor.invokeAll(symUnits);
+                for (Future<Long> future : invoke) {
+                    future.get();
+                    //threadTime += t;
+                    //System.out.println(t);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            cache = tmpCache;
+            qualityComplete = true;
+            /*
+            totalTime = System.currentTimeMillis() - totalTime;
+            System.out.println("Total real time elapsed : " + totalTime);
+            System.out.println("Total CPU time elapsed, on " + NUM_THREADS + " threads: " + threadTime);
+
+            long totalRAM = 0;
+            for (int c = 0; c < width * height; c++) {
+                long ctr = 0, losCtr = 0;
+                for (int i = 0; i < cache[c].length; i++) {
+                    ctr += (((2 * cache[c][i].length + 12 - 1) / 8) + 1) * 8L;
+                }
+                totalRAM += (((ctr + 12 - 1) / 8) + 1) * 8;
+
+                losCtr = (((2 * losCache[c].length + 12 - 1) / 8) + 1) * 8L;
+                totalRAM += (((losCtr + 12 - 1) / 8) + 1) * 8;
+            }
+            System.out.println("Total memory used by cache: " + totalRAM);
+            */
+        }
+    }
+    protected class FOVUnit implements Callable<Long>
     {
         protected int index;
         public FOVUnit(int index)
@@ -1106,7 +1383,7 @@ public class FOVCache {
         }
     }
 
-    public class LOSUnit implements Callable<Long>
+    protected class LOSUnit implements Callable<Long>
     {
         protected int index;
         public LOSUnit(int index)
@@ -1125,7 +1402,7 @@ public class FOVCache {
             return storeCellLOS(index);
         }
     }
-    public class SymmetryUnit implements Callable<Long>
+    protected class SymmetryUnit implements Callable<Long>
     {
         protected int index;
         public SymmetryUnit(int index)
