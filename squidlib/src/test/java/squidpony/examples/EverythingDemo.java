@@ -15,10 +15,12 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
 import javax.swing.JFrame;
+
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A demo to show as many aspects of SquidLib at once as possible.
@@ -136,7 +138,7 @@ public class EverythingDemo {
             fovmap = fov.calculateFOV(res, player.x, player.y, 8);
             HashMap<Coord, Integer> newMons = new HashMap<Coord, Integer>(monsters.size());
             // handle monster turns
-            for(HashMap.Entry<Coord, Integer> mon : monsters.entrySet())
+            for(Map.Entry<Coord, Integer> mon : monsters.entrySet())
             {
                 // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
                 if(mon.getValue() > 0 || fovmap[mon.getKey().x][mon.getKey().y] > 0.1)

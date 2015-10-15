@@ -3,16 +3,33 @@ package squidpony.panel;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.gdx.scenes.scene2d.Group;
+
 import squidpony.annotation.Beta;
+import squidpony.squidgrid.gui.gdx.SquidPanel;
 
 /**
  * The combination of two panels, one to color the background, the other to
  * write characters on the foreground.
  * 
+ * <p>
+ * There are two implementations:
+ * 
+ * <ol>
+ * <li>a very generic one: {@link Impl} that you should use if you're combining
+ * generic things.</li>
+ * <li>a more concrete one: {@link GroupImpl} that you should use if you're
+ * concretely in need of a panel to display/write to, without doing fancy GUI
+ * stuff. Because it extends libgdx's {@link Group}, it offers a lot of
+ * features.</li>
+ * </p>
+ * 
  * @author smelC
  * 
  * @param <T>
  *            The type of colors.
+ * 
+ * @see SquidLayers A more complex combined panel.
  */
 @Beta
 public interface ICombinedPanel<T> {
@@ -82,12 +99,10 @@ public interface ICombinedPanel<T> {
 	public void putBG(int x, int y, T color);
 
 	/**
-	 * @param margin
-	 *            The color to put at this panel's borders.
-	 * @param inside
+	 * @param color
 	 *            The color to put within this panel.
 	 */
-	public void fillBG(T margin, T inside);
+	public void fillBG(T color);
 
 	public void refresh();
 
@@ -98,7 +113,8 @@ public interface ICombinedPanel<T> {
 	public List<ISquidPanel<?>> getBackers();
 
 	/**
-	 * A basic implementation of {@link ICombinedPanel}.
+	 * A generic implementation of {@link ICombinedPanel}. Useful to combine
+	 * things. If you're a new user, you likely need {@link GroupImpl} instead.
 	 * 
 	 * @author smelC
 	 * 
@@ -120,13 +136,11 @@ public interface ICombinedPanel<T> {
 		 * @param fg
 		 *            The backing foreground panel.
 		 * @param width
-		 *            The width of this panel, used for
-		 *            {@link #fillBG(Object, Object)} (so that it fills within
-		 *            {@code [0, width)}).
+		 *            The width of this panel, used for {@link #fillBG(Object)}
+		 *            (so that it fills within {@code [0, width)}).
 		 * @param height
-		 *            The height of this panel, used for
-		 *            {@link #fillBG(Object, Object)} (so that it fills within
-		 *            {@code [0, height)}).
+		 *            The height of this panel, used for {@link #fillBG(Object)}
+		 *            (so that it fills within {@code [0, height)}).
 		 * @throws IllegalStateException
 		 *             In various cases of errors regarding sizes of panels.
 		 */
@@ -174,14 +188,10 @@ public interface ICombinedPanel<T> {
 		}
 
 		@Override
-		public void fillBG(T margin, T inside) {
+		public void fillBG(T color) {
 			for (int x = 0; x < width; x++) {
-				for (int y = 0; y < height; y++) {
-					if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
-						putBG(x, y, margin);
-					else
-						putBG(x, y, inside);
-				}
+				for (int y = 0; y < height; y++)
+					putBG(x, y, color);
 			}
 		}
 
@@ -197,6 +207,174 @@ public interface ICombinedPanel<T> {
 			backers.add(fg.getBacker());
 			backers.add(bg.getBacker());
 			return backers;
+		}
+
+	}
+
+	/**
+	 * An implementation of {@link ICombinedPanel} that extends libgdx's group.
+	 * If you're a new user, that's likely what you should use.
+	 * 
+	 * @author smelC
+	 */
+	public class GroupImpl<T> extends Group implements ICombinedPanel<T> {
+
+		protected/* @Nullable */ISquidPanel<T> bg;
+		protected/* @Nullable */ISquidPanel<T> fg;
+
+		/** The width, in cell sizes */
+		protected int gridWidth = -1;
+
+		/** The height, in cell sizes */
+		protected int gridHeight = -1;
+
+		/**
+		 * @param bg
+		 *            The backing background panel.
+		 * @param fg
+		 *            The backing foreground panel.
+		 * @param gridWidth
+		 *            The width of this panel, used for {@link #fillBG(Object)}
+		 *            (so that it fills within {@code [0, width)}).
+		 * @param gridHeight
+		 *            The height of this panel, used for {@link #fillBG(Object)}
+		 *            (so that it fills within {@code [0, height)}).
+		 * @throws IllegalStateException
+		 *             In various cases of errors regarding sizes of panels.
+		 */
+		public GroupImpl(ISquidPanel<T> bg, ISquidPanel<T> fg, int gridWidth, int gridHeight) {
+			if (bg.gridWidth() != fg.gridWidth())
+				throw new IllegalStateException(
+						"Cannot build a combined panel with backers of different widths");
+			if (bg.gridHeight() != fg.gridHeight())
+				throw new IllegalStateException(
+						"Cannot build a combined panel with backers of different heights");
+
+			this.bg = bg;
+			this.fg = fg;
+			if (gridWidth < 0)
+				throw new IllegalStateException("Cannot create a panel with a negative width");
+			this.gridWidth = gridWidth;
+			if (gridHeight < 0)
+				throw new IllegalStateException("Cannot create a panel with a negative height");
+			this.gridHeight = gridHeight;
+
+			addActors();
+		}
+
+		/**
+		 * Constructor that defer providing the backing panels. Useful for
+		 * subclasses that compute their size after being constructed. Use
+		 * {@link #setPanels(ISquidPanel, ISquidPanel)} to set the panels
+		 * (required before calling any {@code put} method).
+		 * 
+		 * <p>
+		 * Width and height are computed using the provided panels.
+		 * </p>
+		 */
+		public GroupImpl() {
+		}
+
+		/**
+		 * Sets the backing panels.
+		 * 
+		 * @param bg
+		 * @param fg
+		 */
+		public void setPanels(ISquidPanel<T> bg, ISquidPanel<T> fg) {
+			if (this.bg != null)
+				throw new IllegalStateException("Cannot change the background panel");
+			this.bg = bg;
+
+			if (this.fg != null)
+				throw new IllegalStateException("Cannot change the foreground panel");
+			this.fg = fg;
+
+			if (bg.gridWidth() != fg.gridWidth())
+				throw new IllegalStateException(
+						"Cannot build a combined panel with backers of different widths");
+			if (bg.gridHeight() != fg.gridHeight())
+				throw new IllegalStateException(
+						"Cannot build a combined panel with backers of different heights");
+
+			this.gridWidth = bg.gridWidth();
+			this.gridHeight = bg.gridHeight();
+
+			addActors();
+		}
+
+		@Override
+		public void putFG(int x, int y, char c) {
+			checkFG();
+			fg.put(x, y, c);
+		}
+
+		@Override
+		public void putFG(int x, int y, char c, T color) {
+			checkFG();
+			fg.put(x, y, c, color);
+		}
+
+		@Override
+		public void putFG(int x, int y, String string, T foreground) {
+			checkFG();
+			fg.put(x, y, string, foreground);
+		}
+
+		@Override
+		public void putFG(int x, int y, IColoredString<? extends T> cs) {
+			checkFG();
+			fg.put(x, y, cs);
+		}
+
+		@Override
+		public void putBG(int x, int y, T color) {
+			checkBG();
+			bg.put(x, y, color);
+		}
+
+		@Override
+		public void fillBG(T color) {
+			if (gridWidth < 0 || gridHeight < 0)
+				throw new IllegalStateException("Width and height must be set before calling fillBG");
+			for (int x = 0; x < gridWidth; x++) {
+				for (int y = 0; y < gridHeight; y++)
+					putBG(x, y, color);
+			}
+		}
+
+		@Override
+		public void refresh() {
+			bg.refresh();
+			fg.refresh();
+		}
+
+		@Override
+		public List<ISquidPanel<?>> getBackers() {
+			final List<ISquidPanel<?>> backers = new LinkedList<ISquidPanel<?>>();
+			backers.add(fg.getBacker());
+			backers.add(bg.getBacker());
+			return backers;
+		}
+
+		protected void addActors() {
+			addActor((SquidPanel) bg.getBacker());
+			addActor((SquidPanel) fg.getBacker());
+		}
+
+		protected void checkFG() {
+			if (fg == null)
+				throw new NullPointerException("The foreground panel must be set before writing to it");
+		}
+
+		protected void checkBG() {
+			if (bg == null)
+				throw new NullPointerException("The background panel must be set before writing to it");
+		}
+
+		@Override
+		public String toString() {
+			return String.format("%s@%s", this.getClass().getSimpleName(), Integer.toHexString(hashCode()));
 		}
 
 	}
