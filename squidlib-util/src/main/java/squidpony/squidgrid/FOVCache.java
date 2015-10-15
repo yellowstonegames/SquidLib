@@ -522,7 +522,7 @@ public class FOVCache extends FOV{
 
     //needs rewrite, must store the angle a ray traveled at to get around an obstacle, and propagate it to the end of
     //the ray. It should check if the angle theta for a given point is too different from the angle in angleMap.
-    public byte[][] waveFOVWIP(int viewerX, int viewerY) {
+    private byte[][] waveFOVWIP(int viewerX, int viewerY) {
         byte[][] gradientMap = new byte[width][height];
         double[][] angleMap = new double[2 * maxRadius + 1][2 * maxRadius + 1];
         for (int i = 0; i < angleMap.length; i++) {
@@ -970,7 +970,7 @@ public class FOVCache extends FOV{
                 for (int y = Math.max(0, viewerY - l); y <= Math.min(viewerY + l, height - 1); y++) {
                     if(cache[x + y * width] == ALL_WALLS)
                         continue;
-                    if (radiusKind.radius(viewerX, viewerY, x, y) > l)
+                    if (distance(x - viewerX, y - viewerY) / 2 > l)
                         continue;
                     short i = (short) posToHilbert(x, y);
                     if (Arrays.binarySearch(knownSeen, i) >= 0)
@@ -1107,8 +1107,9 @@ public class FOVCache extends FOV{
      * <br>
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations are based on the radiusKind given
-     * in construction. The light will be treated as having the maximum possible
-     * radius stored by this FOVCache.
+     * in construction. The light will be treated as having radius 62, regardless
+     * of the maxRadius passed to the constructor; this should in most cases be
+     * suitable when limitless light is desired.
      * If the cache has not been fully constructed, this will compute a new FOV
      * map using Shadow FOV instead of using the cache, and the result will not
      * be cached.
@@ -1121,7 +1122,7 @@ public class FOVCache extends FOV{
     @Override
     public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty) {
         if(qualityComplete || complete)
-            return unpackMultiDouble(cache[startx + starty * width], width, height, levels);
+            return unpackDouble(losCache[startx + starty * width], width, height);
         else
             return fov.calculateFOV(resistanceMap, startx, starty, maxRadius, radiusKind);
     }
@@ -1149,8 +1150,7 @@ public class FOVCache extends FOV{
     @Override
     public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius) {
         if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius)
-            return unpackMultiDoublePartial(cache[startx + starty * width], width, height, levels,
-                    (int) Math.round(radius));
+            return unpackDouble(cache[startx + starty * width][maxRadius - (int) Math.round(radius)], width, height);
         else
             return fov.calculateFOV(resistanceMap, startx, starty, radius, radiusKind);
     }
@@ -1184,8 +1184,7 @@ public class FOVCache extends FOV{
                                    Radius radiusTechnique) {
         if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius &&
                 radiusKind.equals2D(radiusTechnique))
-            return unpackMultiDoublePartial(cache[startX + startY * width], width, height, levels,
-                    (int)Math.round(radius));
+            return unpackDouble(cache[startX + startY * width][maxRadius - (int) Math.round(radius)], width, height);
         else
             return fov.calculateFOV(resistanceMap, startX, startY, radius, radiusTechnique);
     }
@@ -1222,8 +1221,8 @@ public class FOVCache extends FOV{
                                    Radius radiusTechnique, double angle, double span) {
         if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius &&
                 radiusKind.equals2D(radiusTechnique))
-            return unpackMultiDoublePartialConical(cache[startX + startY * width], width, height, levels,
-                    (int) Math.round(radius), startX, startY, angle, span);
+            return unpackDoubleConical(cache[startX + startY * width][maxRadius - (int) Math.round(radius)], width, height,
+                    startX, startY, angle, span);
         else
             return fov.calculateFOV(resistanceMap, startX, startY, radius, radiusTechnique, angle, span);
     }
@@ -1260,9 +1259,7 @@ public class FOVCache extends FOV{
                     //threadTime += t;
                     //System.out.println(t);
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
 
@@ -1274,9 +1271,7 @@ public class FOVCache extends FOV{
                     //threadTime += t;
                     //System.out.println(t);
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
             //totalTime = System.currentTimeMillis() - totalTime;

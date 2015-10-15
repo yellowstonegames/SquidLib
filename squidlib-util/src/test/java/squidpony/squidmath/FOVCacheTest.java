@@ -29,7 +29,7 @@ public class FOVCacheTest {
             FOVCache cache = new FOVCache(map, 10, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
             byte[][] seen = cache.waveFOV(walkable.x, walkable.y);
-            cache.cacheAllPerformance();
+            cache.awaitCachePerformance();
             byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
 
             for (int i = 0; i < seen.length; i++) {
@@ -37,13 +37,15 @@ public class FOVCacheTest {
             }
             cache.awaitCacheQuality();
             boolean[][] mutual = CoordPacker.unpack(cache.getCacheEntry(walkable.x, walkable.y)[0], width, height);
+            short[] cached;
             for (int i = 0; i < mutual.length; i++) {
                 for (int j = 0; j < mutual[i].length; j++) {
                     if(mutual[i][j] && map[i][j] != '#')
                     {
                         boolean sharing = cache.queryCache(10, i, j, walkable.x, walkable.y);
-                        //if(!sharing)
-                        //    System.out.println("i: " + i + ", j: " + j + ", x: " + walkable.x + ", y: " + walkable.y);
+                        if(!sharing) {
+                            System.out.println("i: " + i + ", j: " + j + ", x: " + walkable.x + ", y: " + walkable.y);
+                        }
                         assertTrue(sharing);
                     }
                 }
