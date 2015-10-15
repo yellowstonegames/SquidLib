@@ -42,11 +42,16 @@ public class DungeonGenerator {
         /**
          * Traps, represented by '^'
          */
-        TRAPS
+        TRAPS,
+        /**
+         * Grass, represented by '"'
+         */
+        GRASS
     }
 
     /**
-     * The effects that will be applied when generate is called. Strongly prefer using addWater, addDoors, and addTraps.
+     * The effects that will be applied when generate is called. Strongly prefer using addWater, addDoors, addTraps,
+     * and addGrass.
      */
     public HashMap<FillEffect, Integer> fx;
     private DungeonBoneGen gen;
@@ -194,6 +199,24 @@ public class DungeonGenerator {
         fx.put(FillEffect.WATER, percentage);
         return this;
     }
+
+    /**
+     * Turns the given percentage of floor cells into grass cells, represented by '~'. Grass will be clustered into
+     * a random number of patches, with more appearing if needed to fill the percentage. Each area will have randomized
+     * volume that should fill or get very close to filling the requested percentage, unless the patches encounter too
+     * much tight space. If this DungeonGenerator previously had addGrass called, the latest call will take precedence.
+     * @param percentage the percentage of floor cells to fill with grass; this can vary quite a lot. It may be
+     *                   difficult to fill very high (approaching 100) percentages with grass, though it will succeed.
+     * @return this DungeonGenerator; can be chained
+     */
+    public DungeonGenerator addGrass(int percentage)
+    {
+        if(percentage < 0) percentage = 0;
+        if(percentage > 100) percentage = 100;
+        if(fx.containsKey(FillEffect.GRASS)) fx.remove(FillEffect.GRASS);
+        fx.put(FillEffect.GRASS, percentage);
+        return this;
+    }
     /**
      * Turns the given percentage of viable doorways into doors, represented by '+' for doors that allow travel along
      * the x-axis and '/' for doors that allow travel along the y-axis. If doubleDoors is true,
@@ -271,10 +294,8 @@ public class DungeonGenerator {
     private LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map)
     {
         LinkedHashSet<Coord> doors = new LinkedHashSet<Coord>();
-        Coord temp = Coord.get(0, 0);
-
-        for(int x = 1; x < map.length - 1; x++, temp = temp.setX(x)) {
-            for (int y = 1; y < map[x].length - 1; y++, temp = temp.setY(y)) {
+        for(int x = 1; x < map.length - 1; x++) {
+            for (int y = 1; y < map[x].length - 1; y++) {
                 if(map[x][y] == '#')
                     continue;
                 if (doubleDoors) {
@@ -361,12 +382,13 @@ public class DungeonGenerator {
         }
 
         LinkedHashSet<Coord> floors = new LinkedHashSet<Coord>();
-        LinkedHashSet<Coord> doorways = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> doorways;
         LinkedHashSet<Coord> hazards = new LinkedHashSet<Coord>();
         Coord temp = Coord.get(0, 0);
         boolean doubleDoors = false;
         int doorFill = 0;
         int waterFill = 0;
+        int grassFill = 0;
         int trapFill = 0;
         if(fx.containsKey(FillEffect.DOORS))
         {
@@ -376,6 +398,9 @@ public class DungeonGenerator {
                 doubleDoors = true;
                 doorFill *= -1;
             }
+        }
+        if(fx.containsKey(FillEffect.GRASS)) {
+            grassFill = fx.get(FillEffect.GRASS);
         }
         if(fx.containsKey(FillEffect.WATER)) {
             waterFill = fx.get(FillEffect.WATER);
@@ -420,10 +445,11 @@ public class DungeonGenerator {
             }
         }
 
-        for(int x = 1; x < map.length - 1; x++, temp = temp.setX(x))
+        for(int x = 1; x < map.length - 1; x++)
         {
-            for(int y = 1; y < map[x].length - 1; y++, temp = temp.setY(y))
+            for(int y = 1; y < map[x].length - 1; y++)
             {
+                temp = Coord.get(x, y);
                 if(map[x][y] == '.' && !obstacles.contains(temp))
                 {
                     floors.add(Coord.get(x, y));
@@ -440,6 +466,63 @@ public class DungeonGenerator {
                 }
             }
         }
+        if(grassFill > 0)
+        {
+            int numPatches = rng.nextInt(8) + 2 + grassFill / 20;
+            int[] volumes = new int[numPatches];
+            int total = floors.size() * grassFill / 100;
+            int error = 0;
+            for(int i = 0; i < numPatches; i++) {
+                volumes[i] = total / numPatches;
+                error += volumes[i];
+            }
+            volumes[0] += total - error;
+
+            for(int i = 0; i < numPatches; i++) {
+                int r = rng.nextInt(volumes[i] / 2) - volumes[i] / 4;
+                volumes[i] += r;
+                volumes[(i + 1) % numPatches] -= r;
+            }
+            Spill spill = new Spill(map, Spill.Measurement.EUCLIDEAN, rng);
+            int bonusVolume = 0;
+            for(int i = 0; i < numPatches; i++)
+            {
+                floors.removeAll(obstacles);
+                Coord entry = floors.toArray(new Coord[floors.size()])[rng.nextInt(floors.size())];
+                spill.start(entry, volumes[i] / 3, obstacles);
+                spill.start(entry, 2 * volumes[i] / 3, obstacles);
+                ArrayList<Coord> ordered = new ArrayList<Coord>(spill.start(entry, volumes[i], obstacles));
+                floors.removeAll(ordered);
+                hazards.removeAll(ordered);
+                obstacles.addAll(ordered);
+
+                if(spill.filled <= volumes[i])
+                {
+                    bonusVolume += volumes[i] - spill.filled;
+                }
+
+            }
+            for(int x = 1; x < map.length - 1; x++) {
+                for (int y = 1; y < map[x].length - 1; y++) {
+                    if(spill.spillMap[x][y])
+                        map[x][y] = '"';
+                }
+            }
+            int frustration = 0;
+            while (bonusVolume > 0 && frustration < 50)
+            {
+                Coord entry = utility.randomFloor(map);
+                ArrayList<Coord> finisher = spill.start(entry, bonusVolume, obstacles);
+                for(Coord p : finisher)
+                {
+                    map[p.x][p.y] = '"';
+                }
+                bonusVolume -= spill.filled;
+                hazards.removeAll(finisher);
+                frustration++;
+            }
+        }
+
         if(waterFill > 0)
         {
             int numPools = rng.nextInt(4) + 2 + waterFill / 20;

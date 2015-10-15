@@ -802,9 +802,8 @@ public class DijkstraMap
                         for (int i = 0; i < size; i++) {
                             if (x - i < 0)
                                 continue;
-                            temp = temp.setX(x - i);
                             for (int j = 0; j < size; j++) {
-                                temp = temp.setY(y - j);
+                                temp = Coord.get(x - i, y - j);
                                 if (y - j < 0 || closed.containsKey(temp))
                                     continue;
                                 if (gradientMap[temp.x][temp.y] <= FLOOR && !goals.containsKey(temp))
@@ -820,10 +819,9 @@ public class DijkstraMap
                     {
                         if(x + i >= width)
                             continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
-                        temp = temp.setX(x + i);
                         for(int j = 0; j < size; j++)
                         {
-                            temp = temp.setY(y + j);
+                            temp = Coord.get(x + i, y + j);
                             if(y + j >= height || closed.containsKey(temp))
                                 continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
                         }
@@ -840,9 +838,8 @@ public class DijkstraMap
                         for (int i = 0; i < size; i++) {
                             if (x + i >= width)
                                 continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
-                            temp = temp.setX(x + i);
                             for (int j = 0; j < size; j++) {
-                                temp = temp.setY(y + j);
+                                temp = Coord.get(x + i, y + j);
                                 if (y + j >= height || closed.containsKey(temp))
                                     continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
                             }
@@ -1343,11 +1340,10 @@ public class DijkstraMap
         // generate an array of the single best location to attack when you are in a given cell.
         for(int x = 0; x < width; x++)
         {
-            tempPt = tempPt.setX(x);
             CELL:
             for(int y = 0; y < height; y++)
             {
-                tempPt = tempPt.setY(y);
+                tempPt = Coord.get(x, y);
                 if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK || userDistanceMap[x][y] > moveLength * 2.0)
                     continue;
                 if (gradientMap[x][y] >= tech.aoe.getMinRange() && gradientMap[x][y] <= tech.aoe.getMaxRange()) {

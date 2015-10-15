@@ -125,9 +125,8 @@ public class BurstAOE implements AOE {
             t = exs[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt = tempPt.setY(y);
+                    tempPt = Coord.get(x, y);
                     dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -263,9 +262,8 @@ public class BurstAOE implements AOE {
             t = exs[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt = tempPt.setY(y);
+                    tempPt = Coord.get(x, y);
                     dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }

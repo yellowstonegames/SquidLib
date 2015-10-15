@@ -263,9 +263,8 @@ public class LineAOE implements AOE {
                 dt.partialScan(radius, null);
 
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt = tempPt.setY(y);
+                    tempPt = Coord.get(x, y);
                     dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -408,9 +407,8 @@ public class LineAOE implements AOE {
                 dt.partialScan(radius, null);
 
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt = tempPt.setY(y);
+                    tempPt = Coord.get(x, y);
                     dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }

@@ -23,10 +23,10 @@ import java.util.List;
  * @see SquidLayers for a more advanced Group that supports multiple layers.
  * @author smelC
  */
-public class GroupCombinedPanel extends Group implements ICombinedPanel<Color> {
+public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 
-    protected/* @Nullable */ISquidPanel<Color> bg;
-    protected/* @Nullable */ISquidPanel<Color> fg;
+    protected/* @Nullable */ISquidPanel<T> bg;
+    protected/* @Nullable */ISquidPanel<T> fg;
 
     /** The width, in cell sizes */
     protected int gridWidth = -1;
@@ -48,7 +48,8 @@ public class GroupCombinedPanel extends Group implements ICombinedPanel<Color> {
      * @throws IllegalStateException
      *             In various cases of errors regarding sizes of panels.
      */
-    public GroupCombinedPanel(ISquidPanel<Color> bg, ISquidPanel<Color> fg, int gridWidth, int gridHeight) {
+    public GroupCombinedPanel(ISquidPanel<T> bg, ISquidPanel<T> fg,
+                              int gridWidth, int gridHeight) {
         if (bg.gridWidth() != fg.gridWidth())
             throw new IllegalStateException(
                     "Cannot build a combined panel with backers of different widths");
@@ -87,7 +88,7 @@ public class GroupCombinedPanel extends Group implements ICombinedPanel<Color> {
      * @param bg Typically a SquidPanel from this package.
      * @param fg Typically a SquidPanel from this package.
      */
-    public void setPanels(ISquidPanel<Color> bg, ISquidPanel<Color> fg) {
+    public void setPanels(ISquidPanel<T> bg, ISquidPanel<T> fg) {
         if (this.bg != null)
             throw new IllegalStateException("Cannot change the background panel");
         this.bg = bg;
@@ -116,37 +117,37 @@ public class GroupCombinedPanel extends Group implements ICombinedPanel<Color> {
     }
 
     @Override
-    public void putFG(int x, int y, char c, Color color) {
+    public void putFG(int x, int y, char c, T color) {
         checkFG();
         fg.put(x, y, c, color);
     }
 
     @Override
-    public void putFG(int x, int y, String string, Color foreground) {
+    public void putFG(int x, int y, String string, T foreground) {
         checkFG();
         fg.put(x, y, string, foreground);
     }
 
     @Override
-    public void putFG(int x, int y, IColoredString<? extends Color> cs) {
+    public void putFG(int x, int y, IColoredString<? extends T> cs) {
         checkFG();
         fg.put(x, y, cs);
     }
 
     @Override
-    public void putBG(int x, int y, Color color) {
+    public void putBG(int x, int y, T color) {
         checkBG();
         bg.put(x, y, color);
     }
 
-    public void put(int x, int y, char c, Color foreground, Color background)
+    public void put(int x, int y, char c, T foreground, T background)
     {
         checkFG();
         checkBG();
         bg.put(x, y, background);
         fg.put(x, y, c, foreground);
     }
-    public void put(int x, int y, IColoredString<? extends Color> cs, Color background)
+    public void put(int x, int y, IColoredString<? extends T> cs, T background)
     {
         checkFG();
         checkBG();
@@ -155,7 +156,7 @@ public class GroupCombinedPanel extends Group implements ICombinedPanel<Color> {
         }
         fg.put(x, y, cs);
     }
-    public void put(int x, int y, String s, Color foreground, Color background)
+    public void put(int x, int y, String s, T foreground, T background)
     {
         checkFG();
         checkBG();
@@ -166,7 +167,7 @@ public class GroupCombinedPanel extends Group implements ICombinedPanel<Color> {
     }
     
     @Override
-    public void fillBG(Color color) {
+    public void fillBG(T color) {
         if (gridWidth < 0 || gridHeight < 0)
             throw new IllegalStateException("Width and height must be set before calling fillBG");
         for (int x = 0; x < gridWidth; x++) {

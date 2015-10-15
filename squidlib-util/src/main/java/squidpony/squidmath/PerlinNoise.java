@@ -113,7 +113,7 @@ public class PerlinNoise {
      *
      * @param xin x input
      * @param yin y input
-     * @return noise for position
+     * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double xin, double yin) {
         double noise0, noise1, noise2; // from the three corners
@@ -188,7 +188,7 @@ public class PerlinNoise {
      * @param xin X input
      * @param yin Y input
      * @param zin Z input
-     * @return noise
+     * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double xin, double yin, double zin) {
         double n0, n1, n2, n3; // Noise contributions from the four corners
@@ -330,8 +330,8 @@ public class PerlinNoise {
      * @param x X position
      * @param y Y position
      * @param z Z position
-     * @param w 4th position
-     * @return noise
+     * @param w Fourth-dimensional position. It is I, the Fourth-Dimensional Ziltoid the Omniscient!
+     * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(double x, double y, double z, double w) {
         // The skewing and unskewing factors are hairy again for the 4D case

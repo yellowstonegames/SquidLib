@@ -73,7 +73,8 @@ public class EverythingDemo extends ApplicationAdapter {
         rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(10);
+        dungeonGen.addWater(12);
+        dungeonGen.addGrass(15);
         dungeonGen.addDoors(15, true);
 
         // change the TilesetType to lots of different choices to see what dungeon works best.

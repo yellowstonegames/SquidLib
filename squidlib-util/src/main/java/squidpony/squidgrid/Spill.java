@@ -378,11 +378,12 @@ public class Spill {
             return null;
         spreadPattern = new ArrayList<Coord>(volume);
         spillMap[entry.x][entry.y] = true;
-        Coord temp = Coord.get(0, 0);
-        for(int x = 0; x < spillMap.length; x++, temp = temp.setX(x))
+        Coord temp;
+        for(int x = 0; x < spillMap.length; x++)
         {
-            for(int y = 0; y < spillMap[x].length; y++, temp = temp.setY(y))
+            for(int y = 0; y < spillMap[x].length; y++)
             {
+                temp = Coord.get(x, y);
                 if(spillMap[x][y] && !impassable.contains(temp))
                     fresh.add(temp);
             }

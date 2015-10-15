@@ -218,9 +218,8 @@ public class CloudAOE implements AOE {
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt = tempPt.setY(y);
+                    tempPt = Coord.get(x, y);
                     dungeonCopy[x][y] = (sp.spillMap[x][y] || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
@@ -366,9 +365,8 @@ public class CloudAOE implements AOE {
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
-                tempPt = tempPt.setX(x);
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    tempPt = tempPt.setY(y);
+                    tempPt = Coord.get(x, y);
                     dungeonCopy[x][y] = (sp.spillMap[x][y] || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
