@@ -371,7 +371,7 @@ public class SquidLayers extends Group {
 
         palette.add(SColor.TEA_GREEN);
         palette.add(SColor.LIME_GREEN);
-        palette.add(SColor.PINE_GREEN);
+        palette.add(SColor.GREEN_BAMBOO);
 
         palette.add(SColor.BABY_BLUE);
         palette.add(SColor.CYAN);

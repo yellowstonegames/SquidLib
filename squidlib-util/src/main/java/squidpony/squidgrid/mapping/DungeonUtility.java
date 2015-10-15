@@ -800,6 +800,9 @@ public class DungeonUtility {
                     case '~':
                         portion[i][j] = 5;
                         break;
+                    case '"':
+                        portion[i][j] = 20;
+                        break;
                     case '^':
                         portion[i][j] = 6;
                         break;
@@ -854,6 +857,9 @@ public class DungeonUtility {
                     case '~':
                         portion[i][j] = 24;
                         break;
+                    case '"':
+                        portion[i][j] = 21;
+                        break;
                     case '^':
                         portion[i][j] = 0;
                         break;
@@ -904,6 +910,9 @@ public class DungeonUtility {
                         break;
                     case '~':
                         portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.65));
+                        break;
+                    case '"':
+                        portion[i][j] = (int)(80 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 8.0 - 0.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -958,6 +967,9 @@ public class DungeonUtility {
                     case '~':
                         portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
                         break;
+                    case '"':
+                        portion[i][j] = (int)(80 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 30.0) / 3.0 - 0.35));
+                        break;
                     case '^':
                         portion[i][j] = 40;
                         break;
@@ -1006,6 +1018,7 @@ public class DungeonUtility {
                         portion[i][j] = 0.0;
                         break;
                     case '/':
+                    case '"':
                         portion[i][j] = 0.15;
                         break;
                     case '+':
