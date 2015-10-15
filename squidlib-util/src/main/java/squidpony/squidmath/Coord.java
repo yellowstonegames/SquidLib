@@ -52,6 +52,22 @@ public class Coord implements java.io.Serializable {
 		return Coord.get(x + d.deltaX, y + d.deltaY);
 	}
 
+	/**
+	 * @param i
+	 * @return {@code (x*i,y*i)}.
+	 */
+	public Coord scale(int i) {
+		return Coord.get(x * i, y * i);
+	}
+
+	/**
+	 * @param i
+	 * @return {@code (x*i,y*j)}.
+	 */
+	public Coord scale(int i, int j) {
+		return Coord.get(x * i, y * j);
+	}
+
     public double distance(double x2, double y2)
     {
         return Math.sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y));
