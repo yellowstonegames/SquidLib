@@ -18,8 +18,8 @@ import java.util.LinkedHashMap;
 public class FOVCacheDemo {
     public static void main(String[] args)
     {
-        int width = 80;
-        int height = 30;
+        int width = 100;
+        int height = 100;
         for (long r = 0, seed = 0xBEEF; r < 10; r++, seed ^= seed << 2) {
 
 
@@ -29,24 +29,29 @@ public class FOVCacheDemo {
             dungeonGenerator.addWater(25);
             //dungeonGenerator.addTraps(2);
             char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
+            /*
             LinkedHashMap<Coord, Integer> lights = new LinkedHashMap<Coord, Integer>((width / 6) * (height / 6));
+
             for (int i = 0; i < width / 6; i++) {
                 for (int j = 0; j < height / 4; j++) {
                     lights.put(Coord.get(i * 6 + 3, j * 4 + i % 4), 2);
                     map[i * 6 + 3][j * 4 + i % 4] = (map[i * 6 + 3][j * 4 + i % 4] == '#') ? '┼' : '^';
                 }
             }
-            FOVCache cache = new FOVCache(map, 4, Radius.CIRCLE, 8, lights);
+            */
+            FOVCache cache = new FOVCache(map, 12, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
             long time = System.currentTimeMillis();
             cache.awaitCacheQuality();
             time = System.currentTimeMillis() - time;
             System.out.println("Time spent caching: " + time);
             byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
+            double[][] conical = cache.calculateGradedFOV(new double[1][1], walkable.x, walkable.y, 12, Radius.CIRCLE, rng.nextDouble(360.0), rng.nextDouble(75) + 75);
             for (int j = 0; j < map[0].length; j++) {
                 for (int i = 0; i < map.length; i++) {
-                    if (gradient[i][j] > 0)
-                        System.out.print((char) (gradient[i][j] + 65));
+                    if (conical[i][j] > 0)
+                        System.out.print((char) ((int)Math.round(conical[i][j] * 12) + 65));
+//                        System.out.print(conical[i][j]);
                     else
                         System.out.print(' ');
                     System.out.print(map[i][j]);

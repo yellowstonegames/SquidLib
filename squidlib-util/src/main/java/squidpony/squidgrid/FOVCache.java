@@ -42,13 +42,37 @@ import static squidpony.squidmath.CoordPacker.*;
  * provides is distant lighting; if lights have been passed to the constructor as a Map of Coord keys to Integer values,
  * then the Coords in that Map that are walkable squares will emit light up to a radius equal to their value in that
  * Map. Cells with distant lighting will always be in FOV if they could be seen at up to radius 62, which is calculated
- * for every FOVCache as an LOS cache.
+ * for every FOVCache as an LOS cache. Calculating distant lighting adds a somewhat substantial amount of time to each
+ * caching attempt, estimated at tripling the amount of time used in cases where there are very many lights in a large
+ * dungeon (one light per 5x5 area when the center of that area is walkable, for example), but the lighting probably is
+ * expected to be much less of a performance hindrance on smaller maps (80x40, 60x60, anything smaller, etc.) or when
+ * there are simply less lights to process (because distant lighting is meant to go beyond nearby cells, it needs to run
+ * through essentially all lights for every cell it processes, and even though adding the lit area to FOV is very
+ * efficient and does not require recalculating FOV, having lots of lights means lots of work per cell).
  * <br>
  * This class extends FOV and can be used as a replacement for FOV in some cases. Generally, FOVCache provides methods
  * that allow faster manipulation and checks of certain values (such as a simple case of whether a cell can be seen from
  * another cell at a given FOV radius), but will fall back to Shadowcasting FOV (without using the cache) if any calls
  * to FOV methods are made that have not had their needed information cached. Uncached calls to FOV will not have some
  * of the niceties FOVCache can provide, like distant lights.
+ * <br>
+ * Conservation of memory usage is a primary concern for this class; storing a full 2D array for every cell on a map
+ * that is even moderately large uses outrageous amounts of RAM, and attempting that naive approach on a 256x256 map
+ * would use more than 4 GB of RAM for purely the data from storing bytes or booleans, not including the JVM's overhead
+ * of between 12 and 19 bytes for every array. Using smaller maps helps both this class and any other approach (less
+ * cells to store FOV for), and at least for FOVCache, using smaller maxRadius values can reduce memory usage as well.
+ * For a normal 100x100 map, storing one byte[][] for every cell, and storing a 2D array of those (which has a minimal
+ * effect on memory consumption vs. a 1D array in this case), the resulting byte[][][][] will use 112,161,616 bytes of
+ * RAM, approximately 110 MB; this would still need an additional step of processing when used to limit a requested
+ * FOV map stored in it to the appropriate vision range. To contrast, the current version of FOVCache on the same size
+ * of map, caching 12 separate FOV radii, uses approximately 6.2 MB. Tests run on ten 100x100 dungeons ran the gamut
+ * between 6,049,760 and 6,404,336 bytes (the layout of the dungeon doesn't affect memory usage of the naive case, but
+ * it does have a small effect on the compressed version). To actually use the compressed maps does take an additional
+ * processing step, but careful benchmarking indicates running FOV for a roughly 12 radius (Radius.SQUARE kind) area
+ * takes twice as long as simply extracting a cached FOV map, and the advantage for the cache is greater for larger FOV
+ * radii (but the cache also uses slightly more memory). Benchmarks are conducted using JMH, a tool developed by the
+ * OpenJDK team, in a Maven module called squidlib-performance that is not distributed with SquidLib but is available if
+ * you download the source code.
  * Created by Tommy Ettinger on 10/7/2015.
  * @author Tommy Ettinger
  */
@@ -65,7 +89,7 @@ public class FOVCache extends FOV{
     protected short[][][] tmpCache;
     protected short[][] losCache;
     protected boolean complete, qualityComplete;
-    protected FOV fov;
+    protected FOV fov, gradedFOV;
     protected short[][] ALL_WALLS;
     protected short[] wallMap;
     protected double[][] atan2Cache, directionAngles;
@@ -77,7 +101,8 @@ public class FOVCache extends FOV{
     protected LinkedHashMap<Coord, Integer> lights;
     protected Coord[] lightSources;
     protected int[] lightBrightnesses;
-    private double[] levels;
+    private double[][] levels;
+    protected double decay;
     private Thread performanceThread = null, qualityThread = null;
     private static final double HALF_PI = Math.PI * 0.5, QUARTER_PI = Math.PI * 0.25125,
             SLIVER_PI = Math.PI * 0.05, PI2 = Math.PI * 2;
@@ -108,8 +133,10 @@ public class FOVCache extends FOV{
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
         this.fov = new FOV(FOV.SHADOW);
+        this.gradedFOV = new FOV(RIPPLE);
         resMap = DungeonUtility.generateResistances(map);
-        this.maxRadius = maxRadius;
+        this.maxRadius = Math.max(1, maxRadius);
+        decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
         lights = new LinkedHashMap<Coord, Integer>();
@@ -170,8 +197,10 @@ public class FOVCache extends FOV{
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
         this.fov = new FOV(FOV.SHADOW);
+        this.gradedFOV = new FOV(RIPPLE);
         resMap = DungeonUtility.generateResistances(map);
-        this.maxRadius = maxRadius;
+        this.maxRadius = Math.max(1, maxRadius);
+        decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
         lights = new LinkedHashMap<Coord, Integer>();
@@ -236,8 +265,10 @@ public class FOVCache extends FOV{
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
         this.fov = new FOV(FOV.SHADOW);
+        this.gradedFOV = new FOV(RIPPLE);
         resMap = DungeonUtility.generateResistances(map);
-        this.maxRadius = maxRadius;
+        this.maxRadius = Math.max(1, maxRadius);
+        decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
         this.lights = new LinkedHashMap<Coord, Integer>(lights);
@@ -273,7 +304,11 @@ public class FOVCache extends FOV{
 
     private void preloadMeasurements()
     {
-        levels = generateLightLevels(maxRadius);
+        levels = new double[maxRadius + 1][maxRadius + 1];
+        levels[maxRadius][maxRadius] = 1.0;
+        for (int i = 1; i <= maxRadius; i++) {
+            System.arraycopy(generateLightLevels(i), 0, levels[i], maxRadius - i, i);
+        }
         Iterator<Coord> it = lights.keySet().iterator();
         Coord pos;
         while (it.hasNext())
@@ -375,7 +410,7 @@ public class FOVCache extends FOV{
      */
     protected long storeCellFOV(int index) {
         long startTime = System.currentTimeMillis();
-        cache[index] = calculateWaveFOV(index % width, index / width);
+        cache[index] = calculateSlopeShadowFOV(index % width, index / width);
         //cache[index] = calculateCellFOV(index % width, index / width);
         return System.currentTimeMillis() - startTime;
     }
@@ -479,6 +514,21 @@ public class FOVCache extends FOV{
             return ALL_WALL;
         }
         return pack(fov.calculateFOV(resMap, viewerX, viewerY, 62, radiusKind));
+    }
+
+    /**
+     * Packs FOV for the given viewer's X and Y as a center, and returns the packed data to be stored.
+     * @param viewerX an int less than 256 and less than width
+     * @param viewerY an int less than 256 and less than height
+     * @return a multi-packed series of progressively wider FOV radii
+     */
+    public short[][] calculateSlopeShadowFOV(int viewerX, int viewerY) {
+        if (viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
+            return ALL_WALLS;
+        if (resMap[viewerX][viewerY] >= 1.0) {
+            return ALL_WALLS;
+        }
+        return packMulti(slopeShadowFOV(viewerX, viewerY), maxRadius + 1);
     }
 
     /**
@@ -784,7 +834,7 @@ public class FOVCache extends FOV{
     public byte[][] waveFOV(int viewerX, int viewerY) {
         byte[][] gradientMap = new byte[width][height];
         double[][] angleMap = new double[2 * maxRadius + 1][2 * maxRadius + 1];
-        gradientMap[viewerX][viewerY] = (byte)(2 * maxRadius);
+        gradientMap[viewerX][viewerY] = (byte)(1 + maxRadius);
         int cx, cy, nearCWx, nearCWy, nearCCWx, nearCCWy;
         Coord pt;
         double theta, angleCW, angleCCW, straight;
@@ -948,6 +998,69 @@ public class FOVCache extends FOV{
         return gradientMap;
     }
 
+    public byte[][] slopeShadowFOV(int viewerX, int viewerY)
+    {
+        byte[][] lightMap = new byte[width][height];
+        lightMap[viewerX][viewerY] = (byte)(1 + maxRadius);
+
+        for (Direction d : Direction.DIAGONALS) {
+            slopeShadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, viewerX, viewerY, lightMap);
+            slopeShadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, viewerX, viewerY, lightMap);
+        }
+        return lightMap;
+    }
+
+    private byte[][] slopeShadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                     int viewerX, int viewerY, byte[][] lightMap) {
+        double newStart = 0;
+        if (start < end) {
+            return lightMap;
+        }
+        int width = lightMap.length;
+        int height = lightMap[0].length;
+
+        boolean blocked = false;
+        int dist;
+        for (int distance = row; distance <= maxRadius && !blocked; distance++) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; deltaX++) {
+                int currentX = viewerX + deltaX * xx + deltaY * xy;
+                int currentY = viewerY + deltaX * yx + deltaY * yy;
+                double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
+                double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
+
+                if (!(currentX >= 0 && currentY >= 0 && currentX < width && currentY < height) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+
+
+                dist = distanceCache[maxRadius + deltaX][maxRadius + deltaY] + 1;
+                //check if it's within the lightable area and light if needed
+                if (dist <= maxRadius) {
+                    lightMap[currentX][currentY] = (byte) dist;
+                }
+
+                if (blocked) { //previous cell was a blocking one
+                    if (resMap[currentX][currentY] >= 0.5) {//hit a wall
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (resMap[currentX][currentY] >= 0.5 && distance < maxRadius) {//hit a wall within sight line
+                        blocked = true;
+                        lightMap = slopeShadowCast(distance + 1, start, leftSlope, xx, xy, yx, yy, viewerX, viewerY, lightMap);
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+        return lightMap;
+    }
+
 
     public short[][] improveQuality(int viewerX, int viewerY) {
         if(!complete) throw new IllegalStateException(
@@ -1080,7 +1193,8 @@ public class FOVCache extends FOV{
                 return 2;
         }
     }
-    private short distance(int x, int y) {
+    private short distance(int xPos, int yPos) {
+        int x = Math.abs(xPos), y = Math.abs(yPos);
         switch (radiusKind) {
             case CIRCLE:
             case SPHERE:
@@ -1102,8 +1216,8 @@ public class FOVCache extends FOV{
 
     /**
      * Calculates the Field Of View for the provided map from the given x, y
-     * coordinates. Returns a light map where the values represent a percentage
-     * of fully lit.
+     * coordinates. Returns a light map where the values are either 1.0 or 0.0.
+     * Takes a double[][] resistance map that will be disregarded.
      * <br>
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations are based on the radiusKind given
@@ -1124,13 +1238,14 @@ public class FOVCache extends FOV{
         if(qualityComplete || complete)
             return unpackDouble(losCache[startx + starty * width], width, height);
         else
-            return fov.calculateFOV(resistanceMap, startx, starty, maxRadius, radiusKind);
+            return fov.calculateFOV(this.resMap, startx, starty, maxRadius, radiusKind);
     }
 
     /**
      * Calculates the Field Of View for the provided map from the given x, y
-     * coordinates. Returns a light map where the values represent a percentage
-     * of fully lit.
+     * coordinates. Returns a light map where the values are either 1.0 or 0.0.
+     * Takes a double radius to extend out to (rounded to the nearest int) and
+     * a double[][] resistance map that will be disregarded.
      * <br>
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations are based on the radiusKind given
@@ -1152,14 +1267,16 @@ public class FOVCache extends FOV{
         if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius)
             return unpackDouble(cache[startx + starty * width][maxRadius - (int) Math.round(radius)], width, height);
         else
-            return fov.calculateFOV(resistanceMap, startx, starty, radius, radiusKind);
+            return fov.calculateFOV(this.resMap, startx, starty, radius, radiusKind);
     }
 
 
     /**
      * Calculates the Field Of View for the provided map from the given x, y
-     * coordinates. Returns a light map where the values represent a percentage
-     * of fully lit.
+     * coordinates. Returns a light map where the values are either 1.0 or 0.0.
+     * Takes a double radius to extend out to (rounded to the nearest int), a
+     * Radius enum that should match the Radius this FOVCache was constructed
+     * with, and a double[][] resistance map that will be disregarded.
      * <br>
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations are based on the radiusTechnique
@@ -1186,13 +1303,17 @@ public class FOVCache extends FOV{
                 radiusKind.equals2D(radiusTechnique))
             return unpackDouble(cache[startX + startY * width][maxRadius - (int) Math.round(radius)], width, height);
         else
-            return fov.calculateFOV(resistanceMap, startX, startY, radius, radiusTechnique);
+            return fov.calculateFOV(this.resMap, startX, startY, radius, radiusTechnique);
     }
 
     /**
-     * Calculates the Field Of View for the provided map from the given x, y
-     * coordinates. Returns a light map where the values represent a percentage
-     * of fully lit.
+     * Calculates the conical Field Of View for the provided map from the given
+     * x, y coordinates. Returns a light map where the values are either 1.0 or
+     * 0.0. Takes a double radius to extend out to (rounded to the nearest int),
+     * a Radius enum that should match the Radius this FOVCache was constructed
+     * with, a double[][] resistance map that will be disregarded, an angle to
+     * center the conical FOV on (in degrees), and the total span in degrees
+     * for the FOV to cover.
      * <br>
      * The starting point for the calculation is considered to be at the center
      * of the origin cell. Radius determinations are based on the radiusTechnique
@@ -1224,7 +1345,119 @@ public class FOVCache extends FOV{
             return unpackDoubleConical(cache[startX + startY * width][maxRadius - (int) Math.round(radius)], width, height,
                     startX, startY, angle, span);
         else
-            return fov.calculateFOV(resistanceMap, startX, startY, radius, radiusTechnique, angle, span);
+            return fov.calculateFOV(this.resMap, startX, startY, radius, radiusTechnique, angle, span);
+    }
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values range from 1.0 (center
+     * of the FOV) to 0.0 (not seen), with values between those two extremes
+     * for the rest of the seen area.
+     * Takes a double radius to extend out to (rounded to the nearest int), and
+     * a double[][] resistance map that will be disregarded.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are based on the radiusKind given
+     * in construction. The light will be treated as having the given radius, but
+     * if that is higher than the maximum possible radius stored by this FOVCache,
+     * it will compute a new FOV map using Ripple FOV instead of using the cache.
+     * If the cache has not been fully constructed, this will compute a new FOV
+     * map using Ripple FOV instead of using the cache, and the result will not
+     * be cached.
+     *
+     * @param resistanceMap the grid of cells to calculate on
+     * @param startx        the horizontal component of the starting location
+     * @param starty        the vertical component of the starting location
+     * @param radius        the distance the light will extend to
+     * @return the computed light grid
+     */
+    public double[][] calculateGradedFOV(double[][] resistanceMap, int startx, int starty, double radius) {
+        if((qualityComplete || complete) && radius > 0 && radius <= maxRadius)
+            return unpackMultiDoublePartial(cache[startx + starty * width], width, height,
+                    levels[(int) Math.round(radius)], (int) Math.round(radius));
+        else
+            return gradedFOV.calculateFOV(this.resMap, startx, starty, radius, radiusKind);
+    }
+
+
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates. Returns a light map where the values range from 1.0 (center
+     * of the FOV) to 0.0 (not seen), with values between those two extremes
+     * for the rest of the seen area.
+     * Takes a double radius to extend out to (rounded to the nearest int), a
+     * Radius enum that should match the Radius this FOVCache was constructed
+     * with, and a double[][] resistance map that will be disregarded.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are based on the radiusTechnique
+     * passed to this method, but will only use the cache if the Radius given is
+     * the same kind as the one given in construction. The light will be treated
+     * as having the given radius, but if that is higher than the maximum possible
+     * radius stored by this FOVCache, it will compute a new FOV map using Ripple
+     * FOV instead of using the cache.
+     * If the cache has not been fully constructed, this will compute a new FOV
+     * map using Ripple FOV instead of using the cache, and the result will not
+     * be cached.
+     *
+     * @param resistanceMap   the grid of cells to calculate on
+     * @param startX          the horizontal component of the starting location
+     * @param startY          the vertical component of the starting location
+     * @param radius          the distance the light will extend to
+     * @param radiusTechnique provides a means to calculate the radius as desired
+     * @return the computed light grid
+     */
+    public double[][] calculateGradedFOV(double[][] resistanceMap, int startX, int startY, double radius,
+                                   Radius radiusTechnique) {
+        if((qualityComplete || complete) && radius > 0 && radius <= maxRadius &&
+                radiusKind.equals2D(radiusTechnique))
+            return unpackMultiDoublePartial(cache[startX + startY * width], width, height,
+                    levels[(int) Math.round(radius)], (int) Math.round(radius));
+        else
+            return gradedFOV.calculateFOV(this.resMap, startX, startY, radius, radiusTechnique);
+    }
+
+    /**
+     * Calculates the conical Field Of View for the provided map from the given
+     * x, y coordinates. Returns a light map where the values range from 1.0
+     * (center of the FOV) to 0.0 (not seen), with values between those two
+     * extremes for the rest of the seen area.
+     * Takes a double radius to extend out to (rounded to the nearest int), a
+     * Radius enum that should match the Radius this FOVCache was constructed
+     * with, a double[][] resistance map that will be disregarded, an angle to
+     * center the conical FOV on (in degrees), and the total span in degrees
+     * for the FOV to cover.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are based on the radiusTechnique
+     * passed to this method, but will only use the cache if the Radius given is
+     * the same kind as the one given in construction. The light will be treated
+     * as having the given radius, but if that is higher than the maximum possible
+     * radius stored by this FOVCache, it will compute a new FOV map using Ripple
+     * FOV instead of using the cache. A conical section of FOV is lit by this
+     * method if span is greater than 0.
+     *
+     * If the cache has not been fully constructed, this will compute a new FOV
+     * map using Ripple FOV instead of using the cache, and the result will not
+     * be cached.
+     *
+     * @param resistanceMap   the grid of cells to calculate on
+     * @param startX          the horizontal component of the starting location
+     * @param startY          the vertical component of the starting location
+     * @param radius          the distance the light will extend to
+     * @param radiusTechnique provides a means to calculate the radius as desired
+     * @param angle           the angle in degrees that will be the center of the FOV cone, 0 points right
+     * @param span            the angle in degrees that measures the full arc contained in the FOV cone
+     * @return the computed light grid
+     */
+    public double[][] calculateGradedFOV(double[][] resistanceMap, int startX, int startY, double radius,
+                                   Radius radiusTechnique, double angle, double span) {
+        if((qualityComplete || complete) && radius > 0 && radius <= maxRadius &&
+                radiusKind.equals2D(radiusTechnique))
+            return unpackMultiDoublePartialConical(cache[startX + startY * width], width, height,
+                    levels[(int) Math.round(radius)], (int) Math.round(radius), startX, startY, angle, span);
+        else
+            return gradedFOV.calculateFOV(this.resMap, startX, startY, radius, radiusTechnique, angle, span);
     }
 
     protected class PerformanceUnit implements Runnable
@@ -1329,8 +1562,8 @@ public class FOVCache extends FOV{
             try {
                 final List<Future<Long>> invoke = executor.invokeAll(symUnits);
                 for (Future<Long> future : invoke) {
+                    //threadTime +=
                     future.get();
-                    //threadTime += t;
                     //System.out.println(t);
                 }
             } catch (InterruptedException | ExecutionException e) {
@@ -1355,6 +1588,10 @@ public class FOVCache extends FOV{
                 totalRAM += (((losCtr + 12 - 1) / 8) + 1) * 8;
             }
             System.out.println("Total memory used by cache: " + totalRAM);
+
+            System.out.println("FOV Map stored for every cell, booleans or bytes, "+width+"x"+height+": " +
+                    ((((((((((((height + 12 - 1) / 8) + 1) * 8L * width + 12 - 1) / 8) + 1) * 8L
+                            * height + 12 - 1) / 8) + 1) * 8L * width + 12 - 1) / 8) + 1) * 8L);
             */
         }
     }
