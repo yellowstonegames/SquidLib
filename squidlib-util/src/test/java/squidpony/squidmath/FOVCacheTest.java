@@ -28,7 +28,7 @@ public class FOVCacheTest {
 
             FOVCache cache = new FOVCache(map, 10, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
-            byte[][] seen = cache.waveFOV(walkable.x, walkable.y);
+            byte[][] seen = cache.slopeShadowFOV(walkable.x, walkable.y);
             cache.awaitCachePerformance();
             byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
 

@@ -144,7 +144,6 @@ public class FOV {
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius, Radius radiusTechnique) {
 
         double rad = Math.max(1, radius);
-
         double decay = 1.0 / rad;
 
         int width = resistanceMap.length;
