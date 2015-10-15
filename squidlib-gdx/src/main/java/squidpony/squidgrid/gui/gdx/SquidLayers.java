@@ -1578,7 +1578,8 @@ public class SquidLayers extends Group {
     public AnimatedEntity getAnimatedEntityByCell(int x, int y) {
         return foregroundPanel.getAnimatedEntityByCell(x, y);
     }
-        @Override
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
