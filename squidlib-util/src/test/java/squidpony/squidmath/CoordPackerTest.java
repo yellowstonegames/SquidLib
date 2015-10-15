@@ -69,19 +69,23 @@ public class CoordPackerTest {
         // 290, 12, 9, 1
         // =
         // 290, 15, 6, 8, 2, 4
+        /*
         System.out.println("Union: ");
         for (int i = 0; i < union.length; i++) {
             System.out.print(union[i] + ", ");
         }
         System.out.println();
+        */
         assertArrayEquals(new short[]{290, 15, 6, 8, 2, 4}, union);
 
         union = CoordPacker.unionPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 10, 1});
+        /*
         System.out.println("Union: ");
         for (int i = 0; i < union.length; i++) {
             System.out.print(union[i] + ", ");
         }
         System.out.println();
+        */
         assertArrayEquals(new short[]{290, 15, 5, 9, 2, 4}, union);
 
         short[] intersect = CoordPacker.intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 12, 9, 1});
@@ -89,19 +93,23 @@ public class CoordPackerTest {
         // 290, 12, 9, 1
         // =
         // 300, 2, 9, 1
+        /*
         System.out.println("Intersect: ");
         for (int i = 0; i < intersect.length; i++) {
             System.out.print(intersect[i] + ", ");
         }
         System.out.println();
+        */
         assertArrayEquals(new short[]{300, 2, 9, 1}, intersect);
 
         intersect = CoordPacker.intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 11, 1});
+        /*
         System.out.println("Intersect: ");
         for (int i = 0; i < intersect.length; i++) {
             System.out.print(intersect[i] + ", ");
         }
         System.out.println();
+        */
         assertArrayEquals(new short[]{311, 1}, intersect);
 
 
@@ -139,6 +147,7 @@ public class CoordPackerTest {
         }
         //assertEquals("Packed shorts", 18, packed.length);
         //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+        /*
         System.out.println("Average Memory used by packed short[] (Appropriate):" +
                 ramPacked / 100.0 + " bytes");
         System.out.println("Average Memory used by boolean[][] (Appropriate):" +
@@ -153,6 +162,7 @@ public class CoordPackerTest {
                 arrayMemoryUsage2D(240, 240, arrayMemoryUsage2D(240, 240, 1)));
         System.out.println("FOV Map stored for every cell, floats, 240x240: " +
                 arrayMemoryUsage2D(240, 240, arrayMemoryUsage2D(240, 240, 4)));
+                */
     }
 
     @Test
@@ -188,6 +198,7 @@ public class CoordPackerTest {
         }
         //assertEquals("Packed shorts", 18, packed.length);
         //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+        /*
         System.out.println("Average Memory used by packed short[] (Approaching Worst-Case):" +
                 ramPacked / 100.0 + " bytes");
         System.out.println("Average Memory used by boolean[][] (Approaching Worst-Case):" +
@@ -202,6 +213,7 @@ public class CoordPackerTest {
                 arrayMemoryUsage2D(30, 70, arrayMemoryUsage2D(30, 70, 1)));
         System.out.println("FOV Map stored for every cell, floats, 30x70: " +
                 arrayMemoryUsage2D(30, 70, arrayMemoryUsage2D(30, 70, 4)));
+                */
     }
     /*
     @Test
@@ -335,6 +347,8 @@ public class CoordPackerTest {
             }*/
             //assertEquals("Packed shorts", 19, packed.length);
             //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+
+            /*
             System.out.println("Memory used by multi-packed short[][] (Appropriate " + FOV_RANGE + "):" +
                     ramPacked / 100.0 + " bytes");
             System.out.println("Memory used by double[][] (Appropriate " + FOV_RANGE + "):" +
@@ -345,6 +359,7 @@ public class CoordPackerTest {
                     100.0 * ramPacked / ramDouble + "%");
             System.out.println("Compression vs. float[][] (Appropriate " + FOV_RANGE + "):" +
                     100.0 * ramPacked / ramFloat + "%");
+            */
         }
         /*
         byte[][] unpacked3 = CoordPacker.unpackMultiByte(packed, seen.length, seen[0].length);
@@ -462,6 +477,7 @@ public class CoordPackerTest {
             }*/
             //assertEquals("Packed shorts", 19, packed.length);
             //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+            /*
             System.out.println("Memory used by multi-packed short[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
                     ramPacked / 100.0 + " bytes");
             System.out.println("Memory used by double[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
@@ -472,6 +488,7 @@ public class CoordPackerTest {
                     100.0 * ramPacked / ramDouble + "%");
             System.out.println("Compression vs. float[][] (Approaching Worst-Case " + FOV_RANGE + "):" +
                     100.0 * ramPacked / ramFloat + "%");
+            */
         }
     }
 
@@ -509,6 +526,7 @@ public class CoordPackerTest {
         }
         //assertEquals("Packed shorts", 18, packed.length);
         //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+        /*
         System.out.println("Average Memory used by packed short[] (Appropriate, Z):" +
                 ramPacked / 100.0 + " bytes");
         System.out.println("Average Memory used by boolean[][] (Appropriate, Z):" +
@@ -519,6 +537,7 @@ public class CoordPackerTest {
                 100.0 * ramPacked / ramBoolean + "%");
         System.out.println("Average Compression, short[] vs. double[][] (Appropriate, Z):" +
                 100.0 * ramPacked / ramDouble + "%");
+        */
     }
 
     //@Test
@@ -554,6 +573,7 @@ public class CoordPackerTest {
         }
         //assertEquals("Packed shorts", 18, packed.length);
         //assertEquals("Unpacked doubles: ", 57600, seen.length * seen[0].length);
+        /*
         System.out.println("Average Memory used by packed short[] (Approaching Worst-Case, Z):" +
                 ramPacked / 100.0 + " bytes");
         System.out.println("Average Memory used by boolean[][] (Approaching Worst-Case, Z):" +
@@ -564,6 +584,7 @@ public class CoordPackerTest {
                 100.0 * ramPacked / ramBoolean + "%");
         System.out.println("Average Compression, short[] vs. double[][] (Approaching Worst-Case, Z):" +
                 100.0 * ramPacked / ramDouble + "%");
+        */
     }
 
     //@Test

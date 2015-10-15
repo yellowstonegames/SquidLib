@@ -507,10 +507,10 @@ public class CoordPacker {
         int xSize = map.length, ySize = map[0].length;
         if (xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
-        int limit = 0x10000, llen = levelCount, mapLimit = xSize * ySize;
+        int limit = 0x10000, mapLimit = xSize * ySize;
         long on = 0, current = 0;
-        ShortVLA[] packing = new ShortVLA[llen];
-        int[] skip = new int[llen];
+        ShortVLA[] packing = new ShortVLA[levelCount];
+        int[] skip = new int[levelCount];
 
         if(ySize <= 128) {
             limit >>= 1;
@@ -530,9 +530,9 @@ public class CoordPacker {
                 }
             }
         }
-        short[][] packed = new short[llen][];
+        short[][] packed = new short[levelCount][];
         short x, y;
-        for(int l = 0; l < llen; l++) {
+        for(int l = 0; l < levelCount; l++) {
             packing[l] = new ShortVLA(64);
             for (int i = 0, ml = 0; i < limit && ml < mapLimit; i++, skip[l]++) {
                 x = hilbertX[i];
@@ -603,6 +603,94 @@ public class CoordPacker {
                     if(x >= width || y >= height)
                         continue;
                     unpacked[x][y] = true;
+                }
+            } else {
+                idx += packed[p] & 0xffff;
+            }
+        }
+        return unpacked;
+    }
+
+    /**
+     * Decompresses a short[] returned by pack() or a sub-array of a short[][] returned by packMulti(), as described in
+     * the {@link CoordPacker} class documentation. This returns a double[][] that stores 1.0 for true and 0.0 for
+     * false if the overload of pack() taking a boolean[][] was used. If a double[][] was compressed with pack(), the
+     * double[][] this returns will have 1.0 for all values greater than 0 and 0.0 for all others. If this is one
+     * of the sub-arrays compressed by packMulti(), the index of the sub-array will correspond to an index in the levels
+     * array passed to packMulti(), and any cells that were at least equal to the corresponding value in levels will be
+     * 1.0, while all others will be 0.0. Width and height do not technically need to match the dimensions of the
+     * original 2D array, but under most circumstances where they don't match, the data produced will be junk.
+     * @param packed a short[] encoded by calling one of this class' packing methods on a 2D array.
+     * @param width the width of the 2D array that will be returned; should match the unpacked array's width.
+     * @param height the height of the 2D array that will be returned; should match the unpacked array's height.
+     * @return a double[][] storing which cells encoded by packed are on (1.0) or off (0.0).
+     */
+    public static double[][] unpackDouble(short[] packed, int width, int height)
+    {
+        if(packed == null)
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-null array");
+        double[][] unpacked = new double[width][height];
+        if(packed.length == 0)
+            return unpacked;
+        boolean on = false;
+        int idx = 0;
+        short x =0, y = 0;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
+                    x = hilbertX[idx];
+                    y = hilbertY[idx];
+                    if(x >= width || y >= height)
+                        continue;
+                    unpacked[x][y] = 1.0;
+                }
+            } else {
+                idx += packed[p] & 0xffff;
+            }
+        }
+        return unpacked;
+    }
+
+    /**
+     * Decompresses a short[] returned by pack() or a sub-array of a short[][] returned by packMulti(), as described in
+     * the {@link CoordPacker} class documentation. This returns a double[][] that stores 1.0 for true and 0.0 for
+     * false if the overload of pack() taking a boolean[][] was used. If a double[][] was compressed with pack(), the
+     * double[][] this returns will have 1.0 for all values greater than 0 and 0.0 for all others. If this is one
+     * of the sub-arrays compressed by packMulti(), the index of the sub-array will correspond to an index in the levels
+     * array passed to packMulti(), and any cells that were at least equal to the corresponding value in levels will be
+     * 1.0, while all others will be 0.0. Width and height do not technically need to match the dimensions of the
+     * original 2D array, but under most circumstances where they don't match, the data produced will be junk.
+     * @param packed a short[] encoded by calling one of this class' packing methods on a 2D array.
+     * @param width the width of the 2D array that will be returned; should match the unpacked array's width.
+     * @param height the height of the 2D array that will be returned; should match the unpacked array's height.
+     * @return a double[][] storing which cells encoded by packed are on (1.0) or off (0.0).
+     */
+    public static double[][] unpackDoubleConical(short[] packed, int width, int height,  int centerX, int centerY,
+                                                 double angle, double span)
+    {
+        if(packed == null)
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpack() must be given a non-null array");
+        double[][] unpacked = new double[width][height];
+        if(packed.length == 0)
+            return unpacked;
+        boolean on = false;
+        int idx = 0;
+        short x =0, y = 0;
+        double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? Math.IEEEremainder(angle + 720.0, 360.0) : angle);
+        double span2 = Math.toRadians(span);
+
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
+                    x = hilbertX[idx];
+                    y = hilbertY[idx];
+                    if(x >= width || y >= height)
+                        continue;
+                    double newAngle = Math.atan2(y - centerY, x - centerX) + Math.PI * 2;
+                    if(Math.abs(Math.IEEEremainder(angle2 - newAngle, Math.PI * 2)) > span2 / 2.0)
+                        unpacked[x][y] = 0.0;
+                    else
+                        unpacked[x][y] = 1.0;
                 }
             } else {
                 idx += packed[p] & 0xffff;
@@ -781,7 +869,7 @@ public class CoordPacker {
                         if(x >= width || y >= height)
                             continue;
                         double newAngle = Math.atan2(y - centerY, x - centerX) + Math.PI * 2;
-                        if(Math.abs(Math.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0)
+                        if(Math.abs(Math.IEEEremainder(angle2 - newAngle, Math.PI * 2)) > span2 / 2.0)
                             unpacked[x][y] = 0.0;
                         else
                             unpacked[x][y] = levels[l];
