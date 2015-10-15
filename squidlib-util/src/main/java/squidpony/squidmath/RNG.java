@@ -44,10 +44,14 @@ public class RNG {
         this.random = random;
     }
 
+    /**
+     * @author Tommy Ettinger
+     */
     protected static class CustomRandom extends Random
     {
-        private static long serialVersionUID = 1L;
-        private RandomnessSource randomnessSource;
+
+		private static final long serialVersionUID = 8211985716129281944L;
+		private final RandomnessSource randomnessSource;
 
         /**
          * Creates a new random number generator. This constructor sets

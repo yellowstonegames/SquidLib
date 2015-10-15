@@ -1,11 +1,10 @@
 package squidpony.squidgrid.gui.animation;
 
-import squidpony.squidmath.Coord;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;

@@ -311,7 +311,8 @@ public class ShortVLA {
         return array;
     }
 
-    public int hashCode () {
+    @Override
+	public int hashCode () {
         if (!ordered) return super.hashCode();
         short[] items = this.items;
         int h = 1;
@@ -320,7 +321,8 @@ public class ShortVLA {
         return h;
     }
 
-    public boolean equals (Object object) {
+    @Override
+	public boolean equals (Object object) {
         if (object == this) return true;
         if (!ordered) return false;
         if (!(object instanceof ShortVLA)) return false;
@@ -328,14 +330,13 @@ public class ShortVLA {
         if (!array.ordered) return false;
         int n = size;
         if (n != array.size) return false;
-        short[] items1 = this.items;
-        short[] items2 = array.items;
         for (int i = 0; i < n; i++)
             if (items[i] != array.items[i]) return false;
         return true;
     }
 
-    public String toString () {
+    @Override
+	public String toString () {
         if (size == 0) return "[]";
         short[] items = this.items;
         StringBuilder buffer = new StringBuilder(32);
