@@ -30,8 +30,37 @@ public class FOVCacheTest {
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
             byte[][] seen = cache.slopeShadowFOV(walkable.x, walkable.y);
             cache.awaitCachePerformance();
-            byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
 
+            byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
+            /*
+            System.out.println("From the walkable square, outside range of the problem");
+            for (int k = 0; k < height; k++) {
+                for (int l = 0; l < width; l++) {
+                    if((l == walkable.x && k == walkable.y))
+                        System.out.print('@');
+                    else if (gradient[l][k] > 0)
+                        System.out.print((char) (gradient[l][k] + 65));
+                    else
+                        System.out.print(' ');
+                    System.out.print(map[l][k]);
+                }
+                System.out.println();
+            }
+            System.out.println("Now from the one that couldn't see the distant square");
+            byte[][] gradient2 = CoordPacker.unpackMultiByte(cache.getCacheEntry(44, 50), width, height);
+            for (int k = 0; k < height; k++) {
+                for (int l = 0; l < width; l++) {
+                    if((l == 44 && k == 50))
+                        System.out.print('@');
+                    else if (gradient2[l][k] > 0)
+                        System.out.print((char) (gradient2[l][k] + 65));
+                    else
+                        System.out.print(' ');
+                    System.out.print(map[l][k]);
+                }
+                System.out.println();
+            }
+            */
             for (int i = 0; i < seen.length; i++) {
                 assertArrayEquals(seen[i], gradient[i]);
             }
@@ -44,6 +73,38 @@ public class FOVCacheTest {
                     {
                         boolean sharing = cache.queryCache(10, i, j, walkable.x, walkable.y);
                         if(!sharing) {
+                            /*
+                            short[][] cacheIJ = cache.getCacheEntry(i, j);
+
+                            for (int k = 0; k <cacheIJ.length; k++) {
+                                System.out.println("Cache sub-array " + k);
+                                for (int l = 0; l < cacheIJ[k].length; l++) {
+                                    System.out.print(cacheIJ[k][l] + ", ");
+                                }
+                                System.out.println();
+                            }
+                            boolean[][] fromIJ = CoordPacker.unpack(cacheIJ[0], width, height);
+                            for (int k = 0; k < height; k++) {
+                                for (int l = 0; l < width; l++) {
+                                    System.out.print(((l == i && k == j) || (l == walkable.x && k == walkable.y)
+                                            ? "@"
+                                            : (fromIJ[l][k] ? "!" : " ")) + map[l][k]);
+                                }
+                                System.out.println();
+                            }
+                            byte[][] grad = CoordPacker.unpackMultiByte(cacheIJ, width, height);
+                            for (int k = 0; k < height; k++) {
+                                for (int l = 0; l < width; l++) {
+                                    if((l == i && k == j) || (l == walkable.x && k == walkable.y))
+                                        System.out.print('@');
+                                    else if (grad[l][k] > 0)
+                                        System.out.print((char) (grad[l][k] + 65));
+                                    else
+                                        System.out.print(' ');
+                                    System.out.print(map[l][k]);
+                                }
+                                System.out.println();
+                            }*/
                             System.out.println("i: " + i + ", j: " + j + ", x: " + walkable.x + ", y: " + walkable.y);
                         }
                         assertTrue(sharing);

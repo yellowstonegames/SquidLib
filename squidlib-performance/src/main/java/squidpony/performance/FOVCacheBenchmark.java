@@ -28,7 +28,7 @@ public class FOVCacheBenchmark {
     public final static char[][] map = dungeonGen.generate();
     public final static double[][] res = DungeonUtility.generateResistances(map);
     public static FOVCache cache = new FOVCache(map, 16, Radius.SQUARE, 8);
-    public static FOV fov = new FOV(FOV.SHADOW);
+    public static FOV fov = new FOV(FOV.RIPPLE);
     static {
         cache.awaitCacheQuality();
     }
@@ -40,7 +40,7 @@ public class FOVCacheBenchmark {
         for (int i = 1; i < DIMENSION - 1; i++) {
             for (int j = 1; j < DIMENSION - 1; j++) {
                 if (map[i][j] != '#') {
-                    cache.calculateFOV(res, i, j, 16);
+                    cache.calculateGradedFOV(res, i, j, 16);
 
                     /*for (int k = 1; k < DIMENSION - 1; k++) {
                         for (int l = 1; l < DIMENSION - 1; l++) {
@@ -97,5 +97,6 @@ public class FOVCacheBenchmark {
                 .build();
 
         new Runner(opt).run();
+
     }
 }

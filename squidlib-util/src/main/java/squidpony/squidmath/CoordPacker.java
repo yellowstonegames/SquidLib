@@ -160,12 +160,13 @@ public class CoordPacker {
     private static final int BITS = DEPTH << 1;
 
     public static short[] hilbertX = new short[0x10000], hilbertY = new short[0x10000],
-            ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
+            hilbertDistances = new short[0x10000], ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
     static {
         ClassLoader cl = CoordPacker.class.getClassLoader();
         InputStream xStream = cl.getResourceAsStream("hilbert/x.bin"),
-                    yStream = cl.getResourceAsStream("hilbert/y.bin");
-        byte[] xBytes = new byte[0x20000], yBytes = new byte[0x20000];
+                yStream = cl.getResourceAsStream("hilbert/y.bin"),
+                dStream = cl.getResourceAsStream("hilbert/distance.bin");
+        byte[] xBytes = new byte[0x20000], yBytes = new byte[0x20000], dBytes = new byte[0x20000];
         try {
             xStream.read(xBytes);
             ByteBuffer.wrap(xBytes).asShortBuffer().get(hilbertX);
@@ -175,6 +176,12 @@ public class CoordPacker {
         try {
             yStream.read(yBytes);
             ByteBuffer.wrap(yBytes).asShortBuffer().get(hilbertY);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            dStream.read(dBytes);
+            ByteBuffer.wrap(dBytes).asShortBuffer().get(hilbertDistances);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -975,7 +982,7 @@ public class CoordPacker {
             int idx = 0;
             for (int p = 0; p < packed[l].length; p++, on = !on) {
                 if (on) {
-                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
+                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip && idx <= 0xffff; idx++) {
                         x = hilbertX[idx];
                         y = hilbertY[idx];
                         if(x >= width || y >= height)
@@ -1847,15 +1854,28 @@ public class CoordPacker {
     /**
      * Takes an x, y position and returns the length to travel along the 256x256 Hilbert curve to reach that position.
      * This assumes x and y are between 0 and 255, inclusive.
+     * This uses a lookup table for the 256x256 Hilbert Curve, which should make it faster than calculating the
+     * distance along the Hilbert Curve repeatedly.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
      * @param x between 0 and 255 inclusive
      * @param y between 0 and 255 inclusive
      * @return the distance to travel along the 256x256 Hilbert Curve to get to the given x, y point.
      */
-    public static int posToHilbert( final int x, final int y )
+    public static int posToHilbert( final int x, final int y ) {
+        return hilbertDistances[x + (y << 8)] & 0xffff;
+    }
+    /*
+     * Takes an x, y position and returns the length to travel along the 256x256 Hilbert curve to reach that position.
+     * This assumes x and y are between 0 and 255, inclusive.
+     * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
+     * @param x between 0 and 255 inclusive
+     * @param y between 0 and 255 inclusive
+     * @return the distance to travel along the 256x256 Hilbert Curve to get to the given x, y point.
+
+    public static int posToHilbertNoLUT( final int x, final int y )
     {
         int hilbert = 0, remap = 0xb4, mcode, hcode;
-        /*
+        / *
         while( block > 0 )
         {
             --block;
@@ -1864,7 +1884,7 @@ public class CoordPacker {
             remap ^= ( 0x82000028 >> ( hcode << 3 ) );
             hilbert = ( ( hilbert << 2 ) + hcode );
         }
-         */
+         * /
 
         mcode = ( ( x >> 7 ) & 1 ) | ( ( ( y >> ( 7 ) ) & 1 ) << 1);
         hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
@@ -1908,9 +1928,10 @@ public class CoordPacker {
 
         return hilbert;
     }
+    */
     /**
      * Takes a position as a Morton code, with interleaved x and y bits and x in the least significant bit, and returns
-     * the length to travel along the 256x256 Hilbert curve to reach that position.
+     * the length to travel along the 256x256 Hilbert Curve to reach that position.
      * This uses 16 bits of the Morton code and requires that the code is non-negative.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
      * @param morton a Morton code that interleaves two 8-bit unsigned numbers, with x as index1 and y as index2.
@@ -1934,9 +1955,9 @@ public class CoordPacker {
 
     /**
      * Takes a distance to travel along the 256x256 Hilbert curve and returns a Morton code representing the position
-     * in 2D space that corresponds to that point on the Hilbert curve; the Morton code will have interleaved x and y
-     * bits and x in the least significant bit. This variant uses a lookup table for the 256x256 Hilbert curve, which
-     * should make it faster than calculating the position repeatedly.
+     * in 2D space that corresponds to that point on the Hilbert Curve; the Morton code will have interleaved x and y
+     * bits and x in the least significant bit. This uses a lookup table for the 256x256 Hilbert curve, which should
+     * make it faster than calculating the position repeatedly.
      * The parameter hilbert is an int but only 16 unsigned bits are used.
      * @param hilbert a distance to travel down the Hilbert Curve
      * @return a Morton code that stores x and y interleaved; can be converted to a Coord with other methods.
@@ -1949,7 +1970,7 @@ public class CoordPacker {
 
     /**
      * Takes a distance to travel along the 256x256 Hilbert curve and returns a Coord representing the position
-     * in 2D space that corresponds to that point on the Hilbert curve. This variant uses a lookup table for the
+     * in 2D space that corresponds to that point on the Hilbert curve. This uses a lookup table for the
      * 256x256 Hilbert curve, which should make it faster than calculating the position repeatedly.
      * The parameter hilbert is an int but only 16 unsigned bits are used.
      * @param hilbert a distance to travel down the Hilbert Curve
