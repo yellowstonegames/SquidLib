@@ -1,22 +1,22 @@
 package squidpony.gdx.examples;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import squidpony.squidgrid.gui.gdx.SColor;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+
+import squidpony.panel.IColoredString;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.AnimatedEntity;
+import squidpony.squidgrid.gui.gdx.GroupCombinedPanel;
+import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
+import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -24,7 +24,15 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-import java.util.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class EverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
@@ -34,6 +42,8 @@ public class EverythingDemo extends ApplicationAdapter {
     private RNG rng;
     private LightRNG lrng;
     private SquidLayers display;
+    /** Non-{@code null} iff '?' was pressed before */
+    private /*Nullable*/ Actor help;
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
     private double[][] res;
@@ -41,8 +51,14 @@ public class EverythingDemo extends ApplicationAdapter {
     private double[][] fovmap, pathMap;
     private AnimatedEntity player;
     private FOV fov;
-    private int width, height;
-    private int cellWidth, cellHeight;
+    /** In number of cells */
+    private int width;
+    /** In number of cells */
+    private int height;
+    /** The pixel width of a cell */
+    private int cellWidth;
+    /** The pixel height of a cell */
+    private int cellHeight;
     private SquidInput input;
     private double counter;
     private boolean[][] seen;
@@ -194,11 +210,16 @@ public class EverythingDemo extends ApplicationAdapter {
                         move(-1, 1);
                         break;
                     }
+                    case '?': {
+                    	displayHelp();
+                        break;
+                    }
                     case 'Q':
                     case 'q':
                     case SquidInput.ESCAPE:
                     {
                         Gdx.app.exit();
+                        break;
                     }
                 }
             }
@@ -255,6 +276,8 @@ public class EverythingDemo extends ApplicationAdapter {
      * @param ymod
      */
     private void move(int xmod, int ymod) {
+    	clearHelp();
+
         if(health <= 0) return;
 
         int newX = player.gridX + xmod, newY = player.gridY + ymod;
@@ -378,6 +401,68 @@ public class EverythingDemo extends ApplicationAdapter {
         }
 
     }
+
+    private void displayHelp() {
+		final int nbMonsters = monsters.size();
+
+		/* Prepare the String to display */
+		final IColoredString<Color> cs = new IColoredString.Impl<Color>();
+		cs.append("Still ", null);
+		{
+			final Color nbColor;
+			if (nbMonsters <= 1)
+				/* Green */
+				nbColor = new Color(0, 1, 0, 1);
+			else if (nbMonsters <= 5)
+				/* Orange */
+				nbColor = new Color(1, 0.5f, 0, 1);
+			else
+				/* Red */
+				nbColor = new Color(1, 0, 0, 1);
+			cs.appendInt(nbMonsters, nbColor);
+		}
+		cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
+
+		/* The panel's width */
+		final int w = cs.length();
+		/* The panel's height. */
+		final int h = 1;
+
+		final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
+		final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
+		final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<Color>();
+		/*
+		 * We're setting them late just for the demo, as it avoids giving 'w'
+		 * and 'h' at construction time.
+		 */
+		gcp.setPanels(bg, fg);
+
+		/*
+		 * Set the position (the center), using libgdx's 'setPosition'
+		 * method, that takes the bottom left corner as input.
+		 */
+		gcp.setPosition(((width / 2) - (w / 2)) * cellWidth, (height / 2) * cellHeight);
+
+		/* Fill the background with some grey */
+		gcp.fillBG(new Color(0.3f, 0.3f, 0.3f, 0.9f));
+
+		/* Now, to set the text we have to follow SquidPanel's convention */
+		/* First 0: justify left, second 0: first (and only) line */
+		gcp.putFG(0, 0, cs);
+		
+		help = gcp;
+
+		stage.addActor(gcp);
+	}
+
+	private void clearHelp() {
+		if (help == null)
+			/* Nothing to do */
+			return;
+		help.clear();
+		stage.getActors().removeValue(help, true);
+	}
+
     public void putMap()
     {
         for (int i = 0; i < width; i++) {
