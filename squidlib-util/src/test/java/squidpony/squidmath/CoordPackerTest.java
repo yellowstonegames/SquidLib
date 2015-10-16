@@ -721,14 +721,28 @@ public class CoordPackerTest {
     public static void generateHilbert() {
         int sideLength = (1 << 8);
         int capacity = sideLength * sideLength;
-        short[] xOut = new short[capacity], yOut = new short[capacity];
+        short[] out = new short[capacity];// xOut = new short[capacity], yOut = new short[capacity];
+        /*
         Coord c;
         for (int i = 0; i < capacity; i++) {
             c = CoordPacker.hilbertToCoord(i);
             xOut[i] = (short) c.x;
             yOut[i] = (short) c.y;
         }
-
+        */
+        for (int y = 0; y < sideLength; y++) {
+            for (int x = 0; x < sideLength; x++) {
+                out[y * sideLength + x] = (short) CoordPacker.posToHilbert(x, y);
+            }
+        }
+        try {
+            FileChannel channel = new FileOutputStream("target/distance.bin").getChannel();
+            channel.write(shortsToBytes(out));
+            channel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /*
         try {
             FileChannel channel = new FileOutputStream("target/x.bin").getChannel();
             channel.write(shortsToBytes(xOut));
@@ -744,6 +758,7 @@ public class CoordPackerTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
     }
 /*
 StringBuilder text = new StringBuilder(0xffff * 11);

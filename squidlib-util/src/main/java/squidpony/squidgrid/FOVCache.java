@@ -70,9 +70,15 @@ import static squidpony.squidmath.CoordPacker.*;
  * it does have a small effect on the compressed version). To actually use the compressed maps does take an additional
  * processing step, but careful benchmarking indicates running FOV for a roughly 12 radius (Radius.SQUARE kind) area
  * takes twice as long as simply extracting a cached FOV map, and the advantage for the cache is greater for larger FOV
- * radii (but the cache also uses slightly more memory). Benchmarks are conducted using JMH, a tool developed by the
- * OpenJDK team, in a Maven module called squidlib-performance that is not distributed with SquidLib but is available if
- * you download the source code.
+ * radii (but the cache also uses slightly more memory). This compares against the fastest FOV type, Shadowcasting, but
+ * to get distance information from an FOV you need to use either the customized FOV algorithm in this class (Slope
+ * Shadowcasting), or to use the Ripple FOV type. Ripple does respect translucent objects, which neither shadowcasting
+ * nor this class' slope shadowcasting does, but getting 16 FOV levels from the cache for every walkable cell on a
+ * 100x100 dungeon map takes approximately 19 ms while running Ripple FOV for the same set of cells takes over 700 ms.
+ * Benchmarks are conducted using JMH, a tool developed by the OpenJDK team, in a Maven module called
+ * squidlib-performance that is not distributed with SquidLib but is available if you download the SquidLib source code.
+ *
+ * @see squidpony.squidmath.CoordPacker has various utilities for operating on compressed data of this kind.
  * Created by Tommy Ettinger on 10/7/2015.
  * @author Tommy Ettinger
  */
@@ -344,7 +350,7 @@ public class FOVCache extends FOV{
         for (int i = 0; i <= maxRadius; i++) {
             for (int j = 0; j <= maxRadius; j++) {
                 tmp = distance(i, j);
-                inverse_tmp = (short)(maxRadius - tmp / 2);
+                inverse_tmp = (short)(maxRadius + 1 - tmp / 2);
 
                 atan2Cache[maxRadius + i][maxRadius + j] = Math.atan2(j, i);
                 if(atan2Cache[maxRadius + i][maxRadius + j] < 0)
@@ -363,7 +369,7 @@ public class FOVCache extends FOV{
                         atan2Cache[maxRadius - i][maxRadius - j] += PI2;
 
                 }
-                if(tmp / 2 <= maxRadius) {
+                if(tmp / 2 <= maxRadius && inverse_tmp > 0) {
                     distanceCache[maxRadius + i][maxRadius + j] = inverse_tmp;
                     if (tmp > 0) {
                         distanceCache[maxRadius - i][maxRadius + j] = inverse_tmp;
@@ -569,7 +575,7 @@ public class FOVCache extends FOV{
         return queryPacked(losCache[viewerX + viewerY  * width], targetX, targetY);
     }
 
-
+    /*
     //needs rewrite, must store the angle a ray traveled at to get around an obstacle, and propagate it to the end of
     //the ray. It should check if the angle theta for a given point is too different from the angle in angleMap.
     private byte[][] waveFOVWIP(int viewerX, int viewerY) {
@@ -596,7 +602,7 @@ public class FOVCache extends FOV{
                 if(cx < width && cx >= 0 && cy < height && cy >= 0)
                 {
                     theta = atan2Cache[pt.x][pt.y];
-                    dist = (byte)(distanceCache[pt.x][pt.y ] + 1);
+                    dist = (byte)(distanceCache[pt.x][pt.y ]);
 
                     if(w <= 0)
                     {
@@ -699,7 +705,7 @@ public class FOVCache extends FOV{
                                 * 0.5) % PI2;
                                 //(angleCW + atan2Cache[cwAdjX][cwAdjY]) * 0.5;
 
-                         */
+                         * /
                         angleCCW = atan2Cache[ccwAdjX][ccwAdjY];
                         //(angleCCW + atan2Cache[ccwAdjX][ccwAdjY]) * 0.5;
                         angleCW = atan2Cache[cwAdjX][cwAdjY];
@@ -817,7 +823,7 @@ public class FOVCache extends FOV{
                                 angleMap[pt.x][pt.y] = (angleMap[ccwAdjX][ccwAdjY] != atan2Cache[ccwAdjX][ccwAdjY])
                                         ? angleMap[ccwAdjX][ccwAdjY]
                                         : theta;
-                             */
+                             * /
                         }
                         if(Math.abs(angleMap[pt.x][pt.y] - theta) <= 0.001 || resMap[pt.x][pt.y] > 0.5)
                             gradientMap[cx][cy] = dist;
@@ -830,7 +836,7 @@ public class FOVCache extends FOV{
 
         return gradientMap;
     }
-
+    */
     public byte[][] waveFOV(int viewerX, int viewerY) {
         byte[][] gradientMap = new byte[width][height];
         double[][] angleMap = new double[2 * maxRadius + 1][2 * maxRadius + 1];
@@ -850,7 +856,7 @@ public class FOVCache extends FOV{
                 if(cx < width && cx >= 0 && cy < height && cy >= 0)
                 {
                     theta = atan2Cache[pt.x][pt.y];
-                    dist = (byte)(distanceCache[pt.x][pt.y ] + 1);
+                    dist = (byte)(distanceCache[pt.x][pt.y ]);
 
                     if(w <= 0)
                     {
@@ -1029,14 +1035,16 @@ public class FOVCache extends FOV{
                 double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
                 double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
 
-                if (!(currentX >= 0 && currentY >= 0 && currentX < width && currentY < height) || start < rightSlope) {
+                if (!(currentX >= 0 && currentY >= 0 && currentX < width && currentY < height
+                        && currentX - viewerX + maxRadius >= 0 && currentX - viewerX <= maxRadius
+                        && currentY - viewerY + maxRadius >= 0 && currentY - viewerY <= maxRadius)
+                        || start < rightSlope) {
                     continue;
                 } else if (end > leftSlope) {
                     break;
                 }
 
-
-                dist = distanceCache[maxRadius + deltaX][maxRadius + deltaY] + 1;
+                dist = distanceCache[currentX - viewerX + maxRadius][currentY - viewerY + maxRadius];
                 //check if it's within the lightable area and light if needed
                 if (dist <= maxRadius) {
                     lightMap[currentX][currentY] = (byte) dist;
@@ -1460,6 +1468,123 @@ public class FOVCache extends FOV{
             return gradedFOV.calculateFOV(this.resMap, startX, startY, radius, radiusTechnique, angle, span);
     }
 
+    /**
+     * Given a path as a List of Coords (such as one produced by DijkstraMap.getPath()), this method will look up the
+     * FOV for the given fovRange at each Coord, and returns an array of packed FOV maps where each map is the union
+     * of the FOV centered on a Coord in path with all FOVs centered on previous Coords in path. The purpose of this is
+     * mainly to have an efficient way to show the progressively expanding seen area of a character who moves multiple
+     * tiles. It may be desirable to add the entire path's cumulative FOV (stored in the last element of the returned
+     * short[][]) to the history of what a character has seen, removing the path's FOV from the currently visible cells
+     * either after the character has finished their action, or even immediately after moving if, for instance, the
+     * movement was part of a rapid leap that wouldn't let the character spot details while moving (but the general
+     * layout provided by the seen-cell history could suffice). This method never unpacks any packed data.
+     * @param path a List of Coords that will be added, in order, to multiple packed FOVs for the path so far
+     * @param fovRange the radius the creature or thing taking the path can see (or possibly light up).
+     * @return a packed short[][], each short[] encoding the FOV around an additional Coord merged with those before
+     */
+    public short[][] pathFOVPacked(List<Coord> path, int fovRange)
+    {
+        if(!complete)
+            throw new IllegalStateException("Cache is not yet constructed");
+        if(fovRange > maxRadius)
+            throw new UnsupportedOperationException("Given fovRange parameter exceeds maximum cached range");
+        short[][] fovSteps = new short[path.size()][];
+        int idx = 0;
+        for (Coord c : path)
+        {
+            if(c.x < 0 || c.y < 0 || c.x >= width || c.y >= height)
+                throw new ArrayIndexOutOfBoundsException("Along given path, encountered an invalid Coord: "
+                + c.toString());
+            if(idx == 0)
+            {
+                fovSteps[idx] = cache[c.x + c.y * width][maxRadius - fovRange];
+            }
+            else
+            {
+                fovSteps[idx] = unionPacked(fovSteps[idx - 1], cache[c.x + c.y * width][maxRadius - fovRange]);
+            }
+            idx++;
+        }
+        return fovSteps;
+    }
+
+    /**
+     * Given a path as a List of Coords (such as one produced by DijkstraMap.getPath()), this method will look up the
+     * FOV for the given fovRange at each Coord, and returns an array of full FOV maps where each map is the union
+     * of the FOV centered on a Coord in path with all FOVs centered on previous Coords in path. The purpose of this is
+     * mainly to have a way to show the progressively expanding seen area of a character who moves multiple
+     * tiles. It may be desirable to add the entire path's cumulative FOV (stored in the last element of the returned
+     * double[][][]) to the history of what a character has seen, removing the path's FOV from the currently visible
+     * cells either after the character has finished their action, or even immediately after moving if, for instance,
+     * the movement was part of a rapid leap that wouldn't let the character spot details while moving (but the general
+     * layout provided by the seen-cell history could suffice). This method computes the union of the FOV without
+     * unpacking, but then unpacks each step along the path into a double[][] of 1.0 and 0.0 values.
+     * @param path a List of Coords that will be added, in order, to multiple FOVs for the path so far
+     * @param fovRange the radius the creature or thing taking the path can see (or possibly light up).
+     * @return a packed double[][][]; each double[][] is the FOV around an additional Coord merged with those before
+     */
+    public double[][][] pathFOV(List<Coord> path, int fovRange)
+    {
+        short[][] compressed = pathFOVPacked(path, fovRange);
+        double[][][] fovSteps = new double[compressed.length][][];
+        for (int i = 0; i < compressed.length; i++) {
+            fovSteps[i] = unpackDouble(compressed[i], width, height);
+        }
+        return fovSteps;
+    }
+
+    /**
+     * In games that have multiple characters who should share one FOV map, this method should provide optimal
+     * performance when collecting several cached FOV maps into one packed map. It takes a Map of Coord keys to Integer
+     * values, and since it does not modify its parameter, nor does it need a particular iteration order, it doesn't
+     * perform a defensive copy of the team parameter. Each Coord key should correspond to the position of a character,
+     * and each Integer value should be the FOV range of that character. This returns a short[] as a packed FOV map for
+     * all characters in team as a collective.
+     * @param team a Map of Coord keys for characters' positions to Integer values for the FOV range of each character
+     * @return a packed FOV map that can be used with other packed data using CoordPacker.
+     */
+    public short[] teamFOVPacked(Map<Coord, Integer> team)
+    {
+        if(!complete)
+            throw new IllegalStateException("Cache is not yet constructed");
+        short[] packing = new short[0];
+        int idx = 0;
+        Coord c;
+        int range;
+        for (Map.Entry<Coord, Integer> kv : team.entrySet())
+        {
+            c = kv.getKey();
+            range = kv.getValue();
+            if(c.x < 0 || c.y < 0 || c.x >= width || c.y >= height)
+                throw new ArrayIndexOutOfBoundsException("Among team, encountered an invalid Coord: "
+                        + c.toString());
+            if(idx == 0)
+            {
+                packing = cache[c.x + c.y * width][maxRadius - range];
+            }
+            else
+            {
+                packing = unionPacked(packing, cache[c.x + c.y * width][maxRadius - range]);
+            }
+            idx++;
+        }
+        return packing;
+    }
+
+    /**
+     * In games that have multiple characters who should share one FOV map, this method should provide optimal
+     * performance when collecting several cached FOV maps into one full map. It takes a Map of Coord keys to Integer
+     * values, and since it does not modify its parameter, nor does it need a particular iteration order, it doesn't
+     * perform a defensive copy of the team parameter. Each Coord key should correspond to the position of a character,
+     * and each Integer value should be the FOV range of that character. This returns a double[][] as a full FOV map,
+     * with values of either 1.0 or 0.0, for all characters in team as a collective.
+     * @param team a Map of Coord keys for characters' positions to Integer values for the FOV range of each character
+     * @return a double[][] FOV map with 1.0 and 0.0 as values, combining all characters' FOV maps.
+     */
+    public double[][] teamFOV(Map<Coord, Integer> team)
+    {
+        return unpackDouble(teamFOVPacked(team), width, height);
+    }
     protected class PerformanceUnit implements Runnable
     {
 

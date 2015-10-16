@@ -104,7 +104,8 @@ public interface ICombinedPanel<T> {
 
 	/**
 	 * A generic implementation of {@link ICombinedPanel}. Useful to combine
-	 * things. If you're a new user, you likely need {@link GroupImpl} instead.
+	 * things. If you're a new user, you likely would prefer the more specific
+     * implementation using libGDX, GroupCombinedPanel, instead.
 	 * 
 	 * @author smelC
 	 * 
