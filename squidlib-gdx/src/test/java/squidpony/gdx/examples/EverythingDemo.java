@@ -211,7 +211,7 @@ public class EverythingDemo extends ApplicationAdapter {
                         break;
                     }
                     case '?': {
-                    	displayHelp();
+                    	toggleHelp();
                         break;
                     }
                     case 'Q':
@@ -402,8 +402,13 @@ public class EverythingDemo extends ApplicationAdapter {
 
     }
 
-    private void displayHelp() {
-		final int nbMonsters = monsters.size();
+    private void toggleHelp() {
+        if(help != null)
+        {
+            clearHelp();
+            return;
+        }
+        final int nbMonsters = monsters.size();
 
 		/* Prepare the String to display */
 		final IColoredString<Color> cs = new IColoredString.Impl<Color>();
@@ -428,9 +433,9 @@ public class EverythingDemo extends ApplicationAdapter {
 		/* The panel's height. */
 		final int h = 1;
 
-		final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
-		final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
-		final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<Color>();
+        final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
+        final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
+        final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<Color>();
 		/*
 		 * We're setting them late just for the demo, as it avoids giving 'w'
 		 * and 'h' at construction time.
@@ -461,6 +466,7 @@ public class EverythingDemo extends ApplicationAdapter {
 			return;
 		help.clear();
 		stage.getActors().removeValue(help, true);
+        help = null;
 	}
 
     public void putMap()
