@@ -40,8 +40,6 @@ public class ImageDemo extends ApplicationAdapter {
         height = 20;
         cellWidth = 18;
         cellHeight = 36;
-        // the font will try to load Rogue-Zodiac.ttf from resources. I (Tommy Ettinger) made it, and it's under the
-        // same license as SquidLib.
         display = new SquidLayers(width * 2, height, cellWidth, cellHeight, DefaultResources.narrowNameExtraLarge);
         display.setAnimationDuration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);

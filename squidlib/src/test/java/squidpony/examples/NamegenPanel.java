@@ -1,15 +1,8 @@
-package squidpony.examples;/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package squidpony.examples;
 
-import java.awt.BorderLayout;
+
 import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import squidpony.WeightedLetterNamegen;
 
 /**
@@ -32,7 +25,7 @@ public class NamegenPanel extends javax.swing.JPanel {
         starters.put("USA Last Name", WeightedLetterNamegen.COMMON_USA_LAST_NAMES);
         starters.put("Lovecraft Mythos Style", WeightedLetterNamegen.LOVECRAFT_MYTHOS_NAMES);
 
-        inputComboBox.setModel(new DefaultComboBoxModel(starters.keySet().toArray()));
+        inputComboBox.setModel(new DefaultComboBoxModel<String>(starters.keySet().toArray(new String[starters.size()])));
         inputComboBox.setSelectedIndex(0);
         inputComboBoxItemStateChanged(null);
         generateButtonActionPerformed(null);
@@ -130,10 +123,10 @@ public class NamegenPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton generateButton;
-    private javax.swing.JComboBox inputComboBox;
-    private javax.swing.JList inputList;
+    private javax.swing.JComboBox<String> inputComboBox;
+    private javax.swing.JList<String> inputList;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList outputList;
+    private javax.swing.JList<String> outputList;
     // End of variables declaration//GEN-END:variables
 }
