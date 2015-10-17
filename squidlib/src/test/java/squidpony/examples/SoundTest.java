@@ -20,7 +20,7 @@ import java.util.Map;
 public class SoundTest {
     public static void main(String[] args) {
         for (SoundMap.Measurement m : SoundMap.Measurement.values()) {
-            LightRNG lrng = new LightRNG(0x57a8deadbeef0ffal);
+            LightRNG lrng = new LightRNG(0x1337BEEF);
             RNG rng = new RNG(lrng);
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
 

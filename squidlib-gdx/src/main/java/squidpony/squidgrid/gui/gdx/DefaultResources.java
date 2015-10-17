@@ -1,17 +1,33 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.LifecycleListener;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.StatefulRNG;
 
 /**
- * Default BitmapFonts for use with LibGDX. Caches these fonts in static fields, so not recommended for use on Android.
+ * Default BitmapFonts, a sample image, and a central RNG for use with LibGDX.
+ * The fonts provided are all monospaced, with most looking rather similar (straight orthogonal lines and elbow curves),
+ * but the one that looks... better than the rest (Inconsolata-LGC, accessible by getLargeSmoothFont()) also supports
+ * Greek and Cyrillic, and is the only one to do so. The most Latin script support is in the font Mandrill, accessible
+ * by getDefaultUnicodeFont() and getLargeUnicodeFont() in two different sizes, and the latter should be suitable for
+ * everything from Polish to Vietnamese.
+ * <br>
+ * The sample image is a tentacle taken from a public domain icon collection graciously released by Henrique Lazarini;
+ * it's fitting for SquidLib to have a tentacle as a logo or something, I guess?
+ * <br>
+ * You can get a default RNG with getGuiRandom(); this should probably not be reused for non-GUI-related randomness,
+ * but is meant instead to be used wherever randomized purely-aesthetic effects are needed, such as a jiggling effect.
  * Created by Tommy Ettinger on 7/11/2015.
  */
-public class DefaultResources {
-    private static BitmapFont narrow1 = null, narrow2 = null, narrow3 = null, square1 = null, square2 = null,
+public class DefaultResources implements LifecycleListener {
+    private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
+            smooth2 = null,
+            square1 = null, square2 = null,
             unicode1 = null, unicode2 = null;
     public final static String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
@@ -19,22 +35,40 @@ public class DefaultResources {
             squareNameLarge = "Zodiac-Square-24x24.fnt",
             narrowNameLarge = "Rogue-Zodiac-12x24.fnt",
             unicodeNameLarge = "Mandrill-12x32.fnt",
-            narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt";
-    public static TextureRegion tentacle2 = null;
+            narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt",
+            smoothNameLarge = "Inconsolata-LGC-12x24.fnt";
+    private Texture tentacle = null;
+    private TextureRegion tentacleRegion = null;
+    private StatefulRNG guiRandom;
+
+    private static DefaultResources instance = null;
+
+    private DefaultResources()
+    {
+        Gdx.app.addLifecycleListener(this);
+    }
+
+    private static void initialize()
+    {
+        if(instance == null)
+            instance = new DefaultResources();
+    }
+
     /**
      * Returns a 12x12px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
      * @return the BitmapFont object representing Zodiac-Square.ttf at size 16 pt.
      */
     public static BitmapFont getDefaultFont()
     {
-        if(square1 == null)
+        initialize();
+        if(instance.square1 == null)
         {
             try {
-                square1 = new BitmapFont(Gdx.files.classpath("Zodiac-Square-12x12.fnt"), Gdx.files.classpath("Zodiac-Square-12x12.png"), false);
+                instance.square1 = new BitmapFont(Gdx.files.classpath("Zodiac-Square-12x12.fnt"), Gdx.files.classpath("Zodiac-Square-12x12.png"), false);
             } catch (Exception e) {
             }
         }
-        return square1;
+        return instance.square1;
     }
     /**
      * Returns a 24x24px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
@@ -42,14 +76,15 @@ public class DefaultResources {
      */
     public static BitmapFont getLargeFont()
     {
-        if(square2 == null)
+        initialize();
+        if(instance.square2 == null)
         {
             try {
-                square2 = new BitmapFont(Gdx.files.classpath("Zodiac-Square-24x24.fnt"), Gdx.files.classpath("Zodiac-Square-24x24.png"), false);
+                instance.square2 = new BitmapFont(Gdx.files.classpath("Zodiac-Square-24x24.fnt"), Gdx.files.classpath("Zodiac-Square-24x24.png"), false);
             } catch (Exception e) {
             }
         }
-        return square2;
+        return instance.square2;
     }
     /**
      * Returns a 6x12px, narrow and curving font as an embedded resource. Caches it for later calls.
@@ -57,14 +92,15 @@ public class DefaultResources {
      */
     public static BitmapFont getDefaultNarrowFont()
     {
-        if(narrow1 == null)
+        initialize();
+        if(instance.narrow1 == null)
         {
             try {
-                narrow1 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-6x12.fnt"), Gdx.files.classpath("Rogue-Zodiac-6x12.png"), false);
+                instance.narrow1 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-6x12.fnt"), Gdx.files.classpath("Rogue-Zodiac-6x12.png"), false);
             } catch (Exception e) {
             }
         }
-        return narrow1;
+        return instance.narrow1;
     }
 
     /**
@@ -73,14 +109,15 @@ public class DefaultResources {
      */
     public static BitmapFont getLargeNarrowFont()
     {
-        if(narrow2 == null)
+        initialize();
+        if(instance.narrow2 == null)
         {
             try {
-                narrow2 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-12x24.fnt"), Gdx.files.classpath("Rogue-Zodiac-12x24.png"), false);
+                instance.narrow2 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-12x24.fnt"), Gdx.files.classpath("Rogue-Zodiac-12x24.png"), false);
             } catch (Exception e) {
             }
         }
-        return narrow2;
+        return instance.narrow2;
     }
     /**
      * Returns a 12x24px, narrow and curving font as an embedded resource. Caches it for later calls.
@@ -88,30 +125,50 @@ public class DefaultResources {
      */
     public static BitmapFont getExtraLargeNarrowFont()
     {
-        if(narrow3 == null)
+        initialize();
+        if(instance.narrow3 == null)
         {
             try {
-                narrow3 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-18x36.fnt"), Gdx.files.classpath("Rogue-Zodiac-18x36.png"), false);
+                instance.narrow3 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-18x36.fnt"), Gdx.files.classpath("Rogue-Zodiac-18x36.png"), false);
             } catch (Exception e) {
             }
         }
-        return narrow3;
+        return instance.narrow3;
     }
 
+    /**
+     * Returns a 12x24px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
+     * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
+     * Caches the font for later calls.
+     * @return the BitmapFont object representing Inconsolata-LGC.ttf at size 32 pt.
+     */
+    public static BitmapFont getLargeSmoothFont()
+    {
+        initialize();
+        if(instance.smooth2 == null)
+        {
+            try {
+                instance.smooth2 = new BitmapFont(Gdx.files.classpath("Inconsolata-LGC-12x24.fnt"), Gdx.files.classpath("Inconsolata-LGC_0.png"), false);
+            } catch (Exception e) {
+            }
+        }
+        return instance.smooth2;
+    }
     /**
      * Returns a 6x16px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
      * @return the BitmapFont object representing Mandrill.ttf at size 16 pt.
      */
     public static BitmapFont getDefaultUnicodeFont()
     {
-        if(unicode1 == null)
+        initialize();
+        if(instance.unicode1 == null)
         {
             try {
-                unicode1 = new BitmapFont(Gdx.files.classpath("Mandrill-6x16.fnt"), Gdx.files.classpath("Mandrill-6x16.png"), false);
+                instance.unicode1 = new BitmapFont(Gdx.files.classpath("Mandrill-6x16.fnt"), Gdx.files.classpath("Mandrill-6x16.png"), false);
             } catch (Exception e) {
             }
         }
-        return unicode1;
+        return instance.unicode1;
     }
 
     /**
@@ -120,14 +177,15 @@ public class DefaultResources {
      */
     public static BitmapFont getLargeUnicodeFont()
     {
-        if(unicode2 == null)
+        initialize();
+        if(instance.unicode2 == null)
         {
             try {
-                unicode2 = new BitmapFont(Gdx.files.classpath("Mandrill-12x32.fnt"), Gdx.files.classpath("Mandrill-12x32.png"), false);
+                instance.unicode2 = new BitmapFont(Gdx.files.classpath("Mandrill-12x32.fnt"), Gdx.files.classpath("Mandrill-12x32.png"), false);
             } catch (Exception e) {
             }
         }
-        return unicode2;
+        return instance.unicode2;
     }
 
     /**
@@ -138,21 +196,31 @@ public class DefaultResources {
      */
     public static TextureRegion getTentacle()
     {
-        if(tentacle2 == null)
+        initialize();
+        if(instance.tentacle == null || instance.tentacleRegion == null)
         {
             try {
-                tentacle2 = new TextureRegion(new Texture(Gdx.files.classpath("Tentacle.png")));
-            } catch (Exception e) {
+                instance.tentacle = new Texture(Gdx.files.classpath("Tentacle.png"));
+                instance.tentacleRegion = new TextureRegion(instance.tentacle);
+            } catch (Exception ignored) {
             }
         }
-        return tentacle2;
+        return instance.tentacleRegion;
     }
 
     /**
      * This is a static global LightRNG that's meant for usage in cases where the seed does not matter and any changes
      * to this LightRNG's state will not change behavior elsewhere in the program; this means the GUI mainly.
      */
-    public static LightRNG guiRandom = new LightRNG();
+    public static StatefulRNG getGuiRandom()
+    {
+        initialize();
+        if(instance.guiRandom == null)
+        {
+            instance.guiRandom =  new StatefulRNG();
+        }
+        return instance.guiRandom;
+    }
 
     /**
      * Special symbols that can be used as icons if you use the narrow default font.
@@ -182,4 +250,60 @@ public class DefaultResources {
                                           "╺╻╼╽╾╿▁▄▅▆▇█▌▐░▒▓▔▖▗\n" +
                                           "▘▙▚▛▜▝▞▟";
 
+    /**
+     * Called when the {@link Application} is about to pause
+     */
+    @Override
+    public void pause() {
+        if(narrow1 != null) {
+            narrow1.dispose();
+            narrow1 = null;
+        }
+        if(narrow2 != null) {
+            narrow2.dispose();
+            narrow2 = null;
+        }
+        if(narrow3 != null) {
+            narrow3.dispose();
+            narrow3 = null;
+        }
+        if(square1 != null) {
+            square1.dispose();
+            square1 = null;
+        }
+        if(square2 != null) {
+            square2.dispose();
+            square1 = null;
+        }
+        if (unicode1 != null) {
+            unicode1.dispose();
+            unicode1 = null;
+        }
+        if (unicode2 != null) {
+            unicode2.dispose();
+            unicode2 = null;
+        }
+        if(tentacle != null) {
+            tentacle.dispose();
+            tentacle = null;
+        }
+    }
+
+    /**
+     * Called when the Application is about to be resumed
+     */
+    @Override
+    public void resume() {
+        initialize();
+    }
+
+    /**
+     * Called when the {@link Application} is about to be disposed
+     */
+    @Override
+    public void dispose() {
+        pause();
+        Gdx.app.removeLifecycleListener(this);
+        instance = null;
+    }
 }

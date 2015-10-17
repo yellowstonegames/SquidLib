@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.StatefulRNG;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -882,18 +884,19 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(duration < 0.02f) duration = 0.02f;
         ae.animating = true;
         animationCount++;
+        StatefulRNG gRandom = DefaultResources.getGuiRandom();
         a.addAction(Actions.sequence(
-                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
                 Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.2F),
                 Actions.delay(duration, Actions.run(new Runnable() {
@@ -919,18 +922,19 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         y = (gridHeight - y - 1);
         y *= cellHeight;
         y -= 1;
+        StatefulRNG gRandom = DefaultResources.getGuiRandom();
         a.addAction(Actions.sequence(
-                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (DefaultResources.guiRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
                 Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.2F),
                 Actions.delay(duration, Actions.run(new Runnable() {
@@ -1010,6 +1014,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 	@Override
 	public void refresh() {
 		/* smelC: should we do something here ? */
+        /* Tommy Ettinger: potentially, but it would need to call draw, and that means keeping a Batch. */
 	}
 
 	@Override

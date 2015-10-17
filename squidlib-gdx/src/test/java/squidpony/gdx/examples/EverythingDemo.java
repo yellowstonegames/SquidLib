@@ -10,13 +10,7 @@ import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.AnimatedEntity;
-import squidpony.squidgrid.gui.gdx.GroupCombinedPanel;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
-import squidpony.squidgrid.gui.gdx.SquidMouse;
-import squidpony.squidgrid.gui.gdx.SquidPanel;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -78,9 +72,9 @@ public class EverythingDemo extends ApplicationAdapter {
         height = 30;
         cellWidth = 12;
         cellHeight = 24;
-        // the font will try to load Rogue-Zodiac.ttf from resources. I (Tommy Ettinger) made it, and it's under the
-        // same license as SquidLib.
-        display = new SquidLayers(width, height, cellWidth, cellHeight);
+        // the font will try to load Inconsolata-LGC as a bitmap font from resources.
+        // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
+        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge);
         display.setAnimationDuration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);
 
