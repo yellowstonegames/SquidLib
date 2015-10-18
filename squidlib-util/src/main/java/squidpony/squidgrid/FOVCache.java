@@ -21,40 +21,39 @@ import static squidpony.squidmath.CoordPacker.*;
  * based on the capability of the machine running the calculations, and should be expected to be much lower on, for
  * instance, older dual-core phones than newer quad-core desktops). There are a few ways to ensure FOVCache is done
  * processing a map by the time a player gets to that map; the recommended approach for games with clearly defined,
- * separate levels is to generate the first level as part of game startup, run your choice of cacheAllPerformance() or
- * cacheAllQuality() immediately afterward (this will start calculation on a second thread), and when the map needs to
- * be displayed (because gameplay has started and any character creation steps are done), to call the caching method's
- * counterpart, either awaitCachePerformance() or awaitCacheQuality(), which will cause gameplay to be essentially
- * frozen until the cache completes (you could display a loading message before calling it). The next part is more
- * interesting; you should generate the second level immediately after the awaiting method finishes, before the player
- * has approached the second level, and create another FOVCache object using the second level as its map, then call
- * your choice of cacheAllPerformance() or cacheAllQuality() on the second level's FOVCache. This will calculate the
- * cache, as before, on another thread, and you should call the appropriate awaiting method when the player is entering
- * the second level (descending or ascending a staircase, for example). This time, as long as the player spent more than
- * a few seconds on the first level for most maps, the cache should be pre-calculated and awaiting should take no time.
+ * separate levels is to generate the first level as part of game startup, run cacheAll() immediately afterward (this
+ * will start calculation on a second thread), and when the map needs to be displayed (because gameplay has started and
+ * any character creation steps are done), to call the caching method's counterpart, awaitCache(), which will cause
+ * gameplay to be essentially frozen until the cache completes (you could display a loading message before calling it).
+ * The next part is more interesting; you should generate the second level immediately after the awaiting method
+ * finishes, before the player has approached the second level, and create another FOVCache object using the second
+ * level as its map, then call cacheAll() on the second level's FOVCache. This will calculate the cache, as before, on
+ * another thread, and you should call the appropriate awaiting method when the player is entering the second level
+ * (descending or ascending a staircase, for example). This time, as long as the player spent more than a few seconds on
+ * the first level for most maps, the cache should be pre-calculated and awaiting should take no time.
  * <br>
- * You can choose cacheAllPerformance() or cacheAllQuality() when using this class; the latter calls the former and so
- * will always be slower, but the steps it performs are typically fairly quick to run and cacheAllQuality() should
- * often be preferred, at least for smaller maps. Using cacheAllPerformance() produces asymmetric FOV frequently, and
- * often has odd traits in regards to "corner peeking" and some other expected behaviors. Using cacheAllQuality() will
- * check every cell that is within the maximum radius for each non-wall cell, and if any cell A can see cell B, but cell
- * B could not yet see A, then B's cached FOV map will be altered so it can see A. The other step cacheAllQuality()
- * provides is distant lighting; if lights have been passed to the constructor as a Map of Coord keys to Integer values,
- * then the Coords in that Map that are walkable squares will emit light up to a radius equal to their value in that
- * Map. Cells with distant lighting will always be in FOV if they could be seen at up to radius 62, which is calculated
- * for every FOVCache as an LOS cache. Calculating distant lighting adds a somewhat substantial amount of time to each
- * caching attempt, estimated at tripling the amount of time used in cases where there are very many lights in a large
- * dungeon (one light per 5x5 area when the center of that area is walkable, for example), but the lighting probably is
- * expected to be much less of a performance hindrance on smaller maps (80x40, 60x60, anything smaller, etc.) or when
- * there are simply less lights to process (because distant lighting is meant to go beyond nearby cells, it needs to run
- * through essentially all lights for every cell it processes, and even though adding the lit area to FOV is very
- * efficient and does not require recalculating FOV, having lots of lights means lots of work per cell).
+ * The FOV calculation this class performs includes a post-processing stage that guarantees symmetry for both LOS and
+ * FOV. This works by checking every cell that is within the maximum radius for each non-wall cell, and if any cell A
+ * can see cell B, but cell B can not yet see A, then B's cached FOV map will be altered so it can see A. The other
+ * post-processing step provides distant lighting; if lights have been passed to the constructor as a Map of Coord keys
+ * to Integer values, then the Coords in that Map that are walkable squares will emit light up to a radius equal to
+ * their value in that Map. Cells with distant lighting will always be in FOV if they could be seen at up to radius 62,
+ * which is calculated for every FOVCache as an LOS cache. Calculating distant lighting adds a somewhat substantial
+ * amount of time to each caching attempt, estimated at tripling the amount of time used in cases where there are very
+ * many lights in a large dungeon (in a 100x100 dungeon, with one light per 5x5 area when the center of that area is
+ * walkable, for example), but the lighting is expected to be much less of a performance hindrance on smaller maps
+ * (80x40, 60x60, anything smaller, etc.) or when there are simply less lights to process (because distant lighting is
+ * meant to go beyond nearby cells, it needs to run through essentially all lights for every cell it processes, and even
+ * though adding the lit area to FOV is very efficient and does not require recalculating FOV, having lots of lights
+ * means lots of work per cell).
  * <br>
  * This class extends FOV and can be used as a replacement for FOV in some cases. Generally, FOVCache provides methods
  * that allow faster manipulation and checks of certain values (such as a simple case of whether a cell can be seen from
  * another cell at a given FOV radius), but will fall back to Shadowcasting FOV (without using the cache) if any calls
  * to FOV methods are made that have not had their needed information cached. Uncached calls to FOV will not have some
- * of the niceties FOVCache can provide, like distant lights.
+ * of the niceties FOVCache can provide, like distant lights. If different light levels are needed (which Shadowcasting
+ * does not provide), you can call Graded variants on the FOV methods, which will fall back to a Ripple FOV instead and
+ * will have values between 0.0 and 1.0 instead of only those two extremes.
  * <br>
  * Conservation of memory usage is a primary concern for this class; storing a full 2D array for every cell on a map
  * that is even moderately large uses outrageous amounts of RAM, and attempting that naive approach on a 256x256 map
@@ -94,7 +93,7 @@ public class FOVCache extends FOV{
     protected short[][][] cache;
     protected short[][][] tmpCache;
     protected short[][] losCache;
-    protected boolean complete, qualityComplete;
+    protected boolean complete, qualityComplete, refreshComplete;
     protected FOV fov, gradedFOV;
     protected short[][] ALL_WALLS;
     protected short[] wallMap;
@@ -115,9 +114,9 @@ public class FOVCache extends FOV{
 
     /**
      * Create an FOVCache for a given map (as a char[][]), caching all FOV radii from 0 up to and including maxRadius,
-     * using the given Radius enum to determine FOV shape.  Upon calling cacheAllPerformance() or cacheAllQuality(),
+     * using the given Radius enum to determine FOV shape.  Upon calling cacheAllPerformance() or cacheAll(),
      * (collectively, the caching methods), the object this creates will run a medium-quality, fairly permissive FOV
-     * calculation for every cell on the map using 8 threads, and if cacheAllQuality() was called, will then ensure
+     * calculation for every cell on the map using 8 threads, and if cacheAll() was called, will then ensure
      * symmetry (if cell A can see cell B, then it will make cell B able to see cell A even if it couldn't in an earlier
      * step). At the same time as the first caching method call, this will calculate Line of Sight at maximum range (62)
      * for all cells. Walls will always have no cells in their FOV or LOS.
@@ -178,9 +177,9 @@ public class FOVCache extends FOV{
 
     /**
      * Create an FOVCache for a given map (as a char[][]), caching all FOV radii from 0 up to and including maxRadius,
-     * using the given Radius enum to determine FOV shape.  Upon calling cacheAllPerformance() or cacheAllQuality(),
+     * using the given Radius enum to determine FOV shape.  Upon calling cacheAllPerformance() or cacheAll(),
      * (collectively, the caching methods), the object this creates will run a medium-quality, fairly permissive FOV
-     * calculation for every cell on the map using a number of threads equal to threadCount, and if cacheAllQuality()
+     * calculation for every cell on the map using a number of threads equal to threadCount, and if cacheAll()
      * was called, will then ensure symmetry (if cell A can see cell B, then it will make cell B able to see cell A even
      * if it couldn't in an earlier step). At the same time as the first caching method call, this will calculate Line
      * of Sight at maximum range (62) for all cells. Walls will always have no cells in their FOV or LOS.
@@ -242,9 +241,9 @@ public class FOVCache extends FOV{
 
     /**
      * Create an FOVCache for a given map (as a char[][]), caching all FOV radii from 0 up to and including maxRadius,
-     * using the given Radius enum to determine FOV shape.  Upon calling cacheAllPerformance() or cacheAllQuality(),
+     * using the given Radius enum to determine FOV shape.  Upon calling cacheAllPerformance() or cacheAll(),
      * (collectively, the caching methods), the object this creates will run a medium-quality, fairly permissive FOV
-     * calculation for every cell on the map using a number of threads equal to threadCount, and if cacheAllQuality()
+     * calculation for every cell on the map using a number of threads equal to threadCount, and if cacheAll()
      * was called, will then ensure symmetry (if cell A can see cell B, then it will make cell B able to see cell A even
      * if it couldn't in an earlier step). At the same time as the first caching method call, this will calculate Line
      * of Sight at maximum range (62) for all cells. Walls will always have no cells in their FOV or LOS. This
@@ -308,13 +307,9 @@ public class FOVCache extends FOV{
         complete = false;
     }
 
-    private void preloadMeasurements()
+    private void preloadLights()
     {
-        levels = new double[maxRadius + 1][maxRadius + 1];
-        levels[maxRadius][maxRadius] = 1.0;
-        for (int i = 1; i <= maxRadius; i++) {
-            System.arraycopy(generateLightLevels(i), 0, levels[i], maxRadius - i, i);
-        }
+
         Iterator<Coord> it = lights.keySet().iterator();
         Coord pos;
         while (it.hasNext())
@@ -323,6 +318,21 @@ public class FOVCache extends FOV{
             if(resMap[pos.x][pos.y] >= 1.0)
                 it.remove();
         }
+
+        lightSources = lights.keySet().toArray(new Coord[lights.size()]);
+        lightBrightnesses = new int[lights.size()];
+        for (int i = 0; i < lightSources.length; i++) {
+            lightBrightnesses[i] = lights.get(lightSources[i]);
+        }
+    }
+
+    private void preloadMeasurements()
+    {
+        levels = new double[maxRadius + 1][maxRadius + 1];
+        levels[maxRadius][maxRadius] = 1.0;
+        for (int i = 1; i <= maxRadius; i++) {
+            System.arraycopy(generateLightLevels(i), 0, levels[i], maxRadius - i, i);
+        }
         boolean[][] walls = new boolean[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -330,12 +340,8 @@ public class FOVCache extends FOV{
             }
         }
         wallMap = pack(walls);
-        lightSources = lights.keySet().toArray(new Coord[lights.size()]);
-        lightBrightnesses = new int[lights.size()];
-        for (int i = 0; i < lightSources.length; i++) {
-            lightBrightnesses[i] = lights.get(lightSources[i]);
-        }
 
+        preloadLights();
 
         atan2Cache = new double[maxRadius * 2 + 1][maxRadius * 2 + 1];
         distanceCache = new short[maxRadius * 2 + 1][maxRadius * 2 + 1];
@@ -433,7 +439,7 @@ public class FOVCache extends FOV{
     }
 
     /**
-     * Uses previously cached FOV and .
+     * Uses previously cached FOV and makes it symmetrical. Also handles distant lights
      * @param index an int that stores the x,y center of FOV as calculated by: x + y * width
      * @return a multi-packed series of progressively wider FOV radii
      */
@@ -1082,7 +1088,22 @@ public class FOVCache extends FOV{
         ShortVLA packing = new ShortVLA(128);
         short[][] packed = new short[maxRadius + 1][], cached = cache[viewerX + viewerY * width];
         short[] losCached = losCache[viewerX + viewerY * width];
+        boolean[][] losUnpacked = unpack(losCached, width, height);
         short[] knownSeen;
+
+        for (int x = Math.max(0, viewerX - 62); x <= Math.min(viewerX + 62, width - 1); x++) {
+            for (int y = Math.max(0, viewerY - 62); y <= Math.min(viewerY + 62, height - 1); y++) {
+                if (losUnpacked[x][y])
+                    continue;
+                if(losCache[x + y * width] == ALL_WALL)
+                    continue;
+                if (distance(x - viewerX, y - viewerY) / 2 > 62)
+                    continue;
+                if (queryPackedHilbert(losCache[x + y * width], myHilbert))
+                    packing.add((short) posToHilbert(x, y));
+            }
+        }
+
         for (int l = 0; l < maxRadius + 1; l++) {
             packing.clear();
             knownSeen = allPackedHilbert(cached[maxRadius - l]);
@@ -1118,7 +1139,7 @@ public class FOVCache extends FOV{
      * awaitCachePerformance() to ensure this method has finished on its own thread, but be aware that this will cause
      * the thread that calls awaitCachePerformance() to essentially freeze until FOV calculations are over.
      */
-    public void cacheAllPerformance() {
+    private void cacheAllPerformance() {
         if(performanceThread != null || complete)
             return;
         performanceThread = new Thread(new PerformanceUnit());
@@ -1132,9 +1153,9 @@ public class FOVCache extends FOV{
      * something has gone wrong.
      * @return true if cacheAllPerformance() has successfully completed, false otherwise.
      */
-    public boolean awaitCachePerformance()
+    private boolean awaitCachePerformance()
     {
-        if(performanceThread == null)
+        if(performanceThread == null && !complete)
             cacheAllPerformance();
         if(complete) return true;
         try {
@@ -1148,14 +1169,10 @@ public class FOVCache extends FOV{
     /**
      * Runs FOV calculations on another thread, without interrupting this one, then performs additional quality tweaks
      * and adds any distant lights, if there were any in the constructor. Before using the cache, you should call
-     * awaitCacheQuality() to ensure this method has finished on its own thread, but be aware that this will cause
-     * the thread that calls awaitCacheQuality() to essentially freeze until FOV calculations are over.
-     * <br>
-     * If you call this method, you do not need to call cacheAllPerformance() or awaitCachePerformance(), and in most
-     * cases you should avoid calling both this method and cacheAllPerformance(); this ensures you do not calculate the
-     * same data twice.
+     * awaitCache() to ensure this method has finished on its own thread, but be aware that this will cause
+     * the thread that calls awaitCache() to essentially freeze until FOV calculations are over.
      */
-    public void cacheAllQuality()
+    public void cacheAll()
     {
         if(qualityThread != null || qualityComplete)
             return;
@@ -1164,16 +1181,16 @@ public class FOVCache extends FOV{
     }
 
     /**
-     * If FOV calculations from cacheAllQuality() are being done on another thread, calling this method will make
+     * If FOV calculations from cacheAll() are being done on another thread, calling this method will make
      * the current thread wait for the FOV calculations' thread to finish, "freezing" the current thread until it does.
      * This ensures the cache will be complete with the additional quality improvements such as distant lights after
      * this method returns true, and if this method returns false, then something has gone wrong.
-     * @return true if cacheAllQuality() has successfully completed, false otherwise.
+     * @return true if cacheAll() has successfully completed, false otherwise.
      */
-    public boolean awaitCacheQuality()
+    public boolean awaitCache()
     {
-        if(qualityThread == null)
-            cacheAllQuality();
+        if(qualityThread == null && !qualityComplete)
+            cacheAll();
         if(qualityComplete) return true;
         try {
             qualityThread.join();
@@ -1181,6 +1198,43 @@ public class FOVCache extends FOV{
             return false;
         }
         return qualityComplete;
+    }
+
+    /**
+     * Runs FOV calculations for any cells that were changed as a result of newMap being different from the map passed
+     * to the FOVCache constructor. It runs these on another thread, without interrupting this one. Before using the
+     * cache, you should call awaitRefresh() to ensure this method has finished on its own thread, but be aware that
+     * this will cause the thread that calls awaitRefresh() to essentially freeze until FOV calculations are over.
+     */
+    public void refreshCache(char[][] newMap)
+    {
+        performanceThread = new Thread(new RefreshUnit(newMap));
+        performanceThread.start();
+    }
+
+    /**
+     * If FOV calculations from refreshCache() are being done on another thread, calling this method will make
+     * the current thread wait for the FOV calculations' thread to finish, "freezing" the current thread until it does.
+     * This ensures the cache will be complete with the updates from things like opening a door after
+     * this method returns true, and if this method returns false, then something has gone wrong.
+     * @return true if refreshCache() has successfully completed, false otherwise.
+     */
+    public boolean awaitRefresh(char[][] newMap)
+    {
+        if(!performanceThread.isAlive() && !refreshComplete)
+            refreshCache(newMap);
+        if(refreshComplete) return true;
+        try {
+            performanceThread.join();
+        } catch (InterruptedException e) {
+            return false;
+        }
+        if(refreshComplete)
+        {
+            refreshComplete = false;
+            return true;
+        }
+        else return false;
     }
 
 
@@ -1718,6 +1772,88 @@ public class FOVCache extends FOV{
                     ((((((((((((height + 12 - 1) / 8) + 1) * 8L * width + 12 - 1) / 8) + 1) * 8L
                             * height + 12 - 1) / 8) + 1) * 8L * width + 12 - 1) / 8) + 1) * 8L);
             */
+        }
+    }
+
+    protected class RefreshUnit implements Runnable
+    {
+        protected double[][] res;
+        protected RefreshUnit(char[][] newMap)
+        {
+            res = DungeonUtility.generateResistances(newMap);
+
+        }
+
+        /**
+         * When an object implementing interface <code>Runnable</code> is used
+         * to create a thread, starting the thread causes the object's
+         * <code>run</code> method to be called in that separately executing
+         * thread.
+         * <p>
+         * The general contract of the method <code>run</code> is that it may
+         * take any action whatsoever.
+         *
+         * @see Thread#run()
+         */
+        @Override
+        public void run() {
+            tmpCache = cache.clone();
+            short[] needsChange = new short[0];
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    if(resMap[i][j] != res[i][j])
+                    {
+                        needsChange = unionPacked(needsChange, losCache[i + j * width]);
+                    }
+                }
+            }
+            needsChange = differencePacked(needsChange, wallMap);
+            resMap = res;
+            Coord[] changingCoords = allPacked(needsChange);
+            List<LOSUnit> losUnits = new ArrayList<LOSUnit>(changingCoords.length);
+            List<FOVUnit> fovUnits = new ArrayList<FOVUnit>(changingCoords.length);
+            List<SymmetryUnit> symUnits = new ArrayList<SymmetryUnit>(changingCoords.length);
+
+            for (int i = 0, idx; i < changingCoords.length; i++)
+            {
+                idx = changingCoords[i].x + changingCoords[i].y * width;
+                losUnits.add(new LOSUnit(idx));
+                fovUnits.add(new FOVUnit(idx));
+                symUnits.add(new SymmetryUnit(idx));
+            }
+
+            try {
+                final List<Future<Long>> invoke = executor.invokeAll(losUnits);
+                for (Future<Long> future : invoke) {
+                    //threadTime +=
+                    future.get();
+                    //System.out.println(t);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            try {
+                final List<Future<Long>> invoke = executor.invokeAll(fovUnits);
+                for (Future<Long> future : invoke) {
+                    //threadTime +=
+                    future.get();
+                    //System.out.println(t);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            try {
+                final List<Future<Long>> invoke = executor.invokeAll(symUnits);
+                for (Future<Long> future : invoke) {
+                    //threadTime +=
+                    future.get();
+                    //System.out.println(t);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            cache = tmpCache;
+            refreshComplete = true;
         }
     }
     protected class FOVUnit implements Callable<Long>

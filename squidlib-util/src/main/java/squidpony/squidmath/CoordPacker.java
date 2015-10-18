@@ -1090,6 +1090,51 @@ public class CoordPacker {
         }
         return vla.shrink();
     }
+    private static int clamp(int n, int min, int max)
+    {
+        return Math.min(Math.max(min, n), max - 1);
+    }
+    public static short[] translate(short[] packed, int xMove, int yMove, int width, int height)
+    {
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        boolean on = false;
+        int idx = 0, x, y;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = clamp(hilbertX[i] + xMove, 0, width);
+                    y = clamp(hilbertY[i] + yMove, 0, height);
+                    vla.add(hilbertDistances[x + (y << 8)]);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        int[] indices = vla.asInts();
+        Arrays.sort(indices);
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) skip);
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.shrink();
+    }
 
     /**
      * Given two packed short arrays, left and right, this produces a packed short array that encodes "on" for any cell

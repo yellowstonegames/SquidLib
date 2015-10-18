@@ -63,6 +63,29 @@ public class CoordPackerTest {
     }
 
     @Test
+    public void testTranslate() {
+        short[] packed = new short[]{0, 4}, squashed = new short[]{0, 1};
+        short[] translated = CoordPacker.translate(packed, -2, -2, 60, 60);
+        assertArrayEquals(squashed, translated);
+
+
+        /*
+        false true
+        true  false
+         */
+        /* MOVE OVER, X 1, limit width to 2
+        false true
+        false true
+         */
+        boolean[][] grid = new boolean[][]{new boolean[]{false, true}, new boolean[]{true, false}};
+        boolean[][] grid2 = new boolean[][]{new boolean[]{false, false}, new boolean[]{true, true}};
+        short[] packed2 = CoordPacker.pack(grid), packed3 = CoordPacker.pack(grid2);
+
+        short[] translated2 = CoordPacker.translate(packed2, 1, 0, 2, 2);
+        assertArrayEquals(packed3, translated2);
+    }
+
+    @Test
     public void testUnion() {
         short[] union = CoordPacker.unionPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 12, 9, 1});
         // 300, 5, 6, 8, 2, 4

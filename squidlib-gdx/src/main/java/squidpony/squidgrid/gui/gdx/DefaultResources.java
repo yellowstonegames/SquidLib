@@ -6,7 +6,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 
 /**
