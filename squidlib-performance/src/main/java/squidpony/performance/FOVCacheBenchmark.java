@@ -30,7 +30,7 @@ public class FOVCacheBenchmark {
     public static FOVCache cache = new FOVCache(map, 16, Radius.SQUARE, 8);
     public static FOV fov = new FOV(FOV.RIPPLE);
     static {
-        cache.awaitCacheQuality();
+        cache.awaitCache();
     }
 
     public void doCachedFOV()

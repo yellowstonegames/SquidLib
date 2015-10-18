@@ -63,10 +63,22 @@ public class ShortVLA {
         this(true, array, 0, array.length);
     }
 
+    /** Creates a new ordered array containing the elements in the specified array, converted to short. The capacity is set to
+     * the number of elements, so any subsequent elements added will cause the backing array to be grown. */
+    public ShortVLA(int[] array) {
+        this(true, array.length);
+        for (int i = 0; i < array.length; i++) {
+            items[size + i] = (short)(array[i]);
+        }
+        size += array.length;
+
+    }
+
     /** Creates a new array containing the elements in the specified array. The capacity is set to the number of elements, so any
      * subsequent elements added will cause the backing array to be grown.
      * @param ordered If false, methods that remove elements may change the order of other elements in the array, which avoids a
-     *           memory copy. */
+     *           memory copy.
+     */
     public ShortVLA(boolean ordered, short[] array, int startIndex, int count) {
         this(ordered, count);
         size = count;
@@ -99,6 +111,16 @@ public class ShortVLA {
         if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
         System.arraycopy(array, offset, items, size, length);
         size += length;
+    }
+
+    public void addAll (int[] array) {
+        short[] items = this.items;
+        int sizeNeeded = size + array.length;
+        if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
+        for (int i = 0; i < array.length; i++) {
+            items[size + i] = (short)(array[i]);
+        }
+        size += array.length;
     }
 
     public void addRange (int start, int end) {
@@ -281,6 +303,15 @@ public class ShortVLA {
         short[] items = this.items;
         System.arraycopy(items, 0, newItems, 0, Math.min(size, newItems.length));
         this.items = newItems;
+        return newItems;
+    }
+
+    public int[] asInts () {
+        int[] newItems = new int[size];
+        short[] items = this.items;
+        for (int i = 0; i < size; i++) {
+            newItems[i] = items[i] & 0xffff;
+        }
         return newItems;
     }
 

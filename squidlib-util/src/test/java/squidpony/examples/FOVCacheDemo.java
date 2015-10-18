@@ -10,22 +10,20 @@ import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 
-import java.util.LinkedHashMap;
-
 /**
  * Created by Tommy Ettinger on 10/8/2015.
  */
 public class FOVCacheDemo {
     public static void main(String[] args)
     {
-        int width = 100;
-        int height = 100;
-        for (long r = 0, seed = 0xBEEF; r < 10; r++, seed ^= seed << 2) {
+        int width = 60;
+        int height = 60;
+        for (long r = 0, seed = 0xD00D; r < 10; r++, seed ^= seed << 2) {
 
 
             StatefulRNG rng = new StatefulRNG(new LightRNG(seed));
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
-            dungeonGenerator.addDoors(15, true);
+            dungeonGenerator.addDoors(25, true);
             dungeonGenerator.addWater(25);
             //dungeonGenerator.addTraps(2);
             char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
@@ -39,26 +37,51 @@ public class FOVCacheDemo {
                 }
             }
             */
-            FOVCache cache = new FOVCache(map, 12, Radius.CIRCLE, 8);
+            FOVCache cache = new FOVCache(map, 10, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
             long time = System.currentTimeMillis();
-            cache.awaitCacheQuality();
+            cache.awaitCache();
             time = System.currentTimeMillis() - time;
             System.out.println("Time spent caching: " + time);
-            byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
-            double[][] conical = cache.calculateGradedFOV(new double[1][1], walkable.x, walkable.y, 12, Radius.CIRCLE, rng.nextDouble(360.0), rng.nextDouble(75) + 75);
+            //byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
+            double[][] gradient = cache.calculateGradedFOV(null, walkable.x, walkable.y, 10);
+            //double[][] conical = cache.calculateGradedFOV(new double[1][1], walkable.x, walkable.y, 12, Radius.CIRCLE, rng.nextDouble(360.0), rng.nextDouble(75) + 75);
             for (int j = 0; j < map[0].length; j++) {
                 for (int i = 0; i < map.length; i++) {
-                    if (conical[i][j] > 0)
-                        System.out.print((char) ((int)Math.round(conical[i][j] * 12) + 65));
-//                        System.out.print(conical[i][j]);
+                    System.out.print(map[i][j]);
+                    if (gradient[i][j] > 0)
+                    {
+                        System.out.print((char) ((int) Math.round(gradient[i][j] * 10) + 65));
+                        if(map[i][j] == '+')
+                            map[i][j] = '/';
+                    }
                     else
                         System.out.print(' ');
-                    System.out.print(map[i][j]);
                 }
                 System.out.println();
             }
             System.out.println();
+
+
+            time = System.currentTimeMillis();
+            cache.awaitRefresh(map);
+            time = System.currentTimeMillis() - time;
+            System.out.println("Time spent refreshing: " + time);
+            //byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
+            gradient = cache.calculateGradedFOV(null, walkable.x, walkable.y, 10);
+            //double[][] conical = cache.calculateGradedFOV(new double[1][1], walkable.x, walkable.y, 12, Radius.CIRCLE, rng.nextDouble(360.0), rng.nextDouble(75) + 75);
+            for (int j = 0; j < map[0].length; j++) {
+                for (int i = 0; i < map.length; i++) {
+                    System.out.print(map[i][j]);
+                    if (gradient[i][j] > 0)
+                        System.out.print((char) ((int)Math.round(gradient[i][j] * 10) + 65));
+                    else
+                        System.out.print(' ');
+                }
+                System.out.println();
+            }
+            System.out.println();
+
         }
 /*        for (int n = 1; n < 8; n++) {
             System.out.println("With viewer at " + walkable.x + "," + walkable.y + " and target at " +
