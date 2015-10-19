@@ -1,0 +1,60 @@
+# AngelCode Bitmap Font Generator configuration file
+fileVersion=1
+
+# font settings
+fontName=Inconsolata LGC
+fontFile=
+charSet=0
+fontSize=-20
+aa=1
+scaleH=100
+useSmoothing=1
+isBold=0
+isItalic=0
+useUnicode=1
+disableBoxChars=1
+outputInvalidCharGlyph=0
+dontIncludeKerningPairs=1
+useHinting=1
+renderFromOutline=0
+useClearType=1
+
+# character alignment
+paddingDown=0
+paddingUp=0
+paddingRight=0
+paddingLeft=0
+spacingHoriz=1
+spacingVert=1
+useFixedHeight=1
+forceZero=1
+
+# output file
+outWidth=512
+outHeight=512
+outBitDepth=32
+fontDescFormat=0
+fourChnlPacked=0
+textureFormat=png
+textureCompression=0
+alphaChnl=0
+redChnl=4
+greenChnl=4
+blueChnl=4
+invA=0
+invR=0
+invG=0
+invB=0
+
+# outline
+outlineThickness=0
+
+# selected chars
+chars=32-126,160-383,402,506-511,536-539,567,894,900-906,908,910-929,931-974,1024-1119,1122-1123,1138
+chars=1139-1141,1168-1169,7808-7813,7922-7923,8211-8213,8215-8226,8230,8240,8242-8243,8249-8250,8252,8254
+chars=8260,8304,8308-8313,8319,8355-8356,8359,8364,8453,8467,8470,8482,8486,8494,8539-8542,8592-8597,8706
+chars=8710,8719,8721-8722,8725,8729-8730,8734-8735,8745,8747,8776,8800-8801,8804-8805,9251,9472,9474,9484
+chars=9488,9492,9496,9500,9508,9516,9524,9532,9552-9580,9604,9608,9612,9632-9633,9642-9643,9650,9660,9674
+chars=9675,9679,9702,9792,9794,9824,9827,9829-9830,9834
+
+# imported icon images
