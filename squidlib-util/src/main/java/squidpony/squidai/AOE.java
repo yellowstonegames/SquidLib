@@ -1,5 +1,6 @@
 package squidpony.squidai;
 
+import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
@@ -95,7 +96,7 @@ public interface AOE {
      * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but
      * have a maxRange at which they can deliver that effect).
      */
-    public Coord getOrigin();
+    Coord getOrigin();
 
     /**
      * Set the position from which the AOE originates, which may be related to the location of the AOE's effect, as for
@@ -103,7 +104,7 @@ public interface AOE {
      * or targeted from a given origin point (as for distant effects that radiate from a chosen central point, but
      * have a maxRange at which they can deliver that effect).
      */
-    public void setOrigin(Coord origin);
+    void setOrigin(Coord origin);
 
     /**
      * You can use limitType to restrict any Points that might be processed based on the given origin (which will be
@@ -121,15 +122,15 @@ public interface AOE {
      *
      * Points that are not valid for this limit will simply not be considered.
      */
-    public Radius getLimitType();
+    Radius getLimitType();
     /**
      * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
      */
-    public int getMinRange();
+    int getMinRange();
     /**
      * The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
      */
-    public int getMaxRange();
+    int getMaxRange();
     /**
      * Used to determine distance from origin for the purposes of selecting a target location that is within the bounds
      * of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE
@@ -137,7 +138,7 @@ public interface AOE {
      * where that floodfill should be allowed to start should likely follow the same distance measurement as the rest of
      * the game, like Radius.SQUARE for Chebyshev distance/8-way movement).
      */
-    public Radius getMetric();
+    Radius getMetric();
 
     /**
      * You can use limitType to restrict any Points that might be processed based on the given origin (which will be
@@ -155,15 +156,15 @@ public interface AOE {
      *
      * Points that are not valid for this limit will simply not be considered.
      */
-    public void setLimitType(Radius limitType);
+    void setLimitType(Radius limitType);
     /**
      * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
      */
-    public void setMinRange(int minRange);
+    void setMinRange(int minRange);
     /**
      * The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
      */
-    public void setMaxRange(int maxRange);
+    void setMaxRange(int maxRange);
     /**
      * Used to determine distance from origin for the purposes of selecting a target location that is within the bounds
      * of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE
@@ -171,6 +172,17 @@ public interface AOE {
      * where that floodfill should be allowed to start should likely follow the same distance measurement as the rest of
      * the game, like Radius.SQUARE for Chebyshev distance/8-way movement).
      */
-    public void setMetric(Radius metric);
+    void setMetric(Radius metric);
+
+    /**
+     * If you use FOVCache to pre-compute FOV maps for a level, you can share the speedup from using the cache with
+     * some AOE implementations that rely on FOV. Not all implementations need to actually make use of the cache, but
+     * those that use FOV for calculations should benefit. The cache parameter this receives should have completed its
+     * calculations, which can be confirmed by calling awaitCache(). Ideally, the FOVCache will have done its initial
+     * calculations in another thread while the previous level or menu was being displayed, and awaitCache() will only
+     * be a formality.
+     * @param cache The FOVCache for the current level; can be null to stop using the cache
+     */
+    void setCache(FOVCache cache);
 
 }

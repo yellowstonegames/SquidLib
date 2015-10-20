@@ -2,7 +2,6 @@ package squidpony.squidgrid;
 
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.ShortVLA;
 
 import java.util.*;
@@ -1144,7 +1143,7 @@ public class FOVCache extends FOV{
                         cache[light.x + light.y * width][maxRadius - lightBrightnesses[i]]), wallMap));
             }
         }
-        
+
         return packed;
     }
 
@@ -1653,6 +1652,24 @@ public class FOVCache extends FOV{
     {
         return unpackDouble(teamFOVPacked(team), width, height);
     }
+
+
+    public int getMaxRadius() {
+        return maxRadius;
+    }
+
+    public Radius getRadiusKind() {
+        return radiusKind;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     protected class PerformanceUnit implements Runnable
     {
 
