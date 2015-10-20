@@ -84,9 +84,8 @@
 	</scm>
 
 	<modules>
-		<module>squidlib</module>
 		<module>squidlib-util</module>
-		<module>squidlib-gdx</module>
+		<module>squidlib</module>
 		<module>squidlib-performance</module>
   </modules>
 
