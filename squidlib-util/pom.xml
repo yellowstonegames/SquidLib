@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.squidpony</groupId>
 		<artifactId>squidlib-parent</artifactId>
-		<version>3.0.0-b1</version>
+		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
 	<artifactId>squidlib-util</artifactId>
