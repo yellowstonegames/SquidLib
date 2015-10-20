@@ -10,12 +10,11 @@ Current Features:
 ###Ease Of Use
 -   Standard GUI notation of (x,y) locations within the grid
 -   Uses Swing components or the scene2d.ui classes from libGDX
-  -   LibGDX is an optional dependency; if you don't use it, you don't need to include it (unless building SquidLib yourself)
+  -   Only one of either Swing or LibGDX is required to use to display a grid; using libGDX should work on desktop and Android, as well as probably iOS via RoboVM (untested).
 -   Any Font can be used
   -   This means TTF or OTF fonts in Swing
-  -   For libGDX, it means bitmap fonts created by the libGDX tool Hiero, which uses TTF or OTF fonts as input
+  -   For libGDX, it means bitmap fonts created in the AngelCode format, which can be generated from libGDX's Hiero tool using TTF or OTF fonts as input
 -   Images may be used alongside characters in same panel
-  -  (libGDX does not currently support mixing images with characters, but will in a future version) 
   -  Characters can be used as a drop-in fallback mechanism!
 -   Specify Grid and Font size multiple ways
   -   Set number of cells in the grid and Font to be used
@@ -103,8 +102,10 @@ Current Features:
 ###Actively Developed
 - Started in 2011 by SquidPony (Eben Howard), SquidLib has since picked up contributions from a number of developers around the world
 - Development has accelerated recently as more people started adding code, with Tommy Ettinger working on things that aren't included in most other roguelike libraries, smelc and David Becker each contributing quite a few pull requests that help stability, performance, and code clarity, and still more developers helping by reporting and commenting on issues
-- SquidLib 2.9.1 is pretty good right now
-- SquidLib 3.0.0 will be better! Features already added or in development, and expected to be in 3.0.0, include:
+- SquidLib 2.9.1 is pretty good
+- SquidLib 3.0.0 will be better!
+- SquidLib 3.0.0 now has a first beta! See the info below.
+- Features already added in the beta include:
   - Use only the features you need; if you want the wide assortment of roguelike logic utilities, but don't want the text-based rendering (maybe because you're making a graphical game), you could include squidlib-util but nothing else.
   - Android support (and likely iOS via RoboVM), for both the logic utilities and text display
   - Better pathfinding for unusual monsters (you can tell it that a fish won't choose to leave water, a fire elemental will never choose to enter water, and an eccentric mystic won't enter doorways, for example)
@@ -113,21 +114,60 @@ Current Features:
     - Uncompressed FOV maps are extremely memory-hungry; a 256x256 dungeon with a simple 2D boolean array per cell, to track what cells each cell can see... uses more than 4GB of RAM
       - Yes, that's more RAM than any Java program can use with a 32-bit Java version; there *is* a better way
     - With the right compression techniques, memory usage can be reduced tremendously; preliminary testing predicts 20-50 MB for a full map with multiple FOV radii, and some games can expect even less.
+    - Full FOV can be precomputed on multiple threads without users of the library needing to delve deep into concurrent code. The API is simple: generate a map before you use it, create an FOVCache for the unreached map, call `cacheAll()` on the FOVCache, and call `awaitCache()` later when the map needs to be used. No `java.lang.Thread` needed in your code!
     - You can even get information from compressed FOV maps without having to decompress them
+      - The technique this uses is similar to that used by [JavaEWAH](https://github.com/lemire/javaewah), but ours is modified for data that is typically in a contiguous area of 2D space. JavaEWAH has gone through much more rigorous tests than SquidLib, and the RLE-like compression scheme has shown itself to be "best-in-class" for encoding large binary sequences (which is how we treat a compressed FOV map).
   - More attention paid to performance
     - Still, users of SquidLib shouldn't have to give up clear or safe code to benefit from what the library does internally
     - A major refactoring of code that used java.awt.Point produced the Coord class, which is immutable, never needs to be constructed more than once (each is cached, except in very rare cases), and should never need garbage collection either
   - Better documentation, we're really trying here
-- But, 3.0.0 will be a major release, and so should be expected to *break* API backwards compatibility
+- Features not currently in the beta but expected for the final release include:
+  - More focus on colors in rendering.
+    - HDR colors (essentially, "more red than red", "darker than black", or "white so bright it shines") should be supported
+    - Swappable palettes are in consideration, and are partially implemented in some classes.
+  - More features may be added to FOVCache
+- But, 3.0.0's final release will be major, and so should be expected to *break* API backwards compatibility
   - Any minor releases after 3.0.0 and before 4.0.0 should be expected to *keep* API backwards compatibility, unless a feature is broken or unusable
   - The most significant change in 3.0.0 will be the removal of the Swing-based rendering and full transition to the similar, but much faster and more responsive, libGDX renderer
+  - 3.0.0-b1 is the last release to contain Swing. If you're porting code that used an earlier version of SquidLib and need Swing for some reason, you may want to stay with the largely-compatible 2.9.1 instead of the very-different 3.0.0-b1.
     - This should also enable SquidLib to be used for rendering on Android/iOS and not only the desktop platforms Swing is limited to
-    - It also should allow some other changes to take place, from split-screen text panels and overlaid, translucent, partially-offset panels, to HDR color and the more elaborate visual effects that allows
   - There will be complete documentation on how to set up a project for people just starting with SquidLib and/or libGDX
     - If you already use Maven, Gradle, SBT, Leiningen, or some other dependency manager, upgrading should be easier.
     - If you don't, you should, but there's no requirement to start using one
 
-Download JARs from the Releases tab or use Maven Central to download with
+Download
+--
+
+Download JARs from the Releases tab or use Maven Central to download the latest version with your choice of:
+
+SquidLib using the Swing renderer, which should work on Windows, Mac OS X, and Linux,
+```
+<dependency>
+  <groupId>com.squidpony</groupId>
+  <artifactId>squidlib</artifactId>
+  <version>3.0.0-b1</version>
+</dependency>
+```
+
+SquidLib using the libGDX renderer, which should work on Windows, Mac OS X, Linux, Android and iOS,
+```
+<dependency>
+  <groupId>com.squidpony</groupId>
+  <artifactId>squidlib-gdx</artifactId>
+  <version>3.0.0-b1</version>
+</dependency>
+```
+
+SquidLib's many utilities only, with no included renderer, which should work everywhere,
+```
+<dependency>
+  <groupId>com.squidpony</groupId>
+  <artifactId>squidlib-util</artifactId>
+  <version>3.0.0-b1</version>
+</dependency>
+```
+
+Or the last stable release in the 2.x series, which optionally depends on libGDX but will not work on mobile devices:
 ```
 <dependency>
   <groupId>com.squidpony</groupId>
@@ -136,7 +176,7 @@ Download JARs from the Releases tab or use Maven Central to download with
 </dependency>
 ```
 
-If you want to use the LibGDX code (anything in a package with "gdx" in it), you need to depend on libGDX.
+If you want to use the LibGDX code in 2.9.1 (anything in a package with "gdx" in it), you need to depend on (an earlier version of) libGDX.
 ```
 <dependency>
     <groupId>com.badlogicgames.gdx</groupId>
@@ -155,7 +195,7 @@ If you want to use the LibGDX code (anything in a package with "gdx" in it), you
     <classifier>natives-desktop</classifier>
 </dependency>
 ```
-(This is not the absolute-most-recent version of LibGDX, and it may work with more recent versions, but no guarantees can be made. SquidLib will update its dependency version when needed, like in the case of the breaking changes between LibGDX 1.5.5 and 1.5.6 that affected text rendering. SquidLib may also update dependencies simply because there's a major release.)
+(This is not the absolute-most-recent version of LibGDX, and it may work with more recent versions, but no guarantees can be made. squidlib-gdx 3.0.0-b1 depends on libGDX 1.7.0, but handles its dependencies on its own, so you don't need this step.)
 
 GitHub repository: https://github.com/SquidPony/SquidLib
 
