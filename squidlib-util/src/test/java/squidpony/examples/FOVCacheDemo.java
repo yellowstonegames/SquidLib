@@ -16,8 +16,9 @@ import squidpony.squidmath.StatefulRNG;
 public class FOVCacheDemo {
     public static void main(String[] args)
     {
-        int width = 120;
-        int height = 120;
+        int width = 80;
+        int height = 40;
+        int range = 8;
         for (long r = 0, seed = 0xD00D; r < 10; r++, seed ^= seed << 2) {
 
 
@@ -37,21 +38,21 @@ public class FOVCacheDemo {
                 }
             }
             */
-            FOVCache cache = new FOVCache(map, 10, Radius.CIRCLE, 8);
+            FOVCache cache = new FOVCache(map, range, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
             long time = System.currentTimeMillis();
             cache.awaitCache();
             time = System.currentTimeMillis() - time;
             System.out.println("Time spent caching: " + time);
             //byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
-            double[][] gradient = cache.calculateGradedFOV(null, walkable.x, walkable.y, 10);
+            double[][] gradient = cache.calculateGradedFOV(null, walkable.x, walkable.y, range);
             //double[][] conical = cache.calculateGradedFOV(new double[1][1], walkable.x, walkable.y, 12, Radius.CIRCLE, rng.nextDouble(360.0), rng.nextDouble(75) + 75);
             for (int j = 0; j < map[0].length; j++) {
                 for (int i = 0; i < map.length; i++) {
                     System.out.print(map[i][j]);
                     if (gradient[i][j] > 0)
                     {
-                        System.out.print((char) ((int) Math.round(gradient[i][j] * 10) + 65));
+                        System.out.print((char) ((int) Math.round(gradient[i][j] * range) + 65));
                         if(map[i][j] == '+')
                             map[i][j] = '/';
                     }
@@ -68,13 +69,13 @@ public class FOVCacheDemo {
             time = System.currentTimeMillis() - time;
             System.out.println("Time spent refreshing: " + time);
             //byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
-            gradient = cache.calculateGradedFOV(null, walkable.x, walkable.y, 10);
+            gradient = cache.calculateGradedFOV(null, walkable.x, walkable.y, range);
             //double[][] conical = cache.calculateGradedFOV(new double[1][1], walkable.x, walkable.y, 12, Radius.CIRCLE, rng.nextDouble(360.0), rng.nextDouble(75) + 75);
             for (int j = 0; j < map[0].length; j++) {
                 for (int i = 0; i < map.length; i++) {
                     System.out.print(map[i][j]);
                     if (gradient[i][j] > 0)
-                        System.out.print((char) ((int)Math.round(gradient[i][j] * 10) + 65));
+                        System.out.print((char) ((int)Math.round(gradient[i][j] * range) + 65));
                     else
                         System.out.print(' ');
                 }

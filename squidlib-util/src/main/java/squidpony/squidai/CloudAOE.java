@@ -1,5 +1,6 @@
 package squidpony.squidai;
 
+import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Spill;
 import squidpony.squidmath.Coord;
@@ -692,5 +693,20 @@ public class CloudAOE implements AOE {
 
     public void setExpanding(boolean expanding) {
         this.expanding = expanding;
+    }
+
+    /**
+     * If you use FOVCache to pre-compute FOV maps for a level, you can share the speedup from using the cache with
+     * some AOE implementations that rely on FOV. Not all implementations need to actually make use of the cache, but
+     * those that use FOV for calculations should benefit. The cache parameter this receives should have completed its
+     * calculations, which can be confirmed by calling awaitCache(). Ideally, the FOVCache will have done its initial
+     * calculations in another thread while the previous level or menu was being displayed, and awaitCache() will only
+     * be a formality.
+     *
+     * @param cache The FOVCache for the current level; can be null to stop using the cache
+     */
+    @Override
+    public void setCache(FOVCache cache) {
+
     }
 }

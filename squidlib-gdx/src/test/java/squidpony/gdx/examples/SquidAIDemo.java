@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import squidpony.squidai.*;
+import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
@@ -50,7 +51,7 @@ public class SquidAIDemo extends ApplicationAdapter {
     private int redIdx = 0, blueIdx = 0;
     private boolean blueTurn = false;
 
-
+    private FOVCache cache;
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -72,6 +73,7 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         // change the TilesetType to lots of different choices to see what dungeon works best.
         bareDungeon = dungeonGen.generate(TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS);
+        cache = new FOVCache(bareDungeon, 9, Radius.CIRCLE);
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(bareDungeon));
         char[][] placement = DungeonUtility.closeDoors(bareDungeon);
@@ -158,10 +160,14 @@ public class SquidAIDemo extends ApplicationAdapter {
             }
         });
         // ABSOLUTELY NEEDED TO HANDLE INPUT
-        Gdx.input.setInputProcessor(input);
         // and then add display, our one visual component, to the list of things that act in Stage.
         display.setPosition(0, 0);
         stage.addActor(display);
+        cache.awaitCache();
+        blast.setCache(cache);
+        cone.setCache(cache);
+        Gdx.input.setInputProcessor(input);
+
 
     }
 

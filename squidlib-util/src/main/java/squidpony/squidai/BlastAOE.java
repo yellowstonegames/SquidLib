@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
@@ -26,6 +27,7 @@ public class BlastAOE implements AOE {
     private Radius radiusType, limitType;
     private int minRange = 1, maxRange = 1;
     private Radius metric = Radius.SQUARE;
+
     public BlastAOE(Coord center, int radius, Radius radiusType)
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
@@ -123,7 +125,10 @@ public class BlastAOE implements AOE {
         Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+            if(cache != null)
+                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
+            else
+                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
@@ -142,8 +147,10 @@ public class BlastAOE implements AOE {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
             t = ts[i];
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
-
+            if(cache != null)
+                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
+            else
+                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     compositeMap[i][x][y] = (tmpfov[x][y] > 0.0) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
@@ -266,7 +273,11 @@ public class BlastAOE implements AOE {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+
+            if(cache != null)
+                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
+            else
+                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
@@ -285,8 +296,11 @@ public class BlastAOE implements AOE {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
             t = pts[i];
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
+            if(cache != null)
+                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
+            else
+                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
             double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
@@ -327,7 +341,11 @@ public class BlastAOE implements AOE {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
             t = lts[i - pts.length];
-            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+
+            if(cache != null)
+                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
+            else
+                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
             double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
@@ -503,7 +521,10 @@ public class BlastAOE implements AOE {
 
     @Override
     public LinkedHashMap<Coord, Double> findArea() {
-        return AreaUtils.arrayToHashMap(fov.calculateFOV(map, center.x, center.y, radius, radiusType));
+        if(cache != null)
+            return AreaUtils.arrayToHashMap(cache.calculateGradedFOV(null, center.x, center.y, radius, radiusType));
+        else
+            return AreaUtils.arrayToHashMap(fov.calculateFOV(map, center.x, center.y, radius, radiusType));
     }
 
     @Override
@@ -557,6 +578,23 @@ public class BlastAOE implements AOE {
     @Override
     public void setMetric(Radius metric) {
         this.metric = metric;
+    }
+
+    private FOVCache cache = null;
+
+    /**
+     * If you use FOVCache to pre-compute FOV maps for a level, you can share the speedup from using the cache with
+     * some AOE implementations that rely on FOV. Not all implementations need to actually make use of the cache, but
+     * those that use FOV for calculations should benefit. The cache parameter this receives should have completed its
+     * calculations, which can be confirmed by calling awaitCache(). Ideally, the FOVCache will have done its initial
+     * calculations in another thread while the previous level or menu was being displayed, and awaitCache() will only
+     * be a formality.
+     *
+     * @param cache The FOVCache for the current level; can be null to stop using the cache
+     */
+    @Override
+    public void setCache(FOVCache cache) {
+        this.cache = cache;
     }
 
 }
