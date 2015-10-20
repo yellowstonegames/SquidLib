@@ -1091,7 +1091,7 @@ public class FOVCache extends FOV{
         short[] losCached = losCache[viewerX + viewerY * width];
         short[] knownSeen;
 
-
+        ///*
         short[] perimeter = allPackedHilbert(fringe(losCached, 2, width, height));
         short p_x, p_y;
         for (int i = 0; i < perimeter.length; i++) {
@@ -1100,7 +1100,7 @@ public class FOVCache extends FOV{
             if (queryPackedHilbert(losCache[p_x + p_y * width], myHilbert))
                 packing.add(perimeter[i]);
         }
-
+        //*/
         /*
         boolean[][] losUnpacked = unpack(losCached, width, height);
         for (int x = Math.max(0, viewerX - 62); x <= Math.min(viewerX + 62, width - 1); x++) {
@@ -1116,6 +1116,9 @@ public class FOVCache extends FOV{
             }
         }
         */
+        losCache[viewerX + viewerY * width] = insertSeveralPacked(losCached, packing.shrink());
+
+
         for (int l = 0; l < maxRadius + 1; l++) {
             packing.clear();
             knownSeen = allPackedHilbert(cached[maxRadius - l]);
@@ -1141,8 +1144,7 @@ public class FOVCache extends FOV{
                         cache[light.x + light.y * width][maxRadius - lightBrightnesses[i]]), wallMap));
             }
         }
-
-
+        
         return packed;
     }
 
