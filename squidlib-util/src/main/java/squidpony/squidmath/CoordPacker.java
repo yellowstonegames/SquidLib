@@ -1090,10 +1090,25 @@ public class CoordPacker {
         }
         return vla.shrink();
     }
+
     private static int clamp(int n, int min, int max)
     {
         return Math.min(Math.max(min, n), max - 1);
     }
+
+    /**
+     * Move all "on" positions in packed by the number of cells given in xMove and yMove, unless the move
+     * would take them further than 0, width - 1 (for xMove) or height - 1 (for yMove), in which case that
+     * cell is stopped at the edge (moving any shape by an xMove greater than width or yMove greater than
+     * height will move all "on" cells to that edge, in a 1-cell thick line). Returns a new packed short[]
+     * and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param xMove distance to move the x-coordinate; can be positive or negative
+     * @param yMove distance to move the y-coordinate; can be positive or negative
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @return a packed array that encodes "on" for cells that were moved from cells that were "on" in packed
+     */
     public static short[] translate(short[] packed, int xMove, int yMove, int width, int height)
     {
         if(packed == null || packed.length <= 1)
@@ -1124,6 +1139,145 @@ public class CoordPacker {
             if (current - past > 1)
             {
                 vla.add((short) skip);
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.shrink();
+    }
+
+
+    /**
+     * Expand each "on" position in packed to cover a a square with side length equal to 1 + expansion * 2,
+     * centered on the original "on" position, unless the expansion would take a cell further than 0,
+     * width - 1 (for xMove) or height - 1 (for yMove), in which case that cell is stopped at the edge.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param expansion the positive (square) radius, in cells, to expand each cell out by
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @return a packed array that encodes "on" for cells that were moved from cells that were "on" in packed
+     */
+    public static short[] expand(short[] packed, int expansion, int width, int height)
+    {
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(256);
+        boolean on = false;
+        int idx = 0;
+        short x, y, dist;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    for (int j = Math.max(0, x - expansion); j <= Math.max(width - 1, x + expansion); j++) {
+                        for (int k = Math.max(0, y - expansion); k <= Math.max(height - 1, y + expansion); k++) {
+                            dist = hilbertDistances[j + (k << 8)];
+                            if (ss.add(dist))
+                                vla.add(dist);
+                        }
+                    }
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        int[] indices = vla.asInts();
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) skip);
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.shrink();
+    }
+
+
+    /**
+     * Finds the area around the cells encoded in packed, without including those cells. For each "on"
+     * position in packed, expand it to cover a a square with side length equal to 1 + expansion * 2,
+     * centered on the original "on" position, unless the expansion would take a cell further than 0,
+     * width - 1 (for xMove) or height - 1 (for yMove), in which case that cell is stopped at the edge.
+     * If a cell is "on" in packed, it will always be "off" in the result.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param expansion the positive (square) radius, in cells, to expand each cell out by
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @return a packed array that encodes "on" for cells that were pushed from the edge of packed's "on" cells
+     */
+    public static short[] fringe(short[] packed, int expansion, int width, int height)
+    {
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(256);
+        boolean on = false;
+        int idx = 0;
+        short x, y, dist;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    ss.add(hilbertDistances[hilbertX[i] + (hilbertY[i] << 8)]);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        on = false;
+        idx = 0;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    for (int j = Math.max(0, x - expansion); j <= Math.min(width - 1, x + expansion); j++) {
+                        for (int k = Math.max(0, y - expansion); k <= Math.min(height - 1, y + expansion); k++) {
+                            dist = hilbertDistances[j + (k << 8)];
+                            if (ss.add(dist))
+                                vla.add(dist);
+                        }
+                    }
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        int[] indices = vla.asInts();
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+
+            if (current - past > 1)
+            {
+                vla.add((short) (skip + 1));
                 skip = 0;
                 vla.add((short)(current - past - 1));
             }
