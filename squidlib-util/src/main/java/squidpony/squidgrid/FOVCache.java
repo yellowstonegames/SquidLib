@@ -2,6 +2,7 @@ package squidpony.squidgrid;
 
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.ShortVLA;
 
 import java.util.*;
@@ -1088,9 +1089,20 @@ public class FOVCache extends FOV{
         ShortVLA packing = new ShortVLA(128);
         short[][] packed = new short[maxRadius + 1][], cached = cache[viewerX + viewerY * width];
         short[] losCached = losCache[viewerX + viewerY * width];
-        boolean[][] losUnpacked = unpack(losCached, width, height);
         short[] knownSeen;
 
+
+        short[] perimeter = allPackedHilbert(fringe(losCached, 2, width, height));
+        short p_x, p_y;
+        for (int i = 0; i < perimeter.length; i++) {
+            p_x = hilbertX[perimeter[i] & 0xffff];
+            p_y = hilbertY[perimeter[i] & 0xffff];
+            if (queryPackedHilbert(losCache[p_x + p_y * width], myHilbert))
+                packing.add(perimeter[i]);
+        }
+
+        /*
+        boolean[][] losUnpacked = unpack(losCached, width, height);
         for (int x = Math.max(0, viewerX - 62); x <= Math.min(viewerX + 62, width - 1); x++) {
             for (int y = Math.max(0, viewerY - 62); y <= Math.min(viewerY + 62, height - 1); y++) {
                 if (losUnpacked[x][y])
@@ -1103,7 +1115,7 @@ public class FOVCache extends FOV{
                     packing.add((short) posToHilbert(x, y));
             }
         }
-
+        */
         for (int l = 0; l < maxRadius + 1; l++) {
             packing.clear();
             knownSeen = allPackedHilbert(cached[maxRadius - l]);

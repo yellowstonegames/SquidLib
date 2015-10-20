@@ -16,14 +16,14 @@ import squidpony.squidmath.StatefulRNG;
 public class FOVCacheDemo {
     public static void main(String[] args)
     {
-        int width = 60;
-        int height = 60;
+        int width = 120;
+        int height = 120;
         for (long r = 0, seed = 0xD00D; r < 10; r++, seed ^= seed << 2) {
 
 
             StatefulRNG rng = new StatefulRNG(new LightRNG(seed));
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
-            dungeonGenerator.addDoors(25, true);
+            dungeonGenerator.addDoors(40, true);
             dungeonGenerator.addWater(25);
             //dungeonGenerator.addTraps(2);
             char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
