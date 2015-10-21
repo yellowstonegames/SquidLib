@@ -99,6 +99,12 @@ public enum Radius {
     public double radius(int startx, int starty, int endx, int endy) {
         return radius((double) startx, (double) starty, (double) endx, (double) endy);
     }
+    public double radius(Coord start, Coord end) {
+        return radius((double) start.x, (double) start.y, (double) end.x, (double) end.y);
+    }
+    public double radius(Coord end) {
+        return radius(0.0, 0.0, (double) end.x, (double) end.y);
+    }
 
     public double radius(double startx, double starty, double endx, double endy) {
         double dx = startx - endx;
