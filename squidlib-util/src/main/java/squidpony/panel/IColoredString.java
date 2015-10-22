@@ -92,6 +92,20 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			this.fragments = new LinkedList<Bucket<T>>();
 		}
 
+		/**
+		 * An instance initially containing {@code text} (with {@code color}).
+		 * 
+		 * @param text
+		 *            The text that {@code this} should contain.
+		 * @param color
+		 *            The color of {@code text}.
+		 */
+		public Impl(String text, /* @Nullable */T color) {
+			this();
+
+			append(text, color);
+		}
+
 		@Override
 		public void append(char c, T color) {
 			append(String.valueOf(c), color);
