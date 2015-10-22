@@ -1,2 +1,3 @@
 mvn install
+java -jar target/benchmarks.jar DijkstraBenchmark -wi 10 -i 10 -f 1
 java -jar target/benchmarks.jar FOVCacheBenchmark -wi 10 -i 10 -f 0

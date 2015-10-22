@@ -422,8 +422,8 @@ public class FOVCache extends FOV{
      */
     protected long storeCellFOV(int index) {
         long startTime = System.currentTimeMillis();
-        cache[index] = calculateSlopeShadowFOV(index % width, index / width);
-        //cache[index] = calculateCellFOV(index % width, index / width);
+        cache[index] = calculatePackedSlopeShadowFOV(index % width, index / width);
+        //cache[index] = calculatePackedExternalFOV(index % width, index / width);
         return System.currentTimeMillis() - startTime;
     }
 
@@ -434,7 +434,7 @@ public class FOVCache extends FOV{
      */
     protected long storeCellLOS(int index) {
         long startTime = System.currentTimeMillis();
-        losCache[index] = calculateCellLOS(index % width, index / width);
+        losCache[index] = calculatePackedLOS(index % width, index / width);
         return System.currentTimeMillis() - startTime;
     }
 
@@ -455,7 +455,7 @@ public class FOVCache extends FOV{
      * @param viewerY an int less than 256 and less than height
      * @return a multi-packed series of progressively wider FOV radii
      */
-    public short[][] calculateCellFOV(int viewerX, int viewerY)
+    private short[][] calculatePackedExternalFOV(int viewerX, int viewerY)
     {
         if(viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
             return ALL_WALLS;
@@ -517,7 +517,7 @@ public class FOVCache extends FOV{
      * @param viewerY an int less than 256 and less than height
      * @return a packed FOV map for radius 62
      */
-    public short[] calculateCellLOS(int viewerX, int viewerY)
+    public short[] calculatePackedLOS(int viewerX, int viewerY)
     {
         if(viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
             return ALL_WALL;
@@ -534,7 +534,7 @@ public class FOVCache extends FOV{
      * @param viewerY an int less than 256 and less than height
      * @return a multi-packed series of progressively wider FOV radii
      */
-    public short[][] calculateSlopeShadowFOV(int viewerX, int viewerY) {
+    public short[][] calculatePackedSlopeShadowFOV(int viewerX, int viewerY) {
         if (viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
             return ALL_WALLS;
         if (resMap[viewerX][viewerY] >= 1.0) {
@@ -549,7 +549,7 @@ public class FOVCache extends FOV{
      * @param viewerY an int less than 256 and less than height
      * @return a multi-packed series of progressively wider FOV radii
      */
-    public short[][] calculateWaveFOV(int viewerX, int viewerY) {
+    public short[][] calculatePackedWaveFOV(int viewerX, int viewerY) {
         if (viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
             return ALL_WALLS;
         if (resMap[viewerX][viewerY] >= 1.0) {
@@ -1536,6 +1536,89 @@ public class FOVCache extends FOV{
     }
 
     /**
+     * Calculates an array of Coord positions that can be seen along the line from the given start point and end point.
+     * Does not order the array. Uses the pre-computed range-62 LOS cache to determine obstacles, and tends to draw a
+     * thicker line than Bresenham lines will. This uses the same radiusKind the FOVCache was created with, but the line
+     * this draws doesn't necessarily travel along valid directions for creatures (in particular, Radius.DIAMOND should
+     * only allow orthogonal movement, but if you request a 45-degree line, the LOS will have Coords on a perfect
+     * diagonal, though they won't travel through walls that occupy a thin perpendicular diagonal).
+     * @param startX the x position of the starting point; must be within bounds of the map
+     * @param startY the y position of the starting point; must be within bounds of the map
+     * @param endX the x position of the endpoint; does not need to be within bounds (will stop LOS at the edge)
+     * @param endY the y position of the endpoint; does not need to be within bounds (will stop LOS at the edge)
+     * @return a Coord[], unordered, that can be seen along the line of sight; limited to max LOS range, 62
+     */
+    public Coord[] calculateLOS(int startX, int startY, int endX, int endY)
+    {
+        if(!complete || startX < 0 || startX >= width || startY < 0 || startY >= height)
+            return new Coord[0];
+        int max = distance(endX - startX, endY - startY);
+        ArrayList<Coord> path = new ArrayList<Coord>(max / 2 + 1);
+        short[] losCached = losCache[startX + startY * width];
+        if(losCached.length == 0)
+            return new Coord[0];
+        boolean on = false;
+        int idx = 0, xt, yt;
+        short x =0, y = 0, dist = 0;
+        path.add(Coord.get(startX, startY));
+        if(startX == endX && startY == endY)
+            return path.toArray(new Coord[1]);
+
+        double angle = Math.atan2(endY - startY, endX - startX);
+        double x2 = Math.sin(angle) * 0.5, y2 = Math.cos(angle) * 0.5;
+        boolean[][] mask = new boolean[width][height];
+        for (int d = 2; d <= max; d++) {
+            xt = startX + (int)(x2 * d + 0.5);
+            yt = startY + (int)(y2 * d + 0.5);
+            if(xt < 0 || xt >= width || yt < 0 || yt >= height)
+                break;
+            mask[xt][yt] = true;
+        }
+
+        for(int p = 0; p < losCached.length; p++, on = !on) {
+            if (on) {
+                for (int toSkip = idx +(losCached[p] & 0xffff); idx < toSkip && idx < limit; idx++) {
+                    x = hilbertX[idx];
+                    y = hilbertY[idx];
+                    // this should never be possible, removing tentatively
+                    //if(x >= width || y >= height)
+                    //    continue;
+                    if(mask[x][y])
+                        path.add(Coord.get(x, y));
+                }
+            } else {
+                idx += losCached[p] & 0xffff;
+            }
+        }
+        return path.toArray(new Coord[path.size()]);
+    }
+
+    /**
+     * Calculates an array of Coord positions that can be seen along the line from the given start point and end point.
+     * Sorts the array, starting from the closest Coord to start and ending close to end. Uses the pre-computed
+     * range-62 LOS cache to determine obstacles, and tends to draw a thicker line than Bresenham lines will. This uses
+     * the same radiusKind the FOVCache was created with, but the line this draws doesn't necessarily travel along valid
+     * directions for creatures (in particular, Radius.DIAMOND should only allow orthogonal movement, but if you request
+     * a 45-degree line, the LOS will have Coords on a perfect diagonal, though they won't travel through walls that
+     * occupy a thin perpendicular diagonal).
+     * @param startX the x position of the starting point; must be within bounds of the map
+     * @param startY the y position of the starting point; must be within bounds of the map
+     * @param endX the x position of the endpoint; does not need to be within bounds (will stop LOS at the edge)
+     * @param endY the y position of the endpoint; does not need to be within bounds (will stop LOS at the edge)
+     * @return a Coord[], sorted, that can be seen along the line of sight; limited to max LOS range, 62
+     */
+    public Coord[] sortedLOS(int startX, int startY, int endX, int endY) {
+        Coord[] path = calculateLOS(startX, startY, endX, endY);
+        SortedMap<Double, Coord> sorted = new TreeMap<Double, Coord>();
+        double modifier = 0.0001;
+        Coord c;
+        for (int i = 0; i < path.length; i++, modifier += 0.0001) {
+            c = path[i];
+            sorted.put(distance(c.x, c.y) + modifier, c);
+        }
+        return sorted.values().toArray(new Coord[sorted.size()]);
+    }
+    /**
      * Given a path as a List of Coords (such as one produced by DijkstraMap.getPath()), this method will look up the
      * FOV for the given fovRange at each Coord, and returns an array of packed FOV maps where each map is the union
      * of the FOV centered on a Coord in path with all FOVs centered on previous Coords in path. The purpose of this is
@@ -1653,6 +1736,17 @@ public class FOVCache extends FOV{
         return unpackDouble(teamFOVPacked(team), width, height);
     }
 
+    /**
+     * When you have some packed on/off data and want to make sure it does not include walls, you can use this. It does
+     * not need to unpack the given packed short[] to get the subset of it without walls. Of course, this needs the
+     * FOVCache to be
+     * @param packed a short[] produced by some CoordPacker method or obtained by getLOSEntry() or getCacheEntry().
+     * @return another packed array containing only the non-wall "on" cells in packed
+     */
+    public short[] removeWalls(short[] packed)
+    {
+        return differencePacked(packed, wallMap);
+    }
 
     public int getMaxRadius() {
         return maxRadius;
