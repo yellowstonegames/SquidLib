@@ -99,9 +99,25 @@ public interface ISquidPanel<T> {
 	 */
 	public void refresh();
 
+	/**
+	 * @return The number of cells that this panel spans, horizontally.
+	 */
 	public int gridWidth();
 
+	/**
+	 * @return The number of cells that this panel spans, vertically.
+	 */
 	public int gridHeight();
+
+	/**
+	 * @return The width of a cell, in number of pixels.
+	 */
+	public int cellWidth();
+
+	/**
+	 * @return The height of a cell, in number of pixels.
+	 */
+	public int cellHeight();
 
 	/**
 	 * Sets the default foreground color.

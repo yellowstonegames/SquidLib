@@ -10,11 +10,17 @@ import squidpony.annotation.Beta;
  * write characters on the foreground.
  * 
  * <p>
- * There is one implementation in squidlib-util (the SquidLib module that
- * uses libGDX has a more full-featured one):
- *
- * a very generic one: {@link Impl} that you should use if you're combining
- * generic things.
+ * <ul>
+ * <li>
+ * There is a very generic implementation in this file: {@link Impl} that you
+ * should use if you're combining generic things.
+ * </li>
+ * <li>
+ * There is a libgdx-{@code Group} based implementation that offers more
+ * features and that you should likely use if you're a new user (in
+ * squidlib-gdx).
+ * </li>
+ * </ul>
  * 
  * @author smelC
  * 
@@ -89,6 +95,23 @@ public interface ICombinedPanel<T> {
 	public void putBG(int x, int y, T color);
 
 	/**
+	 * Puts {@code c} at (x, y), using {@code fgc} for {@code c} and {@code bgc}
+	 * for the background.
+	 */
+	public void put(int x, int y, char c, T bgc, T fgc);
+
+    /**
+     * Put {@code cs} at (x,y) using {@code bgc} for the background.
+     */
+    public void put(int x, int y, T bgc, IColoredString<? extends T> cs);
+
+	/**
+	 * Put {@code cs} at (x,y) using {@code bgc} for the background and
+	 * {@code fgc} for the foreground.
+	 */
+	public void put(int x, int y, String s, T bgc, T fgc);
+	
+	/**
 	 * @param color
 	 *            The color to put within this panel.
 	 */
@@ -105,7 +128,7 @@ public interface ICombinedPanel<T> {
 	/**
 	 * A generic implementation of {@link ICombinedPanel}. Useful to combine
 	 * things. If you're a new user, you likely would prefer the more specific
-     * implementation using libGDX, GroupCombinedPanel, instead.
+	 * implementation using libGDX, GroupCombinedPanel, instead.
 	 * 
 	 * @author smelC
 	 * 
@@ -179,6 +202,28 @@ public interface ICombinedPanel<T> {
 		}
 
 		@Override
+		public void put(int x, int y, char c, T bgc, T fgc) {
+			bg.put(x, y, bgc);
+			fg.put(x, y, c, fgc);
+		}
+
+		@Override
+		public void put(int x, int y, T bgc, IColoredString<? extends T> cs) {
+			final int l = cs.length();
+			for (int i = x; i < l && i < width; i++)
+				bg.put(i, y, bgc);
+			fg.put(x, y, cs);
+		}
+
+		@Override
+		public void put(int x, int y, String s, T bgc, T fgc) {
+			final int l = s.length();
+			for (int i = x; i < l && i < width; i++)
+				bg.put(i, y, bgc);
+			fg.put(x, y, s, fgc);
+		}
+
+		@Override
 		public void fillBG(T color) {
 			for (int x = 0; x < width; x++) {
 				for (int y = 0; y < height; y++)
@@ -201,6 +246,5 @@ public interface ICombinedPanel<T> {
 		}
 
 	}
-
 
 }
