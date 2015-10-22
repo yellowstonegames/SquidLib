@@ -49,16 +49,17 @@ import java.util.concurrent.TimeUnit;
 
 public class DijkstraBenchmark {
 
-    public static final int DIMENSION = 30, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 60, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
-            new DungeonGenerator(120, 120, new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+            new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
     public final static char[][] map = dungeonGen.generate();
 
-    public void doScan()
+    public long doScan()
     {
         DijkstraMap dijkstra = new DijkstraMap(
                 map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
         //Coord r;
+        long scanned = 0;
 
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
@@ -73,8 +74,10 @@ public class DijkstraBenchmark {
                 dijkstra.scan(null);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
+                scanned++;
             }
         }
+        return scanned;
     }
     /*
      * JMH generates lots of synthetic code for the benchmarks for you
@@ -96,14 +99,15 @@ public class DijkstraBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureScan() throws InterruptedException {
-        doScan();
+        System.out.println(doScan());
     }
 
-    public void doPath()
+    public long doPath()
     {
         DijkstraMap dijkstra = new DijkstraMap(
                 map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
         Coord r;
+        long scanned = 0;
         DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
@@ -116,15 +120,16 @@ public class DijkstraBenchmark {
                 dijkstra.findPath(PATH_LENGTH, null, null, r, Coord.get(x, y));
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
-
+                scanned++;
             }
         }
+        return scanned;
     }
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePath() throws InterruptedException {
-        doPath();
+        System.out.println(doPath());
     }
 
     /*
