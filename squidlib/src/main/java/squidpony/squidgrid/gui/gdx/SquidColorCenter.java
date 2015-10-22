@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Color;
  * A concrete implementation of {@link IColorCenter} for libgdx's {@link Color}.
  * 
  * @author smelC
+ * 
+ * @see SColor Another way to obtain colors by using pre-allocated (and named) instances.
  */
 public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
 

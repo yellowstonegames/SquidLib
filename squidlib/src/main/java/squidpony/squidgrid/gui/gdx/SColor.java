@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.Color;
  * Has some built in palettes available as SColor arrays.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
+ * 
+ * @see SquidColorCenter Another way to manage colors if you don't want to use preallocated instances.
  */
 public class SColor extends Color {
 
