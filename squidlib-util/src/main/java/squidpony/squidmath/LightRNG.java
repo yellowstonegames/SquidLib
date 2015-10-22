@@ -45,7 +45,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
 
     /**
      * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
-     * @return
+     * @return any long, all 64 bits are random
      */
     public long nextLong() {
         long z = ( state += 0x9E3779B97F4A7C15l );
@@ -56,7 +56,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
 
     /**
      * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.
-     * @return
+     * @return any int, all 32 bits are random
      */
     public int nextInt() {
         return (int)nextLong();
@@ -64,24 +64,25 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
 
     /**
      * Exclusive on the upper bound n.  The lower bound is 0.
-     * @param n
-     * @return
+     * @param n the upper bound; should be positive
+     * @return a random int less than n and at least equal to 0
      */
     public int nextInt( final int n ) {
         if ( n <= 0 ) throw new IllegalArgumentException();
-        for(;;) {
-            final int bits = nextInt();
-            int value = bits % n;
-            value = (value < 0) ? -value : value;
-            if ( bits - value + ( n - 1 ) >= 0 ) return value;
-        }
+        //for(;;) {
+            final int bits = nextInt() >>> 1;
+        return bits % n;
+            //int value = bits % n;
+            //value = (value < 0) ? -value : value;
+            //if ( bits - value + ( n - 1 ) >= 0 ) return value;
+        //}
     }
 
     /**
      * Inclusive lower, exclusive upper.
-     * @param lower
-     * @param upper
-     * @return
+     * @param lower the lower bound, inclusive, can be positive or negative
+     * @param upper the upper bound, exclusive, should be positive, must be greater than lower
+     * @return a random int at least equal to lower and less than upper
      */
     public int nextInt( final int lower, final int upper ) {
         if ( upper - lower <= 0 ) throw new IllegalArgumentException();
@@ -90,24 +91,25 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
 
     /**
      * Exclusive on the upper bound n. The lower bound is 0.
-     * @param n
-     * @return
+     * @param n the upper bound; should be positive
+     * @return a random long less than n
      */
     public long nextLong( final long n ) {
         if ( n <= 0 ) throw new IllegalArgumentException();
-        for(;;) {
+        //for(;;) {
             final long bits = nextLong() >>> 1;
-            long value = bits % n;
-            value = (value < 0) ? -value : value;
-            if ( bits - value + ( n - 1 ) >= 0 ) return value;
-        }
+        return bits % n;
+            //long value = bits % n;
+            //value = (value < 0) ? -value : value;
+            //if ( bits - value + ( n - 1 ) >= 0 ) return value;
+        //}
     }
 
     /**
      * Inclusive lower, exclusive upper.
-     * @param lower
-     * @param upper
-     * @return
+     * @param lower the lower bound, inclusive, can be positive or negative
+     * @param upper the upper bound, exclusive, should be positive, must be greater than lower
+     * @return a random long at least equal to lower and less than upper
      */
     public long nextLong( final long lower, final long upper ) {
         if ( upper - lower <= 0 ) throw new IllegalArgumentException();
@@ -115,33 +117,44 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
     }
     /**
      * Gets a uniform random double in the range [0.0,1.0)
-     * @return
+     * @return a random double at least equal to 0.0 and less than 1.0
      */
     public double nextDouble() {
         return ( nextLong() & DOUBLE_MASK ) * NORM_53;
     }
 
     /**
-     * Gets a uniform random double in the range [0.0,upper) given the parameter upper.
-     * @param upper
-     * @return
+     * Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer
+     * is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.
+     * @param outer the exclusive outer bound, can be negative
+     * @return a random double between 0.0 (inclusive) and outer (exclusive)
      */
-    public double nextDouble(final double upper) {
-        return nextDouble() * upper;
+    public double nextDouble(final double outer) {
+        return nextDouble() * outer;
     }
 
     /**
      * Gets a uniform random float in the range [0.0,1.0)
-     * @return
+     * @return a random float at least equal to 0.0 and less than 1.0
      */
     public float nextFloat() {
         return (float)( ( nextLong() & FLOAT_MASK ) * NORM_24 );
     }
 
+    /**
+     * Gets a random value, true or false.
+     * Calls nextLong() once.
+     * @return a random true or false value.
+     */
     public boolean nextBoolean() {
         return ( nextLong() & 1 ) != 0L;
     }
 
+    /**
+     * Given a byte array as a parameter, this will fill the array with random bytes (modifying it
+     * in-place). Calls nextLong() {@code Math.ceil(bytes.length / 8.0)} times.
+     * @param bytes a byte array that will have its contents overwritten with random bytes.
+     */
     public void nextBytes( final byte[] bytes ) {
         int i = bytes.length, n = 0;
         while( i != 0 ) {
@@ -151,33 +164,40 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
     }
 
 
+
     /**
      * Sets the seed of this generator (which is also the current state).
+     * @param seed the seed to use for this LightRNG, as if it was constructed with this seed.
      */
     public void setSeed( final long seed ) {
         state = seed;
     }
     /**
      * Sets the seed (also the current state) of this generator.
+     * @param seed the seed to use for this LightRNG, as if it was constructed with this seed.
      */
     @Override
-	public void setState( final long seed ) {
+    public void setState( final long seed ) {
         state = seed;
     }
     /**
      * Gets the current state of this generator.
+     * @return the current seed of this LightRNG, changed once per call to nextLong()
      */
     @Override
-	public long getState( ) {
+    public long getState( ) {
         return state;
     }
 
     /**
-     * Skip forward or backward a number of steps specified by advance, without generating a number at each step.
+     * Advances or rolls back the LightRNG's state without actually generating numbers. Skip forward
+     * or backward a number of steps specified by advance, where a step is equal to one call to nextInt().
      * @param advance Number of future generations to skip past. Can be negative to backtrack.
+     * @return the state after skipping.
      */
-    public void skip(long advance)
+    public long skip(long advance)
     {
-        state += 0x9E3779B97F4A7C15l * advance;
+        return state += 0x9E3779B97F4A7C15l * advance;
     }
+
 }

@@ -57,26 +57,26 @@ public class RNGTest {
         Random lrr = lr.asRandom(),
                prr = pr.asRandom(),
                xrr = xr.asRandom();
-        int c = 0;
+        int c = 0, bound = 1 << 16;
         for(int i = 0; i < 99; i++)
         {
-            c = light.nextInt();
+            c = light.nextInt(bound);
             System.out.println("l   : " + binaryString(c, 0));
-            c = perm.nextInt();
+            c = perm.nextInt(bound);
             System.out.println("p   : " + binaryString(c, 1));
-            c = xor.nextInt();
+            c = xor.nextInt(bound);
             System.out.println("x   : " + binaryString(c, 2));
-            c = lr.nextInt();
+            c = lr.nextInt(bound);
             System.out.println("LR  : " + binaryString(c, 3));
-            c = pr.nextInt();
+            c = pr.nextInt(bound);
             System.out.println("PR  : " + binaryString(c, 4));
-            c = xr.nextInt();
+            c = xr.nextInt(bound);
             System.out.println("XR  : " + binaryString(c, 5));
-            c = lrr.nextInt();
+            c = lrr.nextInt(bound);
             System.out.println("LRR : " + binaryString(c, 6));
-            c = prr.nextInt();
+            c = prr.nextInt(bound);
             System.out.println("PRR : " + binaryString(c, 7));
-            c = xrr.nextInt();
+            c = xrr.nextInt(bound);
             System.out.println("XRR : " + binaryString(c, 8));
             System.out.println();
         }
@@ -102,37 +102,38 @@ public class RNGTest {
         prr = pr.asRandom();
         xrr = xr.asRandom();
 
-        long l = 0;
+        long l = 0, longBound = 1L << 48;
         for(int i = 0; i < 99; i++)
         {
-            l = light.nextLong();
+            l = light.nextLong(longBound);
             System.out.println("l   : " + binaryString(l, 0));
-            l = perm.nextLong();
+            l = perm.nextLong(longBound);
             System.out.println("p   : " + binaryString(l, 1));
-            l = xor.nextLong();
+            l = xor.nextLong(longBound);
             System.out.println("x   : " + binaryString(l, 2));
-            l = lr.nextLong();
+            l = lr.nextLong(longBound);
             System.out.println("LR  : " + binaryString(l, 3));
-            l = pr.nextLong();
+            l = pr.nextLong(longBound);
             System.out.println("PR  : " + binaryString(l, 4));
-            l = xr.nextLong();
+            l = xr.nextLong(longBound);
             System.out.println("XR  : " + binaryString(l, 5));
-            l = lrr.nextLong();
+            /*l = lrr.nextLong(longBound);
             System.out.println("LRR : " + binaryString(l, 6));
-            l = prr.nextLong();
+            l = prr.nextLong(longBound);
             System.out.println("PRR : " + binaryString(l, 7));
-            l = xrr.nextLong();
+            l = xrr.nextLong(longBound);
             System.out.println("XRR : " + binaryString(l, 8));
-            System.out.println();
+            */
+            System.out.println(longBound);
         }
-        for(int k = 0; k < 9; k++) {
+        for(int k = 0; k < 6; k++) {
             for (int i = 63; i >= 0; i--) {
                 System.out.print(String.format("%02d ", lbits[k][i]));
             }
             System.out.println();
         }
 
-        for(int k = 0; k < 9; k++) {
+        for(int k = 0; k < 6; k++) {
             System.out.println(kindNames[k] + " : ");
             System.out.println(lbitsTotal[k]);
             System.out.println(counters[k].toString());
