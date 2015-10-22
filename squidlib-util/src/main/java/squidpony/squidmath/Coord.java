@@ -252,6 +252,46 @@ public class Coord implements java.io.Serializable {
         return (co.x - x) * (co.x - x) + (co.y - y) * (co.y - y);
     }
 
+	/**
+	 * @param c
+	 * @return Whether {@code this} is adjacent to {@code c}. Not that a cell is
+	 *         not adjacent to itself with this method.
+	 */
+	public boolean isAdjacent(Coord c) {
+		switch (Math.abs(x - c.x)) {
+		case 0:
+			return Math.abs(y - c.y) == 1;
+		case 1:
+			return y == c.y || Math.abs(y - c.y) == 1;
+		default:
+			return false;
+		}
+	}
+
+	/**
+	 * Precondition: {@code this} is {@link #isAdjacent(Coord) adjacent} to
+	 * {@code adjacent}.
+	 * 
+	 * @param adjacent
+	 *            A {@link Coord} that is {@link #isAdjacent(Coord) adjacent} to
+	 *            {@code this}.
+	 * @return The direction to go from {@code this} to {@code adjacent} i.e.
+	 *         the direction {@code d} such that {@code translate(this, d)}
+	 *         yields {@code adjacent}.
+	 * @throws IllegalStateException
+	 *             If {@code this} isn't adjacent to {@code adjacent}.
+	 */
+	/* KISS implementation */
+	public Direction toGoTo(Coord adjacent) {
+		assert isAdjacent(adjacent);
+		for (Direction d : Direction.values()) {
+			/* Not calling #translate, to avoid calling the cache */
+			if (x + d.deltaX == adjacent.x && y + d.deltaY == adjacent.y)
+				return d;
+		}
+		throw new IllegalStateException(String.format("%s is not adjacent to %s", this, adjacent));
+	}
+
     public int getX() {
         return x;
     }

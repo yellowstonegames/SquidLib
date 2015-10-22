@@ -1,6 +1,5 @@
 package squidpony.squidgrid.gui.gdx;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ICombinedPanel;
@@ -25,90 +24,63 @@ import java.util.List;
  */
 public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 
-    protected/* @Nullable */ISquidPanel<T> bg;
-    protected/* @Nullable */ISquidPanel<T> fg;
+	protected/* @Nullable */ISquidPanel<T> bg;
+	protected/* @Nullable */ISquidPanel<T> fg;
 
-    /** The width, in cell sizes */
-    protected int gridWidth = -1;
+	/**
+	 * @param bg
+	 *            The backing background panel. Typically a {@link SquidPanel}.
+	 * @param fg
+	 *            The backing foreground panel. Typically a {@link SquidPanel}.
+	 * @throws IllegalStateException
+	 *             In various cases of errors regarding sizes of panels.
+	 */
+	public GroupCombinedPanel(ISquidPanel<T> bg, ISquidPanel<T> fg) {
+		setPanels(bg, fg);
+	}
 
-    /** The height, in cell sizes */
-    protected int gridHeight = -1;
+	/**
+	 * Constructor that defer providing the backing panels. Useful for
+	 * subclasses that compute their size after being constructed. Use
+	 * {@link #setPanels(ISquidPanel, ISquidPanel)} to set the panels (required
+	 * before calling any {@code put} method).
+	 *
+	 * <p>
+	 * Width and height are computed using the provided panels.
+	 * </p>
+	 */
+	public GroupCombinedPanel() {
+	}
 
-    /**
-     * @param bg
-     *            The backing background panel. Typically a SquidPanel from this package.
-     * @param fg
-     *            The backing foreground panel. Typically a SquidPanel from this package.
-     * @param gridWidth
-     *            The width of this panel, used for {@link #fillBG(Object)}
-     *            (so that it fills within {@code [0, width)}).
-     * @param gridHeight
-     *            The height of this panel, used for {@link #fillBG(Object)}
-     *            (so that it fills within {@code [0, height)}).
-     * @throws IllegalStateException
-     *             In various cases of errors regarding sizes of panels.
-     */
-    public GroupCombinedPanel(ISquidPanel<T> bg, ISquidPanel<T> fg,
-                              int gridWidth, int gridHeight) {
-        if (bg.gridWidth() != fg.gridWidth())
-            throw new IllegalStateException(
-                    "Cannot build a combined panel with backers of different widths");
-        if (bg.gridHeight() != fg.gridHeight())
-            throw new IllegalStateException(
-                    "Cannot build a combined panel with backers of different heights");
+	/**
+	 * Sets the backing panels.
+	 *
+	 * @param bg
+	 *            Typically a {@link SquidPanel}.
+	 * @param fg
+	 *            Typically a {@link SquidPanel}.
+	 * @throws IllegalStateException
+	 *             In various cases of errors regarding sizes of panels.
+	 */
+	public final void setPanels(ISquidPanel<T> bg, ISquidPanel<T> fg) {
+		if (this.bg != null)
+			throw new IllegalStateException("Cannot change the background panel");
+		this.bg = bg;
 
-        this.bg = bg;
-        this.fg = fg;
-        if (gridWidth < 0)
-            throw new IllegalStateException("Cannot create a panel with a negative width");
-        this.gridWidth = gridWidth;
-        if (gridHeight < 0)
-            throw new IllegalStateException("Cannot create a panel with a negative height");
-        this.gridHeight = gridHeight;
+		if (this.fg != null)
+			throw new IllegalStateException("Cannot change the foreground panel");
+		this.fg = fg;
 
-        addActors();
-    }
+		final int bgw = bg.gridWidth();
+		final int bgh = bg.gridHeight();
 
-    /**
-     * Constructor that defer providing the backing panels. Useful for
-     * subclasses that compute their size after being constructed. Use
-     * {@link #setPanels(ISquidPanel, ISquidPanel)} to set the panels
-     * (required before calling any {@code put} method).
-     *
-     * <p>
-     * Width and height are computed using the provided panels.
-     * </p>
-     */
-    public GroupCombinedPanel() {
-    }
+		if (bgw != fg.gridWidth())
+			throw new IllegalStateException("Cannot build a combined panel with backers of different widths");
+		if (bgh != fg.gridHeight())
+			throw new IllegalStateException("Cannot build a combined panel with backers of different heights");
 
-    /**
-     * Sets the backing panels.
-     *
-     * @param bg Typically a SquidPanel from this package.
-     * @param fg Typically a SquidPanel from this package.
-     */
-    public void setPanels(ISquidPanel<T> bg, ISquidPanel<T> fg) {
-        if (this.bg != null)
-            throw new IllegalStateException("Cannot change the background panel");
-        this.bg = bg;
-
-        if (this.fg != null)
-            throw new IllegalStateException("Cannot change the foreground panel");
-        this.fg = fg;
-
-        if (bg.gridWidth() != fg.gridWidth())
-            throw new IllegalStateException(
-                    "Cannot build a combined panel with backers of different widths");
-        if (bg.gridHeight() != fg.gridHeight())
-            throw new IllegalStateException(
-                    "Cannot build a combined panel with backers of different heights");
-
-        this.gridWidth = bg.gridWidth();
-        this.gridHeight = bg.gridHeight();
-
-        addActors();
-    }
+		addActors();
+	}
 
     @Override
     public void putFG(int x, int y, char c) {
@@ -140,41 +112,62 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
         bg.put(x, y, color);
     }
 
-    public void put(int x, int y, char c, T foreground, T background)
+    @Override
+    public void put(int x, int y, char c, T background, T foreground)
     {
         checkFG();
         checkBG();
         bg.put(x, y, background);
         fg.put(x, y, c, foreground);
     }
-    public void put(int x, int y, IColoredString<? extends T> cs, T background)
+    @Override
+	public void put(int x, int y, T background, IColoredString<? extends T> cs)
     {
         checkFG();
         checkBG();
-        for (int i = x; i < cs.length() && i < gridWidth; i++) {
+        final int w = getGridWidth();
+        final int l = cs.length();
+        for (int i = x; i < l && i < w; i++) {
             bg.put(i, y, background);
         }
         fg.put(x, y, cs);
     }
-    public void put(int x, int y, String s, T foreground, T background)
+    @Override
+	public void put(int x, int y, String s, T background, T foreground)
     {
         checkFG();
         checkBG();
-        for (int i = x; i < s.length() && i < gridWidth; i++) {
+		final int w = getGridWidth();
+		final int l = s.length();
+		for (int i = x; i < l && i < w; i++) {
             bg.put(i, y, background);
         }
         fg.put(x, y, s, foreground);
     }
-    
-    @Override
-    public void fillBG(T color) {
-        if (gridWidth < 0 || gridHeight < 0)
-            throw new IllegalStateException("Width and height must be set before calling fillBG");
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++)
-                putBG(x, y, color);
-        }
-    }
+
+	/**
+	 * Writes {@code string} at the bottom right. If {@code string} is wider
+	 * than {@code this}, its end will be stripped.
+	 * 
+	 * @param string
+	 */
+	public void putBottomRight(IColoredString<? extends T> string) {
+		final int width = bg.gridWidth();
+		final int len = string.length();
+		final int x = len < width ? width - len : 0;
+		fg.put(x, bg.gridHeight() - 1, string);
+	}
+
+	@Override
+	public void fillBG(T color) {
+		final int gridWidth = getGridWidth();
+		final int gridHeight = getGridHeight();
+
+		for (int x = 0; x < gridWidth; x++) {
+			for (int y = 0; y < gridHeight; y++)
+				putBG(x, y, color);
+		}
+	}
 
     @Override
     public void refresh() {
@@ -204,6 +197,28 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
         if (bg == null)
             throw new NullPointerException("The background panel must be set before writing to it");
     }
+
+	/**
+	 * @return The backer's width
+	 * @throws IllegalStateException
+	 *             If backers aren't set yet.
+	 */
+	protected int getGridWidth() {
+		if (bg == null)
+			throw new NullPointerException("The background panel must be set before requesting the width");
+		return bg.gridWidth();
+	}
+
+	/**
+	 * @return The backer's height
+	 * @throws IllegalStateException
+	 *             If backers aren't set yet.
+	 */
+	protected int getGridHeight() {
+		if (bg == null)
+			throw new NullPointerException("The background panel must be set before requesting the height");
+		return bg.gridHeight();
+	}
 
     @Override
     public String toString() {
