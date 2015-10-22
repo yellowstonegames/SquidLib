@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 
 /**
@@ -312,11 +311,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         colors[x][y] = Color.rgba8888(color);
     }
 
-    public int cellWidth() {
+    @Override
+	public int cellWidth() {
         return cellWidth;
     }
 
-    public int cellHeight() {
+    @Override
+	public int cellHeight() {
         return cellHeight;
     }
 
