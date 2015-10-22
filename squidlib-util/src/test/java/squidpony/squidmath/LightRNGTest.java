@@ -24,7 +24,7 @@ public class LightRNGTest {
 		assertEquals(1, rng.next(1));
 		assertEquals(-1877671296, rng.nextInt());
 		rng.setState(rng.state * 11234L);
-		assertEquals(210, rng.nextInt(10, 230));
+		assertEquals(101, rng.nextInt(10, 230));
 	}
 
 	@Test
