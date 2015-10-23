@@ -111,7 +111,7 @@ public class PoissonDisk {
 
         Coord center = minPosition.average(maxPosition);
         Coord dimensions = maxPosition.subtract(minPosition);
-        float cellSize = minimumDistance / rootTwo;
+        float cellSize = Math.max(minimumDistance / rootTwo, 1f);
         int gridWidth = (int)(dimensions.x / cellSize) + 1;
         int gridHeight = (int)(dimensions.y / cellSize) + 1;
         Coord[][] grid = new Coord[gridWidth][gridHeight];
@@ -166,7 +166,7 @@ public class PoissonDisk {
                         q.y >= minPosition.y && q.y < maxPosition.y &&
                         (rejectionDistance <= 0 || disk.radius(center.x, center.y, q.x, q.y) <= rejectionDistance))
                 {
-                    Coord qIndex = q.subtract(minPosition).divide(cellSize);
+                    Coord qIndex = q.subtract(minPosition).divide((int)Math.ceil(cellSize));
                     boolean tooClose = false;
 
                     for (int i = Math.max(0, qIndex.x - 2); i < Math.min(gridWidth, qIndex.x + 3) && !tooClose; i++) {
