@@ -78,11 +78,13 @@ public class DungeonGeneratorTest {
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xc00bacca));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
-        dungeonGenerator.addDoors(15, true);
+        dungeonGenerator.addDoors(15, false);
         dungeonGenerator.addWater(25);
         dungeonGenerator.addTraps(2);
         MixedGenerator mix = new MixedGenerator(width, height, rng);
-        mix.putCaveCarvers(1);
+        mix.putCaveCarvers(3);
+        mix.putBoxRoomCarvers(1);
+        mix.putRoundRoomCarvers(2);
         dungeonGenerator.generate(mix.generate());
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(

@@ -28,7 +28,7 @@ public class MixedGenerator {
     public StatefulRNG rng;
     private char[][] dungeon;
     private boolean[][] marked;
-    private List<Coord> starts, ends;
+    private List<Coord> points, starts, ends;
     private int totalPoints;
 
     public MixedGenerator(int width, int height, StatefulRNG rng) {
@@ -43,15 +43,12 @@ public class MixedGenerator {
         for (int i = 1; i < width; i++) {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
         }
-        starts = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 1, height - 1),
-                Math.min(width, height) / 7f, width, height, 25, rng);
-        ends = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 1, height - 1),
-                Math.min(width, height) / 7f, width, height, 25, rng);
-        totalPoints = Math.min(starts.size(), ends.size());
-        starts = rng.shuffle(starts);
-        ends = rng.shuffle(ends);
-        starts = starts.subList(0, totalPoints);
-        ends = ends.subList(0, totalPoints);
+        points = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 1, height - 1),
+                Math.min(6f, Math.min(width / 7f, height / 7f)), width, height, 35, rng);
+        totalPoints = points.size() / 2;
+        points = rng.shuffle(points);
+        starts = points.subList(0, totalPoints);
+        ends = points.subList(points.size() - totalPoints, points.size());
         carvers = new EnumMap<CarverType, Integer>(CarverType.class);
     }
 
@@ -93,12 +90,12 @@ public class MixedGenerator {
         for (int p = 0, c = 0; p < totalPoints; p++, c = (++c) % totalLength) {
             Coord start = starts.get(p), end = ends.get(p);
             CarverType ct = allCarvings[c];
+            Direction dir;
             switch (ct)
             {
-                default:
+                case CAVE:
                     mark(end);
                     store();
-                    Direction dir;
                     do {
                         markPlus(start);
                         dir = stepWobbly(start, end, 0.75);
@@ -108,6 +105,47 @@ public class MixedGenerator {
                             break;
                         }
                     }while (dir != Direction.NONE);
+                    break;
+                case BOX:
+                    markRectangle(end, rng.between(1, 5), rng.between(1, 5));
+                    markRectangle(start, rng.between(1, 4), rng.between(1, 4));
+                    store();
+                    dir = Direction.getDirection(end.x - start.x, (end.y - start.y));
+                    if(dir.isDiagonal())
+                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
+                                : Direction.getCardinalDirection(0, -dir.deltaY);
+                    while (start.x != end.x && start.y != end.y)
+                    {
+                        mark(start);
+                        start = start.translate(dir);
+                    }
+                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
+                    while (!(start.x == end.x && start.y == end.y))
+                    {
+                        mark(start);
+                        start = start.translate(dir);
+                    }
+                    break;
+                case ROUND:
+                    markCircle(end, rng.between(2, 6));
+                    markCircle(start, rng.between(2, 6));
+                    store();
+                    dir = Direction.getDirection(end.x - start.x, (end.y - start.y));
+                    if(dir.isDiagonal())
+                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
+                                : Direction.getCardinalDirection(0, -dir.deltaY);
+                    while (start.x != end.x && start.y != end.y)
+                    {
+                        mark(start);
+                        start = start.translate(dir);
+                    }
+                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
+                    while (!(start.x == end.x && start.y == end.y))
+                    {
+                        mark(start);
+                        start = start.translate(dir);
+                    }
+                    break;
             }
             store();
         }
@@ -158,7 +196,7 @@ public class MixedGenerator {
         int high;
         for (int dx = -radius; dx <= radius; ++dx)
         {
-            high = (int)Math.round(Math.sqrt(radius * radius - dx * dx));
+            high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));
             for (int dy = -high; dy <= high; ++dy)
             {
                 mark(pos.x + dx, pos.y + dy);
