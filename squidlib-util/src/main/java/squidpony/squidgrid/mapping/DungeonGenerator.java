@@ -348,7 +348,7 @@ public class DungeonGenerator {
      * Generate a char[][] dungeon using TilesetType.DEFAULT_DUNGEON; this produces a dungeon appropriate for a level
      * of ruins or a partially constructed dungeon. This uses '#' for walls, '.' for floors, '~' for water,
      * '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that provide vertical passage.
-     * Use the addDoors, addWater, and addTraps methods of this class to request these in the next generated map.
+     * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * @return a char[][] dungeon
      */
     public char[][] generate() {
@@ -359,14 +359,29 @@ public class DungeonGenerator {
      * Generate a char[][] dungeon given a TilesetType; the comments in that class provide some opinions on what
      * each TilesetType value could be used for in a game. This uses '#' for walls, '.' for floors, '~' for water,
      * '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that provide vertical passage.
-     * Use the addDoors, addWater, and addTraps methods of this class to request these in the next generated map.
+     * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * @see squidpony.squidgrid.mapping.styled.TilesetType
      * @param kind a TilesetType enum value, such as TilesetType.DEFAULT_DUNGEON
      * @return a char[][] dungeon
      */
     public char[][] generate(TilesetType kind)
     {
-        char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
+        return generate(gen.generate(kind, width, height));
+    }
+
+    /**
+     * Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated.
+     * Typically, you want to call generate with a TilesetType or no argument for the easiest generation; this method
+     * is meant for adding features like water and doors to existing simple maps.
+     * This uses '#' for walls, '.' for floors, '~' for water, '^' for traps, '+' for doors that provide horizontal
+     * passage, and '/' for doors that provide vertical passage.
+     * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
+     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors
+     * @return a char[][] dungeon
+     */
+    public char[][] generate(char[][] baseDungeon)
+    {
+        char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {

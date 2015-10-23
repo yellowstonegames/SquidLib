@@ -2,9 +2,9 @@ package squidpony.examples;
 
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.styled.TilesetType;
+import squidpony.squidgrid.mapping.MixedGenerator;
 import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
 
 /**
  * Sample output: {@code
@@ -73,14 +73,17 @@ import squidpony.squidmath.RNG;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
+    public static int width = 60, height = 60;
     public static void main( String[] args )
     {
-        RNG rng = new RNG(new LightRNG(0xc00bacca));
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(35, 60, rng);
+        StatefulRNG rng = new StatefulRNG(new LightRNG(0xc00bacca));
+        DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
         dungeonGenerator.addDoors(15, true);
         dungeonGenerator.addWater(25);
         dungeonGenerator.addTraps(2);
-        dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        MixedGenerator mix = new MixedGenerator(width, height, rng);
+        mix.putCaveCarvers(1);
+        dungeonGenerator.generate(mix.generate());
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(dungeonGenerator.getDungeon())));
