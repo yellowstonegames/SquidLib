@@ -40,10 +40,10 @@ public class SquidMouse extends InputAdapter {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.processor = processor;
-        this.offsetX = 0;
-        this.offsetY = 0;
-        this.gridWidth = Gdx.graphics.getWidth() / cellWidth;
-        this.gridHeight = Gdx.graphics.getHeight() / cellHeight;
+        offsetX = 0;
+        offsetY = 0;
+        gridWidth = Gdx.graphics.getWidth() / cellWidth;
+        gridHeight = Gdx.graphics.getHeight() / cellHeight;
     }
 
     /**
@@ -129,10 +129,10 @@ public class SquidMouse extends InputAdapter {
     {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
-        this.offsetX = 0;
-        this.offsetY = 0;
-        this.gridWidth = Gdx.graphics.getWidth() / cellWidth;
-        this.gridHeight = Gdx.graphics.getHeight() / cellHeight;
+        offsetX = 0;
+        offsetY = 0;
+        gridWidth = Gdx.graphics.getWidth() / cellWidth;
+        gridHeight = Gdx.graphics.getHeight() / cellHeight;
     }
     public void reinitialize(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY)
     {

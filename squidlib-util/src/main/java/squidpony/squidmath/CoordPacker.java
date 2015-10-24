@@ -160,7 +160,8 @@ public class CoordPacker {
     private static final int BITS = DEPTH << 1;
 
     public static short[] hilbertX = new short[0x10000], hilbertY = new short[0x10000],
-            hilbertDistances = new short[0x10000], ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
+            hilbertDistances = new short[0x10000], mooreX = new short[0x100], mooreY = new short[0x100],
+            mooreDistances = new short[0x100], ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
     static {
         ClassLoader cl = CoordPacker.class.getClassLoader();
         InputStream xStream = cl.getResourceAsStream("hilbert/x.bin"),
@@ -184,6 +185,23 @@ public class CoordPacker {
             ByteBuffer.wrap(dBytes).asShortBuffer().get(hilbertDistances);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        for (int i = 64; i < 128; i++) {
+            mooreX[i - 64] = hilbertX[i];
+            mooreY[i - 64] = hilbertY[i];
+            mooreDistances[mooreX[i - 64] + (mooreY[i - 64] << 4)] = (short)(i - 64);
+
+            mooreX[i] = hilbertX[i];
+            mooreY[i] = (short)(hilbertY[i] + 8);
+            mooreDistances[mooreX[i] + (mooreY[i] << 4)] = (short)(i);
+
+            mooreX[i + 64] = (short)(15 - hilbertX[i]);
+            mooreY[i + 64] = (short)(15 - hilbertY[i]);
+            mooreDistances[mooreX[i + 64] + (mooreY[i + 64] << 4)] = (short)(i + 64);
+
+            mooreX[i + 128] = (short)(15 - hilbertX[i]);
+            mooreY[i + 128] = (short)(7 - hilbertY[i]);
+            mooreDistances[mooreX[i + 128] + (mooreY[i + 128] << 4)] = (short)(i + 128);
         }
     }
 
@@ -2063,6 +2081,18 @@ public class CoordPacker {
     public static int posToHilbert( final int x, final int y ) {
         return hilbertDistances[x + (y << 8)] & 0xffff;
     }
+    /**
+     * Takes an x, y position and returns the length to travel along the 16x16 Moore curve to reach that position.
+     * This assumes x and y are between 0 and 15, inclusive.
+     * This uses a lookup table for the 16x16 Moore Curve, which should make it faster than calculating the
+     * distance along the Moore Curve repeatedly.
+     * @param x between 0 and 15 inclusive
+     * @param y between 0 and 15 inclusive
+     * @return the distance to travel along the 16x16 Moore Curve to get to the given x, y point.
+     */
+    public static int posToMoore( final int x, final int y ) {
+        return mooreDistances[x + (y << 4)] & 0xff;
+    }
     /*
      * Takes an x, y position and returns the length to travel along the 256x256 Hilbert curve to reach that position.
      * This assumes x and y are between 0 and 255, inclusive.
@@ -2180,6 +2210,20 @@ public class CoordPacker {
         return Coord.get(hilbertX[hilbert], hilbertY[hilbert]);
     }
 
+    /**
+     * Takes a distance to travel along the 16x16 Hilbert curve and returns a Coord representing the position
+     * in 2D space that corresponds to that point on the Hilbert curve. This uses a lookup table for the
+     * 16x16 Hilbert curve, which should make it faster than calculating the position repeatedly.
+     * The parameter moore is an int but only 8 unsigned bits are used, and since the Moore Curve loops, it is
+     * calculated as {@code moore % 256}.
+     * @param moore a distance to travel down the Moore Curve
+     * @return a Coord corresponding to the position in 2D space at the given distance down the Hilbert Curve
+     */
+    public static Coord mooreToCoord( final int moore )
+    {
+        return Coord.get(hilbertX[moore % 256], hilbertY[moore % 256]);
+    }
+
 
     /*
      * Takes a distance to travel along the 256x256 Hilbert curve and returns a Morton code representing the position
@@ -2237,12 +2281,24 @@ public class CoordPacker {
      * that position.
      * This assumes pt.x and pt.y are between 0 and 255, inclusive.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param pt
-     * @return
+     * @param pt a Coord with values between 0 and 255, inclusive
+     * @return a distance from the start of the 256x256 Hilbert curve to get to the position of pt
      */
     public static int coordToHilbert(final Coord pt)
     {
         return posToHilbert(pt.x, pt.y);
+    }
+
+    /**
+     * Takes a position as a Coord called pt and returns the length to travel along the 16x16 Moore curve to reach
+     * that position.
+     * This assumes pt.x and pt.y are between 0 and 15, inclusive.
+     * @param pt a Coord with values between 0 and 15, inclusive
+     * @return a distance from the "start" of the 16x16 Moore curve to get to the position of pt
+     */
+    public static int coordToMoore(final Coord pt)
+    {
+        return posToMoore(pt.x, pt.y);
     }
     /**
      * Takes two 8-bit unsigned integers index1 and index2, and returns a Morton code, with interleaved index1 and

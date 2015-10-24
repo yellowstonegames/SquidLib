@@ -1,13 +1,5 @@
 package squidpony.squidgrid.gui.gdx;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-
-import squidpony.panel.IColoredString;
-import squidpony.panel.ISquidPanel;
-import squidpony.squidgrid.Direction;
-import squidpony.squidmath.Coord;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -16,7 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
+import squidpony.panel.IColoredString;
+import squidpony.panel.ISquidPanel;
+import squidpony.squidgrid.Direction;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.StatefulRNG;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -104,27 +103,27 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param chars
      */
     public void put(char[][] chars) {
-        SquidPanel.this.put(0, 0, chars);
+        put(0, 0, chars);
     }
 
     @Override
 	public void put(char[][] chars, Color[][] foregrounds) {
-        SquidPanel.this.put(0, 0, chars, foregrounds);
+        put(0, 0, chars, foregrounds);
     }
 
     public void put(char[][] chars, int[][] indices, ArrayList<Color> palette) {
-        SquidPanel.this.put(0, 0, chars, indices, palette);
+        put(0, 0, chars, indices, palette);
     }
 
     public void put(int xOffset, int yOffset, char[][] chars) {
-        SquidPanel.this.put(xOffset, yOffset, chars, defaultForeground);
+        put(xOffset, yOffset, chars, defaultForeground);
     }
 
     public void put(int xOffset, int yOffset, char[][] chars, Color[][] foregrounds) {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    SquidPanel.this.put(x, y, chars[x - xOffset][y - yOffset], foregrounds[x - xOffset][y - yOffset]);
+                    put(x, y, chars[x - xOffset][y - yOffset], foregrounds[x - xOffset][y - yOffset]);
                 }
             }
         }
@@ -134,7 +133,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    SquidPanel.this.put(x, y, chars[x - xOffset][y - yOffset], palette.get(indices[x - xOffset][y - yOffset]));
+                    put(x, y, chars[x - xOffset][y - yOffset], palette.get(indices[x - xOffset][y - yOffset]));
                 }
             }
         }
@@ -144,7 +143,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         for (int x = xOffset; x < xOffset + foregrounds.length; x++) {
             for (int y = yOffset; y < yOffset + foregrounds[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    SquidPanel.this.put(x, y, '\0', foregrounds[x - xOffset][y - yOffset]);
+                    put(x, y, '\0', foregrounds[x - xOffset][y - yOffset]);
                 }
             }
         }
@@ -154,7 +153,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         for (int x = xOffset; x < xOffset + indices.length; x++) {
             for (int y = yOffset; y < yOffset + indices[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    SquidPanel.this.put(x, y, '\0', palette.get(indices[x - xOffset][y - yOffset]));
+                    put(x, y, '\0', palette.get(indices[x - xOffset][y - yOffset]));
                 }
             }
         }
@@ -164,7 +163,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    SquidPanel.this.put(x, y, chars[x - xOffset][y - yOffset], foreground);
+                    put(x, y, chars[x - xOffset][y - yOffset], foreground);
                 }
             }
         }
@@ -183,7 +182,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param string the characters to be displayed
      */
     public void put(int xOffset, int yOffset, String string) {
-        SquidPanel.this.put(xOffset, yOffset, string, defaultForeground);
+        put(xOffset, yOffset, string, defaultForeground);
     }
 
 	@Override
@@ -203,7 +202,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         for (int i = 0; i < string.length(); i++) {
             temp[i][0] = string.charAt(i);
         }
-        SquidPanel.this.put(xOffset, yOffset, temp, foreground);
+        put(xOffset, yOffset, temp, foreground);
     }
 
     /**
@@ -220,7 +219,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param vertical true if the text should be written vertically, from top to bottom
      */
     public void placeVerticalString(int xOffset, int yOffset, String string, boolean vertical) {
-        SquidPanel.this.put(xOffset, yOffset, string, defaultForeground, vertical);
+        put(xOffset, yOffset, string, defaultForeground, vertical);
     }
 
     /**
@@ -237,9 +236,9 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void put(int xOffset, int yOffset, String string, Color foreground, boolean vertical) {
         if (vertical) {
-            SquidPanel.this.put(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground);
+            put(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground);
         } else {
-            SquidPanel.this.put(xOffset, yOffset, string, foreground);
+            put(xOffset, yOffset, string, foreground);
         }
     }
 
@@ -258,7 +257,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     @Override
 	public void clear(int x, int y) {
-        this.put(x, y, Color.CLEAR);
+        put(x, y, Color.CLEAR);
     }
 
     @Override

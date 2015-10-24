@@ -49,16 +49,16 @@ public class Technique {
     public String id;
     public AOE aoe;
     protected char[][] dungeon;
-    protected final static Coord DEFAULT_POINT = Coord.get(0, 0);
+    protected static final Coord DEFAULT_POINT = Coord.get(0, 0);
 
     /**
      * Creates a Technique that can target any adjacent single Coord, using
      * Chebyshev (8-way square) distance.
      */
     public Technique() {
-        this.name = "Default Technique";
-        this.id = this.name;
-        this.aoe = new PointAOE(DEFAULT_POINT);
+        name = "Default Technique";
+        id = name;
+        aoe = new PointAOE(DEFAULT_POINT);
     }
 
     /**
@@ -68,8 +68,8 @@ public class Technique {
      */
     public Technique(String name) {
         this.name = name;
-        this.id = name;
-        this.aoe = new PointAOE(DEFAULT_POINT);
+        id = name;
+        aoe = new PointAOE(DEFAULT_POINT);
     }
 
     /**
@@ -80,7 +80,7 @@ public class Technique {
      */
     public Technique(String name, AOE aoe) {
         this.name = name;
-        this.id = name;
+        id = name;
         this.aoe = aoe;
     }
 
@@ -110,8 +110,8 @@ public class Technique {
      */
     public void setMap(char[][] map)
     {
-        this.dungeon = map;
-        this.aoe.setMap(map);
+        dungeon = map;
+        aoe.setMap(map);
     }
 
     /**

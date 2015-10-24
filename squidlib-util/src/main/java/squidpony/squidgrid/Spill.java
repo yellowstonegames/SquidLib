@@ -4,7 +4,9 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 /**
  * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for
  * gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.

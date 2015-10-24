@@ -1,10 +1,10 @@
 package squidpony.panel;
 
+import squidpony.annotation.Beta;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
-
-import squidpony.annotation.Beta;
 
 /**
  * A {@link String} divided in chunks of different colors. Use the
@@ -26,7 +26,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * @param color
 	 *            {@code text}'s color. Or {@code null} to let the panel decide.
 	 */
-	public void append(char c, /* @Nullable */T color);
+	void append(char c, /* @Nullable */T color);
 
 	/**
 	 * Mutates {@code this} by appending {@code text} to it. Does nothing if
@@ -37,7 +37,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * @param color
 	 *            {@code text}'s color. Or {@code null} to let the panel decide.
 	 */
-	public void append(/* @Nullable */String text, /* @Nullable */T color);
+	void append(/* @Nullable */String text, /* @Nullable */T color);
 
 	/**
 	 * Mutates {@code this} by appending {@code i} to it.
@@ -47,31 +47,31 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * @param color
 	 *            {@code text}'s color. Or {@code null} to let the panel decide.
 	 */
-	public void appendInt(int i, /* @Nullable */T color);
+	void appendInt(int i, /* @Nullable */T color);
 
 	/**
 	 * Mutates {@code this} by appending {@code other} to it.
 	 * 
 	 * @param other
 	 */
-	public void append(IColoredString<T> other);
+	void append(IColoredString<T> other);
 
 	/**
 	 * Deletes all content after index {@code len} (if any).
 	 * 
 	 * @param len
 	 */
-	public void setLength(int len);
+	void setLength(int len);
 
 	/**
 	 * @return The length of text.
 	 */
-	public int length();
+	int length();
 
 	/**
 	 * @return The text that {@code this} represents.
 	 */
-	public String present();
+	String present();
 
 	/**
 	 * A basic implementation of {@link IColoredString}.
@@ -81,7 +81,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * @param <T>
 	 *            The type of colors
 	 */
-	public static class Impl<T> implements IColoredString<T> {
+	class Impl<T> implements IColoredString<T> {
 
 		protected final LinkedList<Bucket<T>> fragments;
 
@@ -89,7 +89,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		 * An empty instance.
 		 */
 		public Impl() {
-			this.fragments = new LinkedList<Bucket<T>>();
+			fragments = new LinkedList<Bucket<T>>();
 		}
 
 		/**
@@ -217,7 +217,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * @param <T>
 	 *            The type of colors;
 	 */
-	public static class Bucket<T> {
+	class Bucket<T> {
 
 		protected final String text;
 		protected final/* @Nullable */T color;

@@ -1,6 +1,8 @@
 package squidpony.squidgrid.gui.gdx;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.CharArray;
 
 /**
@@ -62,7 +64,7 @@ public class SquidInput extends InputAdapter {
      */
     public SquidInput() {
         keyAction = null;
-        this.mouse = new SquidMouse(12, 12, new InputAdapter());
+        mouse = new SquidMouse(12, 12, new InputAdapter());
     }
 
     /**
@@ -156,7 +158,7 @@ public class SquidInput extends InputAdapter {
     }
 
     public void setUsingNumpadDirections(boolean using) {
-        this.numpadDirections = using;
+        numpadDirections = using;
     }
 
     public KeyHandler getKeyHandler() {

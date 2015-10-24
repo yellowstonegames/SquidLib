@@ -1,9 +1,9 @@
 package squidpony.squidgrid.mapping;
 
-import java.util.*;
-
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.RNG;
+
+import java.util.*;
 
 /**
  * Recursively divided maze. Creates only walls and passages.

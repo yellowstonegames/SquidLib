@@ -1,8 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
-import squidpony.IColorCenter;
-
 import com.badlogic.gdx.graphics.Color;
+import squidpony.IColorCenter;
 
 /**
  * A concrete implementation of {@link IColorCenter} for libgdx's {@link Color}.

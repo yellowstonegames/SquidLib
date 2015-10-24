@@ -1,8 +1,8 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,7 +28,7 @@ public class DefaultResources implements LifecycleListener {
             smooth2 = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null;
-    public final static String squareName = "Zodiac-Square-12x12.fnt",
+    public static final String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
             unicodeName = "Mandrill-6x16.fnt",
             squareNameLarge = "Zodiac-Square-24x24.fnt",

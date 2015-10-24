@@ -1,13 +1,11 @@
 package squidpony.examples;
 
+import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
-import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
-import squidpony.squidgrid.Spill;
 
 import java.util.ArrayList;
 import java.util.HashSet;

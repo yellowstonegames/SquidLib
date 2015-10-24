@@ -35,8 +35,8 @@ public class ConeAOE implements AOE {
     {
         fov = new FOV(FOV.RIPPLE_LOOSE);
         this.origin = origin;
-        this.radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
-        this.angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
+        radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
+        angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
 //        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
         this.span = span;
@@ -602,7 +602,7 @@ public class ConeAOE implements AOE {
     @Override
     public void setMap(char[][] map) {
         this.map = DungeonUtility.generateResistances(map);
-        this.dungeon = map;
+        dungeon = map;
     }
 
     @Override

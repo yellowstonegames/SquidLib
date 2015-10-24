@@ -38,21 +38,24 @@ public class CloudAOE implements AOE {
     public CloudAOE(Coord center, int volume, Radius radiusType)
     {
         LightRNG l = new LightRNG();
-        this.seed = l.getState();
-        this.spill = new Spill(new RNG(l));
+        seed = l.getState();
+        spill = new Spill(new RNG(l));
         this.center = center;
         this.volume = volume;
-        this.expanding = false;
+        expanding = false;
         rt = radiusType;
         switch (radiusType)
         {
             case SPHERE:
-            case CIRCLE: this.spill.measurement = Spill.Measurement.EUCLIDEAN;
+            case CIRCLE:
+                spill.measurement = Spill.Measurement.EUCLIDEAN;
                 break;
             case CUBE:
-            case SQUARE: this.spill.measurement = Spill.Measurement.CHEBYSHEV;
+            case SQUARE:
+                spill.measurement = Spill.Measurement.CHEBYSHEV;
                 break;
-            default: this.spill.measurement = Spill.Measurement.MANHATTAN;
+            default:
+                spill.measurement = Spill.Measurement.MANHATTAN;
                 break;
         }
     }
@@ -60,63 +63,72 @@ public class CloudAOE implements AOE {
     public CloudAOE(Coord center, int volume, Radius radiusType, int minRange, int maxRange)
     {
         LightRNG l = new LightRNG();
-        this.seed = l.getState();
-        this.spill = new Spill(new RNG(l));
+        seed = l.getState();
+        spill = new Spill(new RNG(l));
         this.center = center;
         this.volume = volume;
-        this.expanding = false;
+        expanding = false;
         rt = radiusType;
         this.minRange = minRange;
         this.maxRange = maxRange;
         switch (radiusType)
         {
             case SPHERE:
-            case CIRCLE: this.spill.measurement = Spill.Measurement.EUCLIDEAN;
+            case CIRCLE:
+                spill.measurement = Spill.Measurement.EUCLIDEAN;
                 break;
             case CUBE:
-            case SQUARE: this.spill.measurement = Spill.Measurement.CHEBYSHEV;
+            case SQUARE:
+                spill.measurement = Spill.Measurement.CHEBYSHEV;
                 break;
-            default: this.spill.measurement = Spill.Measurement.MANHATTAN;
+            default:
+                spill.measurement = Spill.Measurement.MANHATTAN;
                 break;
         }
     }
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed)
     {
-        this.seed = rngSeed;
-        this.spill = new Spill(new RNG(new LightRNG(rngSeed)));
+        seed = rngSeed;
+        spill = new Spill(new RNG(new LightRNG(rngSeed)));
         this.center = center;
         this.volume = volume;
-        this.expanding = false;
+        expanding = false;
         rt = radiusType;
         switch (radiusType)
         {
             case SPHERE:
-            case CIRCLE: this.spill.measurement = Spill.Measurement.EUCLIDEAN;
+            case CIRCLE:
+                spill.measurement = Spill.Measurement.EUCLIDEAN;
                 break;
             case CUBE:
-            case SQUARE: this.spill.measurement = Spill.Measurement.CHEBYSHEV;
+            case SQUARE:
+                spill.measurement = Spill.Measurement.CHEBYSHEV;
                 break;
-            default: this.spill.measurement = Spill.Measurement.MANHATTAN;
+            default:
+                spill.measurement = Spill.Measurement.MANHATTAN;
                 break;
         }
     }
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed, int minRange, int maxRange)
     {
-        this.seed = rngSeed;
-        this.spill = new Spill(new RNG(new LightRNG(rngSeed)));
+        seed = rngSeed;
+        spill = new Spill(new RNG(new LightRNG(rngSeed)));
         this.center = center;
         this.volume = volume;
-        this.expanding = false;
+        expanding = false;
         rt = radiusType;
         switch (radiusType)
         {
             case SPHERE:
-            case CIRCLE: this.spill.measurement = Spill.Measurement.EUCLIDEAN;
+            case CIRCLE:
+                spill.measurement = Spill.Measurement.EUCLIDEAN;
                 break;
             case CUBE:
-            case SQUARE: this.spill.measurement = Spill.Measurement.CHEBYSHEV;
+            case SQUARE:
+                spill.measurement = Spill.Measurement.CHEBYSHEV;
                 break;
-            default: this.spill.measurement = Spill.Measurement.MANHATTAN;
+            default:
+                spill.measurement = Spill.Measurement.MANHATTAN;
                 break;
         }
         this.minRange = minRange;
@@ -215,7 +227,7 @@ public class CloudAOE implements AOE {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(this.seed);
+            sp.lrng.setState(seed);
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
@@ -239,7 +251,7 @@ public class CloudAOE implements AOE {
 
             t = ts[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(this.seed);
+            sp.lrng.setState(seed);
 
             sp.start(t, volume, null);
 
@@ -362,7 +374,7 @@ public class CloudAOE implements AOE {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(this.seed);
+            sp.lrng.setState(seed);
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
@@ -386,7 +398,7 @@ public class CloudAOE implements AOE {
 
             t = pts[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(this.seed);
+            sp.lrng.setState(seed);
 
             sp.start(t, volume, null);
 
@@ -435,7 +447,7 @@ public class CloudAOE implements AOE {
 
             t = lts[i - pts.length];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(this.seed);
+            sp.lrng.setState(seed);
 
             sp.start(t, volume, null);
 
@@ -619,7 +631,7 @@ public class CloudAOE implements AOE {
     @Override
     public void setMap(char[][] map) {
         spill.initialize(map);
-        this.dungeon = map;
+        dungeon = map;
     }
 
     @Override
@@ -629,7 +641,7 @@ public class CloudAOE implements AOE {
         if(!expanding)
         {
             spill.reset();
-            spill.lrng.setState(this.seed);
+            spill.lrng.setState(seed);
         }
         return r;
     }

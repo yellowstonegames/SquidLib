@@ -9,12 +9,12 @@ public interface StatefulRandomness extends RandomnessSource {
      * Get the current internal state of the Reseedable as a long.
      * @return the current internal state of this object.
      */
-    public long getState();
+    long getState();
 
     /**
      * Set the current internal state of this Reseedable with a long.
      *
      * @param state a 64-bit long. You should avoid passing 0, even though some implementations can handle that.
      */
-    public void setState(long state);
+    void setState(long state);
 }

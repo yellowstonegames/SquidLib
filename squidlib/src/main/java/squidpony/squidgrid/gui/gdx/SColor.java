@@ -6008,14 +6008,14 @@ public class SColor extends Color {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof SColor || other instanceof Color ? this.toIntBits() == ((Color) other).toIntBits() : false;
+        return other instanceof SColor || other instanceof Color ? toIntBits() == ((Color) other).toIntBits() : false;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 31 * hash + this.name.hashCode();
-        hash += 31 * hash + this.toIntBits();
+        hash = 31 * hash + name.hashCode();
+        hash += 31 * hash + toIntBits();
         return hash;
     }
 }

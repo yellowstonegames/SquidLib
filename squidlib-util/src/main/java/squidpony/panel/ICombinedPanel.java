@@ -1,9 +1,9 @@
 package squidpony.panel;
 
+import squidpony.annotation.Beta;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import squidpony.annotation.Beta;
 
 /**
  * The combination of two panels, one to color the background, the other to
@@ -37,7 +37,7 @@ public interface ICombinedPanel<T> {
 	 * @param y
 	 * @param c
 	 */
-	public void putFG(int x, int y, char c);
+	void putFG(int x, int y, char c);
 
 	/**
 	 * Puts the character {@code c} at {@code (x, y)} with some {@code color}.
@@ -47,7 +47,7 @@ public interface ICombinedPanel<T> {
 	 * @param c
 	 * @param color
 	 */
-	public void putFG(int x, int y, char c, T color);
+	void putFG(int x, int y, char c, T color);
 
 	/**
 	 * Puts the given string horizontally with the first character at the given
@@ -66,7 +66,7 @@ public interface ICombinedPanel<T> {
 	 * @param color
 	 *            the color to draw the characters
 	 */
-	public void putFG(int x, int y, String string, T color);
+	void putFG(int x, int y, String string, T color);
 
 	/**
 	 * Puts the given string horizontally with the first character at the given
@@ -83,7 +83,7 @@ public interface ICombinedPanel<T> {
 	 * @param cs
 	 *            the text to be displayed, with its color.
 	 */
-	public void putFG(int x, int y, IColoredString<? extends T> cs);
+	void putFG(int x, int y, IColoredString<? extends T> cs);
 
 	/**
 	 * Puts the color {@code c} at {@code (x, y)}.
@@ -92,38 +92,38 @@ public interface ICombinedPanel<T> {
 	 * @param y
 	 * @param color
 	 */
-	public void putBG(int x, int y, T color);
+	void putBG(int x, int y, T color);
 
 	/**
 	 * Puts {@code c} at (x, y), using {@code fgc} for {@code c} and {@code bgc}
 	 * for the background.
 	 */
-	public void put(int x, int y, char c, T bgc, T fgc);
+	void put(int x, int y, char c, T bgc, T fgc);
 
     /**
      * Put {@code cs} at (x,y) using {@code bgc} for the background.
      */
-    public void put(int x, int y, T bgc, IColoredString<? extends T> cs);
+	void put(int x, int y, T bgc, IColoredString<? extends T> cs);
 
 	/**
 	 * Put {@code cs} at (x,y) using {@code bgc} for the background and
 	 * {@code fgc} for the foreground.
 	 */
-	public void put(int x, int y, String s, T bgc, T fgc);
+	void put(int x, int y, String s, T bgc, T fgc);
 	
 	/**
 	 * @param color
 	 *            The color to put within this panel.
 	 */
-	public void fillBG(T color);
+	void fillBG(T color);
 
-	public void refresh();
+	void refresh();
 
 	/**
 	 * @return The two backers, with the panel at the top (the foreground)
 	 *         first. They are instances of {@code SquidPanel}.
 	 */
-	public List<ISquidPanel<?>> getBackers();
+	List<ISquidPanel<?>> getBackers();
 
 	/**
 	 * A generic implementation of {@link ICombinedPanel}. Useful to combine
@@ -136,7 +136,7 @@ public interface ICombinedPanel<T> {
 	 *            The type of colors.
 	 */
 	@Beta
-	public static class Impl<T> implements ICombinedPanel<T> {
+	class Impl<T> implements ICombinedPanel<T> {
 
 		protected final ISquidPanel<T> bg;
 		protected final ISquidPanel<T> fg;

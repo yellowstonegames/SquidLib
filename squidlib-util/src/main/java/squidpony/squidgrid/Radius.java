@@ -1,11 +1,11 @@
 package squidpony.squidgrid;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.Coord3D;
 import squidpony.squidmath.RNG;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Basic radius strategy implementations likely to be used for roguelikes.
@@ -254,33 +254,31 @@ public enum Radius {
             break;
             case DIAMOND:
             case OCTAHEDRON: {
-                {
-                    int xUp = center.x + radiusLength, xDown = center.x - radiusLength,
-                            yUp = center.y + radiusLength, yDown = center.y - radiusLength;
-                    if(!surpassEdges) {
-                        xDown = clamp(xDown, 0, width);
-                        xUp = clamp(xUp, 0, width);
-                        yDown = clamp(yDown, 0, height);
-                        yUp = clamp(yUp, 0, height);
-                    }
+                int xUp = center.x + radiusLength, xDown = center.x - radiusLength,
+                        yUp = center.y + radiusLength, yDown = center.y - radiusLength;
+                if(!surpassEdges) {
+                    xDown = clamp(xDown, 0, width);
+                    xUp = clamp(xUp, 0, width);
+                    yDown = clamp(yDown, 0, height);
+                    yUp = clamp(yUp, 0, height);
+                }
 
-                    rim.add(Coord.get(xDown, center.y));
-                    rim.add(Coord.get(xUp, center.y));
-                    rim.add(Coord.get(center.x, yDown));
-                    rim.add(Coord.get(center.x, yUp));
+                rim.add(Coord.get(xDown, center.y));
+                rim.add(Coord.get(xUp, center.y));
+                rim.add(Coord.get(center.x, yDown));
+                rim.add(Coord.get(center.x, yUp));
 
-                    for (int i = xDown + 1, c = 1; i < center.x; i++, c++) {
-                        int x = i;
-                        if(!surpassEdges) x = clamp(i, 0, width);
-                        rim.add(Coord.get(x, clamp(center.y - c, 0, height)));
-                        rim.add(Coord.get(x, clamp(center.y + c, 0, height)));
-                    }
-                    for (int i = center.x + 1, c = 1; i < center.x + radiusLength; i++, c++) {
-                        int x = i;
-                        if(!surpassEdges) x = clamp(i, 0, width);
-                        rim.add(Coord.get(x, clamp(center.y + radiusLength - c, 0, height)));
-                        rim.add(Coord.get(x, clamp(center.y - radiusLength + c, 0, height)));
-                    }
+                for (int i = xDown + 1, c = 1; i < center.x; i++, c++) {
+                    int x = i;
+                    if(!surpassEdges) x = clamp(i, 0, width);
+                    rim.add(Coord.get(x, clamp(center.y - c, 0, height)));
+                    rim.add(Coord.get(x, clamp(center.y + c, 0, height)));
+                }
+                for (int i = center.x + 1, c = 1; i < center.x + radiusLength; i++, c++) {
+                    int x = i;
+                    if(!surpassEdges) x = clamp(i, 0, width);
+                    rim.add(Coord.get(x, clamp(center.y + radiusLength - c, 0, height)));
+                    rim.add(Coord.get(x, clamp(center.y - radiusLength + c, 0, height)));
                 }
             }
             break;
@@ -335,14 +333,14 @@ public enum Radius {
                 int rad2 = 0;
                 if(surpassEdges)
                 {
-                    while (this.radius(center.x, center.y, end.x, end.y) < radiusLength) {
+                    while (radius(center.x, center.y, end.x, end.y) < radiusLength) {
                         rad2++;
                         end = Coord.get((int) Math.round(Math.cos(theta) * rad2) + center.x
                                 , (int) Math.round(Math.sin(theta) * rad2) + center.y);
                     }
                 }
                 else {
-                    while (this.radius(center.x, center.y, end.x, end.y) < radiusLength) {
+                    while (radius(center.x, center.y, end.x, end.y) < radiusLength) {
                         rad2++;
                         end = Coord.get(clamp((int) Math.round(Math.cos(theta) * rad2) + center.x, 0, width)
                                       , clamp((int) Math.round(Math.sin(theta) * rad2) + center.y, 0, height));

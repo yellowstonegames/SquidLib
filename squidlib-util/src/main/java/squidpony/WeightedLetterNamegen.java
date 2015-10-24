@@ -1,12 +1,13 @@
 package squidpony;
 
+import squidpony.annotation.Beta;
+import squidpony.squidmath.ProbabilityTable;
+import squidpony.squidmath.RNG;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeMap;
-import squidpony.annotation.Beta;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.ProbabilityTable;
 
 /**
  * Based on work by Nolithius available at the following two sites

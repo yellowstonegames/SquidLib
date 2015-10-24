@@ -46,7 +46,7 @@ public enum Direction {
      * @param y
      * @return
      */
-    static public Direction getDirection(int x, int y) {
+    public static Direction getDirection(int x, int y) {
         if (x == 0 && y == 0) {
             return NONE;
         }
@@ -89,7 +89,7 @@ public enum Direction {
      * @param y
      * @return
      */
-    static public Direction getCardinalDirection(int x, int y) {
+    public static Direction getCardinalDirection(int x, int y) {
         if (x == 0 && y == 0) {
             return NONE;
         }
@@ -319,8 +319,8 @@ public enum Direction {
 	}
 
 
-    private Direction(int x, int y) {
-        this.deltaX = x;
-        this.deltaY = y;
+    Direction(int x, int y) {
+        deltaX = x;
+        deltaY = y;
     }
 }

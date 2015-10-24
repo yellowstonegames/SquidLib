@@ -17,9 +17,9 @@ import com.badlogic.gdx.utils.IntArray;
  * @author Tommy Ettinger
  * */
 public class SquidKey implements InputProcessor {
-    static private final int KEY_DOWN = 0;
-    static private final int KEY_UP = 1;
-    static private final int KEY_TYPED = 2;
+    private static final int KEY_DOWN = 0;
+    private static final int KEY_UP = 1;
+    private static final int KEY_TYPED = 2;
 
     private InputProcessor processor;
     private final IntArray queue = new IntArray();

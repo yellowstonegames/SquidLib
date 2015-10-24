@@ -40,7 +40,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     }
 
     public PermutedRNG(final long seed) {
-        this.state = seed;
+        state = seed;
     }
 
     @Override

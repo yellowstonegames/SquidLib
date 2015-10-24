@@ -5,11 +5,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.ShortVLA;
 
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import static squidpony.squidmath.CoordPacker.*;
 
@@ -137,8 +133,8 @@ public class FOVCache extends FOV{
         mapLimit = width * height;
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
-        this.fov = new FOV(FOV.SHADOW);
-        this.gradedFOV = new FOV(RIPPLE);
+        fov = new FOV(FOV.SHADOW);
+        gradedFOV = new FOV(RIPPLE);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = Math.max(1, maxRadius);
         decay = 1.0 / maxRadius;
@@ -201,8 +197,8 @@ public class FOVCache extends FOV{
         mapLimit = width * height;
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
-        this.fov = new FOV(FOV.SHADOW);
-        this.gradedFOV = new FOV(RIPPLE);
+        fov = new FOV(FOV.SHADOW);
+        gradedFOV = new FOV(RIPPLE);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = Math.max(1, maxRadius);
         decay = 1.0 / maxRadius;
@@ -269,8 +265,8 @@ public class FOVCache extends FOV{
         mapLimit = width * height;
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
-        this.fov = new FOV(FOV.SHADOW);
-        this.gradedFOV = new FOV(RIPPLE);
+        fov = new FOV(FOV.SHADOW);
+        gradedFOV = new FOV(RIPPLE);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = Math.max(1, maxRadius);
         decay = 1.0 / maxRadius;
@@ -1313,7 +1309,7 @@ public class FOVCache extends FOV{
         if(qualityComplete || complete)
             return unpackDouble(losCache[startx + starty * width], width, height);
         else
-            return fov.calculateFOV(this.resMap, startx, starty, maxRadius, radiusKind);
+            return fov.calculateFOV(resMap, startx, starty, maxRadius, radiusKind);
     }
 
     /**
@@ -1342,7 +1338,7 @@ public class FOVCache extends FOV{
         if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius)
             return unpackDouble(cache[startx + starty * width][maxRadius - (int) Math.round(radius)], width, height);
         else
-            return fov.calculateFOV(this.resMap, startx, starty, radius, radiusKind);
+            return fov.calculateFOV(resMap, startx, starty, radius, radiusKind);
     }
 
 
@@ -1378,7 +1374,7 @@ public class FOVCache extends FOV{
                 radiusKind.equals2D(radiusTechnique))
             return unpackDouble(cache[startX + startY * width][maxRadius - (int) Math.round(radius)], width, height);
         else
-            return fov.calculateFOV(this.resMap, startX, startY, radius, radiusTechnique);
+            return fov.calculateFOV(resMap, startX, startY, radius, radiusTechnique);
     }
 
     /**
@@ -1420,7 +1416,7 @@ public class FOVCache extends FOV{
             return unpackDoubleConical(cache[startX + startY * width][maxRadius - (int) Math.round(radius)], width, height,
                     startX, startY, angle, span);
         else
-            return fov.calculateFOV(this.resMap, startX, startY, radius, radiusTechnique, angle, span);
+            return fov.calculateFOV(resMap, startX, startY, radius, radiusTechnique, angle, span);
     }
 
     /**
@@ -1451,7 +1447,7 @@ public class FOVCache extends FOV{
             return unpackMultiDoublePartial(cache[startx + starty * width], width, height,
                     levels[(int) Math.round(radius)], (int) Math.round(radius));
         else
-            return gradedFOV.calculateFOV(this.resMap, startx, starty, radius, radiusKind);
+            return gradedFOV.calculateFOV(resMap, startx, starty, radius, radiusKind);
     }
 
 
@@ -1489,7 +1485,7 @@ public class FOVCache extends FOV{
             return unpackMultiDoublePartial(cache[startX + startY * width], width, height,
                     levels[(int) Math.round(radius)], (int) Math.round(radius));
         else
-            return gradedFOV.calculateFOV(this.resMap, startX, startY, radius, radiusTechnique);
+            return gradedFOV.calculateFOV(resMap, startX, startY, radius, radiusTechnique);
     }
 
     /**
@@ -1532,7 +1528,7 @@ public class FOVCache extends FOV{
             return unpackMultiDoublePartialConical(cache[startX + startY * width], width, height,
                     levels[(int) Math.round(radius)], (int) Math.round(radius), startX, startY, angle, span);
         else
-            return gradedFOV.calculateFOV(this.resMap, startX, startY, radius, radiusTechnique, angle, span);
+            return gradedFOV.calculateFOV(resMap, startX, startY, radius, radiusTechnique, angle, span);
     }
 
     /**
@@ -1644,7 +1640,7 @@ public class FOVCache extends FOV{
         {
             if(c.x < 0 || c.y < 0 || c.x >= width || c.y >= height)
                 throw new ArrayIndexOutOfBoundsException("Along given path, encountered an invalid Coord: "
-                + c.toString());
+                + c);
             if(idx == 0)
             {
                 fovSteps[idx] = cache[c.x + c.y * width][maxRadius - fovRange];
@@ -1707,7 +1703,7 @@ public class FOVCache extends FOV{
             range = kv.getValue();
             if(c.x < 0 || c.y < 0 || c.x >= width || c.y >= height)
                 throw new ArrayIndexOutOfBoundsException("Among team, encountered an invalid Coord: "
-                        + c.toString());
+                        + c);
             if(idx == 0)
             {
                 packing = cache[c.x + c.y * width][maxRadius - range];

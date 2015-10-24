@@ -5,7 +5,6 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.Elias;
 
-
 import java.util.*;
 
 /**
@@ -40,57 +39,63 @@ public class LineAOE implements AOE {
     private Radius metric = Radius.SQUARE;
     public LineAOE(Coord origin, Coord end)
     {
-        this.dijkstra = new DijkstraMap();
-        this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+        dijkstra = new DijkstraMap();
+        dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
         this.origin = origin;
         this.end = end;
-        this.radius = 0;
-        this.elias = new Elias();
+        radius = 0;
+        elias = new Elias();
     }
     public LineAOE(Coord origin, Coord end, int radius)
     {
-        this.dijkstra = new DijkstraMap();
-        this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+        dijkstra = new DijkstraMap();
+        dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
         rt = Radius.SQUARE;
         this.origin = origin;
         this.end = end;
         this.radius = radius;
-        this.elias = new Elias();
+        elias = new Elias();
     }
     public LineAOE(Coord origin, Coord end, int radius, Radius radiusType)
     {
-        this.dijkstra = new DijkstraMap();
-        this.rt = radiusType;
+        dijkstra = new DijkstraMap();
+        rt = radiusType;
         switch (radiusType)
         {
             case OCTAHEDRON:
-            case DIAMOND: this.dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+            case DIAMOND:
+                dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
                 break;
             case CUBE:
-            case SQUARE: this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+            case SQUARE:
+                dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
                 break;
-            default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+            default:
+                dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
                 break;
         }
         this.origin = origin;
         this.end = end;
         this.radius = radius;
-        this.elias = new Elias();
+        elias = new Elias();
     }
     public LineAOE(Coord origin, Coord end, int radius, Radius radiusType, int minRange, int maxRange)
     {
-        this.dijkstra = new DijkstraMap();
-        this.rt = radiusType;
+        dijkstra = new DijkstraMap();
+        rt = radiusType;
         switch (radiusType)
         {
             case OCTAHEDRON:
-            case DIAMOND: this.dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+            case DIAMOND:
+                dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
                 break;
             case CUBE:
-            case SQUARE: this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+            case SQUARE:
+                dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
                 break;
-            default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+            default:
+                dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
                 break;
         }
         this.origin = origin;
@@ -98,7 +103,7 @@ public class LineAOE implements AOE {
         this.radius = radius;
         this.minRange = minRange;
         this.maxRange = maxRange;
-        this.elias = new Elias();
+        elias = new Elias();
     }
     private double[][] initDijkstra()
     {
@@ -195,16 +200,19 @@ public class LineAOE implements AOE {
     }
     public void setRadiusType(Radius radiusType)
     {
-        this.rt = radiusType;
+        rt = radiusType;
         switch (radiusType)
         {
             case OCTAHEDRON:
-            case DIAMOND: this.dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+            case DIAMOND:
+                dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
                 break;
             case CUBE:
-            case SQUARE: this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+            case SQUARE:
+                dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
                 break;
-            default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+            default:
+                dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
                 break;
         }
     }
@@ -647,7 +655,7 @@ public class LineAOE implements AOE {
 */
     @Override
     public void setMap(char[][] map) {
-        this.dungeon = map;
+        dungeon = map;
         dijkstra.resetMap();
         dijkstra.clearGoals();
     }

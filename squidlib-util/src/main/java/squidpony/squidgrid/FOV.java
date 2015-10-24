@@ -1,11 +1,11 @@
 package squidpony.squidgrid;
 
+import squidpony.squidmath.Coord;
+
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-
-import squidpony.squidmath.Coord;
 
 /**
  * This class provides methods for calculating Field of View in grids. Field of

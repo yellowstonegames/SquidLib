@@ -1,15 +1,15 @@
 package squidpony.performance;
 
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.RandomnessSource;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.RandomnessSource;
 
 /**
  * super class for performance related tests.<br>

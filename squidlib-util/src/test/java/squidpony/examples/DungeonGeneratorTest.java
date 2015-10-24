@@ -89,6 +89,6 @@ public class DungeonGeneratorTest {
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(dungeonGenerator.getDungeon())));
-        System.out.println(dungeonGenerator.toString());
+        System.out.println(dungeonGenerator);
     }
 }

@@ -1,9 +1,10 @@
 package squidpony.squidmath;
 
 
+import squidpony.annotation.Beta;
+
 import java.util.LinkedList;
 import java.util.List;
-import squidpony.annotation.Beta;
 
 /**
  * Creates a field of particles that tend to form a neuron image type

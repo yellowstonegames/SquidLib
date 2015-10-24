@@ -1,8 +1,8 @@
 package squidpony.squidgrid.iterator;
 
-import java.util.Iterator;
-
 import squidpony.squidmath.Coord;
+
+import java.util.Iterator;
 
 /**
  * Iterators that return instances of {@link Coord} and that are useful in

@@ -52,7 +52,7 @@ public class DijkstraBenchmark {
     public static final int DIMENSION = 60, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
-    public final static char[][] map = dungeonGen.generate();
+    public static final char[][] map = dungeonGen.generate();
 
     public long doScan()
     {

@@ -1,9 +1,9 @@
 package squidpony.squidgrid.iterator;
 
-import java.util.NoSuchElementException;
-
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
+
+import java.util.NoSuchElementException;
 
 /**
  * Instances of {@link SquidIterator}.
@@ -169,10 +169,10 @@ public class SquidIterators {
 			if (height == 0)
 				throw new IllegalStateException("Cannot build a square iterator over an empty grid");
 
-			this.xstart = x;
-			this.ystart = y;
+			xstart = x;
+			ystart = y;
 
-			this.maxDistanceFromStart = Math.max(Math.abs(x - width), Math.abs(x - height));
+			maxDistanceFromStart = Math.max(Math.abs(x - width), Math.abs(x - height));
 		}
 
 		/**

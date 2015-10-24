@@ -1,15 +1,11 @@
 package squidpony.performance;
 
 import squidpony.squidai.DijkstraMap;
-import squidpony.squidgrid.FOV;
-import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.StatefulRNG;
 
 /**
  * a simple performance test
@@ -41,7 +37,7 @@ final class DijkstraPerformanceTest extends AbstractPerformanceTest {
 	DijkstraPerformanceTest() {
 		final DungeonGenerator generator = new DungeonGenerator(DIMENSION, DIMENSION, RNG);
 		maps = generator.generate();
-		System.out.println(generator.toString());
+		System.out.println(generator);
 		createThreadList();
 	}
 

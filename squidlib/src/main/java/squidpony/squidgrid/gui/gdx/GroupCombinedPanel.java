@@ -222,7 +222,7 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 
     @Override
     public String toString() {
-        return String.format("%s@%s", this.getClass().getSimpleName(), Integer.toHexString(hashCode()));
+        return String.format("%s@%s", getClass().getSimpleName(), Integer.toHexString(hashCode()));
     }
 
 }

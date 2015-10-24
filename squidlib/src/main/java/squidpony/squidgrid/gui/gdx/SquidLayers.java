@@ -1,9 +1,9 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.graphics.Color;
 import squidpony.squidgrid.Direction;
 
 import java.util.ArrayList;
@@ -215,7 +215,6 @@ public class SquidLayers extends Group {
      * @param gridHeight in grid cells
      */
     public SquidLayers(int gridWidth, int gridHeight) {
-        super();
         initPalettes();
         width = gridWidth;
         height = gridHeight;
@@ -242,11 +241,11 @@ public class SquidLayers extends Group {
 
         extraPanels = new ArrayList<SquidPanel>();
 
-        super.addActorAt(0, backgroundPanel);
-        super.addActorAt(1, lightnessPanel);
-        super.addActorAt(2, foregroundPanel);
+        addActorAt(0, backgroundPanel);
+        addActorAt(1, lightnessPanel);
+        addActorAt(2, foregroundPanel);
 
-        this.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
+        setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
     }
 
     /**
@@ -260,7 +259,6 @@ public class SquidLayers extends Group {
      * @param cellHeight in pixels
      */
     public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
-        super();
         initPalettes();
         width = gridWidth;
         height = gridHeight;
@@ -291,11 +289,11 @@ public class SquidLayers extends Group {
 
         extraPanels = new ArrayList<SquidPanel>();
 
-        super.addActorAt(0, backgroundPanel);
-        super.addActorAt(1, lightnessPanel);
-        super.addActorAt(2, foregroundPanel);
+        addActorAt(0, backgroundPanel);
+        addActorAt(1, lightnessPanel);
+        addActorAt(2, foregroundPanel);
 
-        this.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
+        setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
     }
 
     /**
@@ -309,7 +307,6 @@ public class SquidLayers extends Group {
      * @param fontpath   A Font that should have been assigned a size before being passed here.
      */
     public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, String fontpath) {
-        super();
         initPalettes();
 
         width = gridWidth;
@@ -336,11 +333,11 @@ public class SquidLayers extends Group {
 
         extraPanels = new ArrayList<SquidPanel>();
 
-        super.addActorAt(0, backgroundPanel);
-        super.addActorAt(1, lightnessPanel);
-        super.addActorAt(2, foregroundPanel);
+        addActorAt(0, backgroundPanel);
+        addActorAt(1, lightnessPanel);
+        addActorAt(2, foregroundPanel);
 
-        this.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
+        setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
     }
 
     private void initPalettes() {
@@ -416,7 +413,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers addExtraLayer() {
         SquidPanel sp = new SquidPanel(width, height, textFactory);
-        super.addActor(sp);
+        addActor(sp);
         extraPanels.add(sp);
         return this;
     }

@@ -1,9 +1,10 @@
 package squidpony.squidmath;
 
 
+import squidpony.annotation.Beta;
+
 import java.util.LinkedList;
 import java.util.List;
-import squidpony.annotation.Beta;
 
 /**
  * Contains methods to draw antialiased lines based on floating point

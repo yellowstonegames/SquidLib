@@ -1,12 +1,12 @@
 package squidpony.squidgrid.mapping;
 
 
-import java.util.ArrayList;
-
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -85,6 +85,6 @@ public class GrowingTreeMazeGenerator {
          * @param size
          * @return
          */
-        public int chooseIndex(int size);
+        int chooseIndex(int size);
     }
 }

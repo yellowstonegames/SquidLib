@@ -24,7 +24,7 @@ public class Terrain {
 
     private Terrain(char symbol, int colorIndex) {
         this.symbol = symbol;
-        this.color = colorIndex;
+        color = colorIndex;
     }
 
     /**
@@ -50,7 +50,7 @@ public class Terrain {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 83 * hash + this.symbol;
+        hash = 83 * hash + symbol;
         return hash;
     }
 
@@ -63,6 +63,6 @@ public class Terrain {
             return false;
         }
         final Terrain other = (Terrain) obj;
-        return this.symbol == other.symbol;
+        return symbol == other.symbol;
     }
 }

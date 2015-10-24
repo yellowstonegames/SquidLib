@@ -2,7 +2,6 @@ package squidpony.gdx.examples.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import squidpony.gdx.examples.EverythingDemo;
 import squidpony.gdx.examples.SquidAIDemo;
 
 public class SquidAIDemoLauncher {

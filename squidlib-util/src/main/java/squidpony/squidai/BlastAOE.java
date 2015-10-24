@@ -516,7 +516,7 @@ public class BlastAOE implements AOE {
     @Override
     public void setMap(char[][] map) {
         this.map = DungeonUtility.generateResistances(map);
-        this.dungeon = map;
+        dungeon = map;
     }
 
     @Override
