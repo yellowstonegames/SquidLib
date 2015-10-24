@@ -5,6 +5,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.PoissonDisk;
 import squidpony.squidmath.RNG;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
@@ -28,10 +29,23 @@ public class MixedGenerator {
     public RNG rng;
     private char[][] dungeon;
     private boolean[][] marked;
-    private List<Coord> points, starts, ends;
+    private List<Coord> starts;
+    private List<Coord> ends;
     private int totalPoints;
 
+    private static List<Coord> basicPoints(int width, int height, RNG rng)
+    {
+        List<Coord> seq = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 1, height - 1),
+                6.5f, width, height, 35, rng);
+        //seq = rng.shuffle(seq);
+        seq = seq.subList(0, 4 * seq.size() / 7);
+        return seq;
+    }
+
     public MixedGenerator(int width, int height, RNG rng) {
+        this(width, height, rng, basicPoints(width, height, rng));
+    }
+    public MixedGenerator(int width, int height, RNG rng, List<Coord> sequence) {
         this.height = height;
         this.width = width;
         if(width <= 2 || height <= 2)
@@ -43,12 +57,10 @@ public class MixedGenerator {
         for (int i = 1; i < width; i++) {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
         }
-        points = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 1, height - 1),
-                Math.min(7f, (width + height) * 0.075f), width, height, 35, rng);
-        totalPoints = points.size() / 3;
-        points = rng.shuffle(points);
-        starts = points.subList(0, totalPoints);
-        ends = points.subList(points.size() - totalPoints, points.size());
+        List<Coord> points = new ArrayList<Coord>(sequence);
+        totalPoints = sequence.size();
+        starts = points.subList(0, totalPoints - 1);
+        ends = points.subList(1, totalPoints);
         carvers = new EnumMap<CarverType, Integer>(CarverType.class);
     }
 
@@ -87,7 +99,7 @@ public class MixedGenerator {
         }
         allCarvings = rng.shuffle(allCarvings);
 
-        for (int p = 0, c = 0; p < totalPoints; p++, c = (++c) % totalLength) {
+        for (int p = 0, c = 0; p < totalPoints - 1; p++, c = (++c) % totalLength) {
             Coord start = starts.get(p), end = ends.get(p);
             CarverType ct = allCarvings[c];
             Direction dir;
@@ -100,10 +112,6 @@ public class MixedGenerator {
                         markPlus(start);
                         dir = stepWobbly(start, end, 0.75);
                         start = start.translate(dir);
-                        if(dungeon[start.x][start.y] == '.') {
-                            markPlus(start);
-                            break;
-                        }
                     }while (dir != Direction.NONE);
                     break;
                 case BOX:
@@ -170,6 +178,8 @@ public class MixedGenerator {
     {
         if(x > 0 && x < width - 1 && y > 0 && y < height - 1)
             marked[x][y] = true;
+        //else
+        //    System.out.println("Bad mark: x:" + x + ", y:" + y);
     }
     private void mark(Coord pos)
     {

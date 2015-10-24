@@ -516,16 +516,23 @@ public class DungeonGenerator {
             int total = floors.size() * grassFill / 100;
             int error = 0;
             for(int i = 0; i < numPatches; i++) {
-                volumes[i] = total / numPatches;
+                volumes[i] = rng.nextInt(total / numPatches);
                 error += volumes[i];
             }
-            volumes[0] += total - error;
-
+            while (error > 0)
+            {
+                int n = rng.nextInt(total - error + 1);
+                volumes[rng.nextInt(volumes.length)] += n;
+                error -= n;
+            }
+            //volumes[0] += total - error;
+            /*
             for(int i = 0; i < numPatches; i++) {
                 int r = rng.nextInt(volumes[i] / 2) - volumes[i] / 4;
                 volumes[i] += r;
                 volumes[(i + 1) % numPatches] -= r;
             }
+            */
             Spill spill = new Spill(map, Spill.Measurement.EUCLIDEAN, rng);
             int bonusVolume = 0;
             for(int i = 0; i < numPatches; i++)
