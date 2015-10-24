@@ -1,23 +1,5 @@
 package squidpony.gdx.examples;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-
-import squidpony.panel.IColoredString;
-import squidpony.squidai.DijkstraMap;
-import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.FOV;
-import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.*;
-import squidpony.squidgrid.mapping.DungeonGenerator;
-import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -27,6 +9,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import squidpony.panel.IColoredString;
+import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.Direction;
+import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.mapping.DungeonGenerator;
+import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.MixedGenerator;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
 
 public class EverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
@@ -83,12 +82,18 @@ public class EverythingDemo extends ApplicationAdapter {
         rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(12);
-        dungeonGen.addGrass(15);
-        dungeonGen.addDoors(15, true);
+        dungeonGen.addWater(12, 6);
+        dungeonGen.addGrass(10);
+        dungeonGen.addDoors(15, false);
+        MixedGenerator mix = new MixedGenerator(width, height, rng);
+        mix.putCaveCarvers(1);
+        mix.putBoxRoomCarvers(1);
+        mix.putRoundRoomCarvers(2);
+        char[][] mg = mix.generate();
+        bareDungeon = dungeonGen.generate(mg);
 
         // change the TilesetType to lots of different choices to see what dungeon works best.
-        bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
+        //bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
         char[][] placement = DungeonUtility.closeDoors(bareDungeon);
@@ -407,20 +412,18 @@ public class EverythingDemo extends ApplicationAdapter {
 		/* Prepare the String to display */
 		final IColoredString<Color> cs = new IColoredString.Impl<Color>();
 		cs.append("Still ", null);
-		{
-			final Color nbColor;
-			if (nbMonsters <= 1)
-				/* Green */
-				nbColor = new Color(0, 1, 0, 1);
-			else if (nbMonsters <= 5)
-				/* Orange */
-				nbColor = new Color(1, 0.5f, 0, 1);
-			else
-				/* Red */
-				nbColor = new Color(1, 0, 0, 1);
-			cs.appendInt(nbMonsters, nbColor);
-		}
-		cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
+        final Color nbColor;
+        if (nbMonsters <= 1)
+            /* Green */
+            nbColor = new Color(0, 1, 0, 1);
+        else if (nbMonsters <= 5)
+            /* Orange */
+            nbColor = new Color(1, 0.5f, 0, 1);
+        else
+            /* Red */
+            nbColor = new Color(1, 0, 0, 1);
+        cs.appendInt(nbMonsters, nbColor);
+        cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
 
 		/* The panel's width */
 		final int w = cs.length();

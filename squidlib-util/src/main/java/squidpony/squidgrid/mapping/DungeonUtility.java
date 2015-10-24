@@ -2,7 +2,6 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.squidmath.*;
 
-
 import java.util.Map;
 
 /**
@@ -821,6 +820,7 @@ public class DungeonUtility {
                     case '/':
                         portion[i][j] = 4;
                         break;
+                    case ',':
                     case '~':
                         portion[i][j] = 5;
                         break;
@@ -878,6 +878,9 @@ public class DungeonUtility {
                     case '/':
                         portion[i][j] = 0;
                         break;
+                    case ',':
+                        portion[i][j] = 25;
+                        break;
                     case '~':
                         portion[i][j] = 24;
                         break;
@@ -931,6 +934,9 @@ public class DungeonUtility {
                     case '+':
                     case '/':
                         portion[i][j] = -20;
+                        break;
+                    case ',':
+                        portion[i][j] = (int)(70 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.45));
                         break;
                     case '~':
                         portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.65));
@@ -988,6 +994,9 @@ public class DungeonUtility {
                     case '/':
                         portion[i][j] = -20;
                         break;
+                    case ',':
+                        portion[i][j] = (int)(70 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.45));
+                        break;
                     case '~':
                         portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
                         break;
@@ -1038,9 +1047,6 @@ public class DungeonUtility {
                     case '#':
                         portion[i][j] = 1.0;
                         break;
-                    case '.':
-                        portion[i][j] = 0.0;
-                        break;
                     case '/':
                     case '"':
                         portion[i][j] = 0.15;
@@ -1048,9 +1054,9 @@ public class DungeonUtility {
                     case '+':
                         portion[i][j] = 0.95;
                         break;
+                    case '.':
+                    case ',':
                     case '~':
-                        portion[i][j] = 0.0;
-                        break;
                     case '^':
                         portion[i][j] = 0.0;
                         break;

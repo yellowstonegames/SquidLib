@@ -1,10 +1,8 @@
 package squidpony.examples;
 
+import squidpony.squidgrid.SoundMap;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
-import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidgrid.SoundMap;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;

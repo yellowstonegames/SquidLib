@@ -8,15 +8,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.AnimatedEntity;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
-import squidpony.squidgrid.gui.gdx.SquidMouse;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -24,7 +20,9 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 public class EverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}

@@ -2,16 +2,13 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.annotation.Beta;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
-import squidpony.squidgrid.Spill;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.LinkedHashSet;
 
 /**
@@ -46,14 +43,18 @@ public class DungeonGenerator {
         /**
          * Grass, represented by '"'
          */
-        GRASS
+        GRASS,
+        /**
+         * Islands of ground, '.', surrounded by shallow water, ',', to place in water at evenly spaced points
+         */
+        ISLANDS
     }
 
     /**
      * The effects that will be applied when generate is called. Strongly prefer using addWater, addDoors, addTraps,
      * and addGrass.
      */
-    public HashMap<FillEffect, Integer> fx;
+    public EnumMap<FillEffect, Integer> fx;
     private DungeonBoneGen gen;
     public DungeonUtility utility;
     private int height, width;
@@ -114,7 +115,7 @@ public class DungeonGenerator {
         utility = new DungeonUtility(rng);
         height = 40;
         width = 40;
-        fx = new HashMap<FillEffect, Integer>();
+        fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
     }
 
     /**
@@ -130,7 +131,7 @@ public class DungeonGenerator {
         utility = new DungeonUtility(rng);
         this.height = height;
         this.width = width;
-        fx = new HashMap<FillEffect, Integer>();
+        fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
     }
 
     /**
@@ -147,7 +148,7 @@ public class DungeonGenerator {
         utility = new DungeonUtility(rng);
         this.height = height;
         this.width = width;
-        fx = new HashMap<FillEffect, Integer>();
+        fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
     }
     /**
      * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.
@@ -164,7 +165,7 @@ public class DungeonGenerator {
         utility = new DungeonUtility(rng);
         this.height = height;
         this.width = width;
-        fx = new HashMap<FillEffect, Integer>();
+        fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
     }
 
     /**
@@ -178,7 +179,7 @@ public class DungeonGenerator {
         utility = new DungeonUtility(rng);
         height = copying.height;
         width = copying.width;
-        fx = new HashMap<FillEffect, Integer>(copying.fx);
+        fx = new EnumMap<FillEffect, Integer>(copying.fx);
         dungeon = copying.dungeon;
     }
 
@@ -187,6 +188,7 @@ public class DungeonGenerator {
      * a random number of pools, with more appearing if needed to fill the percentage. Each pool will have randomized
      * volume that should fill or get very close to filling the requested percentage, unless the pools encounter too
      * much tight space. If this DungeonGenerator previously had addWater called, the latest call will take precedence.
+     * No islands will be placed with this variant, but the edge of the water will be shallow, represented by ','.
      * @param percentage the percentage of floor cells to fill with water; this can vary quite a lot. It may be
      *                   difficult to fill very high (approaching 100) percentages with water, though it will succeed.
      * @return this DungeonGenerator; can be chained
@@ -197,6 +199,29 @@ public class DungeonGenerator {
         if(percentage > 100) percentage = 100;
         if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);
         fx.put(FillEffect.WATER, percentage);
+        return this;
+    }
+    /**
+     * Turns the given percentage of floor cells into water cells, represented by '~'. Water will be clustered into
+     * a random number of pools, with more appearing if needed to fill the percentage. Each pool will have randomized
+     * volume that should fill or get very close to filling the requested percentage, unless the pools encounter too
+     * much tight space. If this DungeonGenerator previously had addWater called, the latest call will take precedence.
+     * If islandSpacing is greater than 1, then this will place islands of floor, '.', surrounded by shallow water, ',',
+     * at about the specified distance with Euclidean measurement.
+     * @param percentage the percentage of floor cells to fill with water; this can vary quite a lot. It may be
+     *                   difficult to fill very high (approaching 100) percentages with water, though it will succeed.
+     * @param islandSpacing if greater than 1, islands will be placed randomly this many cells apart.
+     * @return this DungeonGenerator; can be chained
+     */
+    public DungeonGenerator addWater(int percentage, int islandSpacing)
+    {
+        if(percentage < 0) percentage = 0;
+        if(percentage > 100) percentage = 100;
+        if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);
+        fx.put(FillEffect.WATER, percentage);
+        if(fx.containsKey(FillEffect.ISLANDS)) fx.remove(FillEffect.ISLANDS);
+        if(islandSpacing > 1)
+            fx.put(FillEffect.ISLANDS, islandSpacing);
         return this;
     }
 
@@ -405,6 +430,7 @@ public class DungeonGenerator {
         int waterFill = 0;
         int grassFill = 0;
         int trapFill = 0;
+        int islandSpacing = 0;
         if(fx.containsKey(FillEffect.DOORS))
         {
             doorFill = fx.get(FillEffect.DOORS);
@@ -420,7 +446,9 @@ public class DungeonGenerator {
         if(fx.containsKey(FillEffect.WATER)) {
             waterFill = fx.get(FillEffect.WATER);
         }
-
+        if(fx.containsKey(FillEffect.ISLANDS)) {
+            islandSpacing = fx.get(FillEffect.ISLANDS);
+        }
         if(fx.containsKey(FillEffect.TRAPS)) {
             trapFill = fx.get(FillEffect.TRAPS);
         }
@@ -576,8 +604,9 @@ public class DungeonGenerator {
             }
             for(int x = 1; x < map.length - 1; x++) {
                 for (int y = 1; y < map[x].length - 1; y++) {
-                    if(spill.spillMap[x][y])
+                    if (spill.spillMap[x][y]) {
                         map[x][y] = '~';
+                    }
                 }
             }
             int frustration = 0;
@@ -592,6 +621,29 @@ public class DungeonGenerator {
                 bonusVolume -= spill.filled;
                 hazards.removeAll(finisher);
                 frustration++;
+            }
+            for(int x = 1; x < map.length - 1; x++) {
+                for (int y = 1; y < map[x].length - 1; y++) {
+                    if (spill.spillMap[x][y]) {
+                        if(map[x - 1][y] == '.' || map[x + 1][y] == '.' ||
+                                map[x][y - 1] == '.' || map[x][y + 1] == '.')
+                            map[x][y] = ',';
+                    }
+                }
+            }
+            if(islandSpacing > 1) {
+                ArrayList<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^');
+                for (Coord c : islands) {
+                    map[c.x][c.y] = '.';
+                    if (map[c.x - 1][c.y] != '#')
+                        map[c.x - 1][c.y] = ',';
+                    if (map[c.x + 1][c.y] != '#')
+                        map[c.x + 1][c.y] = ',';
+                    if (map[c.x][c.y - 1] != '#')
+                        map[c.x][c.y - 1] = ',';
+                    if (map[c.x][c.y + 1] != '#')
+                        map[c.x][c.y + 1] = ',';
+                }
             }
         }
 

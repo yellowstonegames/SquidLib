@@ -1,8 +1,9 @@
 package squidpony;
 
+import squidpony.annotation.Beta;
+
 import java.util.HashMap;
 import java.util.Map;
-import squidpony.annotation.Beta;
 
 /**
  * The Damerau-Levenshtein Algorithm is an extension to the Levenshtein

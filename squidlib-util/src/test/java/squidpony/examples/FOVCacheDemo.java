@@ -6,7 +6,6 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 

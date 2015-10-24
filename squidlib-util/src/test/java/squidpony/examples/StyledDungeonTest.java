@@ -1,8 +1,8 @@
 package squidpony.examples;
 
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -16,7 +16,7 @@ public class StyledDungeonTest {
         DungeonBoneGen bg = new DungeonBoneGen(new RNG(new LightRNG(0x1337deadbeef48aaL)));
         for(TilesetType tt : TilesetType.values())
         {
-            System.out.println(tt.toString());
+            System.out.println(tt);
             bg.generate(tt, 80, 40);
             bg.wallWrap();
             System.out.println(bg);

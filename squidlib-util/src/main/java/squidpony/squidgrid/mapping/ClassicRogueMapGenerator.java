@@ -1,14 +1,14 @@
 package squidpony.squidgrid.mapping;
 
 
+import squidpony.squidgrid.Direction;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.RNG;
+
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-
-import squidpony.squidgrid.Direction;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.RNG;
 
 /**
  * Creates a dungeon in the style of the original Rogue game. It will always
@@ -43,8 +43,8 @@ public class ClassicRogueMapGenerator {
         @Override
         public int hashCode() {
             int hash = 5;
-            hash = 89 * hash + this.cellx;
-            hash = 89 * hash + this.celly;
+            hash = 89 * hash + cellx;
+            hash = 89 * hash + celly;
             return hash;
         }
 
@@ -57,13 +57,10 @@ public class ClassicRogueMapGenerator {
                 return false;
             }
             final ClassicRogueRoom other = (ClassicRogueRoom) obj;
-            if (this.cellx != other.cellx) {
+            if (cellx != other.cellx) {
                 return false;
             }
-            if (this.celly != other.celly) {
-                return false;
-            }
-            return true;
+            return celly == other.celly;
         }
     }
 

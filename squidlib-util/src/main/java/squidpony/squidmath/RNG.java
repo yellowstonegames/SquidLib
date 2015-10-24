@@ -1,12 +1,6 @@
 package squidpony.squidmath;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 /**
  * A wrapper class for working with random number generators in a more friendly
@@ -60,7 +54,6 @@ public class RNG {
          * @param randomnessSource a way to get random bits, supplied by RNG
          */
         public CustomRandom(RandomnessSource randomnessSource) {
-            super();
             this.randomnessSource = randomnessSource;
         }
 

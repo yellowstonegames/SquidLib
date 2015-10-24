@@ -1,8 +1,9 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.Beta;
+
 import java.util.HashMap;
 import java.util.Set;
-import squidpony.annotation.Beta;
 
 /**
  * A generic method of holding a probability table to determine weighted random

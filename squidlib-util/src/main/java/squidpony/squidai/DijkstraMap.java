@@ -6,7 +6,6 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-
 import java.util.*;
 
 /**

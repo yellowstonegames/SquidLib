@@ -51,7 +51,7 @@ public class ShortVLA {
      * ordered. The capacity is set to the number of elements, so any subsequent elements added will cause the backing array to be
      * grown. */
     public ShortVLA(ShortVLA array) {
-        this.ordered = array.ordered;
+        ordered = array.ordered;
         size = array.size;
         items = new short[size];
         System.arraycopy(array.items, 0, items, 0, size);
@@ -235,7 +235,7 @@ public class ShortVLA {
         if (ordered)
             System.arraycopy(items, start + count, items, start, size - (start + count));
         else {
-            int lastIndex = this.size - 1;
+            int lastIndex = size - 1;
             for (int i = 0; i < count; i++)
                 items[start + i] = items[lastIndex - i];
         }
@@ -394,7 +394,7 @@ public class ShortVLA {
     }
 
     /** @see #ShortVLA(short[]) */
-    static public ShortVLA with (short... array) {
+    public static ShortVLA with (short... array) {
         return new ShortVLA(array);
     }
 }

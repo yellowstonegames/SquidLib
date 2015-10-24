@@ -1,6 +1,9 @@
 package squidpony.squidmath;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Random;
 
 /**
  * An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.
@@ -127,7 +130,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public double nextDouble(double max) {
-        return this.nextDouble() * max;
+        return nextDouble() * max;
     }
 
     /**
@@ -140,7 +143,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public double between(double min, double max) {
-        return min + (max - min) * this.nextDouble();
+        return min + (max - min) * nextDouble();
     }
 
     /**
@@ -155,7 +158,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public int between(int min, int max) {
-        return this.nextInt(max - min) + min;
+        return nextInt(max - min) + min;
     }
 
     /**
@@ -197,7 +200,7 @@ public class DharmaRNG extends RNG {
         if (array.length < 1) {
             return null;
         }
-        return array[this.nextInt(array.length)];
+        return array[nextInt(array.length)];
     }
 
     /**
@@ -213,7 +216,7 @@ public class DharmaRNG extends RNG {
         if (list.size() <= 0) {
             return null;
         }
-        return list.get(this.nextInt(list.size()));
+        return list.get(nextInt(list.size()));
     }
 
     /**
@@ -243,8 +246,8 @@ public class DharmaRNG extends RNG {
         } else {
             double v1, v2, s;
             do {
-                v1 = 2 * this.nextDouble() - 1; // between -1 and 1
-                v2 = 2 * this.nextDouble() - 1; // between -1 and 1
+                v1 = 2 * nextDouble() - 1; // between -1 and 1
+                v2 = 2 * nextDouble() - 1; // between -1 and 1
                 s = v1 * v1 + v2 * v2;
             } while (s >= 1 || s == 0);
             double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
@@ -266,7 +269,7 @@ public class DharmaRNG extends RNG {
             return 0;
         }
 
-        return (int)(this.nextDouble() * bound);
+        return (int)(nextDouble() * bound);
     }
 
     /**
@@ -275,7 +278,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public int nextInt() {
-        return (int)((this.nextDouble() - 0.5) * 2.0 * 0x7FFFFFFF);
+        return (int)((nextDouble() - 0.5) * 2.0 * 0x7FFFFFFF);
     }
 
     /**
@@ -284,7 +287,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public long nextLong() {
-        return (long)(2 * (this.nextDouble() - 0.5) * 0x7FFFFFFFFFFFFFFFL);
+        return (long)(2 * (nextDouble() - 0.5) * 0x7FFFFFFFFFFFFFFFL);
     }
 
     /**
@@ -299,7 +302,7 @@ public class DharmaRNG extends RNG {
         if (bound <= 0) {
             return 0;
         }
-        return (long)(this.nextDouble() * bound);
+        return (long)(nextDouble() * bound);
     }
     /**
      * Gets the measure that this class uses for RNG fairness, defaulting to 0.54 (always between 0.0 and 1.0).
@@ -349,7 +352,7 @@ public class DharmaRNG extends RNG {
             return 0;
         if(bits > 32)
             bits = 32;
-        return (int)(this.nextDouble() * (1l << bits));
+        return (int)(nextDouble() * (1l << bits));
 
     }
 

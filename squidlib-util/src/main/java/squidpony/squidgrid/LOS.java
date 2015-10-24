@@ -1,13 +1,14 @@
 package squidpony.squidgrid;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordDouble;
 import squidpony.squidmath.Elias;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * Line of Sight (LOS) algorithms find if there is or is not a path between two
@@ -84,7 +85,7 @@ public class LOS {
                 resMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;
             }
         }
-        return isReachable(resMap, startx, starty, targetx, targety, this.radiusStrategy);
+        return isReachable(resMap, startx, starty, targetx, targety, radiusStrategy);
     }
 
     /**
@@ -103,7 +104,7 @@ public class LOS {
      * @return
      */
     public boolean isReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety) {
-        return isReachable(resistanceMap, startx, starty, targetx, targety, this.radiusStrategy);
+        return isReachable(resistanceMap, startx, starty, targetx, targety, radiusStrategy);
     }
 
     /**

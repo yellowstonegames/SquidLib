@@ -20,14 +20,14 @@ public class CoordDouble implements java.io.Serializable {
     }
     public CoordDouble(CoordDouble other)
     {
-        this.x = other.x;
-        this.y = other.y;
+        x = other.x;
+        y = other.y;
     }
 
     public CoordDouble(Coord other)
     {
-        this.x = other.x;
-        this.y = other.y;
+        x = other.x;
+        y = other.y;
     }
     public static CoordDouble get(double x, double y)
     {
@@ -49,8 +49,8 @@ public class CoordDouble implements java.io.Serializable {
     }
     public void setLocation(CoordDouble co)
     {
-        this.x = co.x;
-        this.y = co.y;
+        x = co.x;
+        y = co.y;
     }
     public void move(int x, int y)
     {

@@ -4,7 +4,9 @@ import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
  * Area of Effect interface meant to be implemented by various specific burst, line, flowing, and user-made AOE types.

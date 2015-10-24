@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
@@ -14,6 +12,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.HashSet;
+
+import static org.junit.Assert.*;
 
 
 /**
@@ -60,6 +60,13 @@ public class CoordPackerTest {
         assertEquals(43690, CoordPacker.coordToHilbert(Coord.get(255, 255)));
         assertEquals(CoordPacker.posToHilbert(255, 255), CoordPacker.coordToHilbert(Coord.get(255, 255)));
         assertEquals(Coord.get(255, 255), CoordPacker.hilbertToCoord(CoordPacker.coordToHilbert(Coord.get(255, 255))));
+    }
+    //@Test
+    public void testMooreCurve() {
+        for (int i = 0; i < 256; i++) {
+            System.out.println("index " + i + "x:" + CoordPacker.mooreX[i] + ", y:" + CoordPacker.mooreY[i] +
+            ", dist:" + CoordPacker.mooreDistances[CoordPacker.mooreX[i] + (CoordPacker.mooreY[i] << 4)]);
+        }
     }
 
     @Test

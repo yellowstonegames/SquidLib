@@ -14,14 +14,14 @@ public class AnimatedEntity {
     public AnimatedEntity(Actor actor, int x, int y)
     {
         this.actor = actor;
-        this.gridX = x;
-        this.gridY = y;
+        gridX = x;
+        gridY = y;
     }
     public AnimatedEntity(Actor actor, int x, int y, boolean doubleWidth)
     {
         this.actor = actor;
-        this.gridX = x;
-        this.gridY = y;
+        gridX = x;
+        gridY = y;
         this.doubleWidth = doubleWidth;
     }
     public void setText(String text)

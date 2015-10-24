@@ -15,6 +15,7 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,8 +26,8 @@ public class FOVCacheBenchmark {
     public static final int DIMENSION = 60;
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
-    public final static char[][] map = dungeonGen.generate();
-    public final static double[][] res = DungeonUtility.generateResistances(map);
+    public static final char[][] map = dungeonGen.generate();
+    public static final double[][] res = DungeonUtility.generateResistances(map);
     public static FOVCache cache = new FOVCache(map, 16, Radius.SQUARE, 8);
     public static FOV fov = new FOV(FOV.RIPPLE);
     static {

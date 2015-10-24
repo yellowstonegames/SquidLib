@@ -1,9 +1,8 @@
 package squidpony.squidmath;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
-import org.junit.experimental.categories.Categories.ExcludeCategory;
+
+import static org.junit.Assert.*;
 
 /**
  * test to check if {@link LightRNG} returns predictable results

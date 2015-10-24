@@ -1,9 +1,9 @@
 package squidpony;
 
+import squidpony.squidmath.RNG;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import squidpony.squidmath.RNG;
 
 /**
  * How to manage colors, making sure that a color is allocated at most once.

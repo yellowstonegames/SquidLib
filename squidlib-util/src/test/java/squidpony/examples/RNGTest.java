@@ -136,7 +136,7 @@ public class RNGTest {
         for(int k = 0; k < 6; k++) {
             System.out.println(kindNames[k] + " : ");
             System.out.println(lbitsTotal[k]);
-            System.out.println(counters[k].toString());
+            System.out.println(counters[k]);
         }
         
 

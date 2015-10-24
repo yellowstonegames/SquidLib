@@ -16,6 +16,6 @@ public interface RandomnessSource {
      * @param bits the number of bits to be returned
      * @return the integer containing the appropriate number of bits
      */
-    public int next(int bits);
+    int next(int bits);
 
 }

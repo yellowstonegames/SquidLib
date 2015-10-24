@@ -74,8 +74,8 @@ public class DungeonBoneGen {
      */
     public void setDungeon(char[][] dungeon) {
         this.dungeon = dungeon;
-        this.wide = dungeon.length;
-        this.high = dungeon[0].length;
+        wide = dungeon.length;
+        high = dungeon[0].length;
     }
 
     /**
@@ -96,7 +96,7 @@ public class DungeonBoneGen {
      * @param y
      */
     public void put(char elem, int x, int y) {
-        this.dungeon[x][y] = elem;
+        dungeon[x][y] = elem;
     }
 
     /**
@@ -111,7 +111,7 @@ public class DungeonBoneGen {
      *               be used to generate a seed for the internal RNG this class uses.
      */
     public DungeonBoneGen(Random random) {
-        this.rng = new RNG(new LightRNG(random.nextLong()));
+        rng = new RNG(new LightRNG(random.nextLong()));
         initialize();
     }
     /**
@@ -120,7 +120,7 @@ public class DungeonBoneGen {
      * @param random A squidpony.squidmath.RNG to be used during the dungeon generation.
      */
     public DungeonBoneGen(RNG random) {
-        this.rng = random;
+        rng = random;
         initialize();
     }
 
@@ -410,11 +410,9 @@ public class DungeonBoneGen {
                     if (i + 3 >= 1006) {
                         return null;
                     }
-                    ;
                     if (j + 3 >= 1006) {
                         return null;
                     }
-                    ;
                     if (matchingAdjacent(j, i) && matchingAdjacent(j + 1, i) && matchingAdjacent(j + 2, i)
                             && matchingAdjacent(j, i + 1) && matchingAdjacent(j + 1, i + 1) && matchingAdjacent(j + 2, i + 1)) {
                         p = ((i + 1) - (j + 1) + 1) & 3;

@@ -5,7 +5,6 @@ import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
@@ -28,6 +27,7 @@ public class DijkstraCostTest {
             char[][] dun = dg.generate(TilesetType.DEFAULT_DUNGEON);
             HashMap<Character, Double> aquatic = new HashMap<>(16);
             aquatic.put('~', 1.0);
+            aquatic.put(',', 1.0);
             double[][] costs = DungeonUtility.generateCostMap(dun, aquatic, 999.0);
             DijkstraMap dijkstra = new DijkstraMap(dun, m);
             dijkstra.initializeCost(costs);
@@ -46,7 +46,7 @@ public class DijkstraCostTest {
                 for (int y = 0; y < md[x].length; y++) {
                     char t;
                     if (x % 2 == 0 && gm[x / 2][y] < 200)
-                        t = '.';
+                        t = dun[x/2][y];
                     else if (gm[x / 2][y] == DijkstraMap.WALL)
                         t = hl[x][y];
                     else if(x % 2 == 1)
@@ -83,6 +83,7 @@ public class DijkstraCostTest {
             vampire.put('/', 999.0);
             vampire.put('+', 999.0);
             vampire.put('~', 3.0);
+            vampire.put(',', 2.0);
             costs = DungeonUtility.generateCostMap(dun, vampire, 1.0);
             dijkstra.initialize(dun);
             dijkstra.initializeCost(costs);
@@ -106,7 +107,7 @@ public class DijkstraCostTest {
                 for (int y = 0; y < md[x].length; y++) {
                     char t;
                     if (x % 2 == 0 && gm[x / 2][y] < 200)
-                        t = '.';
+                        t = dun[x/2][y];
                     else if (gm[x / 2][y] == DijkstraMap.WALL)
                         t = hl[x][y];
                     else if(x % 2 == 1)
@@ -142,7 +143,8 @@ public class DijkstraCostTest {
 
             dun = DungeonUtility.closeDoors(dg.generate(TilesetType.DEFAULT_DUNGEON));
             HashMap<Character, Double> fancy = new HashMap<>(16);
-            fancy.put('~', 2.0);
+            fancy.put(',', 2.0);
+            fancy.put('~', 8.0);
             fancy.put('+', 4.0);
             costs = DungeonUtility.generateCostMap(dun, fancy, 1.0);
             dijkstra.initialize(dun);
@@ -169,7 +171,7 @@ public class DijkstraCostTest {
                 for (int y = 0; y < md[x].length; y++) {
                     char t;
                     if (x % 2 == 0 && gm[x / 2][y] < 200)
-                        t = '.';
+                        t = dun[x/2][y];
                     else if (gm[x / 2][y] == DijkstraMap.WALL)
                         t = hl[x][y];
                     else if(x % 2 == 1)

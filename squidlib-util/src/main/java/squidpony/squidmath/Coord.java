@@ -1,8 +1,8 @@
 package squidpony.squidmath;
 
-import java.util.Arrays;
-
 import squidpony.squidgrid.Direction;
+
+import java.util.Arrays;
 
 /**
  * A 2D coordinate.
@@ -74,7 +74,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord add(Coord other)
     {
-        return get(this.x + other.x, this.y + other.y);
+        return get(x + other.x, y + other.y);
     }
 
     /**
@@ -85,7 +85,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord add(int operand)
     {
-        return get(this.x + operand, this.y + operand);
+        return get(x + operand, y + operand);
     }
 
     /**
@@ -97,7 +97,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord add(double operand)
     {
-        return get((int)Math.round(this.x + operand), (int)Math.round(this.y + operand));
+        return get((int)Math.round(x + operand), (int)Math.round(y + operand));
     }
 
     /**
@@ -108,7 +108,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord subtract(Coord other)
     {
-        return get(this.x - other.x, this.y - other.y);
+        return get(x - other.x, y - other.y);
     }
 
     /**
@@ -119,7 +119,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord subtract(int operand)
     {
-        return get(this.x - operand, this.y - operand);
+        return get(x - operand, y - operand);
     }
 
     /**
@@ -131,7 +131,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord subtract(double operand)
     {
-        return get((int)Math.round(this.x - operand), (int)Math.round(this.y - operand));
+        return get((int)Math.round(x - operand), (int)Math.round(y - operand));
     }
     /**
      * Separately multiplies the x and y positions of other from this Coord, producing a different Coord as their
@@ -141,7 +141,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord multiply(Coord other)
     {
-        return get(this.x * other.x, this.y * other.y);
+        return get(x * other.x, y * other.y);
     }
     /**
      * Separately multiplies the x and y positions of this Coord by operand, producing a different Coord as their
@@ -151,7 +151,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord multiply(int operand)
     {
-        return get(this.x * operand, this.y * operand);
+        return get(x * operand, y * operand);
     }
 
     /**
@@ -163,7 +163,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord multiply(double operand)
     {
-        return get((int)Math.round(this.x * operand), (int)Math.round(this.y * operand));
+        return get((int)Math.round(x * operand), (int)Math.round(y * operand));
     }
 
     /**
@@ -174,7 +174,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord divide(Coord other)
     {
-        return get(this.x / other.x, this.y / other.y);
+        return get(x / other.x, y / other.y);
     }
     /**
      * Separately divides the x and y positions of this Coord by operand, producing a different Coord as their
@@ -184,7 +184,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord divide(int operand)
     {
-        return get(this.x / operand, this.y / operand);
+        return get(x / operand, y / operand);
     }
 
     /**
@@ -197,7 +197,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord divide(double operand)
     {
-        return get((int)Math.round(this.x / operand), (int)Math.round(this.y / operand));
+        return get((int)Math.round(x / operand), (int)Math.round(y / operand));
     }
 
     /**
@@ -208,7 +208,7 @@ public class Coord implements java.io.Serializable {
      */
     public Coord average(Coord other)
     {
-        return get(Math.round((this.x + other.x) / 2.0f), Math.round((this.y + other.y) / 2.0f));
+        return get(Math.round((x + other.x) / 2.0f), Math.round((y + other.y) / 2.0f));
     }
 	/**
 	 * @param d
@@ -297,7 +297,7 @@ public class Coord implements java.io.Serializable {
     }
 
     public Coord setX(int x) {
-        return get(x, this.y);
+        return get(x, y);
     }
 
     public int getY() {
@@ -305,7 +305,7 @@ public class Coord implements java.io.Serializable {
     }
 
     public Coord setY(int y) {
-        return get(this.x, y);
+        return get(x, y);
     }
 
     @Override

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 package squidpony.squidmath;
-import java.lang.ArithmeticException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

@@ -5,7 +5,6 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.Elias;
 
-
 import java.util.*;
 
 import static java.lang.Math.*;
@@ -47,102 +46,108 @@ public class BeamAOE implements AOE {
 
     public BeamAOE(Coord origin, Coord end)
     {
-        this.dijkstra = new DijkstraMap();
-        this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+        dijkstra = new DijkstraMap();
+        dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
         rt = Radius.SQUARE;
         this.origin = origin;
         this.end = end;
-        this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
-        this.maxRange = this.length;
-        this.radius = 0;
-        this.elias = new Elias();
+        length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
+        maxRange = length;
+        radius = 0;
+        elias = new Elias();
     }
     public BeamAOE(Coord origin, Coord end, int radius)
     {
-        this.dijkstra = new DijkstraMap();
-        this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+        dijkstra = new DijkstraMap();
+        dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
         rt = Radius.SQUARE;
         this.origin = origin;
         this.end = end;
         this.radius = radius;
-        this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
-        this.maxRange = this.length;
-        this.elias = new Elias();
+        length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
+        maxRange = length;
+        elias = new Elias();
     }
     public BeamAOE(Coord origin, Coord end, int radius, Radius radiusType)
     {
-        this.dijkstra = new DijkstraMap();
-        this.rt = radiusType;
+        dijkstra = new DijkstraMap();
+        rt = radiusType;
         switch (radiusType)
         {
             case OCTAHEDRON:
-            case DIAMOND: this.dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+            case DIAMOND:
+                dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
                 break;
             case CUBE:
-            case SQUARE: this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+            case SQUARE:
+                dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
                 break;
-            default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+            default:
+                dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
                 break;
         }
         this.origin = origin;
         this.end = end;
         this.radius = radius;
-        this.length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
-        this.maxRange = this.length;
-        this.elias = new Elias();
+        length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
+        maxRange = length;
+        elias = new Elias();
     }
 
     public BeamAOE(Coord origin, double angle, int length)
     {
-        this.dijkstra = new DijkstraMap();
-        this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+        dijkstra = new DijkstraMap();
+        dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
         rt = Radius.SQUARE;
         this.origin = origin;
         double theta = Math.toRadians(angle);
-        this.end = Coord.get((int) round(cos(theta) * length) + origin.x,
+        end = Coord.get((int) round(cos(theta) * length) + origin.x,
                 (int) round(sin(theta) * length) + origin.y);
         this.length = length;
-        this.maxRange = this.length;
-        this.radius = 0;
-        this.elias = new Elias();
+        maxRange = this.length;
+        radius = 0;
+        elias = new Elias();
     }
     public BeamAOE(Coord origin, double angle, int length, int radius)
     {
-        this.dijkstra = new DijkstraMap();
-        this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+        dijkstra = new DijkstraMap();
+        dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
         rt = Radius.SQUARE;
         this.origin = origin;
         double theta = Math.toRadians(angle);
-        this.end = Coord.get((int) round(cos(theta) * length) + origin.x,
+        end = Coord.get((int) round(cos(theta) * length) + origin.x,
                 (int) round(sin(theta) * length) + origin.y);
         this.radius = radius;
         this.length = length;
-        this.maxRange = this.length;
-        this.elias = new Elias();
+        maxRange = this.length;
+        elias = new Elias();
     }
     public BeamAOE(Coord origin, double angle, int length, int radius, Radius radiusType)
     {
-        this.dijkstra = new DijkstraMap();
-        this.rt = radiusType;
+        dijkstra = new DijkstraMap();
+        rt = radiusType;
         switch (radiusType)
         {
             case OCTAHEDRON:
-            case DIAMOND: this.dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+            case DIAMOND:
+                dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
                 break;
             case CUBE:
-            case SQUARE: this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+            case SQUARE:
+                dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
                 break;
-            default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+            default:
+                dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
                 break;
         }
         this.origin = origin;
         double theta = Math.toRadians(angle);
-        this.end = Coord.get((int) round(cos(theta) * length) + origin.x,
+        end = Coord.get((int) round(cos(theta) * length) + origin.x,
                 (int) round(sin(theta) * length) + origin.y);
         this.radius = radius;
         this.length = length;
-        this.maxRange = this.length;
-        this.elias = new Elias();
+        maxRange = this.length;
+        elias = new Elias();
     }
     private double[][] initDijkstra()
     {
@@ -204,7 +209,7 @@ public class BeamAOE implements AOE {
     @Override
     public void setMaxRange(int maxRange) {
         this.maxRange = maxRange;
-        this.length = maxRange;
+        length = maxRange;
 
     }
 
@@ -239,16 +244,19 @@ public class BeamAOE implements AOE {
     }
     public void setRadiusType(Radius radiusType)
     {
-        this.rt = radiusType;
+        rt = radiusType;
         switch (radiusType)
         {
             case OCTAHEDRON:
-            case DIAMOND: this.dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+            case DIAMOND:
+                dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
                 break;
             case CUBE:
-            case SQUARE: this.dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
+            case SQUARE:
+                dijkstra.measurement = DijkstraMap.Measurement.CHEBYSHEV;
                 break;
-            default: this.dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
+            default:
+                dijkstra.measurement = DijkstraMap.Measurement.EUCLIDEAN;
                 break;
         }
     }
@@ -695,7 +703,7 @@ public class BeamAOE implements AOE {
     */
     @Override
     public void setMap(char[][] map) {
-        this.dungeon = map;
+        dungeon = map;
         end = rt.extend(origin, end, length, false, map.length, map[0].length);
         dijkstra.resetMap();
         dijkstra.clearGoals();

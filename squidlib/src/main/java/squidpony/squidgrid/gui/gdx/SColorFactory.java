@@ -1,17 +1,12 @@
 package squidpony.squidgrid.gui.gdx;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
-import java.util.TreeMap;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
-
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Coord3D;
 import squidpony.squidmath.RNG;
+
+import java.util.*;
 
 /**
  * Provides utilities for working with colors as well as caching operations for

@@ -2,7 +2,6 @@ package squidpony.examples;
 
 import squidpony.squidmath.DharmaRNG;
 import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.SobolQRNG;
 
 /**
  * Created by Tommy Ettinger on 5/2/2015.

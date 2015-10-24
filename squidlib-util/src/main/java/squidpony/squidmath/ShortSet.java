@@ -497,13 +497,13 @@ public class ShortSet {
         return iterator2;
     }
 
-    static public ShortSet with (short... array) {
+    public static ShortSet with (short... array) {
         ShortSet set = new ShortSet();
         set.addAll(array);
         return set;
     }
 
-    static public class ShortSetIterator {
+    public static class ShortSetIterator {
         static final int INDEX_ILLEGAL = -2;
         static final int INDEX_ZERO = -1;
 

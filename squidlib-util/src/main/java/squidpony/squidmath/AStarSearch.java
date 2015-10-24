@@ -1,11 +1,12 @@
 package squidpony.squidmath;
 
 
+import squidpony.squidgrid.Direction;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Queue;
-import squidpony.squidgrid.Direction;
 
 /**
  * Performs A* search.

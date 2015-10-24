@@ -1,12 +1,10 @@
 package squidpony.examples;
 
+import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
-import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidai.DijkstraMap;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
@@ -33,7 +31,7 @@ public class LargeDijkstraTest {
             }
             sb.append('\n');
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
     public static void main(String[] args) {
         for (DijkstraMap.Measurement m : DijkstraMap.Measurement.values()) {

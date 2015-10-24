@@ -1,10 +1,13 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.annotation.Beta;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.PerlinNoise;
+import squidpony.squidmath.StatefulRNG;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import squidpony.annotation.Beta;
-import squidpony.squidmath.*;
 
 import static java.lang.Math.round;
 

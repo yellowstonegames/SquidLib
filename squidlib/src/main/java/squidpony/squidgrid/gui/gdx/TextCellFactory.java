@@ -65,8 +65,8 @@ public class TextCellFactory {
      */
     public TextCellFactory initByFont() {
         bmpFont.setFixedWidthGlyphs(fitting);
-        this.width = (int)bmpFont.getSpaceWidth();
-        this.height = (int)(bmpFont.getLineHeight());
+        width = (int)bmpFont.getSpaceWidth();
+        height = (int)(bmpFont.getLineHeight());
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(Color.WHITE);
         temp.fill();
@@ -143,7 +143,7 @@ public class TextCellFactory {
      * @return this factory for method chaining
      */
     public TextCellFactory font(String fontpath) {
-        this.bmpFont = new BitmapFont(Gdx.files.internal(fontpath));
+        bmpFont = new BitmapFont(Gdx.files.internal(fontpath));
         return this;
     }
 
@@ -240,7 +240,7 @@ public class TextCellFactory {
     public TextCellFactory fit(String fit) {
         fitting = fit;
         bmpFont.setFixedWidthGlyphs(fitting);
-        this.width = (int)bmpFont.getSpaceWidth();
+        width = (int)bmpFont.getSpaceWidth();
         return this;
     }
 
@@ -254,7 +254,7 @@ public class TextCellFactory {
     public TextCellFactory addFit(String fit) {
         fitting += fit;
         bmpFont.setFixedWidthGlyphs(fitting);
-        this.width = (int)bmpFont.getSpaceWidth();
+        width = (int)bmpFont.getSpaceWidth();
         return this;
     }
 

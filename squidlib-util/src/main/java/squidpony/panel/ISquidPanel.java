@@ -25,7 +25,7 @@ public interface ISquidPanel<T> {
 	 * @param y
 	 * @param c
 	 */
-	public void put(int x, int y, char c);
+	void put(int x, int y, char c);
 
 	/**
 	 * Puts {@code color} at {@code (x, y)} (in the cell's entirety, i.e. in the
@@ -35,7 +35,7 @@ public interface ISquidPanel<T> {
 	 * @param y
 	 * @param color
 	 */
-	public void put(int x, int y, T color);
+	void put(int x, int y, T color);
 
 	/**
 	 * Puts the given string horizontally with the first character at the given
@@ -54,7 +54,7 @@ public interface ISquidPanel<T> {
 	 * @param foreground
 	 *            the color to draw the characters
 	 */
-	public void put(int xOffset, int yOffset, String string, T foreground);
+	void put(int xOffset, int yOffset, String string, T foreground);
 
 	/**
 	 * Puts the given string horizontally with the first character at the given
@@ -71,7 +71,7 @@ public interface ISquidPanel<T> {
 	 * @param cs
 	 *            The string to display, with its colors.
 	 */
-	public void put(int xOffset, int yOffset, IColoredString<? extends T> cs);
+	void put(int xOffset, int yOffset, IColoredString<? extends T> cs);
 
 	/**
 	 * Puts the character {@code c} at {@code (x, y)} with some {@code color}.
@@ -81,9 +81,9 @@ public interface ISquidPanel<T> {
 	 * @param c
 	 * @param color
 	 */
-	public void put(int x, int y, char c, T color);
+	void put(int x, int y, char c, T color);
 
-	public void put(char[][] foregrounds, T[][] colors);
+	void put(char[][] foregrounds, T[][] colors);
 
 	/**
 	 * Removes the contents of this cell, leaving a transparent space.
@@ -91,40 +91,40 @@ public interface ISquidPanel<T> {
 	 * @param x
 	 * @param y
 	 */
-	public void clear(int x, int y);
+	void clear(int x, int y);
 
 	/**
 	 * Cause everything that has been prepared for drawing (such as with put) to
 	 * actually be drawn.
 	 */
-	public void refresh();
+	void refresh();
 
 	/**
 	 * @return The number of cells that this panel spans, horizontally.
 	 */
-	public int gridWidth();
+	int gridWidth();
 
 	/**
 	 * @return The number of cells that this panel spans, vertically.
 	 */
-	public int gridHeight();
+	int gridHeight();
 
 	/**
 	 * @return The width of a cell, in number of pixels.
 	 */
-	public int cellWidth();
+	int cellWidth();
 
 	/**
 	 * @return The height of a cell, in number of pixels.
 	 */
-	public int cellHeight();
+	int cellHeight();
 
 	/**
 	 * Sets the default foreground color.
 	 * 
 	 * @param color
 	 */
-	public void setDefaultForeground(T color);
+	void setDefaultForeground(T color);
 
 	/**
 	 * @return The default foreground color (if none was set with
@@ -132,7 +132,7 @@ public interface ISquidPanel<T> {
 	 *         with {@link #setDefaultForeground(Object)}. Cannot be
 	 *         {@code null}.
 	 */
-	public T getDefaultForegroundColor();
+	T getDefaultForegroundColor();
 
 	/**
 	 * @return The panel doing the real job, i.e. an instance of
@@ -145,6 +145,6 @@ public interface ISquidPanel<T> {
 	 *         Can be {@code this} itself.
 	 *         </p>
 	 */
-	public ISquidPanel<?> getBacker();
+	ISquidPanel<?> getBacker();
 
 }

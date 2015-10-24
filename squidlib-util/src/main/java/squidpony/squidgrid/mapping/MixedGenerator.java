@@ -3,7 +3,7 @@ package squidpony.squidgrid.mapping;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.PoissonDisk;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.RNG;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -25,13 +25,13 @@ public class MixedGenerator {
     }
     private EnumMap<CarverType, Integer> carvers;
     private int height, width;
-    public StatefulRNG rng;
+    public RNG rng;
     private char[][] dungeon;
     private boolean[][] marked;
     private List<Coord> points, starts, ends;
     private int totalPoints;
 
-    public MixedGenerator(int width, int height, StatefulRNG rng) {
+    public MixedGenerator(int width, int height, RNG rng) {
         this.height = height;
         this.width = width;
         if(width <= 2 || height <= 2)
@@ -44,8 +44,8 @@ public class MixedGenerator {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
         }
         points = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 1, height - 1),
-                Math.min(6f, Math.min(width / 7f, height / 7f)), width, height, 35, rng);
-        totalPoints = points.size() / 2;
+                Math.min(7f, (width + height) * 0.075f), width, height, 35, rng);
+        totalPoints = points.size() / 3;
         points = rng.shuffle(points);
         starts = points.subList(0, totalPoints);
         ends = points.subList(points.size() - totalPoints, points.size());
@@ -119,6 +119,7 @@ public class MixedGenerator {
                         mark(start);
                         start = start.translate(dir);
                     }
+                    markRectangle(start, 1, 1);
                     dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
                     while (!(start.x == end.x && start.y == end.y))
                     {
@@ -139,6 +140,7 @@ public class MixedGenerator {
                         mark(start);
                         start = start.translate(dir);
                     }
+                    markCircle(start, 2);
                     dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
                     while (!(start.x == end.x && start.y == end.y))
                     {
@@ -149,7 +151,6 @@ public class MixedGenerator {
             }
             store();
         }
-
 
         return dungeon;
     }
