@@ -113,7 +113,7 @@ public class PoissonDisk {
 
         Coord center = minPosition.average(maxPosition);
         Coord dimensions = maxPosition.subtract(minPosition);
-        float cellSize = Math.max(minimumDistance / rootTwo, 1f);
+        float cellSize = Math.max(minimumDistance / rootTwo, 0.25f);
         int gridWidth = (int)(dimensions.x / cellSize) + 1;
         int gridHeight = (int)(dimensions.y / cellSize) + 1;
         Coord[][] grid = new Coord[gridWidth][gridHeight];
