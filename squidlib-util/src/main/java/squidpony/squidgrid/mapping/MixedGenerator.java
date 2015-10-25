@@ -34,8 +34,8 @@ public class MixedGenerator {
 
     private static List<Coord> basicPoints(int width, int height, RNG rng)
     {
-        List<Coord> seq = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 1, height - 1),
-                6.5f, width, height, 35, rng);
+        List<Coord> seq = PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),
+                7.5f, width, height, 35, rng);
         //seq = rng.shuffle(seq);
         seq = seq.subList(0, 4 * seq.size() / 7);
         return seq;
@@ -192,6 +192,8 @@ public class MixedGenerator {
 
     private void markRectangle(Coord pos, int halfWidth, int halfHeight)
     {
+        halfWidth = halfWidth * width / 64;
+        halfHeight = halfHeight * height / 64;
         for (int i = pos.x - halfWidth; i <= pos.x + halfWidth; i++) {
             for (int j = pos.y - halfHeight; j < pos.y + halfHeight; j++) {
                 mark(i, j);
@@ -201,6 +203,7 @@ public class MixedGenerator {
     private void markCircle(Coord pos, int radius)
     {
         int high;
+        radius = radius * Math.min(width, height) / 64;
         for (int dx = -radius; dx <= radius; ++dx)
         {
             high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));
