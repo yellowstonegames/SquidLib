@@ -29,8 +29,7 @@ public class MixedGenerator {
     public RNG rng;
     private char[][] dungeon;
     private boolean[][] marked;
-    private List<Coord> starts;
-    private List<Coord> ends;
+    private List<Coord> points;
     private int totalPoints;
 
     private static List<Coord> basicPoints(int width, int height, RNG rng)
@@ -57,10 +56,8 @@ public class MixedGenerator {
         for (int i = 1; i < width; i++) {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
         }
-        List<Coord> points = new ArrayList<Coord>(sequence);
+        points = new ArrayList<Coord>(sequence);
         totalPoints = sequence.size();
-        starts = points.subList(0, totalPoints - 1);
-        ends = points.subList(1, totalPoints);
         carvers = new EnumMap<CarverType, Integer>(CarverType.class);
     }
 
@@ -94,13 +91,12 @@ public class MixedGenerator {
         }
         if(allCarvings.length == 0)
         {
-            DungeonGenerator gen = new DungeonGenerator(width, height, rng);
-            return gen.generate();
+            allCarvings = new CarverType[]{CarverType.CAVE};
         }
         allCarvings = rng.shuffle(allCarvings);
 
         for (int p = 0, c = 0; p < totalPoints - 1; p++, c = (++c) % totalLength) {
-            Coord start = starts.get(p), end = ends.get(p);
+            Coord start = points.get(p), end = points.get(p + 1);
             CarverType ct = allCarvings[c];
             Direction dir;
             switch (ct)
@@ -233,7 +229,7 @@ public class MixedGenerator {
         }
         else if (dx == 0 || dy == 0)
         {
-            int dx2 = dx, dy2 = dy;
+            int dx2 = (dx == 0) ? dx : dy, dy2 = (dx == 0) ? dy : dx;
             if (r >= (weight * 0.5))
             {
                 r -= weight * 0.5;
@@ -253,18 +249,8 @@ public class MixedGenerator {
                     dy2 *= -1;
                 }
             }
-            if (dx == 0)
-            {
-                dir = Direction.getCardinalDirection(dx2, -dy2);
-                dx = dx2;
-                dy = dy2;
-            }
-            else
-            {
-                dir = Direction.getCardinalDirection(dy2, -dx2);
-                dx = dy2;
-                dy = dx2;
-            }
+            dir = Direction.getCardinalDirection(dx2, -dy2);
+
         }
         else
         {
