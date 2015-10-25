@@ -46,10 +46,10 @@ public class SerpentMapGenerator {
         int rs2 = (int)Math.floor((height - rsum) * 0.5);
         int cs3 = (width == csum) ? 0 :  (int)Math.ceil((width - csum) * 0.5);
         int rs3 = (height == rsum) ? 0 : (int)Math.ceil((height - rsum) * 0.5);
-        columns[random.nextInt(16)] += cs2;
-        rows[random.nextInt(16)] += rs2;
-        columns[random.nextInt(16)] += cs3;
-        rows[random.nextInt(16)] += rs3;
+        columns[7] += cs2;
+        rows[7] += rs2;
+        columns[8] += cs3;
+        rows[8] += rs3;
 
         List<Coord> points = new ArrayList<Coord>(80);
         Coord temp;
@@ -57,8 +57,6 @@ public class SerpentMapGenerator {
             temp = CoordPacker.mooreToCoord(m);
             points.add(Coord.get(columns[temp.x], rows[temp.y]));
         }
-        points.add(random.between(1, points.size() - 1), points.get(random.between(1, points.size() - 1)));
-        points.add(random.between(1, points.size() - 1), points.get(random.between(1, points.size() - 1)));
         points.add(points.get(0));
         mix = new MixedGenerator(width, height, random, points);
 

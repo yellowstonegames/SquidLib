@@ -2221,7 +2221,7 @@ public class CoordPacker {
      */
     public static Coord mooreToCoord( final int moore )
     {
-        return Coord.get(hilbertX[moore % 256], hilbertY[moore % 256]);
+        return Coord.get(mooreX[moore % 256], mooreY[moore % 256]);
     }
 
 

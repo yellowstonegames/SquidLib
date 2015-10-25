@@ -74,7 +74,7 @@ import squidpony.squidmath.StatefulRNG;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 90, height = 50;
+    public static int width = 80, height = 80;
     public static void main( String[] args )
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xc00bacca));
@@ -99,7 +99,7 @@ public class DungeonGeneratorTest {
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
         serpent.putBoxRoomCarvers(2);
         serpent.putRoundRoomCarvers(1);
-        serpent.putCaveCarvers(3);
+        //serpent.putCaveCarvers(3);
         char[][] map = serpent.generate();
         dungeonGenerator.generate(map);
 
