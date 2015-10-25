@@ -43,7 +43,7 @@ public class MixedGenerator {
     private static List<Coord> basicPoints(int width, int height, RNG rng)
     {
         List<Coord> seq = PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),
-                7.5f, width, height, 35, rng);
+                7.5f * (width + height) / 120f, width, height, 35, rng);
         //seq = rng.shuffle(seq);
         seq = seq.subList(0, 4 * seq.size() / 7);
         return seq;
