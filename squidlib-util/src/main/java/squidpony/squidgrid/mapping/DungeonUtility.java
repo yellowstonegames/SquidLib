@@ -34,8 +34,8 @@ public class DungeonUtility {
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value.
      * Uses this class' rng field for pseudo-random number generation.
-     * @param map
-     * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
+     * @param map a char[][] that should contain a '.' floor tile
+     * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small
      */
     public Coord randomFloor(char[][] map)
     {
@@ -73,6 +73,21 @@ public class DungeonUtility {
                 return null;
         }
         return Coord.get(x, y);
+    }
+    /**
+     * Finds a random Coord where the x and y match up to a [x][y] location that is encoded as "on" in packed.
+     * This is useful when you have used {@code CoordPacker.pack(char[][] map, char yes)} to encode all cells in a
+     * char[][] map that match a particular type, like '.' for floors or '~' for deep water, and want to efficiently
+     * get one randomly-chosen tile from it. Calling pack() is likely slightly less efficient than using randomFloor(),
+     * but it only needs to be done once per map and cell type, and this method should be substantially more efficient
+     * when the type of cell is uncommon on the map.
+     * Uses this class' rng field for pseudo-random number generation.
+     * @param packed a packed array produced by CoordPacker encoding the cells to choose from as "on"
+     * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small
+     */
+    public Coord randomCell(short[] packed)
+    {
+        return CoordPacker.singleRandom(packed, rng);
     }
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has the same value as the
