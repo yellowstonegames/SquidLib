@@ -38,9 +38,9 @@ public class SerpentMapGenerator {
         if(width <= 2 || height <= 2)
             throw new ExceptionInInitializerError("width and height must be greater than 2");
         random = rng;
-        long columnAlterations = random.nextLong(0x10000);
+        long columnAlterations = random.nextLong(0x1000000);
         float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);
-        long rowAlterations = random.nextLong(0x10000);
+        long rowAlterations = random.nextLong(0x1000000);
         float rowBase = height / (Long.bitCount(rowAlterations) + 48.0f);
 
         columns = new int[16];
