@@ -15,6 +15,17 @@ import java.util.LinkedHashSet;
  * The primary way to create a more-complete dungeon, layering different effects and modifications on top of
  * a DungeonBoneGen's dungeon.
  *
+ * The main technique for using this is simple: Construct a DungeonGenerator, usually with the desired width and height,
+ * then call any feature adding methods that you want in the dungeon, like addWater(), addTraps, addGrass(), or
+ * addDoors(). Some of these take different parameters, like addDoors() which need to know if it should check openings
+ * that are two cells wide to add a door and a wall to, or whether it should only add doors to single-cell openings.
+ * Then call generate() to get a char[][] with the desired dungeon map, using a fixed repertoire of chars to represent
+ * the different features. After calling generate(), you can safely get the values from the stairsUp and stairsDown
+ * fields, which are Coords that should be a long distance from each other but connected in the dungeon. You may want
+ * to change those to staircase characters, but there's no requirement to do anything with them. The DungeonUtility
+ * field of this class, utility, is a convenient way of accessing the non-static methods in that class, such as
+ * randomFloor(), without needing to create another DungeonUtility (this class creates one, so you don't have to).
+ *
  * @see squidpony.squidgrid.mapping.DungeonUtility
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
@@ -58,6 +69,7 @@ public class DungeonGenerator {
     private DungeonBoneGen gen;
     public DungeonUtility utility;
     private int height, width;
+    public Coord stairsUp = null, stairsDown = null;
     public RNG rng;
 
     private char[][] dungeon = null;
@@ -371,9 +383,11 @@ public class DungeonGenerator {
 
     /**
      * Generate a char[][] dungeon using TilesetType.DEFAULT_DUNGEON; this produces a dungeon appropriate for a level
-     * of ruins or a partially constructed dungeon. This uses '#' for walls, '.' for floors, '~' for water,
-     * '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that provide vertical passage.
-     * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
+     * of ruins or a partially constructed dungeon. This uses '#' for walls, '.' for floors, '~' for deep water, ',' for
+     * shallow water, '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that provide
+     * vertical passage. Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in
+     * the generated map.
+     * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
      * @return a char[][] dungeon
      */
     public char[][] generate() {
@@ -382,9 +396,11 @@ public class DungeonGenerator {
 
     /**
      * Generate a char[][] dungeon given a TilesetType; the comments in that class provide some opinions on what
-     * each TilesetType value could be used for in a game. This uses '#' for walls, '.' for floors, '~' for water,
-     * '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that provide vertical passage.
-     * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
+     * each TilesetType value could be used for in a game. This uses '#' for walls, '.' for floors, '~' for deep water,
+     * ',' for shallow water, '^' for traps, '+' for doors that provide horizontal passage, and '/' for doors that
+     * provide vertical passage. Use the addDoors, addWater, addGrass, and addTraps methods of this class to request
+     * these in the generated map.
+     * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
      * @see squidpony.squidgrid.mapping.styled.TilesetType
      * @param kind a TilesetType enum value, such as TilesetType.DEFAULT_DUNGEON
      * @return a char[][] dungeon
@@ -398,9 +414,10 @@ public class DungeonGenerator {
      * Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated.
      * Typically, you want to call generate with a TilesetType or no argument for the easiest generation; this method
      * is meant for adding features like water and doors to existing simple maps.
-     * This uses '#' for walls, '.' for floors, '~' for water, '^' for traps, '+' for doors that provide horizontal
-     * passage, and '/' for doors that provide vertical passage.
+     * This uses '#' for walls, '.' for floors, '~' for deep water, ',' for shallow water, '^' for traps, '+' for doors
+     * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
+     * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
      * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors
      * @return a char[][] dungeon
      */
@@ -410,21 +427,38 @@ public class DungeonGenerator {
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {
-            dijkstra.setGoal(utility.randomFloor(map));
+            dijkstra.clearGoals();
+            stairsUp = utility.randomFloor(map);
+            dijkstra.setGoal(stairsUp);
             dijkstra.scan(null);
             frustrated++;
-        }while (dijkstra.getMappedCount() < width + height && frustrated < 10);
+        }while (dijkstra.getMappedCount() < width + height && frustrated < 15);
+        double maxDijkstra = 0.0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if(dijkstra.gradientMap[i][j] == DijkstraMap.DARK)
+                if(dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
+                }
+                else if(dijkstra.gradientMap[i][j] > maxDijkstra) {
+                    maxDijkstra = dijkstra.gradientMap[i][j];
+                }
             }
         }
-
+        int wmod = rng.nextInt(width), hmod = rng.nextInt(height);
+        OUTER_LOOP:
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (dijkstra.gradientMap[(i + wmod) % width][(j + hmod) % height] < DijkstraMap.FLOOR &&
+                        dijkstra.gradientMap[(i + wmod) % width][(j + hmod) % height] > maxDijkstra * 0.7) {
+                    stairsDown = Coord.get((i + wmod) % width, (j + hmod) % height);
+                    break OUTER_LOOP;
+                }
+            }
+        }
         LinkedHashSet<Coord> floors = new LinkedHashSet<Coord>();
         LinkedHashSet<Coord> doorways;
         LinkedHashSet<Coord> hazards = new LinkedHashSet<Coord>();
-        Coord temp = Coord.get(0, 0);
+        Coord temp;
         boolean doubleDoors = false;
         int doorFill = 0;
         int waterFill = 0;

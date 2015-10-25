@@ -74,10 +74,10 @@ import squidpony.squidmath.StatefulRNG;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 80, height = 80;
+    public static int width = 240, height = 240;
     public static void main( String[] args )
     {
-        StatefulRNG rng = new StatefulRNG(new LightRNG(0xc00bacca));
+        StatefulRNG rng = new StatefulRNG(new LightRNG(0xea7f00d));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
         dungeonGenerator.addDoors(15, false);
         dungeonGenerator.addWater(25);
@@ -87,15 +87,18 @@ public class DungeonGeneratorTest {
         mix.putBoxRoomCarvers(1);
         mix.putRoundRoomCarvers(2);
         dungeonGenerator.generate(mix.generate());
+        char[][] dungeon = dungeonGenerator.getDungeon();
+        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(dungeonGenerator.getDungeon())));
+                DungeonUtility.hashesToLines(dungeon)));
         System.out.println(dungeonGenerator);
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         dungeonGenerator.addDoors(15, false);
         dungeonGenerator.addWater(20);
         dungeonGenerator.addGrass(10);
-        rng.setState(0xcafed00d);
+        rng.setState(0xea7f00d);
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
         serpent.putBoxRoomCarvers(2);
         serpent.putRoundRoomCarvers(2);
@@ -103,8 +106,12 @@ public class DungeonGeneratorTest {
         char[][] map = serpent.generate();
         dungeonGenerator.generate(map);
 
+        dungeon = dungeonGenerator.getDungeon();
+        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(dungeonGenerator.getDungeon())));
+                DungeonUtility.hashesToLines(dungeon)));
         System.out.println(dungeonGenerator);
 
     }
