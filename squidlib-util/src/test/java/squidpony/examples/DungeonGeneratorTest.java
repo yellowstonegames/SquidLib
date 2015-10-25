@@ -98,8 +98,8 @@ public class DungeonGeneratorTest {
         rng.setState(0xcafed00d);
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
         serpent.putBoxRoomCarvers(2);
-        serpent.putRoundRoomCarvers(1);
-        //serpent.putCaveCarvers(3);
+        serpent.putRoundRoomCarvers(2);
+        serpent.putCaveCarvers(3);
         char[][] map = serpent.generate();
         dungeonGenerator.generate(map);
 

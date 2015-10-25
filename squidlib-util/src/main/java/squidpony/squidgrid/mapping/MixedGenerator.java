@@ -32,6 +32,14 @@ public class MixedGenerator {
     private List<Coord> points;
     private int totalPoints;
 
+    /**
+     * Internal use.
+     * @param width dungeon width in cells
+     * @param height dungeon height in cells
+     * @param rng rng to use
+     * @return evenly spaced Coord points in a list made by PoissonDisk, trimmed down so they aren't all used
+     * @see PoissonDisk used to make the list
+     */
     private static List<Coord> basicPoints(int width, int height, RNG rng)
     {
         List<Coord> seq = PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),
@@ -41,9 +49,34 @@ public class MixedGenerator {
         return seq;
     }
 
+    /**
+     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This version of the constructor uses Poisson Disk sampling to generate the points it will draw caves and
+     * corridors between, ensuring a minimum distance between points, but it does not ensure that paths between points
+     * will avoid overlapping with rooms or other paths. You call the different carver-adding methods to affect what the
+     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
+     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
+     * @param width the width of the final map in cells
+     * @param height the height of the final map in cells
+     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @see PoissonDisk used to ensure spacing for the points.
+     */
     public MixedGenerator(int width, int height, RNG rng) {
         this(width, height, rng, basicPoints(width, height, rng));
     }
+
+    /**
+     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This version of the constructor uses a List of Coord points from some other source to determine the path to add
+     * rooms or caves to and then connect. You call the different carver-adding methods to affect what the
+     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
+     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
+     * @param width the width of the final map in cells
+     * @param height the height of the final map in cells
+     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param sequence a List of Coord to connect in order; index 0 is the start, index size() - 1 is the end.
+     * @see SerpentMapGenerator a class that uses this technique
+     */
     public MixedGenerator(int width, int height, RNG rng, List<Coord> sequence) {
         this.height = height;
         this.width = width;
@@ -61,18 +94,57 @@ public class MixedGenerator {
         carvers = new EnumMap<CarverType, Integer>(CarverType.class);
     }
 
+    /**
+     * Changes the number of "carvers" that will create caves from one room to the next. If count is 0 or less, no caves
+     * will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make
+     * caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically
+     * about 30-40 rooms are carved, large totals for carver count aren't really needed; aiming for a total of 10
+     * between the count of putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers() is reasonable.
+     * @param count the number of carvers making caves between rooms; only matters in relation to other carvers
+     */
     public void putCaveCarvers(int count)
     {
         carvers.put(CarverType.CAVE, count);
     }
+    /**
+     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
+     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. If count
+     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher
+     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then
+     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
+     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
+     * and putRoundRoomCarvers() is reasonable.
+     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation
+     *              to other carvers
+     */
     public void putBoxRoomCarvers(int count)
     {
         carvers.put(CarverType.BOX, count);
     }
+
+    /**
+     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
+     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is
+     * one. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,
+     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,
+     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
+     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
+     * and putRoundRoomCarvers() is reasonable.
+     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation
+     *              to other carvers
+     */
     public void putRoundRoomCarvers(int count)
     {
         carvers.put(CarverType.ROUND, count);
     }
+
+    /**
+     * Uses the added carvers (or just makes caves if none were added) to carve from point to point in sequence, if it
+     * was provided by the constructor, or evenly-spaced randomized points if it was not. This will never carve out
+     * cells on the very edge of the map. Uses the numbers of the various kinds of carver that were added relative to
+     * each other to determine how frequently to use a given carver type.
+     * @return a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second
+     */
     public char[][] generate()
     {
         CarverType[] carvings = carvers.keySet().toArray(new CarverType[carvers.size()]);
@@ -170,6 +242,12 @@ public class MixedGenerator {
             }
         }
     }
+
+    /**
+     * Internal use. Marks a point to be made into floor.
+     * @param x x position to mark
+     * @param y y position to mark
+     */
     private void mark(int x, int y)
     {
         if(x > 0 && x < width - 1 && y > 0 && y < height - 1)
@@ -177,10 +255,20 @@ public class MixedGenerator {
         //else
         //    System.out.println("Bad mark: x:" + x + ", y:" + y);
     }
+
+    /**
+     * Internal use. Marks a point to be made into floor.
+     * @param pos position to mark
+     */
     private void mark(Coord pos)
     {
         mark(pos.x, pos.y);
     }
+
+    /**
+     * Internal use. Marks a point and the four cells orthogonally adjacent to it.
+     * @param pos center position to mark
+     */
     private void markPlus(Coord pos)
     {
         mark(pos.x, pos.y);
@@ -189,7 +277,13 @@ public class MixedGenerator {
         mark(pos.x, pos.y+1);
         mark(pos.x, pos.y-1);
     }
-
+    /**
+     * Internal use. Marks a rectangle of points centered on pos, extending halfWidth in both x directions and
+     * halfHeight in both vertical directions.
+     * @param pos center position to mark
+     * @param halfWidth the distance from the center to extend horizontally
+     * @param halfHeight the distance from the center to extend vertically
+     */
     private void markRectangle(Coord pos, int halfWidth, int halfHeight)
     {
         halfWidth = halfWidth * width / 64;
@@ -200,6 +294,12 @@ public class MixedGenerator {
             }
         }
     }
+
+    /**
+     * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement.
+     * @param pos center position to mark
+     * @param radius radius to extend in all directions from center
+     */
     private void markCircle(Coord pos, int radius)
     {
         int high;
@@ -214,6 +314,14 @@ public class MixedGenerator {
         }
     }
 
+    /**
+     * Internal use. Drunkard's walk algorithm, single step. Based on Michael Patraw's C code, used for cave carving.
+     * http://mpatraw.github.io/libdrunkard/
+     * @param current the current point
+     * @param target the point to wobble towards
+     * @param weight between 0.5 and 1.0, usually. 0.6 makes very random caves, 0.9 is almost a straight line.
+     * @return a Direction, either UP, DOWN, LEFT, or RIGHT if we should move, or NONE if we have reached our target
+     */
     private Direction stepWobbly(Coord current, Coord target, double weight)
     {
         int dx = target.x - current.x;
