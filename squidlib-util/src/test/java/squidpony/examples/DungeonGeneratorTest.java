@@ -74,7 +74,7 @@ import squidpony.squidmath.StatefulRNG;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 80, height = 80;
+    public static int width = 60, height = 60;
     public static void main( String[] args )
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xc00bacca));

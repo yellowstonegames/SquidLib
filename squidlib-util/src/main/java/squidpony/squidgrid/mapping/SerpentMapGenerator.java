@@ -37,9 +37,9 @@ public class SerpentMapGenerator {
         rows = new int[16];
         int csum = 0, rsum = 0;
         for (int i = 0, b = 7; i < 16; i++, b <<= 3) {
-            columns[i] = csum + Math.round(columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
+            columns[i] = csum + (int)(columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
             csum += (int)(columnBase * (3 + Long.bitCount(columnAlterations & b)));
-            rows[i] = rsum + Math.round(rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
+            rows[i] = rsum + (int)(rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
             rsum += (int)(rowBase * (3 + Long.bitCount(rowAlterations & b)));
         }
         int cs2 = (int)Math.floor((width - csum) * 0.5);
