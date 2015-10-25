@@ -42,6 +42,7 @@ import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -53,7 +54,7 @@ public class DijkstraBenchmark {
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
     public static final char[][] map = dungeonGen.generate();
-
+    public static final short[] floors = CoordPacker.pack(map, '.');
     public long doScan()
     {
         DijkstraMap dijkstra = new DijkstraMap(
@@ -116,7 +117,7 @@ public class DijkstraBenchmark {
                 // this should ensure no blatant correlation between R and W
                 utility.rng.setState((x << 22) | (y << 16) | (x * y));
                 ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-                r = utility.randomFloor(map);
+                r = utility.randomCell(floors);
                 dijkstra.findPath(PATH_LENGTH, null, null, r, Coord.get(x, y));
                 dijkstra.clearGoals();
                 dijkstra.resetMap();

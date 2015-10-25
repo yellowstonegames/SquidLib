@@ -16,6 +16,7 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -75,7 +76,8 @@ public class SquidAIDemo extends ApplicationAdapter {
         cache = new FOVCache(bareDungeon, 9, Radius.CIRCLE);
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(bareDungeon));
-        char[][] placement = DungeonUtility.closeDoors(bareDungeon);
+        // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
+        short[] placement = CoordPacker.pack(bareDungeon, '.');
 
 
         teamRed = new LinkedHashMap<AnimatedEntity, Integer>(numMonsters);
@@ -85,13 +87,15 @@ public class SquidAIDemo extends ApplicationAdapter {
         bluePlaces = new LinkedHashSet<Coord>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Coord monPos = dungeonGen.utility.randomFloor(placement);
-            placement[monPos.x][monPos.y] = 'R';
+            Coord monPos = dungeonGen.utility.randomCell(placement);
+            placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
+
             teamRed.put(display.animateActor(monPos.x, monPos.y, "50", 11, true), 50);
             redPlaces.add(monPos);
 
-            Coord monPosBlue = dungeonGen.utility.randomFloor(placement);
-            placement[monPosBlue.x][monPosBlue.y] = 'B';
+            Coord monPosBlue = dungeonGen.utility.randomCell(placement);
+            placement = CoordPacker.removePacked(placement, monPosBlue.x, monPosBlue.y);
+
             teamBlue.put(display.animateActor(monPosBlue.x, monPosBlue.y, "50", 25, true), 50);
             bluePlaces.add(monPosBlue);
         }

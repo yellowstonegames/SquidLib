@@ -19,6 +19,7 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.MixedGenerator;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
@@ -96,15 +97,16 @@ public class EverythingDemo extends ApplicationAdapter {
         //bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
-        char[][] placement = DungeonUtility.closeDoors(bareDungeon);
-        Coord pl = dungeonGen.utility.randomFloor(placement);
-        placement[pl.x][pl.y] = '@';
+        // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
+        short[] placement = CoordPacker.pack(bareDungeon, '.');
+        Coord pl = dungeonGen.utility.randomCell(placement);
+        placement = CoordPacker.removePacked(placement, pl.x, pl.y);
         int numMonsters = 25;
         monsters = new HashMap<AnimatedEntity, Integer>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Coord monPos = dungeonGen.utility.randomFloor(placement);
-            placement[monPos.x][monPos.y] = 'M';
+            Coord monPos = dungeonGen.utility.randomCell(placement);
+            placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
             monsters.put(display.animateActor(monPos.x, monPos.y, 'M', 11), 0);
 
         }
