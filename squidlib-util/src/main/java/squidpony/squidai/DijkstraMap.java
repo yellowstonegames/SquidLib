@@ -5,6 +5,7 @@ import squidpony.squidgrid.LOS;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.*;
 
@@ -740,6 +741,143 @@ public class DijkstraMap
             System.arraycopy(gradientMap[x], 0, gradientClone[x], 0, height);
         }
         return gradientClone;
+    }
+
+    /**
+     * Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first target found.
+     * This uses the current measurement.
+     *
+     * @param start the cell to use as the origin for finding the nearest target
+     * @param targets the Coords that this is trying to find; it will stop once it finds one
+     * @return the Coord that it found first.
+     */
+    public Coord findNearest(Coord start, Set<Coord> targets) {
+        if(!initialized) return null;
+        if(targets == null)
+            return null;
+        Coord start2 = start;
+        while (physicalMap[start.x][start.y] >= FLOOR && frustration < 50)
+        {
+            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(15) - 7), width - 2),
+                    Math.min(Math.max(1, start.y + rng.nextInt(15) - 7), height - 2));
+        }
+        if(closed.containsKey(start2))
+            closed.remove(start2);
+        gradientMap[start2.x][start2.y] = 0.0;
+        double currentLowest = 999000;
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.get(x, y)))
+                    closed.put(Coord.get(x, y), physicalMap[x][y]);
+            }
+        }
+        int numAssigned = 1;
+        mappedCount = 1;
+        open.put(start2, 0.0);
+
+        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        while (numAssigned > 0) {
+//            ++iter;
+            numAssigned = 0;
+
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
+                for (int d = 0; d < dirs.length; d++) {
+                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
+                    double h = heuristic(dirs[d]);
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
+                        ++numAssigned;
+                        ++mappedCount;
+                        if (targets.contains(adj)) {
+                            fresh.clear();
+                            closed.clear();
+                            open.clear();
+                            return adj;
+                        }
+                    }
+                }
+            }
+//            closed.putAll(open);
+            open = new LinkedHashMap<Coord, Double>(fresh);
+            fresh.clear();
+        }
+        closed.clear();
+        open.clear();
+        return null;
+    }
+
+    /**
+     * Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first several targets found,
+     * up to limit or less if the map is fully searched without finding enough.
+     * This uses the current measurement.
+     *
+     * @param start the cell to use as the origin for finding the nearest targets
+     * @param limit the maximum number of targets to find before returning
+     * @param targets the Coords that this is trying to find; it will stop once it finds enough (based on limit)
+     * @return the Coord that it found first.
+     */
+    public ArrayList<Coord> findNearestMultiple(Coord start, int limit, Set<Coord> targets) {
+        if(!initialized) return null;
+        if(targets == null)
+            return null;
+
+        Coord start2 = start;
+        while (physicalMap[start.x][start.y] >= FLOOR && frustration < 50)
+        {
+            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(15) - 7), width - 2),
+                    Math.min(Math.max(1, start.y + rng.nextInt(15) - 7), height - 2));
+        }
+        if(closed.containsKey(start2))
+            closed.remove(start2);
+        gradientMap[start2.x][start2.y] = 0.0;
+        double currentLowest = 999000;
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.get(x, y)))
+                    closed.put(Coord.get(x, y), physicalMap[x][y]);
+            }
+        }
+        int numAssigned = 1;
+        mappedCount = 1;
+        open.put(start2, 0.0);
+        ArrayList<Coord> found = new ArrayList<Coord>(limit);
+
+        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        while (numAssigned > 0) {
+//            ++iter;
+            numAssigned = 0;
+
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
+                for (int d = 0; d < dirs.length; d++) {
+                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
+                    double h = heuristic(dirs[d]);
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
+                        ++numAssigned;
+                        ++mappedCount;
+                        if (targets.contains(adj)) {
+                            found.add(adj);
+                            if (found.size() >= limit) {
+                                fresh.clear();
+                                open.clear();
+                                closed.clear();
+                                return found;
+                            }
+                        }
+                    }
+                }
+            }
+//            closed.putAll(open);
+            open = new LinkedHashMap<Coord, Double>(fresh);
+            fresh.clear();
+        }
+        closed.clear();
+        open.clear();
+        return found;
     }
 
     /**
@@ -2063,6 +2201,58 @@ public class DijkstraMap
                 }
                 break;
             }
+        }
+        frustration = 0;
+        goals.clear();
+        return path;
+    }
+
+
+    /**
+     * Intended primarily for internal use. Needs scan() to already be called and at least one goal to already be set,
+     * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.
+     * @param target the target cell
+     * @return an ArrayList of Coord that make up the best path.
+     */
+    public ArrayList<Coord> findPathPreScanned(Coord target) {
+        if(!initialized || goals == null || goals.isEmpty()) return null;
+        RNG rng2 = new StatefulRNG(new LightRNG(0xf00d));
+        path = new ArrayList<Coord>();
+        Coord currentPos = target;
+        double paidLength = 0.0;
+        while (true) {
+            if (frustration > 2000) {
+                path = new ArrayList<Coord>();
+                break;
+            }
+            double best = gradientMap[currentPos.x][currentPos.y];
+            Direction[] dirs0 = rng2.shuffle((measurement == Measurement.MANHATTAN)
+                    ? Direction.CARDINALS : Direction.OUTWARDS);
+            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
+            dirs[dirs0.length] = Direction.NONE;
+            int choice = rng2.nextInt(dirs.length);
+
+            for (int d = 0; d < dirs.length; d++) {
+                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best) {
+                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
+                        best = gradientMap[pt.x][pt.y];
+                        choice = d;
+                    }
+                }
+            }
+
+            if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
+                path = new ArrayList<Coord>();
+                break;
+            }
+            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
+            path.add(0, currentPos);
+            paidLength += costMap[currentPos.x][currentPos.y];
+            frustration++;
+
+            if(gradientMap[currentPos.x][currentPos.y] == 0)
+                break;
         }
         frustration = 0;
         goals.clear();

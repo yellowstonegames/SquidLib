@@ -243,6 +243,18 @@ public class StatefulRNG extends RNG {
     }
 
     /**
+     * Returns a random long below the given bound, or 0 if the bound is 0 or
+     * negative.
+     *
+     * @param bound the upper bound (exclusive)
+     * @return the found number
+     */
+    @Override
+    public long nextLong(long bound) {
+        return super.nextLong(bound);
+    }
+
+    /**
      * Returns a random integer below the given bound, or 0 if the bound is 0 or
      * negative.
      *
@@ -276,6 +288,46 @@ public class StatefulRNG extends RNG {
     @Override
     public void setRandomness(RandomnessSource random) {
         super.setRandomness((random instanceof StatefulRandomness) ? random : new LightRNG(random.next(32)));
+    }
+
+    /**
+     * Gets a random portion of an array and returns it as a new array. Will only use a given position in the given
+     * array at most once; does this by shuffling a copy of the array and getting a section of it.
+     *
+     * @param data  an array of T; will not be modified.
+     * @param count the non-negative number of elements to randomly take from data
+     * @return an array of T that has length equal to the smaller of count or data.length
+     */
+    @Override
+    public <T> T[] randomPortion(T[] data, int count) {
+        return super.randomPortion(data, count);
+    }
+
+    /**
+     * Gets a random portion of a List and returns it as a new List. Will only use a given position in the given
+     * List at most once; does this by shuffling a copy of the List and getting a section of it.
+     *
+     * @param data  a List of T; will not be modified.
+     * @param count the non-negative number of elements to randomly take from data
+     * @return a List of T that has length equal to the smaller of count or data.length
+     */
+    @Override
+    public <T> List<T> randomPortion(List<T> data, int count) {
+        return super.randomPortion(data, count);
+    }
+
+    /**
+     * Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.
+     * May return an empty array if the parameters are invalid (end is less than/equal to start, or start is negative).
+     *
+     * @param start the start of the range of numbers to potentially use (inclusive)
+     * @param end   the end of the range of numbers to potentially use (exclusive)
+     * @param count the total number of elements to use; will be less if the range is smaller than count
+     * @return an int array that contains at most one of each number in the range
+     */
+    @Override
+    public int[] randomRange(int start, int end, int count) {
+        return super.randomRange(start, end, count);
     }
 
     /**
