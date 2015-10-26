@@ -319,7 +319,7 @@ public class RNG {
     }
     /**
      * Shuffle a {@link List} using the Fisher-Yates algorithm.
-     * @param elements an array of T; will not be modified
+     * @param elements a List of T; will not be modified
      * @param <T> can be any non-primitive type.
      * @return a shuffled ArrayList containing the whole of elements in pseudo-random order.
      */
@@ -333,6 +333,64 @@ public class RNG {
         }
         return al;
     }
+
+    /**
+     * Gets a random portion of an array and returns it as a new array. Will only use a given position in the given
+     * array at most once; does this by shuffling a copy of the array and getting a section of it.
+     * @param data an array of T; will not be modified.
+     * @param count the non-negative number of elements to randomly take from data
+     * @param <T> can be any non-primitive type.
+     * @return an array of T that has length equal to the smaller of count or data.length
+     */
+    public <T> T[] randomPortion(T[] data, int count)
+    {
+        T[] array = Arrays.copyOfRange(data, 0, Math.min(count, data.length));
+        System.arraycopy(shuffle(data), 0, array, 0, Math.min(count, data.length));
+        return array;
+    }
+
+    /**
+     * Gets a random portion of a List and returns it as a new List. Will only use a given position in the given
+     * List at most once; does this by shuffling a copy of the List and getting a section of it.
+     * @param data a List of T; will not be modified.
+     * @param count the non-negative number of elements to randomly take from data
+     * @param <T> can be any non-primitive type
+     * @return a List of T that has length equal to the smaller of count or data.length
+     */
+    public <T> List<T> randomPortion(List<T> data, int count)
+    {
+        return shuffle(data).subList(0, Math.min(count, data.size()));
+    }
+
+    /**
+     * Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.
+     * May return an empty array if the parameters are invalid (end is less than/equal to start, or start is negative).
+     * @param start the start of the range of numbers to potentially use (inclusive)
+     * @param end  the end of the range of numbers to potentially use (exclusive)
+     * @param count the total number of elements to use; will be less if the range is smaller than count
+     * @return an int array that contains at most one of each number in the range
+     */
+    public int[] randomRange(int start, int end, int count)
+    {
+        if(end <= start || start < 0)
+            return new int[0];
+        int[] data = new int[end - start];
+        for (int e = start, i = 0; e < end; e++) {
+            data[i++] = e;
+        }
+        int n = data.length;
+        for (int i = 0; i < n; i++)
+        {
+            int r = i + nextInt(n - i);
+            int t = data[r];
+            data[r] = data[i];
+            data[i] = t;
+        }
+        int[] array = new int[Math.min(count, n)];
+        System.arraycopy(data, 0, array, 0, Math.min(count, n));
+        return array;
+    }
+
     /**
      * @return a value from the gaussian distribution
      */
