@@ -839,10 +839,6 @@ public class DijkstraMap
         if(targets.length == 0)
             return path;
         Coord currentPos = findNearest(start, targets);
-
-        if(currentPos == null)
-            System.out.println("HUH???");
-        double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
                 path = new ArrayList<Coord>();
@@ -873,7 +869,6 @@ public class DijkstraMap
             if(gradientMap[currentPos.x][currentPos.y] == 0)
                 break;
             path.add(currentPos);
-            paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
         }
         frustration = 0;
@@ -896,7 +891,9 @@ public class DijkstraMap
         if(!initialized) return null;
         if(targets == null)
             return null;
-
+        ArrayList<Coord> found = new ArrayList<Coord>(limit);
+        if(targets.contains(start))
+            return found;
         Coord start2 = start;
         while (physicalMap[start.x][start.y] >= WALL && frustration < 50)
         {
@@ -907,7 +904,6 @@ public class DijkstraMap
         if(closed.containsKey(start2))
             closed.remove(start2);
         gradientMap[start2.x][start2.y] = 0.0;
-        double currentLowest = 999000;
         LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
 
         for (int y = 0; y < height; y++) {
@@ -919,7 +915,6 @@ public class DijkstraMap
         int numAssigned = 1;
         mappedCount = 1;
         open.put(start2, 0.0);
-        ArrayList<Coord> found = new ArrayList<Coord>(limit);
 
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (numAssigned > 0) {
