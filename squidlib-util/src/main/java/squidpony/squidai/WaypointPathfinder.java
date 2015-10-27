@@ -5,11 +5,13 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.PoissonDisk;
 import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.*;
 
 /**
- * Meant to make DijkstraMap scans less expensive on large maps.
+ * Pathfind to known connections between rooms or other "chokepoints" without needing full-map Dijkstra scans.
+ * Pre-calculates a path either from or to any given chokepoint to each other chokepoint.
  * Created by Tommy Ettinger on 10/25/2015.
  */
 public class WaypointPathfinder {
@@ -21,9 +23,20 @@ public class WaypointPathfinder {
     private RNG rng;
     private LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>> waypoints;
 
+    /**
+     * Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
+     * Will use the given Radius enum to determine how to handle DijkstraMap measurement in future pathfinding.
+     * Uses rng for all random choices, or a new unseeded RNG if the parameter is null.
+     * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.
+     * @param measurement a Radius that should correspond to how you want path distance calculated.
+     * @param rng an RNG object or null (which will make this use a new RNG); will be used for all random choices
+     */
     public WaypointPathfinder(char[][] map, Radius measurement, RNG rng)
     {
-        this.rng = rng;
+        if(rng == null)
+            this.rng = new StatefulRNG();
+        else
+            this.rng = rng;
         this.map = map;
         width = map.length;
         height = map[0].length;
@@ -108,6 +121,15 @@ public class WaypointPathfinder {
 
     }
 
+    /**
+     * Finds the appropriate one of the already-calculated, possibly-long paths this class stores to get from a waypoint
+     * to another waypoint, then quickly finds a path to get on the long path, and returns the total path. This does
+     * not need to perform any full-map scans with DijkstraMap.
+     * @param self the pathfinder's position
+     * @param approximateTarget the Coord that represents the approximate area to pathfind to; will be randomized if
+     *                          it is not walkable.
+     * @return an ArrayList of Coord that will go from a cell adjacent to self to a waypoint near approximateTarget
+     */
     public ArrayList<Coord> getKnownPath(Coord self, Coord approximateTarget) {
         ArrayList<Coord> near = dm.findNearestMultiple(approximateTarget, 5, waypoints.keySet());
         Coord me = dm.findNearest(self, waypoints.keySet());
@@ -118,17 +140,37 @@ public class WaypointPathfinder {
             Arrays.sort(ed);
             path = ed[0].path;
         } else {
-            for (Coord best : near) {
-                if (waypoints.containsKey(best)) {
-                    if (waypoints.get(best).get(me).cost < bestCost) {
-                        bestCost = waypoints.get(best).get(me).cost;
-                        path = new ArrayList<Coord>(waypoints.get(best).get(me).path);
+            for (Coord test : near) {
+                if (waypoints.containsKey(test)) {
+                    Edge ed = waypoints.get(test).get(me);
+                    if (ed.cost < bestCost) {
+                        bestCost = ed.cost;
+                        path = new ArrayList<Coord>(ed.path);
                     }
                 }
             }
             Collections.reverse(path);
         }
+        ArrayList<Coord> getToPath = dm.findShortcutPath(self, path.toArray(new Coord[path.size()]));
+        if(getToPath.size() > 0) {
+            getToPath.remove(getToPath.size() - 1);
+            getToPath.addAll(path);
+            path = getToPath;
+        }
         return path;
+    }
+
+    /**
+     * If a creature is interrupted or obstructed on a "highway" path, it may need to travel off the path to its goal.
+     * This method gets a straight-line path back to the path to goal. It does not contain the "highway" path, only the
+     * "on-ramp" to enter the ideal path.
+     * @param currentPosition the current position of the pathfinder, which is probably not on the ideal path
+     * @param path the ideal path, probably returned by getKnownPath
+     * @return an ArrayList of Coord that go from a cell adjacent to currentPosition to a Coord on or adjacent to path.
+     */
+    public ArrayList<Coord> goBackToPath(Coord currentPosition, ArrayList<Coord> path)
+    {
+        return dm.findShortcutPath(currentPosition, path.toArray(new Coord[path.size()]));
     }
 
     private static class Edge implements Comparable<Edge>
