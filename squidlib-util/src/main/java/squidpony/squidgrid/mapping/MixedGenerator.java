@@ -164,8 +164,10 @@ public class MixedGenerator {
         if(allCarvings.length == 0)
         {
             allCarvings = new CarverType[]{CarverType.CAVE};
+            totalLength = 1;
         }
-        allCarvings = rng.shuffle(allCarvings);
+        else
+            allCarvings = rng.shuffle(allCarvings);
 
         for (int p = 0, c = 0; p < totalPoints - 1; p++, c = (++c) % totalLength) {
             Coord start = points.get(p), end = points.get(p + 1);

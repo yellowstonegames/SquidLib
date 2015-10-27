@@ -1,11 +1,14 @@
 package squidpony.performance;
 
-import squidpony.squidai.DijkstraMap;
-import squidpony.squidgrid.mapping.DungeonGenerator;
+import squidpony.squidai.WaypointPathfinder;
+import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
+
+import java.util.ArrayList;
 
 /**
  * a simple performance test
@@ -14,10 +17,8 @@ import squidpony.squidmath.StatefulRNG;
  * <ul>
  * <li>generate dungeon</li>
  * <li>for every walkable cell <b>W</b> in the dungeon:</li>
- * <li>
  * <ul>
- * <li>generate a random walkable cell <b>R</b> using DungeonUtility.randomFloor
- * </li>
+ * <li>generate a random walkable cell <b>R</b> using DungeonUtility.randomFloor</li>
  * <li>compute DijkstraMap, spanning the entire dungeon level, with the goals
  * being <b>W</b> and <b>R</b></li>
  * <li>compute path using findPath from <b>W</b> to <b>R</b></li>
@@ -29,20 +30,20 @@ import squidpony.squidmath.StatefulRNG;
  * @author Tommy Ettinger
  *
  */
-final class DijkstraPerformanceTest extends AbstractPerformanceTest {
+final class WaypointPerformanceTest extends AbstractPerformanceTest {
 	// a 60 * 60 map should be more taxing
-	private static final int DIMENSION = 160, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
-	private final char[][] maps;
+	private static final int DIMENSION = 160;
+	private final SerpentMapGenerator generator;
 
-	DijkstraPerformanceTest() {
-		final DungeonGenerator generator = new DungeonGenerator(DIMENSION, DIMENSION, RNG);
-		maps = generator.generate();
+	public WaypointPerformanceTest() {
+		generator = new SerpentMapGenerator(DIMENSION, DIMENSION, RNG);
+        generator.putBoxRoomCarvers(1);
 		createThreadList();
 	}
 
 	@Override
 	protected AbstractPerformanceUnit createWorkUnit() {
-		return new Test(maps);
+		return new Test(generator);
 	}
 
 	/**
@@ -54,33 +55,31 @@ final class DijkstraPerformanceTest extends AbstractPerformanceTest {
 	private static final class Test extends AbstractPerformanceUnit {
 
 		private char[][] map;
-		private DijkstraMap dijkstra;
+		private WaypointPathfinder pathfinder;
 		private DungeonUtility utility;
 
-		public Test(char[][] m) {
-			map = m;
-			dijkstra = new DijkstraMap(map, new StatefulRNG(new LightRNG(0x1337BEEF)));
+		public Test(SerpentMapGenerator m) {
+			map = m.generate();
 			utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEF)));
 		}
 
 		@Override
 		protected void doWork() {
-			Coord r;
-
+			Coord r, s;
+            ArrayList<Coord> path;
+			pathfinder = new WaypointPathfinder(map, Radius.DIAMOND, new StatefulRNG(new LightRNG(0x1337BEEF)));
 			for (int x = 1; x < DIMENSION - 1; x++) {
 				for (int y = 1; y < DIMENSION - 1; y++) {
 					if (map[x][y] == '#')
 						continue;
+
+                    s = Coord.get(x, y);
 					// this should ensure no blatant correlation between R and W
 					utility.rng.setState((x << 22) | (y << 16) | (x * y));
-					((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
+					((StatefulRNG) pathfinder.rng).setState((x << 20) | (y << 14) | (x * y));
 					r = utility.randomFloor(map);
-					dijkstra.setGoal(x, y);
-					dijkstra.setGoal(r);
-					dijkstra.scan(null);
-					dijkstra.clearGoals();
-					dijkstra.findPath(PATH_LENGTH, null, null, Coord.get(x, y), r);
-				}
+					path = pathfinder.getKnownPath(s, r);
+                }
 			}
 		}
 

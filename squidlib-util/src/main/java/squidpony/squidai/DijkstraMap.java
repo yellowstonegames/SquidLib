@@ -755,9 +755,12 @@ public class DijkstraMap
         if(!initialized) return null;
         if(targets == null)
             return null;
+        if(targets.contains(start))
+            return start;
+        resetMap();
         Coord start2 = start;
         int xShift = width / 8, yShift = height / 8;
-        while (physicalMap[start.x][start.y] >= FLOOR && frustration < 50)
+        while (physicalMap[start.x][start.y] >= WALL && frustration < 50)
         {
             start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(1 + xShift * 2) - xShift), width - 2),
                     Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
@@ -833,8 +836,12 @@ public class DijkstraMap
     public ArrayList<Coord> findShortcutPath(Coord start, Coord... targets)
     {
         ArrayList<Coord> path = new ArrayList<Coord>(32);
+        if(targets.length == 0)
+            return path;
         Coord currentPos = findNearest(start, targets);
 
+        if(currentPos == null)
+            System.out.println("HUH???");
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
@@ -891,10 +898,11 @@ public class DijkstraMap
             return null;
 
         Coord start2 = start;
-        while (physicalMap[start.x][start.y] >= FLOOR && frustration < 50)
+        while (physicalMap[start.x][start.y] >= WALL && frustration < 50)
         {
             start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(15) - 7), width - 2),
                     Math.min(Math.max(1, start.y + rng.nextInt(15) - 7), height - 2));
+            frustration++;
         }
         if(closed.containsKey(start2))
             closed.remove(start2);
@@ -2322,7 +2330,6 @@ public class DijkstraMap
                 break;
         }
         frustration = 0;
-        goals.clear();
         return path;
     }
 
