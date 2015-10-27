@@ -23,7 +23,7 @@ abstract class AbstractPerformanceTest {
 	protected static final RNG RNG = new RNG(SOURCE);
 
 	protected static final int NUM_THREADS = 8;
-	protected static final int NUM_TASKS = 100;
+	protected static final int NUM_TASKS = 1;
 
 	protected final List<AbstractPerformanceUnit> tasks = new ArrayList<AbstractPerformanceUnit>();
 

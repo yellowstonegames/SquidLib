@@ -20,7 +20,7 @@ public class WaypointPathfinder {
     private DijkstraMap dm;
     private char[][] map;
     private int[][] expansionMap;
-    private RNG rng;
+    public RNG rng;
     private LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>> waypoints;
 
     /**
@@ -51,8 +51,7 @@ public class WaypointPathfinder {
         for (Coord center : centers) {
             dm.clearGoals();
             dm.resetMap();
-            Coord c = center;
-            dm.setGoal(c);
+            dm.setGoal(center);
             dm.scan(null);
             double current;
             for (int i = 0; i < width; i++) {
@@ -122,6 +121,97 @@ public class WaypointPathfinder {
     }
 
     /**
+     * Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
+     * Will use the given DijkstraMap for pathfinding after construction (and during some initial calculations).
+     * The dijkstra parameter will be mutated by this class, so it should not be reused elsewhere.
+     * Uses rng for all random choices, or a new unseeded RNG if the parameter is null.
+     * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs
+     * @param dijkstra a DijkstraMap that will be used to find paths; may have costs but they will not be used
+     * @param rng an RNG object or null (which will make this use a new RNG); will be used for all random choices
+     */
+    public WaypointPathfinder(char[][] map, DijkstraMap dijkstra, RNG rng)
+    {
+        if(rng == null)
+            this.rng = new StatefulRNG();
+        else
+            this.rng = rng;
+        this.map = map;
+        width = map.length;
+        height = map[0].length;
+        char[][] simplified = DungeonUtility.simplifyDungeon(map);
+        ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
+                Math.min(width, height) * 0.25f, this.rng, '#');
+        int centerCount = centers.size();
+        expansionMap = new int[width][height];
+        waypoints = new LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>>(64);
+        dm = new DijkstraMap(simplified, DijkstraMap.Measurement.CHEBYSHEV);
+
+        for (Coord center : centers) {
+            dm.clearGoals();
+            dm.resetMap();
+            dm.setGoal(center);
+            dm.scan(null);
+            double current;
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    current = dm.gradientMap[i][j];
+                    if (current >= DijkstraMap.FLOOR)
+                        continue;
+                    for (int k = -1; k <= 1; k++) {
+                        for (int l = -1; l <= 1; l++) {
+                            if (dm.gradientMap[i + k][j + l] == current)
+                                expansionMap[i][j]++;
+                        }
+                    }
+                }
+            }
+        }
+        LinkedHashSet<Coord> chokes = new LinkedHashSet<Coord>(128);
+        for (int i = 0; i < width; i++) {
+            ELEMENT_WISE:
+            for (int j = 0; j < height; j++) {
+                if(expansionMap[i][j] <= 0)
+                    continue;
+                int current = expansionMap[i][j];
+                boolean good = false;
+                for (int k = -1; k <= 1; k++) {
+                    for (int l = -1; l <= 1; l++) {
+                        if (expansionMap[i + k][j + l] > 0 && expansionMap[i + k][j + l] >= current + centerCount - 1) {
+                            if(chokes.contains(Coord.get(i + k, j + l)))
+                                continue ELEMENT_WISE;
+                            if (expansionMap[i - k][j - l] > 0 && expansionMap[i - k][j - l] >= current) {
+                                good = true;
+                            }
+                        }
+                    }
+                }
+                if(good) {
+                    Coord chk = Coord.get(i, j);
+                    chokes.add(chk);
+                    waypoints.put(chk, new LinkedHashMap<Coord, Edge>());
+                }
+            }
+        }
+        dm = dijkstra;
+        int e = 0;
+        for(Map.Entry<Coord, LinkedHashMap<Coord, Edge>> n : waypoints.entrySet())
+        {
+            chokes.remove(n.getKey());
+            if(chokes.isEmpty())
+                break;
+            dm.clearGoals();
+            dm.resetMap();
+            dm.setGoal(n.getKey());
+            dm.scan(null);
+            for(Coord c : chokes)
+            {
+                n.getValue().put(c, new Edge(n.getKey(), c, dm.findPathPreScanned(c), dm.gradientMap[c.x][c.y]));
+            }
+        }
+
+    }
+
+    /**
      * Finds the appropriate one of the already-calculated, possibly-long paths this class stores to get from a waypoint
      * to another waypoint, then quickly finds a path to get on the long path, and returns the total path. This does
      * not need to perform any full-map scans with DijkstraMap.
@@ -135,24 +225,36 @@ public class WaypointPathfinder {
         Coord me = dm.findNearest(self, waypoints.keySet());
         double bestCost = 999999.0;
         ArrayList<Coord> path = new ArrayList<Coord>();
-        if (waypoints.containsKey(me)) {
+        /*if (waypoints.containsKey(me)) {
             Edge[] ed = waypoints.get(me).values().toArray(new Edge[waypoints.get(me).size()]);
             Arrays.sort(ed);
             path = ed[0].path;
-        } else {
-            for (Coord test : near) {
-                if (waypoints.containsKey(test)) {
-                    Edge ed = waypoints.get(test).get(me);
-                    if (ed.cost < bestCost) {
-                        bestCost = ed.cost;
-                        path = new ArrayList<Coord>(ed.path);
-                    }
+        */
+        boolean reversed = false;
+        for (Coord test : near) {
+            if (waypoints.containsKey(test)) {
+                Edge ed;
+                if(waypoints.get(test).containsKey(me)) {
+                    ed = waypoints.get(test).get(me);
+                    reversed = true;
+                }
+                else if(waypoints.containsKey(me) && waypoints.get(me).containsKey(test))
+                    ed = waypoints.get(me).get(test);
+                else
+                    continue;
+                if (ed.cost < bestCost) {
+                    bestCost = ed.cost;
+                    path = new ArrayList<Coord>(ed.path);
                 }
             }
-            Collections.reverse(path);
         }
+        if(path.isEmpty())
+            return path;
+        if(reversed)
+            Collections.reverse(path);
         ArrayList<Coord> getToPath = dm.findShortcutPath(self, path.toArray(new Coord[path.size()]));
-        if(getToPath.size() > 0) {
+        if (getToPath.size() > 0)
+        {
             getToPath.remove(getToPath.size() - 1);
             getToPath.addAll(path);
             path = getToPath;
@@ -171,6 +273,11 @@ public class WaypointPathfinder {
     public ArrayList<Coord> goBackToPath(Coord currentPosition, ArrayList<Coord> path)
     {
         return dm.findShortcutPath(currentPosition, path.toArray(new Coord[path.size()]));
+    }
+
+    public LinkedHashSet<Coord> getWaypoints()
+    {
+        return new LinkedHashSet<Coord>(waypoints.keySet());
     }
 
     private static class Edge implements Comparable<Edge>

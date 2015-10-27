@@ -46,7 +46,8 @@ public class SerpentMapGenerator {
         columns = new int[16];
         rows = new int[16];
         int csum = 0, rsum = 0;
-        for (int i = 0, b = 7; i < 16; i++, b <<= 3) {
+        long b = 7;
+        for (int i = 0; i < 16; i++, b <<= 3) {
             columns[i] = csum + (int)(columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
             csum += (int)(columnBase * (3 + Long.bitCount(columnAlterations & b)));
             rows[i] = rsum + (int)(rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
@@ -56,10 +57,14 @@ public class SerpentMapGenerator {
         int rs2 = (int)Math.floor((height - rsum) * 0.5);
         int cs3 = (width == csum) ? 0 :  (int)Math.ceil((width - csum) * 0.5);
         int rs3 = (height == rsum) ? 0 : (int)Math.ceil((height - rsum) * 0.5);
-        columns[7] += cs2;
-        rows[7] += rs2;
-        columns[8] += cs3;
-        rows[8] += rs3;
+        for (int i = 7; i < 16; i++) {
+            columns[i] += cs2;
+            rows[i] += cs2;
+        }
+        for (int i = 8; i < 16; i++) {
+            columns[i] += cs3;
+            rows[i] += cs3;
+        }
 
         List<Coord> points = new ArrayList<Coord>(80);
         Coord temp;
