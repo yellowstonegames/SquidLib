@@ -756,15 +756,15 @@ public class DijkstraMap
         if(targets == null)
             return null;
         Coord start2 = start;
+        int xShift = width / 8, yShift = height / 8;
         while (physicalMap[start.x][start.y] >= FLOOR && frustration < 50)
         {
-            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(15) - 7), width - 2),
-                    Math.min(Math.max(1, start.y + rng.nextInt(15) - 7), height - 2));
+            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(1 + xShift * 2) - xShift), width - 2),
+                    Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
         }
         if(closed.containsKey(start2))
             closed.remove(start2);
         gradientMap[start2.x][start2.y] = 0.0;
-        double currentLowest = 999000;
         LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
 
         for (int y = 0; y < height; y++) {
@@ -786,7 +786,8 @@ public class DijkstraMap
                 for (int d = 0; d < dirs.length; d++) {
                     Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
-                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) &&
+                            gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
@@ -806,6 +807,72 @@ public class DijkstraMap
         closed.clear();
         open.clear();
         return null;
+    }
+
+    /**
+     * Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first target found.
+     * This uses the current measurement.
+     *
+     * @param start the cell to use as the origin for finding the nearest target
+     * @param targets the Coords that this is trying to find; it will stop once it finds one
+     * @return the Coord that it found first.
+     */
+    public Coord findNearest(Coord start, Coord... targets) {
+        LinkedHashSet<Coord> tgts = new LinkedHashSet<Coord>(targets.length);
+        Collections.addAll(tgts, targets);
+        return findNearest(start, tgts);
+    }
+    /**
+     * If you have a target or group of targets you want to pathfind to without scanning the full map, this can be good.
+     * It may find sub-optimal paths in the presence of costs to move into cells. It is useful when you want to move in
+     * a straight line to a known nearby goal.
+     * @param start your starting location
+     * @param targets an array or vararg of Coords to pathfind to the nearest of
+     * @return an ArrayList of Coord that goes from a cell adjacent to start and goes to one of the targets.
+     */
+    public ArrayList<Coord> findShortcutPath(Coord start, Coord... targets)
+    {
+        ArrayList<Coord> path = new ArrayList<Coord>(32);
+        Coord currentPos = findNearest(start, targets);
+
+        double paidLength = 0.0;
+        while (true) {
+            if (frustration > 500) {
+                path = new ArrayList<Coord>();
+                break;
+            }
+            double best = gradientMap[currentPos.x][currentPos.y];
+            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
+                    ? Direction.CARDINALS : Direction.OUTWARDS);
+            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
+            dirs[dirs0.length] = Direction.NONE;
+            int choice = rng.nextInt(dirs.length);
+
+            for (int d = 0; d < dirs.length; d++) {
+                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best) {
+                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
+                        best = gradientMap[pt.x][pt.y];
+                        choice = d;
+                    }
+                }
+            }
+
+            if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
+                path = new ArrayList<Coord>();
+                break;
+            }
+            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
+            if(gradientMap[currentPos.x][currentPos.y] == 0)
+                break;
+            path.add(currentPos);
+            paidLength += costMap[currentPos.x][currentPos.y];
+            frustration++;
+        }
+        frustration = 0;
+        Collections.reverse(path);
+        return path;
+
     }
 
     /**
