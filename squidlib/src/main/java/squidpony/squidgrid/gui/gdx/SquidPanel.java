@@ -414,7 +414,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         else
             a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
 
-        AnimatedEntity ae = new AnimatedEntity(a, x, y);
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
     }
