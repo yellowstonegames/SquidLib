@@ -2,6 +2,7 @@ package squidpony.squidai;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
+import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
@@ -418,6 +419,22 @@ public class DijkstraMap
             System.arraycopy(costs[x], 0, costMap[x], 0, height);
         }
         return this;
+    }
+
+    /**
+     * Gets the appropriate DijkstraMap.Measurement to pass to a constructor if you already have a Radius.
+     * Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.
+     * @param radius the Radius to find the corresponding Measurement for
+     * @return a DijkstraMap.Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
+     */
+    public static Measurement findMeasurement(Radius radius)
+    {
+        if(radius.equals2D(Radius.SQUARE))
+            return DijkstraMap.Measurement.CHEBYSHEV;
+        else if(radius.equals2D(Radius.DIAMOND))
+            return DijkstraMap.Measurement.MANHATTAN;
+        else
+            return DijkstraMap.Measurement.EUCLIDEAN;
     }
 
     /**

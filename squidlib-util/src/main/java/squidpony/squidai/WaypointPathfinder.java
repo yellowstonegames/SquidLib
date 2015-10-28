@@ -94,13 +94,7 @@ public class WaypointPathfinder {
                 }
             }
         }
-
-        if(measurement.equals2D(Radius.SQUARE))
-            dm = new DijkstraMap(map, DijkstraMap.Measurement.CHEBYSHEV);
-        else if(measurement.equals2D(Radius.DIAMOND))
-            dm = new DijkstraMap(map, DijkstraMap.Measurement.MANHATTAN);
-        else
-            dm = new DijkstraMap(map, DijkstraMap.Measurement.EUCLIDEAN);
+        dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
 
         int e = 0;
         for(Map.Entry<Coord, LinkedHashMap<Coord, Edge>> n : waypoints.entrySet())
