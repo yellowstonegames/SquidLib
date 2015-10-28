@@ -74,9 +74,10 @@ public class ZOI {
      * potentially useful for this sort of data. You should save the short[][] for later use if you want to call
      * nearestInfluences() in this class.
      * <br>
-     * The first short[] in the returned short[][] will correspond to the area influenced by the first Coord[] passed
-     * to the constructor (or the first Coord if a non-nested array was passed); the second will correspond to the
-     * second, and so on. The length of the short[][] this returns will equal the number of influence groups.
+     * The first short[] in the returned short[][] will correspond to the area influenced by the first Coord[] in the
+     * nested array passed to the constructor (or the first Coord if a non-nested array was passed); the second will
+     * correspond to the second, and so on. The length of the short[][] this returns will equal the number of influence
+     * groups.
      * @return an array of short[] storing the zones' areas; each can be used as packed data with CoordPacker
      */
     public short[][] calculate()

@@ -1485,14 +1485,14 @@ public class CoordPacker {
                 onLeft = false;
             }
             else if(totalLeft <= idx) {
-                totalLeft += left[elemLeft];
+                totalLeft += left[elemLeft] & 0xffff;
             }
             if(elemRight >= right.length) {
                 totalRight = 0xffff;
                 onRight = false;
             }
             else if(totalRight <= idx) {
-                totalRight += right[elemRight];
+                totalRight += right[elemRight] & 0xffff;
             }
             // 300, 5, 6, 8, 2, 4
             // 290, 12, 9, 1
@@ -1565,14 +1565,14 @@ public class CoordPacker {
                 onLeft = false;
             }
             else if(totalLeft <= idx) {
-                totalLeft += left[elemLeft];
+                totalLeft += left[elemLeft] & 0xffff;
             }
             if(elemRight >= right.length) {
                 totalRight = 0xffff;
                 onRight = false;
             }
             else if(totalRight <= idx) {
-                totalRight += right[elemRight];
+                totalRight += right[elemRight] & 0xffff;
             }
             // 300, 5, 6, 8, 2, 4
             // 290, 12, 9, 1
@@ -1735,7 +1735,7 @@ public class CoordPacker {
      */
     public static short[] removePacked(short[] original, short hilbert)
     {
-        return intersectPacked(original, new short[]{0, hilbert, 1, -1});
+        return intersectPacked(original, new short[]{0, hilbert, 1, (short)0xffff});
     }
     /**
      * Given one packed short array, original, and a position as x,y numbers, this produces a packed short array that
@@ -1750,7 +1750,8 @@ public class CoordPacker {
      */
     public static short[] removePacked(short[] original, int x, int y)
     {
-        return intersectPacked(original, new short[]{0, (short)posToHilbert(x, y), 1, -1});
+        int dist = posToHilbert(x, y);
+        return intersectPacked(original, new short[]{0, (short)dist, 1, (short)(0xfffe - dist)});
     }
 
     /**
@@ -1833,14 +1834,14 @@ public class CoordPacker {
         int r = rng.nextInt(counted);
         int c = 0, idx = 0;
         boolean on = false;
-        for (int i = 0; i < packed.length; i++, on = !on, idx += packed[i]) {
+        for (int i = 0; i < packed.length; on = !on, idx += packed[i] & 0xFFFF, i++) {
             if (on) {
-                if(c + packed[i] > r)
+                if(c + (packed[i] & 0xFFFF) > r)
                 {
                     idx += r - c;
                     return Coord.get(hilbertX[idx], hilbertY[idx]);
                 }
-                c += packed[i];
+                c += packed[i] & 0xFFFF;
             }
         }
         return null;
@@ -1871,9 +1872,9 @@ public class CoordPacker {
         int r = data[0];
         int c = 0, idx = 0;
         boolean on = false;
-        for (int i = 0, ri = 0; i < packed.length; i++, on = !on, idx += packed[i]) {
+        for (int i = 0, ri = 0; i < packed.length; i++, on = !on, idx += packed[i] & 0xffff) {
             if (on) {
-                while (c + packed[i] > r)
+                while (c + (packed[i] & 0xffff) > r)
                 {
                     int n = idx + r - c;
                     coords.add(Coord.get(hilbertX[n], hilbertY[n]));
@@ -1882,7 +1883,7 @@ public class CoordPacker {
                     else
                         return coords;
                 }
-                c += packed[i];
+                c += packed[i] & 0xffff;
             }
         }
         return coords;
@@ -2339,6 +2340,8 @@ public class CoordPacker {
      * @return the distance to travel along the 256x256 Hilbert Curve to get to the given x, y point.
      */
     public static int posToHilbert( final int x, final int y ) {
+        //int dist = posToHilbertNoLUT(x, y);
+        //return dist;
         return hilbertDistances[x + (y << 8)] & 0xffff;
     }
     /**
@@ -2360,7 +2363,8 @@ public class CoordPacker {
      * @param x between 0 and 255 inclusive
      * @param y between 0 and 255 inclusive
      * @return the distance to travel along the 256x256 Hilbert Curve to get to the given x, y point.
-
+     */
+    /*
     public static int posToHilbertNoLUT( final int x, final int y )
     {
         int hilbert = 0, remap = 0xb4, mcode, hcode;
