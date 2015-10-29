@@ -301,9 +301,7 @@ public interface IColorCenter<T> {
             float g = getGreen(c) / 255f;
             float b = getBlue(c) / 255f;
 
-            float max = Math.max(Math.max(r, g), b);    //Min. value of RGB
-
-            return max;
+            return Math.max(Math.max(r, g), b);
         }
 
         /**
