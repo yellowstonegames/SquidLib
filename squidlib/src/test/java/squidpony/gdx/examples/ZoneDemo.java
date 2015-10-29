@@ -68,7 +68,7 @@ public class ZoneDemo extends ApplicationAdapter {
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
         serpent.putBoxRoomCarvers(4);
         serpent.putRoundRoomCarvers(2);
-        serpent.putCaveCarvers(2);
+        serpent.putCaveCarvers(4);
         bareDungeon = dungeonGen.generate(serpent.generate());
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(bareDungeon));
