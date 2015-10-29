@@ -108,6 +108,23 @@ public class SerpentMapGenerator {
     }
     /**
      * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
+     * with a random size in a box shape at the start and end, and a small room at the corner if there is one. This also
+     * ensures walls will be placed around the room, only allowing corridors and small cave openings to pass. If count
+     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher
+     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then
+     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
+     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
+     * and putRoundRoomCarvers() is reasonable.
+     * @see MixedGenerator
+     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation
+     *              to other carvers
+     */
+    public void putWalledBoxRoomCarvers(int count)
+    {
+        mix.putWalledBoxRoomCarvers(count);
+    }
+    /**
+     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
      * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is
      * one. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,
      * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,
@@ -121,6 +138,24 @@ public class SerpentMapGenerator {
     public void putRoundRoomCarvers(int count)
     {
         mix.putRoundRoomCarvers(count);
+    }
+
+    /**
+     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
+     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is
+     * one. This also ensures walls will be placed around the room, only allowing corridors and small cave openings to
+     * pass. If count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,
+     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,
+     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
+     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
+     * and putRoundRoomCarvers() is reasonable.
+     * @see MixedGenerator
+     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation
+     *              to other carvers
+     */
+    public void putWalledRoundRoomCarvers(int count)
+    {
+        mix.putWalledRoundRoomCarvers(count);
     }
 
     /**

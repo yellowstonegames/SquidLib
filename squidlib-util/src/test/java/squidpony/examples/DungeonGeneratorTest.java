@@ -84,8 +84,8 @@ public class DungeonGeneratorTest {
         dungeonGenerator.addTraps(2);
         MixedGenerator mix = new MixedGenerator(width, height, rng);
         mix.putCaveCarvers(3);
-        mix.putBoxRoomCarvers(1);
-        mix.putRoundRoomCarvers(2);
+        mix.putWalledBoxRoomCarvers(2);
+        mix.putWalledRoundRoomCarvers(2);
         dungeonGenerator.generate(mix.generate());
         char[][] dungeon = dungeonGenerator.getDungeon();
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
@@ -100,8 +100,8 @@ public class DungeonGeneratorTest {
         dungeonGenerator.addGrass(10);
         rng.setState(0xea7f00d);
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
-        serpent.putBoxRoomCarvers(2);
-        serpent.putRoundRoomCarvers(2);
+        serpent.putWalledBoxRoomCarvers(2);
+        serpent.putWalledRoundRoomCarvers(2);
         serpent.putCaveCarvers(3);
         char[][] map = serpent.generate();
         dungeonGenerator.generate(map);

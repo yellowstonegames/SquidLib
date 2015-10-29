@@ -22,13 +22,15 @@ public class MixedGenerator {
     {
         CAVE,
         BOX,
-        ROUND
+        ROUND,
+        BOX_WALLED,
+        ROUND_WALLED
     }
     private EnumMap<CarverType, Integer> carvers;
     private int height, width;
     public RNG rng;
     private char[][] dungeon;
-    private boolean[][] marked;
+    private boolean[][] marked, walled;
     private List<Coord> points;
     private int totalPoints;
 
@@ -42,11 +44,8 @@ public class MixedGenerator {
      */
     private static List<Coord> basicPoints(int width, int height, RNG rng)
     {
-        List<Coord> seq = PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),
+        return PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),
                 8.5f * (width + height) / 120f, width, height, 35, rng);
-        //seq = rng.shuffle(seq);
-        //seq = seq.subList(0, 4 * seq.size() / 7);
-        return seq;
     }
 
     /**
@@ -85,6 +84,7 @@ public class MixedGenerator {
         this.rng = rng;
         dungeon = new char[width][height];
         marked = new boolean[width][height];
+        walled = new boolean[width][height];
         Arrays.fill(dungeon[0], '#');
         for (int i = 1; i < width; i++) {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
@@ -99,7 +99,8 @@ public class MixedGenerator {
      * will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make
      * caves more likely. Carvers are shuffled when used, then repeat if exhausted during generation. Since typically
      * about 30-40 rooms are carved, large totals for carver count aren't really needed; aiming for a total of 10
-     * between the count of putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers() is reasonable.
+     * between the count of putCaveCarvers(), putBoxRoomCarvers(), putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and
+     * putWalledRoundRoomCarvers() is reasonable.
      * @param count the number of carvers making caves between rooms; only matters in relation to other carvers
      */
     public void putCaveCarvers(int count)
@@ -113,7 +114,7 @@ public class MixedGenerator {
      * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then
      * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
      * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
-     * and putRoundRoomCarvers() is reasonable.
+     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.
      * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation
      *              to other carvers
      */
@@ -129,13 +130,48 @@ public class MixedGenerator {
      * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,
      * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
      * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
-     * and putRoundRoomCarvers() is reasonable.
+     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.
      * @param count the number of carvers making circular rooms and corridors between them; only matters in relation
      *              to other carvers
      */
     public void putRoundRoomCarvers(int count)
     {
         carvers.put(CarverType.ROUND, count);
+    }
+    /**
+     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
+     * with a random size in a box shape at the start and end, and a small room at the corner if there is one, enforcing
+     * the presence of walls around the rooms even if another room is already there or would be placed there. Corridors
+     * can always pass through enforced walls, but caves will open at most one cell in the wall. If count
+     * is 0 or less, no box-shaped rooms will be made. If count is at least 1, box-shaped rooms are possible, and higher
+     * numbers relative to the other carvers make box-shaped rooms more likely. Carvers are shuffled when used, then
+     * repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
+     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
+     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.
+     * @param count the number of carvers making box-shaped rooms and corridors between them; only matters in relation
+     *              to other carvers
+     */
+    public void putWalledBoxRoomCarvers(int count)
+    {
+        carvers.put(CarverType.BOX_WALLED, count);
+    }
+
+    /**
+     * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
+     * with a random size in a circle shape at the start and end, and a small circular room at the corner if there is
+     * one, enforcing the presence of walls around the rooms even if another room is already there or would be placed
+     * there. Corridors can always pass through enforced walls, but caves will open at most one cell in the wall. If
+     * count is 0 or less, no circular rooms will be made. If count is at least 1, circular rooms are possible,
+     * and higher numbers relative to the other carvers make circular rooms more likely. Carvers are shuffled when used,
+     * then repeat if exhausted during generation. Since typically about 30-40 rooms are carved, large totals for carver
+     * count aren't really needed; aiming for a total of 10 between the count of putCaveCarvers(), putBoxRoomCarvers(),
+     * putRoundRoomCarvers(), putWalledBoxRoomCarvers(), and putWalledRoundRoomCarvers() is reasonable.
+     * @param count the number of carvers making circular rooms and corridors between them; only matters in relation
+     *              to other carvers
+     */
+    public void putWalledRoundRoomCarvers(int count)
+    {
+        carvers.put(CarverType.ROUND_WALLED, count);
     }
 
     /**
@@ -176,11 +212,21 @@ public class MixedGenerator {
             switch (ct)
             {
                 case CAVE:
-                    mark(end);
+                    markPiercing(end);
                     store();
+                    double weight = 0.75;
                     do {
-                        markPlus(start);
-                        dir = stepWobbly(start, end, 0.75);
+                        Coord cent = markPlus(start);
+                        if(cent != null)
+                        {
+                            markPiercing(cent);
+                            markPiercing(cent.translate(1, 0));
+                            markPiercing(cent.translate(-1, 0));
+                            markPiercing(cent.translate(0, 1));
+                            markPiercing(cent.translate(0, -1));
+                            weight = 0.95;
+                        }
+                        dir = stepWobbly(start, end, weight);
                         start = start.translate(dir);
                     }while (dir != Direction.NONE);
                     break;
@@ -194,14 +240,35 @@ public class MixedGenerator {
                                 : Direction.getCardinalDirection(0, -dir.deltaY);
                     while (start.x != end.x && start.y != end.y)
                     {
-                        mark(start);
+                        markPiercing(start);
                         start = start.translate(dir);
                     }
                     markRectangle(start, 1, 1);
                     dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
                     while (!(start.x == end.x && start.y == end.y))
                     {
-                        mark(start);
+                        markPiercing(start);
+                        start = start.translate(dir);
+                    }
+                    break;
+                case BOX_WALLED:
+                    markRectangleWalled(end, rng.between(1, 5), rng.between(1, 5));
+                    markRectangleWalled(start, rng.between(1, 4), rng.between(1, 4));
+                    store();
+                    dir = Direction.getDirection(end.x - start.x, (end.y - start.y));
+                    if(dir.isDiagonal())
+                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
+                                : Direction.getCardinalDirection(0, -dir.deltaY);
+                    while (start.x != end.x && start.y != end.y)
+                    {
+                        markPiercing(start);
+                        start = start.translate(dir);
+                    }
+                    markRectangleWalled(start, 1, 1);
+                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
+                    while (!(start.x == end.x && start.y == end.y))
+                    {
+                        markPiercing(start);
                         start = start.translate(dir);
                     }
                     break;
@@ -215,14 +282,35 @@ public class MixedGenerator {
                                 : Direction.getCardinalDirection(0, -dir.deltaY);
                     while (start.x != end.x && start.y != end.y)
                     {
-                        mark(start);
+                        markPiercing(start);
                         start = start.translate(dir);
                     }
                     markCircle(start, 2);
                     dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
                     while (!(start.x == end.x && start.y == end.y))
                     {
-                        mark(start);
+                        markPiercing(start);
+                        start = start.translate(dir);
+                    }
+                    break;
+                case ROUND_WALLED:
+                    markCircleWalled(end, rng.between(2, 6));
+                    markCircleWalled(start, rng.between(2, 6));
+                    store();
+                    dir = Direction.getDirection(end.x - start.x, (end.y - start.y));
+                    if(dir.isDiagonal())
+                        dir = rng.nextBoolean() ? Direction.getCardinalDirection(dir.deltaX, 0)
+                                : Direction.getCardinalDirection(0, -dir.deltaY);
+                    while (start.x != end.x && start.y != end.y)
+                    {
+                        markPiercing(start);
+                        start = start.translate(dir);
+                    }
+                    markCircleWalled(start, 2);
+                    dir = Direction.getCardinalDirection(end.x - start.x, -(end.y - start.y));
+                    while (!(start.x == end.x && start.y == end.y))
+                    {
+                        markPiercing(start);
                         start = start.translate(dir);
                     }
                     break;
@@ -249,35 +337,59 @@ public class MixedGenerator {
      * Internal use. Marks a point to be made into floor.
      * @param x x position to mark
      * @param y y position to mark
+     * @return false if everything is normal, true if and only if this failed to mark because the position is walled
      */
-    private void mark(int x, int y)
-    {
-        if(x > 0 && x < width - 1 && y > 0 && y < height - 1)
+    private boolean mark(int x, int y) {
+        if (x > 0 && x < width - 1 && y > 0 && y < height - 1 && !walled[x][y]) {
             marked[x][y] = true;
-        //else
-        //    System.out.println("Bad mark: x:" + x + ", y:" + y);
+            return false;
+        }
+        else return x > 0 && x < width - 1 && y > 0 && y < height - 1 && walled[x][y];
+    }
+
+    /**
+     * Internal use. Marks a point to be made into floor.
+     * @param x x position to mark
+     * @param y y position to mark
+     */
+    private void markPiercing(int x, int y) {
+        if (x > 0 && x < width - 1 && y > 0 && y < height - 1) {
+            marked[x][y] = true;
+        }
     }
 
     /**
      * Internal use. Marks a point to be made into floor.
      * @param pos position to mark
      */
-    private void mark(Coord pos)
+    private boolean mark(Coord pos)
     {
-        mark(pos.x, pos.y);
+        return mark(pos.x, pos.y);
+    }
+
+    /**
+     * Internal use. Marks a point to be made into floor.
+     * @param pos position to mark
+     */
+    private void markPiercing(Coord pos)
+    {
+        markPiercing(pos.x, pos.y);
     }
 
     /**
      * Internal use. Marks a point and the four cells orthogonally adjacent to it.
      * @param pos center position to mark
+     * @return null if the center of the plus shape wasn't blocked by wall, otherwise the Coord of the center
      */
-    private void markPlus(Coord pos)
-    {
-        mark(pos.x, pos.y);
-        mark(pos.x+1, pos.y);
-        mark(pos.x-1, pos.y);
-        mark(pos.x, pos.y+1);
-        mark(pos.x, pos.y-1);
+    private Coord markPlus(Coord pos) {
+        Coord block = null;
+        if (mark(pos.x, pos.y))
+            block = pos;
+        mark(pos.x + 1, pos.y);
+        mark(pos.x - 1, pos.y);
+        mark(pos.x, pos.y + 1);
+        mark(pos.x, pos.y - 1);
+        return block;
     }
     /**
      * Internal use. Marks a rectangle of points centered on pos, extending halfWidth in both x directions and
@@ -285,25 +397,59 @@ public class MixedGenerator {
      * @param pos center position to mark
      * @param halfWidth the distance from the center to extend horizontally
      * @param halfHeight the distance from the center to extend vertically
+     * @return null if no points in the rectangle were blocked by walls, otherwise a Coord blocked by a wall
      */
-    private void markRectangle(Coord pos, int halfWidth, int halfHeight)
+    private Coord markRectangle(Coord pos, int halfWidth, int halfHeight)
     {
         halfWidth = halfWidth * width / 64;
         halfHeight = halfHeight * height / 64;
+        Coord block = null;
         for (int i = pos.x - halfWidth; i <= pos.x + halfWidth; i++) {
-            for (int j = pos.y - halfHeight; j < pos.y + halfHeight; j++) {
-                mark(i, j);
+            for (int j = pos.y - halfHeight; j <= pos.y + halfHeight; j++) {
+                if(mark(i, j))
+                    block = Coord.get(i, j);
             }
         }
+        return block;
+    }
+    /**
+     * Internal use. Marks a rectangle of points centered on pos, extending halfWidth in both x directions and
+     * halfHeight in both vertical directions. Also considers the area just beyond each wall, but not corners, to be
+     * a blocking wall that can only be passed by corridors and small cave openings.
+     * @param pos center position to mark
+     * @param halfWidth the distance from the center to extend horizontally
+     * @param halfHeight the distance from the center to extend vertically
+     * @return null if no points in the rectangle were blocked by walls, otherwise a Coord blocked by a wall
+     */
+    private Coord markRectangleWalled(Coord pos, int halfWidth, int halfHeight)
+    {
+        halfWidth = halfWidth * width / 64;
+        halfHeight = halfHeight * height / 64;
+        Coord block = null;
+        for (int i = pos.x - halfWidth; i <= pos.x + halfWidth; i++) {
+            for (int j = pos.y - halfHeight; j <= pos.y + halfHeight; j++) {
+                if(mark(i, j))
+                    block = Coord.get(i, j);
+            }
+        }
+        for (int i = Math.max(0, pos.x - halfWidth - 1); i <= Math.min(width - 1, pos.x + halfWidth + 1); i++) {
+            for (int j = Math.max(0, pos.y - halfHeight - 1); j <= Math.min(height - 1, pos.y + halfHeight + 1); j++)
+            {
+                walled[i][j] = true;
+            }
+        }
+        return block;
     }
 
     /**
      * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement.
      * @param pos center position to mark
      * @param radius radius to extend in all directions from center
+     * @return null if no points in the circle were blocked by walls, otherwise a Coord blocked by a wall
      */
-    private void markCircle(Coord pos, int radius)
+    private Coord markCircle(Coord pos, int radius)
     {
+        Coord block = null;
         int high;
         radius = radius * Math.min(width, height) / 64;
         for (int dx = -radius; dx <= radius; ++dx)
@@ -311,9 +457,55 @@ public class MixedGenerator {
             high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));
             for (int dy = -high; dy <= high; ++dy)
             {
-                mark(pos.x + dx, pos.y + dy);
+                if(mark(pos.x + dx, pos.y + dy))
+                    block = pos.translate(dx, dy);
             }
         }
+        return block;
+    }
+    /**
+     * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement.
+     * Also considers the area just beyond each wall, but not corners, to be
+     * a blocking wall that can only be passed by corridors and small cave openings.
+     * @param pos center position to mark
+     * @param radius radius to extend in all directions from center
+     * @return null if no points in the circle were blocked by walls, otherwise a Coord blocked by a wall
+     */
+    private Coord markCircleWalled(Coord pos, int radius)
+    {
+        Coord block = null;
+        int high;
+        radius = radius * Math.min(width, height) / 64;
+        for (int dx = -radius; dx <= radius; ++dx)
+        {
+            high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));
+            for (int dy = -high; dy <= high; ++dy)
+            {
+                if(mark(pos.x + dx, pos.y + dy))
+                    block = pos.translate(dx, dy);
+            }
+        }
+        for (int dx = -radius; dx <= radius; ++dx)
+        {
+            high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));
+            int dx2 = Math.max(1, Math.min(pos.x + dx, width - 2));
+            for (int dy = -high; dy <= high; ++dy)
+            {
+                int dy2 = Math.max(1, Math.min(pos.y + dy, height - 2));
+
+                walled[dx2][dy2] = true;
+                walled[dx2+1][dy2] = true;
+                walled[dx2-1][dy2] = true;
+                walled[dx2][dy2+1] = true;
+                walled[dx2+1][dy2+1] = true;
+                walled[dx2-1][dy2+1] = true;
+                walled[dx2][dy2-1] = true;
+                walled[dx2+1][dy2-1] = true;
+                walled[dx2-1][dy2-1] = true;
+
+            }
+        }
+        return block;
     }
 
     /**
