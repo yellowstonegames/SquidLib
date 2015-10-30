@@ -38,7 +38,7 @@ public class SquidAIDemo extends ApplicationAdapter {
     private int numMonsters = 16;
 
     private SquidInput input;
-    private static final Color bgColor = SColor.DARK_SLATE_GRAY;
+    private static final HDRColor bgColor = SColor.DARK_SLATE_GRAY;
     private LinkedHashMap<AnimatedEntity, Integer> teamRed, teamBlue;
     private LinkedHashSet<Coord> redPlaces, bluePlaces;
     private Technique redCone, redCloud, blueBlast, blueBeam;
@@ -306,7 +306,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
-        Color whichTint = Color.WHITE;
+        HDRColor whichTint = HDRColor.WHITE;
         LinkedHashMap<AnimatedEntity, Integer> whichEnemyTeam = null;
         LinkedHashMap<Coord, Double> effects = null;
         if (blueTurn) {
@@ -314,7 +314,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
-            whichTint = Color.CYAN;
+            whichTint = HDRColor.CYAN;
             whichEnemyTeam = teamRed;
             for (Map.Entry<AnimatedEntity, Integer> entry : teamBlue.entrySet()) {
                 if (i++ == idx) {
@@ -329,7 +329,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             whichTech = (idx % 2 == 0) ? redCloud : redCone;
             whichFoes = bluePlaces;
             whichAllies = redPlaces;
-            whichTint = Color.RED;
+            whichTint = HDRColor.RED;
             whichEnemyTeam = teamBlue;
             for (Map.Entry<AnimatedEntity, Integer> entry : teamRed.entrySet()) {
                 if (i++ == idx) {

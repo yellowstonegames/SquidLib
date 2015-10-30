@@ -19,17 +19,25 @@ import java.util.*;
  */
 public class SColorFactory {
 
-    private static final TreeMap<String, SColor> nameLookup = new TreeMap<>();
-    private static final TreeMap<Integer, SColor> valueLookup = new TreeMap<>();
-    private static RNG rng = new RNG();
-    private static Map<Integer, SColor> colorBag = new HashMap<>();
-    private static Map<String, ArrayList<SColor>> palettes = new HashMap<>();
-    private static int floor = 1;//what multiple to floor rgb values to in order to reduce total colors
+    private final TreeMap<String, SColor> nameLookup;
+    private final TreeMap<Long, SColor> valueLookup;
+    private RNG rng;
+    private Map<Long, SColor> colorBag;
+    private Map<String, ArrayList<SColor>> palettes;
+    private long floor = 1;//what multiple to floor rgb values to in order to reduce total colors
 
     /**
      * Prevents any instances from being created.
      */
-    private SColorFactory() {
+    public SColorFactory() {
+
+        nameLookup = new TreeMap<>();
+        valueLookup = new TreeMap<>();
+        rng = DefaultResources.getGuiRandom();
+        colorBag = new HashMap<>();
+        palettes = new HashMap<>();
+        floor = 1;
+
     }
 
     /**
@@ -42,7 +50,7 @@ public class SColorFactory {
      * @param s
      * @return
      */
-    public static SColor colorForName(String s) {
+    public SColor colorForName(String s) {
         if (nameLookup.isEmpty()) {
             for (SColor sc : SColor.FULL_PALETTE) {
                 nameLookup.put(sc.getName(), sc);
@@ -63,10 +71,10 @@ public class SColorFactory {
      * @param rgb
      * @return
      */
-    public static SColor colorForValue(int rgb) {
+    public SColor colorForValue(long rgb) {
         if (valueLookup.isEmpty()) {
             for (SColor sc : SColor.FULL_PALETTE) {
-                valueLookup.put(sc.toIntBits(), sc);
+                valueLookup.put(sc.toLongBits(), sc);
             }
         }
 
@@ -78,7 +86,7 @@ public class SColorFactory {
      *
      * @return
      */
-    public static int quantityCached() {
+    public int quantityCached() {
         return colorBag.size();
     }
 
@@ -92,7 +100,7 @@ public class SColorFactory {
      * @return
      */
     @SuppressWarnings("unused")
-	private static int blend(int a, int b, double coef) {
+	private int blend(int a, int b, double coef) {
         coef = MathUtils.clamp(coef, 0, 1);
         return (int) (a + (b - a) * coef);
     }
@@ -105,7 +113,7 @@ public class SColorFactory {
      * @param coef
      * @return
      */
-    private static float blend(float a, float b, double coef) {
+    private float blend(float a, float b, double coef) {
         float cf = MathUtils.clamp((float)coef, 0, 1);
         return (a + (b - a) * cf);
     }
@@ -119,7 +127,7 @@ public class SColorFactory {
      * @param coef The percent towards the second color, as 0.0 to 1.0
      * @return
      */
-    public static SColor blend(SColor color1, SColor color2, double coef) {
+    public SColor blend(SColor color1, SColor color2, double coef) {
         return asSColor(blend(color1.a, color2.a, coef),
                 blend(color1.r, color2.r, coef),
                 blend(color1.g, color2.g, coef),
@@ -136,7 +144,7 @@ public class SColorFactory {
      * @param max The maximum percent towards the second color, as 0.0 to 1.0
      * @return
      */
-    public static SColor randomBlend(SColor color1, SColor color2, double min, double max) {
+    public SColor randomBlend(SColor color1, SColor color2, double min, double max) {
         return blend(color1, color2, rng.between(min, max));
     }
 
@@ -147,7 +155,7 @@ public class SColorFactory {
      * @param color2
      * @return
      */
-    public static SColor add(SColor color1, SColor color2) {
+    public SColor add(SColor color1, SColor color2) {
         return asSColor(color1.a + color2.a, color1.r + color2.r, color1.g + color2.g, color1.b + color2.b);
     }
 
@@ -160,7 +168,7 @@ public class SColorFactory {
      * @param light
      * @return
      */
-    public static SColor lightWith(SColor color, SColor light) {
+    public SColor lightWith(SColor color, SColor light) {
         return asSColor((color.a * light.a), (color.r * light.r), (color.g * light.g), (color.b * light.b));
     }
 
@@ -171,7 +179,7 @@ public class SColorFactory {
      * then not reused, such as when blending different colors in different
      * areas that will not be revisited.
      */
-    public static void emptyCache() {
+    public void emptyCache() {
         colorBag = new HashMap<>();
     }
 
@@ -186,9 +194,9 @@ public class SColorFactory {
      * If the value passed in is less than 1, then the flooring value is set at
      * 1.
      *
-     * @param value
+     * @param value used to determine the precision of rounding
      */
-    public static void setFloor(int value) {
+    public void setFloor(int value) {
         floor = Math.max(1, value);
     }
 
@@ -205,23 +213,23 @@ public class SColorFactory {
      * @param argb
      * @return
      */
-    public static SColor asSColor(int argb) {
-        int working = argb;
+    public SColor asSColor(long argb) {
+        long working = argb;
         if (floor != 1) {//need to convert to floored values
-            int a = (argb >> 24) & 0xff;
-            a -= a % floor;
-            int r = (argb >> 16) & 0xff;
+            long r = (argb >> 40) & 0xffff;
             r -= r % floor;
-            int g = (argb >> 8) & 0xff;
+            long g = (argb >> 24) & 0xffff;
             g -= g % floor;
-            int b = argb & 0xff;
+            long b = (argb >> 8) & 0xffff;
             b -= b % floor;
+            long a = (argb) & 0xff;
+            a -= a % floor;
 
             //put back together
-            working = ((a & 0xFF) << 24)
-                    | ((r & 0xFF) << 16)
-                    | ((g & 0xFF) << 8)
-                    | (b & 0xFF);
+            working = ((r & 0xFFFF) << 40)
+                    | ((g & 0xFFFF) << 24)
+                    | ((b & 0xFFFF) << 8)
+                    | (a & 0xFF);
         }
 
         if (colorBag.containsKey(working)) {
@@ -248,21 +256,21 @@ public class SColorFactory {
      * @param b 
      * @return
      */
-    public static SColor asSColor(float a, float r, float g, float b) {
-        int working = 0;
-        int aa = MathUtils.round(255 * a);
+    public SColor asSColor(float a, float r, float g, float b) {
+        long working = 0;
+        long aa = MathUtils.round(255 * a);
         aa -= aa % floor;
-        int rr = MathUtils.round(255 * r);
+        long rr = MathUtils.round(255 * r);
         rr -= rr % floor;
-        int gg = MathUtils.round(255 * g);
+        long gg = MathUtils.round(255 * g);
         gg -= gg % floor;
-        int bb = MathUtils.round(255 * b);
+        long bb = MathUtils.round(255 * b);
         bb -= bb % floor;
 
         //put back together
-        working = ((aa & 0xFF) << 24)
-                | ((rr & 0xFF) << 16)
-                | ((gg & 0xFF) << 8)
+        working = ((aa & 0xFFFF) << 40)
+                | ((rr & 0xFFFF) << 24)
+                | ((gg & 0xFFFF) << 8)
                 | (bb & 0xFF);
 
 
@@ -283,7 +291,7 @@ public class SColorFactory {
      * @param b
      * @return
      */
-    public static SColor asSColor(int r, int g, int b) {
+    public SColor asSColor(int r, int g, int b) {
         return asSColor(255, r, g, b);
     }
 
@@ -297,7 +305,7 @@ public class SColorFactory {
      * @param b
      * @return
      */
-    public static SColor asSColor(int a, int r, int g, int b) {
+    public SColor asSColor(int a, int r, int g, int b) {
         a = Math.min(a, 255);
         a = Math.max(a, 0);
         r = Math.min(r, 255);
@@ -317,7 +325,7 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    public static SColor asSColor(Color color) {
+    public SColor asSColor(Color color) {
         return colorForValue(Color.rgba8888(color.a, color.r, color.g, color.b));
     }
 
@@ -328,7 +336,7 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    public static SColor dim(SColor color) {
+    public SColor dim(SColor color) {
         return blend(color, SColor.BLACK, 0.1);
     }
 
@@ -339,7 +347,7 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    public static SColor dimmer(SColor color) {
+    public SColor dimmer(SColor color) {
         return blend(color, SColor.BLACK, 0.3);
     }
 
@@ -349,7 +357,7 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    public static SColor dimmest(SColor color) {
+    public SColor dimmest(SColor color) {
         return blend(color, SColor.BLACK, 0.7);
     }
 
@@ -360,7 +368,7 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    public static SColor light(SColor color) {
+    public SColor light(SColor color) {
         return blend(color, SColor.WHITE, 0.1);
     }
 
@@ -371,7 +379,7 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    public static SColor lighter(SColor color) {
+    public SColor lighter(SColor color) {
         return blend(color, SColor.WHITE, 0.3);
     }
 
@@ -381,7 +389,7 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    public static SColor lightest(SColor color) {
+    public SColor lightest(SColor color) {
         return blend(color, SColor.WHITE, 0.6);
     }
 
@@ -392,7 +400,7 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    public static SColor desaturated(SColor color) {
+    public SColor desaturated(SColor color) {
         int r = MathUtils.round(color.r * 255);
         int g = MathUtils.round(color.g * 255);
         int b = MathUtils.round(color.b * 255);
@@ -411,7 +419,7 @@ public class SColorFactory {
      * fully desaturated
      * @return
      */
-    public static SColor desaturate(SColor color, double percent) {
+    public SColor desaturate(SColor color, double percent) {
         return blend(color, desaturated(color), percent);
     }
 
@@ -423,7 +431,7 @@ public class SColorFactory {
      * @param color2
      * @return
      */
-    public static ArrayList<SColor> asGradient(SColor color1, SColor color2) {
+    public ArrayList<SColor> asGradient(SColor color1, SColor color2) {
         String name = paletteNamer(color1, color2);
         if (palettes.containsKey(name)) {
             return palettes.get(name);
@@ -447,7 +455,7 @@ public class SColorFactory {
      * @param name
      * @return
      */
-    public static ArrayList<SColor> palette(String name) {
+    public ArrayList<SColor> palette(String name) {
         return palettes.get(name);
     }
     /**
@@ -458,7 +466,7 @@ public class SColorFactory {
      * @return
      * @deprecated Prefer palette over this misspelled version.
      */
-    public static ArrayList<SColor> pallet(String name) {
+    public ArrayList<SColor> pallet(String name) {
         return palettes.get(name);
     }
 
@@ -474,7 +482,7 @@ public class SColorFactory {
      * @param percent
      * @return
      */
-    public static SColor fromPalette(String name, float percent) {
+    public SColor fromPalette(String name, float percent) {
         ArrayList<SColor> list = palettes.get(name);
         if (list == null) {
             return null;
@@ -499,7 +507,7 @@ public class SColorFactory {
      *
      * @deprecated Prefer fromPalette over this misspelled version; they are equivalent.
      */
-    public static SColor fromPallet(String name, float percent) {
+    public SColor fromPallet(String name, float percent) {
         ArrayList<SColor> list = palettes.get(name);
         if (list == null) {
             return null;
@@ -519,7 +527,7 @@ public class SColorFactory {
      * 
      * @deprecated Prefer addPalette over this misspelled version; they are equivalent.
      */
-    public static void addPallet(String name, ArrayList<SColor> palette) {
+    public void addPallet(String name, ArrayList<SColor> palette) {
         addPalette(name, palette);
     }
 
@@ -529,12 +537,12 @@ public class SColorFactory {
      * @param name
      * @param palette
      */
-    public static void addPalette(String name, ArrayList<SColor> palette) {
+    public void addPalette(String name, ArrayList<SColor> palette) {
         ArrayList<SColor> temp = new ArrayList<>();
 
         //make sure all the colors in the palette are also in the general color cache
         for (SColor sc : palette) {
-            temp.add(asSColor(Color.rgba8888(sc)));
+            temp.add(asSColor(sc.a, sc.r, sc.g, sc.b));
         }
 
         palettes.put(name, temp);
@@ -547,7 +555,7 @@ public class SColorFactory {
      * @param color
      * @return
      */
-    private static Coord3D scolorToCoord3D(SColor color) {
+    private Coord3D scolorToCoord3D(SColor color) {
         return new Coord3D(MathUtils.floor(color.r * 255), MathUtils.floor(color.g * 255), MathUtils.floor(color.b * 255));
     }
 
@@ -558,11 +566,11 @@ public class SColorFactory {
      * @param coord
      * @return
      */
-    private static SColor coord3DToSColor(Coord3D coord) {
+    private SColor coord3DToSColor(Coord3D coord) {
         return asSColor(coord.x, coord.y, coord.z);
     }
 
-    private static String paletteNamer(SColor color1, SColor color2) {
+    private String paletteNamer(SColor color1, SColor color2) {
         return color1.getName() + " to " + color2.getName();
     }
 

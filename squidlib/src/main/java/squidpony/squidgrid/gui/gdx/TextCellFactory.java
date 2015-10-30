@@ -1,7 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -42,6 +41,7 @@ public class TextCellFactory {
     protected BitmapFont bmpFont = null;
     protected Texture block = null;
     protected String fitting = SQUID_FITTING;
+    protected SquidColorCenter scc = new SquidColorCenter();
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     protected int width = 1, height = 1;
     private boolean initialized = false;
@@ -68,7 +68,7 @@ public class TextCellFactory {
         width = (int)bmpFont.getSpaceWidth();
         height = (int)(bmpFont.getLineHeight());
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        temp.setColor(Color.WHITE);
+        temp.setColor(HDRColor.WHITE);
         temp.fill();
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
@@ -90,7 +90,7 @@ public class TextCellFactory {
     public TextCellFactory initBySize() {
         bmpFont.setFixedWidthGlyphs(fitting);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        temp.setColor(Color.WHITE);
+        temp.setColor(HDRColor.WHITE);
         temp.fill();
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
@@ -443,12 +443,12 @@ public class TextCellFactory {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (s == null) {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
@@ -468,19 +468,19 @@ public class TextCellFactory {
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
-    public void draw(Batch batch, String s, Color color, float x, float y) {
+    public void draw(Batch batch, String s, HDRColor color, float x, float y) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         bmpFont.setColor(color);
 
         if (s == null) {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(color);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(color);
             batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
@@ -529,12 +529,12 @@ public class TextCellFactory {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (tr == null) {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
@@ -552,19 +552,19 @@ public class TextCellFactory {
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
-    public void draw(Batch batch, TextureRegion tr, Color color, float x, float y) {
+    public void draw(Batch batch, TextureRegion tr, HDRColor color, float x, float y) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         bmpFont.setColor(color);
 
         if (tr == null) {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(color);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
@@ -614,12 +614,12 @@ public class TextCellFactory {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (tr == null) {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
@@ -639,18 +639,18 @@ public class TextCellFactory {
      * @param width the width of the TextureRegion or solid block in pixels.
      * @param height the height of the TextureRegion or solid block in pixels.
      */
-    public void draw(Batch batch, TextureRegion tr, Color color, float x, float y, float width, float height) {
+    public void draw(Batch batch, TextureRegion tr, HDRColor color, float x, float y, float width, float height) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
 
         if (tr == null) {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(color);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = batch.getColor();
+            HDRColor orig = scc.get(batch.getColor());
             batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
@@ -664,7 +664,7 @@ public class TextCellFactory {
      * @param color a Color to tint s with.
      * @return the Actor, with no position set.
      */
-    public Actor makeActor(String s, Color color) {
+    public Actor makeActor(String s, HDRColor color) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -695,7 +695,7 @@ public class TextCellFactory {
      * @param color a Color to tint tr with.
      * @return the Actor, with no position set.
      */
-    public Actor makeActor(TextureRegion tr, Color color) {
+    public Actor makeActor(TextureRegion tr, HDRColor color) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
@@ -721,7 +721,7 @@ public class TextCellFactory {
      * @param color a Color to tint tr with.
      * @return the Actor, with no position set.
      */
-    public Actor makeActor(TextureRegion tr, Color color, float width, float height) {
+    public Actor makeActor(TextureRegion tr, HDRColor color, float width, float height) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
