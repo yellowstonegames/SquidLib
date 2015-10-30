@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.Color;
  * 
  * @see SquidColorCenter Another way to manage colors if you don't want to use preallocated instances.
  */
-public class SColor extends Color {
+public class SColor extends HDRColor {
 
     private String name = "Unnamed";
     /**
@@ -5932,6 +5932,15 @@ public class SColor extends Color {
         super((colorValue << 8) | 255);
         name = super.toString();
     }
+    /**
+     * Creates a new color that has the given combined HDR RGBA value.
+     *
+     * @param colorValue
+     */
+    public SColor(long colorValue) {
+        super(colorValue);
+        name = super.toString();
+    }
 
     /**
      * Creates a new color that has the given combined RGB value and the
@@ -6008,7 +6017,7 @@ public class SColor extends Color {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof SColor || other instanceof Color ? toIntBits() == ((Color) other).toIntBits() : false;
+        return (other instanceof SColor || other instanceof Color) && toIntBits() == ((Color) other).toIntBits();
     }
 
     @Override

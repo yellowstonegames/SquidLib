@@ -45,7 +45,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private double counter;
     private boolean[][] seen;
     private int health = 7;
-    private static final Color bgColor = SColor.DARK_SLATE_GRAY;
+    private static final HDRColor bgColor = SColor.DARK_SLATE_GRAY;
     private HashMap<AnimatedEntity, Integer> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage;

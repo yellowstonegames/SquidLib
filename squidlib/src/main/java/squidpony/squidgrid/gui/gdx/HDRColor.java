@@ -51,16 +51,29 @@ public class HDRColor extends Color {
     public static final HDRColor VIOLET = new HDRColor(0xee82eeff);
     public static final HDRColor MAROON = new HDRColor(0xb03060ff);
 
+    public static final HDRColor SHINING_WHITE = new HDRColor(2f, 2f, 2f, 1f);
+    public static final HDRColor SHINING_RED = new HDRColor(2f, 0.1f, 0.1f, 1f);
+    public static final HDRColor SHINING_GREEN = new HDRColor(0.1f, 2f, 0.1f, 1f);
+    public static final HDRColor SHINING_BLUE = new HDRColor(0.1f, 0.1f, 2f, 1f);
+    public static final HDRColor SHINING_YELLOW = new HDRColor(2f, 2f, 0.2f, 1f);
+    public static final HDRColor SHINING_CYAN = new HDRColor(0.2f, 1.9f, 1.9f, 1f);
+    public static final HDRColor SHINING_MAGENTA = new HDRColor(1.8f, 0.2f, 1.8f, 1f);
+
     /** the red, green, blue and alpha components **/
-    public float r, g, b, a, hr, hg, hb;
+    public float hr, hg, hb;
 
     /** Constructs a new HDRColor with all components set to 0. */
     public HDRColor () {
     }
 
-    /** @see #rgba8888ToHDRColor(HDRColor, int) */
+    /** @see #rgba8888ToColor(HDRColor, int) */
     public HDRColor (int rgba8888) {
-        rgba8888ToHDRColor(this, rgba8888);
+        rgba8888ToColor(this, rgba8888);
+    }
+
+    /** @see #rgba8888ToColor(HDRColor, int) */
+    public HDRColor (long rgbaHDR) {
+        rgbaHDRToColor(this, rgbaHDR);
     }
 
     /** Constructor, sets the components of the HDRColor
@@ -110,7 +123,7 @@ public class HDRColor extends Color {
      * @param color the Color
      */
     @Override
-    public Color set(Color color) {
+    public HDRColor set(Color color) {
         this.hr = color.r;
         this.hg = color.g;
         this.hb = color.b;
@@ -137,7 +150,7 @@ public class HDRColor extends Color {
      * @return this color.
      */
     @Override
-    public Color mul(Color color) {
+    public HDRColor mul(Color color) {
         this.hr *= color.r;
         this.hg *= color.g;
         this.hb *= color.b;
@@ -177,7 +190,7 @@ public class HDRColor extends Color {
      * @return this color
      */
     @Override
-    public Color add(Color color) {
+    public HDRColor add(Color color) {
         this.hr += color.r;
         this.hg += color.g;
         this.hb += color.b;
@@ -204,7 +217,7 @@ public class HDRColor extends Color {
      * @return this color
      */
     @Override
-    public Color sub(Color color) {
+    public HDRColor sub(Color color) {
         this.hr -= color.r;
         this.hg -= color.g;
         this.hb -= color.b;
@@ -263,10 +276,10 @@ public class HDRColor extends Color {
     /** Sets this HDRColor's component values through an integer representation.
      *
      * @return this HDRColor for chaining
-     * @see #rgba8888ToHDRColor(HDRColor, int) */
+     * @see #rgba8888ToColor(HDRColor, int) */
     @Override
     public HDRColor set (int rgba) {
-        rgba8888ToHDRColor(this, rgba);
+        rgba8888ToColor(this, rgba);
         return this;
     }
 
@@ -343,7 +356,7 @@ public class HDRColor extends Color {
      * @return This color for chaining.
      */
     @Override
-    public Color lerp(Color target, float t) {
+    public HDRColor lerp(Color target, float t) {
         this.hr += t * (target.r - this.hr);
         this.hg += t * (target.g - this.hg);
         this.hb += t * (target.b - this.hb);
@@ -417,10 +430,10 @@ public class HDRColor extends Color {
      * format ABGR.
      * @return the packed HDRColor as a 32-bit int. */
     public long toLongBits () {
-        return ((long)(255 * a) << 48) |
-                (((long)(255 * hb) & 0xffff) << 32) |
-                (((long)(255 * hg) & 0xffff) << 16) |
-                ((long)(255 * hr) & 0xffff);
+        return ((long)(255 * hr) << 40) |
+                (((long)(255 * hg) & 0xffff) << 24) |
+                (((long)(255 * hb) & 0xffff) << 8) |
+                ((long)(255 * a) & 0xff);
     }
 
     /** Returns the HDRColor encoded as hex string with the format RRRRGGGGBBBBAA. */
@@ -522,6 +535,9 @@ public class HDRColor extends Color {
     public static int rgba8888 (HDRColor color) {
         return ((int)(color.r * 255) << 24) | ((int)(color.g * 255) << 16) | ((int)(color.b * 255) << 8) | (int)(color.a * 255);
     }
+    public static long rgbaHDR (HDRColor color) {
+        return (Math.round(color.r * 255.0) << 40) | (Math.round(color.g * 255.0) << 24) | (Math.round(color.b * 255.0) << 8) | Math.round(color.a * 255.0);
+    }
 
     public static int argb8888 (HDRColor color) {
         return ((int)(color.a * 255) << 24) | ((int)(color.r * 255) << 16) | ((int)(color.g * 255) << 8) | (int)(color.b * 255);
@@ -532,7 +548,7 @@ public class HDRColor extends Color {
      *
      * @param color The HDRColor to be modified.
      * @param value An integer HDRColor value in RGB565 format. */
-    public static void rgb565ToHDRColor (HDRColor color, int value) {
+    public static void rgb565ToColor (HDRColor color, int value) {
         color.hr = ((value & 0x0000F800) >>> 11) / 31f;
         color.hg = ((value & 0x000007E0) >>> 5) / 63f;
         color.hb = (value & 0x0000001F)        / 31f;
@@ -543,7 +559,7 @@ public class HDRColor extends Color {
      *
      * @param color The HDRColor to be modified.
      * @param value An integer HDRColor value in RGBA4444 format. */
-    public static void rgba4444ToHDRColor (HDRColor color, int value) {
+    public static void rgba4444ToColor (HDRColor color, int value) {
         color.hr = ((value & 0x0000f000) >>> 12) / 15f;
         color.hg = ((value & 0x00000f00) >>> 8) / 15f;
         color.hb = ((value & 0x000000f0) >>> 4) / 15f;
@@ -555,10 +571,11 @@ public class HDRColor extends Color {
      *
      * @param color The HDRColor to be modified.
      * @param value An integer HDRColor value in RGB888 format. */
-    public static void rgb888ToHDRColor (HDRColor color, int value) {
+    public static void rgb888ToColor (HDRColor color, int value) {
         color.hr = ((value & 0x00ff0000) >>> 16) / 255f;
         color.hg = ((value & 0x0000ff00) >>> 8) / 255f;
         color.hb = ((value & 0x000000ff)) / 255f;
+        color.clamp();
     }
 
     /** Sets the HDRColor components using the specified integer value in the format RGBA8888. This is inverse to the rgba8888(r, g, b,
@@ -566,11 +583,23 @@ public class HDRColor extends Color {
      *
      * @param color The HDRColor to be modified.
      * @param value An integer HDRColor value in RGBA8888 format. */
-    public static void rgba8888ToHDRColor (HDRColor color, int value) {
+    public static void rgba8888ToColor (HDRColor color, int value) {
         color.hr = ((value & 0xff000000) >>> 24) / 255f;
         color.hg = ((value & 0x00ff0000) >>> 16) / 255f;
         color.hb = ((value & 0x0000ff00) >>> 8) / 255f;
         color.a = ((value & 0x000000ff)) / 255f;
+        color.clamp();
+    }
+    /** Sets the HDRColor components using the specified long value with 16 red, 16 green, 16 blue, and 8 alpha bits.
+     * This is inverse to the rgbaHDR() method.
+     *
+     * @param color The HDRColor to be modified.
+     * @param value An long HDRColor value in HDR 16 bt RGB, 8 bit A format. */
+    public static void rgbaHDRToColor (HDRColor color, long value) {
+        color.hr = ((value & 0xffff0000000000L) >> 40) / 255f;
+        color.hg = ((value & 0x0000ffff000000L) >> 24) / 255f;
+        color.hb = ((value & 0x00000000ffff00L) >> 8) / 255f;
+        color.a = ((value  & 0x000000000000ffL)) / 255f;
         color.clamp();
     }
 
@@ -579,7 +608,7 @@ public class HDRColor extends Color {
      *
      * @param color The HDRColor to be modified.
      * @param value An integer HDRColor value in ARGB8888 format. */
-    public static void argb8888ToHDRColor (HDRColor color, int value) {
+    public static void argb8888ToColor (HDRColor color, int value) {
         color.a = ((value & 0xff000000) >>> 24) / 255f;
         color.hr = ((value & 0x00ff0000) >>> 16) / 255f;
         color.hg = ((value & 0x0000ff00) >>> 8) / 255f;

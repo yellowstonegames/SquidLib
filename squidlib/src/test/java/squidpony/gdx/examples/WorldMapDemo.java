@@ -2,15 +2,11 @@ package squidpony.gdx.examples;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SColorFactory;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.MetsaMapFactory;
 import squidpony.squidmath.Coord;
 
@@ -20,12 +16,12 @@ public class WorldMapDemo extends ApplicationAdapter {
     private MetsaMapFactory mapFactory;
 
     private SpriteBatch batch;
-
+    private SColorFactory colorFactory;
     private SquidLayers display;
     private int width, height;
     private int cellWidth, cellHeight;
     private SquidInput input;
-    private static final Color bgColor = SColor.DARK_SLATE_GRAY;
+    private static final SColor bgColor = SColor.DARK_SLATE_GRAY;
     private Stage stage;
     //HEIGHT LIMITS
 
@@ -69,6 +65,7 @@ public class WorldMapDemo extends ApplicationAdapter {
         cellWidth = 1;
         cellHeight = 1;
         display = new SquidLayers(width, height, cellWidth, cellHeight);
+        colorFactory = new SColorFactory();
         mapFactory = new MetsaMapFactory(width, height);
         map = mapFactory.makeHeightMap();
         biomeMap = mapFactory.makeBiomeMap(map);
@@ -142,27 +139,27 @@ public class WorldMapDemo extends ApplicationAdapter {
 
 //                use alpha to blend
                 if (n > 0) {
-                    color = SColorFactory.blend(color, SColor.ALICE_BLUE, Math.pow(n / highn, 2) / 2);//high stuff gets lighter
-                    color = SColorFactory.blend(color, SColor.DARK_BLUE_DYE, 0.2 - n * n);//low stuff gets darker
+                    color = colorFactory.blend(color, SColor.ALICE_BLUE, Math.pow(n / highn, 2) / 2);//high stuff gets lighter
+                    color = colorFactory.blend(color, SColor.DARK_BLUE_DYE, 0.2 - n * n);//low stuff gets darker
 
                     int shadow = mapFactory.getShadow(x, y, map);
                     if (n > SNOWLEVEL && (biomeMap[x][y] == 1 || biomeMap[x][y] == 3)) {//SNOWAREA VOLCANO CASE
                         if (shadow == -1) {//shadow side INVERSE
 //                            color = SColorFactory.blend(color, new SColor(0, 0, 90), 0.2);
-                            color = SColorFactory.blend(color, SColor.DENIM, 0.2 * n / 2);
+                            color = colorFactory.blend(color, SColor.DENIM, 0.2 * n / 2);
                         }
                         if (shadow == 1) {//sun side INVERSE
 //                            color = SColorFactory.blend(color, new SColor(255, 255, 0), 0.1);
-                            color = SColorFactory.blend(color, SColor.BRASS, 0.1 * n / 2);
+                            color = colorFactory.blend(color, SColor.BRASS, 0.1 * n / 2);
                         }
                     } else {
                         if (shadow == 1) { //shadow side
 //                            color = SColorFactory.blend(color, new SColor(0, 0, 90), 0.2);
-                            color = SColorFactory.blend(color, SColor.ONANDO, 0.2 * n / 2);
+                            color = colorFactory.blend(color, SColor.ONANDO, 0.2 * n / 2);
                         }
                         if (shadow == -1) {//sun side
 //                            color = SColorFactory.blend(color, new SColor(220, 220, 100), 0.2);
-                            color = SColorFactory.blend(color, SColor.YELLOW, 0.2 * n / 2);
+                            color = colorFactory.blend(color, SColor.YELLOW, 0.2 * n / 2);
                         }
                     }
                 }

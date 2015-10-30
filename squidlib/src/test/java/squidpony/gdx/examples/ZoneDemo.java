@@ -2,7 +2,6 @@ package squidpony.gdx.examples;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -33,8 +32,8 @@ public class ZoneDemo extends ApplicationAdapter {
     private char[][] bareDungeon, lineDungeon;
     private double[][] res;
     private int[][] colors, lights;
-    private Color[][] bgColors;
-    private Color[] influenceColors;
+    private HDRColor[][] bgColors;
+    private HDRColor[] influenceColors;
     private ZOI zoi;
     private short[][] packedInfluences;
     private int width, height;
@@ -42,7 +41,7 @@ public class ZoneDemo extends ApplicationAdapter {
     private Coord[] centers, shiftedCenters;
     private AnimatedEntity[] centerEntities;
     private SquidInput input;
-    private static final Color bgColor = SColor.DARK_SLATE_GRAY, textColor = SColor.SLATE_GRAY;
+    private static final HDRColor bgColor = SColor.DARK_SLATE_GRAY, textColor = SColor.SLATE_GRAY;
     private Stage stage;
     private int framesWithoutAnimation = 0;
     private ArrayList<Coord> awaitedMoves;
@@ -78,7 +77,7 @@ public class ZoneDemo extends ApplicationAdapter {
         shiftedCenters = temp.toArray(new Coord[temp.size()]);
 
         colorCenter = new SquidColorCenter();
-        influenceColors = new Color[centers.length];
+        influenceColors = new HDRColor[centers.length];
         centerEntities = new AnimatedEntity[centers.length];
         for (int i = 0; i < centers.length; i++) {
             float hue = i * 1.0f / centers.length, sat = rng.nextFloat() * 0.5f + 0.5f,
@@ -92,7 +91,7 @@ public class ZoneDemo extends ApplicationAdapter {
         packedInfluences = zoi.calculate();
 
         colors = DungeonUtility.generatePaletteIndices(bareDungeon);
-        bgColors = new Color[width][height];
+        bgColors = new HDRColor[width][height];
         recolorZones();
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon);
 

@@ -3,7 +3,6 @@ package squidpony.gdx.examples;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -57,7 +56,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private double counter;
     private boolean[][] seen;
     private int health = 7;
-    private static final Color bgColor = SColor.DARK_SLATE_GRAY;
+    private static final HDRColor bgColor = SColor.DARK_SLATE_GRAY;
     private HashMap<AnimatedEntity, Integer> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage;
@@ -412,18 +411,18 @@ public class EverythingDemo extends ApplicationAdapter {
         final int nbMonsters = monsters.size();
 
 		/* Prepare the String to display */
-		final IColoredString<Color> cs = new IColoredString.Impl<Color>();
+		final IColoredString<HDRColor> cs = new IColoredString.Impl<HDRColor>();
 		cs.append("Still ", null);
-        final Color nbColor;
+        final HDRColor nbColor;
         if (nbMonsters <= 1)
             /* Green */
-            nbColor = new Color(0, 1, 0, 1);
+            nbColor = new HDRColor(0, 1, 0, 1);
         else if (nbMonsters <= 5)
             /* Orange */
-            nbColor = new Color(1, 0.5f, 0, 1);
+            nbColor = new HDRColor(1, 0.5f, 0, 1);
         else
             /* Red */
-            nbColor = new Color(1, 0, 0, 1);
+            nbColor = new HDRColor(1, 0, 0, 1);
         cs.appendInt(nbMonsters, nbColor);
         cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
 
@@ -434,7 +433,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
         final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
-        final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<Color>();
+        final GroupCombinedPanel<HDRColor> gcp = new GroupCombinedPanel<HDRColor>();
 		/*
 		 * We're setting them late just for the demo, as it avoids giving 'w'
 		 * and 'h' at construction time.
@@ -448,7 +447,7 @@ public class EverythingDemo extends ApplicationAdapter {
 		gcp.setPosition(((width / 2) - (w / 2)) * cellWidth, (height / 2) * cellHeight);
 
 		/* Fill the background with some grey */
-		gcp.fillBG(new Color(0.3f, 0.3f, 0.3f, 0.9f));
+		gcp.fillBG(new HDRColor(0.3f, 0.3f, 0.3f, 0.9f));
 
 		/* Now, to set the text we have to follow SquidPanel's convention */
 		/* First 0: justify left, second 0: first (and only) line */

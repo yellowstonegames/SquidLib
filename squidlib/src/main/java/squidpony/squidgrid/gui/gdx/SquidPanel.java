@@ -1,7 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -28,14 +27,15 @@ import java.util.LinkedHashSet;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class SquidPanel extends Group implements ISquidPanel<Color> {
+public class SquidPanel extends Group implements ISquidPanel<HDRColor> {
 
     public float DEFAULT_ANIMATION_DURATION = 0.12F;
     private int animationCount = 0;
-    private Color defaultForeground = Color.WHITE;
+    private HDRColor defaultForeground = HDRColor.WHITE;
+    private SquidColorCenter scc = new SquidColorCenter();
     private final int gridWidth, gridHeight, cellWidth, cellHeight;
     private String[][] contents;
-    private int[][] colors;
+    private long[][] colors;
     private final TextCellFactory textFactory;
     private LinkedHashSet<AnimatedEntity> animatedEntities;
 
@@ -89,7 +89,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         cellHeight = factory.height();
 
         contents = new String[gridWidth][gridHeight];
-        colors = new int[gridWidth][gridHeight];
+        colors = new long[gridWidth][gridHeight];
 
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;
@@ -107,11 +107,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
     @Override
-	public void put(char[][] chars, Color[][] foregrounds) {
+	public void put(char[][] chars, HDRColor[][] foregrounds) {
         put(0, 0, chars, foregrounds);
     }
 
-    public void put(char[][] chars, int[][] indices, ArrayList<Color> palette) {
+    public void put(char[][] chars, int[][] indices, ArrayList<HDRColor> palette) {
         put(0, 0, chars, indices, palette);
     }
 
@@ -119,7 +119,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         put(xOffset, yOffset, chars, defaultForeground);
     }
 
-    public void put(int xOffset, int yOffset, char[][] chars, Color[][] foregrounds) {
+    public void put(int xOffset, int yOffset, char[][] chars, HDRColor[][] foregrounds) {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
@@ -129,7 +129,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
     }
 
-    public void put(int xOffset, int yOffset, char[][] chars, int[][] indices, ArrayList<Color> palette) {
+    public void put(int xOffset, int yOffset, char[][] chars, int[][] indices, ArrayList<HDRColor> palette) {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
@@ -139,7 +139,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
     }
 
-    public void put(int xOffset, int yOffset, Color[][] foregrounds) {
+    public void put(int xOffset, int yOffset, HDRColor[][] foregrounds) {
         for (int x = xOffset; x < xOffset + foregrounds.length; x++) {
             for (int y = yOffset; y < yOffset + foregrounds[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
@@ -149,7 +149,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
     }
 
-    public void put(int xOffset, int yOffset, int[][] indices, ArrayList<Color> palette) {
+    public void put(int xOffset, int yOffset, int[][] indices, ArrayList<HDRColor> palette) {
         for (int x = xOffset; x < xOffset + indices.length; x++) {
             for (int y = yOffset; y < yOffset + indices[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
@@ -159,7 +159,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
     }
 
-    public void put(int xOffset, int yOffset, char[][] chars, Color foreground) {
+    public void put(int xOffset, int yOffset, char[][] chars, HDRColor foreground) {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
@@ -186,18 +186,18 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
 	@Override
-	public void put(int xOffset, int yOffset, IColoredString<? extends Color> cs) {
+	public void put(int xOffset, int yOffset, IColoredString<? extends HDRColor> cs) {
 		int x = xOffset;
-		for (IColoredString.Bucket<? extends Color> fragment : cs) {
+		for (IColoredString.Bucket<? extends HDRColor> fragment : cs) {
 			final String s = fragment.getText();
-			final Color color = fragment.getColor();
+			final HDRColor color = fragment.getColor();
 			put(x, yOffset, s, color == null ? getDefaultForegroundColor() : color);
 			x += s.length();
 		}
 	}
 
 	@Override
-	public void put(int xOffset, int yOffset, String string, Color foreground) {
+	public void put(int xOffset, int yOffset, String string, HDRColor foreground) {
         char[][] temp = new char[string.length()][1];
         for (int i = 0; i < string.length(); i++) {
             temp[i][0] = string.charAt(i);
@@ -234,7 +234,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param foreground the color to draw the characters
      * @param vertical true if the text should be written vertically, from top to bottom
      */
-    public void put(int xOffset, int yOffset, String string, Color foreground, boolean vertical) {
+    public void put(int xOffset, int yOffset, String string, HDRColor foreground, boolean vertical) {
         if (vertical) {
             put(xOffset, yOffset, new char[][]{string.toCharArray()}, foreground);
         } else {
@@ -249,7 +249,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         for (int i = 0; i < contents.length; i++) {
             for (int j = 0; j < contents[i].length; j++) {
                 contents[i][j] = "";
-                colors[i][j] = (255 << 24);
+                colors[i][j] = 255;
             }
 
         }
@@ -257,11 +257,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     @Override
 	public void clear(int x, int y) {
-        put(x, y, Color.CLEAR);
+        put(x, y, HDRColor.CLEAR);
     }
 
     @Override
-	public void put(int x, int y, Color color) {
+	public void put(int x, int y, HDRColor color) {
         put(x, y, '\0', color);
     }
 
@@ -281,15 +281,15 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         put(x, y, code, defaultForeground);
     }
 
-    public void put(int x, int y, int c, Color color) {
+    public void put(int x, int y, int c, HDRColor color) {
         put(x, y, String.valueOf(Character.toChars(c)), color);
     }
 
-    public void put(int x, int y, int index, ArrayList<Color> palette) {
+    public void put(int x, int y, int index, ArrayList<HDRColor> palette) {
         put(x, y, palette.get(index));
     }
 
-    public void put(int x, int y, char c, int index, ArrayList<Color> palette) {
+    public void put(int x, int y, char c, int index, ArrayList<HDRColor> palette) {
         put(x, y, c, palette.get(index));
     }
 
@@ -302,12 +302,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      */
     @Override
-	public void put(int x, int y, char c, Color color) {
+	public void put(int x, int y, char c, HDRColor color) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-        colors[x][y] = Color.rgba8888(color);
+        colors[x][y] = HDRColor.rgbaHDR(color);
     }
 
     @Override
@@ -332,11 +332,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     @Override
     public void draw (Batch batch, float parentAlpha) {
-        Color tmp = new Color();
+        HDRColor tmp;
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                Color.rgba8888ToColor(tmp, colors[x][y]);
-                textFactory.draw(batch, contents[x][y], tmp, x * cellWidth, (gridHeight - y) * cellHeight);
+                tmp = scc.get(colors[x][y]);
+                textFactory.draw(batch, contents[x][y], tmp, 1f * x * cellWidth, 1f * (gridHeight - y) * cellHeight);
             }
         }
         super.draw(batch, parentAlpha);
@@ -358,12 +358,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
     @Override
-	public void setDefaultForeground(Color defaultForeground) {
+	public void setDefaultForeground(HDRColor defaultForeground) {
         this.defaultForeground = defaultForeground;
     }
 
 	@Override
-	public Color getDefaultForegroundColor() {
+	public HDRColor getDefaultForegroundColor() {
 		return defaultForeground;
 	}
 
@@ -384,7 +384,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, char c, Color color)
+    public AnimatedEntity animateActor(int x, int y, char c, HDRColor color)
     {
         Actor a = textFactory.makeActor("" + c, color);
         a.setName("" + c);
@@ -405,7 +405,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, char c, Color color)
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, char c, HDRColor color)
     {
         Actor a = textFactory.makeActor("" + c, color);
         a.setName("" + c);
@@ -427,7 +427,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, String s, Color color)
+    public AnimatedEntity animateActor(int x, int y, String s, HDRColor color)
     {
         Actor a = textFactory.makeActor(s, color);
         a.setName(s);
@@ -448,7 +448,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Color color)
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, HDRColor color)
     {
         Actor a = textFactory.makeActor(s, color);
         a.setName(s);
@@ -471,7 +471,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param palette
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette)
+    public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<HDRColor> palette)
     {
         return animateActor(x, y, c, palette.get(index));
     }
@@ -485,7 +485,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param palette
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<Color> palette)
+    public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<HDRColor> palette)
     {
         return animateActor(x, y, s, palette.get(index));
     }
@@ -500,7 +500,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, TextureRegion texture)
     {
-        Actor a = textFactory.makeActor(texture, Color.WHITE);
+        Actor a = textFactory.makeActor(texture, HDRColor.WHITE);
         a.setName("");
         a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
 
@@ -518,7 +518,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, TextureRegion texture, Color color)
+    public AnimatedEntity animateActor(int x, int y, TextureRegion texture, HDRColor color)
     {
         Actor a = textFactory.makeActor(texture, color);
         a.setName("");
@@ -540,7 +540,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture)
     {
-        Actor a = textFactory.makeActor(texture, Color.WHITE, (doubleWidth ? 2 : 1) * cellWidth, cellHeight);
+        Actor a = textFactory.makeActor(texture, HDRColor.WHITE, (doubleWidth ? 2 : 1) * cellWidth, cellHeight);
         a.setName("");
         if(doubleWidth)
             a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
@@ -562,7 +562,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture, Color color) {
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture, HDRColor color) {
         Actor a = textFactory.makeActor(texture, color, (doubleWidth ? 2 : 1) * cellWidth, cellHeight);
         a.setName("");
         if (doubleWidth)
@@ -589,8 +589,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, boolean stretch, TextureRegion texture)
     {
         Actor a = (stretch)
-                ? textFactory.makeActor(texture, Color.WHITE, (doubleWidth ? 2 : 1) * cellWidth, cellHeight)
-                : textFactory.makeActor(texture, Color.WHITE, texture.getRegionWidth(), texture.getRegionHeight());
+                ? textFactory.makeActor(texture, HDRColor.WHITE, (doubleWidth ? 2 : 1) * cellWidth, cellHeight)
+                : textFactory.makeActor(texture, HDRColor.WHITE, texture.getRegionWidth(), texture.getRegionHeight());
         a.setName("");
         if(doubleWidth)
             a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
@@ -614,7 +614,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, boolean stretch, TextureRegion texture, Color color) {
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, boolean stretch, TextureRegion texture, HDRColor color) {
 
         Actor a = (stretch)
                 ? textFactory.makeActor(texture, color, (doubleWidth ? 2 : 1) * cellWidth, cellHeight)
@@ -641,7 +641,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(contents[x][y] == null || contents[x][y].equals(""))
             return null;
 
-        Actor a = textFactory.makeActor(contents[x][y], new Color(colors[x][y]));
+        Actor a = textFactory.makeActor(contents[x][y], scc.get(colors[x][y]));
         a.setName(contents[x][y]);
         a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
 
@@ -663,7 +663,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(contents[x][y] == null || contents[x][y].equals(""))
             return null;
 
-        Actor a = textFactory.makeActor(contents[x][y], new Color(colors[x][y]));
+        Actor a = textFactory.makeActor(contents[x][y], scc.get(colors[x][y]));
         a.setName(contents[x][y]);
         if(doubleWidth)
             a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
@@ -952,7 +952,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @param duration
      */
-    public void tint(final AnimatedEntity ae, Color color, float duration) {
+    public void tint(final AnimatedEntity ae, HDRColor color, float duration) {
 
         final Actor a = ae.actor;
         if(a == null || ae.animating)
@@ -960,7 +960,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(duration < 0.02f) duration = 0.02f;
         ae.animating = true;
         animationCount++;
-        Color ac = a.getColor().cpy();
+        HDRColor ac = scc.get(a.getColor());
         a.addAction(Actions.sequence(
                 Actions.color(color, duration * 0.3f),
                 Actions.color(ac, duration * 0.7f),
@@ -979,14 +979,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param color
      * @param duration
      */
-    public void tint(int x, int y, Color color, float duration) {
+    public void tint(int x, int y, HDRColor color, float duration) {
         final Actor a = cellToActor(x, y);
         if(a == null)
             return;
         if(duration < 0.02f) duration = 0.02f;
         animationCount++;
 
-        Color ac = a.getColor().cpy();
+        HDRColor ac = scc.get(a.getColor());
         a.addAction(Actions.sequence(
                 Actions.color(color, duration * 0.3f),
                 Actions.color(ac, duration * 0.7f),
@@ -1018,7 +1018,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 	}
 
 	@Override
-	public ISquidPanel<Color> getBacker() {
+	public ISquidPanel<HDRColor> getBacker() {
 		return this;
 	}
 
