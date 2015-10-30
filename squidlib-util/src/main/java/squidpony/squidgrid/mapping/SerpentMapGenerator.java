@@ -5,6 +5,7 @@ import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -38,9 +39,9 @@ public class SerpentMapGenerator {
         if(width <= 2 || height <= 2)
             throw new ExceptionInInitializerError("width and height must be greater than 2");
         random = rng;
-        long columnAlterations = random.nextLong(0x1000000);
+        long columnAlterations = random.nextLong(0x1000000000000L);
         float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);
-        long rowAlterations = random.nextLong(0x1000000);
+        long rowAlterations = random.nextLong(0x1000000000000L);
         float rowBase = height / (Long.bitCount(rowAlterations) + 48.0f);
 
         columns = new int[16];
@@ -53,17 +54,20 @@ public class SerpentMapGenerator {
             rows[i] = rsum + (int)(rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
             rsum += (int)(rowBase * (3 + Long.bitCount(rowAlterations & b)));
         }
-        int cs2 = (int)Math.floor((width - csum) * 0.5);
-        int rs2 = (int)Math.floor((height - rsum) * 0.5);
-        int cs3 = (width == csum) ? 0 :  (int)Math.ceil((width - csum) * 0.5);
-        int rs3 = (height == rsum) ? 0 : (int)Math.ceil((height - rsum) * 0.5);
-        for (int i = 7; i < 16; i++) {
-            columns[i] += cs2;
-            rows[i] += cs2;
+        int cs = (width - csum);
+        int rs = (height - rsum);
+        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
+        for (int i = 7; i >= 0; i--) {
+            cs2= cs2 * i / 7;
+            rs2 = rs2 * i / 7;
+            columns[i] -= cs2;
+            rows[i] -= rs2;
         }
-        for (int i = 8; i < 16; i++) {
+        for (int i = 15; i >= 8; i--) {
+            cs3 = cs3 * (i - 8) / 8;
+            rs3 = rs3 * (i - 8) / 8;
             columns[i] += cs3;
-            rows[i] += cs3;
+            rows[i] += rs3;
         }
 
         List<Coord> points = new ArrayList<Coord>(80);
@@ -74,7 +78,77 @@ public class SerpentMapGenerator {
         }
         points.add(points.get(0));
         mix = new MixedGenerator(width, height, random, points);
+    }
 
+    /**
+     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
+     * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
+     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
+     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
+     * @param width the width of the final map in cells
+     * @param height the height of the final map in cells
+     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @see MixedGenerator
+     */
+    public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance)
+    {
+        if(width <= 2 || height <= 2)
+            throw new ExceptionInInitializerError("width and height must be greater than 2");
+        random = rng;
+        long columnAlterations = random.nextLong(0x1000000000000L);
+        float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);
+        long rowAlterations = random.nextLong(0x1000000000000L);
+        float rowBase = height / (Long.bitCount(rowAlterations) + 48.0f);
+
+        columns = new int[16];
+        rows = new int[16];
+        int csum = 0, rsum = 0;
+        long b = 7;
+        for (int i = 0; i < 16; i++, b <<= 3) {
+            columns[i] = csum + (int)(columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
+            csum += (int)(columnBase * (3 + Long.bitCount(columnAlterations & b)));
+            rows[i] = rsum + (int)(rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
+            rsum += (int)(rowBase * (3 + Long.bitCount(rowAlterations & b)));
+        }
+        int cs = (width - csum);
+        int rs = (height - rsum);
+        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
+        for (int i = 7; i >= 0; i--) {
+            cs2= cs2 * i / 7;
+            rs2 = rs2 * i / 7;
+            columns[i] -= cs2;
+            rows[i] -= rs2;
+        }
+        for (int i = 15; i >= 8; i--) {
+            cs3 = cs3 * (i - 8) / 8;
+            rs3 = rs3 * (i - 8) / 8;
+            columns[i] += cs3;
+            rows[i] += rs3;
+        }
+
+        LinkedHashMap<Coord, List<Coord>> connections = new LinkedHashMap<Coord, List<Coord>>(80);
+        Coord temp, t;
+        int m = random.nextInt(256), r = random.between(4, 12);
+        temp = CoordPacker.mooreToCoord(m);
+        Coord starter = CoordPacker.mooreToCoord(m);
+        m += r;
+        for (int i = r; i < 256; i += r, m += r) {
+            List<Coord> cl = new ArrayList<Coord>(4);
+            cl.add(Coord.get(columns[temp.x], rows[temp.y]));
+            temp = CoordPacker.mooreToCoord(m);
+            r = random.between(4, 12);
+            for (int j = 0, p = r - 1;
+                 j < 3 && p > 2 && Math.min(random.nextDouble(), random.nextDouble()) < branchingChance;
+                 j++, p -= random.between(1, p)) {
+                t = CoordPacker.mooreToCoord(m + p);
+                cl.add(Coord.get(columns[t.x], rows[t.y]));
+            }
+            connections.put(Coord.get(columns[temp.x], rows[temp.y]), cl);
+        }
+        connections.get(Coord.get(columns[temp.x], rows[temp.y])).add(
+                Coord.get(columns[starter.x], rows[starter.y]));
+        mix = new MixedGenerator(width, height, random, connections);
     }
 
     /**
