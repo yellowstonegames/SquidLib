@@ -79,6 +79,7 @@ public class DungeonGeneratorTest {
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xea7f00d));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
+
         dungeonGenerator.addDoors(15, false);
         dungeonGenerator.addWater(25);
         dungeonGenerator.addTraps(2);
@@ -94,12 +95,13 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(dungeon)));
         System.out.println(dungeonGenerator);
+
         dungeonGenerator = new DungeonGenerator(width, height, rng);
-        dungeonGenerator.addDoors(15, false);
-        dungeonGenerator.addWater(20);
-        dungeonGenerator.addGrass(10);
-        rng.setState(0xea7f00d);
-        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
+        //dungeonGenerator.addDoors(15, false);
+        //dungeonGenerator.addWater(20);
+        //dungeonGenerator.addGrass(10);
+        rng.setState(0xf00dd00dL);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.8);
         serpent.putWalledBoxRoomCarvers(2);
         serpent.putWalledRoundRoomCarvers(2);
         serpent.putCaveCarvers(3);

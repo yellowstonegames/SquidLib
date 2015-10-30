@@ -5,10 +5,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.PoissonDisk;
 import squidpony.squidmath.RNG;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * A dungeon generator that can use a mix of techniques to have part-cave, part-room dungeons.
@@ -27,11 +24,12 @@ public class MixedGenerator {
         ROUND_WALLED
     }
     private EnumMap<CarverType, Integer> carvers;
-    private int height, width;
+    private int width, height;
+    private float roomWidth, roomHeight;
     public RNG rng;
     private char[][] dungeon;
     private boolean[][] marked, walled;
-    private List<Coord> points;
+    private List<Long> points;
     private int totalPoints;
 
     /**
@@ -77,8 +75,10 @@ public class MixedGenerator {
      * @see SerpentMapGenerator a class that uses this technique
      */
     public MixedGenerator(int width, int height, RNG rng, List<Coord> sequence) {
-        this.height = height;
         this.width = width;
+        this.height = height;
+        this.roomWidth = width / 64.0f;
+        this.roomHeight = height / 64.0f;
         if(width <= 2 || height <= 2)
             throw new ExceptionInInitializerError("width and height must be greater than 2");
         this.rng = rng;
@@ -89,8 +89,54 @@ public class MixedGenerator {
         for (int i = 1; i < width; i++) {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
         }
-        points = new ArrayList<Coord>(sequence);
-        totalPoints = sequence.size();
+        totalPoints = sequence.size() - 1;
+        points = new ArrayList<Long>(totalPoints);
+        for (int i = 0; i < totalPoints; i++) {
+            Coord c1 = sequence.get(i), c2 = sequence.get(i + 1);
+            points.add(((c1.x & 0xffL) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
+        }
+        carvers = new EnumMap<CarverType, Integer>(CarverType.class);
+    }
+    /**
+     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This version of the constructor uses a LinkedHashMap with Coord keys and Coord array values to determine a
+     * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you
+     * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the
+     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
+     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
+     * @param width the width of the final map in cells
+     * @param height the height of the final map in cells
+     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways
+     * @see SerpentMapGenerator a class that uses this technique
+     */
+    public MixedGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections) {
+        this.width = width;
+        this.height = height;
+        this.roomWidth = width / 80.0f;
+        this.roomHeight = height / 80.0f;
+        if(width <= 2 || height <= 2)
+            throw new ExceptionInInitializerError("width and height must be greater than 2");
+        this.rng = rng;
+        dungeon = new char[width][height];
+        marked = new boolean[width][height];
+        walled = new boolean[width][height];
+        Arrays.fill(dungeon[0], '#');
+        for (int i = 1; i < width; i++) {
+            System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
+        }
+        totalPoints = 0;
+        for(List<Coord> vals : connections.values())
+        {
+            totalPoints += vals.size();
+        }
+        points = new ArrayList<Long>(totalPoints);
+        for (Map.Entry<Coord, List<Coord>> kv : connections.entrySet()) {
+            Coord c1 = kv.getKey();
+            for (Coord c2 : kv.getValue()) {
+                points.add(((c1.x & 0xffL) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
+            }
+        }
         carvers = new EnumMap<CarverType, Integer>(CarverType.class);
     }
 
@@ -205,8 +251,10 @@ public class MixedGenerator {
         else
             allCarvings = rng.shuffle(allCarvings);
 
-        for (int p = 0, c = 0; p < totalPoints - 1; p++, c = (++c) % totalLength) {
-            Coord start = points.get(p), end = points.get(p + 1);
+        for (int p = 0, c = 0; p < totalPoints; p++, c = (++c) % totalLength) {
+            long pair = points.get(p);
+            Coord start = Coord.get((int)(pair >> 24) & 0xff, (int)(pair >> 16) & 0xff),
+                  end   = Coord.get((int)(pair >> 8) & 0xff, (int)pair & 0xff);
             CarverType ct = allCarvings[c];
             Direction dir;
             switch (ct)
@@ -401,8 +449,8 @@ public class MixedGenerator {
      */
     private Coord markRectangle(Coord pos, int halfWidth, int halfHeight)
     {
-        halfWidth = halfWidth * width / 64;
-        halfHeight = halfHeight * height / 64;
+        halfWidth = Math.round(halfWidth * roomWidth);
+        halfHeight = Math.round(halfHeight * roomHeight);
         Coord block = null;
         for (int i = pos.x - halfWidth; i <= pos.x + halfWidth; i++) {
             for (int j = pos.y - halfHeight; j <= pos.y + halfHeight; j++) {
@@ -423,8 +471,8 @@ public class MixedGenerator {
      */
     private Coord markRectangleWalled(Coord pos, int halfWidth, int halfHeight)
     {
-        halfWidth = halfWidth * width / 64;
-        halfHeight = halfHeight * height / 64;
+        halfWidth = Math.round(halfWidth * roomWidth);
+        halfHeight = Math.round(halfHeight * roomHeight);
         Coord block = null;
         for (int i = pos.x - halfWidth; i <= pos.x + halfWidth; i++) {
             for (int j = pos.y - halfHeight; j <= pos.y + halfHeight; j++) {
@@ -451,7 +499,7 @@ public class MixedGenerator {
     {
         Coord block = null;
         int high;
-        radius = radius * Math.min(width, height) / 64;
+        radius = Math.round(radius * Math.min(roomWidth, roomHeight));
         for (int dx = -radius; dx <= radius; ++dx)
         {
             high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));
@@ -475,7 +523,7 @@ public class MixedGenerator {
     {
         Coord block = null;
         int high;
-        radius = radius * Math.min(width, height) / 64;
+        radius = Math.round(radius * Math.min(roomWidth, roomHeight));
         for (int dx = -radius; dx <= radius; ++dx)
         {
             high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));
