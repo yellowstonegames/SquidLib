@@ -65,7 +65,8 @@ public interface Filters {
         }
     }
     /**
-     * A Filter that performs a brightness adjustment to make dark areas lighter and light areas not much less bright.
+     * A Filter that is constructed with a color and linear-interpolates any color it is told to alter toward the color
+     * it was constructed with.
      */
     public class LerpFilter extends Filter {
         /**
@@ -80,10 +81,81 @@ public interface Filters {
         public LerpFilter(float r, float g, float b, float a, float amount) {
             state = new float[]{r, g, b, a, amount};
         }
+        /**
+         * Sets up a LerpFilter with the desired color to linearly interpolate towards.
+         *
+         * @param color the HDRColor to lerp towards
+         * @param amount the amount to lerp by, should be between 0.0 and 1.0
+         */
+        public LerpFilter(HDRColor color, float amount) {
+            state = new float[]{color.hr, color.hg, color.hb, color.a, amount};
+        }
 
         @Override
         public HDRColor alter(float r, float g, float b, float a) {
             return new HDRColor(r, g, b, a).lerp(state[0], state[1], state[2], state[3], state[4]);
+        }
+    }
+    /**
+     * A Filter that is constructed with a group of colors and linear-interpolates any color it is told to alter toward
+     * the color it was constructed with that has the closest hue.
+     */
+    public class MultiLerpFilter extends Filter {
+        private SquidColorCenter globalSCC;
+        /**
+         * Sets up a MultiLerpFilter with the desired colors to linearly interpolate towards; the lengths of each given
+         * array should be identical.
+         *
+         * @param r the red components to lerp towards
+         * @param g the green components to lerp towards
+         * @param b the blue components to lerp towards
+         * @param a the opacity components to lerp towards
+         * @param amount the amounts to lerp by, should each be between 0.0 and 1.0
+         */
+        public MultiLerpFilter(float[] r, float[] g, float[] b, float[] a, float[] amount) {
+            state = new float[Math.min(r.length, Math.min(g.length, Math.min(b.length,
+                    Math.min(a.length, amount.length)))) * 6];
+            globalSCC = DefaultResources.getSCC();
+            for (int i = 0; i < state.length / 6; i++) {
+                state[i * 6] = r[i];
+                state[i * 6 + 1] = g[i];
+                state[i * 6 + 2] = b[i];
+                state[i * 6 + 3] = a[i];
+                state[i * 6 + 4] = amount[i];
+                state[i * 6 + 5] = globalSCC.getHue(r[i], g[i], b[i]);
+            }
+        }/**
+         * Sets up a MultiLerpFilter with the desired colors to linearly interpolate towards and their amounts.
+         *
+         * @param colors the HDRColors to lerp towards
+         * @param amount the amounts to lerp by, should each be between 0.0 and 1.0
+         */
+        public MultiLerpFilter(HDRColor[] colors, float[] amount) {
+            state = new float[Math.min(colors.length, amount.length) * 6];
+            globalSCC = DefaultResources.getSCC();
+            for (int i = 0; i < state.length / 6; i++) {
+                state[i * 6] = colors[i].hr;
+                state[i * 6 + 1] = colors[i].hg;
+                state[i * 6 + 2] = colors[i].hb;
+                state[i * 6 + 3] = colors[i].a;
+                state[i * 6 + 4] = amount[i];
+                state[i * 6 + 5] = globalSCC.getHue(colors[i]);
+            }
+        }
+
+        @Override
+        public HDRColor alter(float r, float g, float b, float a) {
+            float givenH = globalSCC.getHue(r, g, b), minDiff = 999.0f, temp;
+            int choice = 0;
+            for (int i = 5; i < state.length; i += 6) {
+                temp = Math.abs(state[i] - (givenH + 1f)) % 1f;
+                if(temp < minDiff) {
+                    minDiff = temp;
+                    choice = i / 6;
+                }
+            }
+            return new HDRColor(r, g, b, a).lerp(state[choice * 6], state[choice * 6 + 1], state[choice * 6 + 2],
+                    state[choice * 6 + 3], state[choice * 6 + 4]);
         }
     }
 }
