@@ -41,7 +41,7 @@ public class TextCellFactory {
     protected BitmapFont bmpFont = null;
     protected Texture block = null;
     protected String fitting = SQUID_FITTING;
-    protected SquidColorCenter scc = new SquidColorCenter();
+    protected SquidColorCenter scc;
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     protected int width = 1, height = 1;
     private boolean initialized = false;
@@ -51,6 +51,7 @@ public class TextCellFactory {
      * be called before this factory can be used!
      */
     public TextCellFactory() {
+        scc = DefaultResources.getSCC();
     }
 
     /**

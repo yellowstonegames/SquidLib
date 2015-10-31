@@ -76,7 +76,7 @@ public class ZoneDemo extends ApplicationAdapter {
         centers = temp.toArray(new Coord[temp.size()]);
         shiftedCenters = temp.toArray(new Coord[temp.size()]);
 
-        colorCenter = new SquidColorCenter();
+        colorCenter = DefaultResources.getSCC();
         influenceColors = new HDRColor[centers.length];
         centerEntities = new AnimatedEntity[centers.length];
         for (int i = 0; i < centers.length; i++) {
