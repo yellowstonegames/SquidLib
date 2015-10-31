@@ -185,6 +185,29 @@ public interface IColorCenter<T> {
 			/* Nothing to do */
 		}
 
+        /**
+         * It clears the cache. You may need to do this to limit the cache to the colors used in a specific section.
+         */
+        public void clearCache()
+        {
+            cache.clear();
+        }
+
+        /**
+         * You may want to copy colors between IColorCenter instances that have different create() methods -- and as
+         * such, will have different values for the same keys in the cache. This allows you to copy the cache from other
+         * into this Skeleton, but using this Skeleton's create() method.
+         * @param other another Skeleton of the same type that will have its cache copied into this Skeleton
+         */
+        public void copyCache(Skeleton<T> other)
+        {
+            for (Map.Entry<Long, T> k : other.cache.entrySet())
+            {
+                cache.put(k.getKey(), create(getRed(k.getValue()), getGreen(k.getValue()), getBlue(k.getValue()),
+                        getAlpha(k.getValue())));
+            }
+        }
+
 		@Override
 		public T get(int red, int green, int blue, int opacity) {
 			final Long value = getUniqueIdentifier((short)red, (short)green, (short)blue, (short)opacity);
@@ -263,16 +286,13 @@ public interface IColorCenter<T> {
 		}
 
         /**
-         * @param c a concrete color
+         * @param r the red component in 0.0 to 1.0 range, typically
+         * @param g the green component in 0.0 to 1.0 range, typically
+         * @param b the blue component in 0.0 to 1.0 range, typically
          * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a
          * bright color, exclusive)
          */
-        @Override
-        public float getSaturation(T c) {
-            float r = getRed(c) / 255f;                     //RGB from 0 to 255
-            float g = getGreen(c) / 255f;
-            float b = getBlue(c) / 255f;
-
+        public float getSaturation(float r, float g, float b) {
             float min = Math.min(Math.min(r, g ), b);    //Min. value of RGB
             float max = Math.max(Math.max(r, g), b);    //Min. value of RGB
             float delta = max - min;                     //Delta RGB value
@@ -289,7 +309,27 @@ public interface IColorCenter<T> {
             }
             return saturation;
         }
+        /**
+         * @param c a concrete color
+         * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a
+         * bright color, exclusive)
+         */
+        @Override
+        public float getSaturation(T c) {
+            return getSaturation(getRed(c) / 255f, getGreen(c) / 255f, getBlue(c) / 255f);
+        }
 
+        /**
+         * @param r the red component in 0.0 to 1.0 range, typically
+         * @param g the green component in 0.0 to 1.0 range, typically
+         * @param b the blue component in 0.0 to 1.0 range, typically
+         * @return the value (essentially lightness) of the color from 0.0 (black, inclusive) to
+         * 1.0 (inclusive) for screen colors or arbitrarily high for HDR colors.
+         */
+        public float getValue(float r, float g, float b)
+        {
+            return Math.max(Math.max(r, g), b);
+        }
         /**
          * @param c a concrete color
          * @return the value (essentially lightness) of the color from 0.0 (black, inclusive) to
@@ -305,16 +345,13 @@ public interface IColorCenter<T> {
         }
 
         /**
-         * @param c a concrete color
+         * @param r the red component in 0.0 to 1.0 range, typically
+         * @param g the green component in 0.0 to 1.0 range, typically
+         * @param b the blue component in 0.0 to 1.0 range, typically
          * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and
          * eventually to purple before looping back to almost the same red (1.0, exclusive)
          */
-        @Override
-        public float getHue(T c) {
-            float r = getRed(c) / 255f;                     //RGB from 0 to 255
-            float g = getGreen(c) / 255f;
-            float b = getBlue(c) / 255f;
-
+        public float getHue(float r, float g, float b) {
             float min = Math.min(Math.min(r, g ), b);    //Min. value of RGB
             float max = Math.max(Math.max(r, g), b);    //Min. value of RGB
             float delta = max - min;                     //Delta RGB value
@@ -339,6 +376,16 @@ public interface IColorCenter<T> {
                 else if ( hue > 1 ) hue -= 1;
             }
             return hue;
+        }
+
+        /**
+         * @param c a concrete color
+         * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and
+         * eventually to purple before looping back to almost the same red (1.0, exclusive)
+         */
+        @Override
+        public float getHue(T c) {
+            return getHue(getRed(c) / 255f, getGreen(c) / 255f, getBlue(c) / 255f);
         }
 
         /**
