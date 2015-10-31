@@ -14,9 +14,18 @@ import squidpony.IColorCenter;
  */
 public class SquidColorCenter extends IColorCenter.Skeleton<HDRColor> {
 
+    public Filter filter;
+    public SquidColorCenter()
+    {
+        filter = new Filters.IdentityFilter();
+    }
+    public SquidColorCenter(Filter filterEffect)
+    {
+        filter = filterEffect;
+    }
 	@Override
 	protected HDRColor create(int red, int green, int blue, int opacity) {
-		return new HDRColor(red / 255f, green / 255f, blue / 255f, opacity / 255f);
+		return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);
 	}
     public HDRColor get(HDRColor c)
     {
