@@ -536,7 +536,7 @@ public class HDRColor extends Color {
         return ((int)(color.r * 255) << 24) | ((int)(color.g * 255) << 16) | ((int)(color.b * 255) << 8) | (int)(color.a * 255);
     }
     public static long rgbaHDR (HDRColor color) {
-        return (Math.round(color.r * 255.0) << 40) | (Math.round(color.g * 255.0) << 24) | (Math.round(color.b * 255.0) << 8) | Math.round(color.a * 255.0);
+        return (Math.round(color.hr * 255.0) << 40) | (Math.round(color.hg * 255.0) << 24) | (Math.round(color.hb * 255.0) << 8) | Math.round(color.a * 255.0);
     }
 
     public static int argb8888 (HDRColor color) {

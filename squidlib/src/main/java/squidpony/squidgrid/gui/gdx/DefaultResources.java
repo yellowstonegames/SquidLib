@@ -36,6 +36,7 @@ public class DefaultResources implements LifecycleListener {
             unicodeNameLarge = "Mandrill-12x32.fnt",
             narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt",
             smoothNameLarge = "Inconsolata-LGC-12x24.fnt";
+    private SquidColorCenter scc = null;
     private Texture tentacle = null;
     private TextureRegion tentacleRegion = null;
     private StatefulRNG guiRandom;
@@ -219,6 +220,19 @@ public class DefaultResources implements LifecycleListener {
             instance.guiRandom =  new StatefulRNG();
         }
         return instance.guiRandom;
+    }
+    /**
+     * This is a static global LightRNG that's meant for usage in cases where the seed does not matter and any changes
+     * to this LightRNG's state will not change behavior elsewhere in the program; this means the GUI mainly.
+     */
+    public static SquidColorCenter getSCC()
+    {
+        initialize();
+        if(instance.scc == null)
+        {
+            instance.scc =  new SquidColorCenter();
+        }
+        return instance.scc;
     }
 
     /**

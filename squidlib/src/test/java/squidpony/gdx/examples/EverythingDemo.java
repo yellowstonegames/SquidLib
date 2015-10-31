@@ -431,8 +431,8 @@ public class EverythingDemo extends ApplicationAdapter {
 		/* The panel's height. */
 		final int h = 1;
 
-        final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
-        final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
+        final HDRPanel bg = new HDRPanel(w, h, display.getTextFactory());
+        final HDRPanel fg = new HDRPanel(w, h, display.getTextFactory());
         final GroupCombinedPanel<HDRColor> gcp = new GroupCombinedPanel<HDRColor>();
 		/*
 		 * We're setting them late just for the demo, as it avoids giving 'w'

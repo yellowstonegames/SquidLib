@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
 /**
- * A helper class to make using multiple SquidPanels easier.
+ * A helper class to make using multiple HDRPanels easier.
  * There is some useful documentation in this class' getPalette method (honestly, I don't know where else to put
  * documentation specifically about this class' default palette)..
  * Created by Tommy Ettinger on 7/6/2015.
@@ -19,10 +19,10 @@ public class SquidLayers extends Group {
     protected int height;
     protected int cellWidth;
     protected int cellHeight;
-    protected SquidPanel backgroundPanel, lightnessPanel, foregroundPanel;
+    protected HDRPanel backgroundPanel, lightnessPanel, foregroundPanel;
     protected int[][] bgIndices;
     protected int[][] lightnesses;
-    protected ArrayList<SquidPanel> extraPanels;
+    protected ArrayList<HDRPanel> extraPanels;
     protected TextCellFactory textFactory;
     protected ArrayList<HDRColor> palette;
     protected ArrayList<HDRColor> lightingPalette;
@@ -234,12 +234,12 @@ public class SquidLayers extends Group {
 
         textFactory = new TextCellFactory().defaultSquareFont().width(12).height(12).initBySize();
 
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
-        lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        backgroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
+        lightnessPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
+        foregroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
-        extraPanels = new ArrayList<SquidPanel>();
+        extraPanels = new ArrayList<HDRPanel>();
 
         addActorAt(0, backgroundPanel);
         addActorAt(1, lightnessPanel);
@@ -282,12 +282,12 @@ public class SquidLayers extends Group {
             textFactory = textFactory.defaultNarrowFont();
         }
         textFactory = textFactory.width(cellWidth).height(cellHeight).initBySize();
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
-        lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        backgroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
+        lightnessPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
+        foregroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
-        extraPanels = new ArrayList<SquidPanel>();
+        extraPanels = new ArrayList<HDRPanel>();
 
         addActorAt(0, backgroundPanel);
         addActorAt(1, lightnessPanel);
@@ -326,12 +326,12 @@ public class SquidLayers extends Group {
 
         textFactory = new TextCellFactory().font(fontpath).width(cellWidth).height(cellHeight).initBySize();
 
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
-        lightnessPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory);
+        backgroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
+        lightnessPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
+        foregroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
-        extraPanels = new ArrayList<SquidPanel>();
+        extraPanels = new ArrayList<HDRPanel>();
 
         addActorAt(0, backgroundPanel);
         addActorAt(1, lightnessPanel);
@@ -412,7 +412,7 @@ public class SquidLayers extends Group {
      * @return
      */
     public SquidLayers addExtraLayer() {
-        SquidPanel sp = new SquidPanel(width, height, textFactory);
+        HDRPanel sp = new HDRPanel(width, height, textFactory);
         addActor(sp);
         extraPanels.add(sp);
         return this;
@@ -767,7 +767,7 @@ public class SquidLayers extends Group {
      * @param c     char[][] to be drawn in the foreground starting from x, y
      */
     public SquidLayers putInto(int layer, int x, int y, char c) {
-        SquidPanel p = backgroundPanel;
+        HDRPanel p = backgroundPanel;
         switch (layer) {
             case 0:
                 break;
@@ -795,7 +795,7 @@ public class SquidLayers extends Group {
      * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
      */
     public SquidLayers putInto(int layer, int x, int y, char c, int colorIndex) {
-        SquidPanel p = backgroundPanel;
+        HDRPanel p = backgroundPanel;
         switch (layer) {
             case 0:
                 break;
@@ -824,7 +824,7 @@ public class SquidLayers extends Group {
      * @param colorIndex       int[][] of indices into alternatePalette for the char being drawn
      */
     public SquidLayers putInto(int layer, int x, int y, char c, ArrayList<HDRColor> alternatePalette, int colorIndex) {
-        SquidPanel p = backgroundPanel;
+        HDRPanel p = backgroundPanel;
         switch (layer) {
             case 0:
                 break;
@@ -852,7 +852,7 @@ public class SquidLayers extends Group {
      * @param c     char[][] to be drawn in the foreground starting from x, y
      */
     public SquidLayers putInto(int layer, int x, int y, char[][] c) {
-        SquidPanel p = backgroundPanel;
+        HDRPanel p = backgroundPanel;
         switch (layer) {
             case 0:
                 break;
@@ -884,7 +884,7 @@ public class SquidLayers extends Group {
      * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
      */
     public SquidLayers putInto(int layer, int x, int y, char[][] c, int[][] colorIndex) {
-        SquidPanel p = backgroundPanel;
+        HDRPanel p = backgroundPanel;
         switch (layer) {
             case 0:
                 break;
@@ -917,7 +917,7 @@ public class SquidLayers extends Group {
      * @param colorIndex       int[][] of indices into alternatePalette for the char being drawn
      */
     public SquidLayers putInto(int layer, int x, int y, char[][] c, ArrayList<HDRColor> alternatePalette, int[][] colorIndex) {
-        SquidPanel p = backgroundPanel;
+        HDRPanel p = backgroundPanel;
         switch (layer) {
             case 0:
                 break;
@@ -950,7 +950,7 @@ public class SquidLayers extends Group {
      * @param colors          int[][] of indices into alternatePalette for the char being drawn
      */
     public SquidLayers putInto(int layer, int x, int y, char[][] c, HDRColor[][] colors) {
-        SquidPanel p = backgroundPanel;
+        HDRPanel p = backgroundPanel;
         switch (layer) {
             case 0:
                 break;
@@ -1152,7 +1152,7 @@ public class SquidLayers extends Group {
         foregroundPanel.erase();
         lightnessPanel.erase();
         backgroundPanel.erase();
-        for (SquidPanel sp : extraPanels) {
+        for (HDRPanel sp : extraPanels) {
             sp.erase();
         }
         for (int i = 0; i < width; i++) {
@@ -1164,7 +1164,7 @@ public class SquidLayers extends Group {
     }
 
     public SquidLayers bump(int x, int y, int layer, Direction dir, float duration) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1183,7 +1183,7 @@ public class SquidLayers extends Group {
         return this;
     }
     public SquidLayers bump(AnimatedEntity ae, int layer, Direction dir, float duration) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1210,7 +1210,7 @@ public class SquidLayers extends Group {
     }
 
     public SquidLayers slide(AnimatedEntity ae, int endX, int endY, int layer, float duration) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1229,7 +1229,7 @@ public class SquidLayers extends Group {
         return this;
     }
     public SquidLayers slide(int x, int y, int endX, int endY, int layer, float duration) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1256,7 +1256,7 @@ public class SquidLayers extends Group {
     }
 
     public SquidLayers wiggle(int x, int y, int layer, float duration) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1275,7 +1275,7 @@ public class SquidLayers extends Group {
         return this;
     }
     public SquidLayers wiggle(AnimatedEntity ae, int layer, float duration) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1301,7 +1301,7 @@ public class SquidLayers extends Group {
         return wiggle(ae, 2, -1);
     }
     public SquidLayers tint(int x, int y, HDRColor color, int layer, float duration) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1320,7 +1320,7 @@ public class SquidLayers extends Group {
         return this;
     }
     public SquidLayers tint(AnimatedEntity ae, HDRColor color, int layer, float duration) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1353,7 +1353,7 @@ public class SquidLayers extends Group {
             return true;
         if (lightnessPanel.hasActiveAnimations())
             return true;
-        for (SquidPanel panel : extraPanels) {
+        for (HDRPanel panel : extraPanels) {
             if (panel.hasActiveAnimations())
                 return true;
         }
@@ -1361,7 +1361,7 @@ public class SquidLayers extends Group {
     }
 
     public AnimatedEntity animateActor(int x, int y, char c, HDRColor color, int layer) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1402,7 +1402,7 @@ public class SquidLayers extends Group {
     }
 
     public AnimatedEntity animateActor(int x, int y, String s, HDRColor color, int layer) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1418,7 +1418,7 @@ public class SquidLayers extends Group {
         return p.animateActor(x, y, s, color);
     }
     public AnimatedEntity animateActor(int x, int y, String s, HDRColor color, int layer, boolean doubleWidth) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1434,7 +1434,7 @@ public class SquidLayers extends Group {
         return p.animateActor(x, y, doubleWidth, s, color);
     }
     public AnimatedEntity animateActor(int x, int y, TextureRegion tr, HDRColor color, int layer) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1450,7 +1450,7 @@ public class SquidLayers extends Group {
         return p.animateActor(x, y, tr, color);
     }
     public AnimatedEntity animateActor(int x, int y, TextureRegion tr, HDRColor color, int layer, boolean doubleWidth, boolean stretch) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1535,7 +1535,7 @@ public class SquidLayers extends Group {
     }
 
     public LinkedHashSet<AnimatedEntity> getAnimatedEntities(int layer) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1556,7 +1556,7 @@ public class SquidLayers extends Group {
     }
 
     public AnimatedEntity getAnimatedEntityByCell(int x, int y, int layer) {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
@@ -1583,7 +1583,7 @@ public class SquidLayers extends Group {
 
     public void drawActor(Batch batch, float parentAlpha, AnimatedEntity ae, int layer)
     {
-        SquidPanel p = foregroundPanel;
+        HDRPanel p = foregroundPanel;
         switch (layer) {
             case 0:
                 p = backgroundPanel;
