@@ -97,8 +97,8 @@ public class ZOI {
                 dijkstra.setGoal(influences[i][j]);
             }
             double[][] factionScanned = dijkstra.scan(null);
-            for (int x = 0; x < map.length; x++) {
-                for (int y = 0; y < map[0].length; y++) {
+            for (int y = 0; y < map[0].length; y++) {
+                for (int x = 0; x < map.length; x++) {
                     influenced[x][y] = (scannedAll[x][y] < DijkstraMap.FLOOR) &&
                             (factionScanned[x][y] - scannedAll[x][y] <= 1);
                 }

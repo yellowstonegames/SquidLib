@@ -51,7 +51,6 @@
 
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 		<maven.compiler.version>3.3</maven.compiler.version>
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
 		<maven.resources.version>2.7</maven.resources.version>
@@ -59,7 +58,6 @@
 		<maven.gpg.version>1.6</maven.gpg.version>
 		<maven.jxr.version>2.5</maven.jxr.version>
 		<maven.pmd.version>3.5</maven.pmd.version>
-		<encoding>UTF-8</encoding>
 		<findbugs.version>3.0.2</findbugs.version>
 		<cobertura.version>2.7</cobertura.version>
 		<jdk.version>1.7</jdk.version>
@@ -87,7 +85,7 @@
 		<module>squidlib-util</module>
 		<module>squidlib</module>
 		<module>squidlib-performance</module>
-  </modules>
+    </modules>
 
 	<build>
 		<plugins>
@@ -177,9 +175,24 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>${maven.resources.version}</version>
+				<configuration>
+					<nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>hilbert</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-resources</id>
+                        <configuration>
+                            <nonFilteredFileExtensions>
+                                <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>hilbert</nonFilteredFileExtension>
+                            </nonFilteredFileExtensions>
+                        </configuration>
+                    </execution>
+                </executions>
 			</plugin>
-
-
 		</plugins>
 	</build>
 

@@ -65,4 +65,11 @@ public class SquidColorCenter extends IColorCenter.Skeleton<HDRColor> {
     public static long encode (Color color) {
         return (Math.round(color.r * 255.0) << 40) | (Math.round(color.g * 255.0) << 24) | (Math.round(color.b * 255.0) << 8) | Math.round(color.a * 255.0);
     }
+
+    @Override
+    public String toString() {
+        return "SquidColorCenter{" +
+                "filter=" + filter.getClass().getSimpleName() +
+                '}';
+    }
 }

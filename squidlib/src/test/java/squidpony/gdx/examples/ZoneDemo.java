@@ -9,14 +9,17 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import squidpony.squidai.ZOI;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.AnimatedEntity;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.HDRColor;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SquidColorCenter;
+import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.PoissonDisk;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 
@@ -31,7 +34,7 @@ public class ZoneDemo extends ApplicationAdapter {
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
     private double[][] res;
-    private int[][] colors, lights;
+    private int[][] lights;
     private HDRColor[][] bgColors;
     private HDRColor[] influenceColors;
     private ZOI zoi;
@@ -58,7 +61,7 @@ public class ZoneDemo extends ApplicationAdapter {
         display.addExtraLayer();
         stage = new Stage(new ScreenViewport(), batch);
 
-        lrng = new LightRNG(0x1337BEEF);
+        lrng = new LightRNG(0xBADBEEF);
         rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
@@ -90,7 +93,6 @@ public class ZoneDemo extends ApplicationAdapter {
         zoi = new ZOI(centers, bareDungeon, Radius.DIAMOND);
         packedInfluences = zoi.calculate();
 
-        colors = DungeonUtility.generatePaletteIndices(bareDungeon);
         bgColors = new HDRColor[width][height];
         recolorZones();
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon);
@@ -139,11 +141,14 @@ public class ZoneDemo extends ApplicationAdapter {
     {
         zoi = new ZOI(shiftedCenters, bareDungeon, Radius.DIAMOND);
         packedInfluences = zoi.calculate();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                int[] inf = zoi.nearestInfluences(packedInfluences, Coord.get(x, y));
-                if(inf.length == 0)
+        Coord c;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                c = Coord.get(x, y);
+                int[] inf = zoi.nearestInfluences(packedInfluences, c);
+                if(inf.length == 0) {
                     bgColors[x][y] = bgColor;
+                }
                 else if(inf.length == 1)
                 {
                     bgColors[x][y] = influenceColors[inf[0]];
@@ -168,8 +173,8 @@ public class ZoneDemo extends ApplicationAdapter {
     }
     public void putMap()
     {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
                 display.put(i * 2, j, lineDungeon[i * 2][j], textColor, bgColors[i][j], lights[i][j]);
                 display.put(i * 2 + 1, j, lineDungeon[i * 2 + 1][j], textColor, bgColors[i][j], lights[i][j]);
             }
