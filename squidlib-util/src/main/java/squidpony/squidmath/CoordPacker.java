@@ -1,8 +1,5 @@
 package squidpony.squidmath;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -165,27 +162,18 @@ public class CoordPacker {
             mooreDistances = new short[0x100], ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
     static {
         ClassLoader cl = CoordPacker.class.getClassLoader();
-        InputStream xStream = cl.getResourceAsStream("hilbert/x.bin"),
-                yStream = cl.getResourceAsStream("hilbert/y.bin"),
-                dStream = cl.getResourceAsStream("hilbert/distance.bin");
-        byte[] xBytes = new byte[0x20000], yBytes = new byte[0x20000], dBytes = new byte[0x20000];
-        try {
-            xStream.read(xBytes);
-            ByteBuffer.wrap(xBytes).asShortBuffer().get(hilbertX);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        Coord c;
+        for (int i = 0; i < 0x10000; i++) {
+            c = CoordPacker.hilbertToCoordNoLUT(i);
+            hilbertX[i] = (short) c.x;
+            hilbertY[i] = (short) c.y;
         }
-        try {
-            yStream.read(yBytes);
-            ByteBuffer.wrap(yBytes).asShortBuffer().get(hilbertY);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            dStream.read(dBytes);
-            ByteBuffer.wrap(dBytes).asShortBuffer().get(hilbertDistances);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        for (int y = 0; y < 256; y++) {
+            for (int x = 0; x < 256; x++) {
+                hilbertDistances[x + y * 256] = (short) CoordPacker.posToHilbertNoLUT(x, y);
+            }
         }
         for (int i = 64; i < 128; i++) {
             mooreX[i - 64] = hilbertX[i];
@@ -2364,11 +2352,11 @@ public class CoordPacker {
      * @param y between 0 and 255 inclusive
      * @return the distance to travel along the 256x256 Hilbert Curve to get to the given x, y point.
      */
-    /*
+
     public static int posToHilbertNoLUT( final int x, final int y )
     {
         int hilbert = 0, remap = 0xb4, mcode, hcode;
-        / *
+        /*
         while( block > 0 )
         {
             --block;
@@ -2377,7 +2365,7 @@ public class CoordPacker {
             remap ^= ( 0x82000028 >> ( hcode << 3 ) );
             hilbert = ( ( hilbert << 2 ) + hcode );
         }
-         * /
+         */
 
         mcode = ( ( x >> 7 ) & 1 ) | ( ( ( y >> ( 7 ) ) & 1 ) << 1);
         hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
@@ -2421,7 +2409,7 @@ public class CoordPacker {
 
         return hilbert;
     }
-    */
+
     /**
      * Takes a position as a Morton code, with interleaved x and y bits and x in the least significant bit, and returns
      * the length to travel along the 256x256 Hilbert Curve to reach that position.
@@ -2522,7 +2510,7 @@ public class CoordPacker {
      * @param hilbert
      * @return
      */
-    /*
+
     public static Coord hilbertToCoordNoLUT( final int hilbert )
     {
         int x = 0, y = 0;
@@ -2539,7 +2527,7 @@ public class CoordPacker {
         }
         return Coord.get(x, y);
     }
-    */
+
     /**
      * Takes a position as a Coord called pt and returns the length to travel along the 256x256 Hilbert curve to reach
      * that position.

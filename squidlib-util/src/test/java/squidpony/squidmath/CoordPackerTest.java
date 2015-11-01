@@ -7,10 +7,7 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.HashSet;
 
 import static org.junit.Assert.*;
@@ -759,22 +756,23 @@ public class CoordPackerTest {
             xOut[i] = (short) c.x;
             yOut[i] = (short) c.y;
         }
-        */
+
         for (int y = 0; y < sideLength; y++) {
             for (int x = 0; x < sideLength; x++) {
                 out[y * sideLength + x] = (short) CoordPacker.posToHilbert(x, y);
             }
         }
         try {
-            FileChannel channel = new FileOutputStream("target/distance.bin").getChannel();
+            FileChannel channel = new FileOutputStream("target/distance").getChannel();
             channel.write(shortsToBytes(out));
             channel.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
         /*
         try {
-            FileChannel channel = new FileOutputStream("target/x.bin").getChannel();
+            FileChannel channel = new FileOutputStream("target/hilbertx").getChannel();
             channel.write(shortsToBytes(xOut));
             channel.close();
         } catch (IOException e) {
@@ -782,7 +780,7 @@ public class CoordPackerTest {
         }
 
         try {
-            FileChannel channel = new FileOutputStream("target/y.bin").getChannel();
+            FileChannel channel = new FileOutputStream("target/hilberty").getChannel();
             channel.write(shortsToBytes(yOut));
             channel.close();
         } catch (IOException e) {
