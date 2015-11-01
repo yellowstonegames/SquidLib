@@ -40,7 +40,8 @@ public class EverythingDemo extends ApplicationAdapter {
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
     private double[][] res;
-    private int[][] colors, bgColors, lights;
+    private int[][] lights;
+    private HDRColor[][] colors, bgColors;
     private double[][] fovmap, pathMap;
     private AnimatedEntity player;
     private FOV fov;
@@ -56,7 +57,8 @@ public class EverythingDemo extends ApplicationAdapter {
     private double counter;
     private boolean[][] seen;
     private int health = 7;
-    private static final HDRColor bgColor = SColor.DARK_SLATE_GRAY;
+    private SquidColorCenter filteredCenter;
+    private HDRColor bgColor;
     private HashMap<AnimatedEntity, Integer> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage;
@@ -66,6 +68,13 @@ public class EverythingDemo extends ApplicationAdapter {
     private ArrayList<Coord> awaitedMoves;
     @Override
     public void create () {
+        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
+        // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
+        // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
+        filteredCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
+                new HDRColor[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
+                new float[]{0.6f, 0.5f}
+        ));
         batch = new SpriteBatch();
         width = 80;
         height = 30;
@@ -82,7 +91,7 @@ public class EverythingDemo extends ApplicationAdapter {
         rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(12, 6);
+        dungeonGen.addWater(18, 6);
         dungeonGen.addGrass(10);
         dungeonGen.addDoors(15, false);
         MixedGenerator mix = new MixedGenerator(width, height, rng);
@@ -123,8 +132,18 @@ public class EverythingDemo extends ApplicationAdapter {
         toCursor = new ArrayList<Coord>(10);
         awaitedMoves = new ArrayList<Coord>(10);
         playerToCursor = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
-        colors = DungeonUtility.generatePaletteIndices(bareDungeon);
-        bgColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
+        int[][] initialColors = DungeonUtility.generatePaletteIndices(bareDungeon),
+                initialBGColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
+        colors = new HDRColor[width][height];
+        bgColors = new HDRColor[width][height];
+        ArrayList<HDRColor> palette = display.getPalette();
+        bgColor = filteredCenter.get(SColor.DARK_SLATE_GRAY);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                colors[i][j] = filteredCenter.get(palette.get(initialColors[i][j]));
+                bgColors[i][j] = filteredCenter.get(palette.get(initialBGColors[i][j]));
+            }
+        }
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon, counter);
         seen = new boolean[width][height];
 

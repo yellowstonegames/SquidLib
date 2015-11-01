@@ -148,10 +148,11 @@ public interface Filters {
             float givenH = globalSCC.getHue(r, g, b), minDiff = 999.0f, temp;
             int choice = 0;
             for (int i = 5; i < state.length; i += 6) {
-                temp = Math.abs(state[i] - (givenH + 1f)) % 1f;
+                temp = state[i] - givenH;
+                temp = (temp >= 0.5f) ? Math.abs(temp - 1f) % 1f : Math.abs(temp);
                 if(temp < minDiff) {
                     minDiff = temp;
-                    choice = i / 6;
+                    choice = i / 6; // rounds down
                 }
             }
             return new HDRColor(r, g, b, a).lerp(state[choice * 6], state[choice * 6 + 1], state[choice * 6 + 2],
