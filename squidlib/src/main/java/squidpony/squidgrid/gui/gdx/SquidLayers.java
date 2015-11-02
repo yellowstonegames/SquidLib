@@ -19,13 +19,11 @@ public class SquidLayers extends Group {
     protected int height;
     protected int cellWidth;
     protected int cellHeight;
-    protected HDRPanel backgroundPanel, lightnessPanel, foregroundPanel;
-    protected int[][] bgIndices;
+    protected HDRPanel backgroundPanel, foregroundPanel;
     protected int[][] lightnesses;
     protected ArrayList<HDRPanel> extraPanels;
     protected TextCellFactory textFactory;
     protected ArrayList<HDRColor> palette;
-    protected ArrayList<HDRColor> lightingPalette;
     protected boolean[][] values;
     protected float animationDuration;
 
@@ -164,16 +162,6 @@ public class SquidLayers extends Group {
     }
 
     /**
-     * Get all the background color indices at once, which are probably indexed into the default palette. See the
-     * documentation for the getPalette() method in this class for more information.
-     *
-     * @return
-     */
-    public int[][] getBgIndices() {
-        return bgIndices;
-    }
-
-    /**
      * Sets the lightness modifiers used for background cells with the int[][] passed as lightnesses. This 2D array
      * should have elements between 0 to 511, with 256 as the unmodified lightness level, lower numbers meaning darker,
      * and higher meaning lighter. Elements less than 0 or higher than 511 will probably cause array out-of-bounds
@@ -185,18 +173,6 @@ public class SquidLayers extends Group {
      */
     public void setLightnesses(int[][] lightnesses) {
         this.lightnesses = lightnesses;
-    }
-
-    /**
-     * Set all of the background colors at once, using indexes into what is probably the default palette unless
-     * otherwise specified in the call to put(). If you want subtle variations on a color, don't add a new entry to
-     * the default palette every time if you can set the lightness differently for things with that color. Indices
-     * should correspond to the numbers in getPalette()'s documentation, or higher if you extended it.
-     *
-     * @param bgIndices 2D array, width and height should match this class' gridWidth and gridHeight.
-     */
-    public void setBgIndices(int[][] bgIndices) {
-        this.bgIndices = bgIndices;
     }
 
     /**
@@ -215,37 +191,7 @@ public class SquidLayers extends Group {
      * @param gridHeight in grid cells
      */
     public SquidLayers(int gridWidth, int gridHeight) {
-        initPalettes();
-        width = gridWidth;
-        height = gridHeight;
-
-        cellWidth = 12;
-        cellHeight = 12;
-
-        bgIndices = new int[width][height];
-        lightnesses = new int[width][height];
-        values = new boolean[width][height];
-
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                lightnesses[x][y] = 256;
-            }
-        }
-
-        textFactory = new TextCellFactory().defaultSquareFont().width(12).height(12).initBySize();
-
-        backgroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
-        lightnessPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
-        foregroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
-        animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
-
-        extraPanels = new ArrayList<HDRPanel>();
-
-        addActorAt(0, backgroundPanel);
-        addActorAt(1, lightnessPanel);
-        addActorAt(2, foregroundPanel);
-
-        setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
+        this(gridWidth, gridHeight, 12, 12);
     }
 
     /**
@@ -259,6 +205,37 @@ public class SquidLayers extends Group {
      * @param cellHeight in pixels
      */
     public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
+        this(gridWidth, gridHeight, cellWidth, cellHeight, DefaultResources.getSCC(), DefaultResources.getSCC());
+    }
+
+    /**
+     * Create a new SquidLayers widget with the given path to a Font file, the given number of cells for gridWidth
+     * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
+     *
+     * @param gridWidth  in grid cells
+     * @param gridHeight in grid cells
+     * @param cellWidth  in pixels
+     * @param cellHeight in pixels
+     * @param fontpath   A Font that should have been assigned a size before being passed here.
+     */
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, String fontpath) {
+        this(gridWidth, gridHeight, cellWidth, cellHeight, fontpath,
+                DefaultResources.getSCC(), DefaultResources.getSCC());
+    }
+    /**
+     * Create a new SquidLayers widget with a default font (it will be square if cellWidth and cellHeight are equal, or
+     * narrow otherwise), the given number of cells for gridWidth
+     * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
+     *
+     * @param gridWidth  in grid cells
+     * @param gridHeight in grid cells
+     * @param cellWidth  in pixels
+     * @param cellHeight in pixels
+     * @param bgColorCenter a SquidColorCenter (possibly with a filter) to use for the background
+     * @param fgColorCenter a SquidColorCenter (possibly with a filter) to use for the foreground
+     */
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight,
+                       SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter) {
         initPalettes();
         width = gridWidth;
         height = gridHeight;
@@ -266,7 +243,6 @@ public class SquidLayers extends Group {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
 
-        bgIndices = new int[width][height];
         lightnesses = new int[width][height];
         values = new boolean[width][height];
         for (int x = 0; x < width; x++) {
@@ -282,15 +258,14 @@ public class SquidLayers extends Group {
             textFactory = textFactory.defaultNarrowFont();
         }
         textFactory = textFactory.width(cellWidth).height(cellHeight).initBySize();
-        backgroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
-        lightnessPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
-        foregroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
+        backgroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
+        foregroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
+
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
         extraPanels = new ArrayList<HDRPanel>();
 
         addActorAt(0, backgroundPanel);
-        addActorAt(1, lightnessPanel);
         addActorAt(2, foregroundPanel);
 
         setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
@@ -305,8 +280,11 @@ public class SquidLayers extends Group {
      * @param cellWidth  in pixels
      * @param cellHeight in pixels
      * @param fontpath   A Font that should have been assigned a size before being passed here.
+     * @param bgColorCenter a SquidColorCenter (possibly with a filter) to use for the background
+     * @param fgColorCenter a SquidColorCenter (possibly with a filter) to use for the foreground
      */
-    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, String fontpath) {
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, String fontpath,
+                       SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter) {
         initPalettes();
 
         width = gridWidth;
@@ -315,7 +293,6 @@ public class SquidLayers extends Group {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
 
-        bgIndices = new int[width][height];
         lightnesses = new int[width][height];
         values = new boolean[width][height];
         for (int x = 0; x < width; x++) {
@@ -326,15 +303,14 @@ public class SquidLayers extends Group {
 
         textFactory = new TextCellFactory().font(fontpath).width(cellWidth).height(cellHeight).initBySize();
 
-        backgroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
-        lightnessPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
-        foregroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory);
+        backgroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
+        foregroundPanel = new HDRPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
+
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
         extraPanels = new ArrayList<HDRPanel>();
 
         addActorAt(0, backgroundPanel);
-        addActorAt(1, lightnessPanel);
         addActorAt(2, foregroundPanel);
 
         setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
@@ -342,7 +318,7 @@ public class SquidLayers extends Group {
 
     private void initPalettes() {
         palette = new ArrayList<>(256);
-        palette.add(SColor.DARK_SLATE_GRAY);
+        palette.add(SColor.PURE_DARK_GRAY);
         palette.add(SColor.CREAM);
         palette.add(SColor.FLATTERY_BROWN);
         palette.add(SColor.SILVER_GREY);
@@ -370,9 +346,9 @@ public class SquidLayers extends Group {
         palette.add(SColor.LIME_GREEN);
         palette.add(SColor.GREEN_BAMBOO);
 
-        palette.add(SColor.BABY_BLUE);
         palette.add(SColor.CYAN);
-        palette.add(SColor.BLUE_GREEN);
+        palette.add(SColor.OCEAN_BLUE);
+        palette.add(SColor.MIDORI);
 
         palette.add(SColor.COLUMBIA_BLUE);
         palette.add(SColor.ROYAL_BLUE);
@@ -394,22 +370,13 @@ public class SquidLayers extends Group {
         palette.add(SColor.DARK_CHESTNUT);
         palette.add(SColor.SAPPANWOOD_INCENSE);
 
-        lightingPalette = new ArrayList<>(512);
-        for (int i = 0; i < 512; i++) {
-            lightingPalette.add(HDRColor.CLEAR);
-        }
-        for (int i = 1; i < 256; i++) {
-            lightingPalette.set(256 + i, new HDRColor(1.0f, 0xFD / 255f, 0xD8 / 255f, i / 255f));
-            lightingPalette.set(256 - i, new HDRColor(0, 0, 0, i / 255f));
-        }
-
     }
 
     /**
      * Add an extra layer on top of the foreground layer. Use putInto methods to specify the layer when adding a char (0
-     * is background, 1 is lightness modifiers, 2 is foreground, and the first call to this method creates layer 3).
+     * is background, 1 is unused, 2 is foreground, and the first call to this method creates layer 3).
      *
-     * @return
+     * @return this for chaining
      */
     public SquidLayers addExtraLayer() {
         HDRPanel sp = new HDRPanel(width, height, textFactory);
@@ -423,8 +390,8 @@ public class SquidLayers extends Group {
      * 
      * The default palette's entries can be seen in the documentation for SquidLayers.getPalette() .
      *
-     * @param color
-     * @return
+     * @param color an HDRColor to add to the palette at the end
+     * @return the extended palette.
      */
     public ArrayList<HDRColor> extendPalette(HDRColor color) {
         palette.add(color);
@@ -439,8 +406,8 @@ public class SquidLayers extends Group {
      * The default palette's entries can be seen in the documentation for SquidLayers.getPalette() .
      *
      * @param index must be at least 0 and less than the length of palette (starts at length 40).
-     * @param color
-     * @return
+     * @param color the HDRColor to put at the given index
+     * @return the altered palette
      */
     public ArrayList<HDRColor> alterPalette(int index, HDRColor color) {
         if (index >= 0 && index < palette.size())
@@ -539,10 +506,8 @@ public class SquidLayers extends Group {
         backgroundLightness = clamp(backgroundLightness, -255, 255);
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
         values[x][y] = true;
-        lightnesses[x][y] = 256 + backgroundLightness;
-
-        lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
-        backgroundPanel.put(x, y, backgroundIndex, palette);
+        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
+        backgroundPanel.put(x, y, palette.get(backgroundIndex), lightnesses[x][y] / 256f);
         return this;
     }
     /**
@@ -562,17 +527,16 @@ public class SquidLayers extends Group {
         backgroundLightness = clamp(backgroundLightness, -255, 255);
         foregroundPanel.put(x, y, c, foregroundIndex, alternatePalette);
         values[x][y] = true;
-        lightnesses[x][y] = 256 + backgroundLightness;
+        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
 
-        lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
-        backgroundPanel.put(x, y, backgroundIndex, alternatePalette);
+        backgroundPanel.put(x, y, alternatePalette.get(backgroundIndex), lightnesses[x][y] / 256f);
         return this;
     }
 
     /**
      * Place a char c into the foreground, with a foreground and background libGDX Color and a lightness variation for
-     * the background (0 is no change, 100 is very bright, -100 is very dark, anything past -150 or 150 will make the
-     * background almost fully black or white).
+     * the background (0 is no change, 255 will nearly double the brightness (capping at white), -255 will reduce the
+     * color to nearly black (for most colors, all the way to black), and values in between will be proportional..
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -582,13 +546,11 @@ public class SquidLayers extends Group {
      * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
      */
     public SquidLayers put(int x, int y, char c, HDRColor foreground, HDRColor background, int backgroundLightness) {
-        backgroundLightness = clamp(backgroundLightness, -255, 255);
         foregroundPanel.put(x, y, c, foreground);
         values[x][y] = true;
-        lightnesses[x][y] = 256 + backgroundLightness;
+        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
 
-        lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
-        backgroundPanel.put(x, y, background);
+        backgroundPanel.put(x, y, background, lightnesses[x][y] / 256f);
         return this;
     }
 
@@ -607,15 +569,13 @@ public class SquidLayers extends Group {
      * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
      */
     public SquidLayers put(int x, int y, char c, int foregroundIndex, ArrayList<HDRColor> fgPalette, int backgroundIndex, ArrayList<HDRColor> bgPalette, int backgroundLightness) {
-        backgroundLightness = clamp(backgroundLightness, -255, 255);
         if (fgPalette == null) fgPalette = palette;
         if (bgPalette == null) bgPalette = palette;
         foregroundPanel.put(x, y, c, foregroundIndex, fgPalette);
         values[x][y] = true;
-        lightnesses[x][y] = 256 + backgroundLightness;
+        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
 
-        lightnessPanel.put(x, y, 256 + backgroundLightness, lightingPalette);
-        backgroundPanel.put(x, y, backgroundIndex, bgPalette);
+        backgroundPanel.put(x, y, bgPalette.get(backgroundIndex), lightnesses[x][y] / 256f);
         return this;
     }
 
@@ -669,10 +629,10 @@ public class SquidLayers extends Group {
             for (int j = y; j < height && j < backgroundLightness[i].length; j++) {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
                 values[i][j] = true;
+                backgroundPanel.put(x, y, palette.get(backgroundIndex[i][j]), lightnesses[i][j] / 256f);
+
             }
         }
-        lightnessPanel.put(0, 0, lightnesses, lightingPalette);
-        backgroundPanel.put(x, y, backgroundIndex, palette);
         return this;
     }
 
@@ -697,10 +657,10 @@ public class SquidLayers extends Group {
             for (int j = y; j < height && j < backgroundLightness[i].length; j++) {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
                 values[i][j] = true;
+                backgroundPanel.put(x, y, alternatePalette.get(backgroundIndex[i][j]), lightnesses[i][j] / 256f);
+
             }
         }
-        lightnessPanel.put(0, 0, lightnesses, lightingPalette);
-        backgroundPanel.put(x, y, backgroundIndex, alternatePalette);
         return this;
     }
     /**
@@ -722,10 +682,9 @@ public class SquidLayers extends Group {
             for (int j = y; j < height && j < backgroundLightness[i].length; j++) {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
                 values[i][j] = true;
+                backgroundPanel.put(x, y, backgrounds[i][j], lightnesses[i][j] / 256f);
             }
         }
-        lightnessPanel.put(0, 0, lightnesses, lightingPalette);
-        backgroundPanel.put(x, y, backgrounds);
         return this;
     }
 
@@ -751,17 +710,17 @@ public class SquidLayers extends Group {
             for (int j = y; j < height && j < backgroundLightness[i].length; j++) {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
                 values[i][j] = true;
+                backgroundPanel.put(x, y, bgPalette.get(backgroundIndex[i][j]), lightnesses[i][j] / 256f);
+
             }
         }
-        lightnessPanel.put(0, 0, lightnesses, lightingPalette);
-        backgroundPanel.put(x, y, backgroundIndex, bgPalette);
         return this;
     }
 
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      *
-     * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param layer 0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x     in grid cells.
      * @param y     in grid cells.
      * @param c     char[][] to be drawn in the foreground starting from x, y
@@ -772,7 +731,6 @@ public class SquidLayers extends Group {
             case 0:
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 p = foregroundPanel;
@@ -788,7 +746,7 @@ public class SquidLayers extends Group {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into the default palette.
      *
-     * @param layer      0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param layer      0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x          in grid cells.
      * @param y          in grid cells.
      * @param c          char[][] to be drawn in the foreground starting from x, y
@@ -800,7 +758,6 @@ public class SquidLayers extends Group {
             case 0:
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 p = foregroundPanel;
@@ -816,7 +773,7 @@ public class SquidLayers extends Group {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      *
-     * @param layer            0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param layer            0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x                in grid cells.
      * @param y                in grid cells.
      * @param c                char[][] to be drawn in the foreground starting from x, y
@@ -829,7 +786,6 @@ public class SquidLayers extends Group {
             case 0:
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 p = foregroundPanel;
@@ -846,7 +802,7 @@ public class SquidLayers extends Group {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      *
-     * @param layer 0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param layer 0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x     in grid cells.
      * @param y     in grid cells.
      * @param c     char[][] to be drawn in the foreground starting from x, y
@@ -857,7 +813,6 @@ public class SquidLayers extends Group {
             case 0:
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 p = foregroundPanel;
@@ -877,7 +832,7 @@ public class SquidLayers extends Group {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into the default palette.
      *
-     * @param layer      0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param layer      0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x          in grid cells.
      * @param y          in grid cells.
      * @param c          char[][] to be drawn in the foreground starting from x, y
@@ -889,7 +844,6 @@ public class SquidLayers extends Group {
             case 0:
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 p = foregroundPanel;
@@ -909,7 +863,7 @@ public class SquidLayers extends Group {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      *
-     * @param layer            0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param layer            0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x                in grid cells.
      * @param y                in grid cells.
      * @param c                char[][] to be drawn in the foreground starting from x, y
@@ -922,7 +876,6 @@ public class SquidLayers extends Group {
             case 0:
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 p = foregroundPanel;
@@ -943,7 +896,7 @@ public class SquidLayers extends Group {
     /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      *
-     * @param layer            0 for background, 1 for lightness, 2 for foreground, 3 or higher for extra layers added on.
+     * @param layer            0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x                in grid cells.
      * @param y                in grid cells.
      * @param c                char[][] to be drawn in the foreground starting from x, y
@@ -955,7 +908,6 @@ public class SquidLayers extends Group {
             case 0:
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 p = foregroundPanel;
@@ -992,7 +944,7 @@ public class SquidLayers extends Group {
      * @param x               in grid cells.
      * @param y               in grid cells.
      * @param s               the string to print
-     * @param foregroundIndex
+     * @param foregroundIndex the indexed color to use
      * @return this, for chaining
      */
     public SquidLayers putString(int x, int y, String s, int foregroundIndex) {
@@ -1007,8 +959,8 @@ public class SquidLayers extends Group {
      * @param x               in grid cells.
      * @param y               in grid cells.
      * @param s               the string to print
-     * @param foregroundIndex
-     * @param backgroundIndex
+     * @param foregroundIndex the indexed color to use
+     * @param backgroundIndex the indexed color to use
      * @return this, for chaining
      */
     public SquidLayers putString(int x, int y, String s, int foregroundIndex, int backgroundIndex) {
@@ -1026,9 +978,9 @@ public class SquidLayers extends Group {
      * @param x                in grid cells.
      * @param y                in grid cells.
      * @param s                the string to print
-     * @param alternatePalette
-     * @param foregroundIndex
-     * @param backgroundIndex
+     * @param alternatePalette the colors this can use, where the indices are used instead of individual colors
+     * @param foregroundIndex the indexed color to use
+     * @param backgroundIndex the indexed color to use
      * @return this, for chaining
      */
     public SquidLayers putString(int x, int y, String s, ArrayList<HDRColor> alternatePalette, int foregroundIndex, int backgroundIndex) {
@@ -1071,9 +1023,10 @@ public class SquidLayers extends Group {
             for (int j = y - 1; j < y + 2 && j < height; j++) {
                 for (int i = x - 1; i < s.length() + x + 2 && i < width; i++) {
                     foregroundPanel.put(i, j, ' ');
-                    backgroundPanel.put(i, j, palette.get(9));
                     lightnesses[i][j] = -255;
-                    lightnessPanel.put(i, j, 1, lightingPalette);
+
+                    backgroundPanel.put(i, j, backgroundPanel.getAt(i, j),
+                            palette.get(9), 1f / 256f);
                 }
             }
         }
@@ -1091,10 +1044,10 @@ public class SquidLayers extends Group {
      * @param lightness int between -255 and 255 , lower numbers are darker, higher lighter.
      */
     public SquidLayers highlight(int x, int y, int lightness) {
-        lightness = clamp(lightness, -255, 255);
-        lightnesses[x][y] = 256 + lightness;
+        lightnesses[x][y] = 256 + clamp(lightness, -255, 255);
 
-        lightnessPanel.put(x, y, 256 + lightness, lightingPalette);
+        backgroundPanel.put(x, y, backgroundPanel.getAt(x, y),
+                backgroundPanel.getColorAt(x, y), lightnesses[x][y] / 256f);
         return this;
     }
     /**
@@ -1108,11 +1061,11 @@ public class SquidLayers extends Group {
     public SquidLayers highlight(int x, int y, int[][] lightness) {
         for (int i = 0; i < lightness.length && x + i < width; i++) {
             for (int j = 0; j < lightness[i].length && y + j < height; j++) {
-                lightness[i][j] = 256 + clamp(lightness[i][j], -255, 255);
-                lightnesses[x+i][y+j] = lightness[i][j];
+                lightnesses[x+i][y+j] = 256 + clamp(lightness[i][j], -255, 255);;
+                backgroundPanel.put(x, y, backgroundPanel.getAt(x, y),
+                        backgroundPanel.getColorAt(x, y), lightnesses[i][j] / 256f);
             }
         }
-        lightnessPanel.put(x, y, lightness, lightingPalette);
         return this;
     }
     /**
@@ -1121,7 +1074,7 @@ public class SquidLayers extends Group {
      *
      * @param x in grid cells.
      * @param y in grid cells.
-     * @return
+     * @return true if something was rendered in the foreground at the given x,y position
      */
     public boolean hasValue(int x, int y) {
         return values[x][y];
@@ -1134,7 +1087,7 @@ public class SquidLayers extends Group {
      *
      * @param x in grid cells
      * @param y in grid cells
-     * @return
+     * @return this for chaining
      */
     public SquidLayers clear(int x, int y) {
         foregroundPanel.clear(x, y);
@@ -1150,7 +1103,6 @@ public class SquidLayers extends Group {
      */
     public SquidLayers erase() {
         foregroundPanel.erase();
-        lightnessPanel.erase();
         backgroundPanel.erase();
         for (HDRPanel sp : extraPanels) {
             sp.erase();
@@ -1170,7 +1122,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1189,7 +1140,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1216,7 +1166,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1235,7 +1184,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1262,7 +1210,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1281,7 +1228,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1307,7 +1253,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1326,7 +1271,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1351,8 +1295,6 @@ public class SquidLayers extends Group {
             return true;
         if (backgroundPanel.hasActiveAnimations())
             return true;
-        if (lightnessPanel.hasActiveAnimations())
-            return true;
         for (HDRPanel panel : extraPanels) {
             if (panel.hasActiveAnimations())
                 return true;
@@ -1367,7 +1309,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1408,7 +1349,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1424,7 +1364,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1440,7 +1379,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1456,7 +1394,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1541,7 +1478,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1562,7 +1498,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;
@@ -1589,7 +1524,6 @@ public class SquidLayers extends Group {
                 p = backgroundPanel;
                 break;
             case 1:
-                p = lightnessPanel;
                 break;
             case 2:
                 break;

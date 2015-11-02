@@ -3363,6 +3363,17 @@ public class SColor extends HDRColor {
     public static final SColor NIGHTINGALE_BROWN = new SColor(0x5C4827, "Nightingale Brown");
     /**
      * Color constant<PRE>
+     *<font style="background-color: #50B0B8; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #50B0B8; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #50B0B8; color: #50B0B8">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #50B0B8; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #50B0B8; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #50B0B8; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #50B0B8">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor OCEAN_BLUE = new SColor(0x50B0B8, "Ocean Blue");
+    /**
+     * Color constant<PRE>
      *<font style="background-color: #CC7722; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CC7722; color: #000000">&nbsp;@&nbsp;</font>
      *<font style="background-color: #CC7722; color: #CC7722">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #CC7722; color: #888888">&nbsp;@&nbsp;</font>
      *<font style="background-color: #CC7722; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #CC7722; color: #ffffff">&nbsp;@&nbsp;</font>
@@ -4131,6 +4142,17 @@ public class SColor extends HDRColor {
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
     public static final SColor PURE_CRIMSON = new SColor(0xC3272B, "Pure Crimson");
+    /**
+     * Color constant<PRE>
+     *<font style="background-color: #2F2F2F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2F2F2F; color: #000000">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #2F2F2F; color: #2F2F2F">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000;">&nbsp;@&nbsp;</font><font style="background-color: #888888;">&nbsp;@&nbsp;</font><font style="background-color: #ffffff;">&nbsp;@&nbsp;</font><font style="background-color: #2F2F2F; color: #888888">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #2F2F2F; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #2F2F2F; color: #ffffff">&nbsp;@&nbsp;</font>
+     *
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #2F2F2F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
+     *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor PURE_DARK_GRAY = new SColor(0x2F2F2F, "Pure Dark Gray");
     /**
      * Color constant<PRE>
      *<font style="background-color: #800080; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #800080; color: #000000">&nbsp;@&nbsp;</font>
@@ -5870,7 +5892,7 @@ public class SColor extends HDRColor {
      */
     public static SColor[] LIMITED_PALETTE = {
             // 0                 1       2                 3              4      5       6
-            DARK_SLATE_GRAY, CREAM, FLATTERY_BROWN, SILVER_GREY, RUST, WATER, INTERNATIONAL_ORANGE,
+            PURE_DARK_GRAY, CREAM, FLATTERY_BROWN, SILVER_GREY, RUST, WATER, INTERNATIONAL_ORANGE,
             // 7     8             9
             WHITE, LIGHT_GRAY, DARK_GRAY,
             // 10           11   12
@@ -5881,8 +5903,8 @@ public class SColor extends HDRColor {
             LEMON_CHIFFON, CORN, GOLDEN_YELLOW,
             // 19          20          21
             TEA_GREEN, LIME_GREEN, PINE_GREEN,
-            // 22         23    24
-            BABY_BLUE, CYAN, BLUE_GREEN,
+            // 22         23            24
+            CYAN, OCEAN_BLUE, MIDORI,
             // 25              26            27
             COLUMBIA_BLUE, ROYAL_BLUE, PERSIAN_BLUE,
             // 28              29            30

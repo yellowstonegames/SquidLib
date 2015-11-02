@@ -14,6 +14,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 
 /**
@@ -35,7 +36,7 @@ public class HDRPanel extends Group implements ISquidPanel<HDRColor> {
     private SquidColorCenter scc;
     private final int gridWidth, gridHeight, cellWidth, cellHeight;
     private String[][] contents;
-    private long[][] colors;
+    private HDRColor[][] colors;
     private final TextCellFactory textFactory;
     private LinkedHashSet<AnimatedEntity> animatedEntities;
 
@@ -73,10 +74,25 @@ public class HDRPanel extends Group implements ISquidPanel<HDRColor> {
      * @param factory the factory to use for cell rendering
      */
     public HDRPanel(int gridWidth, int gridHeight, TextCellFactory factory) {
+        this(gridWidth, gridHeight, factory, DefaultResources.getSCC());
+    }
+
+    /**
+     * Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
+     * are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
+     *
+     * If the TextCellFactory has not yet been initialized, then it will be sized at 12x12 px per cell. If it is null
+     * then a default one will be created and initialized.
+     *
+     * @param gridWidth the number of cells horizontally
+     * @param gridHeight the number of cells vertically
+     * @param factory the factory to use for cell rendering
+     */
+    public HDRPanel(int gridWidth, int gridHeight, TextCellFactory factory, SquidColorCenter center) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         textFactory = factory;
-        scc = DefaultResources.getSCC();
+        scc = center;
 
         if (factory == null) {
             factory = new TextCellFactory();
@@ -90,7 +106,11 @@ public class HDRPanel extends Group implements ISquidPanel<HDRColor> {
         cellHeight = factory.height();
 
         contents = new String[gridWidth][gridHeight];
-        colors = new long[gridWidth][gridHeight];
+        colors = new HDRColor[gridWidth][gridHeight];
+        for (int i = 0; i < gridWidth; i++) {
+            Arrays.fill(colors[i], scc.get(HDRColor.CLEAR));
+        }
+
 
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;
@@ -191,19 +211,48 @@ public class HDRPanel extends Group implements ISquidPanel<HDRColor> {
 		int x = xOffset;
 		for (IColoredString.Bucket<? extends HDRColor> fragment : cs) {
 			final String s = fragment.getText();
-			final HDRColor color = fragment.getColor();
+			final HDRColor color = scc.get(fragment.getColor());
 			put(x, yOffset, s, color == null ? getDefaultForegroundColor() : color);
 			x += s.length();
 		}
 	}
 
-	@Override
-	public void put(int xOffset, int yOffset, String string, HDRColor foreground) {
-        char[][] temp = new char[string.length()][1];
-        for (int i = 0; i < string.length(); i++) {
-            temp[i][0] = string.charAt(i);
+    @Override
+    public void put(int xOffset, int yOffset, String string, HDRColor foreground) {
+        if (string.length() == 1) {
+            put(xOffset, yOffset, string.charAt(0), foreground);
         }
-        put(xOffset, yOffset, temp, foreground);
+        else
+        {
+            char[][] temp = new char[string.length()][1];
+            for (int i = 0; i < string.length(); i++) {
+                temp[i][0] = string.charAt(i);
+            }
+            put(xOffset, yOffset, temp, foreground);
+        }
+    }
+    public void put(int xOffset, int yOffset, String string, HDRColor foreground, float colorMultiplier) {
+        if (string.length() == 1) {
+            put(xOffset, yOffset, string.charAt(0), foreground, colorMultiplier);
+        }
+        else
+        {
+            char[][] temp = new char[string.length()][1];
+            for (int i = 0; i < string.length(); i++) {
+                temp[i][0] = string.charAt(i);
+            }
+            put(xOffset, yOffset, temp, foreground, colorMultiplier);
+        }
+    }
+
+    private void put(int xOffset, int yOffset, char[][] chars, HDRColor foreground, float colorMultiplier) {
+        for (int x = xOffset; x < xOffset + chars.length; x++) {
+            for (int y = yOffset; y < yOffset + chars[0].length; y++) {
+                if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
+                    put(x, y, chars[x - xOffset][y - yOffset], foreground, colorMultiplier);
+                }
+            }
+        }
     }
 
     /**
@@ -250,7 +299,7 @@ public class HDRPanel extends Group implements ISquidPanel<HDRColor> {
         for (int i = 0; i < contents.length; i++) {
             for (int j = 0; j < contents[i].length; j++) {
                 contents[i][j] = "";
-                colors[i][j] = 255;
+                colors[i][j] = HDRColor.CLEAR;
             }
 
         }
@@ -264,6 +313,10 @@ public class HDRPanel extends Group implements ISquidPanel<HDRColor> {
     @Override
 	public void put(int x, int y, HDRColor color) {
         put(x, y, '\0', color);
+    }
+
+    public void put(int x, int y, HDRColor color, float colorMultiplier) {
+        put(x, y, '\0', color, colorMultiplier);
     }
 
     @Override
@@ -303,12 +356,21 @@ public class HDRPanel extends Group implements ISquidPanel<HDRColor> {
      * @param color
      */
     @Override
-	public void put(int x, int y, char c, HDRColor color) {
+    public void put(int x, int y, char c, HDRColor color) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-        colors[x][y] = HDRColor.rgbaHDR(color);
+        colors[x][y] = scc.get(color);
+    }
+    public void put(int x, int y, char c, HDRColor color, float colorMultiplier) {
+        if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
+            return;//skip if out of bounds
+        }
+        contents[x][y] = String.valueOf(c);
+        colors[x][y] = scc.get(Math.round(color.hr * colorMultiplier * 255),
+                Math.round(color.hg * colorMultiplier * 255),
+                Math.round(color.hb * colorMultiplier * 255), Math.round(color.a * 255));
     }
 
     @Override
@@ -1022,5 +1084,24 @@ public class HDRPanel extends Group implements ISquidPanel<HDRColor> {
 	public ISquidPanel<HDRColor> getBacker() {
 		return this;
 	}
+
+    public SquidColorCenter getColorCenter() {
+        return scc;
+    }
+
+    public void setColorCenter(SquidColorCenter scc) {
+        this.scc = scc;
+    }
+
+    public String getAt(int x, int y)
+    {
+        if(contents[x][y] == null)
+            return "";
+        return contents[x][y];
+    }
+    public HDRColor getColorAt(int x, int y)
+    {
+        return colors[x][y];
+    }
 
 }

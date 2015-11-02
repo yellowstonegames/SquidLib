@@ -170,6 +170,16 @@ public class HDRColor extends Color {
         this.a *= value;
         return clamp();
     }
+    /** Multiplies the hr, hg, and hb components of this HDRColor with the given value and sets r, g, and b accordingly.
+     *
+     * @param value the value
+     * @return this HDRColor */
+    public HDRColor mulRGB (float value) {
+        this.hr *= value;
+        this.hg *= value;
+        this.hb *= value;
+        return clamp();
+    }
 
     /** Adds the given HDRColor to this HDRColor.
      *

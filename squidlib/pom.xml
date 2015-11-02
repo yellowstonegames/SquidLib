@@ -37,7 +37,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>squidpony.gdx.examples.desktop.ZoneDemoLauncher</mainClass>
+                                    <mainClass>squidpony.gdx.examples.desktop.EverythingDemoLauncher</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

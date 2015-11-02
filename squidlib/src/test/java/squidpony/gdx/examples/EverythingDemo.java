@@ -57,7 +57,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private double counter;
     private boolean[][] seen;
     private int health = 7;
-    private SquidColorCenter filteredCenter;
+    private SquidColorCenter gammaCenter, filteredCenter;
     private HDRColor bgColor;
     private HashMap<AnimatedEntity, Integer> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
@@ -71,10 +71,17 @@ public class EverythingDemo extends ApplicationAdapter {
         // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
         // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
         // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
+        /*
         filteredCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
                 new HDRColor[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
                 new float[]{0.6f, 0.5f}
         ));
+        */
+        filteredCenter = new SquidColorCenter(new Filters.MaxValueFilter());
+        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
+        // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
+        // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
+        gammaCenter = new SquidColorCenter(new Filters.GammaCorrectFilter(0.6f, 1f));
         batch = new SpriteBatch();
         width = 80;
         height = 30;
@@ -82,17 +89,17 @@ public class EverythingDemo extends ApplicationAdapter {
         cellHeight = 24;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge);
+        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge, gammaCenter, gammaCenter);
         display.setAnimationDuration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);
 
         counter = 0;
-        lrng = new LightRNG(0x1337BEEF);
+        lrng = new LightRNG(0xBADBEEFB0BBL);
         rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(18, 6);
-        dungeonGen.addGrass(10);
+        dungeonGen.addWater(28, 6);
+        dungeonGen.addGrass(15);
         dungeonGen.addDoors(15, false);
         MixedGenerator mix = new MixedGenerator(width, height, rng);
         mix.putCaveCarvers(1);
@@ -115,7 +122,8 @@ public class EverythingDemo extends ApplicationAdapter {
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
-            monsters.put(display.animateActor(monPos.x, monPos.y, 'M', 11), 0);
+            monsters.put(display.animateActor(monPos.x, monPos.y, 'M',
+                    filteredCenter.get(display.getPalette().get(11))), 0);
 
         }
         // your choice of FOV matters here.
@@ -127,7 +135,8 @@ public class EverythingDemo extends ApplicationAdapter {
         res = DungeonUtility.generateResistances(bareDungeon);
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
 
-        player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10), 30);
+        player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10),
+                filteredCenter.get(display.getPalette().get(30)));
         cursor = Coord.get(-1, -1);
         toCursor = new ArrayList<Coord>(10);
         awaitedMoves = new ArrayList<Coord>(10);
@@ -495,17 +504,17 @@ public class EverythingDemo extends ApplicationAdapter {
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j],
-                            lights[i][j] + (int) (-85 + 200 * fovmap[i][j]));
+                            lights[i][j] + (int) (-180 + 420 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else if (seen[i][j]) {
-                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -140);
+                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -200);
                 }
             }
         }
         for (Coord pt : toCursor)
         {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (0 + 170 * fovmap[pt.x][pt.y]));
+            display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (230 * fovmap[pt.x][pt.y]));
         }
     }
     @Override
@@ -514,7 +523,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // not sure if this is always needed...
-        Gdx.gl.glEnable(GL20.GL_BLEND);
+        //Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // used as the z-axis when generating Simplex noise to make water seem to "move"
         counter += Gdx.graphics.getDeltaTime() * 15;
