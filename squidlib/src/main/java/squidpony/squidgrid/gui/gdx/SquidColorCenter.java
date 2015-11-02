@@ -29,10 +29,14 @@ public class SquidColorCenter extends IColorCenter.Skeleton<HDRColor> {
 	}
     public HDRColor get(HDRColor c)
     {
+        if(c == null)
+            return HDRColor.CLEAR;
         return get(Math.round(c.hr * 255f), Math.round(c.hg * 255f), Math.round(c.hb * 255f), Math.round(c.a * 255f));
     }
     public HDRColor get(Color c)
     {
+        if(c == null)
+            return HDRColor.CLEAR;
         return get(Math.round(c.r * 255f), Math.round(c.g * 255f), Math.round(c.b * 255f), Math.round(c.a * 255f));
     }
     public HDRColor get(long c)
@@ -60,9 +64,13 @@ public class SquidColorCenter extends IColorCenter.Skeleton<HDRColor> {
 	}
 
     public static long encode (HDRColor color) {
+        if (color == null)
+            return 0L;
         return (Math.round(color.hr * 255.0) << 40) | (Math.round(color.hg * 255.0) << 24) | (Math.round(color.hb * 255.0) << 8) | Math.round(color.a * 255.0);
     }
     public static long encode (Color color) {
+        if (color == null)
+            return 0L;
         return (Math.round(color.r * 255.0) << 40) | (Math.round(color.g * 255.0) << 24) | (Math.round(color.b * 255.0) << 8) | Math.round(color.a * 255.0);
     }
 
