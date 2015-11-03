@@ -2,9 +2,6 @@ package squidpony.panel;
 
 import squidpony.annotation.Beta;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * The combination of two panels, one to color the background, the other to
  * write characters on the foreground.
@@ -120,12 +117,6 @@ public interface ICombinedPanel<T> {
 	void refresh();
 
 	/**
-	 * @return The two backers, with the panel at the top (the foreground)
-	 *         first. They are instances of {@code SquidPanel}.
-	 */
-	List<ISquidPanel<?>> getBackers();
-
-	/**
 	 * A generic implementation of {@link ICombinedPanel}. Useful to combine
 	 * things. If you're a new user, you likely would prefer the more specific
 	 * implementation using libGDX, GroupCombinedPanel, instead.
@@ -235,14 +226,6 @@ public interface ICombinedPanel<T> {
 		public void refresh() {
 			bg.refresh();
 			fg.refresh();
-		}
-
-		@Override
-		public List<ISquidPanel<?>> getBackers() {
-			final List<ISquidPanel<?>> backers = new LinkedList<ISquidPanel<?>>();
-			backers.add(fg.getBacker());
-			backers.add(bg.getBacker());
-			return backers;
 		}
 
 	}
