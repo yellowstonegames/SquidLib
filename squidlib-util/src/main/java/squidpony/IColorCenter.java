@@ -181,8 +181,14 @@ public interface IColorCenter<T> {
 
 		private final Map<Long, T> cache = new HashMap<Long, T>(256);
 
-		protected Skeleton() {
-			/* Nothing to do */
+		protected /*Nullable*/ IFilter<T> filter;
+
+		/**
+		 * @param filter
+		 * 			The filter to use, or {@code null} for no filter.
+		 */
+		protected Skeleton(/*Nullable*/ IFilter<T> filter) {
+			this.filter = filter;
 		}
 
         /**
@@ -207,6 +213,19 @@ public interface IColorCenter<T> {
                         getAlpha(k.getValue())));
             }
         }
+
+		/**
+		 * If you're changing the filter, you should likely call
+		 * {@link #clearCache()}.
+		 * 
+		 * @param filter
+		 *            The filter to use, or {@code null} to turn filtering OFF.
+		 * @return {@code this}
+		 */
+		public Skeleton<T> setFilter(IFilter<T> filter) {
+			this.filter = filter;
+			return this;
+		}
 
 		@Override
 		public T get(int red, int green, int blue, int opacity) {
@@ -389,7 +408,9 @@ public interface IColorCenter<T> {
         }
 
         /**
-		 * Create a concrete instance of the color type given as a type parameter.
+		 * Create a concrete instance of the color type given as a type parameter. That's the
+		 * place to use the {@link #filter}.
+		 * 
 		 * @param red the red component of the desired color
 		 * @param green the green component of the desired color
 		 * @param blue the blue component of the desired color

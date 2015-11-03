@@ -12,7 +12,7 @@ public interface Filters {
     /**
      * A Filter that does nothing to the colors it is given but pass them along unchanged.
      */
-    public class IdentityFilter extends Filter
+    public class IdentityFilter extends Filter<Color>
     {
         public IdentityFilter()
         {
@@ -29,7 +29,7 @@ public interface Filters {
      * A Filter that tracks the highest brightness for any component it was assigned and stores it in state as the first
      * and only element.
      */
-    public class MaxValueFilter extends Filter
+    public class MaxValueFilter extends Filter<Color>
     {
         public MaxValueFilter()
         {
@@ -47,7 +47,7 @@ public interface Filters {
     /**
      * A Filter that performs a brightness adjustment to make dark areas lighter and light areas not much less bright.
      */
-    public class GammaCorrectFilter extends Filter {
+    public class GammaCorrectFilter extends Filter<Color> {
         /**
          * Sets up a GammaCorrectFilter with the desired gamma adjustment.
          *
@@ -70,7 +70,7 @@ public interface Filters {
      * A Filter that is constructed with a color and linear-interpolates any color it is told to alter toward the color
      * it was constructed with.
      */
-    public class LerpFilter extends Filter {
+    public class LerpFilter extends Filter<Color> {
         /**
          * Sets up a LerpFilter with the desired color to linearly interpolate towards.
          *
@@ -102,7 +102,7 @@ public interface Filters {
      * A Filter that is constructed with a group of colors and linear-interpolates any color it is told to alter toward
      * the color it was constructed with that has the closest hue.
      */
-    public class MultiLerpFilter extends Filter {
+    public class MultiLerpFilter extends Filter<Color> {
         private SquidColorCenter globalSCC;
         /**
          * Sets up a MultiLerpFilter with the desired colors to linearly interpolate towards; the lengths of each given
