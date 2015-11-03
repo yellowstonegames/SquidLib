@@ -5,6 +5,7 @@ import squidpony.annotation.Beta;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 /**
  * A {@link String} divided in chunks of different colors. Use the
@@ -64,6 +65,14 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	void setLength(int len);
 
 	/**
+	 * @param index
+	 * @return The color at {@code index}, if any.
+	 * @throws NoSuchElementException
+	 *             If {@code index} equals or is greater to {@link #length()}.
+	 */
+	public /* @Nullable */ T colorAt(int index);
+
+	/**
 	 * @return The length of text.
 	 */
 	int length();
@@ -104,6 +113,16 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			this();
 
 			append(text, color);
+		}
+
+		/**
+		 * A static constructor, to avoid having to write {@code <T>} in the
+		 * caller.
+		 * 
+		 * @return {@code new Impl(s, t)}.
+		 */
+		public static <T> IColoredString.Impl<T> create(String s, /* @Nullable */ T t) {
+			return new IColoredString.Impl<T>(s, t);
 		}
 
 		@Override
@@ -151,28 +170,32 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				final String ftext = next.text;
 				final int flen = ftext.length();
 				final int nextl = l + flen;
-				if (nextl < len)
+				if (nextl < len) {
 					/* Nothing to do */
+					l += flen;
 					continue;
-				else if (nextl == len) {
+				} else if (nextl == len) {
 					/* Delete all next fragments */
-					while (it.hasNext())
+					while (it.hasNext()) {
+						it.next();
 						it.remove();
+					}
 					/* We'll exit the outer loop right away */
 				} else {
 					assert len < nextl;
 					/* Trim this fragment */
-					final IColoredString.Bucket<T> trimmed = next.setLength(nextl - l);
+					final IColoredString.Bucket<T> trimmed = next.setLength(len - l);
 					/* Replace this fragment */
 					it.remove();
 					it.add(trimmed);
 					/* Delete all next fragments */
-					while (it.hasNext())
+					while (it.hasNext()) {
+						it.next();
 						it.remove();
+					}
 					/* We'll exit the outer loop right away */
 				}
 			}
-
 		}
 
 		@Override
@@ -181,6 +204,22 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			for (Bucket<T> fragment : fragments)
 				result += fragment.getText().length();
 			return result;
+		}
+
+		@Override
+		public T colorAt(int index) {
+			final ListIterator<IColoredString.Bucket<T>> it = fragments.listIterator();
+			int now = 0;
+			while (it.hasNext()) {
+				final IColoredString.Bucket<T> next = it.next();
+				final String ftext = next.text;
+				final int flen = ftext.length();
+				final int nextl = now + flen;
+				if (index <= nextl)
+					return next.color;
+				now += flen;
+			}
+			throw new NoSuchElementException(String.format("Character at index %d in %s", index, this));
 		}
 
 		@Override
@@ -242,7 +281,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 
 		public Bucket<T> setLength(int l) {
 			final int here = text.length();
-			if (here < l)
+			if (here <= l)
 				return this;
 			else
 				return new Bucket<T>(text.substring(0, l), color);

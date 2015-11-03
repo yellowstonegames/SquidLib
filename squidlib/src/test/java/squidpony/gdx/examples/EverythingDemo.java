@@ -58,7 +58,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private double counter;
     private boolean[][] seen;
     private int health = 7;
-    private SquidColorCenter gammaCenter, filteredCenter;
+    private SquidColorCenter filteredCenter;
     private Color bgColor;
     private HashMap<AnimatedEntity, Integer> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
@@ -437,7 +437,8 @@ public class EverythingDemo extends ApplicationAdapter {
 
 		/* Prepare the String to display */
 		final IColoredString<Color> cs = new IColoredString.Impl<Color>();
-		cs.append("Still ", null);
+		final Color textColor = Color.WHITE;
+		cs.append("Still ", textColor);
         final Color nbColor;
         if (nbMonsters <= 1)
             /* Green */
@@ -449,7 +450,7 @@ public class EverythingDemo extends ApplicationAdapter {
             /* Red */
             nbColor = new Color(1, 0, 0, 1);
         cs.appendInt(nbMonsters, nbColor);
-        cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
+        cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), textColor);
 
 		/* The panel's width */
 		final int w = cs.length();
