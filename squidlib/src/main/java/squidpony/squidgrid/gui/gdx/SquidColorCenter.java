@@ -4,15 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import squidpony.IColorCenter;
 
 /**
- * A concrete implementation of {@link IColorCenter} for {@link HDRColor}, an extension of libgdx's
- * {@link com.badlogic.gdx.graphics.Color}.
- * Arguments that expect HDRColor can also be passed SColor constants, since that class extends HDRColor now.
+ * A concrete implementation of {@link IColorCenter} for libgdx's {@link com.badlogic.gdx.graphics.Color}.
  *
  * @author smelC
  * @author Tommy Ettinger
  * @see SColor Another way to obtain colors by using pre-allocated (and named) instances.
  */
-public class SquidColorCenter extends IColorCenter.Skeleton<HDRColor> {
+public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
 
     public Filter filter;
     public SquidColorCenter()
@@ -24,50 +22,61 @@ public class SquidColorCenter extends IColorCenter.Skeleton<HDRColor> {
         filter = filterEffect;
     }
 	@Override
-	protected HDRColor create(int red, int green, int blue, int opacity) {
+	protected Color create(int red, int green, int blue, int opacity) {
 		return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);
 	}
-    public HDRColor get(HDRColor c)
+    public Color get(Color c)
     {
         if(c == null)
-            return HDRColor.CLEAR;
-        return get(Math.round(c.hr * 255f), Math.round(c.hg * 255f), Math.round(c.hb * 255f), Math.round(c.a * 255f));
-    }
-    public HDRColor get(Color c)
-    {
-        if(c == null)
-            return HDRColor.CLEAR;
+            return Color.CLEAR;
         return get(Math.round(c.r * 255f), Math.round(c.g * 255f), Math.round(c.b * 255f), Math.round(c.a * 255f));
     }
-    public HDRColor get(long c)
+    public Color get(long c)
     {
-        return get((int)((c >> 40) & 0xffff), (int)((c >> 24) & 0xffff), (int)((c >> 8) & 0xffff), (int)(c & 0xff));
+        return get((int)((c >> 24) & 0xff), (int)((c >> 16) & 0xff), (int)((c >> 8) & 0xff), (int)(c & 0xff));
+    }
+    public Color get(float r, float g, float b, float a)
+    {
+        return get(Math.round(255 * r), Math.round(255 * g), Math.round(255 * b), Math.round(255 * a));
+    }
+
+    /**
+     * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.
+     * @param start the initial Color
+     * @param end the "target" color
+     * @param change the degree to change closer to end; a change of 0.0f produces start, 1.0f produces end
+     * @return a new Color
+     */
+    public Color lerp(Color start, Color end, float change)
+    {
+        return get(
+                start.r + change * (end.r - start.r),
+                start.g + change * (end.g - start.g),
+                start.b + change * (end.b - start.b),
+                start.a + change * (end.a - start.a)
+        );
+
     }
 	@Override
-	public int getRed(HDRColor c) {
-		return Math.round(c.hr * 255f);
+	public int getRed(Color c) {
+		return Math.round(c.r * 255f);
 	}
 
 	@Override
-	public int getGreen(HDRColor c) {
-		return Math.round(c.hg * 255f);
+	public int getGreen(Color c) {
+		return Math.round(c.g * 255f);
 	}
 
 	@Override
-	public int getBlue(HDRColor c) {
-		return Math.round(c.hb * 255f);
+	public int getBlue(Color c) {
+		return Math.round(c.b * 255f);
 	}
 
 	@Override
-	public int getAlpha(HDRColor c) {
+	public int getAlpha(Color c) {
 		return Math.round(c.a * 255f);
 	}
 
-    public static long encode (HDRColor color) {
-        if (color == null)
-            return 0L;
-        return (Math.round(color.hr * 255.0) << 40) | (Math.round(color.hg * 255.0) << 24) | (Math.round(color.hb * 255.0) << 8) | Math.round(color.a * 255.0);
-    }
     public static long encode (Color color) {
         if (color == null)
             return 0L;

@@ -3,6 +3,7 @@ package squidpony.gdx.examples;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -41,7 +42,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private char[][] bareDungeon, lineDungeon;
     private double[][] res;
     private int[][] lights;
-    private HDRColor[][] colors, bgColors;
+    private Color[][] colors, bgColors;
     private double[][] fovmap, pathMap;
     private AnimatedEntity player;
     private FOV fov;
@@ -58,7 +59,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private boolean[][] seen;
     private int health = 7;
     private SquidColorCenter gammaCenter, filteredCenter;
-    private HDRColor bgColor;
+    private Color bgColor;
     private HashMap<AnimatedEntity, Integer> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage;
@@ -71,17 +72,13 @@ public class EverythingDemo extends ApplicationAdapter {
         // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
         // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
         // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
-        /*
+
         filteredCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
-                new HDRColor[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
+                new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
                 new float[]{0.6f, 0.5f}
         ));
-        */
-        filteredCenter = new SquidColorCenter(new Filters.MaxValueFilter());
-        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
-        // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
-        // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
-        gammaCenter = new SquidColorCenter(new Filters.GammaCorrectFilter(0.6f, 1f));
+
+        //filteredCenter = DefaultResources.getSCC();
         batch = new SpriteBatch();
         width = 80;
         height = 30;
@@ -89,7 +86,7 @@ public class EverythingDemo extends ApplicationAdapter {
         cellHeight = 24;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge, gammaCenter, gammaCenter);
+        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge, DefaultResources.getSCC(), filteredCenter);
         display.setAnimationDuration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);
 
@@ -143,10 +140,10 @@ public class EverythingDemo extends ApplicationAdapter {
         playerToCursor = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
         int[][] initialColors = DungeonUtility.generatePaletteIndices(bareDungeon),
                 initialBGColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
-        colors = new HDRColor[width][height];
-        bgColors = new HDRColor[width][height];
-        ArrayList<HDRColor> palette = display.getPalette();
-        bgColor = filteredCenter.get(SColor.DARK_SLATE_GRAY);
+        colors = new Color[width][height];
+        bgColors = new Color[width][height];
+        ArrayList<Color> palette = display.getPalette();
+        bgColor = SColor.DARK_SLATE_GRAY;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 colors[i][j] = filteredCenter.get(palette.get(initialColors[i][j]));
@@ -439,18 +436,18 @@ public class EverythingDemo extends ApplicationAdapter {
         final int nbMonsters = monsters.size();
 
 		/* Prepare the String to display */
-		final IColoredString<HDRColor> cs = new IColoredString.Impl<HDRColor>();
+		final IColoredString<Color> cs = new IColoredString.Impl<Color>();
 		cs.append("Still ", null);
-        final HDRColor nbColor;
+        final Color nbColor;
         if (nbMonsters <= 1)
             /* Green */
-            nbColor = new HDRColor(0, 1, 0, 1);
+            nbColor = new Color(0, 1, 0, 1);
         else if (nbMonsters <= 5)
             /* Orange */
-            nbColor = new HDRColor(1, 0.5f, 0, 1);
+            nbColor = new Color(1, 0.5f, 0, 1);
         else
             /* Red */
-            nbColor = new HDRColor(1, 0, 0, 1);
+            nbColor = new Color(1, 0, 0, 1);
         cs.appendInt(nbMonsters, nbColor);
         cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
 
@@ -459,9 +456,9 @@ public class EverythingDemo extends ApplicationAdapter {
 		/* The panel's height. */
 		final int h = 1;
 
-        final HDRPanel bg = new HDRPanel(w, h, display.getTextFactory());
-        final HDRPanel fg = new HDRPanel(w, h, display.getTextFactory());
-        final GroupCombinedPanel<HDRColor> gcp = new GroupCombinedPanel<HDRColor>();
+        final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
+        final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
+        final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<Color>();
 		/*
 		 * We're setting them late just for the demo, as it avoids giving 'w'
 		 * and 'h' at construction time.
@@ -475,7 +472,7 @@ public class EverythingDemo extends ApplicationAdapter {
 		gcp.setPosition(((width / 2) - (w / 2)) * cellWidth, (height / 2) * cellHeight);
 
 		/* Fill the background with some grey */
-		gcp.fillBG(new HDRColor(0.3f, 0.3f, 0.3f, 0.9f));
+		gcp.fillBG(new Color(0.3f, 0.3f, 0.3f, 0.9f));
 
 		/* Now, to set the text we have to follow SquidPanel's convention */
 		/* First 0: justify left, second 0: first (and only) line */
@@ -500,21 +497,21 @@ public class EverythingDemo extends ApplicationAdapter {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
-                // and 1.0), with 1.0 being almost pure white at +115 lightness and 0.0 being rather dark at -85.
+                // and 1.0), with 1.0 being almost pure white at +215 lightness and 0.0 being rather dark at -105.
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j],
-                            lights[i][j] + (int) (-180 + 420 * fovmap[i][j]));
+                            lights[i][j] + (int) (-105 + 320 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else if (seen[i][j]) {
-                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -200);
+                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -140);
                 }
             }
         }
         for (Coord pt : toCursor)
         {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (230 * fovmap[pt.x][pt.y]));
+            display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (170 * fovmap[pt.x][pt.y]));
         }
     }
     @Override
@@ -523,7 +520,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // not sure if this is always needed...
-        //Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // used as the z-axis when generating Simplex noise to make water seem to "move"
         counter += Gdx.graphics.getDeltaTime() * 15;

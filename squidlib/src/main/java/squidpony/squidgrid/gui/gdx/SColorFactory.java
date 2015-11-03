@@ -20,9 +20,9 @@ import java.util.*;
 public class SColorFactory {
 
     private final TreeMap<String, SColor> nameLookup;
-    private final TreeMap<Long, SColor> valueLookup;
+    private final TreeMap<Integer, SColor> valueLookup;
     private RNG rng;
-    private Map<Long, SColor> colorBag;
+    private Map<Integer, SColor> colorBag;
     private Map<String, ArrayList<SColor>> palettes;
     private long floor = 1;//what multiple to floor rgb values to in order to reduce total colors
 
@@ -71,10 +71,10 @@ public class SColorFactory {
      * @param rgb
      * @return
      */
-    public SColor colorForValue(long rgb) {
+    public SColor colorForValue(int rgb) {
         if (valueLookup.isEmpty()) {
             for (SColor sc : SColor.FULL_PALETTE) {
-                valueLookup.put(sc.toLongBits(), sc);
+                valueLookup.put(sc.toIntBits(), sc);
             }
         }
 
@@ -213,22 +213,22 @@ public class SColorFactory {
      * @param argb
      * @return
      */
-    public SColor asSColor(long argb) {
-        long working = argb;
+    public SColor asSColor(int argb) {
+        int working = argb;
         if (floor != 1) {//need to convert to floored values
-            long r = (argb >> 40) & 0xffff;
+            int r = (argb >>> 24) & 0xff;
             r -= r % floor;
-            long g = (argb >> 24) & 0xffff;
+            int g = (argb >> 16) & 0xff;
             g -= g % floor;
-            long b = (argb >> 8) & 0xffff;
+            int b = (argb >> 8) & 0xff;
             b -= b % floor;
-            long a = (argb) & 0xff;
+            int a = (argb) & 0xff;
             a -= a % floor;
 
             //put back together
-            working = ((r & 0xFFFF) << 40)
-                    | ((g & 0xFFFF) << 24)
-                    | ((b & 0xFFFF) << 8)
+            working = ((r & 0xFF) << 24)
+                    | ((g & 0xFF) << 16)
+                    | ((b & 0xFF) << 8)
                     | (a & 0xFF);
         }
 
@@ -257,20 +257,20 @@ public class SColorFactory {
      * @return
      */
     public SColor asSColor(float a, float r, float g, float b) {
-        long working = 0;
-        long aa = MathUtils.round(255 * a);
+        int working = 0;
+        int aa = MathUtils.round(255 * a);
         aa -= aa % floor;
-        long rr = MathUtils.round(255 * r);
+        int rr = MathUtils.round(255 * r);
         rr -= rr % floor;
-        long gg = MathUtils.round(255 * g);
+        int gg = MathUtils.round(255 * g);
         gg -= gg % floor;
-        long bb = MathUtils.round(255 * b);
+        int bb = MathUtils.round(255 * b);
         bb -= bb % floor;
 
         //put back together
-        working = ((aa & 0xFFFF) << 40)
-                | ((rr & 0xFFFF) << 24)
-                | ((gg & 0xFFFF) << 8)
+        working = ((aa & 0xFF) << 24)
+                | ((rr & 0xFF) << 16)
+                | ((gg & 0xFF) << 8)
                 | (bb & 0xFF);
 
 
