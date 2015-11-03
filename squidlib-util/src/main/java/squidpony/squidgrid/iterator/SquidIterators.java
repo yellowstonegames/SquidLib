@@ -201,10 +201,14 @@ public class SquidIterators {
 					return null;
 
 				/* Iterator is pristine */
-				return Coord.get(xstart + 1, ystart);
+				final Coord result = Coord.get(xstart + 1, ystart);
+
+				if (mute)
+					previous = result;
+
+				return result;
 			}
 
-			final Coord pprevious = previous;
 			final int dfs = distanceFromStart;
 			final int iis = indexInStreak;
 			final Direction pdirection = direction;
@@ -222,7 +226,10 @@ public class SquidIterators {
 				if (indexInStreak == streakBound) {
 					/* Need to change the direction */
 					indexInStreak = 0;
-					direction = direction.counterClockwise().counterClockwise();
+					if (direction == null)
+						direction = Direction.RIGHT;
+					else
+						direction = direction.counterClockwise().counterClockwise();
 				} else {
 					/* Continue in streak */
 					indexInStreak++;
@@ -231,12 +238,14 @@ public class SquidIterators {
 				result = Coord.get(previous.x + direction.deltaX, previous.y + direction.deltaY);
 			}
 
-			if (!mute) {
-				previous = pprevious;
+			if (mute)
+				previous = result;
+			else {
 				distanceFromStart = dfs;
 				indexInStreak = iis;
 				direction = pdirection;
 			}
+
 
 			return result;
 		}

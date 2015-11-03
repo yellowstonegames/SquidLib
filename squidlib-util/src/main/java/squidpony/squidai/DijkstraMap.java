@@ -1259,9 +1259,9 @@ public class DijkstraMap
             {
                 if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
                     continue;
-                if (gradientMap[x][y] == preferredRange && los != null) {
+                if (gradientMap[x][y] == preferredRange) {
                     for (Coord goal : targets) {
-                        if (los.isReachable(resMap, x, y, goal.x, goal.y)) {
+                        if (los == null || los.isReachable(resMap, x, y, goal.x, goal.y)) {
                             setGoal(x, y);
                             gradientMap[x][y] = 0;
                             continue CELL;

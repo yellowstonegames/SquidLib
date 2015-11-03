@@ -1,6 +1,8 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+
+import squidpony.IFilter;
 import squidpony.IColorCenter;
 
 /**
@@ -12,18 +14,32 @@ import squidpony.IColorCenter;
  */
 public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
 
-    public Filter filter;
+    /**
+     * A fresh filter-less color center.
+     */
     public SquidColorCenter()
     {
-        filter = new Filters.IdentityFilter();
+    	this(null);
     }
-    public SquidColorCenter(Filter filterEffect)
+
+    /**
+	 * A fresh filter-less color center.
+	 * 
+	 * @param filterEffect
+	 *            The filter to use.
+	 */
+    public SquidColorCenter(/*Nullable*/IFilter<Color> filterEffect)
     {
-        filter = filterEffect;
+    	super(filterEffect);
     }
 	@Override
 	protected Color create(int red, int green, int blue, int opacity) {
-		return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);
+		if (filter == null)
+			/* No filtering */
+			return new Color(red / 255f, green / 255f, blue / 255f, opacity / 255f);
+		else
+			/* Some filtering */
+			return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);
 	}
     public Color get(Color c)
     {
