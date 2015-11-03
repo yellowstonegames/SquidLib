@@ -455,6 +455,51 @@ public class DungeonGenerator {
                 }
             }
         }
+        return innerGenerate(map);
+    }
+
+    /**
+     * Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated, and that
+     * already has staircases represented by greater than and less than signs.
+     * Typically, you want to call generate with a TilesetType or no argument for the easiest generation; this method
+     * is meant for adding features like water and doors to existing simple maps.
+     * This uses '#' for walls, '.' for floors, '~' for deep water, ',' for shallow water, '^' for traps, '+' for doors
+     * that provide horizontal passage, and '/' for doors that provide vertical passage.
+     * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
+     * Also sets the fields stairsUp and stairsDown to null, and expects stairs to be already handled.
+     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors, with stairs already in
+     * @return a char[][] dungeon
+     */
+    public char[][] generateRespectingStairs(char[][] baseDungeon) {
+        char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
+        DijkstraMap dijkstra = new DijkstraMap(map);
+        int frustrated = 0;
+        stairsUp = null;
+        stairsDown = null;
+
+        dijkstra.clearGoals();
+        Coord[] stairs = CoordPacker.allPacked(CoordPacker.unionPacked(
+                CoordPacker.pack(map, '<'), CoordPacker.pack(map, '>')));
+        for (Coord s : stairs) {
+            dijkstra.setGoal(s);
+        }
+        dijkstra.scan(null);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
+                    map[i][j] = '#';
+                }
+            }
+        }
+        return innerGenerate(map);
+    }
+
+
+
+
+    private char[][] innerGenerate(char[][] map)
+    {
+
         LinkedHashSet<Coord> floors = new LinkedHashSet<Coord>();
         LinkedHashSet<Coord> doorways;
         LinkedHashSet<Coord> hazards = new LinkedHashSet<Coord>();

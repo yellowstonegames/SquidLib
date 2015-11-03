@@ -159,7 +159,9 @@ public class CoordPacker {
 
     public static short[] hilbertX = new short[0x10000], hilbertY = new short[0x10000],
             hilbertDistances = new short[0x10000], mooreX = new short[0x100], mooreY = new short[0x100],
-            mooreDistances = new short[0x100], ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
+            mooreDistances = new short[0x100], hilbert3X = new short[0x1000], hilbert3Y = new short[0x1000],
+            hilbert3Z = new short[0x1000], hilbert3Distances = new short[0x1000],
+            ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
     static {
         ClassLoader cl = CoordPacker.class.getClassLoader();
 
@@ -168,13 +170,17 @@ public class CoordPacker {
             c = CoordPacker.hilbertToCoordNoLUT(i);
             hilbertX[i] = (short) c.x;
             hilbertY[i] = (short) c.y;
+            hilbertDistances[c.x + c.y * 256] = (short) i;
         }
 
-        for (int y = 0; y < 256; y++) {
-            for (int x = 0; x < 256; x++) {
-                hilbertDistances[x + y * 256] = (short) CoordPacker.posToHilbertNoLUT(x, y);
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
+                    computeHilbert3D(x, y, z);
+                }
             }
         }
+
         for (int i = 64; i < 128; i++) {
             mooreX[i - 64] = hilbertX[i];
             mooreY[i - 64] = hilbertY[i];
@@ -2333,6 +2339,20 @@ public class CoordPacker {
         return hilbertDistances[x + (y << 8)] & 0xffff;
     }
     /**
+     * Takes an x, y, z position and returns the length to travel along the 32x32x32 Hilbert curve to reach that
+     * position. This assumes x, y, and z are between 0 and 31, inclusive.
+     * This uses a lookup table for the 32x32x32 Hilbert Curve, which should make it faster than calculating the
+     * distance along the Hilbert Curve repeatedly.
+     * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
+     * @param x between 0 and 31 inclusive
+     * @param y between 0 and 31 inclusive
+     * @param z between 0 and 31 inclusive
+     * @return the distance to travel along the 32x32x32 Hilbert Curve to get to the given x, y, z point.
+     */
+    public static int posToHilbert3D( final int x, final int y, final int z ) {
+        return hilbert3Distances[x + (y << 5) + (z << 10)];
+    }
+    /**
      * Takes an x, y position and returns the length to travel along the 16x16 Moore curve to reach that position.
      * This assumes x and y are between 0 and 15, inclusive.
      * This uses a lookup table for the 16x16 Moore Curve, which should make it faster than calculating the
@@ -2353,7 +2373,7 @@ public class CoordPacker {
      * @return the distance to travel along the 256x256 Hilbert Curve to get to the given x, y point.
      */
 
-    public static int posToHilbertNoLUT( final int x, final int y )
+    private static int posToHilbertNoLUT( final int x, final int y )
     {
         int hilbert = 0, remap = 0xb4, mcode, hcode;
         /*
@@ -2511,7 +2531,7 @@ public class CoordPacker {
      * @return
      */
 
-    public static Coord hilbertToCoordNoLUT( final int hilbert )
+    private static Coord hilbertToCoordNoLUT( final int hilbert )
     {
         int x = 0, y = 0;
         int remap = 0xb4;
@@ -2552,6 +2572,131 @@ public class CoordPacker {
     {
         return posToMoore(pt.x, pt.y);
     }
+
+    private static int mortonEncode3D( int index1, int index2, int index3 )
+    { // pack 3 5-bit indices into a 15-bit Morton code
+        index1 &= 0x0000001f;
+        index2 &= 0x0000001f;
+        index3 &= 0x0000001f;
+        index1 *= 0x01041041;
+        index2 *= 0x01041041;
+        index3 *= 0x01041041;
+        index1 &= 0x10204081;
+        index2 &= 0x10204081;
+        index3 &= 0x10204081;
+        index1 *= 0x00011111;
+        index2 *= 0x00011111;
+        index3 *= 0x00011111;
+        index1 &= 0x12490000;
+        index2 &= 0x12490000;
+        index3 &= 0x12490000;
+        return( ( index1 >> 16 ) | ( index2 >> 15 ) | ( index3 >> 14 ) );
+    }
+    private static void computeHilbert3D(int x, int y, int z)
+    {
+        int hilbert = mortonEncode3D(x, y, z);
+            int block = 9;
+            int hcode = ( ( hilbert >> block ) & 7 );
+            int mcode, shift, signs;
+            shift = signs = 0;
+            while( block > 0 )
+            {
+                block -= 3;
+                hcode <<= 2;
+                mcode = ( ( 0x20212021 >> hcode ) & 3 );
+                shift = ( ( 0x48 >> ( 7 - shift - mcode ) ) & 3 );
+                signs = ( ( signs | ( signs << 3 ) ) >> mcode );
+                signs = ( ( signs ^ ( 0x53560300 >> hcode ) ) & 7 );
+                mcode = ( ( hilbert >> block ) & 7 );
+                hcode = mcode;
+                hcode = ( ( ( hcode | ( hcode << 3 ) ) >> shift ) & 7 );
+                hcode ^= signs;
+                hilbert ^= ( ( mcode ^ hcode ) << block );
+            }
+
+        hilbert ^= ( ( hilbert >> 1 ) & 0x92492492 );
+        hilbert ^= ( ( hilbert & 0x92492492 ) >> 1 );
+
+        hilbert3X[hilbert] = (short)x;
+        hilbert3Y[hilbert] = (short)y;
+        hilbert3Z[hilbert] = (short)z;
+        hilbert3Distances[x + (y << 4) + (z << 8)] = (short)hilbert;
+
+    }
+
+    /**
+     * Gets the x coordinate for a given index into the 32x32x32 Moore curve. Expects indices to touch the following
+     * corners of the 32x32x32 cube in this order, using x,y,z syntax:
+     * (0,0,0) (0,0,32) (0,32,32) (0,32,0) (32,32,0) (32,32,32) (32,0,32) (32,0,0)
+     * @param index the index into the 3D 32x32x32 Moore Curve, must be less than 0x8000
+     * @return the x coordinate of the given distance traveled through the 3D 32x32x32 Moore Curve
+     */
+    public static int getXMoore3D(final int index)
+    {
+        int hilbert = index & 0xfff;
+        int sector = index >> 12;
+        switch (sector)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                return 15 - hilbert3X[hilbert];
+            default:
+                return 16 + hilbert3X[hilbert];
+        }
+    }
+    /**
+     * Gets the y coordinate for a given index into the 32x32x32 Moore curve. Expects indices to touch the following
+     * corners of the 32x32x32 cube in this order, using x,y,z syntax:
+     * (0,0,0) (0,0,32) (0,32,32) (0,32,0) (32,32,0) (32,32,32) (32,0,32) (32,0,0)
+     * @param index the index into the 3D 32x32x32 Moore Curve, must be less than 0x8000
+     * @return the y coordinate of the given distance traveled through the 3D 32x32x32 Moore Curve
+     */
+    public static int getYMoore3D(final int index)
+    {
+        int hilbert = index & 0xfff;
+        int sector = index >> 12;
+        switch (sector)
+        {
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return 16 + hilbert3Y[hilbert];
+            default:
+                return 15 - hilbert3Y[hilbert];
+        }
+    }
+    /**
+     * Gets the z coordinate for a given index into the 32x32x32 Moore curve. Expects indices to touch the following
+     * corners of the 32x32x32 cube in this order, using x,y,z syntax:
+     * (0,0,0) (0,0,32) (0,32,32) (0,32,0) (32,32,0) (32,32,32) (32,0,32) (32,0,0)
+     * @param index the index into the 3D 32x32x32 Moore Curve, must be less than 0x8000
+     * @return the z coordinate of the given distance traveled through the 3D 32x32x32 Moore Curve
+     */
+    public static int getZMoore3D(final int index)
+    {
+        int hilbert = index & 0xfff;
+        int sector = index >> 12;
+        switch (sector)
+        {
+            case 0:
+            case 4:
+                return hilbert3Z[hilbert];
+            case 1:
+            case 5:
+                return hilbert3Z[hilbert] + 16;
+            case 2:
+            case 6:
+                return 31 - hilbert3Z[hilbert];
+            default:
+                return 15 - hilbert3Z[hilbert];
+        }
+    }
+
+
+
     /**
      * Takes two 8-bit unsigned integers index1 and index2, and returns a Morton code, with interleaved index1 and
      * index2 bits and index1 in the least significant bit. With this method, index1 and index2 can have up to 8 bits.
