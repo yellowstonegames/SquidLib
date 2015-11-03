@@ -1959,9 +1959,10 @@ public class DijkstraMap
             {
                 if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
                     continue;
-                if (x+2 < width && y + 2 < height && gradientMap[x][y] == preferredRange && los != null) {
+                if (x+2 < width && y + 2 < height && gradientMap[x][y] == preferredRange) {
                     for (Coord goal : targets) {
-                        if (los.isReachable(resMap, x, y, goal.x, goal.y)
+                        if (los == null
+                                || los.isReachable(resMap, x, y, goal.x, goal.y)
                                 || los.isReachable(resMap, x+1, y, goal.x, goal.y)
                                 || los.isReachable(resMap, x, y+1, goal.x, goal.y)
                                 || los.isReachable(resMap, x+1, y+1, goal.x, goal.y)) {
@@ -2100,10 +2101,10 @@ public class DijkstraMap
             {
                 if(gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
                     continue;
-                if (x+2 < width && y + 2 < height && gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange
-                        && los != null) {
+                if (x+2 < width && y + 2 < height && gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange) {
                     for (Coord goal : targets) {
-                        if (los.isReachable(resMap, x, y, goal.x, goal.y)
+                        if (los == null
+                                || los.isReachable(resMap, x, y, goal.x, goal.y)
                                 || los.isReachable(resMap, x+1, y, goal.x, goal.y)
                                 || los.isReachable(resMap, x, y+1, goal.x, goal.y)
                                 || los.isReachable(resMap, x+1, y+1, goal.x, goal.y)) {
