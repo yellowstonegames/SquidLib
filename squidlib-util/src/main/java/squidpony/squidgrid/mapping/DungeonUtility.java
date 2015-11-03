@@ -1007,16 +1007,16 @@ public class DungeonUtility {
                         break;
                     case '+':
                     case '/':
-                        portion[i][j] = -20;
+                        portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int)(80 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 1.65));
+                        portion[i][j] = (int)(70 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int)(110 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 1.85));
+                        portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int)(80 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 30.0) / 3.0 - 0.5));
+                        portion[i][j] = (int)(80 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 30.0) / 3.0 - 0.35));
                         break;
                     case '^':
                         portion[i][j] = 40;

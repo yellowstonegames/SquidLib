@@ -2,6 +2,7 @@ package squidpony.gdx.examples;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -9,17 +10,14 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import squidpony.squidai.ZOI;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.AnimatedEntity;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.HDRColor;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidColorCenter;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.PoissonDisk;
+import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
 
@@ -35,8 +33,8 @@ public class ZoneDemo extends ApplicationAdapter {
     private char[][] bareDungeon, lineDungeon;
     private double[][] res;
     private int[][] lights;
-    private HDRColor[][] bgColors;
-    private HDRColor[] influenceColors;
+    private Color[][] bgColors;
+    private Color[] influenceColors;
     private ZOI zoi;
     private short[][] packedInfluences;
     private int width, height;
@@ -44,7 +42,7 @@ public class ZoneDemo extends ApplicationAdapter {
     private Coord[] centers, shiftedCenters;
     private AnimatedEntity[] centerEntities;
     private SquidInput input;
-    private static final HDRColor bgColor = SColor.DARK_SLATE_GRAY, textColor = SColor.SLATE_GRAY;
+    private static final Color bgColor = SColor.DARK_SLATE_GRAY, textColor = SColor.SLATE_GRAY;
     private Stage stage;
     private int framesWithoutAnimation = 0;
     private ArrayList<Coord> awaitedMoves;
@@ -80,7 +78,7 @@ public class ZoneDemo extends ApplicationAdapter {
         shiftedCenters = temp.toArray(new Coord[temp.size()]);
 
         colorCenter = DefaultResources.getSCC();
-        influenceColors = new HDRColor[centers.length];
+        influenceColors = new Color[centers.length];
         centerEntities = new AnimatedEntity[centers.length];
         for (int i = 0; i < centers.length; i++) {
             float hue = i * 1.0f / centers.length, sat = rng.nextFloat() * 0.5f + 0.5f,
@@ -93,7 +91,7 @@ public class ZoneDemo extends ApplicationAdapter {
         zoi = new ZOI(centers, bareDungeon, Radius.DIAMOND);
         packedInfluences = zoi.calculate();
 
-        bgColors = new HDRColor[width][height];
+        bgColors = new Color[width][height];
         recolorZones();
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon);
 

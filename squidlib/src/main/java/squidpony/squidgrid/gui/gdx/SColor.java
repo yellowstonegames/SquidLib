@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.Color;
  * 
  * @see SquidColorCenter Another way to manage colors if you don't want to use preallocated instances.
  */
-public class SColor extends HDRColor {
+public class SColor extends Color {
 
     private String name = "Unnamed";
     /**
@@ -4152,7 +4152,7 @@ public class SColor extends HDRColor {
      *<font style="background-color: #ff0000; color: #2F2F2F">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public static final SColor PURE_DARK_GRAY = new SColor(0x2F2F2F, "Pure Dark Gray");
+    public static final SColor PURE_DARK_GRAY = new SColor(0x3F4041, "Pure Dark Gray");
     /**
      * Color constant<PRE>
      *<font style="background-color: #800080; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #800080; color: #000000">&nbsp;@&nbsp;</font>
@@ -5952,15 +5952,6 @@ public class SColor extends HDRColor {
      */
     public SColor(int colorValue) {
         super((colorValue << 8) | 255);
-        name = super.toString();
-    }
-    /**
-     * Creates a new color that has the given combined HDR RGBA value.
-     *
-     * @param colorValue
-     */
-    public SColor(long colorValue) {
-        super(colorValue);
         name = super.toString();
     }
 

@@ -1,5 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.graphics.Color;
+
 /**
  * A group of nested classes under the empty interface Filters, these all are meant to perform different changes
  * to colors before they are created (they should be passed to SquidColorCenter's constructor, which can use them).
@@ -18,8 +20,8 @@ public interface Filters {
         }
 
         @Override
-        public HDRColor alter(float r, float g, float b, float a) {
-            return new HDRColor(r, g, b, a);
+        public Color alter(float r, float g, float b, float a) {
+            return new Color(r, g, b, a);
         }
     }
 
@@ -35,9 +37,9 @@ public interface Filters {
         }
 
         @Override
-        public HDRColor alter(float r, float g, float b, float a) {
+        public Color alter(float r, float g, float b, float a) {
             state[0] = Math.max(state[0], Math.max(r, Math.max(g, b)));
-            return new HDRColor(r, g, b, a);
+            return new Color(r, g, b, a);
         }
 
     }
@@ -57,8 +59,8 @@ public interface Filters {
         }
 
         @Override
-        public HDRColor alter(float r, float g, float b, float a) {
-            return new HDRColor(state[1] * (float) Math.pow(r, state[0]),
+        public Color alter(float r, float g, float b, float a) {
+            return new Color(state[1] * (float) Math.pow(r, state[0]),
                     state[1] * (float) Math.pow(g, state[0]),
                     state[1] * (float) Math.pow(b, state[0]),
                     a);
@@ -84,16 +86,16 @@ public interface Filters {
         /**
          * Sets up a LerpFilter with the desired color to linearly interpolate towards.
          *
-         * @param color the HDRColor to lerp towards
+         * @param color the Color to lerp towards
          * @param amount the amount to lerp by, should be between 0.0 and 1.0
          */
-        public LerpFilter(HDRColor color, float amount) {
-            state = new float[]{color.hr, color.hg, color.hb, color.a, amount};
+        public LerpFilter(Color color, float amount) {
+            state = new float[]{color.r, color.g, color.b, color.a, amount};
         }
 
         @Override
-        public HDRColor alter(float r, float g, float b, float a) {
-            return new HDRColor(r, g, b, a).lerp(state[0], state[1], state[2], state[3], state[4]);
+        public Color alter(float r, float g, float b, float a) {
+            return new Color(r, g, b, a).lerp(state[0], state[1], state[2], state[3], state[4]);
         }
     }
     /**
@@ -127,16 +129,16 @@ public interface Filters {
         }/**
          * Sets up a MultiLerpFilter with the desired colors to linearly interpolate towards and their amounts.
          *
-         * @param colors the HDRColors to lerp towards
+         * @param colors the Colors to lerp towards
          * @param amount the amounts to lerp by, should each be between 0.0 and 1.0
          */
-        public MultiLerpFilter(HDRColor[] colors, float[] amount) {
+        public MultiLerpFilter(Color[] colors, float[] amount) {
             state = new float[Math.min(colors.length, amount.length) * 6];
             globalSCC = DefaultResources.getSCC();
             for (int i = 0; i < state.length / 6; i++) {
-                state[i * 6] = colors[i].hr;
-                state[i * 6 + 1] = colors[i].hg;
-                state[i * 6 + 2] = colors[i].hb;
+                state[i * 6] = colors[i].r;
+                state[i * 6 + 1] = colors[i].g;
+                state[i * 6 + 2] = colors[i].b;
                 state[i * 6 + 3] = colors[i].a;
                 state[i * 6 + 4] = amount[i];
                 state[i * 6 + 5] = globalSCC.getHue(colors[i]);
@@ -144,8 +146,11 @@ public interface Filters {
         }
 
         @Override
-        public HDRColor alter(float r, float g, float b, float a) {
-            float givenH = globalSCC.getHue(r, g, b), minDiff = 999.0f, temp;
+        public Color alter(float r, float g, float b, float a) {
+            float givenH = globalSCC.getHue(r, g, b), givenS = globalSCC.getSaturation(r, g, b),
+                    minDiff = 999.0f, temp;
+            if(givenS < 0.05)
+                return new Color(r, g, b, a);
             int choice = 0;
             for (int i = 5; i < state.length; i += 6) {
                 temp = state[i] - givenH;
@@ -155,7 +160,7 @@ public interface Filters {
                     choice = i / 6; // rounds down
                 }
             }
-            return new HDRColor(r, g, b, a).lerp(state[choice * 6], state[choice * 6 + 1], state[choice * 6 + 2],
+            return new Color(r, g, b, a).lerp(state[choice * 6], state[choice * 6 + 1], state[choice * 6 + 2],
                     state[choice * 6 + 3], state[choice * 6 + 4]);
         }
     }
