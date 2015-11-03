@@ -159,8 +159,8 @@ public class CoordPacker {
 
     public static short[] hilbertX = new short[0x10000], hilbertY = new short[0x10000],
             hilbertDistances = new short[0x10000], mooreX = new short[0x100], mooreY = new short[0x100],
-            mooreDistances = new short[0x100], hilbert3X = new short[0x1000], hilbert3Y = new short[0x1000],
-            hilbert3Z = new short[0x1000], hilbert3Distances = new short[0x1000],
+            mooreDistances = new short[0x100], hilbert3X = new short[0x200], hilbert3Y = new short[0x200],
+            hilbert3Z = new short[0x200], hilbert3Distances = new short[0x200],
             ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
     static {
         ClassLoader cl = CoordPacker.class.getClassLoader();
@@ -173,9 +173,9 @@ public class CoordPacker {
             hilbertDistances[c.x + c.y * 256] = (short) i;
         }
 
-        for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 16; y++) {
-                for (int z = 0; z < 16; z++) {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                for (int z = 0; z < 8; z++) {
                     computeHilbert3D(x, y, z);
                 }
             }
@@ -2595,7 +2595,7 @@ public class CoordPacker {
     private static void computeHilbert3D(int x, int y, int z)
     {
         int hilbert = mortonEncode3D(x, y, z);
-            int block = 9;
+            int block = 6;
             int hcode = ( ( hilbert >> block ) & 7 );
             int mcode, shift, signs;
             shift = signs = 0;
@@ -2620,79 +2620,60 @@ public class CoordPacker {
         hilbert3X[hilbert] = (short)x;
         hilbert3Y[hilbert] = (short)y;
         hilbert3Z[hilbert] = (short)z;
-        hilbert3Distances[x + (y << 4) + (z << 8)] = (short)hilbert;
+        hilbert3Distances[x + (y << 3) + (z << 6)] = (short)hilbert;
 
     }
 
     /**
-     * Gets the x coordinate for a given index into the 32x32x32 Moore curve. Expects indices to touch the following
-     * corners of the 32x32x32 cube in this order, using x,y,z syntax:
-     * (0,0,0) (0,0,32) (0,32,32) (0,32,0) (32,32,0) (32,32,32) (32,0,32) (32,0,0)
-     * @param index the index into the 3D 32x32x32 Moore Curve, must be less than 0x8000
-     * @return the x coordinate of the given distance traveled through the 3D 32x32x32 Moore Curve
+     * Gets the x coordinate for a given index into the 16x16x(8*n) Moore curve. Expects indices to touch the following
+     * corners of the 16x16x(8*n) cube in this order, using x,y,z syntax:
+     * (0,0,0) (0,0,(8*n)) (0,16,(8*n)) (0,16,0) (16,16,0) (16,16,(8*n)) (16,0,(8*n)) (16,0,0)
+     * @param index the index into the 3D 16x16x(8*n) Moore Curve, must be less than 0x1000
+     * @param n the number of 8-deep layers to use as part of the box shape this travels through
+     * @return the x coordinate of the given distance traveled through the 3D 16x16x(8*n) Moore Curve
      */
-    public static int getXMoore3D(final int index)
+    public static int getXMoore3D(final int index, final int n) {
+        int hilbert = index & 0x1ff;
+        int sector = index >> 9;
+        if (sector < 2 * n)
+            return 7 - hilbert3X[hilbert];
+        else
+            return 8 + hilbert3X[hilbert];
+    }
+
+    /**
+     * Gets the y coordinate for a given index into the 16x16x(8*n) Moore curve. Expects indices to touch the following
+     * corners of the 16x16x(8*n) cube in this order, using x,y,z syntax:
+     * (0,0,0) (0,0,(8*n)) (0,16,(8*n)) (0,16,0) (16,16,0) (16,16,(8*n)) (16,0,(8*n)) (16,0,0)
+     * @param index the index into the 3D 16x16x(8*n) Moore Curve, must be less than 0x1000
+     * @param n the number of 8-deep layers to use as part of the box shape this travels through
+     * @return the y coordinate of the given distance traveled through the 3D 16x16x(8*n) Moore Curve
+     */
+    public static int getYMoore3D(final int index, final int n)
     {
-        int hilbert = index & 0xfff;
-        int sector = index >> 12;
-        switch (sector)
-        {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                return 15 - hilbert3X[hilbert];
-            default:
-                return 16 + hilbert3X[hilbert];
-        }
+        int hilbert = index & 0x1ff;
+        int sector = index >> 9;
+        if (sector < n || sector >= 3 * n)
+            return 7 - hilbert3Y[hilbert];
+        else
+            return 8 + hilbert3Y[hilbert];
+
     }
     /**
-     * Gets the y coordinate for a given index into the 32x32x32 Moore curve. Expects indices to touch the following
-     * corners of the 32x32x32 cube in this order, using x,y,z syntax:
-     * (0,0,0) (0,0,32) (0,32,32) (0,32,0) (32,32,0) (32,32,32) (32,0,32) (32,0,0)
-     * @param index the index into the 3D 32x32x32 Moore Curve, must be less than 0x8000
-     * @return the y coordinate of the given distance traveled through the 3D 32x32x32 Moore Curve
+     * Gets the z coordinate for a given index into the 16x16x(8*n) Moore curve. Expects indices to touch the following
+     * corners of the 16x16x(8*n) cube in this order, using x,y,z syntax:
+     * (0,0,0) (0,0,(8*n)) (0,16,(8*n)) (0,16,0) (16,16,0) (16,16,(8*n)) (16,0,(8*n)) (16,0,0)
+     * @param index the index into the 3D 16x16x(8*n) Moore Curve, must be less than 0x1000
+     * @param n the number of 8-deep layers to use as part of the box shape this travels through
+     * @return the z coordinate of the given distance traveled through the 3D 16x16x(8*n) Moore Curve
      */
-    public static int getYMoore3D(final int index)
-    {
-        int hilbert = index & 0xfff;
-        int sector = index >> 12;
-        switch (sector)
-        {
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                return 16 + hilbert3Y[hilbert];
-            default:
-                return 15 - hilbert3Y[hilbert];
-        }
-    }
-    /**
-     * Gets the z coordinate for a given index into the 32x32x32 Moore curve. Expects indices to touch the following
-     * corners of the 32x32x32 cube in this order, using x,y,z syntax:
-     * (0,0,0) (0,0,32) (0,32,32) (0,32,0) (32,32,0) (32,32,32) (32,0,32) (32,0,0)
-     * @param index the index into the 3D 32x32x32 Moore Curve, must be less than 0x8000
-     * @return the z coordinate of the given distance traveled through the 3D 32x32x32 Moore Curve
-     */
-    public static int getZMoore3D(final int index)
-    {
-        int hilbert = index & 0xfff;
-        int sector = index >> 12;
-        switch (sector)
-        {
-            case 0:
-            case 4:
-                return hilbert3Z[hilbert];
-            case 1:
-            case 5:
-                return hilbert3Z[hilbert] + 16;
-            case 2:
-            case 6:
-                return 31 - hilbert3Z[hilbert];
-            default:
-                return 15 - hilbert3Z[hilbert];
-        }
+    public static int getZMoore3D(final int index, final int n) {
+        int hilbert = index & 0x1ff;
+        int sector = index >> 9;
+        if (sector / n < 2)
+            return hilbert3Z[hilbert] + 8 * (sector % n);
+        else
+            return (8 * n - 1) - hilbert3Z[hilbert] - 8 * (sector % n);
     }
 
 

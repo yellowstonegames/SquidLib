@@ -61,19 +61,20 @@ public class SerpentDeepMapGenerator {
     {
         if(width <= 2 || height <= 2)
             throw new ExceptionInInitializerError("width and height must be greater than 2");
-        if(depth < 1 || depth > 32)
-            throw new ExceptionInInitializerError("depth must be between 1 and 32 inclusive");
+        if(depth < 1)
+            throw new ExceptionInInitializerError("depth must be at least 1");
         random = rng;
         this.width = width;
         this.height = height;
         this.depth = depth;
+        int numLayers = (int)Math.ceil(depth / 8.0f);
         long columnAlterations = random.nextLong(0x100000000L);
-        float columnBase = width / (Long.bitCount(columnAlterations) + 32.0f);
+        float columnBase = width / (Long.bitCount(columnAlterations) + 16.0f);
         long rowAlterations = random.nextLong(0x100000000L);
-        float rowBase = height / (Long.bitCount(rowAlterations) + 32.0f);
+        float rowBase = height / (Long.bitCount(rowAlterations) + 16.0f);
 
-        columns = new int[32];
-        rows = new int[32];
+        columns = new int[16];
+        rows = new int[16];
         linksUp = new ArrayList<ArrayList<Coord>>(depth);
         linksDown = new ArrayList<ArrayList<Coord>>(depth);
         for (int i = 0; i < depth; i++) {
@@ -81,8 +82,8 @@ public class SerpentDeepMapGenerator {
             linksDown.add(new ArrayList<Coord>(80));
         }
         int csum = 0, rsum = 0;
-        long b = 1;
-        for (int i = 0; i < 32; i++, b <<= 1) {
+        long b = 3;
+        for (int i = 0; i < 16; i++, b <<= 2) {
             columns[i] = csum + (int)(columnBase * 0.5f * (1 + Long.bitCount(columnAlterations & b)));
             csum += (int)(columnBase * (1 + Long.bitCount(columnAlterations & b)));
             rows[i] = rsum + (int)(rowBase * 0.5f * (1 + Long.bitCount(rowAlterations & b)));
@@ -91,15 +92,15 @@ public class SerpentDeepMapGenerator {
         int cs = (width - csum);
         int rs = (height - rsum);
         int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
-        for (int i = 15; i >= 0; i--) {
-            cs2= cs2 * i / 15;
-            rs2 = rs2 * i / 15;
+        for (int i = 7; i >= 0; i--) {
+            cs2= cs2 * i / 7;
+            rs2 = rs2 * i / 7;
             columns[i] -= cs2;
             rows[i] -= rs2;
         }
-        for (int i = 31; i >= 16; i--) {
-            cs3 = cs3 * (i - 16) / 16;
-            rs3 = rs3 * (i - 16) / 16;
+        for (int i = 15; i >= 8; i--) {
+            cs3 = cs3 * (i - 8) / 8;
+            rs3 = rs3 * (i - 8) / 8;
             columns[i] += cs3;
             rows[i] += rs3;
         }
@@ -108,62 +109,123 @@ public class SerpentDeepMapGenerator {
         for (int i = 0; i < depth; i++) {
             connections.add(new LinkedHashMap<Coord, List<Coord>>(80));
         }
-        int m = random.nextInt(0x8000);
-        int x = CoordPacker.getXMoore3D(m), y = CoordPacker.getYMoore3D(m), z = CoordPacker.getZMoore3D(m) * depth / 32, tz;
-        int r = random.between(48, 96);
+        int m = random.nextInt(0x800 * numLayers);
+        int x = CoordPacker.getXMoore3D(m, numLayers), y = CoordPacker.getYMoore3D(m, numLayers),
+                z = (int)Math.floor(CoordPacker.getZMoore3D(m, numLayers) * depth / (8f * numLayers)),
+                sx = x, sy = y, sz = z, tz = z;
+        int r = random.between(8, 24);
         m += r;
-        for (int i = 0; i < 0x8000; r = random.between(48, 96), i += r, m = (m + r) % 0x8000) {
+        for (int i = 0; i < 0x800 * numLayers; r = random.between(8, 24), i += r, m = (m + r) % (0x800 * numLayers)) {
             tz = z;
+            int tx = x, ty = y;
             do {
-                int tx = x, ty = y;
                 List<Coord> cl = new ArrayList<Coord>(4);
 
                 for (int j = 0;
                      j < 2;
                      j++) {
-                    int x2 = random.between(Math.max(0, x - 3), x);
-                    int x3 = random.between(x + 1, Math.min(x + 3, 31));
-                    int y2 = random.between(Math.max(0, y - 3), y);
-                    int y3 = random.between(y + 1, Math.min(y + 3, 31));
-                    if (x3 < 32 && random.nextBoolean())
+                    int x2 = random.between(Math.max(0, tx - 2), tx);
+                    int x3 = random.between(tx + 1, Math.min(tx + 3, 15));
+                    int y2 = random.between(Math.max(0, ty - 2), ty);
+                    int y3 = random.between(ty + 1, Math.min(ty + 3, 15));
+                    if (x3 < 16 && random.nextBoolean())
                         x2 = x3;
-                    if (y3 < 32 && random.nextBoolean())
+                    if (y3 < 16 && random.nextBoolean())
                         y2 = y3;
                     cl.add(Coord.get(columns[x2], rows[y2]));
-                    if (Math.min(random.nextDouble(), random.nextDouble()) >= branchingChance)
+                    if (random.nextDouble() >= branchingChance)
                         break;
                 }
-                connections.get(tz).put(Coord.get(columns[tx], rows[ty]), cl);
 
-                x = CoordPacker.getXMoore3D(m);
-                y = CoordPacker.getYMoore3D(m);
-                z = CoordPacker.getZMoore3D(m) * depth / 32;
+                List<Coord> connect = connections.get(tz).get(Coord.get(columns[tx], rows[ty]));
+                if(connect != null)
+                    connections.get(tz).get(Coord.get(columns[tx], rows[ty])).addAll(cl);
+                else
+                    connections.get(tz).put(Coord.get(columns[tx], rows[ty]), new ArrayList<Coord>(cl));
+
+                x = CoordPacker.getXMoore3D(m, numLayers);
+                y = CoordPacker.getYMoore3D(m, numLayers);
+                z = (int)Math.floor(CoordPacker.getZMoore3D(m, numLayers) * depth / (8f * numLayers));
                 if(z != tz)
                     cl.clear();
                 cl.add(Coord.get(columns[x], rows[y]));
 
                 if (tz == z) {
-                    connections.get(z).put(Coord.get(columns[tx], rows[ty]), cl);
+                    List<Coord> conn = connections.get(z).get(Coord.get(columns[tx], rows[ty]));
+                    if(conn != null)
+                        connections.get(z).get(Coord.get(columns[tx], rows[ty])).addAll(cl);
+                    else
+                        connections.get(z).put(Coord.get(columns[tx], rows[ty]), new ArrayList<Coord>(cl));
                     break;
                 }
                 else {
                     if (z > tz) {
-                        linksDown.get(tz).add(Coord.get(columns[x], rows[y]));
+                        linksDown.get(tz).add(Coord.get(columns[tx], rows[ty]));
                         tz++;
-                        linksUp.get(tz).add(Coord.get(columns[x], rows[y]));
+                        linksUp.get(tz).add(Coord.get(columns[tx], rows[ty]));
                     }
                     else
                     {
-                        linksUp.get(tz).add(Coord.get(columns[x], rows[y]));
+                        linksUp.get(tz).add(Coord.get(columns[tx], rows[ty]));
                         tz--;
-                        linksDown.get(tz).add(Coord.get(columns[x], rows[y]));
+                        linksDown.get(tz).add(Coord.get(columns[tx], rows[ty]));
                     }
                 }
             }while (true);
         }
+
+        do {
+            List<Coord> cl = new ArrayList<Coord>(4);
+
+            for (int j = 0;
+                 j < 2;
+                 j++) {
+                int x2 = random.between(Math.max(0, x - 2), x);
+                int x3 = random.between(x + 1, Math.min(x + 3, 15));
+                int y2 = random.between(Math.max(0, y - 2), y);
+                int y3 = random.between(y + 1, Math.min(y + 3, 15));
+                if (x3 < 16 && random.nextBoolean())
+                    x2 = x3;
+                if (y3 < 16 && random.nextBoolean())
+                    y2 = y3;
+                cl.add(Coord.get(columns[x2], rows[y2]));
+                if (Math.min(random.nextDouble(), random.nextDouble()) >= branchingChance)
+                    break;
+            }
+
+            List<Coord> connect = connections.get(tz).get(Coord.get(columns[x], rows[y]));
+            if(connect != null)
+                connections.get(tz).get(Coord.get(columns[x], rows[y])).addAll(cl);
+            else
+                connections.get(tz).put(Coord.get(columns[x], rows[y]), new ArrayList<Coord>(cl));
+
+            if(sz != tz)
+                cl.clear();
+            cl.add(Coord.get(columns[x], rows[y]));
+
+            if (tz == sz) {
+                connections.get(sz).get(Coord.get(columns[x], rows[y])).add(
+                        Coord.get(columns[sx], rows[sy]));
+                break;
+            }
+            else {
+                if (sz > tz) {
+                    linksDown.get(tz).add(Coord.get(columns[x], rows[y]));
+                    tz++;
+                    linksUp.get(tz).add(Coord.get(columns[x], rows[y]));
+                }
+                else
+                {
+                    linksUp.get(tz).add(Coord.get(columns[x], rows[y]));
+                    tz--;
+                    linksDown.get(tz).add(Coord.get(columns[x], rows[y]));
+                }
+            }
+        }while (true);
+
         mix = new MixedGenerator[depth];
         for (int i = 0; i < depth; i++) {
-            mix[i] = new MixedGenerator(width, height, random, connections.get(i), 0.6f);
+            mix[i] = new MixedGenerator(width, height, random, connections.get(i), 0.4f);
         }
     }
     /**
@@ -275,53 +337,58 @@ public class SerpentDeepMapGenerator {
         }
         for (int i = 0; i < depth; i++) {
             ArrayList<Coord> ups = linksUp.get(i), downs = linksDown.get(i);
+            LinkedHashMap<Coord, Integer> used = new LinkedHashMap<Coord, Integer>(128);
             for(Coord up : ups)
             {
-                int x = up.x + random.between(-2,2), y = up.y + random.between(-2, 2), frustration = 0;
-                while ((x < 0 || y < 0 || x >= width || y >= height || dungeon[i][x][y] != '.')
-                        && frustration < 40)
+                Integer count = used.get(up);
+                if(count != null && count > 1)
+                    continue;
+                int x = up.x + random.between(-1,2), y = up.y + random.between(-1, 2), frustration = 0;
+                while (((x == up.x && y == up.y) || x < 0 || y < 0 || x >= width || y >= height || dungeon[i][x][y] != '.')
+                        && frustration < 200)
                 {
-                    x = up.x + random.between(-2, 2);
-                    y = up.y + random.between(-2, 2);
+                    x = up.x + random.between(-1, 2);
+                    y = up.y + random.between(-1, 2);
                     frustration++;
                 }
-                if(frustration >= 40) {
+                if(frustration >= 200) {
+                    for (int xx = Math.max(1, up.x - 1); xx <= Math.min(width - 2, up.x + 1); xx++) {
+                        for (int yy = Math.max(1, up.y - 1); yy <= Math.min(height - 2, up.y + 1); yy++) {
+                            dungeon[i][xx][yy] = '.';
+                        }
+                    }
                     dungeon[i][up.x][up.y] = '<';
-                    if(up.x > 1)
-                        dungeon[i][up.x-1][up.y] = '.';
-                    if(up.y > 1)
-                        dungeon[i][up.x][up.y-1] = '.';
-                    if(up.x < width - 2)
-                        dungeon[i][up.x+1][up.y] = '.';
-                    if(up.x < height - 2)
-                        dungeon[i][up.x][up.y+1] = '.';
-                }else
+                }
+                else
                     dungeon[i][x][y] = '<';
+                used.put(up, (count == null) ? 1 : count + 1);
             }
+            used.clear();
             for(Coord down : downs)
             {
-                int x = down.x + random.between(-2,2), y = down.y + random.between(-2, 2), frustration = 0;
-                while ((x < 0 || y < 0 || x >= width || y >= height || dungeon[i][x][y] != '.')
-                        && frustration < 40)
+                Integer count = used.get(down);
+                if(count != null && count > 1)
+                    continue;
+                int x = down.x + random.between(-1,2), y = down.y + random.between(-1, 2), frustration = 0;
+                while (((x == down.x && y == down.y) || x < 0 || y < 0 || x >= width || y >= height || dungeon[i][x][y] != '.')
+                        && frustration < 20)
                 {
-                    x = down.x + random.between(-2, 2);
-                    y = down.y + random.between(-2, 2);
+                    x = down.x + random.between(-1, 2);
+                    y = down.y + random.between(-1, 2);
                     frustration++;
                 }
-                if(frustration >= 40) {
-                    dungeon[i][down.x][down.y] = '>';
+                if(frustration >= 200) {
 
-                    if(down.x > 1)
-                        dungeon[i][down.x-1][down.y] = '.';
-                    if(down.y > 1)
-                        dungeon[i][down.x][down.y-1] = '.';
-                    if(down.x < width - 2)
-                        dungeon[i][down.x+1][down.y] = '.';
-                    if(down.x < height - 2)
-                        dungeon[i][down.x][down.y+1] = '.';
+                    for (int xx = Math.max(1, down.x - 1); xx <= Math.min(width - 2, down.x + 1); xx++) {
+                        for (int yy = Math.max(1, down.y - 1); yy <= Math.min(height - 2, down.y + 1); yy++) {
+                            dungeon[i][xx][yy] = '.';
+                        }
+                    }
+                    dungeon[i][down.x][down.y] = '>';
                 }
                 else
                     dungeon[i][x][y] = '>';
+                used.put(down, (count == null) ? 1 : count + 1);
             }
         }
         return dungeon;
