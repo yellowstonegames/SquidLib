@@ -66,13 +66,13 @@ public class CoordPackerTest {
     }
     @Test
     public void testMooreCurve3D() {
-        for (int s = 0; s < 8; s++) {
+        for (int s = 0; s < 12; s++) {
 
             for (int i0 : new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 31, 32, 33, 63, 64, 255, 256, 511, 512, 1023, 1024, 4092, 4093, 4094, 4095}) {
                 int i = i0 + s * 4096;
-                System.out.println("index " + i + ", sector " + (i >> 12) + ", x:" + CoordPacker.getXMoore3D(i) +
-                        ", y:" + CoordPacker.getYMoore3D(i) +
-                        ", z:" + CoordPacker.getZMoore3D(i));
+                System.out.println("index " + i + ", sector " + (i >> 12) + ", x:" + CoordPacker.getXMoore3D(i, 3) +
+                        ", y:" + CoordPacker.getYMoore3D(i, 3) +
+                        ", z:" + CoordPacker.getZMoore3D(i, 3));
             }
         }
     }

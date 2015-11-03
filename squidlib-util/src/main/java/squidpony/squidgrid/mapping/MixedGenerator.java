@@ -131,8 +131,8 @@ public class MixedGenerator {
                           float roomSizeMultiplier) {
         this.width = width;
         this.height = height;
-        this.roomWidth = width / 64.0f * roomSizeMultiplier;
-        this.roomHeight = height / 64.0f * roomSizeMultiplier;
+        this.roomWidth = (width / 64.0f) * roomSizeMultiplier;
+        this.roomHeight = (height / 64.0f) * roomSizeMultiplier;
         if(width <= 2 || height <= 2)
             throw new ExceptionInInitializerError("width and height must be greater than 2");
         this.rng = rng;
