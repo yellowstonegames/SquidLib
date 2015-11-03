@@ -110,11 +110,29 @@ public class MixedGenerator {
      * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public MixedGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections) {
+    public MixedGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections)
+    {
+        this(width, height, rng, connections, 0.8f);
+    }
+    /**
+     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This version of the constructor uses a LinkedHashMap with Coord keys and Coord array values to determine a
+     * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you
+     * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the
+     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
+     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
+     * @param width the width of the final map in cells
+     * @param height the height of the final map in cells
+     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways
+     * @see SerpentMapGenerator a class that uses this technique
+     */
+    public MixedGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections,
+                          float roomSizeMultiplier) {
         this.width = width;
         this.height = height;
-        this.roomWidth = width / 80.0f;
-        this.roomHeight = height / 80.0f;
+        this.roomWidth = width / 64.0f * roomSizeMultiplier;
+        this.roomHeight = height / 64.0f * roomSizeMultiplier;
         if(width <= 2 || height <= 2)
             throw new ExceptionInInitializerError("width and height must be greater than 2");
         this.rng = rng;
@@ -449,8 +467,8 @@ public class MixedGenerator {
      */
     private Coord markRectangle(Coord pos, int halfWidth, int halfHeight)
     {
-        halfWidth = Math.round(halfWidth * roomWidth);
-        halfHeight = Math.round(halfHeight * roomHeight);
+        halfWidth = Math.max(1, Math.round(halfWidth * roomWidth));
+        halfHeight = Math.max(1, Math.round(halfHeight * roomHeight));
         Coord block = null;
         for (int i = pos.x - halfWidth; i <= pos.x + halfWidth; i++) {
             for (int j = pos.y - halfHeight; j <= pos.y + halfHeight; j++) {
@@ -471,8 +489,8 @@ public class MixedGenerator {
      */
     private Coord markRectangleWalled(Coord pos, int halfWidth, int halfHeight)
     {
-        halfWidth = Math.round(halfWidth * roomWidth);
-        halfHeight = Math.round(halfHeight * roomHeight);
+        halfWidth = Math.max(1, Math.round(halfWidth * roomWidth));
+        halfHeight = Math.max(1, Math.round(halfHeight * roomHeight));
         Coord block = null;
         for (int i = pos.x - halfWidth; i <= pos.x + halfWidth; i++) {
             for (int j = pos.y - halfHeight; j <= pos.y + halfHeight; j++) {
@@ -499,7 +517,7 @@ public class MixedGenerator {
     {
         Coord block = null;
         int high;
-        radius = Math.round(radius * Math.min(roomWidth, roomHeight));
+        radius = Math.max(1, Math.round(radius * Math.min(roomWidth, roomHeight)));
         for (int dx = -radius; dx <= radius; ++dx)
         {
             high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));
@@ -523,7 +541,7 @@ public class MixedGenerator {
     {
         Coord block = null;
         int high;
-        radius = Math.round(radius * Math.min(roomWidth, roomHeight));
+        radius = Math.max(1, Math.round(radius * Math.min(roomWidth, roomHeight)));
         for (int dx = -radius; dx <= radius; ++dx)
         {
             high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));

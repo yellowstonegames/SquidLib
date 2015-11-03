@@ -58,6 +58,24 @@ public class CoordPackerTest {
         assertEquals(CoordPacker.posToHilbert(255, 255), CoordPacker.coordToHilbert(Coord.get(255, 255)));
         assertEquals(Coord.get(255, 255), CoordPacker.hilbertToCoord(CoordPacker.coordToHilbert(Coord.get(255, 255))));
     }
+    public void testHilbertCurve3D() {
+        for(int i : new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,31,32,33,63,64,255,256,4092,4093,4094,4095})
+            System.out.println("index " + i + ", x:" + CoordPacker.hilbert3X[i] +
+                    ", y:" + CoordPacker.hilbert3Y[i] +
+                    ", z:" + CoordPacker.hilbert3Z[i]);
+    }
+    @Test
+    public void testMooreCurve3D() {
+        for (int s = 0; s < 8; s++) {
+
+            for (int i0 : new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 31, 32, 33, 63, 64, 255, 256, 511, 512, 1023, 1024, 4092, 4093, 4094, 4095}) {
+                int i = i0 + s * 4096;
+                System.out.println("index " + i + ", sector " + (i >> 12) + ", x:" + CoordPacker.getXMoore3D(i) +
+                        ", y:" + CoordPacker.getYMoore3D(i) +
+                        ", z:" + CoordPacker.getZMoore3D(i));
+            }
+        }
+    }
     //@Test
     public void testMooreCurve() {
         for (int i = 0; i < 256; i++) {
