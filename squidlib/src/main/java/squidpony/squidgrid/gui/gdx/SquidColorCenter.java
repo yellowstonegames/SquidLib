@@ -41,11 +41,13 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
 			/* Some filtering */
 			return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);
 	}
-    public Color get(Color c)
+    @Override
+	public Color filter(Color c)
     {
         if(c == null)
             return Color.CLEAR;
-        return get(Math.round(c.r * 255f), Math.round(c.g * 255f), Math.round(c.b * 255f), Math.round(c.a * 255f));
+        else
+        	return super.filter(c);
     }
     public Color get(long c)
     {
@@ -102,7 +104,7 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
     @Override
     public String toString() {
         return "SquidColorCenter{" +
-                "filter=" + filter.getClass().getSimpleName() +
+                "filter=" + (filter == null ? "null" : filter.getClass().getSimpleName()) +
                 '}';
     }
 }

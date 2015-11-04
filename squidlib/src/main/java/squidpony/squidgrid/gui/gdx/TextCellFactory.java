@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
+import squidpony.IColorCenter;
+
 /**
  * Class for creating text blocks.
  *
@@ -42,7 +44,7 @@ public class TextCellFactory {
     protected BitmapFont bmpFont = null;
     protected Texture block = null;
     protected String fitting = SQUID_FITTING;
-    protected SquidColorCenter scc;
+    protected IColorCenter<Color> scc;
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     protected int width = 1, height = 1;
     private boolean initialized = false;
@@ -374,6 +376,23 @@ public class TextCellFactory {
         bottomPadding = padding;
         return this;
     }
+
+	/**
+	 * @param icc
+	 *            The color center to use. Should not be {@code null}.
+	 * @return {@code this}
+	 * @throws NullPointerException
+	 *             If {@code icc} is {@code null}.
+	 */
+	public TextCellFactory setColorCenter(IColorCenter<Color> icc) {
+		if (icc == null)
+			/* Better fail now than later */
+			throw new NullPointerException(
+					"The color center should not be null in " + getClass().getSimpleName());
+		this.scc = icc;
+		return this;
+	}
+
     /**
      * Returns true if this factory is fully initialized and ready to build text cells.
      * 
@@ -382,7 +401,6 @@ public class TextCellFactory {
     public boolean initialized() {
         return initialized;
     }
-
 
     /**
      * Returns true if the given character will fit inside the current cell
@@ -445,12 +463,12 @@ public class TextCellFactory {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (s == null) {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
@@ -477,12 +495,12 @@ public class TextCellFactory {
         bmpFont.setColor(color);
 
         if (s == null) {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(color);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(color);
             batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
@@ -531,12 +549,12 @@ public class TextCellFactory {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (tr == null) {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
@@ -561,12 +579,12 @@ public class TextCellFactory {
         bmpFont.setColor(color);
 
         if (tr == null) {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(color);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
@@ -616,12 +634,12 @@ public class TextCellFactory {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (tr == null) {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
@@ -647,12 +665,12 @@ public class TextCellFactory {
         }
 
         if (tr == null) {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(color);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = scc.get(batch.getColor());
+            Color orig = scc.filter(batch.getColor());
             batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
