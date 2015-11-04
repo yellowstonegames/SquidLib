@@ -31,12 +31,12 @@ import java.util.ArrayList;
  *
  */
 final class WaypointPerformanceTest extends AbstractPerformanceTest {
-	// a 60 * 60 map should be more taxing
-	private static final int DIMENSION = 160;
+	// a 120 * 60 map should be more representative
+	private static final int WIDTH = 120, HEIGHT = 60;
 	private final SerpentMapGenerator generator;
 
 	public WaypointPerformanceTest() {
-		generator = new SerpentMapGenerator(DIMENSION, DIMENSION, RNG);
+		generator = new SerpentMapGenerator(WIDTH, HEIGHT, RNG);
         generator.putBoxRoomCarvers(1);
 		createThreadList();
 	}
@@ -68,8 +68,8 @@ final class WaypointPerformanceTest extends AbstractPerformanceTest {
 			Coord r, s;
             ArrayList<Coord> path;
 			pathfinder = new WaypointPathfinder(map, Radius.DIAMOND, new StatefulRNG(new LightRNG(0x1337BEEF)));
-			for (int x = 1; x < DIMENSION - 1; x++) {
-				for (int y = 1; y < DIMENSION - 1; y++) {
+			for (int x = 1; x < WIDTH - 1; x++) {
+				for (int y = 1; y < HEIGHT - 1; y++) {
 					if (map[x][y] == '#')
 						continue;
 

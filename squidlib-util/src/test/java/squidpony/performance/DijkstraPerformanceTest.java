@@ -30,12 +30,12 @@ import squidpony.squidmath.StatefulRNG;
  *
  */
 final class DijkstraPerformanceTest extends AbstractPerformanceTest {
-	// a 60 * 60 map should be more taxing
-	private static final int DIMENSION = 160, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+	// a 120 * 60 map should be more taxing
+	private static final int WIDTH = 120, HEIGHT = 60, PATH_LENGTH = (WIDTH - 2) * (HEIGHT - 2);
 	private final char[][] maps;
 
 	DijkstraPerformanceTest() {
-		final DungeonGenerator generator = new DungeonGenerator(DIMENSION, DIMENSION, RNG);
+		final DungeonGenerator generator = new DungeonGenerator(WIDTH, HEIGHT, RNG);
 		maps = generator.generate();
 		createThreadList();
 	}
@@ -67,8 +67,8 @@ final class DijkstraPerformanceTest extends AbstractPerformanceTest {
 		protected void doWork() {
 			Coord r;
 
-			for (int x = 1; x < DIMENSION - 1; x++) {
-				for (int y = 1; y < DIMENSION - 1; y++) {
+			for (int x = 1; x < WIDTH - 1; x++) {
+				for (int y = 1; y < HEIGHT - 1; y++) {
 					if (map[x][y] == '#')
 						continue;
 					// this should ensure no blatant correlation between R and W
