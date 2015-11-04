@@ -1,5 +1,6 @@
 package squidpony.squidai;
 
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
@@ -42,11 +43,11 @@ public class WaypointPathfinder {
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
         ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
-                Math.min(width, height) * 0.25f, this.rng, '#');
+                Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];
         waypoints = new LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>>(64);
-        dm = new DijkstraMap(simplified, DijkstraMap.Measurement.CHEBYSHEV);
+        dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
 
         for (Coord center : centers) {
             dm.clearGoals();
@@ -59,15 +60,23 @@ public class WaypointPathfinder {
                     current = dm.gradientMap[i][j];
                     if (current >= DijkstraMap.FLOOR)
                         continue;
-                    for (int k = -1; k <= 1; k++) {
-                        for (int l = -1; l <= 1; l++) {
-                            if (dm.gradientMap[i + k][j + l] == current)
-                                expansionMap[i][j]++;
-                        }
+                    if (center.x == i && center.y == j)
+                        expansionMap[i][j]++;
+                    for (Direction dir : Direction.CARDINALS) {
+                        if (dm.gradientMap[i + dir.deltaX][j + dir.deltaY] == current + 1 ||
+                                dm.gradientMap[i + dir.deltaX][j + dir.deltaY] == current - 1)
+                            expansionMap[i][j]++;
                     }
                 }
             }
         }
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                expansionMap[i][j] /= centerCount;
+            }
+        }
+
         LinkedHashSet<Coord> chokes = new LinkedHashSet<Coord>(128);
         for (int i = 0; i < width; i++) {
             ELEMENT_WISE:
@@ -76,17 +85,17 @@ public class WaypointPathfinder {
                     continue;
                 int current = expansionMap[i][j];
                 boolean good = false;
-                for (int k = -1; k <= 1; k++) {
-                    for (int l = -1; l <= 1; l++) {
-                        if (expansionMap[i + k][j + l] > 0 && expansionMap[i + k][j + l] >= current + centerCount - 1) {
-                            if(chokes.contains(Coord.get(i + k, j + l)))
-                                continue ELEMENT_WISE;
-                            if (expansionMap[i - k][j - l] > 0 && expansionMap[i - k][j - l] >= current) {
-                                good = true;
-                            }
+                for(Direction dir : Direction.CARDINALS) {
+                    if (chokes.contains(Coord.get(i + dir.deltaX, j + dir.deltaY)))
+                        continue ELEMENT_WISE;
+                    if (expansionMap[i + dir.deltaX][j + dir.deltaY] > 0 && expansionMap[i + dir.deltaX][j + dir.deltaY] > current + 1 ||
+                            (expansionMap[i + dir.deltaX][j + dir.deltaY] > current && expansionMap[i][j] <= 2)) {
+                        if (expansionMap[i - dir.deltaX][j - dir.deltaY] > 0 && expansionMap[i - dir.deltaX][j - dir.deltaY] >= current) {
+                            good = true;
                         }
                     }
                 }
+
                 if(good) {
                     Coord chk = Coord.get(i, j);
                     chokes.add(chk);
@@ -94,6 +103,32 @@ public class WaypointPathfinder {
                 }
             }
         }
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if(expansionMap[x][y] <= 0)
+                    System.out.print('#');
+                else
+                    System.out.print((char)(expansionMap[x][y] + 64));
+            }
+            System.out.println();
+        }
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if(expansionMap[x][y] <= 0)
+                    System.out.print('#');
+                else if(chokes.contains(Coord.get(x, y)))
+                    System.out.print('@');
+                else if(centers.contains(Coord.get(x, y)))
+                    System.out.print('*');
+                else
+                    System.out.print('.');
+            }
+            System.out.println();
+        }
+
+
         dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
 
         int e = 0;
@@ -134,11 +169,11 @@ public class WaypointPathfinder {
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
         ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
-                Math.min(width, height) * 0.25f, this.rng, '#');
+                Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];
         waypoints = new LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>>(64);
-        dm = new DijkstraMap(simplified, DijkstraMap.Measurement.CHEBYSHEV);
+        dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
 
         for (Coord center : centers) {
             dm.clearGoals();
@@ -151,15 +186,23 @@ public class WaypointPathfinder {
                     current = dm.gradientMap[i][j];
                     if (current >= DijkstraMap.FLOOR)
                         continue;
-                    for (int k = -1; k <= 1; k++) {
-                        for (int l = -1; l <= 1; l++) {
-                            if (dm.gradientMap[i + k][j + l] == current)
-                                expansionMap[i][j]++;
-                        }
+                    if (center.x == i && center.y == j)
+                        expansionMap[i][j]++;
+                    for (Direction dir : Direction.CARDINALS) {
+                        if (dm.gradientMap[i + dir.deltaX][j + dir.deltaY] == current + 1 ||
+                                dm.gradientMap[i + dir.deltaX][j + dir.deltaY] == current - 1)
+                            expansionMap[i][j]++;
                     }
                 }
             }
         }
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                expansionMap[i][j] /= centerCount;
+            }
+        }
+
         LinkedHashSet<Coord> chokes = new LinkedHashSet<Coord>(128);
         for (int i = 0; i < width; i++) {
             ELEMENT_WISE:
@@ -168,14 +211,13 @@ public class WaypointPathfinder {
                     continue;
                 int current = expansionMap[i][j];
                 boolean good = false;
-                for (int k = -1; k <= 1; k++) {
-                    for (int l = -1; l <= 1; l++) {
-                        if (expansionMap[i + k][j + l] > 0 && expansionMap[i + k][j + l] >= current + centerCount - 1) {
-                            if(chokes.contains(Coord.get(i + k, j + l)))
-                                continue ELEMENT_WISE;
-                            if (expansionMap[i - k][j - l] > 0 && expansionMap[i - k][j - l] >= current) {
-                                good = true;
-                            }
+                for(Direction dir : Direction.CARDINALS) {
+                    if (chokes.contains(Coord.get(i + dir.deltaX, j + dir.deltaY)))
+                        continue ELEMENT_WISE;
+                    if (expansionMap[i + dir.deltaX][j + dir.deltaY] > 0 && expansionMap[i + dir.deltaX][j + dir.deltaY] > current + 1 ||
+                            (expansionMap[i + dir.deltaX][j + dir.deltaY] > current && expansionMap[i][j] <= 2)) {
+                        if (expansionMap[i - dir.deltaX][j - dir.deltaY] > 0 && expansionMap[i - dir.deltaX][j - dir.deltaY] >= current) {
+                            good = true;
                         }
                     }
                 }
