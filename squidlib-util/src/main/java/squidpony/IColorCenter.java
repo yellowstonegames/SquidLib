@@ -170,6 +170,12 @@ public interface IColorCenter<T> {
      */
     float getValue(T c);
 
+    /**
+     * @param c
+     * @return The color that {@code this} shows when {@code c} is requested. May be {@code c} itself.
+     */
+    T filter(T c);
+
 	/**
 	 * A skeletal implementation of {@link IColorCenter}.
 	 * 
@@ -405,6 +411,12 @@ public interface IColorCenter<T> {
         @Override
         public float getHue(T c) {
             return getHue(getRed(c) / 255f, getGreen(c) / 255f, getBlue(c) / 255f);
+        }
+
+        @Override
+		public T filter(T c)
+        {
+        	return get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));
         }
 
         /**
