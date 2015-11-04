@@ -120,7 +120,7 @@ public class EverythingDemo extends ApplicationAdapter {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
             monsters.put(display.animateActor(monPos.x, monPos.y, 'M',
-                    filteredCenter.get(display.getPalette().get(11))), 0);
+                    filteredCenter.filter(display.getPalette().get(11))), 0);
 
         }
         // your choice of FOV matters here.
@@ -133,7 +133,7 @@ public class EverythingDemo extends ApplicationAdapter {
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
 
         player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10),
-                filteredCenter.get(display.getPalette().get(30)));
+                filteredCenter.filter(display.getPalette().get(30)));
         cursor = Coord.get(-1, -1);
         toCursor = new ArrayList<Coord>(10);
         awaitedMoves = new ArrayList<Coord>(10);
@@ -146,8 +146,8 @@ public class EverythingDemo extends ApplicationAdapter {
         bgColor = SColor.DARK_SLATE_GRAY;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                colors[i][j] = filteredCenter.get(palette.get(initialColors[i][j]));
-                bgColors[i][j] = filteredCenter.get(palette.get(initialBGColors[i][j]));
+                colors[i][j] = filteredCenter.filter(palette.get(initialColors[i][j]));
+                bgColors[i][j] = filteredCenter.filter(palette.get(initialBGColors[i][j]));
             }
         }
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon, counter);
@@ -437,8 +437,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
 		/* Prepare the String to display */
 		final IColoredString<Color> cs = new IColoredString.Impl<Color>();
-		final Color textColor = Color.WHITE;
-		cs.append("Still ", textColor);
+		cs.append("Still ", null);
         final Color nbColor;
         if (nbMonsters <= 1)
             /* Green */
@@ -450,7 +449,7 @@ public class EverythingDemo extends ApplicationAdapter {
             /* Red */
             nbColor = new Color(1, 0, 0, 1);
         cs.appendInt(nbMonsters, nbColor);
-        cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), textColor);
+        cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
 
 		/* The panel's width */
 		final int w = cs.length();
