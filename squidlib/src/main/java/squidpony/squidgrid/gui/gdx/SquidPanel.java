@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
+
+import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.Direction;
@@ -34,7 +36,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public float DEFAULT_ANIMATION_DURATION = 0.12F;
     private int animationCount = 0;
     private Color defaultForeground = Color.WHITE;
-    private SquidColorCenter scc;
+    private IColorCenter<Color> scc;
     private final int gridWidth, gridHeight, cellWidth, cellHeight;
     private String[][] contents;
     private Color[][] colors;
@@ -89,12 +91,15 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param gridWidth the number of cells horizontally
      * @param gridHeight the number of cells vertically
      * @param factory the factory to use for cell rendering
+     * @param center
+     * 			The color center to use. Can be {@code null}, but then must be set later on with
+     *          {@link #setColorCenter(IColorCenter)}.
      */
-    public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, SquidColorCenter center) {
+    public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, IColorCenter<Color> center) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
-        textFactory = factory;
-        scc = center;
+        this.textFactory = factory;
+        this.scc = center;
 
         if (factory == null) {
             factory = new TextCellFactory();
@@ -110,7 +115,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         contents = new String[gridWidth][gridHeight];
         colors = new Color[gridWidth][gridHeight];
         for (int i = 0; i < gridWidth; i++) {
-            Arrays.fill(colors[i], scc.get(Color.CLEAR));
+            Arrays.fill(colors[i], scc.filter(Color.CLEAR));
         }
 
 
@@ -213,8 +218,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 		int x = xOffset;
 		for (IColoredString.Bucket<? extends Color> fragment : cs) {
 			final String s = fragment.getText();
-			final Color color = scc.get(fragment.getColor());
-			put(x, yOffset, s, color == null ? getDefaultForegroundColor() : color);
+			final Color color = fragment.getColor();
+			put(x, yOffset, s, color == null ? getDefaultForegroundColor() : scc.filter(color));
 			x += s.length();
 		}
 	}
@@ -363,15 +368,24 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-        colors[x][y] = scc.get(color);
+        colors[x][y] = scc.filter(color);
     }
-    public void put(int x, int y, char c, Color color, float colorMultiplier) {
+
+	/**
+	 * @throws UnsupportedOperationException
+	 *             If the backing {@link IColorCenter} isn't an instance of
+	 *             {@link SquidColorCenter}.
+	 */
+	public void put(int x, int y, char c, Color color, float colorMultiplier) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-        colors[x][y] = scc.lerp(color, lightingColor, colorMultiplier);
-    }
+		if (!(scc instanceof SquidColorCenter))
+			throw new UnsupportedOperationException("This method required the color center to be a "
+					+ SquidColorCenter.class.getSimpleName());
+		colors[x][y] = ((SquidColorCenter) scc).lerp(color, lightingColor, colorMultiplier);
+	}
 
     @Override
 	public int cellWidth() {
@@ -398,7 +412,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         Color tmp;
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                tmp = scc.get(colors[x][y]);
+                tmp = scc.filter(colors[x][y]);
                 textFactory.draw(batch, contents[x][y], tmp, 1f * x * cellWidth, 1f * (gridHeight - y) * cellHeight);
             }
         }
@@ -704,7 +718,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(contents[x][y] == null || contents[x][y].equals(""))
             return null;
 
-        Actor a = textFactory.makeActor(contents[x][y], scc.get(colors[x][y]));
+        Actor a = textFactory.makeActor(contents[x][y], scc.filter(colors[x][y]));
         a.setName(contents[x][y]);
         a.setPosition(x * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
 
@@ -726,7 +740,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(contents[x][y] == null || contents[x][y].equals(""))
             return null;
 
-        Actor a = textFactory.makeActor(contents[x][y], scc.get(colors[x][y]));
+        Actor a = textFactory.makeActor(contents[x][y], scc.filter(colors[x][y]));
         a.setName(contents[x][y]);
         if(doubleWidth)
             a.setPosition(x * 2 * cellWidth, (gridHeight - y - 1) * cellHeight - 1);
@@ -1023,7 +1037,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(duration < 0.02f) duration = 0.02f;
         ae.animating = true;
         animationCount++;
-        Color ac = scc.get(a.getColor());
+        Color ac = scc.filter(a.getColor());
         a.addAction(Actions.sequence(
                 Actions.color(color, duration * 0.3f),
                 Actions.color(ac, duration * 0.7f),
@@ -1049,7 +1063,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(duration < 0.02f) duration = 0.02f;
         animationCount++;
 
-        Color ac = scc.get(a.getColor());
+        Color ac = scc.filter(a.getColor());
         a.addAction(Actions.sequence(
                 Actions.color(color, duration * 0.3f),
                 Actions.color(ac, duration * 0.7f),
@@ -1085,13 +1099,32 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 		return this;
 	}
 
-    public SquidColorCenter getColorCenter() {
-        return scc;
-    }
+	/**
+	 * @return The current color center. Never {@code null}.
+	 */
+	public IColorCenter<Color> getColorCenter() {
+		return scc;
+	}
 
-    public void setColorCenter(SquidColorCenter scc) {
-        this.scc = scc;
-    }
+	/**
+	 * Use this method if you use your own {@link IColorCenter} and want this
+	 * panel not to allocate its own colors (or fill
+	 * {@link DefaultResources#getSCC()} but instead to the provided center.
+	 * 
+	 * @param scc
+	 *            The color center to use. Should not be {@code null}.
+	 * @return {@code this}
+	 * @throws NullPointerException
+	 *             If {@code scc} is {@code null}.
+	 */
+	public SquidPanel setColorCenter(IColorCenter<Color> scc) {
+		if (scc == null)
+			/* Better fail now than later */
+			throw new NullPointerException(
+					"The color center should not be null in " + getClass().getSimpleName());
+		this.scc = scc;
+		return this;
+	}
 
     public String getAt(int x, int y)
     {
