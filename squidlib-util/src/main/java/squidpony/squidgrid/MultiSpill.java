@@ -6,6 +6,7 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -316,20 +317,21 @@ public class MultiSpill {
     }
 
     /**
-     * Recalculate the spillMap and return the spreadPattern. The cell corresponding to entry will be true,
-     * the cells near that will be true if chosen at random from all passable cells adjacent to a
+     * Recalculate the spillMap and return the spreadPattern. The cell corresponding to a Coord in entries will be true,
+     * the cells near each of those will be true if chosen at random from all passable cells adjacent to a
      * filled (true) cell, and all other cells will be false. This takes a total number of cells to attempt
-     * to fill (the volume parameter), and will fill less if it has completely exhausted all passable cells.
+     * to fill (the volume parameter), which can be negative to simply fill the whole map, and will fill less if it has
+     * completely exhausted all passable cells from all sources in entries.
      * If the measurement this Spill uses is anything other than MANHATTAN, you can expect many gaps in the first
      * filled area.  Subsequent calls to start() with the same entry and a higher volume will expand the area
      * of the Spill, and are likely to fill any gaps after a few subsequent calls. Increasing the volume slowly
      * is the best way to ensure that gaps only exist on the very edge if you use a non-MANHATTAN measurement.
      *
-     * @param entries The first cell for each spiller to spread from, which should really be passable.
-     * @param volume The total number of cells to attempt to fill; if negative will fill the whole map.
-     * @param impassable A Set of Position keys representing the locations of moving obstacles to a
-     *                   path that cannot be moved through; this can be null if there are no such obstacles.
-     * @return An ArrayList of Points that this will enter, in order starting with entry at index 0, until it
+     * @param entries the first cell for each spiller to spread from, which should really be passable.
+     * @param volume the total number of cells to attempt to fill; if negative will fill the whole map.
+     * @param impassable a Set of Position keys representing the locations of moving obstacles to a
+     *                   fill that cannot be moved through; this can be null if there are no such obstacles.
+     * @return an ArrayList of Points that this will enter, in order starting with entry at index 0, until it
      * reaches its volume or fills its boundaries completely.
      */
     public ArrayList<ArrayList<Coord>> start(List<Coord> entries, int volume, Set<Coord> impassable) {
@@ -350,14 +352,12 @@ public class MultiSpill {
         }
         boolean hasFresh = false;
         Coord temp;
-        for (short i = 0; i < spillers.size(); i++) {
-            for (int x = 0; x < spillMap.length; x++) {
-                for (int y = 0; y < spillMap[x].length; y++) {
-                    temp = Coord.get(x, y);
-                    if (spillMap[x][y] == i && !impassable.contains(temp)) {
-                        fresh.get(i).add(temp);
-                        hasFresh = true;
-                    }
+        for (int x = 0; x < spillMap.length; x++) {
+            for (int y = 0; y < spillMap[x].length; y++) {
+                temp = Coord.get(x, y);
+                if (spillMap[x][y] >= 0 && !impassable.contains(temp)) {
+                    fresh.get(spillMap[x][y]).add(temp);
+                    hasFresh = true;
                 }
             }
         }
@@ -386,6 +386,94 @@ public class MultiSpill {
                     }
                 }
                 currentFresh.remove(cell);
+            }
+        }
+        return spreadPattern;
+    }
+
+    /**
+     * Recalculate the spillMap and return the spreadPattern. The cell corresponding to a key in entries will be true,
+     * the cells near each of those will be true if chosen at random from all passable cells adjacent to a
+     * filled (true) cell, and all other cells will be false. This takes a total number of cells to attempt
+     * to fill (the volume parameter), which can be negative to simply fill the whole map, and will fill less if it has
+     * completely exhausted all passable cells from all sources in entries. It uses the values in entries to determine
+     * whether it should advance from a particular key in that step or not; this choice is pseudo-random. If you have
+     * some values that are at or near 1.0 and some values that are closer to 0.0, you should expect the keys for the
+     * higher values to spread further out than the keys associated with lower values.
+     * <br>
+     * If the measurement this Spill uses is anything other than MANHATTAN, you can expect many gaps in the first
+     * filled area.  Subsequent calls to start() with the same entry and a higher volume will expand the area
+     * of the Spill, and are likely to fill any gaps after a few subsequent calls. Increasing the volume slowly
+     * is the best way to ensure that gaps only exist on the very edge if you use a non-MANHATTAN measurement.
+     * <br>
+     * The intended purpose for this method is filling contiguous areas of dungeon with certain terrain features, but it
+     * has plenty of other uses as well.
+     * @param entries key: the first cell for each spiller to spread from. value: the bias toward advancing this key;
+     *                1.0 will always advance, 0.0 will never advance beyond the key, in between will randomly choose
+     * @param volume the total number of cells to attempt to fill; if negative will fill the whole map.
+     * @param impassable a Set of Position keys representing the locations of moving obstacles to a
+     *                   fill that cannot be moved through; this can be null if there are no such obstacles.
+     * @return an ArrayList of Points that this will enter, in order starting with entry at index 0, until it
+     * reaches its volume or fills its boundaries completely.
+     */
+    public ArrayList<ArrayList<Coord>> start(LinkedHashMap<Coord, Double> entries, int volume, Set<Coord> impassable) {
+        if(!initialized) return null;
+        if(impassable == null)
+            impassable = new LinkedHashSet<>();
+        if(volume < 0)
+            volume = Integer.MAX_VALUE;
+        ArrayList<Coord> spillers = new ArrayList<Coord>(entries.keySet());
+        ArrayList<Double> biases = new ArrayList<Double>(entries.values());
+        spreadPattern = new ArrayList<ArrayList<Coord>>(spillers.size());
+        fresh.clear();
+        for (short i = 0; i < spillers.size(); i++) {
+            spreadPattern.add(new ArrayList<Coord>(128));
+            fresh.add(new LinkedHashSet<Coord>(128));
+            Coord c = spillers.get(i);
+            spillMap[c.x][c.y] = i;
+
+        }
+        boolean hasFresh = false;
+        Coord temp;
+        for (int x = 0; x < spillMap.length; x++) {
+            for (int y = 0; y < spillMap[x].length; y++) {
+                temp = Coord.get(x, y);
+                if (spillMap[x][y] >= 0 && !impassable.contains(temp)) {
+                    fresh.get(spillMap[x][y]).add(temp);
+                    hasFresh = true;
+                }
+            }
+        }
+
+        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+
+        while (hasFresh && filled < volume) {
+            hasFresh = false;
+            for (short i = 0; i < spillers.size() && filled < volume; i++) {
+                LinkedHashSet<Coord> currentFresh = fresh.get(i);
+                if(currentFresh.isEmpty())
+                    continue;
+                else
+                    hasFresh = true;
+                Coord cell = currentFresh.toArray(new Coord[currentFresh.size()])[rng.nextInt(currentFresh.size())];
+                if(rng.nextDouble() < biases.get(i)) {
+
+                    spreadPattern.get(i).add(cell);
+                    spillMap[cell.x][cell.y] = i;
+                    filled++;
+                    anySpillMap[cell.x][cell.y] = true;
+
+
+                    for (int d = 0; d < dirs.length; d++) {
+                        Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
+                        double h = heuristic(dirs[d]);
+                        if (physicalMap[adj.x][adj.y] && !anySpillMap[adj.x][adj.y] && !impassable.contains(adj)
+                                && rng.nextDouble() <= 1.0 / h) {
+                            setFresh(i, adj);
+                        }
+                    }
+                    currentFresh.remove(cell);
+                }
             }
         }
         return spreadPattern;

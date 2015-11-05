@@ -11,6 +11,7 @@ import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 
 /**
  * A test for the randomized flood-fill in the Spill class. This runs the Spill twice from the same starting position,
@@ -67,9 +68,16 @@ public class SpillTest {
             System.out.println(dg);
             short[] valid = CoordPacker.pack(dun, '.');
 
-            ArrayList<Coord> entry = CoordPacker.randomPortion(valid, 16, rng);
+            LinkedHashMap<Coord, Double> entries = new LinkedHashMap<Coord, Double>(16);
+            ArrayList<Coord> section = CoordPacker.randomPortion(valid, 16, rng);
+            for (int i = 0; i < 4; i++) {
+                entries.put(section.get(i * 4    ), 1.0);
+                entries.put(section.get(i * 4 + 1), 0.75);
+                entries.put(section.get(i * 4 + 2), 0.5);
+                entries.put(section.get(i * 4 + 3), 0.25);
+            }
 
-            ArrayList<ArrayList<Coord>> ordered = spreader.start(entry, -1, null);
+            ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
             short[][] sm = spreader.spillMap;
             char[][] md = dun.clone(),
                     hl = DungeonUtility.hashesToLines(dun);
@@ -81,7 +89,7 @@ public class SpillTest {
                         md[x][y] = hl[x][y];
                 }
             }
-            for(Coord c : entry)
+            for(Coord c : entries.keySet())
             {
                 md[c.x][c.y] = '@';
             }
