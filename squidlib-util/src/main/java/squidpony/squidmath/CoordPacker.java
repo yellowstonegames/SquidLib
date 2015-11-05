@@ -1866,7 +1866,7 @@ public class CoordPacker {
         int r = data[0];
         int c = 0, idx = 0;
         boolean on = false;
-        for (int i = 0, ri = 0; i < packed.length; i++, on = !on, idx += packed[i] & 0xffff) {
+        for (int i = 0, ri = 0; i < packed.length; on = !on, idx += packed[i] & 0xffff, i++) {
             if (on) {
                 while (c + (packed[i] & 0xffff) > r)
                 {

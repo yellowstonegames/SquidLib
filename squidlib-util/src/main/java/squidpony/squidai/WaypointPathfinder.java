@@ -103,7 +103,7 @@ public class WaypointPathfinder {
                 }
             }
         }
-
+/*
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if(expansionMap[x][y] <= 0)
@@ -127,7 +127,7 @@ public class WaypointPathfinder {
             }
             System.out.println();
         }
-
+*/
 
         dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
 
