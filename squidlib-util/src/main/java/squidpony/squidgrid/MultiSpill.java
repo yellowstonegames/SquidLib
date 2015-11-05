@@ -1,39 +1,21 @@
 package squidpony.squidgrid;
 
+import squidpony.squidgrid.Spill.Measurement;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+
 /**
  * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for
  * gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.
  * Created by Tommy Ettinger on 4/7/2015.
  */
-public class Spill {
-    /**
-     * The type of heuristic to use.
-     */
-    public enum Measurement {
-
-        /**
-         * The distance it takes when only the four primary directions can be
-         * moved in. The default.
-         */
-        MANHATTAN,
-        /**
-         * The distance it takes when diagonal movement costs the same as
-         * cardinal movement.
-         */
-        CHEBYSHEV,
-        /**
-         * The distance it takes as the crow flies.
-         */
-        EUCLIDEAN
-    }
+public class MultiSpill {
 
     /**
      * This affects how distance is measured on diagonal directions vs. orthogonal directions. MANHATTAN should form a
@@ -55,15 +37,21 @@ public class Spill {
      */
     public boolean[][] physicalMap;
     /**
-     * The cells that are filled by the Spill when it reaches its volume or limits will be true; others will be false.
+     * The cells that are filled by the a spiller with index n when it reaches its volume or limits will be equal to n;
+     * others will be -1.
      */
-    public boolean[][] spillMap;
+    public short[][] spillMap;
 
     /**
-     * The list of points that the Spill will randomly fill, starting with what is passed to start(), in order of when
-     * they are reached.
+     * The cells that are filled by the any spiller will be true, others will be false.
      */
-    public ArrayList<Coord> spreadPattern;
+    public boolean[][] anySpillMap;
+
+    /**
+     * Each spiller in the MultiSpill corresponds to a list of points that it will randomly fill, starting with the
+     * initial point for each spiller passed to start(), in order of when they are reached.
+     */
+    public ArrayList<ArrayList<Coord>> spreadPattern;
     /**
      * Height of the map. Exciting stuff. Don't change this, instead call initialize().
      */
@@ -77,26 +65,21 @@ public class Spill {
      * are reached on all sides and the Spill has no more room to fill.
      */
     public int filled = 0;
-    private LinkedHashSet<Coord> fresh;
+    private ArrayList<LinkedHashSet<Coord>> fresh;
     /**
-     * The RNG used to decide which one of multiple equally-short paths to take.
+     * The StatefulRNG used to decide how to randomly fill a space; can have its state set and read.
      */
     public StatefulRNG rng;
-    /**
-     * The LightRNG used as a RandomnessSource for the RNG this object uses. Can have its state read and set.
-     */
-    public LightRNG lrng;
 
     private boolean initialized = false;
     /**
      * Construct a Spill without a level to actually scan. If you use this constructor, you must call an
      * initialize() method before using this class.
      */
-    public Spill() {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+    public MultiSpill() {
+        rng = new StatefulRNG();
 
-        fresh = new LinkedHashSet<>();
+        fresh = new ArrayList<LinkedHashSet<Coord>>();
     }
     /**
      * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual
@@ -104,46 +87,30 @@ public class Spill {
      * be requested from the passed RNG, and that will be used to seed this class' RNG).
      *
      * If you use this constructor, you must call an  initialize() method before using this class.
+     * @param random an RNG that will be converted to a StatefulRNG if it is not one already
      */
-    public Spill(RNG random) {
-        lrng = new LightRNG(random.nextLong());
-        rng = new StatefulRNG(lrng);
+    public MultiSpill(RNG random) {
+        rng = new StatefulRNG(random.getRandomness());
 
-        fresh = new LinkedHashSet<>();
-    }
-
-    /**
-     * Construct a Spill without a level to actually scan. This constructor allows you to specify a RandomnessSource
-     * in the form of a LightRNG, which will be referenced in this class (if the state of random changes because this
-     * object needed a random number, the state change will be reflected in the code that passed random to here).
-     *
-     * If you use this constructor, you must call an  initialize() method before using this class.
-     */
-    public Spill(LightRNG random) {
-        lrng = random;
-        rng = new StatefulRNG(lrng);
-
-        fresh = new LinkedHashSet<>();
+        fresh = new ArrayList<LinkedHashSet<Coord>>();
     }
 
     /**
      * Used to construct a Spill from the output of another.
-     * @param level
+     * @param level a short[][] that should have been the spillMap of another MultiSpill
      */
-    public Spill(final boolean[][] level) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+    public MultiSpill(final short[][] level) {
+        rng = new StatefulRNG();
 
         initialize(level);
     }
     /**
      * Used to construct a Spill from the output of another, specifying a distance calculation.
-     * @param level
-     * @param measurement
+     * @param level a short[][] that should have been the spillMap of another MultiSpill
+     * @param measurement a Spill.Measurement that should usually be MANHATTAN
      */
-    public Spill(final boolean[][] level, Measurement measurement) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+    public MultiSpill(final short[][] level, Measurement measurement) {
+        rng = new StatefulRNG();
 
         this.measurement = measurement;
 
@@ -156,11 +123,10 @@ public class Spill {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here.
      *
-     * @param level
+     * @param level a char[][] that should use '#' for walls and '.' for floors
      */
-    public Spill(final char[][] level) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+    public MultiSpill(final char[][] level) {
+        rng = new StatefulRNG();
 
         initialize(level);
     }
@@ -170,11 +136,11 @@ public class Spill {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. You can specify the character used for walls.
      *
-     * @param level
+     * @param level a char[][] that should use alternateWall for walls and '.' for floors
+     * @param alternateWall the char to use for walls
      */
-    public Spill(final char[][] level, char alternateWall) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+    public MultiSpill(final char[][] level, char alternateWall) {
+        rng = new StatefulRNG();
 
         initialize(level, alternateWall);
     }
@@ -185,12 +151,11 @@ public class Spill {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
      *
-     * @param level
-     * @param measurement
+     * @param level a char[][] that should use '#' for walls and '.' for floors
+     * @param measurement a Spill.Measurement that should usually be MANHATTAN
      */
-    public Spill(final char[][] level, Measurement measurement) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+    public MultiSpill(final char[][] level, Measurement measurement) {
+        rng = new StatefulRNG();
         this.measurement = measurement;
 
         initialize(level);
@@ -205,31 +170,12 @@ public class Spill {
      * will not be identical to the one passed as random (64 bits will be requested from the passed RNG, and that will
      * be used to seed this class' RNG).
      *
-     * @param level
-     * @param measurement
+     * @param level a char[][] that should use '#' for walls and '.' for floors
+     * @param measurement a Spill.Measurement that should usually be MANHATTAN
+     * @param random an RNG that will be converted to a StatefulRNG if it is not one already
      */
-    public Spill(final char[][] level, Measurement measurement, RNG random) {
-        lrng = new LightRNG(random.nextLong());
-        rng = new StatefulRNG(lrng);
-        this.measurement = measurement;
-
-        initialize(level);
-    }
-    /**
-     * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
-     * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
-     * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
-     * map that can be used here. This constructor specifies a distance measurement.
-     *
-     * This constructor allows you to specify a RandomnessSource in the form of a LightRNG, which will be referenced in
-     * this class (if the state of random changes because this object needed a random number, the state change will be
-     * reflected in the code that passed random to here).
-     * @param level
-     * @param measurement
-     */
-    public Spill(final char[][] level, Measurement measurement, LightRNG random) {
-        lrng = random;
-        rng = new StatefulRNG(lrng);
+    public MultiSpill(final char[][] level, Measurement measurement, RNG random) {
+        rng = new StatefulRNG(random.getRandomness());
         this.measurement = measurement;
 
         initialize(level);
@@ -237,21 +183,22 @@ public class Spill {
 
     /**
      * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
-     * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
-     * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
-     * @param level
-     * @return
+     * one when it was constructed, or because the contents of the terrain have changed permanently.
+     * @param level a short[][] that should have been the spillMap of another MultiSpill
+     * @return this for chaining
      */
-    public Spill initialize(final boolean[][] level) {
-        fresh = new LinkedHashSet<>();
+    public MultiSpill initialize(final short[][] level) {
+        fresh = new ArrayList<LinkedHashSet<Coord>>();
         width = level.length;
         height = level[0].length;
-        spillMap = new boolean[width][height];
+        spillMap = new short[width][height];
+        anySpillMap = new boolean[width][height];
         physicalMap = new boolean[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 spillMap[x][y] = level[x][y];
-                physicalMap[x][y] = level[x][y];
+                anySpillMap[x][y] = level[x][y] > 0;
+                physicalMap[x][y] = level[x][y] >= 0;
             }
         }
         initialized = true;
@@ -262,18 +209,20 @@ public class Spill {
      * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
-     * @param level
-     * @return
+     * @param level a char[][] that should use '#' for walls and '.' for floors
+     * @return this for chaining
      */
-    public Spill initialize(final char[][] level) {
-        fresh = new LinkedHashSet<>();
+    public MultiSpill initialize(final char[][] level) {
+        fresh = new ArrayList<LinkedHashSet<Coord>>();
         width = level.length;
         height = level[0].length;
-        spillMap = new boolean[width][height];
+        spillMap = new short[width][height];
+        anySpillMap = new boolean[width][height];
         physicalMap = new boolean[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                spillMap[x][y] = false;
+                spillMap[x][y] = -1;
+                anySpillMap[x][y] = false;
                 physicalMap[x][y] = (level[x][y] != '#');
             }
         }
@@ -286,19 +235,21 @@ public class Spill {
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ). This
      * initialize() method allows you to specify an alternate wall char other than the default character, '#' .
-     * @param level
-     * @param alternateWall
-     * @return
+     * @param level a char[][] that should use alternateWall for walls and '.' for floors
+     * @param alternateWall the char to use for walls
+     * @return this for chaining
      */
-    public Spill initialize(final char[][] level, char alternateWall) {
-        fresh = new LinkedHashSet<>();
+    public MultiSpill initialize(final char[][] level, char alternateWall) {
+        fresh = new ArrayList<LinkedHashSet<Coord>>();
         width = level.length;
         height = level[0].length;
-        spillMap = new boolean[width][height];
+        spillMap = new short[width][height];
+        anySpillMap = new boolean[width][height];
         physicalMap = new boolean[width][height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                spillMap[x][y] = false;
+                spillMap[x][y] = -1;
+                anySpillMap[x][y] = false;
                 physicalMap[x][y] = (level[x][y] != alternateWall);
             }
         }
@@ -313,7 +264,8 @@ public class Spill {
         if(!initialized) return;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                spillMap[x][y] = false;
+                spillMap[x][y] = -1;
+                anySpillMap[x][y] = false;
             }
         }
     }
@@ -334,7 +286,8 @@ public class Spill {
      */
     public void resetCell(int x, int y) {
         if(!initialized) return;
-        spillMap[x][y] = false;
+        spillMap[x][y] = -1;
+        anySpillMap[x][y] = false;
     }
 
     /**
@@ -343,17 +296,23 @@ public class Spill {
      */
     public void resetCell(Coord pt) {
         if(!initialized) return;
-        spillMap[pt.x][pt.y] = false;
+        spillMap[pt.x][pt.y] = -1;
+        anySpillMap[pt.x][pt.y] = false;
     }
 
-    protected void setFresh(int x, int y) {
+    protected void setFresh(int idx, int x, int y) {
         if(!initialized) return;
-        fresh.add(Coord.get(x, y));
+        fresh.get(idx).add(Coord.get(x, y));
     }
 
-    protected void setFresh(final Coord pt) {
+    protected void setFresh(int idx, final Coord pt) {
         if(!initialized) return;
-        fresh.add(pt);
+        for(LinkedHashSet<Coord> f : fresh)
+        {
+            if(f.contains(pt))
+                return;
+        }
+        fresh.get(idx).add(pt);
     }
 
     /**
@@ -366,47 +325,69 @@ public class Spill {
      * of the Spill, and are likely to fill any gaps after a few subsequent calls. Increasing the volume slowly
      * is the best way to ensure that gaps only exist on the very edge if you use a non-MANHATTAN measurement.
      *
-     * @param entry The first cell to spread from, which should really be passable.
-     * @param volume The total number of cells to attempt to fill, which must be non-negative.
+     * @param entries The first cell for each spiller to spread from, which should really be passable.
+     * @param volume The total number of cells to attempt to fill; if negative will fill the whole map.
      * @param impassable A Set of Position keys representing the locations of moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return An ArrayList of Points that this will enter, in order starting with entry at index 0, until it
      * reaches its volume or fills its boundaries completely.
      */
-    public ArrayList<Coord> start(Coord entry, int volume, Set<Coord> impassable) {
+    public ArrayList<ArrayList<Coord>> start(List<Coord> entries, int volume, Set<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
             impassable = new LinkedHashSet<>();
-        if(!physicalMap[entry.x][entry.y] || impassable.contains(entry))
-            return null;
-        spreadPattern = new ArrayList<Coord>(volume);
-        spillMap[entry.x][entry.y] = true;
-        Coord temp;
-        for(int x = 0; x < spillMap.length; x++)
-        {
-            for(int y = 0; y < spillMap[x].length; y++)
-            {
-                temp = Coord.get(x, y);
-                if(spillMap[x][y] && !impassable.contains(temp))
-                    fresh.add(temp);
-            }
-        }
+        if(volume < 0)
+            volume = Integer.MAX_VALUE;
+        ArrayList<Coord> spillers = new ArrayList<Coord>(entries);
+        spreadPattern = new ArrayList<ArrayList<Coord>>(spillers.size());
+        fresh.clear();
+        for (short i = 0; i < spillers.size(); i++) {
+            spreadPattern.add(new ArrayList<Coord>(128));
+            fresh.add(new LinkedHashSet<Coord>(128));
+            Coord c = spillers.get(i);
+            spillMap[c.x][c.y] = i;
 
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
-        while (!fresh.isEmpty() && spreadPattern.size() < volume) {
-            Coord cell = fresh.toArray(new Coord[fresh.size()])[rng.nextInt(fresh.size())];
-            spreadPattern.add(cell);
-            spillMap[cell.x][cell.y] = true;
-            for (int d = 0; d < dirs.length; d++) {
-                Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
-                double h = heuristic(dirs[d]);
-                if (physicalMap[adj.x][adj.y] && !spillMap[adj.x][adj.y] && !impassable.contains(adj) && rng.nextDouble() <= 1.0 / h) {
-                    setFresh(adj);
+        }
+        boolean hasFresh = false;
+        Coord temp;
+        for (short i = 0; i < spillers.size(); i++) {
+            for (int x = 0; x < spillMap.length; x++) {
+                for (int y = 0; y < spillMap[x].length; y++) {
+                    temp = Coord.get(x, y);
+                    if (spillMap[x][y] == i && !impassable.contains(temp)) {
+                        fresh.get(i).add(temp);
+                        hasFresh = true;
+                    }
                 }
             }
-            fresh.remove(cell);
         }
-        filled = spreadPattern.size();
+        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+
+        while (hasFresh && filled < volume) {
+            hasFresh = false;
+            for (short i = 0; i < spillers.size() && filled < volume; i++) {
+                LinkedHashSet<Coord> currentFresh = fresh.get(i);
+                if(currentFresh.isEmpty())
+                    continue;
+                else
+                    hasFresh = true;
+                Coord cell = currentFresh.toArray(new Coord[currentFresh.size()])[rng.nextInt(currentFresh.size())];
+
+                spreadPattern.get(i).add(cell);
+                spillMap[cell.x][cell.y] = i;
+                filled++;
+                anySpillMap[cell.x][cell.y] = true;
+
+                for (int d = 0; d < dirs.length; d++) {
+                    Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
+                    double h = heuristic(dirs[d]);
+                    if (physicalMap[adj.x][adj.y] && !anySpillMap[adj.x][adj.y] && !impassable.contains(adj) && rng.nextDouble() <= 1.0 / h) {
+                        setFresh(i, adj);
+                    }
+                }
+                currentFresh.remove(cell);
+            }
+        }
         return spreadPattern;
     }
 
