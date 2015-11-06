@@ -1,8 +1,8 @@
 package squidpony.performance;
 
 import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
 import squidpony.squidmath.RandomnessSource;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +20,9 @@ import java.util.concurrent.Future;
 abstract class AbstractPerformanceTest {
 	// we want predictable outcome for our test
 	protected static final RandomnessSource SOURCE = new LightRNG(0x1337BEEF);
-	protected static final RNG RNG = new RNG(SOURCE);
+	protected static final StatefulRNG RNG = new StatefulRNG(SOURCE);
 
-	protected static final int NUM_THREADS = 8;
+	protected static final int NUM_THREADS = 1;
 	protected static final int NUM_TASKS = 1;
 
 	protected final List<AbstractPerformanceUnit> tasks = new ArrayList<AbstractPerformanceUnit>();

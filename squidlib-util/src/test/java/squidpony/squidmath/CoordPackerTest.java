@@ -29,6 +29,16 @@ public class CoordPackerTest {
         for (int i = 1 << 31; i != 0; i >>>= 1)
             System.out.print((n & i) != 0 ? 1 : 0);
     }
+    public void printPacked(short[] packed, int width, int height)
+    {
+        boolean[][] unpacked = CoordPacker.unpack(packed, width, height);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                System.out.print(unpacked[x][y] ? '@' : '.');
+            }
+            System.out.println();
+        }
+    }
 
     public long arrayMemoryUsage(int length, long bytesPerItem)
     {
@@ -64,7 +74,7 @@ public class CoordPackerTest {
                     ", y:" + CoordPacker.hilbert3Y[i] +
                     ", z:" + CoordPacker.hilbert3Z[i]);
     }
-    @Test
+    //@Test
     public void testMooreCurve3D() {
         for (int s = 0; s < 12; s++) {
 
@@ -157,7 +167,27 @@ public class CoordPackerTest {
         */
         assertArrayEquals(new short[]{311, 1}, intersect);
 
+        /*
+        StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
 
+        DungeonGenerator dungeonGenerator = new DungeonGenerator(60, 60, rng);
+        char[][] map = dungeonGenerator.generate();
+        short[] floors = CoordPacker.pack(map, '.');
+        Coord viewer = dungeonGenerator.utility.randomCell(floors);
+        FOV fov = new FOV(FOV.SHADOW);
+        double[][] seen = fov.calculateFOV(DungeonUtility.generateResistances(map), viewer.x, viewer.y,
+                FOV_RANGE, RADIUS);
+        short[] visible = CoordPacker.pack(seen);
+
+        short[] fringe = CoordPacker.fringe(visible, 1, 60, 60);
+        printPacked(fringe, 60, 60);
+
+
+        short[][] fringes = CoordPacker.fringes(visible, 6, 60, 60);
+        for (int i = 0; i < 6; i++) {
+            printPacked(CoordPacker.intersectPacked(fringes[i], floors), 60, 60);
+        }
+        */
     }
     @Test
     public void testPackOptimalParameters()
