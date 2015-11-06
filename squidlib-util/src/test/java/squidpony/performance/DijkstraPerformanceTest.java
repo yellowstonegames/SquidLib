@@ -30,11 +30,11 @@ import squidpony.squidmath.StatefulRNG;
  *
  */
 final class DijkstraPerformanceTest extends AbstractPerformanceTest {
-	// a 120 * 60 map should be more taxing
-	private static final int WIDTH = 120, HEIGHT = 60, PATH_LENGTH = (WIDTH - 2) * (HEIGHT - 2);
+	// a 40 * 40 map should be possible to really profile
+	private static final int WIDTH = 40, HEIGHT = 40, PATH_LENGTH = (WIDTH - 2) * (HEIGHT - 2);
 	private final char[][] maps;
 
-	DijkstraPerformanceTest() {
+	public DijkstraPerformanceTest() {
 		final DungeonGenerator generator = new DungeonGenerator(WIDTH, HEIGHT, RNG);
 		maps = generator.generate();
 		createThreadList();

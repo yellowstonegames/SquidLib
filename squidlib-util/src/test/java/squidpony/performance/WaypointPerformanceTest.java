@@ -31,8 +31,8 @@ import java.util.ArrayList;
  *
  */
 final class WaypointPerformanceTest extends AbstractPerformanceTest {
-	// a 120 * 60 map should be more representative
-	private static final int WIDTH = 120, HEIGHT = 60;
+	// a 40 * 40 map should be possible to really profile
+	private static final int WIDTH = 40, HEIGHT = 40;
 	private final SerpentMapGenerator generator;
 
 	public WaypointPerformanceTest() {

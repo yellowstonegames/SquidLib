@@ -38,7 +38,8 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import squidpony.squidai.DijkstraMap;
+import squidpony.squidai.WaypointPathfinder;
+import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
@@ -49,7 +50,7 @@ import squidpony.squidmath.StatefulRNG;
 
 import java.util.concurrent.TimeUnit;
 
-public class DijkstraBenchmark {
+public class WaypointBenchmark {
 
     public static final int DIMENSION = 120, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
@@ -64,58 +65,11 @@ public class DijkstraBenchmark {
         map = dungeonGen.generate(serpent.generate());
         floors = CoordPacker.pack(map, '.');
     }
-    public long doScan()
-    {
-        DijkstraMap dijkstra = new DijkstraMap(
-                map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
-        //Coord r;
-        long scanned = 0;
-
-        for (int x = 1; x < DIMENSION - 1; x++) {
-            for (int y = 1; y < DIMENSION - 1; y++) {
-                if (map[x][y] == '#')
-                    continue;
-                // this should ensure no blatant correlation between R and W
-                //utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-                //r = utility.randomFloor(map);
-                dijkstra.setGoal(x, y);
-                //dijkstra.setGoal(r);
-                dijkstra.scan(null);
-                dijkstra.clearGoals();
-                dijkstra.resetMap();
-                scanned++;
-            }
-        }
-        return scanned;
-    }
-    /*
-     * JMH generates lots of synthetic code for the benchmarks for you
-     * during the benchmark compilation. JMH can measure the benchmark
-     * methods in lots of modes. Users may select the default benchmark
-     * mode with the special annotation, or select/override the mode via
-     * the runtime options.
-     *
-     * When you are puzzled with some particular behavior, it usually helps
-     * to look into the generated code. You might see the code is doing not
-     * something you intend it to do. Good experiments always follow up on
-     * the experimental setup, and cross-checking the generated code is an
-     * important part of that follow up.
-     *
-     * The generated code for this particular sample is somewhere at
-     *  target/generated-sources/annotations/.../JMHSample_02_BenchmarkModes.java
-     */
-    //@Benchmark
-    //@BenchmarkMode(Mode.AverageTime)
-    //@OutputTimeUnit(TimeUnit.MILLISECONDS)
-    //public void measureScan() throws InterruptedException {
-    //    System.out.println(doScan());
-    //}
 
     public long doPath()
     {
-        DijkstraMap dijkstra = new DijkstraMap(
-                map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
+        WaypointPathfinder way = new WaypointPathfinder(
+                map, Radius.SQUARE, new StatefulRNG(new LightRNG(0x1337BEEF)));
         Coord r;
         long scanned = 0;
         DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
@@ -125,11 +79,9 @@ public class DijkstraBenchmark {
                     continue;
                 // this should ensure no blatant correlation between R and W
                 utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
+                ((StatefulRNG) way.rng).setState((x << 20) | (y << 14) | (x * y));
                 r = utility.randomCell(floors);
-                dijkstra.findPath(PATH_LENGTH, null, null, r, Coord.get(x, y));
-                dijkstra.clearGoals();
-                dijkstra.resetMap();
+                way.getKnownPath(r, Coord.get(x, y));
                 scanned++;
             }
         }
@@ -152,7 +104,7 @@ public class DijkstraBenchmark {
      *
      * a) Via the command line from the squidlib-performance module's root folder:
      *    $ mvn clean install
-     *    $ java -jar target/benchmarks.jar DijkstraBenchmark -wi 5 -i 5 -f 1
+     *    $ java -jar target/benchmarks.jar WaypointBenchmark -wi 5 -i 5 -f 1
      *
      *    (we requested 5 warmup/measurement iterations, single fork)
      *
@@ -163,7 +115,7 @@ public class DijkstraBenchmark {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(DijkstraBenchmark.class.getSimpleName())
+                .include(WaypointBenchmark.class.getSimpleName())
                 .warmupIterations(5)
                 .measurementIterations(5)
                 .forks(1)

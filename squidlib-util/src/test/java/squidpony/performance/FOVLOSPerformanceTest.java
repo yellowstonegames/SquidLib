@@ -4,9 +4,6 @@ import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.RandomnessSource;
 
 /**
  * a simple performance test
@@ -23,16 +20,13 @@ import squidpony.squidmath.RandomnessSource;
  *
  */
 final class FOVLOSPerformanceTest extends AbstractPerformanceTest {
-	// we want predictable outcome for our test
-	private static final RandomnessSource SOURCE = new LightRNG(0x1337BEEF);
-	private static final RNG RNG = new RNG(SOURCE);
 
 	// a 30 * 30 map should be enough
 	private static final int DIMENSION = 30;
 	private final char[][] maps;
 	private final double[][] res;
 
-	FOVLOSPerformanceTest() {
+	public FOVLOSPerformanceTest() {
 		final DungeonGenerator generator = new DungeonGenerator(DIMENSION, DIMENSION, RNG);
 		maps = generator.generate();
 		res = DungeonUtility.generateResistances(maps);
