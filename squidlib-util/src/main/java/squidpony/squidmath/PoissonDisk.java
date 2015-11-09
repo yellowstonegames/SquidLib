@@ -256,8 +256,7 @@ public class PoissonDisk {
                 //end get random point around
 
                 if (q.x >= minPosition.x && q.x <= maxPosition.x &&
-                        q.y >= minPosition.y && q.y <= maxPosition.y &&
-                        restricted && !blocked.contains(map[q.x][q.y])) {
+                        q.y >= minPosition.y && q.y <= maxPosition.y) {
                     Coord qIndex = q.subtract(minPosition).divide((int) Math.ceil(cellSize));
                     boolean tooClose = false;
 
@@ -272,7 +271,8 @@ public class PoissonDisk {
                     if (!tooClose) {
                         found = true;
                         activePoints.add(q);
-                        points.add(q);
+                        if(!blocked.contains(map[q.x][q.y]))
+                            points.add(q);
                         grid[qIndex.x][qIndex.y] = q;
                     }
                 }
