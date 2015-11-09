@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import squidpony.squidgrid.mapping.DungeonGenerator;
+import squidpony.squidgrid.mapping.SerpentDeepMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.PoissonDisk;
@@ -17,13 +18,15 @@ public class PoissonDiskTest {
     public static void main(String[] args) {
         LightRNG lrng = new LightRNG(0xbeefbabel);
         RNG rng = new RNG(lrng);
-        DungeonGenerator dg = new DungeonGenerator(80, 40, rng);
+        DungeonGenerator dg = new DungeonGenerator(80, 80, rng);
 
-        char[][] dun = dg.generate();
+        SerpentDeepMapGenerator deep = new SerpentDeepMapGenerator(80, 80, 8, rng);
+        //deep.putWalledBoxRoomCarvers(1);
+        char[][] dun = dg.generateRespectingStairs(deep.generate()[7]);
 
         // System.out.println(dg);
 
-        ArrayList<Coord> disks = PoissonDisk.sampleRectangle(Coord.get(1,1), Coord.get(78,38), 6, 80, 40, 5, rng);
+        ArrayList<Coord> disks = PoissonDisk.sampleMap(dun, 7f, rng, '#');
 
         //char[][] hl = DungeonUtility.hashesToLines(dun);
         for(Coord c : disks)
