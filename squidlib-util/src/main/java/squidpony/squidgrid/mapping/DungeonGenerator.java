@@ -2,6 +2,7 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.annotation.Beta;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -9,6 +10,7 @@ import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 /**
@@ -72,15 +74,23 @@ public class DungeonGenerator {
     public Coord stairsUp = null, stairsDown = null;
     public RNG rng;
 
-    private char[][] dungeon = null;
+    private char[][] dungeon = null, bareDungeon = null;
 
     /**
-     * Get the most recently generated char[][] dungeon out of this class, which may be null if none have been
-     * generated with the method generate and setDungeon has not been called.
+     * Get the most recently generated char[][] dungeon out of this class. The
+     * dungeon may be null if generate() or setDungeon() have not been called.
      * @return a char[][] dungeon, or null.
      */
     public char[][] getDungeon() {
         return dungeon;
+    }
+    /**
+     * Get the most recently generated char[][] dungeon out of this class without any chars other than '#' or '.', for
+     * walls and floors respectively. The dungeon may be null if generate() or setDungeon() have not been called.
+     * @return a char[][] dungeon with only '#' for walls and '.' for floors, or null.
+     */
+    public char[][] getBareDungeon() {
+        return bareDungeon;
     }
 
     /**
@@ -89,6 +99,7 @@ public class DungeonGenerator {
      */
     public void setDungeon(char[][] dungeon) {
         this.dungeon = dungeon;
+        bareDungeon = DungeonUtility.simplifyDungeon(dungeon);
         if(dungeon == null)
         {
             width = 0;
@@ -193,6 +204,7 @@ public class DungeonGenerator {
         width = copying.width;
         fx = new EnumMap<FillEffect, Integer>(copying.fx);
         dungeon = copying.dungeon;
+        bareDungeon = copying.bareDungeon;
     }
 
     /**
@@ -424,6 +436,7 @@ public class DungeonGenerator {
     public char[][] generate(char[][] baseDungeon)
     {
         char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
+        bareDungeon = DungeonBoneGen.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {
@@ -438,6 +451,7 @@ public class DungeonGenerator {
             for (int j = 0; j < height; j++) {
                 if(dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
+                    bareDungeon[i][j] = '#';
                 }
                 else if(dijkstra.gradientMap[i][j] > maxDijkstra) {
                     maxDijkstra = dijkstra.gradientMap[i][j];
@@ -472,6 +486,7 @@ public class DungeonGenerator {
      */
     public char[][] generateRespectingStairs(char[][] baseDungeon) {
         char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
+        bareDungeon = DungeonBoneGen.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         stairsUp = null;
@@ -488,6 +503,7 @@ public class DungeonGenerator {
             for (int j = 0; j < height; j++) {
                 if (dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
+                    bareDungeon[i][j] = '#';
                 }
             }
         }
@@ -498,6 +514,200 @@ public class DungeonGenerator {
 
 
     private char[][] innerGenerate(char[][] map)
+    {
+
+        LinkedHashSet<Coord> floors = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> doorways;
+        LinkedHashSet<Coord> hazards = new LinkedHashSet<Coord>();
+        Coord temp;
+        boolean doubleDoors = false;
+        int doorFill = 0;
+        int waterFill = 0;
+        int grassFill = 0;
+        int trapFill = 0;
+        int islandSpacing = 0;
+        if(fx.containsKey(FillEffect.DOORS))
+        {
+            doorFill = fx.get(FillEffect.DOORS);
+            if(doorFill < 0)
+            {
+                doubleDoors = true;
+                doorFill *= -1;
+            }
+        }
+        if(fx.containsKey(FillEffect.GRASS)) {
+            grassFill = fx.get(FillEffect.GRASS);
+        }
+        if(fx.containsKey(FillEffect.WATER)) {
+            waterFill = fx.get(FillEffect.WATER);
+        }
+        if(fx.containsKey(FillEffect.ISLANDS)) {
+            islandSpacing = fx.get(FillEffect.ISLANDS);
+        }
+        if(fx.containsKey(FillEffect.TRAPS)) {
+            trapFill = fx.get(FillEffect.TRAPS);
+        }
+
+        double floorRate = 1.0, waterRate = waterFill / 100.0, grassRate = grassFill / 100.0;
+        if(waterRate + grassRate > 1.0)
+        {
+            waterRate /= (waterFill + grassFill) / 100.0;
+            grassRate /= (waterFill + grassFill) / 100.0;
+        }
+        floorRate -= waterRate + grassRate;
+        doorways = viableDoorways(doubleDoors, map);
+
+        LinkedHashSet<Coord> obstacles = new LinkedHashSet<Coord>(doorways.size() * doorFill / 100);
+        if(doorFill > 0)
+        {
+            int total = doorways.size() * doorFill / 100;
+
+            BigLoop:
+            for(int i = 0; i < total; i++)
+            {
+                Coord entry = doorways.toArray(new Coord[doorways.size()])[rng.nextInt(doorways.size())];
+                if(map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#')
+                {
+                    map[entry.x][entry.y] = '+';
+                }
+                else {
+                    map[entry.x][entry.y] = '/';
+                }
+                obstacles.add(entry);
+                Coord[] adj = new Coord[]{Coord.get(entry.x + 1, entry.y), Coord.get(entry.x - 1, entry.y),
+                        Coord.get(entry.x, entry.y + 1), Coord.get(entry.x, entry.y - 1)};
+                for(Coord near : adj) {
+                    if (doorways.contains(near)) {
+                        map[near.x][near.y] = '#';
+                        bareDungeon[near.x][near.y] = '#';
+                        obstacles.add(near);
+                        doorways.remove(near);
+                        i++;
+                        doorways.remove(entry);
+                        continue BigLoop;
+                    }
+                }
+                doorways.remove(entry);
+            }
+        }
+
+        for(int x = 1; x < map.length - 1; x++)
+        {
+            for(int y = 1; y < map[x].length - 1; y++)
+            {
+                temp = Coord.get(x, y);
+                if(map[x][y] == '.' && !obstacles.contains(temp))
+                {
+                    floors.add(Coord.get(x, y));
+                    int ctr = 0;
+                    if(map[x+1][y] != '#') ++ctr;
+                    if(map[x-1][y] != '#') ++ctr;
+                    if(map[x][y+1] != '#') ++ctr;
+                    if(map[x][y-1] != '#') ++ctr;
+                    if(map[x+1][y+1] != '#') ++ctr;
+                    if(map[x-1][y+1] != '#') ++ctr;
+                    if(map[x+1][y-1] != '#') ++ctr;
+                    if(map[x-1][y-1] != '#') ++ctr;
+                    if(ctr >= 5) hazards.add(Coord.get(x, y));
+                }
+            }
+        }
+
+        MultiSpill ms = new MultiSpill(map, Spill.Measurement.MANHATTAN, rng);
+        LinkedHashMap<Coord, Double> fillers = new LinkedHashMap<Coord, Double>(128);
+        ArrayList<Coord> dots = PoissonDisk.sampleMap(map, Math.min(width, height) / 8f, rng, '#', '+', '/');
+        for (int i = 0; i < dots.size(); i++) {
+            switch (i % 3) {
+                case 0:
+                    fillers.put(dots.get(i), floorRate);
+                    break;
+                case 1:
+                    fillers.put(dots.get(i), waterRate);
+                    break;
+                case 2:
+                    fillers.put(dots.get(i), grassRate);
+                    break;
+            }
+        }
+
+        ArrayList<ArrayList<Coord>> fills = ms.start(fillers, -1, null);
+
+        int ctr = 0;
+        for(ArrayList<Coord> pts : fills)
+        {
+            switch (ctr % 3) {
+                case 0:
+                    break;
+                case 1:
+                    floors.removeAll(pts);
+                    hazards.removeAll(pts);
+                    obstacles.addAll(pts);
+                    for (int x = 1; x < width - 1; x++) {
+                        for (int y = 1; y < height - 1; y++) {
+                            if (ms.spillMap[x][y] == ctr) {
+                                map[x][y] = '~';
+                            }
+                        }
+                    }
+                    for (int x = 1; x < width - 1; x++) {
+                        for (int y = 1; y < height - 1; y++) {
+                            if (ms.spillMap[x][y] == ctr) {
+                                if(map[x - 1][y] == '.' || map[x + 1][y] == '.' ||
+                                        map[x][y - 1] == '.' || map[x][y + 1] == '.')
+                                    map[x][y] = ',';
+                            }
+                        }
+                    }
+                    if(islandSpacing > 1) {
+                        ArrayList<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^');
+                        for (Coord c : islands) {
+                            map[c.x][c.y] = '.';
+                            if (map[c.x - 1][c.y] != '#')
+                                map[c.x - 1][c.y] = ',';
+                            if (map[c.x + 1][c.y] != '#')
+                                map[c.x + 1][c.y] = ',';
+                            if (map[c.x][c.y - 1] != '#')
+                                map[c.x][c.y - 1] = ',';
+                            if (map[c.x][c.y + 1] != '#')
+                                map[c.x][c.y + 1] = ',';
+                        }
+                    }
+
+                    break;
+                case 2:
+                    floors.removeAll(pts);
+                    hazards.removeAll(pts);
+                    obstacles.addAll(pts);
+                    for (int x = 1; x < width - 1; x++) {
+                        for (int y = 1; y < height - 1; y++) {
+                            if (ms.spillMap[x][y] == ctr && map[x][y] == '.') {
+                                map[x][y] = '"';
+                            }
+                        }
+                    }
+                    break;
+            }
+            ctr++;
+        }
+
+        if(trapFill > 0)
+        {
+            int total = hazards.size() * trapFill / 100;
+
+            for(int i = 0; i < total; i++)
+            {
+                Coord entry = hazards.toArray(new Coord[hazards.size()])[rng.nextInt(hazards.size())];
+                map[entry.x][entry.y] = '^';
+                hazards.remove(entry);
+            }
+        }
+
+        dungeon = map;
+        return map;
+
+    }
+
+    private char[][] innerGenerateOld(char[][] map)
     {
 
         LinkedHashSet<Coord> floors = new LinkedHashSet<Coord>();
