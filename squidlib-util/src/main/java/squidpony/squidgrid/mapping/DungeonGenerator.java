@@ -13,6 +13,8 @@ import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
+import static squidpony.squidmath.CoordPacker.*;
+
 /**
  * The primary way to create a more-complete dungeon, layering different effects and modifications on top of
  * a DungeonBoneGen's dungeon.
@@ -57,6 +59,10 @@ public class DungeonGenerator {
          * Grass, represented by '"'
          */
         GRASS,
+        /**
+         * Boulders strewn about open areas, represented by '#' and treated as walls
+         */
+        BOULDERS,
         /**
          * Islands of ground, '.', surrounded by shallow water, ',', to place in water at evenly spaced points
          */
@@ -264,6 +270,20 @@ public class DungeonGenerator {
         if(percentage > 100) percentage = 100;
         if(fx.containsKey(FillEffect.GRASS)) fx.remove(FillEffect.GRASS);
         fx.put(FillEffect.GRASS, percentage);
+        return this;
+    }
+    /**
+     * Turns the given percentage of floor cells not already adjacent to walls into wall cells, represented by '#'.
+     * If this DungeonGenerator previously had addBoulders called, the latest call will take precedence.
+     * @param percentage the percentage of floor cells not adjacent to walls to fill with boulders.
+     * @return this DungeonGenerator; can be chained
+     */
+    public DungeonGenerator addBoulders(int percentage)
+    {
+        if(percentage < 0) percentage = 0;
+        if(percentage > 100) percentage = 100;
+        if(fx.containsKey(FillEffect.BOULDERS)) fx.remove(FillEffect.BOULDERS);
+        fx.put(FillEffect.BOULDERS, percentage);
         return this;
     }
     /**
@@ -493,8 +513,7 @@ public class DungeonGenerator {
         stairsDown = null;
 
         dijkstra.clearGoals();
-        Coord[] stairs = CoordPacker.allPacked(CoordPacker.unionPacked(
-                CoordPacker.pack(map, '<'), CoordPacker.pack(map, '>')));
+        Coord[] stairs = allPacked(unionPacked(pack(map, '<'), pack(map, '>')));
         for (Coord s : stairs) {
             dijkstra.setGoal(s);
         }
@@ -525,6 +544,7 @@ public class DungeonGenerator {
         int waterFill = 0;
         int grassFill = 0;
         int trapFill = 0;
+        double boulderFill = 0.0;
         int islandSpacing = 0;
         if(fx.containsKey(FillEffect.DOORS))
         {
@@ -540,6 +560,9 @@ public class DungeonGenerator {
         }
         if(fx.containsKey(FillEffect.WATER)) {
             waterFill = fx.get(FillEffect.WATER);
+        }
+        if(fx.containsKey(FillEffect.BOULDERS)) {
+            boulderFill = fx.get(FillEffect.BOULDERS) * 0.01;
         }
         if(fx.containsKey(FillEffect.ISLANDS)) {
             islandSpacing = fx.get(FillEffect.ISLANDS);
@@ -590,25 +613,38 @@ public class DungeonGenerator {
                 doorways.remove(entry);
             }
         }
+        if (boulderFill > 0.0) {
+            short[] walls = pack(map, '#');
+            short[] more = expand(walls, 1, width, height);
+            short[] negated = negatePacked(more);
+            short[] rect = rectangle(width, height);
+            short[] viable = intersectPacked(negated,
+                    rect);
+            Coord[] boulders = randomSample(viable, boulderFill, rng);
+            for (int i = 0; i < boulders.length; i++) {
+                map[boulders[i].x][boulders[i].y] = '#';
+                bareDungeon[boulders[i].x][boulders[i].y] = '#';
+            }
+        }
 
-        for(int x = 1; x < map.length - 1; x++)
-        {
-            for(int y = 1; y < map[x].length - 1; y++)
-            {
-                temp = Coord.get(x, y);
-                if(map[x][y] == '.' && !obstacles.contains(temp))
-                {
-                    floors.add(Coord.get(x, y));
-                    int ctr = 0;
-                    if(map[x+1][y] != '#') ++ctr;
-                    if(map[x-1][y] != '#') ++ctr;
-                    if(map[x][y+1] != '#') ++ctr;
-                    if(map[x][y-1] != '#') ++ctr;
-                    if(map[x+1][y+1] != '#') ++ctr;
-                    if(map[x-1][y+1] != '#') ++ctr;
-                    if(map[x+1][y-1] != '#') ++ctr;
-                    if(map[x-1][y-1] != '#') ++ctr;
-                    if(ctr >= 5) hazards.add(Coord.get(x, y));
+
+        if(trapFill > 0) {
+            for (int x = 1; x < map.length - 1; x++) {
+                for (int y = 1; y < map[x].length - 1; y++) {
+                    temp = Coord.get(x, y);
+                    if (map[x][y] == '.' && !obstacles.contains(temp)) {
+                        floors.add(Coord.get(x, y));
+                        int ctr = 0;
+                        if (map[x + 1][y] != '#') ++ctr;
+                        if (map[x - 1][y] != '#') ++ctr;
+                        if (map[x][y + 1] != '#') ++ctr;
+                        if (map[x][y - 1] != '#') ++ctr;
+                        if (map[x + 1][y + 1] != '#') ++ctr;
+                        if (map[x - 1][y + 1] != '#') ++ctr;
+                        if (map[x + 1][y - 1] != '#') ++ctr;
+                        if (map[x - 1][y - 1] != '#') ++ctr;
+                        if (ctr >= 5) hazards.add(Coord.get(x, y));
+                    }
                 }
             }
         }

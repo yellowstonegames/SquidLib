@@ -324,7 +324,7 @@ public class SquidLayers extends Group {
         palette.add(SColor.FLATTERY_BROWN);
         palette.add(SColor.SILVER_GREY);
         palette.add(SColor.RUST);
-        palette.add(SColor.WATER);
+        palette.add(SColor.PALE_CORNFLOWER_BLUE);
         palette.add(SColor.INTERNATIONAL_ORANGE);
 
         palette.add(SColor.WHITE);

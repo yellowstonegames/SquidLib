@@ -39,7 +39,7 @@ public class EverythingDemo extends ApplicationAdapter {
     /** Non-{@code null} iff '?' was pressed before */
     private /*Nullable*/ Actor help;
     private DungeonGenerator dungeonGen;
-    private char[][] bareDungeon, lineDungeon;
+    private char[][] decoDungeon, bareDungeon, lineDungeon;
     private double[][] res;
     private int[][] lights;
     private Color[][] colors, bgColors;
@@ -72,17 +72,18 @@ public class EverythingDemo extends ApplicationAdapter {
         // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
         // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
         // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
-
+        /*
         filteredCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
                 new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
                 new float[]{0.6f, 0.5f}
         ));
+        */
         // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
         // MultiLerpFilter here is given three colors to tint everything toward one of; this is meant to look bolder.
 
         filteredCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
                 new Color[]{SColor.CRIMSON, SColor.MEDIUM_BLUE, SColor.LIME_GREEN},
-                new float[]{0.85f, 0.8f, 0.8f}
+                new float[]{0.25f, 0.3f, 0.3f}
         ));
 
         //filteredCenter = DefaultResources.getSCC();
@@ -102,20 +103,21 @@ public class EverythingDemo extends ApplicationAdapter {
         rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(15, 7);
-        dungeonGen.addGrass(15);
+        dungeonGen.addWater(10, 7);
+        dungeonGen.addGrass(1);
+        dungeonGen.addBoulders(10);
         dungeonGen.addDoors(15, false);
         MixedGenerator mix = new MixedGenerator(width, height, rng);
         mix.putCaveCarvers(1);
         mix.putBoxRoomCarvers(1);
         mix.putRoundRoomCarvers(2);
         char[][] mg = mix.generate();
-        bareDungeon = dungeonGen.generate(mg);
+        decoDungeon = dungeonGen.generate(mg);
 
         // change the TilesetType to lots of different choices to see what dungeon works best.
         //bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
-        bareDungeon = DungeonUtility.closeDoors(bareDungeon);
-        lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
+        bareDungeon = dungeonGen.getBareDungeon();
+        lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
         // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
         short[] placement = CoordPacker.pack(bareDungeon, '.');
         Coord pl = dungeonGen.utility.randomCell(placement);
@@ -132,11 +134,11 @@ public class EverythingDemo extends ApplicationAdapter {
         }
         // your choice of FOV matters here.
         fov = new FOV(FOV.RIPPLE_TIGHT);
-        getToPlayer = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.CHEBYSHEV);
+        getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
         getToPlayer.setGoal(pl);
         pathMap = getToPlayer.scan(null);
-        res = DungeonUtility.generateResistances(bareDungeon);
+        res = DungeonUtility.generateResistances(decoDungeon);
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
 
         player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10),
@@ -144,9 +146,9 @@ public class EverythingDemo extends ApplicationAdapter {
         cursor = Coord.get(-1, -1);
         toCursor = new ArrayList<Coord>(10);
         awaitedMoves = new ArrayList<Coord>(10);
-        playerToCursor = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.EUCLIDEAN);
-        int[][] initialColors = DungeonUtility.generatePaletteIndices(bareDungeon),
-                initialBGColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
+        playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.EUCLIDEAN);
+        int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
+                initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
         colors = new Color[width][height];
         bgColors = new Color[width][height];
         ArrayList<Color> palette = display.getPalette();
@@ -157,7 +159,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 bgColors[i][j] = filteredCenter.filter(palette.get(initialBGColors[i][j]));
             }
         }
-        lights = DungeonUtility.generateLightnessModifiers(bareDungeon, counter);
+        lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
         seen = new boolean[width][height];
 
         // this is a big one.
@@ -318,10 +320,10 @@ public class EverythingDemo extends ApplicationAdapter {
         {
             // '+' is a door.
             if (lineDungeon[newX][newY] == '+') {
-                bareDungeon[newX][newY] = '/';
+                decoDungeon[newX][newY] = '/';
                 lineDungeon[newX][newY] = '/';
                 // changes to the map mean the resistances for FOV need to be regenerated.
-                res = DungeonUtility.generateResistances(bareDungeon);
+                res = DungeonUtility.generateResistances(decoDungeon);
                 // recalculate FOV, store it in fovmap for the render to use.
                 fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
 
@@ -532,7 +534,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // used as the z-axis when generating Simplex noise to make water seem to "move"
         counter += Gdx.graphics.getDeltaTime() * 15;
         // this does the standard lighting for walls, floors, etc. but also uses counter to do the Simplex noise thing.
-        lights = DungeonUtility.generateLightnessModifiers(bareDungeon, counter);
+        lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
 
         // you done bad. you done real bad.
         if (health <= 0) {

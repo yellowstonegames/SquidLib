@@ -244,8 +244,25 @@ public class DungeonUtility {
      * @param map
      * @return
      */
-    public static char[][] hashesToLines(char[][] map)
-    {
+    public static char[][] hashesToLines(char[][] map) {
+        return hashesToLines(map, false);
+    }
+    /**
+         * Takes a char[][] dungeon map that uses '#' to represent walls, and returns a new char[][] that uses unicode box
+         * drawing characters to draw straight, continuous lines for walls, filling regions between walls (that were
+         * filled with more walls before) with space characters, ' '. If the lines "point the wrong way," such as having
+         * multiple horizontally adjacent vertical lines where there should be horizontal lines, call transposeLines() on
+         * the returned map, which will keep the dimensions of the map the same and only change the line chars. You will
+         * also need to call transposeLines if you call hashesToLines on a map that already has "correct" line-drawing
+         * characters, which means hashesToLines should only be called on maps that use '#' for walls. If you have a
+         * jumbled map that contains two or more of the following: "correct" line-drawing characters, "incorrect"
+         * line-drawing characters, and '#' characters for walls, you can reset by calling linesToHashes() and then
+         * potentially calling hashesToLines() again.
+         * @param map
+         * @return
+    */
+    public static char[][] hashesToLines(char[][] map, boolean keepSingleHashes)
+        {
         int width = map[0].length+2;
         int height = map.length+2;
 
@@ -399,7 +416,7 @@ public class DungeonUtility {
                     }
                     else
                     {
-                        neo[y][x] = '─';
+                        neo[y][x] = keepSingleHashes ? '#' : '─';
                     }
 
                 }
@@ -957,7 +974,7 @@ public class DungeonUtility {
                         portion[i][j] = (int)(100 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int)(80 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 8.0 - 0.5));
+                        portion[i][j] = (int)(80 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 8.0 - 0.35));
                         break;
                     case '^':
                         portion[i][j] = 40;

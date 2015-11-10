@@ -1141,7 +1141,7 @@ public class CoordPacker {
             }
             idx += packed[p] & 0xffff;
         }
-        short[] distances = vla.shrink();
+        int[] distances = vla.asInts();
         Coord[] cs = new Coord[distances.length];
         for (int i = 0; i < distances.length; i++) {
             cs[i] = Coord.get(hilbertX[distances[i]], hilbertY[distances[i]]);
@@ -1254,15 +1254,15 @@ public class CoordPacker {
         ShortVLA vla = new ShortVLA(256);
         ShortSet ss = new ShortSet(256);
         boolean on = false;
-        int idx = 0;
-        short x, y, dist;
+        int idx = 0, x, y;
+        short dist;
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
                     x = hilbertX[i];
                     y = hilbertY[i];
-                    for (int j = Math.max(0, x - expansion); j <= Math.max(width - 1, x + expansion); j++) {
-                        for (int k = Math.max(0, y - expansion); k <= Math.max(height - 1, y + expansion); k++) {
+                    for (int j = Math.max(0, x - expansion); j <= Math.min(width - 1, x + expansion); j++) {
+                        for (int k = Math.max(0, y - expansion); k <= Math.min(height - 1, y + expansion); k++) {
                             dist = hilbertDistances[j + (k << 8)];
                             if (ss.add(dist))
                                 vla.add(dist);
@@ -1272,6 +1272,7 @@ public class CoordPacker {
             }
             idx += packed[p] & 0xffff;
         }
+
         int[] indices = vla.asInts();
         Arrays.sort(indices);
 
@@ -1281,14 +1282,14 @@ public class CoordPacker {
         vla.add((short)indices[0]);
         for (int i = 1; i < indices.length; i++) {
             current = indices[i];
+            if(current != past)
+                skip++;
             if (current - past > 1)
             {
-                vla.add((short) skip);
+                vla.add((short) (skip));
                 skip = 0;
                 vla.add((short)(current - past - 1));
             }
-            else if(current != past)
-                skip++;
             past = current;
         }
         vla.add((short)(skip+1));
@@ -1356,15 +1357,14 @@ public class CoordPacker {
         vla.add((short)indices[0]);
         for (int i = 1; i < indices.length; i++) {
             current = indices[i];
-
+            if(current != past)
+                skip++;
             if (current - past > 1)
             {
-                vla.add((short) (skip + 1));
+                vla.add((short) (skip));
                 skip = 0;
                 vla.add((short)(current - past - 1));
             }
-            else if(current != past)
-                skip++;
             past = current;
         }
         vla.add((short)(skip+1));
@@ -1436,12 +1436,13 @@ public class CoordPacker {
             for (int i = 1; i < indices.length; i++) {
                 current = indices[i];
 
+                if (current != past)
+                    skip++;
                 if (current - past > 1) {
-                    vla.add((short) (skip + 1));
+                    vla.add((short) (skip));
                     skip = 0;
                     vla.add((short) (current - past - 1));
-                } else if (current != past)
-                    skip++;
+                }
                 past = current;
             }
             vla.add((short) (skip + 1));
@@ -1463,49 +1464,11 @@ public class CoordPacker {
     {
         if(width > 256 || height > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
-        ShortVLA packing = new ShortVLA(256);
-        boolean on = false;
-        int skip = 0, limit = 0x10000, mapLimit = width * height;
-        if(height <= 128) {
-            limit >>= 1;
-            if (width <= 128) {
-                limit >>= 1;
-                if (width <= 64) {
-                    limit >>= 1;
-                    if (height <= 64) {
-                        limit >>= 1;
-                        if (height <= 32) {
-                            limit >>= 1;
-                            if (width <= 32) {
-                                limit >>= 1;
-                            }
-                        }
-                    }
-                }
-            }
+        boolean[][] rect = new boolean[width][height];
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(rect[i], true);
         }
-
-        for(int i = 0, ml = 0; i < limit && ml < mapLimit; i++, skip++) {
-            if (hilbertX[i] >= width || hilbertY[i] >= height) {
-                if (on) {
-                    on = false;
-                    packing.add((short) skip);
-                    skip = 0;
-                }
-                continue;
-            }
-            ml++;
-            if(!on) {
-                packing.add((short) skip);
-                skip = 0;
-                on = true;
-            }
-        }
-        if(on)
-            packing.add((short)skip);
-        if(packing.size == 0)
-            return ALL_WALL;
-        return packing.shrink();
+        return pack(rect);
     }
 
     /**
@@ -1530,7 +1493,20 @@ public class CoordPacker {
         boolean on = false;
         for (int i = 0; i < packed.length; i++, on = !on) {
             if(on == wanted)
-                c += packed[i];
+                c += packed[i] & 0xffff;
+        }
+        return c;
+    }
+    /**
+     * Finds how many cells are encoded in a packed array (both on and off) without unpacking it.
+     * @param packed a packed short array, as produced by pack()
+     * @return the number of cells that are encoded explicitly in the packed data as either on or off.
+     */
+    public static int covered(short[] packed)
+    {
+        int c = 0;
+        for (int i = 0; i < packed.length; i++) {
+            c += packed[i] & 0xffff;
         }
         return c;
     }
@@ -1632,7 +1608,7 @@ public class CoordPacker {
         ShortVLA packing = new ShortVLA(64);
         boolean on = false, onLeft = false, onRight = false;
         int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
-        while ((elemLeft < left.length || elemRight < right.length) && idx <= 0xffff) {
+        while ((elemLeft < left.length && elemRight < right.length) && idx <= 0xffff) {
             if (elemLeft >= left.length) {
                 totalLeft = 0xffff;
                 onLeft = false;
@@ -1714,13 +1690,13 @@ public class CoordPacker {
         if (original[0] == 0) {
             short[] copy = new short[original.length];
             System.arraycopy(original, 1, copy, 0, original.length - 1);
-            copy[original.length - 1] = (short) 0xFFFF;
+            copy[original.length - 1] = (short) (0xFFFF - covered(copy));
             return copy;
         }
         short[] copy = new short[original.length + 2];
         copy[0] = 0;
         System.arraycopy(original, 0, copy, 1, original.length);
-        copy[copy.length - 1] = (short) 0xFFFF;
+        copy[copy.length - 1] = (short) (0xFFFF - covered(copy));
         return copy;
     }
 
@@ -1883,7 +1859,7 @@ public class CoordPacker {
             }
             idx += packed[p] & 0xffff;
         }
-        short[] distances = vla.shrink();
+        int[] distances = vla.asInts();
         Coord[] cs = new Coord[distances.length];
         for (int i = 0; i < distances.length; i++) {
             cs[i] = Coord.get(hilbertX[distances[i]], hilbertY[distances[i]]);
@@ -1960,6 +1936,23 @@ public class CoordPacker {
             }
         }
         return coords;
+    }
+
+    /**
+     * Quick utility method for printing packed data as a grid of 1 (on) and/or 0 (off). Useful primarily for debugging.
+     * @param packed a packed short[] such as one produced by pack()
+     * @param width the width of the packed 2D array
+     * @param height the height of the packed 2D array
+     */
+    public static void printPacked(short[] packed, int width, int height)
+    {
+        boolean[][] unpacked = unpack(packed, width, height);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                System.out.print(unpacked[x][y] ? '1' : '0');
+            }
+            System.out.println();
+        }
     }
 
 
