@@ -77,6 +77,13 @@ public class EverythingDemo extends ApplicationAdapter {
                 new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
                 new float[]{0.6f, 0.5f}
         ));
+        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
+        // MultiLerpFilter here is given three colors to tint everything toward one of; this is meant to look bolder.
+
+        filteredCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
+                new Color[]{SColor.CRIMSON, SColor.MEDIUM_BLUE, SColor.LIME_GREEN},
+                new float[]{0.85f, 0.8f, 0.8f}
+        ));
 
         //filteredCenter = DefaultResources.getSCC();
         batch = new SpriteBatch();
@@ -95,7 +102,7 @@ public class EverythingDemo extends ApplicationAdapter {
         rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(28, 6);
+        dungeonGen.addWater(15, 7);
         dungeonGen.addGrass(15);
         dungeonGen.addDoors(15, false);
         MixedGenerator mix = new MixedGenerator(width, height, rng);

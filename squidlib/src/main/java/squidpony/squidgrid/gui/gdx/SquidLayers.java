@@ -1026,7 +1026,7 @@ public class SquidLayers extends Group {
                     lightnesses[i][j] = -255;
 
                     backgroundPanel.put(i, j, backgroundPanel.getAt(i, j),
-                            palette.get(9), 1f / 512f);
+                            palette.get(9), 0f / 512f);
                 }
             }
         }
