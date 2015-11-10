@@ -123,9 +123,16 @@ Current Features:
   - Better documentation, we're really trying here
 - Features not currently in the beta but expected for the final release include:
   - More focus on colors in rendering.
-    - HDR colors (essentially, "more red than red", "darker than black", or "white so bright it shines") should be supported
-    - Swappable palettes are in consideration, and are partially implemented in some classes.
+    - Swappable palettes are in consideration, and are partially implemented in some classes
+    - HDR colors were considered but proved too cumbersome for users when the higher range wouldn't often be used
   - More features may be added to FOVCache
+  - More and better dungeon generation techniques
+    - MixedGenerator takes points, draws rooms around them, then connects them with corridors, caves, or a mix of the two
+    - SerpentMapGenerator uses MixedGenerator but tries to ensure a winding, snake-like path that must visit many rooms/caves
+    - SerpentDeepMapGenerator works like SerpentMapGenerator, but requires passage up and down stairs to get to certain areas
+  - More options for pathfinding
+    - WaypointPathfinder precalculates paths between all doorways or other wide-to-narrow transitions, and can quickly fetch a path that it already knows.
+    - DijkstraMap should get a few more features, including pathfinding that tries to stay behind cover or out of sight.
 - But, 3.0.0's final release will be major, and so should be expected to *break* API backwards compatibility
   - Any minor releases after 3.0.0 and before 4.0.0 should be expected to *keep* API backwards compatibility, unless a feature is broken or unusable
   - The most significant change in 3.0.0 will be the removal of the Swing-based rendering and full transition to the similar, but much faster and more responsive, libGDX renderer
