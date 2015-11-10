@@ -139,9 +139,8 @@ public class MixedGenerator {
         dungeon = new char[width][height];
         marked = new boolean[width][height];
         walled = new boolean[width][height];
-        Arrays.fill(dungeon[0], '#');
-        for (int i = 1; i < width; i++) {
-            System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(dungeon[i], '#');
         }
         totalPoints = 0;
         for(List<Coord> vals : connections.values())

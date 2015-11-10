@@ -5891,8 +5891,8 @@ public class SColor extends Color {
      * Indexes into this palette can be used as a placeholder for modules that do not have access to SColor.
      */
     public static SColor[] LIMITED_PALETTE = {
-            // 0                 1       2                 3              4      5       6
-            PURE_DARK_GRAY, CREAM, FLATTERY_BROWN, SILVER_GREY, RUST, WATER, INTERNATIONAL_ORANGE,
+            // 0                 1       2                 3      4            5                     6
+            PURE_DARK_GRAY, CREAM, FLATTERY_BROWN, SILVER_GREY, RUST, PALE_CORNFLOWER_BLUE, INTERNATIONAL_ORANGE,
             // 7     8             9
             WHITE, LIGHT_GRAY, DARK_GRAY,
             // 10           11   12
@@ -5903,7 +5903,7 @@ public class SColor extends Color {
             LEMON_CHIFFON, CORN, GOLDEN_YELLOW,
             // 19          20          21
             TEA_GREEN, LIME_GREEN, PINE_GREEN,
-            // 22         23            24
+            // 22     23        24
             CYAN, OCEAN_BLUE, MIDORI,
             // 25              26            27
             COLUMBIA_BLUE, ROYAL_BLUE, PERSIAN_BLUE,
