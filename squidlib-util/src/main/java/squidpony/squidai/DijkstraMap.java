@@ -1823,13 +1823,13 @@ public class DijkstraMap {
      * @param fov            a FOV (or FOVCache that has completed its calculations), and will be used for LOS work, may be null
      * @param impassable     a Set of impassable Coord positions that may change (not constant like walls); can be null
      * @param onlyPassable   a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
-     * @param threats        an array of Threat objects that store a position, min and max threatening distance
+     * @param threats        a List of Threat objects that store a position, min and max threatening distance
      * @param start          the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets        a vararg or array of Coord that this will try to pathfind toward
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int preferredRange, FOV fov,
-                                                  Set<Coord> impassable, Set<Coord> onlyPassable, Threat[] threats, Coord start, Coord... targets) {
+                                                  Set<Coord> impassable, Set<Coord> onlyPassable, List<Threat> threats, Coord start, Coord... targets) {
         return findCoveredAttackPath(moveLength, preferredRange, preferredRange, fov, impassable, onlyPassable, threats, start, targets);
     }
 
@@ -1857,13 +1857,13 @@ public class DijkstraMap {
      * @param fov               a FOV (or FOVCache that has completed its calculations), and will be used for LOS work, may be null
      * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
      * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
-     * @param threats           an array of Threat objects that store a position, min and max threatening distance
+     * @param threats           a List of Threat objects that store a position, min and max threatening distance
      * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets           a vararg or array of Coord that this will try to pathfind toward
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, FOV fov,
-                                                  Set<Coord> impassable, Set<Coord> onlyPassable, Threat[] threats, Coord start, Coord... targets) {
+                                                  Set<Coord> impassable, Set<Coord> onlyPassable, List<Threat> threats, Coord start, Coord... targets) {
         if (!initialized) return null;
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
@@ -1925,16 +1925,27 @@ public class DijkstraMap {
         double[][] storedScan = scan(impassable2);
         clearGoals();
         resetMap();
-        Threat t;
         double[][] seen;
         short[] packed = CoordPacker.ALL_WALL, tempPacked;
-        for (int i = 0; i < threats.length; i++) {
-            t = threats[i];
-            seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.maxThreatDistance, findRadius(measurement));
-            tempPacked = CoordPacker.pack(seen);
+        for(Threat t : threats) {
+            if(fov instanceof FOVCache)
+            {
+                tempPacked = ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y)[t.maxThreatDistance];
+            }
+            else {
+                seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.maxThreatDistance, findRadius(measurement));
+                tempPacked = CoordPacker.pack(seen);
+            }
+
             if (t.minThreatDistance > 0) {
-                seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.minThreatDistance, findRadius(measurement));
-                tempPacked = CoordPacker.differencePacked(tempPacked, CoordPacker.pack(seen));
+                if (fov instanceof FOVCache) {
+                    tempPacked = CoordPacker.differencePacked(tempPacked,
+                            ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y)[t.minThreatDistance]);
+                }
+                else {
+                    seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.minThreatDistance, findRadius(measurement));
+                    tempPacked = CoordPacker.differencePacked(tempPacked, CoordPacker.pack(seen));
+                }
             }
             packed = CoordPacker.unionPacked(packed, tempPacked);
         }

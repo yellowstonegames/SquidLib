@@ -80,7 +80,7 @@ public class DungeonGenerator {
     public Coord stairsUp = null, stairsDown = null;
     public RNG rng;
 
-    private char[][] dungeon = null, bareDungeon = null;
+    private char[][] dungeon = null;
 
     /**
      * Get the most recently generated char[][] dungeon out of this class. The
@@ -96,7 +96,7 @@ public class DungeonGenerator {
      * @return a char[][] dungeon with only '#' for walls and '.' for floors, or null.
      */
     public char[][] getBareDungeon() {
-        return bareDungeon;
+        return DungeonUtility.simplifyDungeon(dungeon);
     }
 
     /**
@@ -105,7 +105,6 @@ public class DungeonGenerator {
      */
     public void setDungeon(char[][] dungeon) {
         this.dungeon = dungeon;
-        bareDungeon = DungeonUtility.simplifyDungeon(dungeon);
         if(dungeon == null)
         {
             width = 0;
@@ -210,7 +209,6 @@ public class DungeonGenerator {
         width = copying.width;
         fx = new EnumMap<FillEffect, Integer>(copying.fx);
         dungeon = copying.dungeon;
-        bareDungeon = copying.bareDungeon;
     }
 
     /**
@@ -456,7 +454,6 @@ public class DungeonGenerator {
     public char[][] generate(char[][] baseDungeon)
     {
         char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
-        bareDungeon = DungeonBoneGen.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {
@@ -471,7 +468,6 @@ public class DungeonGenerator {
             for (int j = 0; j < height; j++) {
                 if(dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
-                    bareDungeon[i][j] = '#';
                 }
                 else if(dijkstra.gradientMap[i][j] > maxDijkstra) {
                     maxDijkstra = dijkstra.gradientMap[i][j];
@@ -506,7 +502,6 @@ public class DungeonGenerator {
      */
     public char[][] generateRespectingStairs(char[][] baseDungeon) {
         char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
-        bareDungeon = DungeonBoneGen.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         stairsUp = null;
@@ -522,7 +517,6 @@ public class DungeonGenerator {
             for (int j = 0; j < height; j++) {
                 if (dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
-                    bareDungeon[i][j] = '#';
                 }
             }
         }
@@ -602,7 +596,6 @@ public class DungeonGenerator {
                 for(Coord near : adj) {
                     if (doorways.contains(near)) {
                         map[near.x][near.y] = '#';
-                        bareDungeon[near.x][near.y] = '#';
                         obstacles.add(near);
                         doorways.remove(near);
                         i++;
@@ -623,7 +616,6 @@ public class DungeonGenerator {
             Coord[] boulders = randomSample(viable, boulderFill, rng);
             for (int i = 0; i < boulders.length; i++) {
                 map[boulders[i].x][boulders[i].y] = '#';
-                bareDungeon[boulders[i].x][boulders[i].y] = '#';
             }
         }
 
