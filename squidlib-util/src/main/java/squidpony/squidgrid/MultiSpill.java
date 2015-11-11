@@ -422,15 +422,21 @@ public class MultiSpill {
             impassable = new LinkedHashSet<>();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
-        ArrayList<Coord> spillers = new ArrayList<Coord>(entries.keySet());
-        ArrayList<Double> biases = new ArrayList<Double>(entries.values());
-        spreadPattern = new ArrayList<ArrayList<Coord>>(spillers.size());
+        ArrayList<Coord> spillers0 = new ArrayList<Coord>(entries.keySet()),
+                spillers = new ArrayList<Coord>(spillers0.size());
+        ArrayList<Double> biases0 = new ArrayList<Double>(entries.values()),
+                biases = new ArrayList<Double>(biases0.size());
+        spreadPattern = new ArrayList<ArrayList<Coord>>(spillers0.size());
         fresh.clear();
-        for (short i = 0; i < spillers.size(); i++) {
+        for (short i = 0, ctr = 0; i < spillers0.size(); i++) {
+            if(biases0.get(i) <= 0.0001)
+                continue;
             spreadPattern.add(new ArrayList<Coord>(128));
             fresh.add(new LinkedHashSet<Coord>(128));
-            Coord c = spillers.get(i);
-            spillMap[c.x][c.y] = i;
+            Coord c = spillers0.get(i);
+            spillers.add(c);
+            biases.add(biases0.get(i));
+            spillMap[c.x][c.y] = ctr++;
 
         }
         boolean hasFresh = false;
