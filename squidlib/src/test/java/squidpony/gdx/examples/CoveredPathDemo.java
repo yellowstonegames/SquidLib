@@ -30,12 +30,14 @@ public class CoveredPathDemo extends ApplicationAdapter {
         public AnimatedEntity entity;
         public int health;
         public DijkstraMap dijkstra;
+        public ArrayList<Coord> previousPositions;
 
         public Creature(AnimatedEntity ae, int hp, DijkstraMap dijkstraMap)
         {
             entity = ae;
             health = hp;
             dijkstra = dijkstraMap;
+            previousPositions = new ArrayList<Coord>(16);
         }
     }
     SpriteBatch batch;
@@ -60,9 +62,9 @@ public class CoveredPathDemo extends ApplicationAdapter {
     private List<Threat> redThreats, blueThreats;
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
-    private int framesWithoutAnimation = 0, moveLength = 8;
+    private int framesWithoutAnimation = 0, moveLength = 7;
     private ArrayList<Coord> awaitedMoves;
-    private int redIdx = 0, blueIdx = 0;
+    private int scheduledMoves = 0, whichIdx = 0;
     private boolean blueTurn = false;
     private double frames = 0.0;
 
@@ -113,7 +115,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
             teamRed.add(new Creature(display.animateActor(monPos.x, monPos.y, "9", 11), 9,
                     new DijkstraMap(bareDungeon, DijkstraMap.Measurement.MANHATTAN, rng)));
             redPlaces.add(monPos);
-            redThreats.add(new Threat(monPos, 1));
+            redThreats.add(new Threat(monPos, 1, 1));
 
             Coord monPosBlue = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPosBlue.x, monPosBlue.y);
@@ -147,6 +149,9 @@ public class CoveredPathDemo extends ApplicationAdapter {
                     {
                         Gdx.app.exit();
                     }
+                    break;
+                    default:
+                        scheduledMoves++;
                 }
             }
         });
@@ -174,45 +179,34 @@ public class CoveredPathDemo extends ApplicationAdapter {
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
-        if(blueTurn)
-        {
+        if(blueTurn) {
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
             whichThreats = redThreats;
             myMin = 3;
             myMax = 6;
-            for(Creature entry : teamBlue)
-            {
-                if(i++ == idx)
-                {
-                    ae = entry.entity;
-                    health = entry.health;
-                    whichDijkstra = entry.dijkstra;
-                    user = Coord.get(ae.gridX, ae.gridY);
-                    break;
-                }
-            }
+
+            Creature entry = teamBlue.get(idx);
+            ae = entry.entity;
+            health = entry.health;
+            whichDijkstra = entry.dijkstra;
+            user = Coord.get(ae.gridX, ae.gridY);
+            entry.previousPositions.add(user);
         }
-        else
-        {
+        else {
             whichFoes = bluePlaces;
             whichAllies = redPlaces;
             whichThreats = blueThreats;
             myMin = 0;
             myMax = 1;
-            for(Creature entry : teamRed)
-            {
-                if(i++ == idx)
-                {
-                    ae = entry.entity;
-                    health = entry.health;
-                    whichDijkstra = entry.dijkstra;
-                    user = Coord.get(ae.gridX, ae.gridY);
-                    break;
-                }
-            }
+            Creature entry = teamRed.get(idx);
+            ae = entry.entity;
+            health = entry.health;
+            whichDijkstra = entry.dijkstra;
+            user = Coord.get(ae.gridX, ae.gridY);
+            entry.previousPositions.add(user);
         }
-        if(ae == null || whichDijkstra == null || health <= 0) {
+        if(whichDijkstra == null || health <= 0) {
             phase = Phase.MOVE_ANIM;
             return;
         }
@@ -241,6 +235,8 @@ public class CoveredPathDemo extends ApplicationAdapter {
             }
             System.out.println();
         }*/
+        if(path.isEmpty())
+            path.add(user);
         awaitedMoves = new ArrayList<Coord>(path);
     }
 
@@ -274,43 +270,52 @@ public class CoveredPathDemo extends ApplicationAdapter {
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
+        DijkstraMap dijkstra = null;
+        ArrayList<Coord> previous = null;
         Color whichTint = Color.WHITE;
         ArrayList<Creature> whichEnemyTeam;
+        List<Threat> myThreats, enemyThreats;
         if (blueTurn) {
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
             whichTint = Color.CYAN;
             whichEnemyTeam = teamRed;
+            myThreats = blueThreats;
+            enemyThreats = redThreats;
             myMin = 3;
             myMax = 6;
-            for (Creature entry : teamBlue) {
-                if (i++ == idx) {
-                    ae = entry.entity;
-                    health = entry.health;
-                    user = Coord.get(ae.gridX, ae.gridY);
-                    break;
-                }
-            }
+            Creature entry = teamBlue.get(idx);
+            ae = entry.entity;
+            health = entry.health;
+            dijkstra = entry.dijkstra;
+            previous = entry.previousPositions;
+            user = Coord.get(ae.gridX, ae.gridY);
         } else {
             whichFoes = bluePlaces;
             whichAllies = redPlaces;
             whichTint = Color.RED;
             whichEnemyTeam = teamBlue;
+            myThreats = redThreats;
+            enemyThreats = blueThreats;
             myMin = 0;
             myMax = 1;
-            for (Creature entry : teamRed) {
-                if (i++ == idx) {
-                    ae = entry.entity;
-                    health = entry.health;
-                    user = Coord.get(ae.gridX, ae.gridY);
-                    break;
-                }
-            }
+
+            Creature entry = teamRed.get(idx);
+            ae = entry.entity;
+            health = entry.health;
+            dijkstra = entry.dijkstra;
+            previous = entry.previousPositions;
+            user = Coord.get(ae.gridX, ae.gridY);
         }
-        if (ae == null || health <= 0) {
+        myThreats.get(idx).position = user;
+
+        if (health <= 0 || dijkstra == null) {
+            myThreats.get(idx).maxThreatDistance = 0;
+            myThreats.get(idx).minThreatDistance = 0;
             phase = Phase.ATTACK_ANIM;
             return;
         }
+        dijkstra.deteriorate(previous);
         for(Creature creature : whichEnemyTeam)
         {
             if(cache.queryLOS(user.x, user.y, creature.entity.gridX, creature.entity.gridY) &&
@@ -329,14 +334,25 @@ public class CoveredPathDemo extends ApplicationAdapter {
         }
 
         if(targetCell != null) {
-            ;
             whichTint.a = 0.5f;
+            boolean successfulKill = false;
             display.tint(targetCell.x, targetCell.y, whichTint, 0, display.getAnimationDuration());
             for (Creature mon : whichEnemyTeam) {
                 if (mon.entity.gridX == targetCell.x && mon.entity.gridY == targetCell.y) {
                     int currentHealth = Math.max(mon.health - 3, 0);
                     mon.health = currentHealth;
+                    if(currentHealth <= 0)
+                        successfulKill = true;
                     mon.entity.setText(Integer.toString(currentHealth));
+                }
+            }
+            if(successfulKill)
+            {
+                for (Threat t : enemyThreats) {
+                    if (t.position.x == targetCell.x && t.position.y == targetCell.y) {
+                        t.maxThreatDistance = 0;
+                        t.minThreatDistance = 0;
+                    }
                 }
             }
         }
@@ -352,6 +368,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
         }
         */
         whichAllies.add(user);
+
         phase = Phase.ATTACK_ANIM;
     }
     public void putMap()
@@ -378,14 +395,16 @@ public class CoveredPathDemo extends ApplicationAdapter {
             if(blueHealth.health > 0) {
                 redWins = false;
                 break;
-            }redWins = true;
+            }
+            redWins = true;
         }
         for(Creature redHealth : teamRed)
         {
             if(redHealth.health > 0) {
                 blueWins = false;
                 break;
-            }blueWins = true;
+            }
+            blueWins = true;
         }
         if (blueWins) {
             // still need to display the map, then write over it with a message.
@@ -415,25 +434,14 @@ public class CoveredPathDemo extends ApplicationAdapter {
         }
         int i = 0;
         AnimatedEntity ae = null;
-        int whichIdx = 0;
         if(blueTurn) {
-            for (Creature entry : teamBlue) {
-                if (i++ == blueIdx) {
-                    ae = entry.entity;
-                    whichIdx = blueIdx;
-                    break;
-                }
-            }
+            Creature entry = teamBlue.get(whichIdx);
+            ae = entry.entity;
+
         }
-        else
-        {
-            for (Creature entry : teamRed) {
-                if (i++ == redIdx) {
-                    ae = entry.entity;
-                    whichIdx = redIdx;
-                    break;
-                }
-            }
+        else {
+            Creature entry = teamRed.get(whichIdx);
+            ae = entry.entity;
         }
 
         // need to display the map every frame, since we clear the screen to avoid artifacts.
@@ -442,7 +450,6 @@ public class CoveredPathDemo extends ApplicationAdapter {
         if(input.hasNext()) {
             input.next();
         }
-        // if the user clicked, we have a list of moves to perform.
         if(!awaitedMoves.isEmpty())
         {
             if(ae == null) {
@@ -463,7 +470,8 @@ public class CoveredPathDemo extends ApplicationAdapter {
         // (because with no animations running the last phase must have ended), or start a new animation soon.
         else if(!display.hasActiveAnimations()) {
             ++framesWithoutAnimation;
-            if (framesWithoutAnimation >= 3) {
+            if (framesWithoutAnimation >= 6) {// && scheduledMoves > 0) {
+                //System.out.println("frames: " + framesWithoutAnimation + "scheduled: " + scheduledMoves);
                 framesWithoutAnimation = 0;
                 switch (phase) {
                     case ATTACK_ANIM: {
@@ -471,14 +479,13 @@ public class CoveredPathDemo extends ApplicationAdapter {
                         blueTurn = !blueTurn;
                         if(!blueTurn)
                         {
-                            whichIdx++;
-                            redIdx = (redIdx + 1) % numMonsters;
-                            blueIdx = (blueIdx + 1) % numMonsters;
+                            whichIdx = (whichIdx + 1) % numMonsters;
                         }
                         startMove(whichIdx);
                     }
                     break;
                     case MOVE_ANIM: {
+                        //scheduledMoves = Math.max(scheduledMoves - 1, 0);
                         postMove(whichIdx);
                     }
                 }

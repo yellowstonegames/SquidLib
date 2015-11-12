@@ -649,6 +649,21 @@ public class DijkstraMap {
      * earlier along a path, and you do this once every turn or once every few turns, depending on how aggressively the
      * pathfinder should seek a goal.
      *
+     * @param riskyPoints a List of Coord that should be considered more risky to stay at with each call.
+     * @return the current safetyMap.
+     */
+    public double[][] deteriorate(List<Coord> riskyPoints) {
+        return deteriorate(riskyPoints.toArray(new Coord[riskyPoints.size()]));
+    }
+
+    /**
+     * Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
+     * specified risky points to be considered less safe, and will encourage a pathfinder to keep moving toward a goal
+     * instead of just staying in cover forever (or until an enemy moves around the cover and ambushes the pathfinder).
+     * Typically, you call deteriorate() with the current Coord position of the pathfinder and any Coords they stayed at
+     * earlier along a path, and you do this once every turn or once every few turns, depending on how aggressively the
+     * pathfinder should seek a goal.
+     *
      * @param riskyPoints a vararg or array of Coord that should be considered more risky to stay at with each call.
      * @return the current safetyMap.
      */
@@ -661,6 +676,22 @@ public class DijkstraMap {
             safetyMap[c.x][c.y] += 1.0;
         }
         return safetyMap;
+    }
+
+    /**
+     * Used in conjunction with methods that depend on finding cover, like findCoveredAttackPath(), this method causes
+     * specified safer points to be considered more safe, and will make a pathfinder more likely to enter those places
+     * if they were considered dangerous earlier (due to calling deteriorate()).
+     * <p/>
+     * Typically, you call relax() with previous Coords a pathfinder stayed at that should be safer now than they were
+     * at some previous point in time, and you might do this when no one has been attacked in a while or when the AI is
+     * sure that a threat has been neutralized or no longer threatens a safer point.
+     *
+     * @param saferPoints a List of Coord that should be considered less risky to stay at with each call.
+     * @return the current safetyMap.
+     */
+    public double[][] relax(List<Coord> saferPoints) {
+        return relax(saferPoints.toArray(new Coord[saferPoints.size()]));
     }
 
     /**
@@ -1868,7 +1899,7 @@ public class DijkstraMap {
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
         double[][] resMap = new double[width][height];
-        if (fov != null) {
+        if (fov != null && !(fov instanceof FOVCache)) {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
@@ -1923,45 +1954,49 @@ public class DijkstraMap {
         }
         measurement = mess;
         double[][] storedScan = scan(impassable2);
-        clearGoals();
-        resetMap();
-        double[][] seen;
-        short[] packed = CoordPacker.ALL_WALL, tempPacked;
-        for(Threat t : threats) {
-            if(fov instanceof FOVCache)
-            {
-                tempPacked = ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y)[t.maxThreatDistance];
-            }
-            else {
-                seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.maxThreatDistance, findRadius(measurement));
-                tempPacked = CoordPacker.pack(seen);
-            }
-
-            if (t.minThreatDistance > 0) {
+        double[][] safeMap;
+        if(storedScan[start.x][start.y] >= 1.0) {
+            clearGoals();
+            resetMap();
+            double[][] seen;
+            short[] packed = CoordPacker.ALL_WALL, tempPacked;
+            for (Threat t : threats) {
                 if (fov instanceof FOVCache) {
-                    tempPacked = CoordPacker.differencePacked(tempPacked,
-                            ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y)[t.minThreatDistance]);
+                    tempPacked = ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y, t.maxThreatDistance);
+                } else {
+                    seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.maxThreatDistance, findRadius(measurement));
+                    tempPacked = CoordPacker.pack(seen);
                 }
-                else {
-                    seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.minThreatDistance, findRadius(measurement));
-                    tempPacked = CoordPacker.differencePacked(tempPacked, CoordPacker.pack(seen));
-                }
-            }
-            packed = CoordPacker.unionPacked(packed, tempPacked);
-        }
-        short[][] unseen = CoordPacker.fringes(packed, 2, width, height);
-        Coord[] safe = CoordPacker.allPacked(unseen[1]);
-        for (int i = 0; i < safe.length; i++) {
-            setGoal(safe[i]);
-        }
-        double[][] safeMap = scan(impassable2);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                safeMap[x][y] = Math.pow(safeMap[x][y] + safetyMap[x][y], 1.5);
-            }
-        }
-        gradientMap = storedScan;
 
+                if (t.minThreatDistance > 0) {
+                    if (fov instanceof FOVCache) {
+                        tempPacked = CoordPacker.differencePacked(tempPacked,
+                                ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y, t.minThreatDistance));
+                    } else {
+                        seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.minThreatDistance, findRadius(measurement));
+                        tempPacked = CoordPacker.differencePacked(tempPacked, CoordPacker.pack(seen));
+                    }
+                }
+                packed = CoordPacker.unionPacked(packed, tempPacked);
+            }
+            short[][] unseen = CoordPacker.fringes(packed, 2, width, height);
+            Coord[] safe = CoordPacker.allPacked(unseen[1]);
+            for (int i = 0; i < safe.length; i++) {
+                setGoal(safe[i]);
+            }
+            safeMap = scan(impassable2);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if (safeMap[x][y] < FLOOR)
+                        safeMap[x][y] = Math.pow(safeMap[x][y] + safetyMap[x][y], 1.5);
+                }
+            }
+            gradientMap = storedScan;
+        }
+        else
+        {
+            safeMap = safetyMap;
+        }
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
@@ -1988,29 +2023,26 @@ public class DijkstraMap {
 
             if (best >= gradientMap[currentPos.x][currentPos.y] + safeMap[currentPos.x][currentPos.y] ||
                     physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
                 break;
             }
-            currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
+            currentPos = currentPos.translate(dirs[choice]);
             path.add(Coord.get(currentPos.x, currentPos.y));
             paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
-            if (paidLength > moveLength - 1.0) {
-
-                if (onlyPassable.contains(currentPos)) {
-
-                    closed.put(currentPos, WALL);
-                    impassable2.add(currentPos);
-                    return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, fov, impassable2,
-                            onlyPassable, threats, start, targets);
-                }
+            if(paidLength > moveLength - 1.0)
                 break;
-            }
             if (gradientMap[currentPos.x][currentPos.y] + safeMap[currentPos.x][currentPos.y] == 0)
                 break;
         }
-        frustration = 0;
         goals.clear();
+        if (onlyPassable.contains(currentPos) || impassable2.contains(currentPos)) {
+            closed.put(currentPos, WALL);
+            impassable2.add(currentPos);
+            return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, fov, impassable2,
+                    onlyPassable, threats, start, targets);
+        }
+
+        frustration = 0;
         return path;
     }
 

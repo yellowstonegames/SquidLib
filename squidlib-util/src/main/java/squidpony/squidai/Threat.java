@@ -14,13 +14,14 @@ public class Threat {
 
     public Threat(Coord position, int maxThreatDistance) {
         this.position = position;
-        minThreatDistance = 0;
-        this.maxThreatDistance = maxThreatDistance;
+        minThreatDistance = (maxThreatDistance <= 0) ? 0 : 1;
+        this.maxThreatDistance = (maxThreatDistance < 0) ? 0 : maxThreatDistance;
     }
 
     public Threat(Coord position, int minThreatDistance, int maxThreatDistance) {
         this.position = position;
-        this.minThreatDistance = minThreatDistance;
-        this.maxThreatDistance = maxThreatDistance;
+        this.minThreatDistance = (minThreatDistance < 0) ? 0 : minThreatDistance;
+        this.maxThreatDistance = (this.minThreatDistance > maxThreatDistance)
+                ? this.minThreatDistance : maxThreatDistance;
     }
 }

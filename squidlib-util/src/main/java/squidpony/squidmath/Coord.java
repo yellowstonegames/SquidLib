@@ -188,7 +188,7 @@ public class Coord implements java.io.Serializable {
     }
 
     /**
-     * Separately divides the x and y positions of this Coord by operand, rounding to the nearest int for each of x and
+     * Separately divides the x and y positions of this Coord by operand, flooring to a lower int for each of x and
      * y and producing a different Coord as their "quotient." If operand is 0.0, expect strange results (infinity and
      * NaN are both possibilities).
      * @param operand a value to divide each of x and y by
@@ -196,6 +196,19 @@ public class Coord implements java.io.Serializable {
      *          operand}, with both x and y rounded accordingly
      */
     public Coord divide(double operand)
+    {
+        return get((int)(x / operand), (int)(y / operand));
+    }
+
+    /**
+     * Separately divides the x and y positions of this Coord by operand, rounding to the nearest int for each of x and
+     * y and producing a different Coord as their "quotient." If operand is 0.0, expect strange results (infinity and
+     * NaN are both possibilities).
+     * @param operand a value to divide each of x and y by
+     * @return a Coord (usually cached and not a new instance) with {@code x = this.x / operand; y = this.y /
+     *          operand}, with both x and y rounded accordingly
+     */
+    public Coord divideRounding(double operand)
     {
         return get((int)Math.round(x / operand), (int)Math.round(y / operand));
     }
