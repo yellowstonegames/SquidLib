@@ -557,6 +557,10 @@ public class FOVCache extends FOV{
     {
         return cache[x + y * width];
     }
+    public short[] getCacheEntry(int x, int y, int radius)
+    {
+        return cache[x + y * width][maxRadius - radius];
+    }
 
     public short[] getLOSEntry(int x, int y)
     {

@@ -28,7 +28,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <outputFile>target/squidlib-demo-gdx.jar</outputFile>
+                            <outputFile>target/squidlib-demo-path.jar</outputFile>
                             <artifactSet>
                                 <excludes>
                                     <exclude>junit:junit</exclude>
@@ -37,7 +37,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>squidpony.gdx.examples.desktop.EverythingDemoLauncher</mainClass>
+                                    <mainClass>squidpony.gdx.examples.desktop.CoveredPathDemoLauncher</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
