@@ -103,7 +103,7 @@ public class EverythingDemo extends ApplicationAdapter {
         rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(10, 7);
+        //dungeonGen.addWater(10, 7);
         dungeonGen.addGrass(1);
         dungeonGen.addBoulders(10);
         dungeonGen.addDoors(15, false);

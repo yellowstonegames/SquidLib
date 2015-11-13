@@ -2015,7 +2015,7 @@ public class DijkstraMap {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
                 if (gradientMap[pt.x][pt.y] + safeMap[pt.x][pt.y] < best) {
                     if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
-                        best = gradientMap[pt.x][pt.y];
+                        best = gradientMap[pt.x][pt.y] + safeMap[pt.x][pt.y];
                         choice = d;
                     }
                 }

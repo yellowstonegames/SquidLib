@@ -1088,6 +1088,10 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         return animatedEntities;
     }
 
+    public void removeAnimatedEntity(AnimatedEntity ae)
+    {
+        animatedEntities.remove(ae);
+    }
 	@Override
 	public void refresh() {
 		/* smelC: should we do something here ? */

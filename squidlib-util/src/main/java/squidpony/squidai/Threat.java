@@ -14,7 +14,7 @@ public class Threat {
 
     public Threat(Coord position, int maxThreatDistance) {
         this.position = position;
-        minThreatDistance = (maxThreatDistance <= 0) ? 0 : 1;
+        minThreatDistance = 0;
         this.maxThreatDistance = (maxThreatDistance < 0) ? 0 : maxThreatDistance;
     }
 

@@ -428,15 +428,15 @@ public class MultiSpill {
                 biases = new ArrayList<Double>(biases0.size());
         spreadPattern = new ArrayList<ArrayList<Coord>>(spillers0.size());
         fresh.clear();
-        for (short i = 0, ctr = 0; i < spillers0.size(); i++) {
-            if(biases0.get(i) <= 0.0001)
-                continue;
+        for (short i = 0, ctr = 0; i < spillers0.size(); i++, ctr++) {
             spreadPattern.add(new ArrayList<Coord>(128));
             fresh.add(new LinkedHashSet<Coord>(128));
             Coord c = spillers0.get(i);
             spillers.add(c);
             biases.add(biases0.get(i));
-            spillMap[c.x][c.y] = ctr++;
+            if(biases0.get(i) <= 0.0001)
+                continue;
+            spillMap[c.x][c.y] = ctr;
 
         }
         boolean hasFresh = false;
