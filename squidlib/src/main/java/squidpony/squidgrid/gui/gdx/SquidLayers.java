@@ -1506,9 +1506,48 @@ public class SquidLayers extends Group {
         }
         return p.getAnimatedEntityByCell(x, y);
     }
+    public void removeAnimatedEntity(AnimatedEntity ae, int layer)
+    {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        p.removeAnimatedEntity(ae);
+    }
+    public void removeAnimatedEntity(AnimatedEntity ae)
+    {
+        foregroundPanel.removeAnimatedEntity(ae);
+    }
 
     public AnimatedEntity getAnimatedEntityByCell(int x, int y) {
         return foregroundPanel.getAnimatedEntityByCell(x, y);
+    }
+
+    public void removeAnimatedEntityByCell(int x, int y, int layer) {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        p.removeAnimatedEntity(getAnimatedEntityByCell(x, y, layer));
+    }
+    public void removeAnimatedEntityByCell(int x, int y) {
+        foregroundPanel.removeAnimatedEntity(getAnimatedEntityByCell(x, y));
     }
 
     @Override
