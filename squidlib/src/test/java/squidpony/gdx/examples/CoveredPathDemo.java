@@ -67,6 +67,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
     private int scheduledMoves = 0, whichIdx = 0;
     private boolean blueTurn = false;
     private double frames = 0.0;
+    boolean late = false;
 
     private FOVCache cache;
     @Override
@@ -115,7 +116,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
             teamRed.add(new Creature(display.animateActor(monPos.x, monPos.y, "9", 11), 9,
                     new DijkstraMap(bareDungeon, DijkstraMap.Measurement.MANHATTAN, rng)));
             redPlaces.add(monPos);
-            redThreats.add(new Threat(monPos, 1, 1));
+            redThreats.add(new Threat(monPos, 0, 1));
 
             Coord monPosBlue = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPosBlue.x, monPosBlue.y);
@@ -263,6 +264,17 @@ public class CoveredPathDemo extends ApplicationAdapter {
         return false;
     }
 
+    private LinkedHashMap<Integer, Threat> convertThreats(List<Threat> ts)
+    {
+        LinkedHashMap<Integer, Threat> numbered = new LinkedHashMap<Integer, Threat>();
+        int i = 0;
+        for (Threat t : ts)
+        {
+            numbered.put(i, t);
+            i++;
+        }
+        return numbered;
+    }
     private void postMove(int idx) {
 
         int i = 0, myMax, myMin;
@@ -274,14 +286,14 @@ public class CoveredPathDemo extends ApplicationAdapter {
         ArrayList<Coord> previous = null;
         Color whichTint = Color.WHITE;
         ArrayList<Creature> whichEnemyTeam;
-        List<Threat> myThreats, enemyThreats;
+        LinkedHashMap<Integer, Threat> myThreats, enemyThreats;
         if (blueTurn) {
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
             whichTint = Color.CYAN;
             whichEnemyTeam = teamRed;
-            myThreats = blueThreats;
-            enemyThreats = redThreats;
+            myThreats = convertThreats(blueThreats);
+            enemyThreats = convertThreats(redThreats);
             myMin = 3;
             myMax = 6;
             Creature entry = teamBlue.get(idx);
@@ -295,8 +307,8 @@ public class CoveredPathDemo extends ApplicationAdapter {
             whichAllies = redPlaces;
             whichTint = Color.RED;
             whichEnemyTeam = teamBlue;
-            myThreats = redThreats;
-            enemyThreats = blueThreats;
+            myThreats = convertThreats(redThreats);
+            enemyThreats = convertThreats(blueThreats);
             myMin = 0;
             myMax = 1;
 
@@ -335,26 +347,26 @@ public class CoveredPathDemo extends ApplicationAdapter {
 
         if(targetCell != null) {
             whichTint.a = 0.5f;
-            boolean successfulKill = false;
+            int successfulKill = -1, ix = 0;
             display.tint(targetCell.x, targetCell.y, whichTint, 0, display.getAnimationDuration());
             for (Creature mon : whichEnemyTeam) {
                 if (mon.entity.gridX == targetCell.x && mon.entity.gridY == targetCell.y) {
                     int currentHealth = Math.max(mon.health - 3, 0);
                     mon.health = currentHealth;
-                    if(currentHealth <= 0)
-                        successfulKill = true;
+                    if (currentHealth <= 0) {
+                        successfulKill = ix;
+                    }
                     mon.entity.setText(Integer.toString(currentHealth));
                 }
+                ix++;
             }
-            if(successfulKill)
-            {
-                for (Threat t : enemyThreats) {
-                    if (t.position.x == targetCell.x && t.position.y == targetCell.y) {
-                        t.maxThreatDistance = 0;
-                        t.minThreatDistance = 0;
-                    }
-                }
+            if (successfulKill >= 0) {
+                Coord deadPos = enemyThreats.remove(successfulKill).position;
+                AnimatedEntity deadAE = whichEnemyTeam.get(successfulKill).entity;
+                display.removeAnimatedEntity(deadAE);
+                whichFoes.remove(deadPos);
             }
+
         }
         /*
         else
@@ -479,6 +491,8 @@ public class CoveredPathDemo extends ApplicationAdapter {
                         blueTurn = !blueTurn;
                         if(!blueTurn)
                         {
+                            if(whichIdx + 1 >= numMonsters)
+                                late = true;
                             whichIdx = (whichIdx + 1) % numMonsters;
                         }
                         startMove(whichIdx);
