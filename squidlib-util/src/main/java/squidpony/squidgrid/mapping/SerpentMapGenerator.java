@@ -22,7 +22,6 @@ public class SerpentMapGenerator {
     private MixedGenerator mix;
     private int[] columns, rows;
     private RNG random;
-
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
      * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
@@ -35,6 +34,22 @@ public class SerpentMapGenerator {
      * @see MixedGenerator
      */
     public SerpentMapGenerator(int width, int height, RNG rng)
+    {
+        this(width, height, rng, false);
+    }
+    /**
+     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
+     * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
+     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
+     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
+     * @param width the width of the final map in cells
+     * @param height the height of the final map in cells
+     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param symmetrical true if this should generate a bi-radially symmetric map, false for a typical map
+     * @see MixedGenerator
+     */
+    public SerpentMapGenerator(int width, int height, RNG rng, boolean symmetrical)
     {
         if(width <= 2 || height <= 2)
             throw new ExceptionInInitializerError("width and height must be greater than 2");
@@ -72,12 +87,18 @@ public class SerpentMapGenerator {
 
         List<Coord> points = new ArrayList<Coord>(80);
         Coord temp;
-        for (int i = 0, m = random.nextInt(256), r; i < 256; r = random.between(4, 12), i += r, m += r) {
+        for (int i = 0, m = random.nextInt(64), r; i < 256; r = random.between(4, 12), i += r, m += r) {
             temp = CoordPacker.mooreToCoord(m);
             points.add(Coord.get(columns[temp.x], rows[temp.y]));
         }
         points.add(points.get(0));
-        mix = new MixedGenerator(width, height, random, points);
+        if(symmetrical) {
+            mix = new SymmetryDungeonGenerator(width, height, random,
+                    SymmetryDungeonGenerator.removeSomeOverlap(width, height, points));
+        }
+        else
+            mix = new MixedGenerator(width, height, random, points);
+
     }
 
     /**
@@ -89,9 +110,27 @@ public class SerpentMapGenerator {
      * @param width the width of the final map in cells
      * @param height the height of the final map in cells
      * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param branchingChance the chance from 0.0 to 1.0 that each room will branch at least once
      * @see MixedGenerator
      */
     public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance)
+    {
+        this(width, height, rng, branchingChance, false);
+    }
+    /**
+     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
+     * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
+     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
+     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
+     * @param width the width of the final map in cells
+     * @param height the height of the final map in cells
+     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param branchingChance the chance from 0.0 to 1.0 that each room will branch at least once
+     * @param symmetrical true if this should generate a bi-radially symmetric map, false for a typical map
+     * @see MixedGenerator
+     */
+    public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance, boolean symmetrical)
     {
         if(width <= 2 || height <= 2)
             throw new ExceptionInInitializerError("width and height must be greater than 2");
@@ -129,7 +168,7 @@ public class SerpentMapGenerator {
 
         LinkedHashMap<Coord, List<Coord>> connections = new LinkedHashMap<Coord, List<Coord>>(80);
         Coord temp, t;
-        int m = random.nextInt(256), r = random.between(4, 12);
+        int m = random.nextInt(64), r = random.between(4, 12);
         temp = CoordPacker.mooreToCoord(m);
         Coord starter = CoordPacker.mooreToCoord(m);
         m += r;
@@ -148,7 +187,13 @@ public class SerpentMapGenerator {
         }
         connections.get(Coord.get(columns[temp.x], rows[temp.y])).add(
                 Coord.get(columns[starter.x], rows[starter.y]));
-        mix = new MixedGenerator(width, height, random, connections);
+        if(symmetrical) {
+            mix = new SymmetryDungeonGenerator(width, height, random,
+                    SymmetryDungeonGenerator.removeSomeOverlap(width, height, connections));
+        }
+        else
+            mix = new MixedGenerator(width, height, random, connections);
+
     }
 
     /**

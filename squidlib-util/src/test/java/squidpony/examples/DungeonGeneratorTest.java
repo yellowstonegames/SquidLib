@@ -113,6 +113,28 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
 
+
+        dungeonGenerator = new DungeonGenerator(width, height, rng);
+        //dungeonGenerator.addDoors(15, false);
+        //dungeonGenerator.addWater(20);
+        //dungeonGenerator.addGrass(10);
+        rng.setState(0xf00dd00dL);
+        serpent = new SerpentMapGenerator(width, height, rng, 0.2, true);
+        serpent.putWalledBoxRoomCarvers(2);
+        serpent.putWalledRoundRoomCarvers(2);
+        serpent.putCaveCarvers(3);
+        map = serpent.generate();
+        dungeonGenerator.generate(map);
+
+        sdungeon = dungeonGenerator.getDungeon();
+        sdungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        sdungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdungeon)));
+        System.out.println(dungeonGenerator);
+
+
 /*
         rng.setState(0xf00dd00dL);
         SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, rng, 0.2);

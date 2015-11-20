@@ -23,14 +23,14 @@ public class MixedGenerator {
         BOX_WALLED,
         ROUND_WALLED
     }
-    private EnumMap<CarverType, Integer> carvers;
-    private int width, height;
-    private float roomWidth, roomHeight;
+    protected EnumMap<CarverType, Integer> carvers;
+    protected int width, height;
+    protected float roomWidth, roomHeight;
     public RNG rng;
-    private char[][] dungeon;
-    private boolean[][] marked, walled;
-    private List<Long> points;
-    private int totalPoints;
+    protected char[][] dungeon;
+    protected boolean[][] marked, walled;
+    protected List<Long> points;
+    protected int totalPoints;
 
     /**
      * Internal use.
@@ -40,7 +40,7 @@ public class MixedGenerator {
      * @return evenly spaced Coord points in a list made by PoissonDisk, trimmed down so they aren't all used
      * @see PoissonDisk used to make the list
      */
-    private static List<Coord> basicPoints(int width, int height, RNG rng)
+    protected static List<Coord> basicPoints(int width, int height, RNG rng)
     {
         return PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),
                 8.5f * (width + height) / 120f, width, height, 35, rng);
@@ -125,6 +125,7 @@ public class MixedGenerator {
      * @param height the height of the final map in cells
      * @param rng an RNG object to use for random choices; this make a lot of random choices.
      * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways
+     * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
      * @see SerpentMapGenerator a class that uses this technique
      */
     public MixedGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections,
@@ -385,7 +386,11 @@ public class MixedGenerator {
 
         return dungeon;
     }
-    private void store()
+
+    /**
+     * Internal use. Takes cells that have been previously marked and permanently stores them as floors in the dungeon.
+     */
+    protected void store()
     {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -404,7 +409,7 @@ public class MixedGenerator {
      * @param y y position to mark
      * @return false if everything is normal, true if and only if this failed to mark because the position is walled
      */
-    private boolean mark(int x, int y) {
+    protected boolean mark(int x, int y) {
         if (x > 0 && x < width - 1 && y > 0 && y < height - 1 && !walled[x][y]) {
             marked[x][y] = true;
             return false;
@@ -417,9 +422,19 @@ public class MixedGenerator {
      * @param x x position to mark
      * @param y y position to mark
      */
-    private void markPiercing(int x, int y) {
+    protected void markPiercing(int x, int y) {
         if (x > 0 && x < width - 1 && y > 0 && y < height - 1) {
             marked[x][y] = true;
+        }
+    }
+    /**
+     * Internal use. Marks a point to be made into floor.
+     * @param x x position to mark
+     * @param y y position to mark
+     */
+    protected void wallOff(int x, int y) {
+        if (x > 0 && x < width - 1 && y > 0 && y < height - 1) {
+            walled[x][y] = true;
         }
     }
 
@@ -427,7 +442,7 @@ public class MixedGenerator {
      * Internal use. Marks a point to be made into floor.
      * @param pos position to mark
      */
-    private boolean mark(Coord pos)
+    protected boolean mark(Coord pos)
     {
         return mark(pos.x, pos.y);
     }
@@ -436,7 +451,7 @@ public class MixedGenerator {
      * Internal use. Marks a point to be made into floor.
      * @param pos position to mark
      */
-    private void markPiercing(Coord pos)
+    protected void markPiercing(Coord pos)
     {
         markPiercing(pos.x, pos.y);
     }
@@ -500,7 +515,7 @@ public class MixedGenerator {
         for (int i = Math.max(0, pos.x - halfWidth - 1); i <= Math.min(width - 1, pos.x + halfWidth + 1); i++) {
             for (int j = Math.max(0, pos.y - halfHeight - 1); j <= Math.min(height - 1, pos.y + halfHeight + 1); j++)
             {
-                walled[i][j] = true;
+                wallOff(i, j);
             }
         }
         return block;
@@ -558,15 +573,15 @@ public class MixedGenerator {
             {
                 int dy2 = Math.max(1, Math.min(pos.y + dy, height - 2));
 
-                walled[dx2][dy2] = true;
-                walled[dx2+1][dy2] = true;
-                walled[dx2-1][dy2] = true;
-                walled[dx2][dy2+1] = true;
-                walled[dx2+1][dy2+1] = true;
-                walled[dx2-1][dy2+1] = true;
-                walled[dx2][dy2-1] = true;
-                walled[dx2+1][dy2-1] = true;
-                walled[dx2-1][dy2-1] = true;
+                wallOff(dx2, dy2-1);
+                wallOff(dx2+1, dy2-1);
+                wallOff(dx2-1, dy2-1);
+                wallOff(dx2, dy2);
+                wallOff(dx2+1, dy2);
+                wallOff(dx2-1, dy2);
+                wallOff(dx2, dy2+1);
+                wallOff(dx2+1, dy2+1);
+                wallOff(dx2-1, dy2+1);
 
             }
         }
