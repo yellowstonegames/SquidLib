@@ -52,7 +52,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
     private int[][] colors, bgColors, lights;
     private int width, height;
     private int cellWidth, cellHeight;
-    private int numMonsters = 16;
+    private int numMonsters = 10;
     private Radius radiusKind = Radius.DIAMOND;
 
     private SquidInput input;
@@ -62,7 +62,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
     private List<Threat> redThreats, blueThreats;
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
-    private int framesWithoutAnimation = 0, moveLength = 7;
+    private int framesWithoutAnimation = 0, moveLength = 6;
     private ArrayList<Coord> awaitedMoves;
     private int scheduledMoves = 0, whichIdx = 0;
     private boolean blueTurn = false;
@@ -124,7 +124,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
             teamBlue.add(new Creature(display.animateActor(monPosBlue.x, monPosBlue.y, "9", 25), 9,
                     new DijkstraMap(bareDungeon, DijkstraMap.Measurement.MANHATTAN, rng)));
             bluePlaces.add(monPosBlue);
-            blueThreats.add(new Threat(monPosBlue, 3, 6));
+            blueThreats.add(new Threat(monPosBlue, 3, 5));
         }
         res = DungeonUtility.generateResistances(bareDungeon);
 
@@ -185,7 +185,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
             whichAllies = bluePlaces;
             whichThreats = redThreats;
             myMin = 3;
-            myMax = 6;
+            myMax = 5;
 
             Creature entry = teamBlue.get(idx);
             ae = entry.entity;
@@ -220,7 +220,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
                 visibleTargets.add(p);
             }
         }*/
-        ArrayList<Coord> path = whichDijkstra.findCoveredAttackPath(moveLength, myMin, myMax, cache, whichFoes,
+        ArrayList<Coord> path = whichDijkstra.findCoveredAttackPath(moveLength, myMin, myMax, 1.0, cache, true, whichFoes,
                 whichAllies, whichThreats, user, whichFoes.toArray(new Coord[whichFoes.size()]));
         /*
         System.out.println("User at (" + user.x + "," + user.y + ") using " +
@@ -295,7 +295,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
             myThreats = convertThreats(blueThreats);
             enemyThreats = convertThreats(redThreats);
             myMin = 3;
-            myMax = 6;
+            myMax = 5;
             Creature entry = teamBlue.get(idx);
             ae = entry.entity;
             health = entry.health;
