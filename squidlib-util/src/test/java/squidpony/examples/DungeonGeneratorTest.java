@@ -119,7 +119,7 @@ public class DungeonGeneratorTest {
         //dungeonGenerator.addWater(20);
         //dungeonGenerator.addGrass(10);
         rng.setState(0xf00dd00dL);
-        serpent = new SerpentMapGenerator(width, height, rng, 0.2, true);
+        serpent = new SerpentMapGenerator(width, height, rng, 0.4, true);
         serpent.putWalledBoxRoomCarvers(2);
         serpent.putWalledRoundRoomCarvers(2);
         serpent.putCaveCarvers(3);

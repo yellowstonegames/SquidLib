@@ -4,10 +4,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.PoissonDisk;
 import squidpony.squidmath.RNG;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A variant on {@link MixedGenerator} that creates bi-radially symmetric maps (basically a yin-yang shape). Useful for
@@ -27,17 +24,27 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
         }
         return listToMap(s2);
     }
-    public static LinkedHashMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, LinkedHashMap<Coord, List<Coord>> connections)
-    {
+    public static LinkedHashMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, LinkedHashMap<Coord, List<Coord>> connections) {
         LinkedHashMap<Coord, List<Coord>> lhm2 = new LinkedHashMap<Coord, List<Coord>>(connections.size());
-        for(Coord c : connections.keySet()) {
+        Set<Coord> keyset = connections.keySet(), newkeys = new LinkedHashSet<>(connections.size());
+        for (Coord c : keyset) {
+            if (c.x * 1.0 / width + c.y * 1.0 / height <= 1.0) {
+                newkeys.add(c);
+            }
+        }
+        Coord[] keys = newkeys.toArray(new Coord[newkeys.size()]);
+        for (int i = 0; i < keys.length; i++) {
+            Coord c = keys[i];
             if (c.x * 1.0 / width + c.y * 1.0 / height <= 1.0) {
                 List<Coord> cs = new ArrayList<Coord>(4);
-                for (Coord c2 : connections.get(c))
-                {
+                for (Coord c2 : connections.get(c)) {
                     if (c2.x * 1.0 / width + c2.y * 1.0 / height <= 1.0) {
                         cs.add(c2);
+                    } else if (keys[(i + 1) % keys.length].x * 1.0 / width +
+                            keys[(i + 1) % keys.length].y * 1.0 / height <= 1.0) {
+                        cs.add(keys[(i + 1) % keys.length]);
                     }
+
                 }
                 lhm2.put(c, cs);
             }
