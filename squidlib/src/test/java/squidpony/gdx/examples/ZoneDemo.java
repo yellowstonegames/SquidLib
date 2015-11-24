@@ -59,15 +59,16 @@ public class ZoneDemo extends ApplicationAdapter {
         display.addExtraLayer();
         stage = new Stage(new ScreenViewport(), batch);
 
-        lrng = new LightRNG(0xBADBEEF);
+        lrng = new LightRNG(0x7ECCBABBL);
         rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
 //        dungeonGen.addWater(10);
         //dungeonGen.addDoors(15, true);
-        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
-        serpent.putBoxRoomCarvers(4);
-        serpent.putRoundRoomCarvers(2);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.4);
+        serpent.putBoxRoomCarvers(2);
+        serpent.putWalledBoxRoomCarvers(2);
+        serpent.putWalledRoundRoomCarvers(2);
         serpent.putCaveCarvers(4);
         bareDungeon = dungeonGen.generate(serpent.generate());
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
@@ -81,12 +82,12 @@ public class ZoneDemo extends ApplicationAdapter {
         influenceColors = new Color[centers.length];
         centerEntities = new AnimatedEntity[centers.length];
         for (int i = 0; i < centers.length; i++) {
-            float hue = i * 1.0f / centers.length, sat = rng.nextFloat() * 0.5f + 0.5f,
-                    val = rng.nextFloat() * 0.3f + 0.7f;
+            float hue = i * 1.0f / centers.length, sat = rng.nextFloat() * 0.3f + 0.7f,
+                    val = rng.nextFloat() * 0.4f + 0.6f;
             influenceColors[i] = colorCenter.getHSV(hue, sat, val);
 
             centerEntities[i] = display.animateActor(centers[i].x, centers[i].y, '@',
-                    colorCenter.getHSV(hue, sat - 0.2f, val - 0.4f), true);
+                    colorCenter.getHSV(hue, sat - 0.3f, val - 0.4f), true);
         }
         zoi = new ZOI(centers, bareDungeon, Radius.DIAMOND);
         packedInfluences = zoi.calculate();
