@@ -1938,6 +1938,7 @@ public class DijkstraMap {
         }
         scan(impassable2);
         goals.clear();
+        LinkedHashMap<Coord, Double> cachedGoals = new LinkedHashMap<Coord, Double>();
 
         for (int x = 0; x < width; x++) {
             CELL:
@@ -1951,8 +1952,8 @@ public class DijkstraMap {
                         results = fov.calculateFOV(resMap, x, y, maxPreferredRange, findRadius(mess));
                     for (Coord goal : targets) {
                         if (seekDistantGoals || results[goal.x][goal.y] > 0.0) {
-                            setGoal(x, y);
-                            gradientMap[x][y] = 0;
+                            gradientMap[x][y] = 0.001 * (maxPreferredRange - gradientMap[x][y]);
+                            cachedGoals.put(Coord.get(x, y), gradientMap[x][y]);
                             continue CELL;
                         }
                     }
@@ -1962,7 +1963,6 @@ public class DijkstraMap {
             }
         }
         measurement = mess;
-        LinkedHashMap<Coord, Double> cachedGoals = new LinkedHashMap<Coord, Double>(goals);
         double[][] storedScan = scan(impassable2);
         if(storedScan[start.x][start.y] > moveLength) {
             clearGoals();
