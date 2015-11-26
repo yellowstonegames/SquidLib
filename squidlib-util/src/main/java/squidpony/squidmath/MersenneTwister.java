@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class MersenneTwister implements RandomnessSource {
 
-    // The actual seed size isn't that important, but it should be a multiple of 4.
+	// The actual seed size isn't that important, but it should be a multiple of 4.
     private static final int SEED_SIZE_BYTES = 8;
     // Magic numbers from original C version.
     private static final int N = 624;
@@ -38,6 +38,8 @@ public class MersenneTwister implements RandomnessSource {
     private final int[] mt = new int[N]; // State vector.
     private int mtIndex = 0; // Index into state vector.    
     private static final int BITWISE_BYTE_TO_INT = 0x000000FF;
+
+	private static final long serialVersionUID = 217351968847857679L;
 
     /**
      * Creates a new RNG and seeds it using the default seeding strategy.

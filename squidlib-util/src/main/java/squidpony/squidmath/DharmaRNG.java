@@ -34,7 +34,7 @@ import java.util.Random;
  */
 public class DharmaRNG extends RNG {
 
-    /** Used to tweak the generator toward high or low values. */
+	/** Used to tweak the generator toward high or low values. */
     private double fairness = 0.54;
 
     /** Running total for what this has actually produced. */
@@ -42,6 +42,8 @@ public class DharmaRNG extends RNG {
 
     /** Running total for what this would produce if it always produced a value equal to fairness. */
     private double baseline = 0.0;
+
+	private static final long serialVersionUID = -8919455766853811999L;
 
     /**
      * Constructs a DharmaRNG with a pseudo-random seed from Math.random().
