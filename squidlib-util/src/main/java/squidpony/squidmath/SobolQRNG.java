@@ -53,7 +53,7 @@ import java.util.StringTokenizer;
  */
 public class SobolQRNG implements RandomnessSource {
 
-    /** The number of bits to use. */
+	/** The number of bits to use. */
     private static final int BITS = 52;
 
     /** The scaling factor. */
@@ -67,6 +67,8 @@ public class SobolQRNG implements RandomnessSource {
 
     /** Character set for file input. */
     private static final String FILE_CHARSET = "US-ASCII";
+
+	private static final long serialVersionUID = -6759002780425873173L;
 
     /** Space dimension. */
     private final int dimension;
