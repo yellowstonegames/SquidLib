@@ -9,7 +9,10 @@ import java.util.Random;
  * Created by Tommy Ettinger on 9/15/2015.
  */
 public class StatefulRNG extends RNG {
-    public StatefulRNG() {
+
+	private static final long serialVersionUID = 4801506898212937160L;
+
+	public StatefulRNG() {
         super(new LightRNG());
     }
 

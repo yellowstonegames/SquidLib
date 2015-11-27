@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -11,13 +12,15 @@ import java.util.*;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class RNG {
+public class RNG implements Serializable {
 
-    protected static final double DOUBLE_UNIT = 1.0 / (1L << 53);
+	protected static final double DOUBLE_UNIT = 1.0 / (1L << 53);
     protected RandomnessSource random;
     protected double nextNextGaussian;
     protected boolean haveNextNextGaussian = false;
     private Random ran = null;
+
+	private static final long serialVersionUID = 5716284182286645149L;
 
     /**
      * Default constructor uses Mersenne Twister, which is of high quality and

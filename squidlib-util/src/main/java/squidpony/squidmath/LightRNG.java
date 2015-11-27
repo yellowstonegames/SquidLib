@@ -18,7 +18,7 @@ package squidpony.squidmath;
  */
 public class LightRNG implements RandomnessSource, StatefulRandomness
 {
-    /** 2 raised to the 53, - 1. */
+	/** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
     /** 2 raised to the -53. */
     private static final double NORM_53 = 1. / ( 1L << 53 );
@@ -26,6 +26,8 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
     private static final long FLOAT_MASK = ( 1L << 24 ) - 1;
     /** 2 raised to the -24. */
     private static final double NORM_24 = 1. / ( 1L << 24 );
+
+	private static final long serialVersionUID = -1656615589113474497L;
 
     public long state; /* The state can be seeded with any value. */
 

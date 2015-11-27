@@ -1,5 +1,7 @@
 package squidpony.squidmath;
 
+import java.io.Serializable;
+
 /**
  * This interface defines the interactions required of a random number
  * generator. It is a replacement for Java's built-in Random because for
@@ -7,7 +9,7 @@ package squidpony.squidmath;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public interface RandomnessSource {
+public interface RandomnessSource extends Serializable {
 
     /**
      * Using this method, any algorithm that might use the built-in Java Random

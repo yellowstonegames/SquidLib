@@ -21,7 +21,7 @@ package squidpony.squidmath;
  */
 public class PermutedRNG implements RandomnessSource, StatefulRandomness
 {
-    /** 2 raised to the 53, - 1. */
+	/** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
     /** 2 raised to the -53. */
     private static final double NORM_53 = 1. / ( 1L << 53 );
@@ -33,6 +33,8 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      * The state can be seeded with any value.
      */
     public long state;
+
+	private static final long serialVersionUID = -2319339396218218531L;
 
     /** Creates a new generator seeded using Math.random. */
     public PermutedRNG() {
