@@ -6,95 +6,49 @@ import java.util.Queue;
 import java.util.Random;
 
 /**
- * An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.
- * <p>
- * This takes a RandomnessSource, defaulting to a LightRNG, and uses it to generate random values, but tracks the total
- * and compares it to the potential total of a generator of only numbers with a desired value (default 0.54,
- * so it compares against a sequence of all 0.54). If the current generated total is too high or low compared to the
- * desired total, the currently used seed is possibly changed, the generated number is moved in the direction of the
- * desired fairness, and it returns that instead of the number that would have pushed the current generated total
- * beyond the desired threshold. The new number, if one is changed, will always be closer to the desired fairness.
- * This is absolutely insecure for cryptographic purposes, but should seem more "fair" to a player than a
- * random number generator that seeks to be truly random.
- * You can create multiple DharmaRNG objects with different fairness values and seeds, and use favorable generators
- * (with fairness greater than 0.54) for characters that need an easier time, or unfavorable generators if you want
- * the characters that use that RNG to be impeded somewhat.
- * The name comes from the Wheel of Dharma.
- * This class currently will have a slight bias toward lower numbers with many RNGs unless fairness is tweaked; 0.54
- * can be used as a stand-in because 0.5 leans too low.
- *
+ * An RNG variant that has 16 possible grades of value it can produce and shuffles them like a deck of cards.
+ * It repeats grades of value, but not exact values, every 16 numbers requested from it. Grades go in increments of
+ * 0.0625 from 0.0 to 0.9375, and are added to a random double less than 0.0625 to get the random number for that
+ * grade.
  * <p>
  * You can get values from this generator with: {@link #nextDouble()}, {@link #nextInt()},
  *   {@link #nextLong()}, and the bounded variants on each of those.
- * <p>
- * You can alter the tracking information or requested fairness with {@link #resetFortune()},
- *   {@link #setFairness(double)}, and {@link #getFairness()}.
  *
  * Created by Tommy Ettinger on 5/2/2015.
  */
-public class DharmaRNG extends RNG {
-
-	/** Used to tweak the generator toward high or low values. */
-    private double fairness = 0.54;
-
-    /** Running total for what this has actually produced. */
-    private double produced = 0.0;
-
-    /** Running total for what this would produce if it always produced a value equal to fairness. */
-    private double baseline = 0.0;
-
-	private static final long serialVersionUID = -8919455766853811999L;
+public class DeckRNG extends StatefulRNG {
+	private static final long serialVersionUID = 7828346657944720807L;
+    private int step;
+    private long lastShuffledState;
+    private double[] deck = new double[]{0.0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375,
+                                             0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375};
 
     /**
-     * Constructs a DharmaRNG with a pseudo-random seed from Math.random().
+     * Constructs a DeckRNG with a pseudo-random seed from Math.random().
      */
-    public DharmaRNG()
+    public DeckRNG()
     {
         this((long)(Math.random() * ((1L << 50) - 1)));
     }
     /**
-     * Construct a new DharmaRNG with the given seed.
+     * Construct a new DeckRNG with the given seed.
      *
      * @param seed used to seed the default RandomnessSource.
      */
-    public DharmaRNG(final long seed) {
-        super(new LightRNG(seed));
+    public DeckRNG(final long seed) {
+        lastShuffledState = seed;
+        random = new LightRNG(seed);
+        step = 0;
     }
 
     /**
-     * Construct a new DharmaRNG with the given seed.
-     *
-     * @param seed used to seed the default RandomnessSource.
-     * @param fairness the desired fairness metric, which must be between 0.0 and 1.0
+     * Seeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields
+     * that would affect future pseudo-random number generation.
+     * @param random will be used to generate a new seed, but will not be assigned as this object's RandomnessSource
      */
-    public DharmaRNG(final long seed, final double fairness) {
-        super(new LightRNG(seed));
-        if(fairness < 0.0 || fairness >= 1.0)
-            this.fairness = 0.54;
-        else
-            this.fairness = fairness;
-    }
+    public DeckRNG(RandomnessSource random) {
+        this(((long)random.next(32) << 32) | random.next(32));
 
-    /**
-     * Construct a new DharmaRNG with the given seed.
-     *
-     * @param rs the implementation used to generate random bits.
-     */
-    public DharmaRNG(final RandomnessSource rs) {
-        super(rs);
-    }
-    /**
-     * Construct a new DharmaRNG with the given seed.
-     *
-     * @param rs the implementation used to generate random bits.
-     * @param fairness the desired fairness metric, which must be between 0.0 and 1.0
-     */
-    public DharmaRNG(final RandomnessSource rs, final double fairness) {
-        super(rs);
-        if(fairness < 0.0 || fairness >= 1.0)
-            this.fairness = 0.54;
-        else
-            this.fairness = fairness;
     }
 
     /**
@@ -104,25 +58,11 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public double nextDouble() {
-        double gen = (((long) (super.next(26)) << 27) + super.next(27)) * DOUBLE_UNIT;
-        /*if(Math.abs((produced + gen) - (baseline + fairness)) > 1.5) {
-            //do some reseeding here if possible
-        }*/
-        if(Math.abs((produced + gen) - (baseline + fairness)) > 0.5)
-        {
-            gen = (gen + fairness) / 2.0;
-            produced *= 0.5;
-            baseline *= 0.5;
-            produced += gen;
-            baseline += fairness;
-            return gen;
-        }
-        else
-        {
-            produced += gen;
-            baseline += fairness;
-            return gen;
-        }
+        if(step == 0)
+            shuffleInPlace(deck);
+        double gen = deck[step++];
+        step %= 16;
+        return gen;
     }
 
     /**
@@ -275,7 +215,7 @@ public class DharmaRNG extends RNG {
     }
 
     /**
-     * Returns a random integer, which may be positive or negative. Affects the current fortune.
+     * Returns a random integer, which may be positive or negative.
      * @return A random int
      */
     @Override
@@ -284,12 +224,13 @@ public class DharmaRNG extends RNG {
     }
 
     /**
-     * Returns a random long, which may be positive or negative. Affects the current fortune.
+     * Returns a random long, which may be positive or negative.
      * @return A random long
      */
     @Override
     public long nextLong() {
-        return (long)((nextDouble() - 0.5) * 2.0 * 0x7FFFFFFFFFFFFFFFL);
+        double nx = nextDouble();
+        return (long)((nx * 2.0 - 1.0) * 0x7FFFFFFFFFFFFFFFL) ^ (long)(nx * 0xFFFFFL) ^ (long)(nx * 0xFFFFF00000L);
     }
 
     /**
@@ -304,44 +245,8 @@ public class DharmaRNG extends RNG {
         if (bound <= 0) {
             return 0;
         }
-        return (long)(nextDouble() * bound);
-    }
-    /**
-     * Gets the measure that this class uses for RNG fairness, defaulting to 0.54 (always between 0.0 and 1.0).
-     * @return the current fairness metric.
-     */
-    public double getFairness() {
-        return fairness;
-    }
-
-    /**
-     * Sets the measure that this class uses for RNG fairness, which must always be between 0.0 and 1.0, and will be
-     * set to 0.54 if an invalid value is passed.
-     * @param fairness the desired fairness metric, which must be 0.0 &lt;= fairness &lt; 1.0
-     */
-    public void setFairness(double fairness) {
-        if(fairness < 0.0 || fairness >= 1.0)
-            this.fairness = 0.54;
-        else
-            this.fairness = fairness;
-    }
-
-    /**
-     * Gets the status of the fortune used when calculating fairness adjustments.
-     * @return the current value used to determine whether the results should be adjusted toward fairness.
-     */
-    public double getFortune()
-    {
-        return Math.abs(produced - baseline);
-    }
-
-    /**
-     * Resets the stored history this RNG uses to try to ensure fairness.
-     */
-    public void resetFortune()
-    {
-        produced = 0.0;
-        baseline = 0.0;
+        double nx = nextDouble();
+        return (long)((nx * bound)) ^ (long)((nx * 0xFFFFFL) % bound) ^ (long)((nx * 0xFFFFF00000L) % bound);
     }
     /**
      *
@@ -360,7 +265,11 @@ public class DharmaRNG extends RNG {
 
     @Override
     public Random asRandom() {
-        return super.asRandom();
+        if(ran == null)
+        {
+            ran = new CustomRandom(new LightRNG(getState()));
+        }
+        return ran;
     }
 
     @Override
@@ -398,9 +307,15 @@ public class DharmaRNG extends RNG {
         return random;
     }
 
+    /**
+     * Reseeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields
+     * that would affect future pseudo-random number generation.
+     * @param random will be used to generate a new seed, but will not be assigned as this object's RandomnessSource
+     */
     @Override
     public void setRandomness(RandomnessSource random) {
-        this.random = random;
+        setState(((long)random.next(32) << 32) | random.next(32));
+
     }
 
     /**
@@ -441,5 +356,58 @@ public class DharmaRNG extends RNG {
     @Override
     public int[] randomRange(int start, int end, int count) {
         return super.randomRange(start, end, count);
+    }
+
+    /**
+     * Shuffle an array using the Fisher-Yates algorithm.
+     * @param array an array of double; WILL be modified
+     */
+    private void shuffleInPlace(double[] array)
+    {
+        lastShuffledState = ((LightRNG)random).getState();
+        int n = array.length;
+        for (int i = 0; i < n; i++)
+        {
+            int r = i + ((LightRNG)random).nextInt(n - i);
+            double t = array[r];
+            array[r] = array[i];
+            array[i] =((LightRNG)random).nextDouble(0.0625) + t;
+        }
+    }
+
+    /**
+     * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.
+     *
+     * @return a long that can be used as state.
+     */
+    @Override
+    public long getState() {
+        return lastShuffledState;
+    }
+
+    /**
+     * Sets the state of the random number generator to a given long, which will alter future random numbers this
+     * produces based on the state. Setting the state always causes the "deck" of random grades to be shuffled.
+     *
+     * @param state any long (this can tolerate states of 0)
+     */
+    @Override
+    public void setState(long state) {
+        random = new LightRNG(state);
+        step = 0;
+
+    }
+
+    @Override
+    public String toString() {
+        return "DeckRNG{state:" + Long.toHexString(lastShuffledState) +", step:" + step + "}";
+    }
+
+    public int getStep() {
+        return step;
+    }
+
+    public void setStep(int step) {
+        this.step = step;
     }
 }
