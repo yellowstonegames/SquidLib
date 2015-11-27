@@ -18,7 +18,7 @@ public class RNG implements Serializable {
     protected RandomnessSource random;
     protected double nextNextGaussian;
     protected boolean haveNextNextGaussian = false;
-    private Random ran = null;
+    protected Random ran = null;
 
 	private static final long serialVersionUID = 5716284182286645149L;
 
