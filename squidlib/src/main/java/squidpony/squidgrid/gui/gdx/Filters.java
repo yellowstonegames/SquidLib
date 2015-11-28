@@ -12,7 +12,7 @@ public interface Filters {
     /**
      * A Filter that does nothing to the colors it is given but pass them along unchanged.
      */
-    public class IdentityFilter extends Filter<Color>
+    class IdentityFilter extends Filter<Color>
     {
         public IdentityFilter()
         {
@@ -26,10 +26,27 @@ public interface Filters {
     }
 
     /**
+     * A Filter that converts all colors passed to it to grayscale, like a black and white film.
+     */
+    class GrayscaleFilter extends Filter<Color>
+    {
+        public GrayscaleFilter()
+        {
+            state = new float[0];
+        }
+
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            float v = (r + g + b) / 3f;
+            return new Color(v, v, v, a);
+        }
+    }
+
+    /**
      * A Filter that tracks the highest brightness for any component it was assigned and stores it in state as the first
      * and only element.
      */
-    public class MaxValueFilter extends Filter<Color>
+    class MaxValueFilter extends Filter<Color>
     {
         public MaxValueFilter()
         {
@@ -47,7 +64,7 @@ public interface Filters {
     /**
      * A Filter that performs a brightness adjustment to make dark areas lighter and light areas not much less bright.
      */
-    public class GammaCorrectFilter extends Filter<Color> {
+    class GammaCorrectFilter extends Filter<Color> {
         /**
          * Sets up a GammaCorrectFilter with the desired gamma adjustment.
          *
@@ -70,7 +87,7 @@ public interface Filters {
      * A Filter that is constructed with a color and linear-interpolates any color it is told to alter toward the color
      * it was constructed with.
      */
-    public class LerpFilter extends Filter<Color> {
+    class LerpFilter extends Filter<Color> {
         /**
          * Sets up a LerpFilter with the desired color to linearly interpolate towards.
          *
@@ -102,7 +119,7 @@ public interface Filters {
      * A Filter that is constructed with a group of colors and linear-interpolates any color it is told to alter toward
      * the color it was constructed with that has the closest hue.
      */
-    public class MultiLerpFilter extends Filter<Color> {
+    class MultiLerpFilter extends Filter<Color> {
         private SquidColorCenter globalSCC;
         /**
          * Sets up a MultiLerpFilter with the desired colors to linearly interpolate towards; the lengths of each given
@@ -162,6 +179,113 @@ public interface Filters {
             }
             return new Color(r, g, b, a).lerp(state[choice * 6], state[choice * 6 + 1], state[choice * 6 + 2],
                     state[choice * 6 + 3], state[choice * 6 + 4]);
+        }
+    }
+
+    /**
+     * A Filter that is constructed with a color and makes any color it is told to alter have the same hue as the given
+     * color, have saturation that is somewhere between the given color's and the altered colors, and chiefly is
+     * distinguishable from other colors by value. Useful for sepia effects, which can be created satisfactorily with
+     * {@code new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f)}.
+     */
+    class ColorizeFilter extends Filter<Color> {
+        private SquidColorCenter globalSCC;
+        /**
+         * Sets up a ColorizeFilter with the desired color to colorize towards.
+         *
+         * @param r the red component to colorize towards
+         * @param g the green component to colorize towards
+         * @param b the blue component to colorize towards
+         */
+        public ColorizeFilter(float r, float g, float b) {
+            globalSCC = DefaultResources.getSCC();
+
+            state = new float[]{globalSCC.getHue(r, g, b), globalSCC.getSaturation(r, g, b), 1f, 0f};
+        }
+        /**
+         * Sets up a ColorizeFilter with the desired color to colorize towards.
+         *
+         * @param color the Color to colorize towards
+         */
+        public ColorizeFilter(Color color) {
+            globalSCC = DefaultResources.getSCC();
+            state = new float[]{globalSCC.getHue(color), globalSCC.getSaturation(color), 1f, 0f};
+        }
+        /**
+         * Sets up a ColorizeFilter with the desired color to colorize towards.
+         *
+         * @param r the red component to colorize towards
+         * @param g the green component to colorize towards
+         * @param b the blue component to colorize towards
+         * @param saturationMultiplier a multiplier to apply to the final color's saturation; may be greater than 1
+         * @param valueModifier a modifier that affects the final brightness value of any color this alters;
+         *                      typically very small, such as in the -0.2f to 0.2f range
+         */
+        public ColorizeFilter(float r, float g, float b, float saturationMultiplier, float valueModifier) {
+            globalSCC = DefaultResources.getSCC();
+
+            state = new float[]{
+                    globalSCC.getHue(r, g, b),
+                    globalSCC.getSaturation(r, g, b),
+                    saturationMultiplier,
+                    valueModifier};
+        }
+        /**
+         * Sets up a ColorizeFilter with the desired color to colorize towards.
+         *
+         * @param color the Color to colorize towards
+         * @param saturationMultiplier a multiplier to apply to the final color's saturation; may be greater than 1
+         * @param valueModifier a modifier that affects the final brightness value of any color this alters;
+         *                      typically very small, such as in the -0.2f to 0.2f range
+         */
+        public ColorizeFilter(Color color, float saturationMultiplier, float valueModifier) {
+            globalSCC = DefaultResources.getSCC();
+            state = new float[]{
+                    globalSCC.getHue(color),
+                    globalSCC.getSaturation(color),
+                    saturationMultiplier,
+                    valueModifier};
+        }
+
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            return globalSCC.getHSV(
+                    state[0],
+                    Math.max(0f, Math.min((globalSCC.getSaturation(r, g, b) + state[1]) * 0.5f * state[2], 1f)),
+                    globalSCC.getValue(r, g, b) * (1f - state[3]) + state[3],
+                    a);
+        }
+    }
+    /**
+     * A Filter that makes the colors requested from it highly saturated, with the original value and a timer that
+     * increments very slowly altering hue, and the original hue altering value. It should look like a hallucination.
+     *
+     * A short (poorly recorded) video can be seen here http://i.imgur.com/SEw2LXe.gifv ; performance should be smoother
+     * during actual gameplay.
+     */
+    class HallucinateFilter extends Filter<Color> {
+        private SquidColorCenter globalSCC;
+        /**
+         * Sets up a HallucinateFilter with the timer at 0..
+         */
+        public HallucinateFilter() {
+            globalSCC = DefaultResources.getSCC();
+
+            state = new float[]{0f};
+        }
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            state[0] += 0.00003f;
+            if(state[0] >= 1.0f)
+                state[0] = 0f;
+            float h = globalSCC.getHue(r, g, b),
+                    s = globalSCC.getSaturation(r, g, b),
+                    v = globalSCC.getValue(r, g, b);
+            return globalSCC.getHSV(
+                    (v * 4f + h + state[0]) % 1.0f,
+                    Math.max(0f, Math.min((h + v) * 0.65f + state[0] * 0.4f, 1f)),
+                    (h + v + s) * 0.35f + 0.7f,
+                    a);
         }
     }
 }

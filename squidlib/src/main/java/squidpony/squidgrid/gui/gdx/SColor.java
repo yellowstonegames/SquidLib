@@ -2337,7 +2337,7 @@ public class SColor extends Color {
      *<font style="background-color: #ff0000; color: #4C221B">&nbsp;@&nbsp;</font><font style="background-color: #ffff00;">&nbsp;@&nbsp;</font><font style="background-color: #00ff00;">&nbsp;@&nbsp;</font><font style="background-color: #0000ff;">&nbsp;@&nbsp;</font><font style="background-color: #964b00;">&nbsp;@&nbsp;</font>
      *<font style="background-color: #ff0000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #00ff00; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #0000ff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #964b00; color: #000000">&nbsp;&nbsp;&nbsp;</font></PRE>
      */
-    public static final SColor IBIS = new SColor(0x4C221B, "Iris");
+    public static final SColor IBIS = new SColor(0x4C221B, "Ibis");
     /**
      * Color constant<PRE>
      *<font style="background-color: #F58F84; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #000000; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #888888; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #ffffff; color: #000000">&nbsp;&nbsp;&nbsp;</font><font style="background-color: #F58F84; color: #000000">&nbsp;@&nbsp;</font>
