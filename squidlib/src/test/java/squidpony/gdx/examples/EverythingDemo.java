@@ -58,7 +58,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private double counter;
     private boolean[][] seen;
     private int health = 7;
-    private SquidColorCenter filteredCenter;
+    private SquidColorCenter fgCenter, bgCenter;
     private Color bgColor;
     private HashMap<AnimatedEntity, Integer> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
@@ -73,20 +73,38 @@ public class EverythingDemo extends ApplicationAdapter {
         // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
         // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
         /*
-        filteredCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
+        fgCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
                 new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
                 new float[]{0.6f, 0.5f}
         ));
+        bgCenter = fgCenter;
         */
+        /*
         // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
         // MultiLerpFilter here is given three colors to tint everything toward one of; this is meant to look bolder.
 
-        filteredCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
-                new Color[]{SColor.CRIMSON, SColor.MEDIUM_BLUE, SColor.LIME_GREEN},
+        fgCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
+                new Color[]{SColor.RED_PIGMENT, SColor.MEDIUM_BLUE, SColor.LIME_GREEN},
                 new float[]{0.25f, 0.3f, 0.3f}
         ));
+        bgCenter = fgCenter;
+        */
 
-        //filteredCenter = DefaultResources.getSCC();
+        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
+        // ColorizeFilter here is given a slightly-grayish dark brown to imitate a sepia tone.
+
+        fgCenter = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.7f, -0.05f));
+        bgCenter = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.65f, 0.07f));
+        /*
+        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
+        // HallucinateFilter is being tested here.
+
+        fgCenter = new SquidColorCenter(new Filters.HallucinateFilter());
+        bgCenter = fgCenter;
+        */
+
+        //fgCenter = DefaultResources.getSCC();
+        //bgCenter = fgCenter;
         batch = new SpriteBatch();
         width = 80;
         height = 30;
@@ -94,7 +112,7 @@ public class EverythingDemo extends ApplicationAdapter {
         cellHeight = 24;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge, DefaultResources.getSCC(), filteredCenter);
+        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge, bgCenter, fgCenter);
         display.setAnimationDuration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);
 
@@ -129,7 +147,7 @@ public class EverythingDemo extends ApplicationAdapter {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
             monsters.put(display.animateActor(monPos.x, monPos.y, 'M',
-                    filteredCenter.filter(display.getPalette().get(11))), 0);
+                    fgCenter.filter(display.getPalette().get(11))), 0);
 
         }
         // your choice of FOV matters here.
@@ -142,7 +160,7 @@ public class EverythingDemo extends ApplicationAdapter {
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
 
         player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10),
-                filteredCenter.filter(display.getPalette().get(30)));
+                fgCenter.filter(display.getPalette().get(30)));
         cursor = Coord.get(-1, -1);
         toCursor = new ArrayList<Coord>(10);
         awaitedMoves = new ArrayList<Coord>(10);
@@ -155,8 +173,8 @@ public class EverythingDemo extends ApplicationAdapter {
         bgColor = SColor.DARK_SLATE_GRAY;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                colors[i][j] = filteredCenter.filter(palette.get(initialColors[i][j]));
-                bgColors[i][j] = filteredCenter.filter(palette.get(initialBGColors[i][j]));
+                colors[i][j] = fgCenter.filter(palette.get(initialColors[i][j]));
+                bgColors[i][j] = bgCenter.filter(palette.get(initialBGColors[i][j]));
             }
         }
         lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
@@ -620,6 +638,8 @@ public class EverythingDemo extends ApplicationAdapter {
         }
         // batch must end if it began.
         batch.end();
+        //uncomment the next line if using a filter that changes each frame
+        //fgCenter.clearCache();
     }
 
     @Override

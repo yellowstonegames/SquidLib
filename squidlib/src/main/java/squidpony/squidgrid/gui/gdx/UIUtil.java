@@ -112,8 +112,7 @@ public class UIUtil {
 		/**
 		 * Here's an example of this style:
 		 * 
-		 * <br/>
-		 * <br/>
+		 * <br>
 		 * 
 		 * <img src="http://i.imgur.com/AQgWeic.png"/>.
 		 */
@@ -122,8 +121,7 @@ public class UIUtil {
 		 * A NES-like style (to my taste..). Try it, I can't explain it with
 		 * sentences. Here's an example:
 		 * 
-		 * <br/>
-		 * <br/>
+		 * <br>
 		 * 
 		 * <img src="http://i.imgur.com/PQSvT0t.png"/>
 		 */
