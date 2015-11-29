@@ -23,6 +23,6 @@ public interface IFilter<T> {
 	 *            The alpha component.
 	 * @return An alteration of {@code (r,g,b,a)}.
 	 */
-	public T alter(float r, float g, float b, float a);
+	T alter(float r, float g, float b, float a);
 
 }

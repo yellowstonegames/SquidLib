@@ -23,7 +23,9 @@ public class WeightedLetterNamegen {
     public static final String[] VIKING_STYLE_NAMES = new String[]{
         "Andor",
         "Baatar",
+        "Beowulf",
         "Drogo",
+        "Freya",
         "Grog",
         "Gruumsh",
         "Grunt",
@@ -33,6 +35,7 @@ public class WeightedLetterNamegen {
         "Korg",
         "Lothar",
         "Odin",
+        "Theodrin",
         "Thor",
         "Yngvar",
         "Xandor"
@@ -42,12 +45,14 @@ public class WeightedLetterNamegen {
     public static final String[] STAR_WARS_STYLE_NAMES = new String[]{
         "Lutoif Vap",
         "Nasoi Seert",
-        "Jitpai Sose",
-        "Vainau Jairkau",
+        "Jitpai",
+        "Sose",
+        "Vainau",
+        "Jairkau",
         "Tirka Kist",
         "Boush",
         "Wofe",
-        "Vouxoin Voges",
+        "Voxin Voges",
         "Koux Boiti",
         "Loim",
         "Gaungu",
@@ -65,7 +70,8 @@ public class WeightedLetterNamegen {
         "Tafa",
         "Zeesheerk",
         "Cremoim Kixoop",
-        "Tago"
+        "Tago",
+        "Kesha Diplo"
     };
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="USA male names static name list">
@@ -122,8 +128,62 @@ public class WeightedLetterNamegen {
         "Roger"
     };
 //</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="USA female names static name list">
+    public static final String[] COMMON_USA_FEMALE_NAMES = new String[]{
+        "Mary",
+        "Patricia",
+        "Linda",
+        "Barbara",
+        "Elizabeth",
+        "Jennifer",
+        "Maria",
+        "Susan",
+        "Margaret",
+        "Dorothy",
+        "Lisa",
+        "Nancy",
+        "Karen",
+        "Betty",
+        "Helen",
+        "Sandra",
+        "Donna",
+        "Carol",
+        "Ruth",
+        "Sharon",
+        "Michelle",
+        "Laura",
+        "Sarah",
+        "Kimberly",
+        "Deborah",
+        "Jessica",
+        "Shirley",
+        "Cynthia",
+        "Angela",
+        "Melissa",
+        "Brenda",
+        "Amy",
+        "Anna",
+        "Crystal",
+        "Virginia",
+        "Kathleen",
+        "Pamela",
+        "Martha",
+        "Becky",
+        "Amanda",
+        "Stephanie",
+        "Carolyn",
+        "Christine",
+        "Marie",
+        "Janet",
+        "Catherine",
+        "Frances",
+        "Ann",
+        "Joyce",
+        "Diane"
+    };
+//</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="USA last names static name list">
-public static final String[] COMMON_USA_LAST_NAMES = new String[]{
+    public static final String[] COMMON_USA_LAST_NAMES = new String[]{
         "Smith",
         "Johnson",
         "Williams",
@@ -146,6 +206,7 @@ public static final String[] COMMON_USA_LAST_NAMES = new String[]{
         "Walker"
 };
 //</editor-fold>
+
 //<editor-fold defaultstate="collapsed" desc="Lovecraft Mythos style static name list">
     public static final String[] LOVECRAFT_MYTHOS_NAMES = new String[]{
         "Koth",

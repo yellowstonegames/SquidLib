@@ -27,7 +27,7 @@ public class ProbabilityTable<T> {
      * Creates a new probability table.
      */
     public ProbabilityTable() {
-        this(new RNG());
+        this(new StatefulRNG());
     }
 
     /**
