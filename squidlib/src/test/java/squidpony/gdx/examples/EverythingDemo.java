@@ -93,8 +93,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
         // ColorizeFilter here is given a slightly-grayish dark brown to imitate a sepia tone.
 
-        fgCenter = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.7f, -0.05f));
-        bgCenter = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.65f, 0.07f));
+        //fgCenter = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.7f, -0.05f));
+        //bgCenter = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.65f, 0.07f));
         /*
         // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
         // HallucinateFilter is being tested here.
@@ -103,16 +103,16 @@ public class EverythingDemo extends ApplicationAdapter {
         bgCenter = fgCenter;
         */
 
-        //fgCenter = DefaultResources.getSCC();
-        //bgCenter = fgCenter;
+        fgCenter = DefaultResources.getSCC();
+        bgCenter = fgCenter;
         batch = new SpriteBatch();
         width = 80;
         height = 30;
-        cellWidth = 12;
-        cellHeight = 24;
+        cellWidth = 8;
+        cellHeight = 18;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge, bgCenter, fgCenter);
+        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothName, bgCenter, fgCenter);
         display.setAnimationDuration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);
 
@@ -146,7 +146,7 @@ public class EverythingDemo extends ApplicationAdapter {
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
-            monsters.put(display.animateActor(monPos.x, monPos.y, 'M',
+            monsters.put(display.animateActor(monPos.x, monPos.y, 'ξ',
                     fgCenter.filter(display.getPalette().get(11))), 0);
 
         }
