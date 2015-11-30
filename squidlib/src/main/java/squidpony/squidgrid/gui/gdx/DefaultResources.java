@@ -25,6 +25,7 @@ import squidpony.squidmath.StatefulRNG;
  */
 public class DefaultResources implements LifecycleListener {
     private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
+            smooth1 = null,
             smooth2 = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null;
@@ -35,6 +36,7 @@ public class DefaultResources implements LifecycleListener {
             narrowNameLarge = "Rogue-Zodiac-12x24.fnt",
             unicodeNameLarge = "Mandrill-12x32.fnt",
             narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt",
+            smoothName = "Inconsolata-LGC-8x18.fnt",
             smoothNameLarge = "Inconsolata-LGC-12x24.fnt";
     private SquidColorCenter scc = null;
     private Texture tentacle = null;
@@ -137,10 +139,28 @@ public class DefaultResources implements LifecycleListener {
     }
 
     /**
+     * Returns a 8x18px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
+     * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
+     * Caches the font for later calls.
+     * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... not actually sure, 8x18 pixels.
+     */
+    public static BitmapFont getSmoothFont()
+    {
+        initialize();
+        if(instance.smooth1 == null)
+        {
+            try {
+                instance.smooth1 = new BitmapFont(Gdx.files.classpath("Inconsolata-LGC-8x18.fnt"), Gdx.files.classpath("Inconsolata-LGC-8x18.png"), false);
+            } catch (Exception e) {
+            }
+        }
+        return instance.smooth1;
+    }
+    /**
      * Returns a 12x24px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * Caches the font for later calls.
-     * @return the BitmapFont object representing Inconsolata-LGC.ttf at size 32 pt.
+     * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... not actually sure, 12x24 pixels.
      */
     public static BitmapFont getLargeSmoothFont()
     {
@@ -148,7 +168,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smooth2 == null)
         {
             try {
-                instance.smooth2 = new BitmapFont(Gdx.files.classpath("Inconsolata-LGC-12x24.fnt"), Gdx.files.classpath("Inconsolata-LGC_0.png"), false);
+                instance.smooth2 = new BitmapFont(Gdx.files.classpath("Inconsolata-LGC-12x24.fnt"), Gdx.files.classpath("Inconsolata-LGC-12x24.png"), false);
             } catch (Exception e) {
             }
         }
