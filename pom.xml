@@ -63,7 +63,6 @@
 		<jdk.version>1.7</jdk.version>
 		<gdx.version>1.7.0</gdx.version>
 		<gson.version>2.3.1</gson.version>
-		<roaringbitmap.version>0.5.13</roaringbitmap.version>
 		<junit.version>4.11</junit.version>
 	</properties>
 
@@ -171,6 +170,29 @@
 					<detectOfflineLinks>false</detectOfflineLinks>
 					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.version}</version>
+				<configuration>
+					<nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>hilbert</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-resources</id>
+                        <configuration>
+                            <nonFilteredFileExtensions>
+                                <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>hilbert</nonFilteredFileExtension>
+                            </nonFilteredFileExtensions>
+                        </configuration>
+                    </execution>
+                </executions>
 			</plugin>
 		</plugins>
 	</build>
