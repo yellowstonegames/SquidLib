@@ -15,26 +15,6 @@
         https://github.com/SquidPony/SquidLib .
     </description>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*.txt</include>
-                    <include>**/*.js</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <excludes>
-                    <exclude>**/*.txt</exclude>
-                    <exclude>**/*.js</exclude>
-                </excludes>
-            </resource>
-        </resources>
-    </build>
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>

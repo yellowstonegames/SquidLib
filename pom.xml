@@ -171,29 +171,6 @@
 					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>${maven.resources.version}</version>
-				<configuration>
-					<nonFilteredFileExtensions>
-                        <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>hilbert</nonFilteredFileExtension>
-					</nonFilteredFileExtensions>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>default-resources</id>
-                        <configuration>
-                            <nonFilteredFileExtensions>
-                                <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
-                                <nonFilteredFileExtension>hilbert</nonFilteredFileExtension>
-                            </nonFilteredFileExtensions>
-                        </configuration>
-                    </execution>
-                </executions>
-			</plugin>
 		</plugins>
 	</build>
 
