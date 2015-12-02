@@ -283,7 +283,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 * @throws IllegalStateException
 	 *             In various cases of errors regarding sizes of panels.
 	 */
-	public ButtonsPanel(List<IColoredString<T>> buttonTexts) {
+	public ButtonsPanel(/* Nullable */ List<IColoredString<T>> buttonTexts) {
 		if (buttonTexts != null) {
 			this.buttonsTexts = new ArrayList<IColoredString<T>>(buttonTexts.size());
 			this.buttonsTexts.addAll(buttonTexts);
@@ -319,6 +319,13 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 *         <p>
 	 *         See {@link #y_gdxToSquid()} to configure the processor's
 	 *         behavior.
+	 *         </p>
+	 * 
+	 *         <p>
+	 *         If this panel is behind a {@link Stage} (i.e. you're not setting
+	 *         the returned processor to {@link Gdx#input}) and you want it to
+	 *         receive keyboard events, don't forget to call
+	 *         {@link Stage#setKeyboardFocus(Actor)} by giving {@code this}.
 	 *         </p>
 	 * @throws NullPointerException
 	 *             If the text of buttons wasn't given at creation time, and
@@ -720,7 +727,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 				for (int i = 0; i < bound; i++) {
 					final char c = bucketText.charAt(i);
 					if (set || shortcuts.containsKey(Character.toLowerCase(c))
-							|| !Character.isAlphabetic(c)) {
+							|| !Character.isLetter(c)) {
 						/*
 						 * Shortcut already used or we went into the 'else'
 						 * already, or character is inadequate.

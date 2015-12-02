@@ -121,6 +121,17 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		 * 
 		 * @return {@code new Impl(s, t)}.
 		 */
+		public static <T> IColoredString.Impl<T> create() {
+			return new IColoredString.Impl<T>("", null);
+		}
+
+
+		/**
+		 * A static constructor, to avoid having to write {@code <T>} in the
+		 * caller.
+		 * 
+		 * @return {@code new Impl(s, t)}.
+		 */
 		public static <T> IColoredString.Impl<T> create(String s, /* @Nullable */ T t) {
 			return new IColoredString.Impl<T>(s, t);
 		}
