@@ -38,8 +38,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     private Color defaultForeground = Color.WHITE;
     private IColorCenter<Color> scc;
     private final int gridWidth, gridHeight, cellWidth, cellHeight;
-    private String[][] contents;
-    private Color[][] colors;
+    private final String[][] contents;
+    private final Color[][] colors;
     private Color lightingColor = SColor.CREAM;
     private final TextCellFactory textFactory;
     private LinkedHashSet<AnimatedEntity> animatedEntities;
@@ -406,6 +406,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 	public int gridWidth() {
         return gridWidth;
     }
+
+	/**
+	 * @return The {@link TextCellFactory} backing {@code this}.
+	 */
+	public TextCellFactory getTextCellFactory() {
+		return textFactory;
+	}
 
     @Override
     public void draw (Batch batch, float parentAlpha) {
@@ -795,7 +802,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         final Actor a = ae.actor;
         final int x = ae.gridX * cellWidth, y = (gridHeight - ae.gridY - 1) * cellHeight - 1;
         if(a == null || ae.animating) return;
-        if(duration < 0.02f) duration = 0.02f;
+        duration = clampDuration(duration);
         animationCount++;
         ae.animating = true;
         a.addAction(Actions.sequence(
@@ -821,7 +828,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     {
         final Actor a = cellToActor(x, y);
         if(a == null) return;
-        if(duration < 0.02f) duration = 0.02f;
+        duration = clampDuration(duration);
         animationCount++;
         x *= cellWidth;
         y = (gridHeight - y - 1);
@@ -872,7 +879,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         final Actor a = ae.actor;
         final int nextX = newX * cellWidth * ((ae.doubleWidth) ? 2 : 1), nextY = (gridHeight - newY - 1) * cellHeight - 1;
         if(a == null || ae.animating) return;
-        if(duration < 0.02f) duration = 0.02f;
+        duration = clampDuration(duration);
         animationCount++;
         ae.animating = true;
         a.addAction(Actions.sequence(
@@ -898,7 +905,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     {
         final Actor a = cellToActor(x, y);
         if(a == null) return;
-        if(duration < 0.02f) duration = 0.02f;
+        duration = clampDuration(duration);
         animationCount++;
         newX *= cellWidth;
         newY = (gridHeight - newY - 1);
@@ -958,7 +965,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         final int x = ae.gridX * cellWidth * ((ae.doubleWidth) ? 2 : 1), y = (gridHeight - ae.gridY - 1) * cellHeight - 1;
         if(a == null || ae.animating)
             return;
-        if(duration < 0.02f) duration = 0.02f;
+        duration = clampDuration(duration);
         ae.animating = true;
         animationCount++;
         StatefulRNG gRandom = DefaultResources.getGuiRandom();
@@ -993,7 +1000,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void wiggle(int x, int y, float duration) {
         final Actor a = cellToActor(x, y);
         if(a == null) return;
-        if(duration < 0.02f) duration = 0.02f;
+        duration = clampDuration(duration);
         animationCount++;
         x *= cellWidth;
         y = (gridHeight - y - 1);
@@ -1023,18 +1030,17 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
     /**
-     * Starts an wiggling animation for the object at the given location for the given duration in seconds.
+     * Starts a tint animation for {@code ae} for the given {@code duration} in seconds.
      *
      * @param ae an AnimatedEntity returned by animateActor()
      * @param color
      * @param duration
      */
     public void tint(final AnimatedEntity ae, Color color, float duration) {
-
         final Actor a = ae.actor;
         if(a == null || ae.animating)
             return;
-        if(duration < 0.02f) duration = 0.02f;
+        duration = clampDuration(duration);
         ae.animating = true;
         animationCount++;
         Color ac = scc.filter(a.getColor());
@@ -1048,32 +1054,66 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                     }
                 }))));
     }
+
     /**
-     * Starts an wiggling animation for the object at the given location for the given duration in seconds.
-     *
-     * @param x
-     * @param y
-     * @param color
-     * @param duration
-     */
-    public void tint(int x, int y, Color color, float duration) {
+	 * Like {@link #tint(int, int, Color, float)}, but waits for {@code delay}
+	 * (in seconds) before performing it.
+	 */
+    public void tint(float delay, int x, int y, Color color, float duration) {
         final Actor a = cellToActor(x, y);
         if(a == null)
             return;
-        if(duration < 0.02f) duration = 0.02f;
+        duration = clampDuration(duration);
         animationCount++;
 
         Color ac = scc.filter(a.getColor());
         a.addAction(Actions.sequence(
+        		Actions.delay(delay),
                 Actions.color(color, duration * 0.3f),
                 Actions.color(ac, duration * 0.7f),
-                Actions.delay(duration, Actions.run(new Runnable() {
+                Actions.run(new Runnable() {
                     @Override
                     public void run() {
                         recallActor(a);
                     }
-                }))));
+                })));
     }
+
+    /**
+	 * Starts a tint animation for the object at {@code (x,y)} for the given
+	 * {@code duration} (in seconds).
+	 */
+    public final void tint(int x, int y, Color color, float duration) {
+    	tint(0f, x, y, color, duration);
+    }
+
+	/**
+	 * Fade the cell at {@code (x,y)} to {@code color}. Contrary to
+	 * {@link #tint(int, int, Color, float)}, this action does not restore the
+	 * cell's color at the end of its execution. This is for example useful to
+	 * fade the game screen when the rogue dies.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param color
+	 *            The color at the end of the fadeout.
+	 * @param duration
+	 *            The fadeout's duration.
+	 */
+	public void fade(int x, int y, Color color, float duration) {
+		final Actor a = cellToActor(x, y);
+		if (a == null)
+			return;
+        duration = clampDuration(duration);
+		animationCount++;
+		final Color c = scc.filter(color);
+		a.addAction(Actions.sequence(Actions.color(c, duration), Actions.run(new Runnable() {
+			@Override
+			public void run() {
+				recallActor(a);
+			}
+		})));
+	}
 
     /**
      * Returns true if there are animations running when this method is called.
@@ -1148,4 +1188,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void setLightingColor(Color lightingColor) {
         this.lightingColor = lightingColor;
     }
+
+    protected float clampDuration(float duration) {
+    	if (duration < 0.02f)
+    		return 0.02f;
+    	else
+    		return duration;
+    }
+
 }

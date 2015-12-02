@@ -1,6 +1,8 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -41,6 +43,11 @@ public class TextCellFactory {
     public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\ ",
     LINE_FITTING = "┼├┤┴┬┌┐└┘│─", SQUID_FITTING = DEFAULT_FITTING + LINE_FITTING;
 
+	/**
+	 * The {@link AssetManager} from where to load the font. Use it to share
+	 * loading of a font's file across multiple factories.
+	 */
+	protected /* Nullable */AssetManager assetManager;
     protected BitmapFont bmpFont = null;
     protected Texture block = null;
     protected String fitting = SQUID_FITTING;
@@ -54,7 +61,20 @@ public class TextCellFactory {
      * be called before this factory can be used!
      */
     public TextCellFactory() {
-        scc = DefaultResources.getSCC();
+    	this(null);
+    }
+
+	/**
+	 * A default valued factory that uses the given {@link AssetManager} to load
+	 * the font file. Use this constructor if you are likely to load the same
+	 * font over and over (recall that, without an {@link AssetManager}, each
+	 * instance of {@link TextCellFactory} will load its font from disk).
+	 * 
+	 * @param assetManager
+	 */
+    public TextCellFactory(/* Nullable */ AssetManager assetManager) {
+    	this.assetManager = assetManager;
+        this.scc = DefaultResources.getSCC();
     }
 
     /**
@@ -147,7 +167,19 @@ public class TextCellFactory {
      * @return this factory for method chaining
      */
     public TextCellFactory font(String fontpath) {
-        bmpFont = new BitmapFont(Gdx.files.internal(fontpath));
+    	if (assetManager == null)
+    		bmpFont = new BitmapFont(Gdx.files.internal(fontpath));
+    	else {
+			assetManager.load(new AssetDescriptor<BitmapFont>(fontpath, BitmapFont.class));
+			/*
+			 * We're using the AssetManager not be asynchronous, but to avoid
+			 * loading a file twice (because that takes some time (tens of
+			 * milliseconds)). Hence this KISS code to avoid having to handle a
+			 * not-yet-loaded font:
+			 */
+			assetManager.finishLoading();
+			bmpFont = assetManager.get(fontpath, BitmapFont.class);
+    	}
         return this;
     }
 
