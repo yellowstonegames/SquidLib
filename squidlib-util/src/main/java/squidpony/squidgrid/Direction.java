@@ -1,5 +1,7 @@
 package squidpony.squidgrid;
 
+import squidpony.squidmath.Coord;
+
 /**
  * Represents the eight grid directions and the deltaX, deltaY values associated
  * with those directions.
@@ -119,6 +121,18 @@ public enum Direction {
         return LEFT;
 
     }
+
+	/**
+	 * @param from
+	 *            The starting point.
+	 * @param to
+	 *            The desired point to reach.
+	 * @return The direction to follow to go from {@code from} to {@code to}. It
+	 *         can be cardinal or diagonal.
+	 */
+	public static Direction toGoTo(Coord from, Coord to) {
+		return getDirection(to.x - from.x, to.y - from.y);
+	}
 
     /**
      * Returns the Direction one step clockwise including diagonals.

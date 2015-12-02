@@ -62,6 +62,12 @@ public class UIUtil {
 	 *            The width of the button considered.
 	 * @param height
 	 *            The width of the button considered.
+	 * @param margin
+	 *            The size of the margin to draw.
+	 * @param color
+	 *            The color to draw
+	 * @param cornerStyle
+	 *            The style with which to draw the margins
 	 */
 	public static void drawMarginsAround(float botLeftX, float botLeftY, int width, int height, int margin,
 			Color color, CornerStyle cornerStyle) {
