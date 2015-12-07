@@ -583,6 +583,8 @@ public class DungeonGenerator {
             for(int i = 0; i < total; i++)
             {
                 Coord entry = doorways.toArray(new Coord[doorways.size()])[rng.nextInt(doorways.size())];
+                if(map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '>')
+                    continue;
                 if(map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#')
                 {
                     map[entry.x][entry.y] = '+';
@@ -607,12 +609,10 @@ public class DungeonGenerator {
             }
         }
         if (boulderFill > 0.0) {
-            short[] walls = pack(map, '#');
+            short[] walls = unionPacked(unionPacked(pack(map, '>'), pack(map, '<')), pack(map, '#'));
             short[] more = expand(walls, 1, width, height);
-            short[] negated = negatePacked(more);
             short[] rect = rectangle(width, height);
-            short[] viable = intersectPacked(negated,
-                    rect);
+            short[] viable = differencePacked(rect, more);
             Coord[] boulders = randomSample(viable, boulderFill, rng);
             for (int i = 0; i < boulders.length; i++) {
                 map[boulders[i].x][boulders[i].y] = '#';
@@ -643,7 +643,7 @@ public class DungeonGenerator {
 
         MultiSpill ms = new MultiSpill(map, Spill.Measurement.MANHATTAN, rng);
         LinkedHashMap<Coord, Double> fillers = new LinkedHashMap<Coord, Double>(128);
-        ArrayList<Coord> dots = PoissonDisk.sampleMap(map, Math.min(width, height) / 8f, rng, '#', '+', '/');
+        ArrayList<Coord> dots = PoissonDisk.sampleMap(map, Math.min(width, height) / 8f, rng, '#', '+', '/','<', '>');
         for (int i = 0; i < dots.size(); i++) {
             switch (i % 3) {
                 case 0:
@@ -672,7 +672,7 @@ public class DungeonGenerator {
                     obstacles.addAll(pts);
                     for (int x = 1; x < width - 1; x++) {
                         for (int y = 1; y < height - 1; y++) {
-                            if (ms.spillMap[x][y] == ctr) {
+                            if (ms.spillMap[x][y] == ctr && map[x][y] != '<' && map[x][y] != '>') {
                                 map[x][y] = '~';
                             }
                         }
@@ -680,23 +680,24 @@ public class DungeonGenerator {
                     for (int x = 1; x < width - 1; x++) {
                         for (int y = 1; y < height - 1; y++) {
                             if (ms.spillMap[x][y] == ctr) {
-                                if(map[x - 1][y] == '.' || map[x + 1][y] == '.' ||
-                                        map[x][y - 1] == '.' || map[x][y + 1] == '.')
+                                if(map[x][y] != '<' && map[x][y] != '>' &&
+                                        (map[x - 1][y] == '.' || map[x + 1][y] == '.' ||
+                                        map[x][y - 1] == '.' || map[x][y + 1] == '.'))
                                     map[x][y] = ',';
                             }
                         }
                     }
                     if(islandSpacing > 1) {
-                        ArrayList<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^');
+                        ArrayList<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^', '<', '>');
                         for (Coord c : islands) {
                             map[c.x][c.y] = '.';
-                            if (map[c.x - 1][c.y] != '#')
+                            if (map[c.x - 1][c.y] != '#' && map[c.x - 1][c.y] != '<' && map[c.x - 1][c.y] != '>')
                                 map[c.x - 1][c.y] = ',';
-                            if (map[c.x + 1][c.y] != '#')
+                            if (map[c.x + 1][c.y] != '#' && map[c.x + 1][c.y] != '<' && map[c.x + 1][c.y] != '>')
                                 map[c.x + 1][c.y] = ',';
-                            if (map[c.x][c.y - 1] != '#')
+                            if (map[c.x][c.y-1] != '#' && map[c.x][c.y-1] != '<' && map[c.x][c.y-1] != '>')
                                 map[c.x][c.y - 1] = ',';
-                            if (map[c.x][c.y + 1] != '#')
+                            if (map[c.x][c.y+1] != '#' && map[c.x][c.y+1] != '<' && map[c.x][c.y+1] != '>')
                                 map[c.x][c.y + 1] = ',';
                         }
                     }
@@ -725,6 +726,8 @@ public class DungeonGenerator {
             for(int i = 0; i < total; i++)
             {
                 Coord entry = hazards.toArray(new Coord[hazards.size()])[rng.nextInt(hazards.size())];
+                if(map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '<')
+                    continue;
                 map[entry.x][entry.y] = '^';
                 hazards.remove(entry);
             }
