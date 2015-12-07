@@ -93,6 +93,7 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(dungeon)));
         System.out.println(dungeonGenerator);
 */
+        /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);
         //dungeonGenerator.addWater(20);
@@ -133,11 +134,11 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
+*/
 
 
-/*
         rng.setState(0xf00dd00dL);
-        SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, rng, 0.2);
+        SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, rng, 0.15);
         deepSerpent.putWalledBoxRoomCarvers(2);
         deepSerpent.putWalledRoundRoomCarvers(2);
         deepSerpent.putCaveCarvers(3);
@@ -145,11 +146,13 @@ public class DungeonGeneratorTest {
         DungeonGenerator[] gens = new DungeonGenerator[depth];
         for (int i = 0; i < depth; i++) {
             gens[i] = new DungeonGenerator(width, height, rng);
+            gens[i].addWater(rng.nextInt(25));
+            gens[i].addGrass(rng.nextInt(15));
+            gens[i].addBoulders(rng.nextInt(30));
+            gens[i].addDoors(rng.between(4, 10), false);
             gens[i].generateRespectingStairs(map3D[i]);
-
-
             gens[i].setDungeon(DungeonUtility.doubleWidth(
-                    DungeonUtility.hashesToLines(gens[i].getDungeon())));
+                    DungeonUtility.hashesToLines(gens[i].getDungeon(), true)));
             System.out.println(gens[i]);
             System.out.print  ("------------------------------------------------------------");
             System.out.print  ("------------------------------------------------------------");
@@ -157,6 +160,5 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
 
         }
-        */
     }
 }

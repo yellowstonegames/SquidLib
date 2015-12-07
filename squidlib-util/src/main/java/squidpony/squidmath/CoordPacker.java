@@ -170,7 +170,7 @@ public class CoordPacker {
             c = CoordPacker.hilbertToCoordNoLUT(i);
             hilbertX[i] = (short) c.x;
             hilbertY[i] = (short) c.y;
-            hilbertDistances[c.x + c.y * 256] = (short) i;
+            hilbertDistances[c.x + (c.y << 8)] = (short) i;
         }
 
         for (int x = 0; x < 8; x++) {
@@ -1290,7 +1290,7 @@ public class CoordPacker {
             current = indices[i];
             if (current - past > 1)
             {
-                vla.add((short) skip);
+                vla.add((short) (skip+1));
                 skip = 0;
                 vla.add((short)(current - past - 1));
             }
@@ -1526,8 +1526,8 @@ public class CoordPacker {
      * Given a width and height, returns a packed array that encodes "on" for the rectangle from (0,0) to
      * (width - 1, height - 1). Primarily useful with intersectPacked() to ensure things like negatePacked() that can
      * encode "on" cells in any position are instead limited to the bounds of the map.
-     * @param width the width of the map
-     * @param height the height of the map
+     * @param width the width of the rectangle
+     * @param height the height of the rectangle
      * @return a packed short[] encoding "on" for all cells with x less than width and y less than height.
      */
     public static short[] rectangle(int width, int height)
@@ -1537,6 +1537,29 @@ public class CoordPacker {
         boolean[][] rect = new boolean[width][height];
         for (int i = 0; i < width; i++) {
             Arrays.fill(rect[i], true);
+        }
+        return pack(rect);
+    }
+    /**
+     * Given x, y, width and height, returns a packed array that encodes "on" for the rectangle from (x,y) to
+     * (width - 1, height - 1). Primarily useful with intersectPacked() to ensure things like negatePacked() that can
+     * encode "on" cells in any position are instead limited to the bounds of the map, but also handy for basic "box
+     * drawing" for other uses.
+     * @param x the minimum x coordinate
+     * @param y the minimum y coordinate
+     * @param width the width of the rectangle
+     * @param height the height of the rectangle
+     * @return a packed short[] encoding "on" for all cells with x less than width and y less than height.
+     */
+    public static short[] rectangle(int x, int y, int width, int height)
+    {
+        if(x + width > 256 || y + height > 256)
+            throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
+        if(width < 0 || height < 0 || x < 0 || y < 0)
+            throw new UnsupportedOperationException("Negative coordinates/sizes are not supported, aborting");
+        boolean[][] rect = new boolean[x + width][y + height];
+        for (int i = x; i < x + width; i++) {
+            Arrays.fill(rect[i], y, y + height, true);
         }
         return pack(rect);
     }
@@ -1758,9 +1781,8 @@ public class CoordPacker {
             return ALL_ON;
         }
         if (original[0] == 0) {
-            short[] copy = new short[original.length];
-            System.arraycopy(original, 1, copy, 0, original.length - 1);
-            copy[original.length - 1] = (short) (0xFFFF - covered(copy));
+            short[] copy = new short[original.length - 2];
+            System.arraycopy(original, 1, copy, 0, original.length - 2);
             return copy;
         }
         short[] copy = new short[original.length + 2];
@@ -1781,7 +1803,153 @@ public class CoordPacker {
      */
     public static short[] differencePacked(short[] left, short[] right)
     {
-        return intersectPacked(left, negatePacked(right));
+        if(left.length <= 1)
+            return ALL_WALL;
+        if(right.length <= 1)
+            return left;
+        ShortVLA packing = new ShortVLA(64);
+        boolean on = false, onLeft = false, onRight = false;
+        int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
+        while ((elemLeft < left.length || elemRight < right.length) && idx <= 0xffff) {
+            if (elemLeft >= left.length) {
+                totalLeft = 0xffff;
+                onLeft = false;
+            }
+            else if(totalLeft <= idx) {
+                totalLeft += left[elemLeft] & 0xffff;
+            }
+            if(elemRight >= right.length) {
+                totalRight = 0xffff;
+                onRight = false;
+            }
+            else if(totalRight <= idx) {
+                totalRight += right[elemRight] & 0xffff;
+            }
+            if(totalLeft < totalRight)
+            {
+                onLeft = !onLeft;
+                skip += totalLeft - idx;
+                idx = totalLeft;
+                if(on != (onLeft && !onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemLeft++;
+            }
+            else if(totalLeft == totalRight)
+            {
+                onLeft = !onLeft;
+                onRight = !onRight;
+                skip += totalLeft - idx;
+                idx = totalLeft;
+                if(on != (onLeft && !onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemLeft++;
+                elemRight++;
+
+            }
+            else
+            {
+                onRight = !onRight;
+                skip += totalRight - idx;
+                idx = totalRight;
+                if(on != (onLeft && !onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemRight++;
+            }
+        }
+        return packing.shrink();
+    }
+
+    /**
+     * Given two packed short arrays, left and right, this produces a packed short array that encodes "on" for any cell
+     * that was "on" only in left or only in right, but not a cell that was "off" in both or "on" in both. This method
+     * does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly preferred
+     * when performing an exclusive-or operation on two pieces of packed data.
+     * <br>
+     * Could more-correctly be called exclusiveDisjunctionPacked to match the other terms, but... seriously?
+     * @param left A packed array such as one produced by pack()
+     * @param right A packed array such as one produced by pack()
+     * @return A packed array that encodes "on" for all cells such that left's cell ^ right's cell returns true
+     */
+    public static short[] xorPacked(short[] left, short[] right)
+    {
+        if(left.length == 0)
+            return right;
+        if(right.length == 0)
+            return left;
+        ShortVLA packing = new ShortVLA(64);
+        boolean on = false, onLeft = false, onRight = false;
+        int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
+        while ((elemLeft < left.length || elemRight < right.length) && idx <= 0xffff) {
+            if (elemLeft >= left.length) {
+                totalLeft = 0xffff;
+                onLeft = false;
+            }
+            else if(totalLeft <= idx) {
+                totalLeft += left[elemLeft] & 0xffff;
+            }
+            if(elemRight >= right.length) {
+                totalRight = 0xffff;
+                onRight = false;
+            }
+            else if(totalRight <= idx) {
+                totalRight += right[elemRight] & 0xffff;
+            }
+            // 300, 5, 6, 8, 2, 4
+            // 290, 12, 9, 1
+            // =
+            // 290, 15, 6, 8, 2, 4
+            // 290 off in both, 10 in right, 2 in both, 3 in left, 6 off in both, 1 on in both, 7 on in left, 2 off in
+            //     both, 4 on in left
+            if(totalLeft < totalRight)
+            {
+                onLeft = !onLeft;
+                skip += totalLeft - idx;
+                idx = totalLeft;
+                if(on != (onLeft ^ onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemLeft++;
+            }
+            else if(totalLeft == totalRight)
+            {
+                onLeft = !onLeft;
+                onRight = !onRight;
+                skip += totalLeft - idx;
+                idx = totalLeft;
+                if(on != (onLeft ^ onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemLeft++;
+                elemRight++;
+
+            }
+            else
+            {
+                onRight = !onRight;
+                skip += totalRight - idx;
+                idx = totalRight;
+                if(on != (onLeft ^ onRight)) {
+                    packing.add((short) skip);
+                    skip = 0;
+                    on = !on;
+                }
+                elemRight++;
+            }
+        }
+        return packing.shrink();
     }
 
     /**
@@ -1854,7 +2022,7 @@ public class CoordPacker {
      */
     public static short[] removePacked(short[] original, short hilbert)
     {
-        return intersectPacked(original, new short[]{0, hilbert, 1, (short)0xffff});
+        return differencePacked(original, new short[]{hilbert, 1});
     }
     /**
      * Given one packed short array, original, and a position as x,y numbers, this produces a packed short array that
@@ -1870,7 +2038,7 @@ public class CoordPacker {
     public static short[] removePacked(short[] original, int x, int y)
     {
         int dist = posToHilbert(x, y);
-        return intersectPacked(original, new short[]{0, (short)dist, 1, (short)(0xfffe - dist)});
+        return differencePacked(original, new short[]{(short)dist, 1});
     }
 
     /**
@@ -1891,17 +2059,15 @@ public class CoordPacker {
     public static short[] removeSeveralPacked(short[] original, short... hilbert)
     {
         Arrays.sort(hilbert);
-        short[] removals = new short[hilbert.length * 2 + 2];
+        short[] removals = new short[hilbert.length * 2];
         short current;
-        removals[0] = 0;
         for (int i = 0, total = 0; i < hilbert.length; i++) {
             current = hilbert[i];
-            removals[i * 2 + 1] = (short)(current - total);
-            removals[i * 2 + 2] = 1;
+            removals[i * 2] = (short)(current - total);
+            removals[i * 2 + 1] = 1;
             total = current + 1;
         }
-        removals[removals.length - 1] = -1;
-        return intersectPacked(original, removals);
+        return differencePacked(original, removals);
     }
 
     /**
@@ -2025,6 +2191,19 @@ public class CoordPacker {
         }
     }
 
+    public static void printCompressedData(short[] packed)
+    {
+        if(packed == null || packed.length == 0)
+        {
+            System.out.println("[]");
+            return;
+        }
+        System.out.print("[" + packed[0]);
+        for (int i = 1; i < packed.length; i++) {
+            System.out.print(", " + packed[i]);
+        }
+        System.out.println("]");
+    }
 
 
 
