@@ -4,7 +4,11 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
+
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Sample output: {@code
@@ -176,4 +180,122 @@ public class DungeonGeneratorTest {
         }
         */
     }
+    public static void mainAlt( String[] args ) {
+        LightRNG rng = new LightRNG(2252637788195L);
+        DungeonGenerator dungeonGenerator = new DungeonGenerator(120, 120, new RNG((rng)));
+        dungeonGenerator.addDoors(15, true);
+        dungeonGenerator.addWater(15);
+        dungeonGenerator.addGrass(15);
+        dungeonGenerator.addBoulders(8);
+        dungeonGenerator.generate();
+
+        dungeonGenerator.setDungeon(
+                DungeonUtility.hashesToLines(dungeonGenerator.getDungeon(), true));
+        char[][] iso = dungeonGenerator.getDungeon();
+        int[][] water = new int[120][120];
+        for (int i = 0; i < 120; i++)
+        {
+            for (int j = 0; j < 120; j++)
+            {
+                water[i][j] = -1;
+            }
+        }
+        boolean even = true;
+        StringBuilder sb = new StringBuilder(64000);
+        for(int row = 0, sx = -59, sy = 59; row < 240; ++row, even = (row % 2 == 0), sx += (even) ? 1 : 0, sy += (!even) ? 1 : 0)
+        {
+            sb.append("<div class=\"row\">\n");
+            for(int col = 0; col < 120; col++)
+            {
+                int x = sx + col;
+                int y = sy - col;
+                if(x < 0 || y < 0 || x > 119 || y > 119)
+                {
+                    sb.append("<div class=\"isotile\"></div>\n");
+                }
+                else
+                {
+                    switch (iso[x][y])
+                    {
+                        case '.':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+                            break;
+                        case '"':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette47_Grass_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+                            break;
+                        case '#':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Boulder_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+                            break;
+                        case '~':
+                        case ',':
+                            water[x][y] = rng.nextInt(16);
+                            if(water[x][y-1] > -1) water[x][y] = (water[x][y] & 14) | ((water[x][y-1] & 4) >> 2);
+                            if(water[x][y+1] > -1) water[x][y] = (water[x][y] & 11) | ((water[x][y+1] & 1) * 4);
+                            if(water[x-1][y] > -1) water[x][y] = (water[x][y] & 7)  | ((water[x-1][y] & 2) * 4);
+                            if(water[x+1][y] > -1) water[x][y] = (water[x][y] & 13) | ((water[x+1][y] & 8) >> 2);
+
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette0_Water_Huge_face0_" + (Integer.toHexString(water[x][y])) + ".png\" /></div>\n");
+                            break;
+                        case '│':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face" + (rng.nextInt(2) * 2) + "_0.png\" /></div>\n");
+                            break;
+                        case '─':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face" + (rng.nextInt(2) * 2 + 1) + "_0.png\" /></div>\n");
+                            break;
+
+                        case '┌':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face2_0.png\" /></div>\n");
+                            break;
+                        case '┐':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face3_0.png\" /></div>\n");
+                            break;
+                        case '└':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face1_0.png\" /></div>\n");
+                            break;
+                        case '┘':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face0_0.png\" /></div>\n");
+                            break;
+
+                        case '┤':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face0_0.png\" /></div>\n");
+                            break;
+                        case '┴':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face1_0.png\" /></div>\n");
+                            break;
+                        case '├':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face2_0.png\" /></div>\n");
+                            break;
+                        case '┬':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face3_0.png\" /></div>\n");
+                            break;
+
+                        case '┼':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Cross_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+                            break;
+
+                        case '+':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face" + (rng.nextInt(2) * 2) + "_0.png\" /></div>\n");
+                            break;
+                        case '/':
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face" + (rng.nextInt(2) * 2 + 1) + "_0.png\" /></div>\n");
+                            break;
+
+                        case ' ':
+                            sb.append("<div class=\"isotile\"></div>\n");
+                            break;
+                    }
+                }
+            }
+
+            sb.append("</div>\n");
+        }
+        try {
+            FileWriter fw = new FileWriter("data.html");
+            fw.write(sb.toString());
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
