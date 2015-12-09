@@ -1,6 +1,8 @@
 package squidpony.examples;
 
-import squidpony.squidgrid.mapping.*;
+import squidpony.squidgrid.mapping.DungeonGenerator;
+import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -74,8 +76,22 @@ public class DungeonGeneratorTest {
     public static int width = 120, height = 120, depth = 16;
     public static void main( String[] args )
     {
-        StatefulRNG rng = new StatefulRNG(new LightRNG(0xea7f00d));
+        //seed is, in base 36, the number SQUIDLIB
+        StatefulRNG rng = new StatefulRNG(new LightRNG(2252637788195L));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
+
+        /*
+        String[][] tiles = new DungeonBoneGen().getTiles(TilesetType.DEFAULT_DUNGEON);
+        for(String[] tile : tiles)
+        {
+            System.out.println("{");
+            for(String row : tile)
+            {
+                System.out.println("\"" + row + "\",");
+            }
+            System.out.println("},");
+        }
+        */
 /*
         dungeonGenerator.addDoors(15, false);
         dungeonGenerator.addWater(25);
@@ -93,28 +109,27 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(dungeon)));
         System.out.println(dungeonGenerator);
 */
-        /*
+
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);
         //dungeonGenerator.addWater(20);
         //dungeonGenerator.addGrass(10);
-        rng.setState(0xf00dd00dL);
-        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.5);
-        serpent.putWalledBoxRoomCarvers(2);
-        serpent.putWalledRoundRoomCarvers(2);
-        serpent.putCaveCarvers(3);
+        rng.setState(2252637788195L);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.2, true);
+        serpent.putWalledBoxRoomCarvers(5);
+        serpent.putWalledRoundRoomCarvers(4);
+        serpent.putCaveCarvers(6);
         char[][] map = serpent.generate();
         dungeonGenerator.generate(map);
 
         char[][] sdungeon = dungeonGenerator.getDungeon();
-        sdungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
-        sdungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+        //sdungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        //sdungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
-
-
+        /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);
         //dungeonGenerator.addWater(20);
@@ -134,10 +149,9 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
-*/
-
-
-        rng.setState(0xf00dd00dL);
+        */
+        /*
+        rng.setState(2252637788195L);
         SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, rng, 0.15);
         deepSerpent.putWalledBoxRoomCarvers(2);
         deepSerpent.putWalledRoundRoomCarvers(2);
@@ -160,5 +174,6 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
 
         }
+        */
     }
 }
