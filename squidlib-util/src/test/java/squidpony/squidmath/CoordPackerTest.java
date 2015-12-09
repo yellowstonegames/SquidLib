@@ -214,7 +214,7 @@ public class CoordPackerTest {
         short[] manual = packSeveral(Coord.get(25, 2), Coord.get(26, 2), Coord.get(27, 2), Coord.get(28, 2),
                 Coord.get(25, 3), Coord.get(26, 3), Coord.get(27, 3),
                 Coord.get(26, 4));
-        printPacked(flooded, 64, 64);
+        //printPacked(flooded, 64, 64);
         assertArrayEquals(flooded, manual);
     }
     @Test

@@ -1,6 +1,5 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidai.DijkstraMap;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.RNG;
@@ -334,12 +333,11 @@ public class SerpentDeepMapGenerator {
     public char[][][] generate()
     {
         char[][][] dungeon = new char[depth][][];
-        DijkstraMap[] dijkstras = new DijkstraMap[depth];
-        //int dlimit = (int)Math.sqrt(30.0 * (height + width));
+        short[][] floors = new short[depth][];
         int dlimit = (height + width) / 3;
         for (int i = 0; i < depth; i++) {
             dungeon[i] = mix[i].generate();
-            dijkstras[i] = new DijkstraMap(dungeon[i], DijkstraMap.Measurement.MANHATTAN, random);
+            floors[i] = CoordPacker.pack(dungeon[i], '.');
         }
         //using actual dungeon space per layer, not row/column 3D grid space
         ArrayList<LinkedHashSet<Coord>> ups = new ArrayList<LinkedHashSet<Coord>>(depth),
@@ -355,22 +353,18 @@ public class SerpentDeepMapGenerator {
                 Coord higher = random.getRandomElement(above.toArray(new Coord[above.size()]));
                 while(above.size() > 0)
                 {
-                    dijkstras[i - 1].clearGoals();
-                    dijkstras[i - 1].resetMap();
-                    dijkstras[i - 1].setGoal(columns[higher.x], rows[higher.y]);
-                    double[][] scannedAbove = dijkstras[i - 1].partialScan(dlimit, null);
-                    short[] near = CoordPacker.pack(scannedAbove, dlimit + 1);
-                    dijkstras[i].clearGoals();
-                    dijkstras[i].resetMap();
-                    dijkstras[i].setGoal(columns[higher.x], rows[higher.y]);
-                    double[][] scanned = dijkstras[i].partialScan(dlimit, null);
-                    near = CoordPacker.intersectPacked(near, CoordPacker.pack(scanned, dlimit + 1));
+                    short[] nearAbove = CoordPacker.flood(floors[i - 1],
+                            CoordPacker.packOne(columns[higher.x], rows[higher.y]),
+                            dlimit);
+                    short[] near = CoordPacker.intersectPacked(nearAbove, CoordPacker.flood(floors[i],
+                            CoordPacker.packOne(columns[higher.x], rows[higher.y]),
+                            dlimit));
                     ArrayList<Coord> subLinks = CoordPacker.randomPortion(near, 1, random);
                     ups.get(i).addAll(subLinks);
                     downs.get(i-1).addAll(subLinks);
                     for(Coord abv : linksDown.get(i-1))
                     {
-                        if(scannedAbove[columns[abv.x]][rows[abv.y]] <= dlimit)
+                        if(CoordPacker.queryPacked(nearAbove, columns[abv.x], rows[abv.y])) //scannedAbove[columns[abv.x]][rows[abv.y]] <= dlimit
                             above.remove(abv);
                     }
                     if(above.isEmpty())
@@ -378,38 +372,8 @@ public class SerpentDeepMapGenerator {
                     higher = random.getRandomElement(above.toArray(new Coord[above.size()]));
                 }
             }
-        }/*
-        for (int i = depth - 2; i >= 0; i--) {
-            LinkedHashSet<Coord> downGoers = linksUp.get(i), below = null;
-            below = new LinkedHashSet<Coord>(linksUp.get(i + 1));
-            if (below.size() == 0)
-                continue;
-            Coord lower = random.getRandomElement(below.toArray(new Coord[below.size()]));
-            while (below.size() > 0) {
-                dijkstras[i + 1].clearGoals();
-                dijkstras[i + 1].resetMap();
-                dijkstras[i + 1].setGoal(columns[lower.x], rows[lower.y]);
-                double[][] scannedBelow = dijkstras[i + 1].partialScan(dlimit, null);
-                short[] near = CoordPacker.pack(scannedBelow, dlimit + 1);
+        }
 
-                dijkstras[i].clearGoals();
-                dijkstras[i].resetMap();
-                dijkstras[i].setGoal(columns[lower.x], rows[lower.y]);
-                double[][] scanned = dijkstras[i].partialScan(dlimit, null);
-                near = CoordPacker.intersectPacked(near, CoordPacker.pack(scanned, dlimit + 1));
-                Coord subLink = CoordPacker.singleRandom(near, random);
-                downs.get(i).add(subLink);
-                ups.get(i+1).add(subLink);
-
-                for (Coord bel : linksUp.get(i + 1)) {
-                    if (scannedBelow[columns[bel.x]][rows[bel.y]] <= dlimit)
-                        below.remove(bel);
-                }
-                if (below.isEmpty())
-                    break;
-                lower = random.getRandomElement(below.toArray(new Coord[below.size()]));
-            }
-        }*/
         for (int i = 0; i < depth; i++) {
             LinkedHashMap<Coord, Integer> used = new LinkedHashMap<Coord, Integer>(128);
             for(Coord up : ups.get(i))
@@ -418,26 +382,7 @@ public class SerpentDeepMapGenerator {
                 if(count != null && count > 1)
                     continue;
                 dungeon[i][up.x][up.y] = '<';
-                /*
-                int x = up.x + random.between(-1,2), y = up.y + random.between(-1, 2), frustration = 0;
-                while (((x == up.x && y == up.y) || x < 0 || y < 0 || x >= width || y >= height || dungeon[i][x][y] != '.')
-                        && frustration < 200)
-                {
-                    x = up.x + random.between(-1, 2);
-                    y = up.y + random.between(-1, 2);
-                    frustration++;
-                }
-                if(frustration >= 200) {
-                    for (int xx = Math.max(1, up.x - 1); xx <= Math.min(width - 2, up.x + 1); xx++) {
-                        for (int yy = Math.max(1, up.y - 1); yy <= Math.min(height - 2, up.y + 1); yy++) {
-                            dungeon[i][xx][yy] = '.';
-                        }
-                    }
-                    dungeon[i][up.x][up.y] = '<';
-                }
-                else
-                    dungeon[i][x][y] = '<';
-                */
+
                 used.put(up, (count == null) ? 1 : count + 1);
             }
             used.clear();
@@ -447,27 +392,7 @@ public class SerpentDeepMapGenerator {
                 if(count != null && count > 1)
                     continue;
                 dungeon[i][down.x][down.y] = '>';
-                /*
-                int x = down.x + random.between(-1,2), y = down.y + random.between(-1, 2), frustration = 0;
-                while (((x == down.x && y == down.y) || x < 0 || y < 0 || x >= width || y >= height || dungeon[i][x][y] != '.')
-                        && frustration < 20)
-                {
-                    x = down.x + random.between(-1, 2);
-                    y = down.y + random.between(-1, 2);
-                    frustration++;
-                }
-                if(frustration >= 200) {
 
-                    for (int xx = Math.max(1, down.x - 1); xx <= Math.min(width - 2, down.x + 1); xx++) {
-                        for (int yy = Math.max(1, down.y - 1); yy <= Math.min(height - 2, down.y + 1); yy++) {
-                            dungeon[i][xx][yy] = '.';
-                        }
-                    }
-                    dungeon[i][down.x][down.y] = '>';
-                }
-                else
-                    dungeon[i][x][y] = '>';
-                */
                 used.put(down, (count == null) ? 1 : count + 1);
             }
         }

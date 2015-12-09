@@ -1556,6 +1556,7 @@ public class CoordPacker {
         short[] s2 = allPackedHilbert(start);
         int[] xOffsets = new int[]{0, 1, 0, -1}, yOffsets = new int[]{1, 0, -1, 0};
         for (int e = 0; e < expansion; e++) {
+            ShortVLA edge = new ShortVLA(128);
             for (int s = 0; s < s2.length; s++) {
                 int i = s2[s] & 0xffff;
                 x = hilbertX[i];
@@ -1567,14 +1568,94 @@ public class CoordPacker {
                     if (quickBounds.contains(dist)) {
                         if (ss.add(dist)) {
                             vla.add(dist);
+                            edge.add(dist);
                         }
                     }
                 }
             }
-            s2 = vla.shrink();
+            s2 = edge.shrink();
         }
 
+        int[] indices = vla.asInts();
+        Arrays.sort(indices);
 
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.shrink();
+    }
+
+
+    /**
+     * Given a packed array encoding a larger area, a packed array encoding one or more points inside bounds, and an
+     * amount of expansion, expands each cell in start by a Manhattan (diamond) radius equal to expansion, limiting any
+     * expansion to within bounds and returning the final expanded (limited) packed data.
+     * Returns a new packed short[] and does not modify bounds or start.
+     * @param bounds packed data representing the maximum extent of the region to flood-fill; often floors
+     * @param start a packed array that encodes position(s) that the flood will spread outward from
+     * @param expansion the positive (square) radius, in cells, to expand each cell out by
+     * @return a packed array that encodes "on" for cells that are "on" in bounds and are within expansion Manhattan
+     * distance from a Coord in start
+     */
+    public static short[] flood(short[] bounds, short[] start, int expansion, boolean eightWay)
+    {
+        if(!eightWay)
+            return flood(bounds, start, expansion);
+        if(bounds == null || bounds.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        int boundSize = count(bounds);
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        boolean on = false;
+        int idx = 0;
+        short x, y, dist;
+        for(int p = 0; p < bounds.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (bounds[p] & 0xffff); i++) {
+                    quickBounds.add((short) i);
+                }
+            }
+            idx += bounds[p] & 0xffff;
+        }
+        short[] s2 = allPackedHilbert(start);
+        int[] xOffsets = new int[]{-1, 0, 1, -1,    1, -1, 0, 1}, yOffsets = new int[]{-1, -1, -1, 0,    0, 1, 1, 1};
+        for (int e = 0; e < expansion; e++) {
+            ShortVLA edge = new ShortVLA(128);
+            for (int s = 0; s < s2.length; s++) {
+                int i = s2[s] & 0xffff;
+                x = hilbertX[i];
+                y = hilbertY[i];
+                for (int d = 0; d < 8; d++) {
+                    int j = Math.min(255, Math.max(0, x + xOffsets[d]));
+                    int k = Math.min(255, Math.max(0, y + yOffsets[d]));
+                    dist = hilbertDistances[j + (k << 8)];
+                    if (quickBounds.contains(dist)) {
+                        if (ss.add(dist)) {
+                            vla.add(dist);
+                            edge.add(dist);
+                        }
+                    }
+                }
+            }
+            s2 = edge.shrink();
+        }
 
         int[] indices = vla.asInts();
         Arrays.sort(indices);
@@ -2031,8 +2112,39 @@ public class CoordPacker {
     }
 
     /**
-     * Returns a new packed short[] containing the hilbert distances in hilbert as "on" cells, and all other cells "off"
-     * @param hilbert a vararg or array of hilbert distances that will be encoded as "on"
+     * Returns a new packed short[] containing the Hilbert distance hilbert as "on", and all other cells "off".
+     * Much more efficient than packSeveral called with only one argument.
+     * @param hilbert a Hilbert distance that will be encoded as "on"
+     * @return the point given to this encoded as "on" in a packed short array
+     */
+    public static short[] packOne(int hilbert)
+    {
+        return new short[]{(short) hilbert, 1};
+    }
+    /**
+     * Returns a new packed short[] containing the Coord point as "on", and all other cells "off".
+     * Much more efficient than packSeveral called with only one argument.
+     * @param point a Coord that will be encoded as "on"
+     * @return the point given to this encoded as "on" in a packed short array
+     */
+    public static short[] packOne(Coord point)
+    {
+        return new short[]{(short) coordToHilbert(point), 1};
+    }
+    /**
+     * Returns a new packed short[] containing the given x,y cell as "on", and all other cells "off".
+     * Much more efficient than packSeveral called with only one argument.
+     * @param x the x component of the point that will be encoded as "on"
+     * @param y the y component of the point that will be encoded as "on"
+     * @return the point given to this encoded as "on" in a packed short array
+     */
+    public static short[] packOne(int x, int y)
+    {
+        return new short[]{(short) posToHilbert(x, y), 1};
+    }
+    /**
+     * Returns a new packed short[] containing the Hilbert distances in hilbert as "on" cells, and all other cells "off"
+     * @param hilbert a vararg or array of Hilbert distances that will be encoded as "on"
      * @return the points given to this encoded as "on" in a packed short array
      */
     public static short[] packSeveral(int... hilbert)
