@@ -1313,7 +1313,7 @@ public class CoordPacker {
      * @param expansion the positive (square) radius, in cells, to expand each cell out by
      * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
      * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
-     * @return a packed array that encodes "on" for cells that were moved from cells that were "on" in packed
+     * @return a packed array that encodes "on" for packed and cells that expanded from cells that were "on" in packed
      */
     public static short[] expand(short[] packed, int expansion, int width, int height)
     {
@@ -1352,18 +1352,17 @@ public class CoordPacker {
         vla.add((short)indices[0]);
         for (int i = 1; i < indices.length; i++) {
             current = indices[i];
-            if(current != past)
-                skip++;
             if (current - past > 1)
             {
-                vla.add((short) (skip));
+                vla.add((short) (skip+1));
                 skip = 0;
                 vla.add((short)(current - past - 1));
             }
+            else if(current != past)
+                skip++;
             past = current;
         }
         vla.add((short)(skip+1));
-
         return vla.shrink();
     }
 
@@ -1395,7 +1394,7 @@ public class CoordPacker {
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
-                    ss.add(hilbertDistances[hilbertX[i] + (hilbertY[i] << 8)]);
+                    ss.add((short) i);
                 }
             }
             idx += packed[p] & 0xffff;
@@ -1427,14 +1426,14 @@ public class CoordPacker {
         vla.add((short)indices[0]);
         for (int i = 1; i < indices.length; i++) {
             current = indices[i];
-            if(current != past)
-                skip++;
             if (current - past > 1)
             {
-                vla.add((short) (skip));
+                vla.add((short) (skip+1));
                 skip = 0;
                 vla.add((short)(current - past - 1));
             }
+            else if(current != past)
+                skip++;
             past = current;
         }
         vla.add((short)(skip+1));
@@ -1471,7 +1470,7 @@ public class CoordPacker {
         for (int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
-                    ss.add(hilbertDistances[hilbertX[i] + (hilbertY[i] << 8)]);
+                    ss.add((short) i);
                 }
             }
             idx += packed[p] & 0xffff;
@@ -1509,7 +1508,7 @@ public class CoordPacker {
                 if (current != past)
                     skip++;
                 if (current - past > 1) {
-                    vla.add((short) (skip));
+                    vla.add((short) (skip + 1));
                     skip = 0;
                     vla.add((short) (current - past - 1));
                 }
@@ -1520,6 +1519,85 @@ public class CoordPacker {
             finished[expansion-1] = vla.shrink();
         }
         return finished;
+    }
+
+
+    /**
+     * Given a packed array encoding a larger area, a packed array encoding one or more points inside bounds, and an
+     * amount of expansion, expands each cell in start by a Manhattan (diamond) radius equal to expansion, limiting any
+     * expansion to within bounds and returning the final expanded (limited) packed data.
+     * Returns a new packed short[] and does not modify bounds or start.
+     * @param bounds packed data representing the maximum extent of the region to flood-fill; often floors
+     * @param start a packed array that encodes position(s) that the flood will spread outward from
+     * @param expansion the positive (square) radius, in cells, to expand each cell out by
+     * @return a packed array that encodes "on" for cells that are "on" in bounds and are within expansion Manhattan
+     * distance from a Coord in start
+     */
+    public static short[] flood(short[] bounds, short[] start, int expansion)
+    {
+        if(bounds == null || bounds.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        int boundSize = count(bounds);
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        boolean on = false;
+        int idx = 0;
+        short x, y, dist;
+        for(int p = 0; p < bounds.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (bounds[p] & 0xffff); i++) {
+                    quickBounds.add((short) i);
+                }
+            }
+            idx += bounds[p] & 0xffff;
+        }
+        short[] s2 = allPackedHilbert(start);
+        int[] xOffsets = new int[]{0, 1, 0, -1}, yOffsets = new int[]{1, 0, -1, 0};
+        for (int e = 0; e < expansion; e++) {
+            for (int s = 0; s < s2.length; s++) {
+                int i = s2[s] & 0xffff;
+                x = hilbertX[i];
+                y = hilbertY[i];
+                for (int d = 0; d < 4; d++) {
+                    int j = Math.min(255, Math.max(0, x + xOffsets[d]));
+                    int k = Math.min(255, Math.max(0, y + yOffsets[d]));
+                    dist = hilbertDistances[j + (k << 8)];
+                    if (quickBounds.contains(dist)) {
+                        if (ss.add(dist)) {
+                            vla.add(dist);
+                        }
+                    }
+                }
+            }
+            s2 = vla.shrink();
+        }
+
+
+
+        int[] indices = vla.asInts();
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.shrink();
     }
 
     /**
@@ -1953,6 +2031,70 @@ public class CoordPacker {
     }
 
     /**
+     * Returns a new packed short[] containing the hilbert distances in hilbert as "on" cells, and all other cells "off"
+     * @param hilbert a vararg or array of hilbert distances that will be encoded as "on"
+     * @return the points given to this encoded as "on" in a packed short array
+     */
+    public static short[] packSeveral(int... hilbert)
+    {
+        if(hilbert.length == 0)
+            return ALL_WALL;
+        Arrays.sort(hilbert);
+        ShortVLA vla = new ShortVLA(128);
+        int current, past = hilbert[0], skip = 0;
+
+        vla.add((short)hilbert[0]);
+        for (int i = 1; i < hilbert.length; i++) {
+            current = hilbert[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+        return vla.shrink();
+    }
+
+    /**
+     * Returns a new packed short[] containing the Coords in points as "on" cells, and all other cells "off"
+     * @param points a vararg or array of Coords that will be encoded as "on"
+     * @return the points given to this encoded as "on" in a packed short array
+     */
+    public static short[] packSeveral(Coord... points)
+    {
+        if(points.length == 0)
+            return ALL_WALL;
+        int[] hilbert = new int[points.length];
+        for (int i = 0; i < points.length; i++) {
+            hilbert[i] = coordToHilbert(points[i]);
+        }
+
+        Arrays.sort(hilbert);
+        ShortVLA vla = new ShortVLA(128);
+        int current, past = hilbert[0], skip = 0;
+
+        vla.add((short)hilbert[0]);
+        for (int i = 1; i < hilbert.length; i++) {
+            current = hilbert[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+        return vla.shrink();
+    }
+    /**
      * Given one packed short array, original, and a Hilbert Curve index, hilbert, this produces a packed short array
      * that encodes "on" for any cell that was "on" in original, always encodes "on" for the position referred
      * to by hilbert, and encodes "off" for cells that were "off" in original and are not the cell hilbert refers to.
@@ -1997,18 +2139,28 @@ public class CoordPacker {
      * @param hilbert an array or vararg of Hilbert Curve indices that should be inserted into the result
      * @return A packed array that encodes "on" for all cells that are "on" in original or are contained in hilbert
      */
-    public static short[] insertSeveralPacked(short[] original, short... hilbert)
+    public static short[] insertSeveralPacked(short[] original, int... hilbert)
     {
-        Arrays.sort(hilbert);
-        short[] additions = new short[hilbert.length * 2];
-        short current;
-        for (int i = 0, total = 0; i < hilbert.length; i++) {
-            current = hilbert[i];
-            additions[i * 2] = (short)(current - total);
-            additions[i * 2 + 1] = 1;
-            total = current + 1;
-        }
-        return unionPacked(original, additions);
+        return unionPacked(original, packSeveral(hilbert));
+    }
+    /**
+     * Given one packed short array, original, and a number of Coords, points, this produces a packed
+     * short array that encodes "on" for any cell that was "on" in original, always encodes "on" for the position
+     * referred to by any element of points, and encodes "off" for cells that were "off" in original and are not in any
+     * cell points refers to. This method does not do any unpacking (which can be somewhat computationally expensive)
+     * and so should be strongly preferred when you have several Coords, possibly nearby each other but
+     * just as possibly not, that you need inserted into a packed array.
+     * <br>
+     *     NOTE: this may not produce an optimally packed result, though the difference in memory consumption is likely
+     *     to be exceedingly small unless there are many nearby elements in hilbert (which may be a better use case for
+     *     unionPacked() anyway).
+     * @param original A packed array such as one produced by pack()
+     * @param points an array or vararg of Coords that should be inserted into the result
+     * @return A packed array that encodes "on" for all cells that are "on" in original or are contained in hilbert
+     */
+    public static short[] insertSeveralPacked(short[] original, Coord... points)
+    {
+        return unionPacked(original, packSeveral(points));
     }
     /**
      * Given one packed short array, original, and a Hilbert Curve index, hilbert, this produces a packed short array
@@ -2056,18 +2208,29 @@ public class CoordPacker {
      * @param hilbert an array or vararg of Hilbert Curve indices that should be inserted into the result
      * @return A packed array that encodes "on" for all cells that are "on" in original and aren't contained in hilbert
      */
-    public static short[] removeSeveralPacked(short[] original, short... hilbert)
+    public static short[] removeSeveralPacked(short[] original, int... hilbert)
     {
-        Arrays.sort(hilbert);
-        short[] removals = new short[hilbert.length * 2];
-        short current;
-        for (int i = 0, total = 0; i < hilbert.length; i++) {
-            current = hilbert[i];
-            removals[i * 2] = (short)(current - total);
-            removals[i * 2 + 1] = 1;
-            total = current + 1;
-        }
-        return differencePacked(original, removals);
+        return differencePacked(original, packSeveral(hilbert));
+    }
+
+    /**
+     * Given one packed short array, original, and a number of Hilbert Curve indices, hilbert, this produces a packed
+     * short array that encodes "on" for any cell that was "on" in original, unless it was a position referred to by
+     * hilbert, and encodes "off" for cells that were "off" in original and are a cell hilbert refers to. This method
+     * does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly preferred
+     * when you have several Hilbert Curve indices, possibly nearby each other but just as possibly not, that you need
+     * removed from a packed array.
+     * <br>
+     *     NOTE: this may not produce an optimally packed result, though the difference in memory consumption is likely
+     *     to be exceedingly small unless there are many nearby elements in hilbert (which may be a better use case for
+     *     differencePacked() anyway).
+     * @param original A packed array such as one produced by pack()
+     * @param points an array or vararg of Coords that should be inserted into the result
+     * @return A packed array that encodes "on" for all cells that are "on" in original and aren't contained in points
+     */
+    public static short[] removeSeveralPacked(short[] original, Coord... points)
+    {
+        return differencePacked(original, packSeveral(points));
     }
 
     /**

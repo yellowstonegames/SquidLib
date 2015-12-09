@@ -205,7 +205,17 @@ public class CoordPackerTest {
         short[] xor = xorPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14));
         assertArrayEquals(minus, xor);
 
-
+        short[] edge = fringe(dataCross, 1, 64, 64);
+        //printPacked(edge, 64, 64);
+        short[] bonus = expand(dataCross, 1, 64, 64);
+        //printPacked(bonus, 64, 64);
+        assertArrayEquals(differencePacked(bonus, edge), dataCross);
+        short[] flooded = flood(dataCross, packSeveral(Coord.get(26, 2)), 2);
+        short[] manual = packSeveral(Coord.get(25, 2), Coord.get(26, 2), Coord.get(27, 2), Coord.get(28, 2),
+                Coord.get(25, 3), Coord.get(26, 3), Coord.get(27, 3),
+                Coord.get(26, 4));
+        printPacked(flooded, 64, 64);
+        assertArrayEquals(flooded, manual);
     }
     @Test
     public void testPackOptimalParameters()
