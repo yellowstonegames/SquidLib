@@ -1115,7 +1115,7 @@ public class FOVCache extends FOV{
             }
         }
         */
-        losCache[viewerX + viewerY * width] = insertSeveralPacked(losCached, packing.shrink());
+        losCache[viewerX + viewerY * width] = insertSeveralPacked(losCached, packing.asInts());
 
 
         for (int l = 0; l < maxRadius + 1; l++) {
@@ -1135,7 +1135,7 @@ public class FOVCache extends FOV{
                         packing.add(i);
                 }
             }
-            packed[maxRadius - l] = insertSeveralPacked(cached[maxRadius - l], packing.shrink());
+            packed[maxRadius - l] = insertSeveralPacked(cached[maxRadius - l], packing.asInts());
             Coord light;
             for (int i = 0; i < lightSources.length; i++) {
                 light = lightSources[i];
