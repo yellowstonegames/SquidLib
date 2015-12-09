@@ -43,7 +43,7 @@ public class ShortSet {
     private int hashShift, threshold;
     private int stashCapacity;
     private int pushIterations;
-    private short mask;
+    private int mask;
     private static LightRNG rng;
 
     private ShortSetIterator iterator1, iterator2;
@@ -73,7 +73,7 @@ public class ShortSet {
         this.loadFactor = loadFactor;
 
         threshold = (int)(capacity * loadFactor);
-        mask = (short)(capacity - 1);
+        mask = capacity - 1;
         hashShift = 31 - Integer.numberOfTrailingZeros(capacity);
         stashCapacity = Math.max(3, (int)Math.ceil(Math.log(capacity)) * 2);
         pushIterations = Math.max(Math.min(capacity, 8), (int)Math.sqrt(capacity) / 8);
@@ -206,7 +206,7 @@ public class ShortSet {
     private void push (short insertKey, int index1, short key1, int index2, short key2, int index3, short key3) {
         short[] keyTable = this.keyTable;
 
-        short mask = this.mask;
+        int mask = this.mask;
 
         // Push keys until an empty bucket is found.
         short evictedKey;
@@ -399,7 +399,7 @@ public class ShortSet {
 
         capacity = newSize;
         threshold = (int)(newSize * loadFactor);
-        mask = (short)(newSize - 1);
+        mask = newSize - 1;
         hashShift = 31 - Integer.numberOfTrailingZeros(newSize);
         stashCapacity = Math.max(3, (int)Math.ceil(Math.log(newSize)) * 2);
         pushIterations = Math.max(Math.min(newSize, 8), (int)Math.sqrt(newSize) / 8);
