@@ -266,7 +266,7 @@ public class CoordPacker {
             packing.add((short)skip);
         if(packing.size == 0)
             return ALL_WALL;
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -336,7 +336,7 @@ public class CoordPacker {
             packing.add((short)skip);
         if(packing.size == 0)
             return ALL_WALL;
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -404,7 +404,7 @@ public class CoordPacker {
             packing.add((short)skip);
         if(packing.size == 0)
             return ALL_WALL;
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -467,7 +467,7 @@ public class CoordPacker {
             packing.add((short)skip);
         if(packing.size == 0)
             return ALL_WALL;
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -536,7 +536,7 @@ public class CoordPacker {
             packing.add((short)skip);
         if(packing.size == 0)
             return ALL_WALL;
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -699,7 +699,7 @@ public class CoordPacker {
             if(packing[l].size == 0)
                 packed[l] = ALL_WALL;
             else
-                packed[l] = packing[l].shrink();
+                packed[l] = packing[l].toArray();
         }
         return packed;
     }
@@ -793,7 +793,7 @@ public class CoordPacker {
             if(packing[l].size == 0)
                 packed[l] = ALL_WALL;
             else
-                packed[l] = packing[l].shrink();
+                packed[l] = packing[l].toArray();
         }
         return packed;
     }
@@ -1240,7 +1240,7 @@ public class CoordPacker {
             }
             idx += packed[p] & 0xffff;
         }
-        return vla.shrink();
+        return vla.toArray();
     }
 
     private static int clamp(int n, int min, int max)
@@ -1300,7 +1300,7 @@ public class CoordPacker {
         }
         vla.add((short)(skip+1));
 
-        return vla.shrink();
+        return vla.toArray();
     }
 
 
@@ -1363,7 +1363,7 @@ public class CoordPacker {
             past = current;
         }
         vla.add((short)(skip+1));
-        return vla.shrink();
+        return vla.toArray();
     }
 
 
@@ -1438,7 +1438,7 @@ public class CoordPacker {
         }
         vla.add((short)(skip+1));
 
-        return vla.shrink();
+        return vla.toArray();
     }
 
     /**
@@ -1516,7 +1516,7 @@ public class CoordPacker {
             }
             vla.add((short) (skip + 1));
 
-            finished[expansion-1] = vla.shrink();
+            finished[expansion-1] = vla.toArray();
         }
         return finished;
     }
@@ -1573,7 +1573,7 @@ public class CoordPacker {
                     }
                 }
             }
-            s2 = edge.shrink();
+            s2 = edge.toArray();
         }
 
         int[] indices = vla.asInts();
@@ -1597,7 +1597,7 @@ public class CoordPacker {
         }
         vla.add((short)(skip+1));
 
-        return vla.shrink();
+        return vla.toArray();
     }
 
 
@@ -1654,7 +1654,7 @@ public class CoordPacker {
                     }
                 }
             }
-            s2 = edge.shrink();
+            s2 = edge.toArray();
         }
 
         int[] indices = vla.asInts();
@@ -1678,7 +1678,7 @@ public class CoordPacker {
         }
         vla.add((short)(skip+1));
 
-        return vla.shrink();
+        return vla.toArray();
     }
 
     /**
@@ -1712,15 +1712,45 @@ public class CoordPacker {
      */
     public static short[] rectangle(int x, int y, int width, int height)
     {
-        if(x + width > 256 || y + height > 256)
-            throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
-        if(width < 0 || height < 0 || x < 0 || y < 0)
-            throw new UnsupportedOperationException("Negative coordinates/sizes are not supported, aborting");
-        boolean[][] rect = new boolean[x + width][y + height];
-        for (int i = x; i < x + width; i++) {
-            Arrays.fill(rect[i], y, y + height, true);
+        int width2 = width, height2 = height;
+        if(x + width >= 256)
+            width2 = 255 - x;
+        if(y + height >= 256)
+            height2 = 255 - y;
+        if(width2 < 0 || height2 < 0 || x < 0 || y < 0)
+            return ALL_WALL;
+        boolean[][] rect = new boolean[x + width2][y + height2];
+        for (int i = x; i < x + width2; i++) {
+            Arrays.fill(rect[i], y, y + height2, true);
         }
         return pack(rect);
+    }
+    /**
+     * Given x, y, width and height, returns an array of all Hilbert distance within the rectangle from (x,y) to
+     * (width - 1, height - 1).
+     * @param x the minimum x coordinate
+     * @param y the minimum y coordinate
+     * @param width the width of the rectangle
+     * @param height the height of the rectangle
+     * @return a short[] that is not packed, and instead stores individual Hilbert distances in the rectangle
+     */
+    public static short[] rectangleHilbert(int x, int y, int width, int height)
+    {
+        int width2 = width, height2 = height;
+        if(x + width >= 256)
+            width2 = 255 - x;
+        if(y + height >= 256)
+            height2 = 255 - y;
+        if(width2 <= 0 || height2 <= 0 || x < 0 || y < 0)
+            return new short[0];
+        short[] hilberts = new short[width2 * height2];
+        int idx = 0;
+        for (int i = x; i < x + width2; i++) {
+            for (int j = y; j < y + height2; j++) {
+                hilberts[idx++] = hilbertDistances[i + (j << 8)];
+            }
+        }
+        return hilberts;
     }
 
     /**
@@ -1841,7 +1871,7 @@ public class CoordPacker {
                 elemRight++;
             }
         }
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -1920,7 +1950,7 @@ public class CoordPacker {
                 elemRight++;
             }
         }
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -2024,7 +2054,7 @@ public class CoordPacker {
                 elemRight++;
             }
         }
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -2108,7 +2138,7 @@ public class CoordPacker {
                 elemRight++;
             }
         }
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -2169,7 +2199,7 @@ public class CoordPacker {
             past = current;
         }
         vla.add((short)(skip+1));
-        return vla.shrink();
+        return vla.toArray();
     }
 
     /**
@@ -2204,7 +2234,7 @@ public class CoordPacker {
             past = current;
         }
         vla.add((short)(skip+1));
-        return vla.shrink();
+        return vla.toArray();
     }
     /**
      * Given one packed short array, original, and a Hilbert Curve index, hilbert, this produces a packed short array
@@ -2550,7 +2580,7 @@ public class CoordPacker {
         }
         if(on)
             packing.add((short)skip);
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -2617,7 +2647,7 @@ public class CoordPacker {
         }
         if(on)
             packing.add((short)skip);
-        return packing.shrink();
+        return packing.toArray();
     }
 
     /**
@@ -2717,7 +2747,7 @@ public class CoordPacker {
 
             if (((on >> l) & 1L) == 1L)
                 packing[l].add((short) skip[l]);
-            packed[l] = packing[l].shrink();
+            packed[l] = packing[l].toArray();
         }
         return packed;
     }

@@ -20,7 +20,8 @@ package squidpony.squidmath;
 import java.util.NoSuchElementException;
 
 /** An unordered set that uses short keys. This implementation uses cuckoo hashing using 3 hashes, random walking, and a
- * small stash for problematic keys. No allocation is done except when growing the table size. <br>
+ * small stash for problematic keys. No allocation is done except when growing the table size. Used internally by
+ * CoordPacker, and unlikely to be used outside of it.
  * <br>
  * This set performs very fast contains and remove (typically O(1), worst case O(log(n))). Add may be a bit slower,
  * depending on hash collisions. Load factors greater than 0.91 greatly increase the chances the set will have to rehash
