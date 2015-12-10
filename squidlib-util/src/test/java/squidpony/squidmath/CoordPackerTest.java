@@ -125,7 +125,8 @@ public class CoordPackerTest {
         assertArrayEquals(dataCross, crossUnTranslated);
 
         short[] crossBox = translate(translate(dataCross, 25, 25, 64, 64), -50, -50, 64, 64);
-        printPacked(crossBox, 64, 64);
+        //printPacked(crossBox, 64, 64);
+        assertArrayEquals(crossBox, rectangle(14, 14));
     }
 
     @Test
@@ -366,7 +367,7 @@ public class CoordPackerTest {
     {
         for(int FOV_RANGE = 1; FOV_RANGE < 21; FOV_RANGE++) {
             StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
-            DungeonGenerator dungeonGenerator = new DungeonGenerator(240, 240, rng);
+            DungeonGenerator dungeonGenerator = new DungeonGenerator(80, 80, rng);
             dungeonGenerator.addDoors(15, true);
             dungeonGenerator.addWater(25);
             dungeonGenerator.addTraps(2);
@@ -497,7 +498,7 @@ public class CoordPackerTest {
     public void testPackMultiPoorParameters() {
         for(int FOV_RANGE = 1; FOV_RANGE < 21; FOV_RANGE++) {
             StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
-            DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 70, rng);
+            DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 240, rng);
             dungeonGenerator.addDoors(15, true);
             dungeonGenerator.addWater(25);
             dungeonGenerator.addTraps(2);
