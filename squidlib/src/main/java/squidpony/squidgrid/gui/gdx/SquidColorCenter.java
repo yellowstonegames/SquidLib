@@ -7,6 +7,7 @@ import squidpony.IColorCenter;
 
 /**
  * A concrete implementation of {@link IColorCenter} for libgdx's {@link com.badlogic.gdx.graphics.Color}.
+ * Supports filtering any colors that this creates using a {@link Filter}, such as one from {@link Filters}.
  *
  * @author smelC
  * @author Tommy Ettinger
@@ -73,7 +74,6 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
                 start.b + change * (end.b - start.b),
                 start.a + change * (end.a - start.a)
         );
-
     }
 	@Override
 	public int getRed(Color c) {
@@ -95,10 +95,13 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
 		return Math.round(c.a * 255f);
 	}
 
-    public static long encode (Color color) {
+    public static int encode (Color color) {
         if (color == null)
-            return 0L;
-        return (Math.round(color.r * 255.0) << 40) | (Math.round(color.g * 255.0) << 24) | (Math.round(color.b * 255.0) << 8) | Math.round(color.a * 255.0);
+            return 0;
+        return (Math.round(color.r * 255.0f) << 24)
+                | (Math.round(color.g * 255.0f) << 16)
+                | (Math.round(color.b * 255.0f) << 8)
+                | Math.round(color.a * 255.0f);
     }
 
     @Override
