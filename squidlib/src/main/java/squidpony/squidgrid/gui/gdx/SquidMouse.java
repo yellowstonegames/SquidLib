@@ -49,11 +49,11 @@ public class SquidMouse extends InputAdapter {
     /**
      * Sets the size of the cell so that all mouse input can be evaluated as
      * relative to the grid. Offsets can be specified for x and y if the grid
-     * is displayed at a position other than the full screen. Instead of
-     * specifying an offset from the bottom and right edges, specify the
-     * width and height in grid cells of the area to receive input. All input
-     * is passed to the provided InputProcessor once it's had its coordinates
-     * translated to grid coordinates.
+     * is displayed at a position other than the full screen. Specify the
+     * width and height in grid cells of the area to receive input, as well as
+     * the offsets from the bottom and left edges also measured in grid cells.
+     * All input is passed to the provided InputProcessor once it's had its
+     * coordinates translated to grid coordinates.
      *
      * If the input is not within the bounds of the grid as determined by
      * gridWidth, gridHeight, offsetX, and offsetY, the input will be clamped.
@@ -161,11 +161,11 @@ public class SquidMouse extends InputAdapter {
     }
 
 	protected int translateX(int screenX) {
-		return MathUtils.floor(MathUtils.clamp((screenX - offsetX) / cellWidth, 0.0f, gridWidth - 1.0f));
+		return MathUtils.clamp((MathUtils.floor((screenX + offsetX) / cellWidth)), 0, (int)(gridWidth - 1)); //MathUtils.floor((offsetX * 0f) / cellWidth)
 	}
 
 	protected int translateY(int screenY) {
-		return MathUtils.floor(MathUtils.clamp((screenY - offsetY) / cellHeight, 0.0f, gridHeight - 1.0f));
+		return MathUtils.clamp((MathUtils.floor((screenY + offsetY) / cellHeight)), 0, (int)(gridHeight - 1)); //MathUtils.floor((offsetY * 0f) / cellHeight)
 	}
 
     @Override

@@ -881,7 +881,7 @@ public class DungeonUtility {
                         portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (80 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 8.0 - 0.35));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 4.0 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -939,7 +939,7 @@ public class DungeonUtility {
                         portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (80 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 30.0) / 3.0 - 0.35));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 35.0) / 4.0 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;

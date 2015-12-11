@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import squidpony.squidgrid.Direction;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 
 /**
@@ -319,6 +320,8 @@ public class SquidLayers extends Group {
 
     private void initPalettes() {
         palette = new ArrayList<>(256);
+        Collections.addAll(palette, SColor.LIMITED_PALETTE);
+        /*
         palette.add(SColor.PURE_DARK_GRAY);
         palette.add(SColor.CREAM);
         palette.add(SColor.FLATTERY_BROWN);
@@ -356,8 +359,8 @@ public class SquidLayers extends Group {
         palette.add(SColor.PERSIAN_BLUE);
 
         palette.add(SColor.LAVENDER_BLUE);
-        palette.add(SColor.THIN_VIOLET);
         palette.add(SColor.DARK_VIOLET);
+        palette.add(SColor.INDIGO);
 
         palette.add(SColor.CARNATION_PINK);
         palette.add(SColor.HOT_MAGENTA);
@@ -371,6 +374,7 @@ public class SquidLayers extends Group {
         palette.add(SColor.DARK_CHESTNUT);
         palette.add(SColor.SAPPANWOOD_INCENSE);
 
+         */
     }
 
     /**
@@ -1587,6 +1591,25 @@ public class SquidLayers extends Group {
     private int clamp(int x, int min, int max)
     {
         return Math.min(Math.max(min, x), max);
+    }
+
+
+    /**
+     * Sets the position of the actor's bottom left corner.
+     *
+     * @param x
+     * @param y
+     */
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        setBounds(x, y, getWidth(), getHeight());
+        foregroundPanel.setPosition(x, y);
+        backgroundPanel.setPosition(x, y);
+        for(SquidPanel panel : extraPanels)
+        {
+            panel.setPosition(x, y);
+        }
     }
 
 }
