@@ -257,9 +257,10 @@ public interface Filters {
         }
     }
     /**
-     * A Filter that makes the colors requested from it highly saturated, with the original value and a timer that
-     * increments very slowly altering hue, and the original hue altering value. It should look like a hallucination.
-     *
+     * A Filter that makes the colors requested from it highly saturated, with the original hue, value and a timer that
+     * increments very slowly altering hue, with hue, value and the timer altering saturation, and the original hue,
+     * saturation, and value all altering value. It should look like a hallucination.
+     * <br>
      * A short (poorly recorded) video can be seen here http://i.imgur.com/SEw2LXe.gifv ; performance should be smoother
      * during actual gameplay.
      */
@@ -285,6 +286,37 @@ public interface Filters {
                     (v * 4f + h + state[0]) % 1.0f,
                     Math.max(0f, Math.min((h + v) * 0.65f + state[0] * 0.4f, 1f)),
                     (h + v + s) * 0.35f + 0.7f,
+                    a);
+        }
+    }
+
+
+    /**
+     * A Filter that multiplies the saturation of any color requested from it by a number given during construction.
+     */
+    class SaturationFilter extends Filter<Color> {
+        private SquidColorCenter globalSCC;
+        /**
+         * Sets up a SaturationFilter with the desired saturation multiplier. Using a multiplier of 0f, as you would
+         * expect, makes the image grayscale. Using a multiplier of 0.5 make the image "muted", with no truly bright
+         * colors, while 1.0f makes no change, and and any numbers higher than 1.0f will make the image more saturated,
+         * with the exception of colors that were already grayscale or close to it. This clamps the result, so there's
+         * no need to worry about using too high of a saturation multiplier.
+         *
+         * @param multiplier the amount to multiply each requested color's saturation by; 1.0f means "no change"
+         */
+        public SaturationFilter(float multiplier) {
+            globalSCC = DefaultResources.getSCC();
+
+            state = new float[]{multiplier};
+        }
+
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            return globalSCC.getHSV(
+                    globalSCC.getHue(r, g, b),
+                    Math.max(0f, Math.min((globalSCC.getSaturation(r, g, b) * state[0]), 1f)),
+                    globalSCC.getValue(r, g, b),
                     a);
         }
     }

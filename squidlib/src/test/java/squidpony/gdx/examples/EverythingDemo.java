@@ -3,12 +3,14 @@ package squidpony.gdx.examples;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
@@ -36,6 +38,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private RNG rng;
     private LightRNG lrng;
     private SquidLayers display;
+    private SquidMessageBox messages;
     /** Non-{@code null} iff '?' was pressed before */
     private /*Nullable*/ Actor help;
     private DungeonGenerator dungeonGen;
@@ -67,6 +70,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private Coord cursor;
     private ArrayList<Coord> toCursor;
     private ArrayList<Coord> awaitedMoves;
+    private String lang;
     @Override
     public void create () {
         // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
@@ -103,18 +107,31 @@ public class EverythingDemo extends ApplicationAdapter {
         bgCenter = fgCenter;
         */
 
-        fgCenter = DefaultResources.getSCC();
+        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
+        // SaturationFilter is being tested here.
+
+        fgCenter = new SquidColorCenter(new Filters.SaturationFilter(1.3f));
         bgCenter = fgCenter;
+
+
+        //fgCenter = DefaultResources.getSCC();
+        //bgCenter = fgCenter;
         batch = new SpriteBatch();
         width = 80;
         height = 30;
-        cellWidth = 8;
-        cellHeight = 18;
+        cellWidth = 12;
+        cellHeight = 24;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothName, bgCenter, fgCenter);
+        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge, bgCenter, fgCenter);
         display.setAnimationDuration(0.03f);
+        messages = new SquidMessageBox(width, 4, new TextCellFactory().font(DefaultResources.smoothNameLarge)
+                .width(cellWidth).height(cellHeight).initBySize());
         stage = new Stage(new ScreenViewport(), batch);
+
+        //These need to have their positions set before adding any entities if there is an offset involved.
+        messages.setPosition(0, 0);
+        display.setPosition(0, messages.getHeight());
 
         counter = 0;
         lrng = new LightRNG(0xBADBEEFB0BBL);
@@ -146,9 +163,8 @@ public class EverythingDemo extends ApplicationAdapter {
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
-            monsters.put(display.animateActor(monPos.x, monPos.y, 'ξ',
+            monsters.put(display.animateActor(monPos.x, monPos.y, 'Ж',
                     fgCenter.filter(display.getPalette().get(11))), 0);
-
         }
         // your choice of FOV matters here.
         fov = new FOV(FOV.RIPPLE_TIGHT);
@@ -179,7 +195,8 @@ public class EverythingDemo extends ApplicationAdapter {
         }
         lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
         seen = new boolean[width][height];
-
+        lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
+                new String[]{"..."}, 0.25);
         // this is a big one.
         // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
         // (which is given an InputProcessor implementation and can handle multiple kinds of mouse move), or both.
@@ -275,7 +292,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                 }
             }
-        }, new SquidMouse(cellWidth, cellHeight, new InputAdapter() {
+        }, new SquidMouse(cellWidth, cellHeight, width, height, 0, 0, new InputAdapter() {
 
             // if the user clicks within FOV range and there are no awaitedMoves queued up, generate toCursor if it
             // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
@@ -314,10 +331,10 @@ public class EverythingDemo extends ApplicationAdapter {
             }
         }));
         // ABSOLUTELY NEEDED TO HANDLE INPUT
-        Gdx.input.setInputProcessor(input);
+        Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
         // and then add display, our one visual component, to the list of things that act in Stage.
-        display.setPosition(0, 0);
         stage.addActor(display);
+        stage.addActor(messages);
 
     }
     /**
@@ -406,6 +423,12 @@ public class EverythingDemo extends ApplicationAdapter {
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
             if(mon.getValue() > 0 || fovmap[mon.getKey().gridX][mon.getKey().gridY] > 0.1)
             {
+                if(mon.getValue() == 0)
+                {
+                    messages.appendMessage("The armed guard shouts at you, \"" +
+                            FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
+                            new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
+                }
                 // this block is used to ensure that the monster picks the best path, or a random choice if there
                 // is more than one equally good best option.
                 Direction choice = null;
@@ -438,7 +461,9 @@ public class EverythingDemo extends ApplicationAdapter {
                             display.put(mon.getKey().x, mon.getKey().y, 'M', 11);
                         }*/
                         nextMovePositions.add(Coord.get(tmp.x, tmp.y));
+                        monsters.put(mon.getKey(), 1);
                         display.slide(mon.getKey(), tmp.x, tmp.y);
+
                     }
                 }
                 else
@@ -558,8 +583,10 @@ public class EverythingDemo extends ApplicationAdapter {
         if (health <= 0) {
             // still need to display the map, then write over it with a message.
             putMap();
-            display.putBoxedString(width / 2 - 11, height / 2 - 1, "YOU HAVE BEEN EATEN!");
-            display.putBoxedString(width / 2 - 11, height / 2 + 5, "     q to quit.     ");
+            display.putBoxedString(width / 2 - 18, height / 2 - 10, "   THE TSAR WILL HAVE YOUR HEAD!    ");
+            display.putBoxedString(width / 2 - 18, height / 2 - 5,  "      AS THE OLD SAYING GOES,       ");
+            display.putBoxedString(width / 2 - lang.length() / 2, height / 2, lang);
+            display.putBoxedString(width / 2 - 18, height / 2 + 5,  "             q to quit.             ");
 
             // because we return early, we still need to draw.
             stage.draw();
@@ -568,6 +595,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 input.next();
             return;
         }
+        stage.act();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
         // if the user clicked, we have a list of moves to perform.
@@ -645,6 +673,6 @@ public class EverythingDemo extends ApplicationAdapter {
     @Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		input.getMouse().reinitialize((float) width / this.width, (float) height / this.height);
+		input.getMouse().reinitialize((float) width / this.width, (height - messages.getHeight()) / this.height, this.width, this.height, 0, 0);
 	}
 }
