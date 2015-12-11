@@ -1845,8 +1845,8 @@ public class FOVCache extends FOV{
             ArrayList<ArrayList<LOSUnit>> losUnits = new ArrayList<ArrayList<LOSUnit>>(24);
             ArrayList<ArrayList<FOVUnit>> fovUnits = new ArrayList<ArrayList<FOVUnit>>(24);
             for (int p = 0; p < 24; p++) {
-                losUnits.add(new ArrayList<LOSUnit>(mapLimit));
-                fovUnits.add(new ArrayList<FOVUnit>(mapLimit));
+                losUnits.add(new ArrayList<LOSUnit>(mapLimit / 20));
+                fovUnits.add(new ArrayList<FOVUnit>(mapLimit / 20));
             }
             for (int i = 0, p = 0; i < mapLimit; i++, p = (p+1) % 24) {
                 losUnits.get(p).add(new LOSUnit(i));
@@ -1933,7 +1933,7 @@ public class FOVCache extends FOV{
 
             ArrayList<ArrayList<SymmetryUnit>> symUnits = new ArrayList<ArrayList<SymmetryUnit>>(4);
             for (int p = 0; p < 4; p++) {
-                symUnits.add(new ArrayList<SymmetryUnit>(mapLimit));
+                symUnits.add(new ArrayList<SymmetryUnit>(mapLimit / 3));
             }
             for (int i = 0, p = 0; i < mapLimit; i++, p = (p+1) % 4) {
                 symUnits.get(p).add(new SymmetryUnit(i));
@@ -1950,6 +1950,7 @@ public class FOVCache extends FOV{
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
+                symUnits.remove(p);
                 System.gc();
             }
             cache = tmpCache;

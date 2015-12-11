@@ -222,7 +222,7 @@ public class CoordPacker {
         if(xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
-        boolean on = false, current;
+        boolean on = false, anyAdded = false, current;
         int skip = 0, limit = 0x10000, mapLimit = xSize * ySize;
         if(ySize <= 128) {
             limit >>= 1;
@@ -250,6 +250,7 @@ public class CoordPacker {
                     on = false;
                     packing.add((short) skip);
                     skip = 0;
+                    anyAdded = true;
                 }
                 continue;
             }
@@ -260,11 +261,12 @@ public class CoordPacker {
                 packing.add((short) skip);
                 skip = 0;
                 on = current;
+                anyAdded = true;
             }
         }
         if(on)
             packing.add((short)skip);
-        if(packing.size == 0)
+        else if(!anyAdded)
             return ALL_WALL;
         return packing.toArray();
     }
@@ -292,7 +294,7 @@ public class CoordPacker {
         if(xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
-        boolean on = false, current;
+        boolean on = false, anyAdded = false, current;
         int skip = 0, limit = 0x10000, mapLimit = xSize * ySize;
         if(ySize <= 128) {
             limit >>= 1;
@@ -320,6 +322,7 @@ public class CoordPacker {
                     on = false;
                     packing.add((short) skip);
                     skip = 0;
+                    anyAdded = true;
                 }
                 continue;
             }
@@ -330,11 +333,12 @@ public class CoordPacker {
                 packing.add((short) skip);
                 skip = 0;
                 on = current;
+                anyAdded = true;
             }
         }
         if(on)
             packing.add((short)skip);
-        if(packing.size == 0)
+        else if(!anyAdded)
             return ALL_WALL;
         return packing.toArray();
     }
@@ -360,7 +364,7 @@ public class CoordPacker {
         if(xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
-        boolean on = false, current;
+        boolean on = false, anyAdded = false, current;
         int skip = 0, limit = 0x10000, mapLimit = xSize * ySize;
         if(ySize <= 128) {
             limit >>= 1;
@@ -388,6 +392,7 @@ public class CoordPacker {
                     on = false;
                     packing.add((short) skip);
                     skip = 0;
+                    anyAdded = true;
                 }
                 continue;
             }
@@ -398,11 +403,12 @@ public class CoordPacker {
                 packing.add((short) skip);
                 skip = 0;
                 on = current;
+                anyAdded = true;
             }
         }
         if(on)
             packing.add((short)skip);
-        if(packing.size == 0)
+        else if(!anyAdded)
             return ALL_WALL;
         return packing.toArray();
     }
@@ -424,7 +430,7 @@ public class CoordPacker {
         if(xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
-        boolean on = false, current;
+        boolean on = false, anyAdded = false, current;
         int skip = 0, limit = 0x10000, mapLimit = xSize * ySize;
         if(ySize <= 128) {
             limit >>= 1;
@@ -451,6 +457,7 @@ public class CoordPacker {
                     on = false;
                     packing.add((short) skip);
                     skip = 0;
+                    anyAdded = true;
                 }
                 continue;
             }
@@ -461,11 +468,12 @@ public class CoordPacker {
                 packing.add((short) skip);
                 skip = 0;
                 on = current;
+                anyAdded = true;
             }
         }
         if(on)
             packing.add((short)skip);
-        if(packing.size == 0)
+        else if(!anyAdded)
             return ALL_WALL;
         return packing.toArray();
     }
@@ -492,7 +500,7 @@ public class CoordPacker {
         if(xSize > 256 || ySize > 256)
             throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
         ShortVLA packing = new ShortVLA(64);
-        boolean on = false, current;
+        boolean on = false, anyAdded = false, current;
         int skip = 0, limit = 0x10000, mapLimit = xSize * ySize;
         if(ySize <= 128) {
             limit >>= 1;
@@ -520,6 +528,7 @@ public class CoordPacker {
                     on = false;
                     packing.add((short) skip);
                     skip = 0;
+                    anyAdded = true;
                 }
                 continue;
             }
@@ -530,11 +539,12 @@ public class CoordPacker {
                 packing.add((short) skip);
                 skip = 0;
                 on = current;
+                anyAdded = true;
             }
         }
         if(on)
             packing.add((short)skip);
-        if(packing.size == 0)
+        else if(!anyAdded)
             return ALL_WALL;
         return packing.toArray();
     }
@@ -669,12 +679,14 @@ public class CoordPacker {
         short[][] packed = new short[llen][];
         for(int l = 0; l < llen; l++) {
             packing[l] = new ShortVLA(64);
+            boolean anyAdded = false;
             for (int i = 0, ml = 0; i < limit && ml < mapLimit; i++, skip[l]++) {
                 if (hilbertX[i] >= xSize || hilbertY[i] >= ySize) {
                     if ((on & (1L << l)) != 0L) {
                         on ^= (1L << l);
                         packing[l].add((short) skip[l]);
                         skip[l] = 0;
+                        anyAdded = true;
                     }
                     continue;
                 }
@@ -691,12 +703,15 @@ public class CoordPacker {
                     // sets the bit at position l in on to the same as the bit at position l in current.
                     on ^= (-((current >> l) & 1L) ^ on) & (1L << l);
 
+                    anyAdded = true;
                 }
             }
 
-            if (((on >> l) & 1L) == 1L)
+            if (((on >> l) & 1L) == 1L) {
                 packing[l].add((short) skip[l]);
-            if(packing[l].size == 0)
+                anyAdded = true;
+            }
+            if(!anyAdded)
                 packed[l] = ALL_WALL;
             else
                 packed[l] = packing[l].toArray();
@@ -761,6 +776,7 @@ public class CoordPacker {
         short x, y;
         for(int l = 0; l < levelCount; l++) {
             packing[l] = new ShortVLA(64);
+            boolean anyAdded = false;
             for (int i = 0, ml = 0; i < limit && ml < mapLimit; i++, skip[l]++) {
                 x = hilbertX[i];
                 y = hilbertY[i];
@@ -769,6 +785,7 @@ public class CoordPacker {
                         on ^= (1L << l);
                         packing[l].add((short) skip[l]);
                         skip[l] = 0;
+                        anyAdded = true;
                     }
                     continue;
                 }
@@ -785,12 +802,15 @@ public class CoordPacker {
                     // sets the bit at position l in on to the same as the bit at position l in current.
                     on ^= (-((current >> l) & 1L) ^ on) & (1L << l);
 
+                    anyAdded = true;
                 }
             }
 
-            if (((on >> l) & 1L) == 1L)
+            if (((on >> l) & 1L) == 1L) {
                 packing[l].add((short) skip[l]);
-            if(packing[l].size == 0)
+                anyAdded = true;
+            }
+            if(!anyAdded)
                 packed[l] = ALL_WALL;
             else
                 packed[l] = packing[l].toArray();
