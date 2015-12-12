@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import squidpony.IColorCenter;
 import squidpony.squidgrid.Direction;
 
 import java.util.ArrayList;
@@ -1610,6 +1611,24 @@ public class SquidLayers extends Group {
         {
             panel.setPosition(x, y);
         }
+    }
+
+
+    /**
+     * Sets the IColorCenter used by the foreground layer.
+     *
+     * @param scc an IColorCenter<Color>; commonly a SquidColorCenter with an optional filter
+     */
+    public void setFGColorCenter(IColorCenter<Color> scc) {
+        foregroundPanel.setColorCenter(scc);
+    }
+    /**
+     * Sets the IColorCenter used by the background layer.
+     *
+     * @param scc an IColorCenter<Color>; commonly a SquidColorCenter with an optional filter
+     */
+    public void setBGColorCenter(IColorCenter<Color> scc) {
+        backgroundPanel.setColorCenter(scc);
     }
 
 }

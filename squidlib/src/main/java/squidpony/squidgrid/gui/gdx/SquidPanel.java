@@ -41,7 +41,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected int gridWidth, gridHeight, gridOffsetX = 0, gridOffsetY = 0;
     protected final String[][] contents;
     protected final Color[][] colors;
-    protected Color lightingColor = SColor.CREAM;
+    protected Color lightingColor = SColor.WHITE;
     protected final TextCellFactory textFactory;
     protected LinkedHashSet<AnimatedEntity> animatedEntities;
 

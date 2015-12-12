@@ -71,51 +71,63 @@ public class EverythingDemo extends ApplicationAdapter {
     private ArrayList<Coord> toCursor;
     private ArrayList<Coord> awaitedMoves;
     private String lang;
+    private SquidColorCenter[] colorCenters;
+    private int currentCenter;
+    private boolean changingColors = false;
     @Override
     public void create () {
-        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
+        // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
+        lrng = new LightRNG(0xBADBEEFB0BBL);
+        rng = new RNG(lrng);
+
+        // for demo purposes, we allow changing the SquidColorCenter and the filter effect associated with it.
+        // next, we populate the colorCenters array with the SquidColorCenters that will modify any colors we request
+        // of them using the filter we specify. Only one SquidColorCenter will be used at any time for foreground, and
+        // sometimes another will be used for background.
+        colorCenters = new SquidColorCenter[14];
         // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
         // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
-        /*
-        fgCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
+
+        colorCenters[0] = new SquidColorCenter(new Filters.MultiLerpFilter(
                 new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
-                new float[]{0.6f, 0.5f}
+                new float[]{0.25f, 0.2f}
         ));
-        bgCenter = fgCenter;
-        */
-        /*
-        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
+        colorCenters[1] = colorCenters[0];
+
         // MultiLerpFilter here is given three colors to tint everything toward one of; this is meant to look bolder.
 
-        fgCenter = new SquidColorCenter(new Filters.MultiLerpFilter(
+        colorCenters[2] = new SquidColorCenter(new Filters.MultiLerpFilter(
                 new Color[]{SColor.RED_PIGMENT, SColor.MEDIUM_BLUE, SColor.LIME_GREEN},
-                new float[]{0.25f, 0.3f, 0.3f}
+                new float[]{0.2f, 0.25f, 0.25f}
         ));
-        bgCenter = fgCenter;
-        */
+        colorCenters[3] = colorCenters[2];
 
-        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
         // ColorizeFilter here is given a slightly-grayish dark brown to imitate a sepia tone.
 
-        //fgCenter = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.7f, -0.05f));
-        //bgCenter = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.65f, 0.07f));
-        /*
-        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
-        // HallucinateFilter is being tested here.
+        colorCenters[4] = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.7f, -0.05f));
+        colorCenters[5] = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.65f, 0.07f));
 
-        fgCenter = new SquidColorCenter(new Filters.HallucinateFilter());
-        bgCenter = fgCenter;
-        */
+        // HallucinateFilter makes all the colors very saturated and move even when you aren't doing anything.
 
-        // creates the SquidColorCenter that will modify any colors we request of it using the filter we specify.
-        // SaturationFilter is being tested here.
+        colorCenters[6] = new SquidColorCenter(new Filters.HallucinateFilter());
+        colorCenters[7] = colorCenters[6];
 
-        fgCenter = new SquidColorCenter(new Filters.SaturationFilter(1.3f));
-        bgCenter = fgCenter;
+        // SaturationFilter here is used to over-saturate the colors slightly. Background is less saturated.
 
+        colorCenters[8] = new SquidColorCenter(new Filters.SaturationFilter(1.35f));
+        colorCenters[9] = new SquidColorCenter(new Filters.SaturationFilter(1.15f));
 
-        //fgCenter = DefaultResources.getSCC();
-        //bgCenter = fgCenter;
+        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
+
+        colorCenters[10] = new SquidColorCenter(new Filters.SaturationFilter(0.7f));
+        colorCenters[11] = new SquidColorCenter(new Filters.SaturationFilter(0.5f));
+
+        colorCenters[12] = DefaultResources.getSCC();
+        colorCenters[13] = colorCenters[12];
+
+        fgCenter = colorCenters[12];
+        bgCenter = colorCenters[13];
+        currentCenter = 6;
         batch = new SpriteBatch();
         width = 80;
         height = 30;
@@ -132,16 +144,15 @@ public class EverythingDemo extends ApplicationAdapter {
         //These need to have their positions set before adding any entities if there is an offset involved.
         messages.setPosition(0, 0);
         display.setPosition(0, messages.getHeight());
-
+        messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
+                " Click the top or bottom border of this box to scroll.");
         counter = 0;
-        lrng = new LightRNG(0xBADBEEFB0BBL);
-        rng = new RNG(lrng);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        //dungeonGen.addWater(10, 7);
-        dungeonGen.addGrass(1);
+        dungeonGen.addWater(8, 6);
+        dungeonGen.addGrass(5);
         dungeonGen.addBoulders(10);
-        dungeonGen.addDoors(15, false);
+        dungeonGen.addDoors(18, false);
         MixedGenerator mix = new MixedGenerator(width, height, rng);
         mix.putCaveCarvers(1);
         mix.putBoxRoomCarvers(1);
@@ -163,7 +174,7 @@ public class EverythingDemo extends ApplicationAdapter {
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
-            monsters.put(display.animateActor(monPos.x, monPos.y, 'Ж',
+            monsters.put(display.animateActor(monPos.x, monPos.y, 'Я',
                     fgCenter.filter(display.getPalette().get(11))), 0);
         }
         // your choice of FOV matters here.
@@ -181,7 +192,7 @@ public class EverythingDemo extends ApplicationAdapter {
         toCursor = new ArrayList<Coord>(10);
         awaitedMoves = new ArrayList<Coord>(10);
         playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.EUCLIDEAN);
-        int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
+        final int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
                 initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
         colors = new Color[width][height];
         bgColors = new Color[width][height];
@@ -189,8 +200,8 @@ public class EverythingDemo extends ApplicationAdapter {
         bgColor = SColor.DARK_SLATE_GRAY;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                colors[i][j] = fgCenter.filter(palette.get(initialColors[i][j]));
-                bgColors[i][j] = bgCenter.filter(palette.get(initialBGColors[i][j]));
+                colors[i][j] = palette.get(initialColors[i][j]);
+                bgColors[i][j] = palette.get(initialBGColors[i][j]);
             }
         }
         lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
@@ -288,6 +299,18 @@ public class EverythingDemo extends ApplicationAdapter {
                     case SquidInput.ESCAPE:
                     {
                         Gdx.app.exit();
+                        break;
+                    }
+                    case 'f':
+                    case 'F':
+                    {
+                        currentCenter = (currentCenter + 1) % 7;
+                        // idx is 3 when we use the HallucinateFilter, which needs special work
+                        changingColors = currentCenter == 3;
+                        fgCenter = colorCenters[currentCenter * 2];
+                        bgCenter = colorCenters[currentCenter * 2 + 1];
+                        display.setFGColorCenter(fgCenter);
+                        display.setBGColorCenter(bgCenter);
                         break;
                     }
                 }
@@ -425,7 +448,7 @@ public class EverythingDemo extends ApplicationAdapter {
             {
                 if(mon.getValue() == 0)
                 {
-                    messages.appendMessage("The armed guard shouts at you, \"" +
+                    messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
                             new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
                 }
@@ -493,21 +516,24 @@ public class EverythingDemo extends ApplicationAdapter {
         final Color nbColor;
         if (nbMonsters <= 1)
             /* Green */
-            nbColor = new Color(0, 1, 0, 1);
+            nbColor = Color.GREEN;
         else if (nbMonsters <= 5)
             /* Orange */
-            nbColor = new Color(1, 0.5f, 0, 1);
+            nbColor = Color.ORANGE;
         else
             /* Red */
-            nbColor = new Color(1, 0, 0, 1);
+            nbColor = Color.RED;
         cs.appendInt(nbMonsters, nbColor);
         cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
 
-		/* The panel's width */
-		final int w = cs.length();
-		/* The panel's height. */
-		final int h = 1;
+        IColoredString<Color> helping1 = new IColoredString.Impl<Color>("Use numpad or vi-keys (hjklyubn) to move.", Color.WHITE);
+        IColoredString<Color> helping2 = new IColoredString.Impl<Color>("Use ? for help, f to change colors, q to quit.", Color.WHITE);
+        IColoredString<Color> helping3 = new IColoredString.Impl<Color>("Click the top or bottom border of the lower message box to scroll.", Color.WHITE);
 
+		/* The panel's width */
+        final int w = Math.max(helping3.length(), cs.length());
+		/* The panel's height. */
+        final int h = 5;
         final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
         final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
         final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<Color>();
@@ -527,10 +553,15 @@ public class EverythingDemo extends ApplicationAdapter {
 		gcp.fillBG(new Color(0.3f, 0.3f, 0.3f, 0.9f));
 
 		/* Now, to set the text we have to follow SquidPanel's convention */
-		/* First 0: justify left, second 0: first (and only) line */
-		gcp.putFG(0, 0, cs);
-		
-		help = gcp;
+		/* First 0: align left, second 0: first line */
+        gcp.putFG(0, 0, cs);
+
+		/* 0: align left, 2: third line */
+        gcp.putFG(0, 2, helping1);
+        gcp.putFG(0, 3, helping2);
+        gcp.putFG(0, 4, helping3);
+
+        help = gcp;
 
 		stage.addActor(gcp);
 	}
@@ -552,11 +583,11 @@ public class EverythingDemo extends ApplicationAdapter {
                 // and 1.0), with 1.0 being almost pure white at +215 lightness and 0.0 being rather dark at -105.
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
-                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j],
+                    display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
                             lights[i][j] + (int) (-105 + 320 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else if (seen[i][j]) {
-                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -140);
+                    display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]), -140);
                 }
             }
         }
@@ -595,7 +626,6 @@ public class EverythingDemo extends ApplicationAdapter {
                 input.next();
             return;
         }
-        stage.act();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
         // if the user clicked, we have a list of moves to perform.
@@ -653,21 +683,25 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.draw();
-
-        // disolay does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
-        batch.begin();
-        // the player needs to get drawn every frame, of course.
-        display.drawActor(batch, 1.0f, player);
-        for(AnimatedEntity mon : monsters.keySet()) {
-            // monsters are only drawn if within FOV.
-            if (fovmap[mon.gridX][mon.gridY] > 0.0) {
-                display.drawActor(batch, 1.0f, mon);
+        if(help == null) {
+            // disolay does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
+            batch.begin();
+            // the player needs to get drawn every frame, of course.
+            display.drawActor(batch, 1.0f, player);
+            for (AnimatedEntity mon : monsters.keySet()) {
+                // monsters are only drawn if within FOV.
+                if (fovmap[mon.gridX][mon.gridY] > 0.0) {
+                    display.drawActor(batch, 1.0f, mon);
+                }
             }
+            // batch must end if it began.
+            batch.end();
         }
-        // batch must end if it began.
-        batch.end();
-        //uncomment the next line if using a filter that changes each frame
-        //fgCenter.clearCache();
+        // if using a filter that changes each frame, clear the known relationship between requested and actual colors
+        if(changingColors) {
+            fgCenter.clearCache();
+            bgCenter.clearCache();
+        }
     }
 
     @Override
