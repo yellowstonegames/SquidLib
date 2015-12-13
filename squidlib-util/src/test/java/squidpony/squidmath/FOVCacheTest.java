@@ -16,9 +16,9 @@ public class FOVCacheTest {
     @Test
     public void testCache()
     {
-        int width = 200;
-        int height = 200;
-        for (long r = 0, seed = 0xCAB; r < 1; r++, seed ^= seed << 2) {
+        int width = 50;
+        int height = 50;
+        for (long r = 0, seed = 0xcabL; r < 6; r++, seed ^= seed << 2) {
             StatefulRNG rng = new StatefulRNG(new LightRNG(seed));
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
             dungeonGenerator.addDoors(15, true);

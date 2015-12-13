@@ -10,7 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import squidpony.squidai.DijkstraMap;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
@@ -231,6 +235,9 @@ public class BasicDemo extends ApplicationAdapter {
         }
     }
 
+    /**
+     * Draws the map, applies any highlighting for the path to the cursor, and then draws the player.
+     */
     public void putMap()
     {
         for (int i = 0; i < width; i++) {

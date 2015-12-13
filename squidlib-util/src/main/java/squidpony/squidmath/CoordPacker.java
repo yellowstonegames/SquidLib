@@ -1758,9 +1758,9 @@ public class CoordPacker {
     {
         int width2 = width, height2 = height;
         if(x + width >= 256)
-            width2 = 255 - x;
+            width2 = 256 - x;
         if(y + height >= 256)
-            height2 = 255 - y;
+            height2 = 256 - y;
         if(width2 <= 0 || height2 <= 0 || x < 0 || y < 0)
             return new short[0];
         short[] hilberts = new short[width2 * height2];
