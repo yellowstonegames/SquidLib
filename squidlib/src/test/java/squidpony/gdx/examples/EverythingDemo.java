@@ -324,6 +324,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 if(fovmap[screenX][screenY] > 0.0 && awaitedMoves.isEmpty()) {
                     if (toCursor.isEmpty()) {
                         cursor = Coord.get(screenX, screenY);
+                        //Uses DijkstraMap to get a path. from the player's position to the cursor
                         toCursor = playerToCursor.findPath(30, null, null, Coord.get(player.gridX, player.gridY), cursor);
                     }
                     awaitedMoves = new ArrayList<>(toCursor);
@@ -348,6 +349,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 }
                 if(fovmap[screenX][screenY] > 0.0) {
                     cursor = Coord.get(screenX, screenY);
+                    //Uses DijkstraMap to get a path. from the player's position to the cursor
                     toCursor = playerToCursor.findPath(30, null, null, Coord.get(player.gridX, player.gridY), cursor);
                 }
                 return false;
@@ -355,7 +357,7 @@ public class EverythingDemo extends ApplicationAdapter {
         }));
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
-        // and then add display, our one visual component, to the list of things that act in Stage.
+        // and then add display and messages, our two visual components, to the list of things that act in Stage.
         stage.addActor(display);
         stage.addActor(messages);
 

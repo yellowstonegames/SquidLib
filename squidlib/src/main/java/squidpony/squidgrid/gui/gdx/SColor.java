@@ -5889,6 +5889,50 @@ public class SColor extends Color {
 
     /**
      * Indexes into this palette can be used as a placeholder for modules that do not have access to SColor.
+     * <br>
+     * This palette has colors at these elements:
+     * <ul>
+     * <li>0: Black, also used for backgrounds if not specified</li>
+     * <li>1: Off-white, used as the default foreground at times</li>
+     * <li>2: Dark gray for walls</li>
+     * <li>3: Silver gray for floors</li>
+     * <li>4: Rust brown for doors</li>
+     * <li>5: Gray-blue for water</li>
+     * <li>6: Bright orange for traps</li>
+     * <li>7: White</li>
+     * <li>8: Light gray</li>
+     * <li>9: Dark gray</li>
+     * <li>10: Light red</li>
+     * <li>11: Medium red</li>
+     * <li>12: Dark red</li>
+     * <li>13: Light orange</li>
+     * <li>14: Medium orange</li>
+     * <li>15: Dark orange</li>
+     * <li>16: Light yellow</li>
+     * <li>17: Medium yellow</li>
+     * <li>18: Dark yellow</li>
+     * <li>19: Light green</li>
+     * <li>20: Medium green</li>
+     * <li>21: Dark green</li>
+     * <li>22: Light blue-green</li>
+     * <li>23: Medium blue-green</li>
+     * <li>24: Dark blue-green</li>
+     * <li>25: Light blue</li>
+     * <li>26: Medium blue</li>
+     * <li>27: Dark blue</li>
+     * <li>28: Light purple</li>
+     * <li>29: Medium purple</li>
+     * <li>30: Dark purple</li>
+     * <li>31: Light pink</li>
+     * <li>32: Medium pink</li>
+     * <li>33: Dark pink</li>
+     * <li>34: Light gray-brown</li>
+     * <li>35: Medium gray-brown</li>
+     * <li>36: Dark gray-brown</li>
+     * <li>37: Light brown</li>
+     * <li>38: Medium brown</li>
+     * <li>39: Dark brown</li>
+     * </ul>
      */
     public static SColor[] LIMITED_PALETTE = {
             // 0                 1       2                 3      4            5                     6
