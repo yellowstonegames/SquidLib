@@ -61,13 +61,13 @@
 		<findbugs.version>3.0.2</findbugs.version>
 		<cobertura.version>2.7</cobertura.version>
 		<jdk.version>1.7</jdk.version>
-		<gdx.version>1.7.0</gdx.version>
+		<gdx.version>1.7.1</gdx.version>
 		<gson.version>2.3.1</gson.version>
 		<junit.version>4.11</junit.version>
 	</properties>
 
 	<prerequisites>
-		<maven>3.0.3</maven>
+		<maven>3.3.0</maven>
 	</prerequisites>
 
 	<issueManagement>
