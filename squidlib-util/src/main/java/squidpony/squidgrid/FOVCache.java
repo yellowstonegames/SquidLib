@@ -1116,6 +1116,7 @@ public class FOVCache extends FOV{
     public short[][] improveQuality(int viewerX, int viewerY) {
         if(!complete) throw new IllegalStateException(
                 "cacheAllPerformance() must be called before improveQuality() to fill the cache.");
+
         if (viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
             return ALL_WALLS;
         if (resMap[viewerX][viewerY] >= 1.0) {
@@ -1162,9 +1163,10 @@ public class FOVCache extends FOV{
             packing.clear();
             xr = Math.max(0, viewerX - l);
             yr = Math.max(0, viewerY - l);
-            wr = Math.min(width - 1 - viewerX, l * 2 + 1);
-            hr = Math.min(height - 1 - viewerY, l * 2 + 1);
+            wr = Math.min(width - viewerX + l, l * 2 + 1);
+            hr = Math.min(height - viewerY + l, l * 2 + 1);
             perimeter = rectangleHilbert(xr, yr, wr, hr);
+
             //short p_x, p_y;
             for (int i = 0; i < perimeter.length; i++) {
                 if(queryPackedHilbert(cached[maxRadius - l], perimeter[i])) {
@@ -1939,7 +1941,7 @@ public class FOVCache extends FOV{
                 symUnits.get(p).add(new SymmetryUnit(i));
             }
 
-            for (int p = 0; p < 4; p++) {
+            for (int p = 3; p >= 0; p--) {
                 try {
                     final List<Future<Long>> invoke = executor.invokeAll(symUnits.get(p));
                     for (Future<Long> future : invoke) {

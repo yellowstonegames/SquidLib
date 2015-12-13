@@ -142,7 +142,7 @@ public class DefaultResources implements LifecycleListener {
      * Returns a 8x18px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * Caches the font for later calls.
-     * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... not actually sure, 8x18 pixels.
+     * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... pretty sure it's 8x18 pixels
      */
     public static BitmapFont getSmoothFont()
     {

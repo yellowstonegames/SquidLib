@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
-
 import squidpony.IColorCenter;
 
 /**
@@ -150,26 +149,40 @@ public class TextCellFactory {
      * methods in this class.
      *
      * This should be called with an argument such as "Rogue-Zodiac-6x12.fnt", that is, it should have the .fnt
-     * extension as opposed to the .png that accompanies such a bitmap font. The bitmap font should be on the classpath,
-     * which usually means it is in the libGDX assets folder, but can also be a resource bundled with SquidLib:
+     * extension as opposed to the .png that accompanies such a bitmap font. The bitmap font should be either in the
+     * internal folder that libGDX knows about, which means it is in the assets folder of your project usually, or it
+     * can be on the classpath, which mostly applies to these resources bundled with SquidLib:
      * <ul>
-     *     <li>"Rogue-Zodiac-6x12.fnt"</li>
-     *     <li>"Rogue-Zodiac-12x24.fnt" (available with the defaultNarrowFont() method as well)</li>
-     *     <li>"Zodiac-Square-12x12.fnt" (available with the defaultSquareFont() method as well)</li>
-     *     <li>"Zodiac-Square-24x24.fnt"</li>
-     *     <li>"Mandrill-6x16.fnt"</li>
-     *     <li>"Mandrill-12x32.fnt"</li>
+     *     <li>DefaultResources.squareName = "Zodiac-Square-12x12.fnt"</li>
+     *     <li>DefaultResources.narrowName = "Rogue-Zodiac-6x12.fnt"</li>
+     *     <li>DefaultResources.unicodeName = "Mandrill-6x16.fnt"</li>
+     *     <li>DefaultResources.smoothName = "Inconsolata-LGC-8x18.fnt"</li>
+     *     <li>DefaultResources.squareNameLarge = "Zodiac-Square-24x24.fnt"</li>
+     *     <li>DefaultResources.narrowNameLarge = "Rogue-Zodiac-12x24.fnt"</li>
+     *     <li>DefaultResources.unicodeNameLarge = "Mandrill-12x32.fnt"</li>
+     *     <li>DefaultResources.smoothNameLarge = "Inconsolata-LGC-12x24.fnt"</li>
+     *     <li>DefaultResources.narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt"</li>
      * </ul>
-     *
-     * See https://github.com/libgdx/libgdx/wiki/Hiero for some ways to create a bitmap font this can use.
+     * "Rogue-Zodiac-12x24.fnt", which is easily accessed by the field DefaultResources.narrowNameLarge , can also
+     * be set using TextCellFactory.defaultNarrowFont() instead of font(); "Zodiac-Square-12x12.fnt", also accessible
+     * as DefaultResources.squareName , can be set using TextCellFactory.defaultSquareFont() instead of font().
+     * <br>
+     * See https://github.com/libgdx/libgdx/wiki/Hiero for some ways to create a bitmap font this can use. Several fonts
+     * in this list were created using Hiero (not Hiero4), and several were created with AngelCode's BMFont tool.
      *
      * @param fontpath the path to the font to use
      * @return this factory for method chaining
      */
     public TextCellFactory font(String fontpath) {
-    	if (assetManager == null)
-    		bmpFont = new BitmapFont(Gdx.files.internal(fontpath));
-    	else {
+        if (assetManager == null) {
+            if (Gdx.files.internal(fontpath).exists())
+                bmpFont = new BitmapFont(Gdx.files.internal(fontpath));
+            else if (Gdx.files.classpath(fontpath).exists())
+                bmpFont = new BitmapFont(Gdx.files.classpath(fontpath));
+            else
+                bmpFont = DefaultResources.getDefaultFont();
+        }
+        else {
 			assetManager.load(new AssetDescriptor<BitmapFont>(fontpath, BitmapFont.class));
 			/*
 			 * We're using the AssetManager not be asynchronous, but to avoid
@@ -184,7 +197,25 @@ public class TextCellFactory {
     }
 
     /**
-     * Sets this factory to use a default 12x24 font.
+     * Sets this factory to use a default 12x24 font that supports Latin, Greek, Cyrillic, and many more, including
+     * box-drawing characters, zodiac signs, playing-card suits, and chess piece symbols. This is enough to support the
+     * output of anything that DungeonUtility can make for a dungeon or FakeLanguageGen can make for text with its
+     * defaults, which is difficult for any font to do. The box-drawing characters in this don't quite line up, and in
+     * some colors there may appear to be gaps (white text on black backgrounds will show it, but not much else).
+     *
+     * This is a way to complete a needed step; the font must be set before initializing, which can be done by a few
+     * methods in this class.
+     *
+     * @return this factory for method chaining
+     */
+    public TextCellFactory defaultFont()
+    {
+        bmpFont = DefaultResources.getLargeSmoothFont();
+        return this;
+    }
+    /**
+     * Sets this factory to use a default 12x24 font that renders very accurately, with no gaps between box-drawing
+     * characters and very geometric lines.
      *
      * This is a way to complete a needed step; the font must be set before initializing, which can be done by a few
      * methods in this class.
@@ -198,7 +229,8 @@ public class TextCellFactory {
     }
 
     /**
-     * Sets this factory to use a default 12x12 font.
+     * Sets this factory to use a default 12x12 font, which... is square, and doesn't look as bad as many square fonts
+     * do, plus it supports box-drawing characters with no gaps.
      *
      * This is a way to complete a needed step; the font must be set before initializing, which can be done by a few
      * methods in this class.
