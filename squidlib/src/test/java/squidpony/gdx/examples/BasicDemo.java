@@ -47,7 +47,7 @@ public class BasicDemo extends ApplicationAdapter {
     private Coord cursor, player;
     private ArrayList<Coord> toCursor;
     private ArrayList<Coord> awaitedMoves;
-    private int framesWithoutMoves;
+    private float secondsWithoutMoves;
     @Override
     public void create () {
         //These variables, corresponding to the screen's width and height in cells and a cell's width and height in
@@ -265,9 +265,9 @@ public class BasicDemo extends ApplicationAdapter {
         if(!awaitedMoves.isEmpty())
         {
             // this doesn't check for input, but instead processes and removes Points from awaitedMoves.
-            ++framesWithoutMoves;
-            if (framesWithoutMoves >= 8) {
-                framesWithoutMoves = 0;
+            secondsWithoutMoves += Gdx.graphics.getDeltaTime();
+            if (secondsWithoutMoves >= 0.1) {
+                secondsWithoutMoves = 0;
                 Coord m = awaitedMoves.remove(0);
                 toCursor.remove(0);
                 move(m.x - player.x, m.y - player.y);
