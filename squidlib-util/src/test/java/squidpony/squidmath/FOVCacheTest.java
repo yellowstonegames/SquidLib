@@ -16,9 +16,9 @@ public class FOVCacheTest {
     @Test
     public void testCache()
     {
-        int width = 60;
-        int height = 60;
-        for (long r = 0, seed = 0xCAB; r < 10; r++, seed ^= seed << 2) {
+        int width = 50;
+        int height = 50;
+        for (long r = 0, seed = 0xcabL; r < 6; r++, seed ^= seed << 2) {
             StatefulRNG rng = new StatefulRNG(new LightRNG(seed));
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
             dungeonGenerator.addDoors(15, true);
@@ -26,7 +26,7 @@ public class FOVCacheTest {
             //dungeonGenerator.addTraps(2);
             char[][] map = DungeonUtility.closeDoors(dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON));
 
-            FOVCache cache = new FOVCache(map, 10, Radius.CIRCLE, 8);
+            FOVCache cache = new FOVCache(map, 10, 60, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
             //byte[][] seen = cache.slopeShadowFOV(walkable.x, walkable.y);
             //byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
@@ -64,6 +64,7 @@ public class FOVCacheTest {
             }
             */
             cache.awaitCache();
+            System.out.println("Memory used by FOVCache: " + cache.approximateMemoryUsage());
             boolean[][] mutual = CoordPacker.unpack(cache.getCacheEntry(walkable.x, walkable.y)[0], width, height);
             for (int i = 0; i < mutual.length; i++) {
                 for (int j = 0; j < mutual[i].length; j++) {

@@ -20,7 +20,8 @@ package squidpony.squidmath;
 import java.util.NoSuchElementException;
 
 /** An unordered set that uses short keys. This implementation uses cuckoo hashing using 3 hashes, random walking, and a
- * small stash for problematic keys. No allocation is done except when growing the table size. <br>
+ * small stash for problematic keys. No allocation is done except when growing the table size. Used internally by
+ * CoordPacker, and unlikely to be used outside of it.
  * <br>
  * This set performs very fast contains and remove (typically O(1), worst case O(log(n))). Add may be a bit slower,
  * depending on hash collisions. Load factors greater than 0.91 greatly increase the chances the set will have to rehash
@@ -43,7 +44,7 @@ public class ShortSet {
     private int hashShift, threshold;
     private int stashCapacity;
     private int pushIterations;
-    private short mask;
+    private int mask;
     private static LightRNG rng;
 
     private ShortSetIterator iterator1, iterator2;
@@ -73,7 +74,7 @@ public class ShortSet {
         this.loadFactor = loadFactor;
 
         threshold = (int)(capacity * loadFactor);
-        mask = (short)(capacity - 1);
+        mask = capacity - 1;
         hashShift = 31 - Integer.numberOfTrailingZeros(capacity);
         stashCapacity = Math.max(3, (int)Math.ceil(Math.log(capacity)) * 2);
         pushIterations = Math.max(Math.min(capacity, 8), (int)Math.sqrt(capacity) / 8);
@@ -206,7 +207,7 @@ public class ShortSet {
     private void push (short insertKey, int index1, short key1, int index2, short key2, int index3, short key3) {
         short[] keyTable = this.keyTable;
 
-        short mask = this.mask;
+        int mask = this.mask;
 
         // Push keys until an empty bucket is found.
         short evictedKey;
@@ -399,7 +400,7 @@ public class ShortSet {
 
         capacity = newSize;
         threshold = (int)(newSize * loadFactor);
-        mask = (short)(newSize - 1);
+        mask = newSize - 1;
         hashShift = 31 - Integer.numberOfTrailingZeros(newSize);
         stashCapacity = Math.max(3, (int)Math.ceil(Math.log(newSize)) * 2);
         pushIterations = Math.max(Math.min(newSize, 8), (int)Math.sqrt(newSize) / 8);

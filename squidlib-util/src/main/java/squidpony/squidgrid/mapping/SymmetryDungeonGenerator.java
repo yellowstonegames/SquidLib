@@ -10,6 +10,7 @@ import java.util.*;
  * A variant on {@link MixedGenerator} that creates bi-radially symmetric maps (basically a yin-yang shape). Useful for
  * strategy games and possibly competitive multi-player games. The Coords passed to constructors as room positions do
  * not necessarily need to be
+ *
  * Created by Tommy Ettinger on 11/20/2015.
  */
 public class SymmetryDungeonGenerator extends MixedGenerator {
@@ -161,19 +162,23 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
                             l1 = lc;
                             r1 = rc2;
                         }
-                        else if(dist < lowest2)
+                        else if(dist < lowest2 && !lc.equals(l1) && !rc2.equals(r1))
                         {
                             lowest2 = dist;
                             l2 = lc;
                             r2 = rc2;
                         }
-                        else if(dist < lowest3)
+                        else if(dist < lowest3
+                                && !lc.equals(l1) && !rc2.equals(r1) && !lc.equals(l2) && !rc2.equals(r2))
                         {
                             lowest3 = dist;
                             l3 = lc;
                             r3 = rc2;
                         }
-                        else if(dist < lowest4)
+                        else if(dist < lowest4
+                                && !lc.equals(l1) && !rc2.equals(r1)
+                                && !lc.equals(l2) && !rc2.equals(r2)
+                                && !lc.equals(l3) && !rc2.equals(r3))
                         {
                             lowest4 = dist;
                             l4 = lc;
