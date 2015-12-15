@@ -6,6 +6,7 @@ import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class SerpentDeepMapGenerator {
     private MixedGenerator[] mix;
     private int[] columns, rows;
     private int width, height, depth;
-    private ArrayList<ArrayList<Coord>> linksUp,linksDown;
+    private ArrayList<LinkedHashSet<Coord>> linksUp,linksDown;
     private RNG random;
 
     /**
@@ -67,7 +68,7 @@ public class SerpentDeepMapGenerator {
         this.width = width;
         this.height = height;
         this.depth = depth;
-        int numLayers = (int)Math.ceil(depth / 8.0f);
+        int numLayers = (int)Math.ceil(depth / 4.0f);
         long columnAlterations = random.nextLong(0x100000000L);
         float columnBase = width / (Long.bitCount(columnAlterations) + 16.0f);
         long rowAlterations = random.nextLong(0x100000000L);
@@ -75,11 +76,11 @@ public class SerpentDeepMapGenerator {
 
         columns = new int[16];
         rows = new int[16];
-        linksUp = new ArrayList<ArrayList<Coord>>(depth);
-        linksDown = new ArrayList<ArrayList<Coord>>(depth);
+        linksUp = new ArrayList<LinkedHashSet<Coord>>(depth);
+        linksDown = new ArrayList<LinkedHashSet<Coord>>(depth);
         for (int i = 0; i < depth; i++) {
-            linksUp.add(new ArrayList<Coord>(80));
-            linksDown.add(new ArrayList<Coord>(80));
+            linksUp.add(new LinkedHashSet<Coord>(80));
+            linksDown.add(new LinkedHashSet<Coord>(80));
         }
         int csum = 0, rsum = 0;
         long b = 3;
@@ -113,9 +114,9 @@ public class SerpentDeepMapGenerator {
         int x = CoordPacker.getXMoore3D(m, numLayers), y = CoordPacker.getYMoore3D(m, numLayers),
                 z = (int)Math.floor(CoordPacker.getZMoore3D(m, numLayers) * depth / (8f * numLayers)),
                 sx = x, sy = y, sz = z, tz = z;
-        int r = random.between(8, 24);
+        int r = random.between(12, 33);
         m += r;
-        for (int i = 0; i < 0x800 * numLayers; r = random.between(8, 24), i += r, m = (m + r) % (0x800 * numLayers)) {
+        for (int i = 0; i < 0x800 * numLayers; r = random.between(12, 33), i += r, m = (m + r) % (0x800 * numLayers)) {
             tz = z;
             int tx = x, ty = y;
             do {
@@ -160,15 +161,15 @@ public class SerpentDeepMapGenerator {
                 }
                 else {
                     if (z > tz) {
-                        linksDown.get(tz).add(Coord.get(columns[tx], rows[ty]));
+                        linksDown.get(tz).add(Coord.get(tx, ty));
                         tz++;
-                        linksUp.get(tz).add(Coord.get(columns[tx], rows[ty]));
+                        linksUp.get(tz).add(Coord.get(tx, ty));
                     }
                     else
                     {
-                        linksUp.get(tz).add(Coord.get(columns[tx], rows[ty]));
+                        linksUp.get(tz).add(Coord.get(tx, ty));
                         tz--;
-                        linksDown.get(tz).add(Coord.get(columns[tx], rows[ty]));
+                        linksDown.get(tz).add(Coord.get(tx, ty));
                     }
                 }
             }while (true);
@@ -210,22 +211,22 @@ public class SerpentDeepMapGenerator {
             }
             else {
                 if (sz > tz) {
-                    linksDown.get(tz).add(Coord.get(columns[x], rows[y]));
+                    linksDown.get(tz).add(Coord.get(x, y));
                     tz++;
-                    linksUp.get(tz).add(Coord.get(columns[x], rows[y]));
+                    linksUp.get(tz).add(Coord.get(x, y));
                 }
                 else
                 {
-                    linksUp.get(tz).add(Coord.get(columns[x], rows[y]));
+                    linksUp.get(tz).add(Coord.get(x, y));
                     tz--;
-                    linksDown.get(tz).add(Coord.get(columns[x], rows[y]));
+                    linksDown.get(tz).add(Coord.get(x, y));
                 }
             }
         }while (true);
 
         mix = new MixedGenerator[depth];
         for (int i = 0; i < depth; i++) {
-            mix[i] = new MixedGenerator(width, height, random, connections.get(i), 0.4f);
+            mix[i] = new MixedGenerator(width, height, random, connections.get(i), 0.35f);
         }
     }
     /**
@@ -320,74 +321,78 @@ public class SerpentDeepMapGenerator {
     }
 
     /**
-     * This generates a new map by stretching a 32x32x32 grid of potential rooms to fit the width, height, and depth
-     * passed to the constructor, randomly expanding columns and rows before contracting the whole to fit perfectly.
-     * This uses the Moore Curve, a space-filling curve that loops around on itself, to guarantee that the rooms will
-     * always have a long path through the dungeon, going up and down as well as north/south/east/west, that, if
-     * followed completely, will take you back to your starting room. Some small branches are possible, and large rooms
-     * may merge with other rooms nearby. This uses MixedGenerator.
+     * This generates a new map by stretching a 32x32x(multiple of 8) grid of potential rooms to fit the width, height,
+     * and depth passed to the constructor, randomly expanding columns and rows before contracting the whole to fit
+     * perfectly. This uses the Moore Curve, a space-filling curve that loops around on itself, to guarantee that the
+     * rooms will always have a long path through the dungeon, going up and down as well as north/south/east/west, that,
+     * if followed completely, will take you back to your starting room. Some small branches are possible, and large
+     * rooms may merge with other rooms nearby. This uses MixedGenerator.
      * @see MixedGenerator
      * @return a char[][][] where the outermost array is layers, then inside that are x and y in order (z x y)
      */
     public char[][][] generate()
     {
         char[][][] dungeon = new char[depth][][];
+        short[][] floors = new short[depth][];
+        int dlimit = (height + width) / 3;
         for (int i = 0; i < depth; i++) {
             dungeon[i] = mix[i].generate();
+            floors[i] = CoordPacker.pack(dungeon[i], '.');
         }
+        //using actual dungeon space per layer, not row/column 3D grid space
+        ArrayList<LinkedHashSet<Coord>> ups = new ArrayList<LinkedHashSet<Coord>>(depth),
+                downs = new ArrayList<LinkedHashSet<Coord>>(depth);
         for (int i = 0; i < depth; i++) {
-            ArrayList<Coord> ups = linksUp.get(i), downs = linksDown.get(i);
+            ups.add(new LinkedHashSet<Coord>(40));
+            downs.add(new LinkedHashSet<Coord>(40));
+            LinkedHashSet<Coord> above = null;
+            if (i > 0) {
+                above = new LinkedHashSet<Coord>(linksDown.get(i - 1));
+                if(above.size() == 0)
+                    continue;
+                Coord higher = random.getRandomElement(above.toArray(new Coord[above.size()]));
+                while(above.size() > 0)
+                {
+                    short[] nearAbove = CoordPacker.flood(floors[i - 1],
+                            CoordPacker.packOne(columns[higher.x], rows[higher.y]),
+                            dlimit);
+                    short[] near = CoordPacker.intersectPacked(nearAbove, CoordPacker.flood(floors[i],
+                            CoordPacker.packOne(columns[higher.x], rows[higher.y]),
+                            dlimit));
+                    ArrayList<Coord> subLinks = CoordPacker.randomPortion(near, 1, random);
+                    ups.get(i).addAll(subLinks);
+                    downs.get(i-1).addAll(subLinks);
+                    for(Coord abv : linksDown.get(i-1))
+                    {
+                        if(CoordPacker.queryPacked(nearAbove, columns[abv.x], rows[abv.y])) //scannedAbove[columns[abv.x]][rows[abv.y]] <= dlimit
+                            above.remove(abv);
+                    }
+                    if(above.isEmpty())
+                        break;
+                    higher = random.getRandomElement(above.toArray(new Coord[above.size()]));
+                }
+            }
+        }
+
+        for (int i = 0; i < depth; i++) {
             LinkedHashMap<Coord, Integer> used = new LinkedHashMap<Coord, Integer>(128);
-            for(Coord up : ups)
+            for(Coord up : ups.get(i))
             {
                 Integer count = used.get(up);
                 if(count != null && count > 1)
                     continue;
-                int x = up.x + random.between(-1,2), y = up.y + random.between(-1, 2), frustration = 0;
-                while (((x == up.x && y == up.y) || x < 0 || y < 0 || x >= width || y >= height || dungeon[i][x][y] != '.')
-                        && frustration < 200)
-                {
-                    x = up.x + random.between(-1, 2);
-                    y = up.y + random.between(-1, 2);
-                    frustration++;
-                }
-                if(frustration >= 200) {
-                    for (int xx = Math.max(1, up.x - 1); xx <= Math.min(width - 2, up.x + 1); xx++) {
-                        for (int yy = Math.max(1, up.y - 1); yy <= Math.min(height - 2, up.y + 1); yy++) {
-                            dungeon[i][xx][yy] = '.';
-                        }
-                    }
-                    dungeon[i][up.x][up.y] = '<';
-                }
-                else
-                    dungeon[i][x][y] = '<';
+                dungeon[i][up.x][up.y] = '<';
+
                 used.put(up, (count == null) ? 1 : count + 1);
             }
             used.clear();
-            for(Coord down : downs)
+            for(Coord down : downs.get(i))
             {
                 Integer count = used.get(down);
                 if(count != null && count > 1)
                     continue;
-                int x = down.x + random.between(-1,2), y = down.y + random.between(-1, 2), frustration = 0;
-                while (((x == down.x && y == down.y) || x < 0 || y < 0 || x >= width || y >= height || dungeon[i][x][y] != '.')
-                        && frustration < 20)
-                {
-                    x = down.x + random.between(-1, 2);
-                    y = down.y + random.between(-1, 2);
-                    frustration++;
-                }
-                if(frustration >= 200) {
+                dungeon[i][down.x][down.y] = '>';
 
-                    for (int xx = Math.max(1, down.x - 1); xx <= Math.min(width - 2, down.x + 1); xx++) {
-                        for (int yy = Math.max(1, down.y - 1); yy <= Math.min(height - 2, down.y + 1); yy++) {
-                            dungeon[i][xx][yy] = '.';
-                        }
-                    }
-                    dungeon[i][down.x][down.y] = '>';
-                }
-                else
-                    dungeon[i][x][y] = '>';
                 used.put(down, (count == null) ? 1 : count + 1);
             }
         }

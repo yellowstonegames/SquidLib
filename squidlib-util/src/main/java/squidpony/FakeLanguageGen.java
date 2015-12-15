@@ -6,7 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * A text generator for producing sentences and/or words in nonsense languages that fit a theme.
+ * A text generator for producing sentences and/or words in nonsense languages that fit a theme. This does not use an
+ * existing word list as a basis for its output, so it may or may not produce existing words occasionally, but you can
+ * safely assume it won't generate a meaningful sentence except in the absolute unlikeliest of cases.
  * Created by Tommy Ettinger on 11/29/2015.
  */
 public class FakeLanguageGen {
@@ -53,7 +55,9 @@ public class FakeLanguageGen {
             new String[]{}, new int[]{1, 2, 3}, new double[]{5, 7, 4}, 0.45, 0.45, 0.0, 0.3);
 
     /**
-     *
+     * Imitation modern French, using (too many of) the accented vowels that are present in the language. Translating it
+     * will produce gibberish if it produces anything at all. In the GDX display module, the "smooth" and "unicode"
+     * fonts support all the accented characters you need for this.
      */
     public static final FakeLanguageGen FRENCH = new FakeLanguageGen(
             new String[]{"a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
@@ -85,6 +89,46 @@ public class FakeLanguageGen {
                     "ang", "ong", "acré", "eau", "ouche", "oux", "oux", "ect", "ecri", "agne", "uer", "aix", "eth", "ut", "ant",
                     "anc", "anc", "anche", "ioche", "eaux", "ive", "eur", "ancois", "ecois"},
             new String[]{}, new int[]{1, 2, 3}, new double[]{18, 7, 2}, 0.35, 1.0, 0.0, 0.55);
+
+    /**
+     * Imitation modern Russian, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
+     */
+    public static final FakeLanguageGen RUSSIAN_ROMANIZED = new FakeLanguageGen(
+            new String[]{"a", "e", "e", "i", "i", "o", "u", "ie", "y", "e", "iu", "ia", "y", "a", "a", "o", "u"},
+            new String[]{},
+            new String[]{"b", "v", "g", "d", "k", "l", "p", "r", "s", "t", "f", "kh", "ts",
+                    "b", "v", "g", "d", "k", "l", "p", "r", "s", "t", "f", "kh", "ts",
+                    "b", "v", "g", "d", "k", "l", "p", "r", "s", "t", "f",
+                    "zh", "m", "n", "z", "ch", "sh", "shch",
+                    "br", "sk", "tr", "bl", "gl", "kr", "gr"},
+            new String[]{"bl", "br", "pl", "dzh", "tr", "gl", "gr", "kr"},
+            new String[]{"b", "v", "g", "d", "zh", "z", "k", "l", "m", "n", "p", "r", "s", "t", "f", "kh", "ts", "ch", "sh",
+                    "v", "f", "sk", "sk", "sk", "s", "b", "d", "d", "n", "r", "r"},
+            new String[]{"odka", "odna", "usk", "ask", "usky", "ad", "ar", "ovich", "ev", "ov", "of", "agda", "etsky", "ich", "on", "akh", "iev", "ian"},
+            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12);
+
+
+    /**
+     * Imitation modern Russian, using the authentic Cyrillic alphabet used in Russia and other countries.
+     * Make sure the font you use to render this supports the Cyrillic alphabet!
+     * In the GDX display module, the "smooth" fonts support all the Cyrillic alphabet you need for this.
+     */
+    public static final FakeLanguageGen RUSSIAN_AUTHENTIC = new FakeLanguageGen(
+            new String[]{"а", "е", "ё", "и", "й", "о", "у", "ъ", "ы", "э", "ю", "я", "ы", "а", "а", "о", "у"},
+            new String[]{},
+            new String[]{"б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф", "х", "ц",
+                    "б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф", "х", "ц",
+                    "б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф",
+                    "ж", "м", "н", "з", "ч", "ш", "щ",
+                    "бр", "ск", "тр", "бл", "гл", "кр", "гр"},
+            new String[]{"бл", "бр", "пл", "дж", "тр", "гл", "гр", "кр"},
+            new String[]{"б", "в", "г", "д", "ж", "з", "к", "л", "м", "н", "п", "р", "с", "т", "ф", "х", "ц", "ч", "ш",
+                    "в", "ф", "ск", "ск", "ск", "с", "б", "д", "д", "н", "р", "р"},
+            new String[]{"одка", "одна", "уск", "аск", "ускы", "ад", "ар", "овйч", "ев", "ов", "оф", "агда", "ёцкы", "йч", "он", "ах", "ъв", "ян"},
+            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12);
+
+
+
     /**
      * This is a very complicated constructor! Maybe look at the calls to this to initialize static members of this
      * class, LOVECRAFT and GREEK_ROMANIZED.

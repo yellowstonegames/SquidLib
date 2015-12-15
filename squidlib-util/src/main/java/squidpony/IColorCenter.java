@@ -199,6 +199,8 @@ public interface IColorCenter<T> {
 
         /**
          * It clears the cache. You may need to do this to limit the cache to the colors used in a specific section.
+		 * This is also useful if a Filter changes what colors it should return on a frame-by-frame basis; in that case,
+		 * you can call clearCache() at the start or end of a frame to ensure the next frame gets different colors.
          */
         public void clearCache()
         {

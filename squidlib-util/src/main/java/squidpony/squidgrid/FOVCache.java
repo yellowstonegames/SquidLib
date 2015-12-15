@@ -33,15 +33,15 @@ import static squidpony.squidmath.CoordPacker.*;
  * can see cell B, but cell B can not yet see A, then B's cached FOV map will be altered so it can see A. The other
  * post-processing step provides distant lighting; if lights have been passed to the constructor as a Map of Coord keys
  * to Integer values, then the Coords in that Map that are walkable squares will emit light up to a radius equal to
- * their value in that Map. Cells with distant lighting will always be in FOV if they could be seen at up to radius 62,
- * which is calculated for every FOVCache as an LOS cache. Calculating distant lighting adds a somewhat substantial
- * amount of time to each caching attempt, estimated at tripling the amount of time used in cases where there are very
- * many lights in a large dungeon (in a 100x100 dungeon, with one light per 5x5 area when the center of that area is
- * walkable, for example), but the lighting is expected to be much less of a performance hindrance on smaller maps
- * (80x40, 60x60, anything smaller, etc.) or when there are simply less lights to process (because distant lighting is
- * meant to go beyond nearby cells, it needs to run through essentially all lights for every cell it processes, and even
- * though adding the lit area to FOV is very efficient and does not require recalculating FOV, having lots of lights
- * means lots of work per cell).
+ * their value in that Map. Cells with distant lighting will always be in FOV if they could be seen at up to radius
+ * equal to maxLOSRadius, which defaults to 62 and is calculated for every FOVCache as an LOS cache. Calculating distant
+ * lighting adds a somewhat substantial amount of time to each caching attempt, estimated at tripling the amount of time
+ * used in cases where there are very many lights in a large dungeon (in a 100x100 dungeon, with one light per 5x5 area
+ * when the center of that area is walkable, for example), but the lighting is expected to be much less of a performance
+ * hindrance on smaller maps (80x40, 60x60, anything smaller, etc.) or when there are simply less lights to process
+ * (because distant lighting is meant to go beyond nearby cells, it needs to run through essentially all lights for every
+ * cell it processes, and even though adding the lit area to FOV is very efficient and does not require recalculating
+ * FOV, having lots of lights means lots of work per cell).
  * <br>
  * This class extends FOV and can be used as a replacement for FOV in some cases. Generally, FOVCache provides methods
  * that allow faster manipulation and checks of certain values (such as a simple case of whether a cell can be seen from
@@ -79,7 +79,7 @@ import static squidpony.squidmath.CoordPacker.*;
  */
 public class FOVCache extends FOV{
 
-    protected int maxRadius;
+    protected int maxRadius, maxLOSRadius;
     protected int width;
     protected int height;
     protected int mapLimit;
@@ -114,8 +114,8 @@ public class FOVCache extends FOV{
      * (collectively, the caching methods), the object this creates will run a medium-quality, fairly permissive FOV
      * calculation for every cell on the map using 8 threads, and if cacheAll() was called, will then ensure
      * symmetry (if cell A can see cell B, then it will make cell B able to see cell A even if it couldn't in an earlier
-     * step). At the same time as the first caching method call, this will calculate Line of Sight at maximum range (62)
-     * for all cells. Walls will always have no cells in their FOV or LOS.
+     * step). At the same time as the first caching method call, this will calculate Line of Sight at maxLOSRadius (here
+     * it is given a default of 62) for all cells. Walls will always have no cells in their FOV or LOS.
      * @param map a char[][] as returned by SquidLib's map generators
      * @param maxRadius the longest radius that will possibly need to be cached for FOV; LOS is separate
      * @param radiusKind a Radius enum that determines the shape of each FOV area
@@ -137,6 +137,7 @@ public class FOVCache extends FOV{
         gradedFOV = new FOV(RIPPLE);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = Math.max(1, maxRadius);
+        this.maxLOSRadius = 62;
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
@@ -178,13 +179,15 @@ public class FOVCache extends FOV{
      * calculation for every cell on the map using a number of threads equal to threadCount, and if cacheAll()
      * was called, will then ensure symmetry (if cell A can see cell B, then it will make cell B able to see cell A even
      * if it couldn't in an earlier step). At the same time as the first caching method call, this will calculate Line
-     * of Sight at maximum range (62) for all cells. Walls will always have no cells in their FOV or LOS.
+     * of Sight at maximum range (given by maxLOSRadius) for all cells. Walls will always have no cells in their FOV or
+     * in their LOS.
      * @param map a char[][] as returned by SquidLib's map generators
      * @param maxRadius the longest radius that will possibly need to be cached for FOV; LOS is separate
+     * @param maxLOSRadius the longest radius that will possibly need to be cached for LOS, must be less than 63
      * @param radiusKind a Radius enum that determines the shape of each FOV area
      * @param threadCount how many threads to use during the full-map calculations
      */
-    public FOVCache(char[][] map, int maxRadius, Radius radiusKind, int threadCount)
+    public FOVCache(char[][] map, int maxRadius, int maxLOSRadius, Radius radiusKind, int threadCount)
     {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
@@ -197,10 +200,13 @@ public class FOVCache extends FOV{
         mapLimit = width * height;
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
+        if(maxLOSRadius <= 0 || maxLOSRadius >= 63)
+            throw new UnsupportedOperationException("LOS radius is incorrect. Must be 0 < maxLOSRadius < 63");
         fov = new FOV(FOV.SHADOW);
         gradedFOV = new FOV(RIPPLE);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = Math.max(1, maxRadius);
+        this.maxLOSRadius = Math.max(1, maxLOSRadius);
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
@@ -242,17 +248,18 @@ public class FOVCache extends FOV{
      * calculation for every cell on the map using a number of threads equal to threadCount, and if cacheAll()
      * was called, will then ensure symmetry (if cell A can see cell B, then it will make cell B able to see cell A even
      * if it couldn't in an earlier step). At the same time as the first caching method call, this will calculate Line
-     * of Sight at maximum range (62) for all cells. Walls will always have no cells in their FOV or LOS. This
-     * constructor also allows you to initialize light sources in the level using the lights parameter; any Coord keys
-     * should correspond to walkable cells (or they will be ignored), and the values will be the range those cells
-     * should light up. Light sources are only used by calculateAllQuality().
+     * of Sight at maximum range (given by maxLOSRadius) for all cells. Walls will always have no cells in their FOV or
+     * in their LOS. This constructor also allows you to initialize light sources in the level using the lights
+     * parameter; any Coord keys should correspond to walkable cells (or they will be ignored), and the values will be
+     * the range those cells should light up..
      * @param map a char[][] as returned by SquidLib's map generators
      * @param maxRadius the longest radius that will possibly need to be cached for FOV; LOS is separate
+     * @param maxLOSRadius the longest radius that will possibly need to be cached for LOS, must be less than 63
      * @param radiusKind a Radius enum that determines the shape of each FOV area
      * @param threadCount how many threads to use during the full-map calculations
      * @param lights a Map of Coords (which should be walkable) to the radii they should light (not for moving lights)
      */
-    public FOVCache(char[][] map, int maxRadius, Radius radiusKind, int threadCount, Map<Coord, Integer> lights)
+    public FOVCache(char[][] map, int maxRadius, int maxLOSRadius, Radius radiusKind, int threadCount, Map<Coord, Integer> lights)
     {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
@@ -265,10 +272,13 @@ public class FOVCache extends FOV{
         mapLimit = width * height;
         if(maxRadius <= 0 || maxRadius >= 63)
             throw new UnsupportedOperationException("FOV radius is incorrect. Must be 0 < maxRadius < 63");
+        if(maxLOSRadius <= 0 || maxLOSRadius >= 63)
+            throw new UnsupportedOperationException("LOS radius is incorrect. Must be 0 < maxLOSRadius < 63");
         fov = new FOV(FOV.SHADOW);
         gradedFOV = new FOV(RIPPLE);
         resMap = DungeonUtility.generateResistances(map);
         this.maxRadius = Math.max(1, maxRadius);
+        this.maxLOSRadius = Math.max(1, maxLOSRadius);
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
@@ -325,9 +335,9 @@ public class FOVCache extends FOV{
     private void preloadMeasurements()
     {
         levels = new double[maxRadius + 1][maxRadius + 1];
-        levels[maxRadius][maxRadius] = 1.0;
+        //levels[maxRadius][maxRadius] = 1.0;
         for (int i = 1; i <= maxRadius; i++) {
-            System.arraycopy(generateLightLevels(i), 0, levels[i], maxRadius - i, i);
+            System.arraycopy(generateLightLevels(i), 0, levels[i], maxRadius - i + 1, i);
         }
         boolean[][] walls = new boolean[width][height];
         for (int i = 0; i < width; i++) {
@@ -393,7 +403,7 @@ public class FOVCache extends FOV{
         }
         short[][] positionsZ = new short[maxRadius + 1][];
         for (int i = 0; i <= maxRadius; i++) {
-            positionsZ[i] = positionsAtDistance[i].shrink();
+            positionsZ[i] = positionsAtDistance[i].toArray();
             waves[i] = new Coord[positionsZ[i].length];
             for (int j = 0; j < waves[i].length; j++) {
                 waves[i][j] = zDecode(positionsZ[i][j]);
@@ -502,7 +512,7 @@ public class FOVCache extends FOV{
             if(packing[l].size == 0)
                 packed[l] = ALL_WALL;
             else
-                packed[l] = packing[l].shrink();
+                packed[l] = packing[l].toArray();
         }
         return packed;
     }
@@ -511,7 +521,7 @@ public class FOVCache extends FOV{
      * Packs FOV for the given viewer's X and Y as a center, and returns the packed data to be stored.
      * @param viewerX an int less than 256 and less than width
      * @param viewerY an int less than 256 and less than height
-     * @return a packed FOV map for radius 62
+     * @return a packed FOV map for radius equal to maxLOSRadius
      */
     public short[] calculatePackedLOS(int viewerX, int viewerY)
     {
@@ -521,7 +531,7 @@ public class FOVCache extends FOV{
         {
             return ALL_WALL;
         }
-        return pack(fov.calculateFOV(resMap, viewerX, viewerY, 62, radiusKind));
+        return pack(fov.calculateFOV(resMap, viewerX, viewerY, maxLOSRadius, radiusKind));
     }
 
     /**
@@ -579,6 +589,33 @@ public class FOVCache extends FOV{
     public boolean queryLOS(int viewerX, int viewerY, int targetX, int targetY)
     {
         return queryPacked(losCache[viewerX + viewerY  * width], targetX, targetY);
+    }
+
+    private long arrayMemoryUsage(int length, long bytesPerItem)
+    {
+        return (((bytesPerItem * length + 12 - 1) / 8) + 1) * 8L;
+    }
+    private long arrayMemoryUsage2D(int xSize, int ySize, long bytesPerItem)
+    {
+        return arrayMemoryUsage(xSize, (((bytesPerItem * ySize + 12 - 1) / 8) + 1) * 8L);
+    }
+    private int arrayMemoryUsageJagged(short[][] arr)
+    {
+        int ctr = 0;
+        for (int i = 0; i < arr.length; i++) {
+            ctr += arrayMemoryUsage(arr[i].length, 2);
+        }
+        return (((ctr + 12 - 1) / 8) + 1) * 8;
+    }
+    public long approximateMemoryUsage()
+    {
+        long ctr = 0;
+        for (int i = 0; i < cache.length; i++) {
+            ctr += arrayMemoryUsageJagged(cache[i]);
+        }
+        ctr = (((ctr + 12L - 1L) / 8L) + 1L) * 8L;
+        ctr += (((arrayMemoryUsageJagged(losCache) + 12L - 1L) / 8L) + 1L) * 8L;
+        return ctr;
     }
 
     /*
@@ -1079,6 +1116,7 @@ public class FOVCache extends FOV{
     public short[][] improveQuality(int viewerX, int viewerY) {
         if(!complete) throw new IllegalStateException(
                 "cacheAllPerformance() must be called before improveQuality() to fill the cache.");
+
         if (viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
             return ALL_WALLS;
         if (resMap[viewerX][viewerY] >= 1.0) {
@@ -1088,10 +1126,13 @@ public class FOVCache extends FOV{
         ShortVLA packing = new ShortVLA(128);
         short[][] packed = new short[maxRadius + 1][], cached = cache[viewerX + viewerY * width];
         short[] losCached = losCache[viewerX + viewerY * width];
-        short[] knownSeen;
 
         ///*
-        short[] perimeter = allPackedHilbert(fringe(losCached, 2, width, height));
+        //short[] perimeter = allPackedHilbert(fringe(losCached, 2, width, height));
+        int xr = Math.max(0, viewerX - 1 - maxLOSRadius), yr = Math.max(0, viewerY - 1 - maxLOSRadius),
+                wr = Math.min(width - 1 - viewerX, maxLOSRadius * 2 + 3),
+                hr = Math.min(height - 1 - viewerY, maxLOSRadius * 2 + 3);
+        short[] perimeter = rectangleHilbert(xr, yr, wr, hr);
         short p_x, p_y;
         for (int i = 0; i < perimeter.length; i++) {
             p_x = hilbertX[perimeter[i] & 0xffff];
@@ -1115,13 +1156,36 @@ public class FOVCache extends FOV{
             }
         }
         */
-        losCache[viewerX + viewerY * width] = insertSeveralPacked(losCached, packing.shrink());
+        losCache[viewerX + viewerY * width] = insertSeveralPacked(losCached, packing.asInts());
 
 
-        for (int l = 0; l < maxRadius + 1; l++) {
+        for (int l = 0; l <= maxRadius; l++) {
             packing.clear();
-            knownSeen = allPackedHilbert(cached[maxRadius - l]);
-            Arrays.sort(knownSeen);
+            xr = Math.max(0, viewerX - l);
+            yr = Math.max(0, viewerY - l);
+            wr = Math.min(width - viewerX + l, l * 2 + 1);
+            hr = Math.min(height - viewerY + l, l * 2 + 1);
+            perimeter = rectangleHilbert(xr, yr, wr, hr);
+
+            //short p_x, p_y;
+            for (int i = 0; i < perimeter.length; i++) {
+                if(queryPackedHilbert(cached[maxRadius - l], perimeter[i])) {
+                    packing.add(perimeter[i]);
+                    continue;
+                }
+                p_x = hilbertX[perimeter[i] & 0xffff];
+                p_y = hilbertY[perimeter[i] & 0xffff];
+
+                if(cache[p_x + p_y * width] == ALL_WALLS)
+                    continue;
+
+                if (distance(p_x - viewerX, p_y - viewerY) / 2 > l)
+                    continue;
+                if (queryPackedHilbert(cache[p_x + p_y * width][maxRadius - l], myHilbert))
+                    packing.add(perimeter[i]);
+            }
+            /*
+            knownSeen = cached[maxRadius - l];
             for (int x = Math.max(0, viewerX - l); x <= Math.min(viewerX + l, width - 1); x++) {
                 for (int y = Math.max(0, viewerY - l); y <= Math.min(viewerY + l, height - 1); y++) {
                     if(cache[x + y * width] == ALL_WALLS)
@@ -1129,13 +1193,13 @@ public class FOVCache extends FOV{
                     if (distance(x - viewerX, y - viewerY) / 2 > l)
                         continue;
                     short i = (short) posToHilbert(x, y);
-                    if (Arrays.binarySearch(knownSeen, i) >= 0)
+                    if (queryPackedHilbert(knownSeen, i))
                         continue;
                     if (queryPackedHilbert(cache[x + y * width][maxRadius - l], myHilbert))
                         packing.add(i);
                 }
-            }
-            packed[maxRadius - l] = insertSeveralPacked(cached[maxRadius - l], packing.shrink());
+            }*/
+            packed[maxRadius - l] = packSeveral(packing.asInts());
             Coord light;
             for (int i = 0; i < lightSources.length; i++) {
                 light = lightSources[i];
@@ -1537,7 +1601,7 @@ public class FOVCache extends FOV{
 
     /**
      * Calculates an array of Coord positions that can be seen along the line from the given start point and end point.
-     * Does not order the array. Uses the pre-computed range-62 LOS cache to determine obstacles, and tends to draw a
+     * Does not order the array. Uses the pre-computed LOS cache to determine obstacles, and tends to draw a
      * thicker line than Bresenham lines will. This uses the same radiusKind the FOVCache was created with, but the line
      * this draws doesn't necessarily travel along valid directions for creatures (in particular, Radius.DIAMOND should
      * only allow orthogonal movement, but if you request a 45-degree line, the LOS will have Coords on a perfect
@@ -1546,7 +1610,7 @@ public class FOVCache extends FOV{
      * @param startY the y position of the starting point; must be within bounds of the map
      * @param endX the x position of the endpoint; does not need to be within bounds (will stop LOS at the edge)
      * @param endY the y position of the endpoint; does not need to be within bounds (will stop LOS at the edge)
-     * @return a Coord[], unordered, that can be seen along the line of sight; limited to max LOS range, 62
+     * @return a Coord[], unordered, that can be seen along the line of sight; limited to maxLOSRadius, default 62
      */
     public Coord[] calculateLOS(int startX, int startY, int endX, int endY)
     {
@@ -1595,9 +1659,9 @@ public class FOVCache extends FOV{
 
     /**
      * Calculates an array of Coord positions that can be seen along the line from the given start point and end point.
-     * Sorts the array, starting from the closest Coord to start and ending close to end. Uses the pre-computed
-     * range-62 LOS cache to determine obstacles, and tends to draw a thicker line than Bresenham lines will. This uses
-     * the same radiusKind the FOVCache was created with, but the line this draws doesn't necessarily travel along valid
+     * Sorts the array, starting from the closest Coord to start and ending close to end. Uses the pre-computed LOS
+     * cache to determine obstacles, and tends to draw a thicker line than Bresenham lines will. This uses the same
+     * radiusKind the FOVCache was created with, but the line this draws doesn't necessarily travel along valid
      * directions for creatures (in particular, Radius.DIAMOND should only allow orthogonal movement, but if you request
      * a 45-degree line, the LOS will have Coords on a perfect diagonal, though they won't travel through walls that
      * occupy a thin perpendicular diagonal).
@@ -1780,36 +1844,46 @@ public class FOVCache extends FOV{
          */
         @Override
         public void run() {
-            List<LOSUnit> losUnits = new ArrayList<LOSUnit>(mapLimit);
-            List<FOVUnit> fovUnits = new ArrayList<FOVUnit>(mapLimit);
-            for (int i = 0; i < mapLimit; i++) {
-                losUnits.add(new LOSUnit(i));
-                fovUnits.add(new FOVUnit(i));
+            ArrayList<ArrayList<LOSUnit>> losUnits = new ArrayList<ArrayList<LOSUnit>>(24);
+            ArrayList<ArrayList<FOVUnit>> fovUnits = new ArrayList<ArrayList<FOVUnit>>(24);
+            for (int p = 0; p < 24; p++) {
+                losUnits.add(new ArrayList<LOSUnit>(mapLimit / 20));
+                fovUnits.add(new ArrayList<FOVUnit>(mapLimit / 20));
+            }
+            for (int i = 0, p = 0; i < mapLimit; i++, p = (p+1) % 24) {
+                losUnits.get(p).add(new LOSUnit(i));
+                fovUnits.get(p).add(new FOVUnit(i));
             }
             //long totalTime = System.currentTimeMillis(), threadTime = 0L;
-
-            try {
-                final List<Future<Long>> invoke = executor.invokeAll(losUnits);
-                for (Future<Long> future : invoke) {
-                    future.get();
-                    //long t = future.get();
-                    //threadTime += t;
-                    //System.out.println(t);
+            for (int p = 23; p >= 0; p--) {
+                try {
+                    final List<Future<Long>> invoke = executor.invokeAll(losUnits.get(p));
+                    for (Future<Long> future : invoke) {
+                        future.get();
+                        //long t = future.get();
+                        //threadTime += t;
+                        //System.out.println(t);
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                losUnits.remove(p);
+                System.gc();
             }
-
-            try {
-                final List<Future<Long>> invoke = executor.invokeAll(fovUnits);
-                for (Future<Long> future : invoke) {
-                    future.get();
-                    //long t = future.get();
-                    //threadTime += t;
-                    //System.out.println(t);
+            for (int p = 23; p >= 0; p--) {
+                try {
+                    final List<Future<Long>> invoke = executor.invokeAll(fovUnits.get(p));
+                    for (Future<Long> future : invoke) {
+                        future.get();
+                        //long t = future.get();
+                        //threadTime += t;
+                        //System.out.println(t);
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                fovUnits.remove(p);
+                System.gc();
             }
             //totalTime = System.currentTimeMillis() - totalTime;
             //System.out.println("Total real time elapsed: " + totalTime);
@@ -1858,20 +1932,28 @@ public class FOVCache extends FOV{
                     return;
                 }
             }
-            List<SymmetryUnit> symUnits = new ArrayList<SymmetryUnit>(mapLimit);
-            for (int i = 0; i < mapLimit; i++) {
-                symUnits.add(new SymmetryUnit(i));
+
+            ArrayList<ArrayList<SymmetryUnit>> symUnits = new ArrayList<ArrayList<SymmetryUnit>>(4);
+            for (int p = 0; p < 4; p++) {
+                symUnits.add(new ArrayList<SymmetryUnit>(mapLimit / 3));
+            }
+            for (int i = 0, p = 0; i < mapLimit; i++, p = (p+1) % 4) {
+                symUnits.get(p).add(new SymmetryUnit(i));
             }
 
-            try {
-                final List<Future<Long>> invoke = executor.invokeAll(symUnits);
-                for (Future<Long> future : invoke) {
-                    //threadTime +=
-                    future.get();
-                    //System.out.println(t);
+            for (int p = 3; p >= 0; p--) {
+                try {
+                    final List<Future<Long>> invoke = executor.invokeAll(symUnits.get(p));
+                    for (Future<Long> future : invoke) {
+                        //threadTime +=
+                        future.get();
+                        //System.out.println(t);
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                symUnits.remove(p);
+                System.gc();
             }
             cache = tmpCache;
             qualityComplete = true;

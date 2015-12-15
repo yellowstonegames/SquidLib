@@ -37,7 +37,7 @@ public class FOVCacheDemo {
                 }
             }
             */
-            FOVCache cache = new FOVCache(map, range, Radius.CIRCLE, 8);
+            FOVCache cache = new FOVCache(map, range, 50, Radius.CIRCLE, 8);
             Coord walkable = dungeonGenerator.utility.randomFloor(map);
             long time = System.currentTimeMillis();
             cache.awaitCache();

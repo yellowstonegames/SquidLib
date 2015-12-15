@@ -558,4 +558,29 @@ public class DungeonBoneGen {
         }
         return sb.toString();
     }
+
+    /**
+     * Gets an array of all herringbone tiles associated with a TilesetType enum.
+     *
+     * @param tt a TilesetType enum
+     * @return an array of 2D char arrays representing tiles
+     */
+    public String[][] getTiles(TilesetType tt) {
+        Tileset ts;
+        if (tilesetCache.containsKey(tt)) {
+            ts = tilesetCache.get(tt);
+        } else {
+            ts = gson.fromJson(stringifyStream(jsonStreams[tt.ordinal()]), Tileset.class);
+            tilesetCache.put(tt, ts);
+        }
+
+        String[][] result = new String[ts.h_tiles.length + ts.v_tiles.length][];
+        for (int i = 0; i < ts.h_tiles.length; i++) {
+            result[i] = ts.h_tiles[i].data;
+        }
+        for (int i = 0; i < ts.v_tiles.length; i++) {
+            result[ts.h_tiles.length + i] = ts.v_tiles[i].data;
+        }
+        return result;
+    }
 }

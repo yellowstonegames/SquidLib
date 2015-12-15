@@ -11,12 +11,24 @@ import java.nio.ByteBuffer;
 import java.util.HashSet;
 
 import static org.junit.Assert.*;
+import static squidpony.squidmath.CoordPacker.*;
 
 
 /**
  * Created by Tommy Ettinger on 10/1/2015.
  */
 public class CoordPackerTest {
+
+    public static short[] dataCross = unionPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14));
+    @Test
+    public void testBasics() {
+        //printPacked(dataCross, 64, 64);
+        assertArrayEquals(dataCross, unionPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14)));
+        short[] singleNegative = negatePacked(unionPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14))),
+                doubleNegative = negatePacked(singleNegative);
+        assertArrayEquals(dataCross, doubleNegative);
+    }
+
     public static int FOV_RANGE = 12;
     public static Radius RADIUS = Radius.SQUARE;
 
@@ -28,16 +40,6 @@ public class CoordPackerTest {
     public void printBits32(int n) {
         for (int i = 1 << 31; i != 0; i >>>= 1)
             System.out.print((n & i) != 0 ? 1 : 0);
-    }
-    public void printPacked(short[] packed, int width, int height)
-    {
-        boolean[][] unpacked = CoordPacker.unpack(packed, width, height);
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                System.out.print(unpacked[x][y] ? '@' : '.');
-            }
-            System.out.println();
-        }
     }
 
     public long arrayMemoryUsage(int length, long bytesPerItem)
@@ -59,20 +61,20 @@ public class CoordPackerTest {
 
     @Test
     public void testHilbertCurve() {
-        assertEquals(0, CoordPacker.posToHilbert(0, 0));
-        assertEquals(21845, CoordPacker.posToHilbert(255, 0));
-        assertEquals(65535, CoordPacker.posToHilbert(0, 255));
-        assertEquals(43690, CoordPacker.posToHilbert(255, 255));
+        assertEquals(0, posToHilbert(0, 0));
+        assertEquals(21845, posToHilbert(255, 0));
+        assertEquals(65535, posToHilbert(0, 255));
+        assertEquals(43690, posToHilbert(255, 255));
 
-        assertEquals(43690, CoordPacker.coordToHilbert(Coord.get(255, 255)));
-        assertEquals(CoordPacker.posToHilbert(255, 255), CoordPacker.coordToHilbert(Coord.get(255, 255)));
-        assertEquals(Coord.get(255, 255), CoordPacker.hilbertToCoord(CoordPacker.coordToHilbert(Coord.get(255, 255))));
+        assertEquals(43690, coordToHilbert(Coord.get(255, 255)));
+        assertEquals(posToHilbert(255, 255), coordToHilbert(Coord.get(255, 255)));
+        assertEquals(Coord.get(255, 255), hilbertToCoord(coordToHilbert(Coord.get(255, 255))));
     }
     public void testHilbertCurve3D() {
         for(int i : new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,31,32,33,63,64,255,256,4092,4093,4094,4095})
-            System.out.println("index " + i + ", x:" + CoordPacker.hilbert3X[i] +
-                    ", y:" + CoordPacker.hilbert3Y[i] +
-                    ", z:" + CoordPacker.hilbert3Z[i]);
+            System.out.println("index " + i + ", x:" + hilbert3X[i] +
+                    ", y:" + hilbert3Y[i] +
+                    ", z:" + hilbert3Z[i]);
     }
     //@Test
     public void testMooreCurve3D() {
@@ -80,24 +82,24 @@ public class CoordPackerTest {
 
             for (int i0 : new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 31, 32, 33, 63, 64, 255, 256, 511, 512, 1023, 1024, 4092, 4093, 4094, 4095}) {
                 int i = i0 + s * 4096;
-                System.out.println("index " + i + ", sector " + (i >> 12) + ", x:" + CoordPacker.getXMoore3D(i, 3) +
-                        ", y:" + CoordPacker.getYMoore3D(i, 3) +
-                        ", z:" + CoordPacker.getZMoore3D(i, 3));
+                System.out.println("index " + i + ", sector " + (i >> 12) + ", x:" + getXMoore3D(i, 3) +
+                        ", y:" + getYMoore3D(i, 3) +
+                        ", z:" + getZMoore3D(i, 3));
             }
         }
     }
     //@Test
     public void testMooreCurve() {
         for (int i = 0; i < 256; i++) {
-            System.out.println("index " + i + "x:" + CoordPacker.mooreX[i] + ", y:" + CoordPacker.mooreY[i] +
-            ", dist:" + CoordPacker.mooreDistances[CoordPacker.mooreX[i] + (CoordPacker.mooreY[i] << 4)]);
+            System.out.println("index " + i + "x:" + mooreX[i] + ", y:" + mooreY[i] +
+            ", dist:" + mooreDistances[mooreX[i] + (mooreY[i] << 4)]);
         }
     }
 
     @Test
     public void testTranslate() {
         short[] packed = new short[]{0, 4}, squashed = new short[]{0, 1};
-        short[] translated = CoordPacker.translate(packed, -2, -2, 60, 60);
+        short[] translated = translate(packed, -2, -2, 60, 60);
         assertArrayEquals(squashed, translated);
 
 
@@ -111,15 +113,25 @@ public class CoordPackerTest {
          */
         boolean[][] grid = new boolean[][]{new boolean[]{false, true}, new boolean[]{true, false}};
         boolean[][] grid2 = new boolean[][]{new boolean[]{false, false}, new boolean[]{true, true}};
-        short[] packed2 = CoordPacker.pack(grid), packed3 = CoordPacker.pack(grid2);
+        short[] packed2 = pack(grid), packed3 = pack(grid2);
 
-        short[] translated2 = CoordPacker.translate(packed2, 1, 0, 2, 2);
+        short[] translated2 = translate(packed2, 1, 0, 2, 2);
         assertArrayEquals(packed3, translated2);
+        short[] crossZeroTranslated = translate(dataCross, 0, 0, 64, 64);
+        short[] crossTranslated = translate(dataCross, 1, 1, 64, 64);
+        short[] crossUnTranslated = translate(crossTranslated, -1, -1, 64, 64);
+
+        assertArrayEquals(dataCross, crossZeroTranslated);
+        assertArrayEquals(dataCross, crossUnTranslated);
+
+        short[] crossBox = translate(translate(dataCross, 25, 25, 64, 64), -50, -50, 64, 64);
+        //printPacked(crossBox, 64, 64);
+        assertArrayEquals(crossBox, rectangle(14, 14));
     }
 
     @Test
     public void testUnion() {
-        short[] union = CoordPacker.unionPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 12, 9, 1});
+        short[] union = unionPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 12, 9, 1});
         // 300, 5, 6, 8, 2, 4
         // 290, 12, 9, 1
         // =
@@ -133,7 +145,7 @@ public class CoordPackerTest {
         */
         assertArrayEquals(new short[]{290, 15, 6, 8, 2, 4}, union);
 
-        union = CoordPacker.unionPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 10, 1});
+        union = unionPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 10, 1});
         /*
         System.out.println("Union: ");
         for (int i = 0; i < union.length; i++) {
@@ -143,7 +155,7 @@ public class CoordPackerTest {
         */
         assertArrayEquals(new short[]{290, 15, 5, 9, 2, 4}, union);
 
-        short[] intersect = CoordPacker.intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 12, 9, 1});
+        short[] intersect = intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 12, 9, 1});
         // 300, 5, 6, 8, 2, 4
         // 290, 12, 9, 1
         // =
@@ -157,7 +169,7 @@ public class CoordPackerTest {
         */
         assertArrayEquals(new short[]{300, 2, 9, 1}, intersect);
 
-        intersect = CoordPacker.intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 11, 1});
+        intersect = intersectPacked(new short[]{300, 5, 6, 8, 2, 4}, new short[]{290, 10, 11, 1});
         /*
         System.out.println("Intersect: ");
         for (int i = 0; i < intersect.length; i++) {
@@ -172,22 +184,39 @@ public class CoordPackerTest {
 
         DungeonGenerator dungeonGenerator = new DungeonGenerator(60, 60, rng);
         char[][] map = dungeonGenerator.generate();
-        short[] floors = CoordPacker.pack(map, '.');
+        short[] floors = pack(map, '.');
         Coord viewer = dungeonGenerator.utility.randomCell(floors);
         FOV fov = new FOV(FOV.SHADOW);
         double[][] seen = fov.calculateFOV(DungeonUtility.generateResistances(map), viewer.x, viewer.y,
                 FOV_RANGE, RADIUS);
-        short[] visible = CoordPacker.pack(seen);
+        short[] visible = pack(seen);
 
-        short[] fringe = CoordPacker.fringe(visible, 1, 60, 60);
+        short[] fringe = fringe(visible, 1, 60, 60);
         printPacked(fringe, 60, 60);
 
 
-        short[][] fringes = CoordPacker.fringes(visible, 6, 60, 60);
+        short[][] fringes = fringes(visible, 6, 60, 60);
         for (int i = 0; i < 6; i++) {
-            printPacked(CoordPacker.intersectPacked(fringes[i], floors), 60, 60);
+            printPacked(intersectPacked(fringes[i], floors), 60, 60);
         }
         */
+        short[] box = translate(translate(translate(dataCross, 25, 25, 64, 64), -50, -50, 64, 64), 25, 25, 64, 64);
+        assertArrayEquals(box, intersectPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14)));
+        short[] minus = differencePacked(dataCross, box);
+        short[] xor = xorPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14));
+        assertArrayEquals(minus, xor);
+
+        short[] edge = fringe(dataCross, 1, 64, 64);
+        //printPacked(edge, 64, 64);
+        short[] bonus = expand(dataCross, 1, 64, 64);
+        //printPacked(bonus, 64, 64);
+        assertArrayEquals(differencePacked(bonus, edge), dataCross);
+        short[] flooded = flood(dataCross, packSeveral(Coord.get(26, 2)), 2);
+        short[] manual = packSeveral(Coord.get(25, 2), Coord.get(26, 2), Coord.get(27, 2), Coord.get(28, 2),
+                Coord.get(25, 3), Coord.get(26, 3), Coord.get(27, 3),
+                Coord.get(26, 4));
+        //printPacked(flooded, 64, 64);
+        assertArrayEquals(flooded, manual);
     }
     @Test
     public void testPackOptimalParameters()
@@ -208,9 +237,9 @@ public class CoordPackerTest {
         for (int t = 0; t < 100; t++) {
             viewer = dungeonGenerator.utility.randomFloor(map);
             seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
-            packed = CoordPacker.pack(seen);
+            packed = pack(seen);
 
-            unpacked = CoordPacker.unpack(packed, seen.length, seen[0].length);
+            unpacked = unpack(packed, seen.length, seen[0].length);
             for (int i = 0; i < unpacked.length ; i++) {
                 for (int j = 0; j < unpacked[i].length; j++) {
                     assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
@@ -259,9 +288,9 @@ public class CoordPackerTest {
         for (int t = 0; t < 100; t++) {
             viewer = dungeonGenerator.utility.randomFloor(map);
             seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
-            packed = CoordPacker.pack(seen);
+            packed = pack(seen);
 
-            unpacked = CoordPacker.unpack(packed, seen.length, seen[0].length);
+            unpacked = unpack(packed, seen.length, seen[0].length);
             for (int i = 0; i < unpacked.length ; i++) {
                 for (int j = 0; j < unpacked[i].length; j++) {
                     assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
@@ -310,7 +339,7 @@ public class CoordPackerTest {
 
         double[][] resMap = DungeonUtility.generateResistances(map);
         double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
-        short[] packed = CoordPacker.pack(seen);
+        short[] packed = pack(seen);
 
         assertEquals("Packed shorts", 28, packed.length);
         assertEquals("Unpacked doubles: ", 2100, seen.length * seen[0].length);
@@ -325,7 +354,7 @@ public class CoordPackerTest {
         System.out.println("Compression, short[] vs. double[][] (Approaching Worst-Case):" +
                 100.0 * arrayMemoryUsage(packed.length, 2) / arrayMemoryUsage2D(30, 70, 8) + "%");
 
-        boolean[][]unpacked = CoordPacker.unpack(packed, seen.length, seen[0].length);
+        boolean[][]unpacked = unpack(packed, seen.length, seen[0].length);
         for (int i = 0; i < unpacked.length ; i++) {
             for (int j = 0; j < unpacked[i].length; j++) {
                 assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
@@ -338,7 +367,7 @@ public class CoordPackerTest {
     {
         for(int FOV_RANGE = 1; FOV_RANGE < 21; FOV_RANGE++) {
             StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
-            DungeonGenerator dungeonGenerator = new DungeonGenerator(240, 240, rng);
+            DungeonGenerator dungeonGenerator = new DungeonGenerator(80, 80, rng);
             dungeonGenerator.addDoors(15, true);
             dungeonGenerator.addWater(25);
             dungeonGenerator.addTraps(2);
@@ -346,8 +375,8 @@ public class CoordPackerTest {
             double[][] resMap = DungeonUtility.generateResistances(map), seen;
 
             FOV fov = new FOV(FOV.RIPPLE);
-            double[] packingLevels = CoordPacker.generatePackingLevels(FOV_RANGE),
-                    lightLevels = CoordPacker.generateLightLevels(FOV_RANGE);
+            double[] packingLevels = generatePackingLevels(FOV_RANGE),
+                    lightLevels = generateLightLevels(FOV_RANGE);
             short[][] packed;
             int ramPacked = 0, ramFloat = 0, ramDouble = 0;
             Coord viewer;
@@ -367,7 +396,7 @@ public class CoordPackerTest {
             for (int t = 0; t < 100; t++) {
                 viewer = dungeonGenerator.utility.randomFloor(map);
                 seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
-                packed = CoordPacker.packMulti(seen, packingLevels);
+                packed = packMulti(seen, packingLevels);
 
                 for (int j = 0; j < seen[0].length; j++) {
                     for (int i = 0; i < seen.length; i++) {
@@ -376,7 +405,7 @@ public class CoordPackerTest {
                 }
 
                 for (int ll = 0; ll < lightLevels.length; ll++) {
-                    boolean[][] unpackedB = CoordPacker.unpack(packed[ll], seen.length, seen[0].length);
+                    boolean[][] unpackedB = unpack(packed[ll], seen.length, seen[0].length);
                     for (int i = 0; i < unpackedB.length; i++) {
                         for (int j = 0; j < unpackedB[i].length; j++) {
                             assertTrue((seen[i][j] > packingLevels[ll]) == unpackedB[i][j]);
@@ -384,10 +413,10 @@ public class CoordPackerTest {
                     }
                     if (ll + 1 == lightLevels.length) {
                         assertTrue(packed[ll].length == 2);
-                        assertTrue(CoordPacker.queryPacked(packed[ll], viewer.x, viewer.y));
+                        assertTrue(queryPacked(packed[ll], viewer.x, viewer.y));
                     }
                 }
-                double[][] unpacked2 = CoordPacker.unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
+                double[][] unpacked2 = unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
                 for (int j = 0; j < seen[0].length; j++) {
                     for (int i = 0; i < seen.length; i++) {
                         /*
@@ -437,7 +466,7 @@ public class CoordPackerTest {
             */
         }
         /*
-        byte[][] unpacked3 = CoordPacker.unpackMultiByte(packed, seen.length, seen[0].length);
+        byte[][] unpacked3 = unpackMultiByte(packed, seen.length, seen[0].length);
         for (int j = 0; j < seen[0].length; j++) {
             for (int i = 0; i < seen.length; i++) {
                 System.out.print(String.format("%x", unpacked3[i][j]));
@@ -449,7 +478,7 @@ public class CoordPackerTest {
 
 
         /*
-        byte[][] unpacked3 = CoordPacker.unpackMultiByte(packed, seen.length, seen[0].length);
+        byte[][] unpacked3 = unpackMultiByte(packed, seen.length, seen[0].length);
         for (int j = 0; j < seen[0].length; j++) {
             for (int i = 0; i < seen.length; i++) {
                 System.out.print(unpacked3[i][j]);
@@ -469,7 +498,7 @@ public class CoordPackerTest {
     public void testPackMultiPoorParameters() {
         for(int FOV_RANGE = 1; FOV_RANGE < 21; FOV_RANGE++) {
             StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
-            DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 70, rng);
+            DungeonGenerator dungeonGenerator = new DungeonGenerator(30, 240, rng);
             dungeonGenerator.addDoors(15, true);
             dungeonGenerator.addWater(25);
             dungeonGenerator.addTraps(2);
@@ -478,8 +507,8 @@ public class CoordPackerTest {
 
             FOV fov = new FOV(FOV.RIPPLE);
 
-            double[] packingLevels = CoordPacker.generatePackingLevels(FOV_RANGE),
-                      lightLevels = CoordPacker.generateLightLevels(FOV_RANGE);
+            double[] packingLevels = generatePackingLevels(FOV_RANGE),
+                      lightLevels = generateLightLevels(FOV_RANGE);
             short[][] packed;
             int ramPacked = 0, ramFloat = 0, ramDouble = 0;
             Coord viewer;
@@ -498,7 +527,7 @@ public class CoordPackerTest {
             for (int t = 0; t < 100; t++) {
                 viewer = dungeonGenerator.utility.randomFloor(map);
                 seen = fov.calculateFOV(resMap, viewer.x, viewer.y, FOV_RANGE, RADIUS);
-                packed = CoordPacker.packMulti(seen, packingLevels);
+                packed = packMulti(seen, packingLevels);
                 for (int j = 0; j < seen[0].length; j++) {
                     for (int i = 0; i < seen.length; i++) {
                         seenValues.add(seen[i][j]);
@@ -506,7 +535,7 @@ public class CoordPackerTest {
                 }
 
                 for (int ll = 0; ll < lightLevels.length; ll++) {
-                    boolean[][] unpackedB = CoordPacker.unpack(packed[ll], seen.length, seen[0].length);
+                    boolean[][] unpackedB = unpack(packed[ll], seen.length, seen[0].length);
                     for (int i = 0; i < unpackedB.length; i++) {
                         for (int j = 0; j < unpackedB[i].length; j++) {
                             assertTrue((seen[i][j] > packingLevels[ll]) == unpackedB[i][j]);
@@ -514,10 +543,10 @@ public class CoordPackerTest {
                     }
                     if (ll + 1 == lightLevels.length) {
                         assertTrue(packed[ll].length == 2);
-                        assertTrue(CoordPacker.queryPacked(packed[ll], viewer.x, viewer.y));
+                        assertTrue(queryPacked(packed[ll], viewer.x, viewer.y));
                     }
                 }
-                double[][] unpacked2 = CoordPacker.unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
+                double[][] unpacked2 = unpackMultiDouble(packed, seen.length, seen[0].length, lightLevels);
                 for (int j = 0; j < seen[0].length; j++) {
                     for (int i = 0; i < seen.length; i++) {
                         /*
@@ -587,9 +616,9 @@ public class CoordPackerTest {
         for (int t = 0; t < 100; t++) {
             viewer = dungeonGenerator.utility.randomFloor(map);
             seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
-            packed = CoordPacker.packZ(seen);
+            packed = packZ(seen);
 
-            unpacked = CoordPacker.unpackZ(packed, seen.length, seen[0].length);
+            unpacked = unpackZ(packed, seen.length, seen[0].length);
             for (int i = 0; i < unpacked.length ; i++) {
                 for (int j = 0; j < unpacked[i].length; j++) {
                     assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
@@ -634,9 +663,9 @@ public class CoordPackerTest {
         for (int t = 0; t < 100; t++) {
             viewer = dungeonGenerator.utility.randomFloor(map);
             seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
-            packed = CoordPacker.packZ(seen);
+            packed = packZ(seen);
 
-            unpacked = CoordPacker.unpackZ(packed, seen.length, seen[0].length);
+            unpacked = unpackZ(packed, seen.length, seen[0].length);
             for (int i = 0; i < unpacked.length ; i++) {
                 for (int j = 0; j < unpacked[i].length; j++) {
                     assertTrue((seen[i][j] > 0.0) == unpacked[i][j]);
@@ -682,7 +711,7 @@ public class CoordPackerTest {
         double[][] resMap = DungeonUtility.generateResistances(map);
         double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
         double[] lightLevels = new double[]{0.125, 0.25, 0.125 * 3, 0.5, 0.125 * 5, 0.75, 0.125 * 7, 1.0};
-        short[][] packed = CoordPacker.packMultiZ(seen, lightLevels);
+        short[][] packed = packMultiZ(seen, lightLevels);
         System.out.println("Appropriate Parameter packed values, Z");
         for(int p = 0; p < packed.length; p++) {
             System.out.print(packed[p][0]);
@@ -704,14 +733,14 @@ public class CoordPackerTest {
         System.out.println("Compression vs. float[][] (Appropriate, Z):" +
                 100.0 * arrayMemoryUsageJagged(packed) / arrayMemoryUsage2D(240, 240, 4) + "%");
         for(int ll = 0; ll < lightLevels.length; ll++) {
-            boolean[][] unpacked = CoordPacker.unpackZ(packed[ll], seen.length, seen[0].length);
+            boolean[][] unpacked = unpackZ(packed[ll], seen.length, seen[0].length);
             for (int i = 0; i < unpacked.length; i++) {
                 for (int j = 0; j < unpacked[i].length; j++) {
                     assertTrue((seen[i][j] >= lightLevels[ll]) == unpacked[i][j]);
                 }
             }
         }
-        double[][] unpacked2 = CoordPacker.unpackMultiDoubleZ(packed, seen.length, seen[0].length, lightLevels);
+        double[][] unpacked2 = unpackMultiDoubleZ(packed, seen.length, seen[0].length, lightLevels);
         for (int i = 0; i < unpacked2.length; i++) {
             for (int j = 0; j < unpacked2[i].length; j++) {
                 assertTrue(seen[i][j] == unpacked2[i][j]);
@@ -738,7 +767,7 @@ public class CoordPackerTest {
         double[][] resMap = DungeonUtility.generateResistances(map);
         double[][] seen = fov.calculateFOV(resMap, viewer.x, viewer.y, 8, Radius.DIAMOND);
         double[] lightLevels = new double[]{0.125, 0.25, 0.125 * 3, 0.5, 0.125 * 5, 0.75, 0.125 * 7, 1.0};
-        short[][] packed = CoordPacker.packMultiZ(seen, lightLevels);
+        short[][] packed = packMultiZ(seen, lightLevels);
         System.out.println("Poor Parameter packed values, Z");
         for(int p = 0; p < packed.length; p++) {
             System.out.print(packed[p][0]);
@@ -766,7 +795,7 @@ public class CoordPackerTest {
                 100.0 * arrayMemoryUsageJagged(packed) / arrayMemoryUsage2D(30, 70, 4) + "%");
 
         for (int ll = 0; ll < lightLevels.length; ll++) {
-            boolean[][] unpacked = CoordPacker.unpackZ(packed[ll], seen.length, seen[0].length);
+            boolean[][] unpacked = unpackZ(packed[ll], seen.length, seen[0].length);
             for (int i = 0; i < unpacked.length; i++) {
                 for (int j = 0; j < unpacked[i].length; j++) {
                     assertTrue((seen[i][j] >= lightLevels[ll]) == unpacked[i][j]);
@@ -774,7 +803,7 @@ public class CoordPackerTest {
             }
         }
 
-        double[][] unpacked2 = CoordPacker.unpackMultiDoubleZ(packed, seen.length, seen[0].length, lightLevels);
+        double[][] unpacked2 = unpackMultiDoubleZ(packed, seen.length, seen[0].length, lightLevels);
         for (int i = 0; i < unpacked2.length; i++) {
             for (int j = 0; j < unpacked2[i].length; j++) {
                 assertTrue(seen[i][j] == unpacked2[i][j]);
@@ -784,12 +813,12 @@ public class CoordPackerTest {
 
     @Test
     public void testMorton() {
-        assertEquals(0, CoordPacker.mortonEncode(0, 0));
-        assertEquals(0x5555, CoordPacker.mortonEncode(0xFF, 0));
-        assertEquals(0xAAAA, CoordPacker.mortonEncode(0, 0xFF));
-        assertEquals(0xFFFF, CoordPacker.mortonEncode(0xFF, 0xFF));
-        assertEquals(0x7AAD, CoordPacker.mortonEncode(0xC3, 0x7E));
-        assertEquals(Coord.get(0xC3, 0x7E), CoordPacker.mortonDecode(0x7AAD));
+        assertEquals(0, mortonEncode(0, 0));
+        assertEquals(0x5555, mortonEncode(0xFF, 0));
+        assertEquals(0xAAAA, mortonEncode(0, 0xFF));
+        assertEquals(0xFFFF, mortonEncode(0xFF, 0xFF));
+        assertEquals(0x7AAD, mortonEncode(0xC3, 0x7E));
+        assertEquals(Coord.get(0xC3, 0x7E), mortonDecode(0x7AAD));
         //generateHilbert();
     }
 
@@ -800,14 +829,14 @@ public class CoordPackerTest {
         /*
         Coord c;
         for (int i = 0; i < capacity; i++) {
-            c = CoordPacker.hilbertToCoord(i);
+            c = hilbertToCoord(i);
             xOut[i] = (short) c.x;
             yOut[i] = (short) c.y;
         }
 
         for (int y = 0; y < sideLength; y++) {
             for (int x = 0; x < sideLength; x++) {
-                out[y * sideLength + x] = (short) CoordPacker.posToHilbert(x, y);
+                out[y * sideLength + x] = (short) posToHilbert(x, y);
             }
         }
         try {

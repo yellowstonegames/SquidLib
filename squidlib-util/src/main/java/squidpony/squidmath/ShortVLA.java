@@ -19,7 +19,8 @@ import java.util.Arrays;
 
 /** A resizable, ordered or unordered short variable-length array. Avoids the boxing that occurs with {@code ArrayList<Short>}.
  * If unordered, this class avoids a memory copy when removing elements (the last element is moved to the removed
- * element's position).
+ * element's position). Used internally by CoordPacker, and unlikely to be used outside of it.
+ * <br>
  * Was called IntArray in libGDX; to avoid confusion with the fixed-length primitive array type, VLA (variable-length
  * array) was chosen as a different name. Also uses short instead of int, of course.
  * Copied from LibGDX by Tommy Ettinger on 10/1/2015.
