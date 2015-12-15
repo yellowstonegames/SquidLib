@@ -154,12 +154,7 @@ public class DungeonGenerator {
      */
     public DungeonGenerator(int width, int height)
     {
-        rng = new RNG(new LightRNG());
-        gen = new DungeonBoneGen(rng);
-        utility = new DungeonUtility(rng);
-        this.height = height;
-        this.width = width;
-        fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
+    	this(width, height, new RNG(new LightRNG()));
     }
 
     /**
@@ -170,23 +165,6 @@ public class DungeonGenerator {
      *            results from map generation every time, don't use the same RNG object in other places.
      */
     public DungeonGenerator(int width, int height, RNG rng)
-    {
-        this.rng = rng;
-        gen = new DungeonBoneGen(rng);
-        utility = new DungeonUtility(rng);
-        this.height = height;
-        this.width = width;
-        fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
-    }
-    /**
-     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.
-     * @param width The width of the dungeon in cells.
-     * @param height The height of the dungeon in cells.
-     * @param rng The RNG to use for all purposes in this class; if this has been seeded and you want the same
-     *            results from map generation every time, don't use the same RNG object in other places. This is
-     *            a StatefulRNG, which has some benefits in regards to DungeonUtility.
-     */
-    public DungeonGenerator(int width, int height, StatefulRNG rng)
     {
         this.rng = rng;
         gen = new DungeonBoneGen(rng);
@@ -503,7 +481,6 @@ public class DungeonGenerator {
     public char[][] generateRespectingStairs(char[][] baseDungeon) {
         char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
-        int frustrated = 0;
         stairsUp = null;
         stairsDown = null;
 
@@ -735,7 +712,8 @@ public class DungeonGenerator {
 
     }
 
-    private char[][] innerGenerateOld(char[][] map)
+    @SuppressWarnings("unused")
+	private char[][] innerGenerateOld(char[][] map)
     {
 
         LinkedHashSet<Coord> floors = new LinkedHashSet<Coord>();

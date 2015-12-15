@@ -1,11 +1,11 @@
 package squidpony.panel;
 
-import squidpony.annotation.Beta;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+
+import squidpony.annotation.Beta;
 
 /**
  * A {@link String} divided in chunks of different colors. Use the
@@ -63,6 +63,11 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * @param len
 	 */
 	void setLength(int len);
+
+	/**
+	 * Empties {@code this}.
+	 */
+	void clear();
 
 	/**
 	 * @param index
@@ -124,7 +129,6 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		public static <T> IColoredString.Impl<T> create() {
 			return new IColoredString.Impl<T>("", null);
 		}
-
 
 		/**
 		 * A static constructor, to avoid having to write {@code <T>} in the
@@ -207,6 +211,11 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 					/* We'll exit the outer loop right away */
 				}
 			}
+		}
+
+		@Override
+		public void clear() {
+			fragments.clear();
 		}
 
 		@Override
