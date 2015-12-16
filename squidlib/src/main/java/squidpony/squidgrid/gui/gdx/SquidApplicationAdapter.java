@@ -3,9 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-
 import squidpony.SquidTags;
-import squidpony.panel.IPanelBuilder;
 
 /**
  * A partial application adapter that uses the Zodiac-Square fonts. It should be
@@ -23,8 +21,6 @@ public class SquidApplicationAdapter extends ApplicationAdapter {
 	protected /* @Nullable */ AbstractSquidScreen<Color> screen;
 
 	/**
-	 * @param icc
-	 * @param ipb
 	 *            An {@link IPanelBuilder} that specifies which font sizes are
 	 *            available. Use {@link IPanelBuilder.Skeleton} to help build
 	 *            this instance.
@@ -39,7 +35,7 @@ public class SquidApplicationAdapter extends ApplicationAdapter {
 					return "Zodiac-Square-24x24.fnt";
 				else
 					throw new IllegalStateException(
-							"Sorry this panel builder only supports a square font of size 12 or 24");
+							"Sorry! This panel builder only supports a square font of size 12 or 24");
 			}
 		};
 	}

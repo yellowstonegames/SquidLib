@@ -25,8 +25,8 @@ public class SquidTags {
 	public static final String LAYOUT = "layout";
 
 	/**
-	 * Use this tag when logging things about {@link AbstractSquidScreen} and
-	 * {@link SquidApplicationAdapter}.
+	 * Use this tag when logging things about AbstractSquidScreen or other
+	 * screen-changing methods if your display has them..
 	 */
 	public static final String SCREEN = "screen";
 }

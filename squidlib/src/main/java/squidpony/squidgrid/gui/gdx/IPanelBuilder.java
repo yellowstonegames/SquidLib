@@ -1,7 +1,4 @@
-package squidpony.panel;
-
-import squidpony.squidgrid.gui.gdx.SquidPanel;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+package squidpony.squidgrid.gui.gdx;
 
 /**
  * Interface to build instances of {@link SquidPanel} by taking care of
