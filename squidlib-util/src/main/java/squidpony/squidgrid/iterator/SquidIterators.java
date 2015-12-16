@@ -1,9 +1,9 @@
 package squidpony.squidgrid.iterator;
 
+import java.util.NoSuchElementException;
+
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
-
-import java.util.NoSuchElementException;
 
 /**
  * Instances of {@link SquidIterator}.
@@ -120,12 +120,17 @@ public class SquidIterators {
 
 	}
 
-	/* **************************************************************************************************** */
-
 	/**
-	 * An iterator that circles around a location, in a square-shape,
-	 * counter-clockwise, starting at the east. This iterator can return
-	 * locations that are outside the map.
+	 * An iterator that returns cells in a square around a location. Cells are
+	 * iterated from bottom left to top right in this square. A square size of
+	 * {@code 0} creates an iterator that returns one location (the starting
+	 * one); a square of size {@code 1} is an iterator that returns at most 9
+	 * locations, (start.x-1,start.y+1), (start.x,start.y+1), ...; a square of
+	 * size {@code 2} returns at most ((2*2)+1)*((2*2)+1) = 25 locations, etc..
+	 * 
+	 * <p>
+	 * Instances of this iterator never return a coordinate outside the map.
+	 * </p>
 	 * 
 	 * @author smelC
 	 */
@@ -139,44 +144,47 @@ public class SquidIterators {
 		protected final int xstart;
 		protected final int ystart;
 
-		/** Invariant: less or equal to {@link #maxDistanceFromStart} */
-		protected int distanceFromStart;
+		protected final int size;
 
-		protected int streakBound; // inclusive
-		protected int indexInStreak;
-		protected Direction direction;
-
-		/** The maximum distance from the starting point */
-		protected final int maxDistanceFromStart;
+		protected boolean done = false;
 
 		/**
-		 * A circling iterator around (x, y).
+		 * An iterator to iterate in the square of size {@code size} around
+		 * {@code (x, y)}.
 		 * 
 		 * @param width
-		 *            The grid's width
+		 *            The map's width
 		 * @param height
-		 *            The grid's height
+		 *            The map's height
 		 * @param x
 		 *            The starting x coordinate.
 		 * @param y
 		 *            The starting y coordinate.
+		 * @param size
+		 *            The square's size. Can be {@code 0} but not negative.
+		 * @throws IllegalStateException
+		 *             If {@code width <= 0 || height <= 0 || size < 0}.
 		 */
-		public Square(int width, int height, int x, int y) {
+		public Square(int width, int height, int x, int y, int size) {
 			this.width = width;
-			if (width == 0)
+			if (width <= 0)
 				throw new IllegalStateException("Cannot build a square iterator over an empty grid");
 			this.height = height;
-			if (height == 0)
+			if (height <= 0)
 				throw new IllegalStateException("Cannot build a square iterator over an empty grid");
 
-			xstart = x;
-			ystart = y;
+			this.xstart = x;
+			this.ystart = y;
 
-			maxDistanceFromStart = Math.max(Math.abs(x - width), Math.abs(x - height));
+			if (size < 0)
+				throw new IllegalStateException("Cannot build a square iterator with a negative size");
+
+			this.size = size;
 		}
 
 		/**
-		 * A circling iterator around (x, y).
+		 * An iterator to iterate in the square of size {@code size} around
+		 * {@code start}.
 		 * 
 		 * @param width
 		 *            The grid's width
@@ -185,69 +193,13 @@ public class SquidIterators {
 		 * @param start
 		 *            The starting coordinate.
 		 */
-		public Square(int width, int height, Coord start) {
-			this(width, height, start.x, start.y);
+		public Square(int width, int height, Coord start, int size) {
+			this(width, height, start.x, start.y, size);
 		}
 
 		@Override
 		public boolean hasNext() {
-			return findNext(true) != null;
-		}
-
-		protected/* @Nullable */Coord findNext(boolean mute) {
-			if (previous == null) {
-				if (maxDistanceFromStart == 0)
-					/* This is an empty iterator */
-					return null;
-
-				/* Iterator is pristine */
-				final Coord result = Coord.get(xstart + 1, ystart);
-
-				if (mute)
-					previous = result;
-
-				return result;
-			}
-
-			final int dfs = distanceFromStart;
-			final int iis = indexInStreak;
-			final Direction pdirection = direction;
-
-			final Coord result;
-			if (direction == Direction.RIGHT && indexInStreak == streakBound) {
-				/* Enlarge the square */
-				if (distanceFromStart == maxDistanceFromStart)
-					result = null;
-				else {
-					distanceFromStart++;
-					result = Coord.get(xstart + distanceFromStart, ystart);
-				}
-			} else {
-				if (indexInStreak == streakBound) {
-					/* Need to change the direction */
-					indexInStreak = 0;
-					if (direction == null)
-						direction = Direction.RIGHT;
-					else
-						direction = direction.counterClockwise().counterClockwise();
-				} else {
-					/* Continue in streak */
-					indexInStreak++;
-				}
-
-				result = Coord.get(previous.x + direction.deltaX, previous.y + direction.deltaY);
-			}
-
-			if (mute)
-				previous = result;
-			else {
-				distanceFromStart = dfs;
-				indexInStreak = iis;
-				direction = pdirection;
-			}
-
-
-			return result;
+			return findNext(false) != null;
 		}
 
 		@Override
@@ -263,13 +215,63 @@ public class SquidIterators {
 			throw new UnsupportedOperationException();
 		}
 
-	}
+		protected/* @Nullable */Coord findNext(boolean mute) {
+			while (!done) {
+				final Coord result = findNext0();
+				if (result != null) {
+					if (isInGrid(result.x, result.y)) {
+						if (mute)
+							previous = result;
+						return result;
+					}
+					/*
+					 * We need to record progression, even if mutation isn't
+					 * required. This is correct, because this is progression
+					 * that isn't observable (skipping cells outside the map).
+					 */
+					previous = result;
+				}
+			}
+			return null;
+		}
 
-	/* **************************************************************************************************** */
+		/*
+		 * This method doesn't care about validity, findNext(boolean) handles it
+		 */
+		protected/* @Nullable */Coord findNext0() {
+			if (previous == null) {
+				/* Init */
+				/* We're in SquidLib coordinates here ((0,0) is top left) */
+				return Coord.get(xstart - size, ystart + size);
+			}
+
+			assert xstart - size <= previous.x && previous.x <= xstart + size;
+			assert ystart - size <= previous.y && previous.y <= ystart + size;
+
+			if (previous.x == xstart + size) {
+				/* Need to go up and left (one column up, go left) */
+				if (previous.y == ystart - size) {
+					/* We're done */
+					done = true;
+					return null;
+				} else
+					return Coord.get(xstart - size, previous.y - 1);
+			} else {
+				/* Can go right in the same line */
+				return Coord.get(previous.x + 1, previous.y);
+			}
+		}
+
+		protected boolean isInGrid(int x, int y) {
+			return 0 <= x && x < width && 0 <= y && y < height;
+		}
+	}
 
 	/**
 	 * An iterator that iterates around a starting position (counter clockwise).
-	 * It can return at most 9 elements.
+	 * It can return at most 9 elements. Instances of this iterator only return
+	 * coordinates that are valid w.r.t. to the widths and heights given at
+	 * creation time (i.e. they do not go off the map).
 	 * 
 	 * @author smelC
 	 */
@@ -314,11 +316,11 @@ public class SquidIterators {
 			this.height = height;
 
 			if (xstart < 0 || width <= xstart)
-				throw new IllegalArgumentException(String.format("x-coordinate: %d in grid with width %d",
-						xstart, width));
+				throw new IllegalArgumentException(
+						String.format("x-coordinate: %d in grid with width %d", xstart, width));
 			if (ystart < 0 || height <= ystart)
-				throw new IllegalArgumentException(String.format("y-coordinate: %d in grid with height %d",
-						xstart, width));
+				throw new IllegalArgumentException(
+						String.format("y-coordinate: %d in grid with height %d", xstart, width));
 
 			this.xstart = xstart;
 			this.ystart = ystart;
@@ -410,12 +412,12 @@ public class SquidIterators {
 		 */
 		public VerticalUp(int startx, int starty, int width, int height) {
 			if (startx < 0 || width <= startx)
-				throw new IllegalStateException(String.format("Illegal x-coordinate: %d (map's width: %d)",
-						startx, width));
+				throw new IllegalStateException(
+						String.format("Illegal x-coordinate: %d (map's width: %d)", startx, width));
 			this.startx = startx;
 			if (starty < 0 || height <= starty)
-				throw new IllegalStateException(String.format("Illegal y-coordinate: %d (map's height: %d)",
-						starty, height));
+				throw new IllegalStateException(
+						String.format("Illegal y-coordinate: %d (map's height: %d)", starty, height));
 			this.starty = starty;
 
 			this.width = width;

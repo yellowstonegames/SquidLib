@@ -111,6 +111,32 @@ public class UIUtil {
 	}
 
 	/**
+	 * Draws a rectangle using a {@link ShapeRenderer}.
+	 * 
+	 * @param botLeftX
+	 *            The bottom left x of the rectangle.
+	 * @param botLeftY
+	 *            The bottom left y of the rectangle.
+	 * @param width
+	 *            The rectangle's width
+	 * @param height
+	 *            The rectangle's height
+	 * @param st
+	 *            The style to use
+	 * @param color
+	 *            The rectangle's color
+	 */
+	public static void drawRectangle(float botLeftX, float botLeftY, float width, float height, ShapeType st,
+			Color color) {
+		final ShapeRenderer sRender = new ShapeRenderer();
+		sRender.begin(st);
+		sRender.setColor(color);
+		sRender.rect(botLeftX, botLeftY, width, height);
+		sRender.end();
+		sRender.dispose();
+	}
+
+	/**
 	 * @author smelC
 	 */
 	public static enum CornerStyle {
