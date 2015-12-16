@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import squidpony.IColorCenter;
-import squidpony.ScreenSizeManager;
-import squidpony.panel.IPanelBuilder;
 
 /**
  * A SquidLib-aware partial implementation of {@link ScreenAdapter}. This is a
@@ -25,7 +23,7 @@ import squidpony.panel.IPanelBuilder;
  * Moving from a screen to another is either triggered by libgdx (when it calls
  * {@link #resize(int, int)} and {@link #dispose()}) or by you (you can call
  * {@link #dispose()} directly). In both cases, it'll make
- * {@link SquidApplicationAdapter}'s {@link ApplicationAdapter#render()} method
+ * {@link SquidApplicationAdapter}'s {@link com.badlogic.gdx.ApplicationAdapter#render()} method
  * call {@link #getNext()}, hereby triggering screen change.
  * </p>
  * 
@@ -53,7 +51,7 @@ public abstract class AbstractSquidScreen<T extends Color> extends ScreenAdapter
 	 * @param sizeManager
 	 *            A size manager that is correct w.r.t. to the current screen
 	 *            size. It is usually built by inspecting the current screen
-	 *            size (see {@link Gdx#graphics}) and a cell size you want.
+	 *            size (see {@link com.badlogic.gdx.Gdx#graphics}) and a cell size you want.
 	 * 
 	 *            <p>
 	 *            The screen's size is not computed automatically by this
@@ -104,7 +102,7 @@ public abstract class AbstractSquidScreen<T extends Color> extends ScreenAdapter
 	 * size has been changed (to get the new size, use {@link #sizeManager}; it
 	 * has been updated already). When {@link #disposed} holds, the usual
 	 * behavior is for this method to return null to quit the whole application
-	 * (that's the assumption that {@link squidpony.SquidApplicationAdapter}
+	 * (that's the assumption that {@link squidpony.squidgrid.gui.gdx.SquidApplicationAdapter}
 	 * does) or to return another screen to move forward (for example when
 	 * switching from the main/splash screen to the game's screen).
 	 * 
@@ -176,7 +174,8 @@ public abstract class AbstractSquidScreen<T extends Color> extends ScreenAdapter
 	/**
 	 * @param width
 	 * @param height
-	 * @param cellSize
+	 * @param cellWidth
+	 * @param cellHeight
 	 * @return A panel of size {@code (width, height)} that has {@code cellSize}
 	 *         . Its position isn't set.
 	 */
@@ -186,7 +185,7 @@ public abstract class AbstractSquidScreen<T extends Color> extends ScreenAdapter
 
 	/**
 	 * @return The color to use to repaint the screen entirely when moving from
-	 *         a {@link SquidScreen} to another.
+	 *         a {@link AbstractSquidScreen} to another.
 	 */
 	protected T getClearingColor() {
 		return colorCenter.getBlack();

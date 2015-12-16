@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import squidpony.IColorCenter;
-import squidpony.panel.IPanelBuilder;
 
 /**
  * An almost-concrete implementation of {@link IPanelBuilder}. This class makes

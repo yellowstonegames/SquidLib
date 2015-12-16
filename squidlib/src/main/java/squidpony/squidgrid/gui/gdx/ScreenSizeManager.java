@@ -1,6 +1,4 @@
-package squidpony;
-
-import com.badlogic.gdx.Gdx;
+package squidpony.squidgrid.gui.gdx;
 
 import squidpony.squidmath.Coord;
 
@@ -9,7 +7,7 @@ import squidpony.squidmath.Coord;
  * screen-level, i.e. it is intended to keep track of the full screen, not of a
  * nested panel. Given the screen's size and the desired cell size, it computes
  * the margins around the usable part of the screen, and hence the position of
- * the full-screen {@link SquidPanel} ({@code (leftMargin,botMargin)}).
+ * the full-screen SquidPanel ({@code (leftMargin,botMargin)}).
  * 
  * @author smelC
  */
@@ -112,12 +110,14 @@ public class ScreenSizeManager {
 	}
 
 	public void log() {
+		/*
 		Gdx.app.log(SquidTags.LAYOUT, String.format("Screen size: %dx%d", screenWidth, screenHeight));
 		Gdx.app.log(SquidTags.LAYOUT,
 				String.format("Displaying %d cells horizontally and %d cells vertically", wCells, hCells));
 		Gdx.app.log(SquidTags.LAYOUT,
 				String.format("Margins (in pixels): left:%d, right:%d, top:%d, bottom:%d", leftMargin,
 						rightMargin, topMargin, botMargin));
+		*/
 	}
 
 	public Coord toScreenSize() {
