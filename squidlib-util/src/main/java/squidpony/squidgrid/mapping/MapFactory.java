@@ -5,7 +5,7 @@ import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 
 /**
- * Tools to create maps.
+ * Tools to create maps. Not commonly used outside of code that needs height maps.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
