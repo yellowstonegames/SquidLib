@@ -5,6 +5,7 @@ import squidpony.squidgrid.Radius;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * This provides a Uniform Poisson Disk Sampling technique that can be used to generate random points that have a
@@ -117,8 +118,8 @@ public class PoissonDisk {
         int gridWidth = (int)(dimensions.x / cellSize) + 1;
         int gridHeight = (int)(dimensions.y / cellSize) + 1;
         Coord[][] grid = new Coord[gridWidth][gridHeight];
-        ArrayList<Coord> activePoints = new ArrayList<Coord>(),
-                points = new ArrayList<Coord>();
+        ArrayList<Coord> activePoints = new ArrayList<Coord>();
+        LinkedHashSet<Coord> points = new LinkedHashSet<Coord>(128);
 
         //add first point
         boolean added = false;
@@ -193,8 +194,8 @@ public class PoissonDisk {
             if (!found)
                 activePoints.remove(listIndex);
         }
-
-        return points;
+        activePoints = new ArrayList<Coord>(points);
+        return activePoints;
     }
 
     public static ArrayList<Coord> sampleMap(char[][] map,
@@ -219,14 +220,14 @@ public class PoissonDisk {
         int gridWidth = (int) (dimensions.x / cellSize) + 1;
         int gridHeight = (int) (dimensions.y / cellSize) + 1;
         Coord[][] grid = new Coord[gridWidth][gridHeight];
-        ArrayList<Coord> activePoints = new ArrayList<Coord>(),
-                points = new ArrayList<Coord>();
+        ArrayList<Coord> activePoints = new ArrayList<Coord>();
+        LinkedHashSet<Coord> points = new LinkedHashSet<Coord>(128);
 
         //add first point
 
         Coord p = randomUnblockedTile(minPosition, maxPosition, map, rng, blocked);
         if (p == null)
-            return points;
+            return activePoints;
         Coord index = p.subtract(minPosition).divide(cellSize);
 
         grid[index.x][index.y] = p;
@@ -293,8 +294,8 @@ public class PoissonDisk {
             if (!found)
                 activePoints.remove(listIndex);
         }
-
-        return points;
+        activePoints = new ArrayList<Coord>(points);
+        return activePoints;
     }
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has any value not in blocking.

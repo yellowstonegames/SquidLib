@@ -190,39 +190,42 @@ public class DungeonGenerator {
     }
 
     /**
-     * Turns the given percentage of floor cells into water cells, represented by '~'. Water will be clustered into
-     * a random number of pools, with more appearing if needed to fill the percentage. Each pool will have randomized
-     * volume that should fill or get very close to filling the requested percentage, unless the pools encounter too
-     * much tight space. If this DungeonGenerator previously had addWater called, the latest call will take precedence.
-     * No islands will be placed with this variant, but the edge of the water will be shallow, represented by ','.
-     * @param percentage the percentage of floor cells to fill with water; this can vary quite a lot. It may be
-     *                   difficult to fill very high (approaching 100) percentages with water, though it will succeed.
+     * Turns the majority of the given percentage of floor cells into water cells, represented by '~'. Water will be
+     * clustered into a random number of pools, with more appearing if needed to fill (two thirds of) the percentage.
+     * Each pool will have randomized volume that should fill or get very close to filling two thirds of the requested
+     * percentage, unless the pools encounter too much tight space. If this DungeonGenerator previously had addWater
+     * called, the latest call will take precedence. No islands will be placed with this variant, but the edge of the
+     * water will be shallow, represented by ','.
+     * @param percentage the percentage of floor cells to fill with water; this can vary quite a lot. It is not
+     *                   intended to allow filling very high (over 66%) percentages of map with water, though you can do
+     *                   this by giving a percentage of between 100 and 150.
      * @return this DungeonGenerator; can be chained
      */
     public DungeonGenerator addWater(int percentage)
     {
         if(percentage < 0) percentage = 0;
-        if(percentage > 100) percentage = 100;
+        if(percentage > 150) percentage = 150;
         if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);
         fx.put(FillEffect.WATER, percentage);
         return this;
     }
     /**
-     * Turns the given percentage of floor cells into water cells, represented by '~'. Water will be clustered into
-     * a random number of pools, with more appearing if needed to fill the percentage. Each pool will have randomized
-     * volume that should fill or get very close to filling the requested percentage, unless the pools encounter too
-     * much tight space. If this DungeonGenerator previously had addWater called, the latest call will take precedence.
-     * If islandSpacing is greater than 1, then this will place islands of floor, '.', surrounded by shallow water, ',',
-     * at about the specified distance with Euclidean measurement.
+     * Turns the majority of the given percentage of floor cells into water cells, represented by '~'. Water will be
+     * clustered into a random number of pools, with more appearing if needed to fill the percentage. Each pool will
+     * have randomized volume that should fill or get very close to filling (two thirds of) the requested percentage,
+     * unless the pools encounter too much tight space. If this DungeonGenerator previously had addWater called, the
+     * latest call will take precedence. If islandSpacing is greater than 1, then this will place islands of floor, '.',
+     * surrounded by shallow water, ',', at about the specified distance with Euclidean measurement.
      * @param percentage the percentage of floor cells to fill with water; this can vary quite a lot. It may be
-     *                   difficult to fill very high (approaching 100) percentages with water, though it will succeed.
+     *                   difficult to fill very high (over 66%) percentages of map with water, though you can do this by
+     *                   giving a percentage of between 100 and 150.
      * @param islandSpacing if greater than 1, islands will be placed randomly this many cells apart.
      * @return this DungeonGenerator; can be chained
      */
     public DungeonGenerator addWater(int percentage, int islandSpacing)
     {
         if(percentage < 0) percentage = 0;
-        if(percentage > 100) percentage = 100;
+        if(percentage > 150) percentage = 150;
         if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);
         fx.put(FillEffect.WATER, percentage);
         if(fx.containsKey(FillEffect.ISLANDS)) fx.remove(FillEffect.ISLANDS);
@@ -232,18 +235,20 @@ public class DungeonGenerator {
     }
 
     /**
-     * Turns the given percentage of floor cells into grass cells, represented by '~'. Grass will be clustered into
-     * a random number of patches, with more appearing if needed to fill the percentage. Each area will have randomized
-     * volume that should fill or get very close to filling the requested percentage, unless the patches encounter too
-     * much tight space. If this DungeonGenerator previously had addGrass called, the latest call will take precedence.
+     * Turns the majority of the given percentage of floor cells into grass cells, represented by '"'. Grass will be
+     * clustered into a random number of patches, with more appearing if needed to fill the percentage. Each area will
+     * have randomized volume that should fill or get very close to filling (two thirds of) the requested percentage,
+     * unless the patches encounter too much tight space. If this DungeonGenerator previously had addGrass called, the
+     * latest call will take precedence.
      * @param percentage the percentage of floor cells to fill with grass; this can vary quite a lot. It may be
-     *                   difficult to fill very high (approaching 100) percentages with grass, though it will succeed.
+     *                   difficult to fill very high (over 66%) percentages of map with grass, though you can do this by
+     *                   giving a percentage of between 100 and 150.
      * @return this DungeonGenerator; can be chained
      */
     public DungeonGenerator addGrass(int percentage)
     {
         if(percentage < 0) percentage = 0;
-        if(percentage > 100) percentage = 100;
+        if(percentage > 150) percentage = 150;
         if(fx.containsKey(FillEffect.GRASS)) fx.remove(FillEffect.GRASS);
         fx.put(FillEffect.GRASS, percentage);
         return this;
@@ -542,7 +547,7 @@ public class DungeonGenerator {
             trapFill = fx.get(FillEffect.TRAPS);
         }
 
-        double floorRate = 1.0, waterRate = waterFill / 100.0, grassRate = grassFill / 100.0;
+        double floorRate = 1.0, waterRate = waterFill / 150.0, grassRate = grassFill / 150.0;
         if(waterRate + grassRate > 1.0)
         {
             waterRate /= (waterFill + grassFill) / 100.0;
