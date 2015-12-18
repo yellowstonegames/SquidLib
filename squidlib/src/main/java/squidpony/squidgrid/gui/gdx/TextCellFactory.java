@@ -67,9 +67,12 @@ public class TextCellFactory {
 	 * A default valued factory that uses the given {@link AssetManager} to load
 	 * the font file. Use this constructor if you are likely to load the same
 	 * font over and over (recall that, without an {@link AssetManager}, each
-	 * instance of {@link TextCellFactory} will load its font from disk).
+	 * instance of {@link TextCellFactory} will load its font from disk). This
+     * primarily matters if you are using fonts not bundled with SquidLib, since
+     * accessing a BitmapFont with a method (not a String) from DefaultResources
+     * caches the BitmapFont already.
 	 * 
-	 * @param assetManager
+	 * @param assetManager an ordinary libGDX AssetManager
 	 */
     public TextCellFactory(/* Nullable */ AssetManager assetManager) {
     	this.assetManager = assetManager;
@@ -162,10 +165,16 @@ public class TextCellFactory {
      *     <li>DefaultResources.unicodeNameLarge = "Mandrill-12x32.fnt"</li>
      *     <li>DefaultResources.smoothNameLarge = "Inconsolata-LGC-12x24.fnt"</li>
      *     <li>DefaultResources.narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt"</li>
+     *     <li>There is also a sequence of resized versions of Inconsolata LGC, altered to fit in a square area. These
+     *     don't have names in DefaultResources; you should use the overload of font() that takes a BitmapFont if you
+     *     want to use the multiple, increasingly-resized versions.</li>
      * </ul>
      * "Rogue-Zodiac-12x24.fnt", which is easily accessed by the field DefaultResources.narrowNameLarge , can also
-     * be set using TextCellFactory.defaultNarrowFont() instead of font(); "Zodiac-Square-12x12.fnt", also accessible
+     * be set using TextCellFactory.defaultNarrowFont() instead of font(). "Zodiac-Square-12x12.fnt", also accessible
      * as DefaultResources.squareName , can be set using TextCellFactory.defaultSquareFont() instead of font().
+     * "Inconsolata-LGC-12x24.fnt", also accessible as DefaultResources.smoothNameLarge , can be set using
+     * TextCellFactory.defaultFont() instead of font(). All three of these alternatives will cache the BitmapFont if
+     * the same one is requested later, but this font() method will not.
      * <br>
      * See https://github.com/libgdx/libgdx/wiki/Hiero for some ways to create a bitmap font this can use. Several fonts
      * in this list were created using Hiero (not Hiero4), and several were created with AngelCode's BMFont tool.
@@ -183,16 +192,61 @@ public class TextCellFactory {
                 bmpFont = DefaultResources.getDefaultFont();
         }
         else {
-			assetManager.load(new AssetDescriptor<BitmapFont>(fontpath, BitmapFont.class));
+            assetManager.load(new AssetDescriptor<BitmapFont>(fontpath, BitmapFont.class));
 			/*
 			 * We're using the AssetManager not be asynchronous, but to avoid
 			 * loading a file twice (because that takes some time (tens of
 			 * milliseconds)). Hence this KISS code to avoid having to handle a
 			 * not-yet-loaded font:
 			 */
-			assetManager.finishLoading();
-			bmpFont = assetManager.get(fontpath, BitmapFont.class);
-    	}
+            assetManager.finishLoading();
+            bmpFont = assetManager.get(fontpath, BitmapFont.class);
+        }
+        return this;
+    }
+    /**
+     * Sets this factory to use the provided BitmapFont as its font without re-constructing anything.
+     *
+     * This is a way to complete a needed step; the font must be set before initializing, which can be done by a few
+     * methods in this class.
+     *
+     * This should be called with an argument such as {@code DefaultResources.getDefaultFont()} or any other variable
+     * with BitmapFont as its type. The bitmap font will not be loaded from file with this method, which it would be if
+     * you called the overload of font() that takes a String more than once. These BitmapFont resources are already
+     * bundled with SquidLib:
+     * <ul>
+     *     <li>DefaultResources.getDefaultFont() = "Zodiac-Square-12x12.fnt"</li>
+     *     <li>DefaultResources.getDefaultNarrowFont() = "Rogue-Zodiac-6x12.fnt"</li>
+     *     <li>DefaultResources.getDefaultUnicodeFont() = "Mandrill-6x16.fnt"</li>
+     *     <li>DefaultResources.getSmoothFont() = "Inconsolata-LGC-8x18.fnt"</li>
+     *     <li>DefaultResources.getLargeFont() = "Zodiac-Square-24x24.fnt"</li>
+     *     <li>DefaultResources.getLargeNarrowFont() = "Rogue-Zodiac-12x24.fnt"</li>
+     *     <li>DefaultResources.getLargeUnicodeFont() = "Mandrill-12x32.fnt"</li>
+     *     <li>DefaultResources.getLargeSmoothFont() = "Inconsolata-LGC-12x24.fnt"</li>
+     *     <li>DefaultResources.getExtraLargeNarrowFont() = "Rogue-Zodiac-18x36.fnt"</li>
+     *     <li>There is also a sequence of resized versions of Inconsolata LGC, altered to fit in a square area. These
+     *     can be accessed with DefaultResources.getZoomedFont(), passing an int between 0 and 11 inclusive.</li>
+     * </ul>
+     * "Rogue-Zodiac-12x24.fnt", which is easily accessed by the method DefaultResources.getLargeNarrowFont() , can also
+     * be set using TextCellFactory.defaultNarrowFont() instead of font(). "Zodiac-Square-12x12.fnt", also accessible
+     * with DefaultResources.getDefaultFont() , can be set using TextCellFactory.defaultSquareFont() instead of font().
+     * "Inconsolata-LGC-12x24.fnt", also accessible with DefaultResources.getLargeSmoothFont() , can be set using
+     * TextCellFactory.defaultFont() instead of font(). All three of these alternatives will cache the BitmapFont if
+     * the same one is requested later, but this font() method will not.
+     * <br>
+     * See https://github.com/libgdx/libgdx/wiki/Hiero for some ways to create a bitmap font this can use. Several fonts
+     * in this list were created using Hiero (not Hiero4), and several were created with AngelCode's BMFont tool.
+     *
+     * @param bitmapFont the BitmapFont this should use
+     * @return this factory for method chaining
+     */
+    public TextCellFactory font(BitmapFont bitmapFont) {
+        if (bitmapFont == null) {
+            bmpFont = DefaultResources.getDefaultFont();
+        }
+        else {
+            bmpFont = bitmapFont;
+        }
         return this;
     }
 
