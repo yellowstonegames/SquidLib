@@ -57,10 +57,10 @@ public class BasicDemo extends ApplicationAdapter {
         //	config.width = 80 * 12;
         //  config.height = 25 * 24;
         //Most games that do not use multiple Panels should probably use the same approach.
-        width = 80;
-        height = 25;
-        cellWidth = 12;
-        cellHeight = 24;
+        width = 50;
+        height = 32;
+        cellWidth = 20;
+        cellHeight = 20;
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
         rng = new RNG(new LightRNG(0xd00d));
 
@@ -70,7 +70,7 @@ public class BasicDemo extends ApplicationAdapter {
         stage = new Stage(new ScreenViewport(), batch);
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge);
+        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.getSquareSmoothFont());
         display.setAnimationDuration(0.03f);
 
         //These need to have their positions set before adding any entities if there is an offset involved.

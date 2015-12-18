@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import squidpony.IColorCenter;
@@ -212,17 +213,31 @@ public class SquidLayers extends Group {
     }
 
     /**
-     * Create a new SquidLayers widget with the given path to a Font file, the given number of cells for gridWidth
+     * Create a new SquidLayers widget with the given path to a BitmapFont file, the given number of cells for gridWidth
      * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
      *
      * @param gridWidth  in grid cells
      * @param gridHeight in grid cells
      * @param cellWidth  in pixels
      * @param cellHeight in pixels
-     * @param fontpath   A Font that should have been assigned a size before being passed here.
+     * @param fontpath   A path to a BitmapFont that can be on the classpath (in SquidLib) or in the assets folder
      */
     public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, String fontpath) {
         this(gridWidth, gridHeight, cellWidth, cellHeight, fontpath,
+                DefaultResources.getSCC(), DefaultResources.getSCC());
+    }
+    /**
+     * Create a new SquidLayers widget with the given path to a BitmapFont file, the given number of cells for gridWidth
+     * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
+     *
+     * @param gridWidth  in grid cells
+     * @param gridHeight in grid cells
+     * @param cellWidth  in pixels
+     * @param cellHeight in pixels
+     * @param bitmapFont A BitmapFont that you already constructed
+     */
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, BitmapFont bitmapFont) {
+        this(gridWidth, gridHeight, cellWidth, cellHeight, bitmapFont,
                 DefaultResources.getSCC(), DefaultResources.getSCC());
     }
     /**
@@ -275,18 +290,52 @@ public class SquidLayers extends Group {
     }
 
     /**
-     * Create a new SquidLayers widget with the given path to a Font file, the given number of cells for gridWidth
+     * Create a new SquidLayers widget with the given path to a BitmapFont file, the given number of cells for gridWidth
      * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
      *
      * @param gridWidth  in grid cells
      * @param gridHeight in grid cells
      * @param cellWidth  in pixels
      * @param cellHeight in pixels
-     * @param fontpath   A Font that should have been assigned a size before being passed here.
+     * @param fontpath   A path to a BitmapFont that can be on the classpath (in SquidLib) or in the assets folder.
      * @param bgColorCenter a SquidColorCenter (possibly with a filter) to use for the background
      * @param fgColorCenter a SquidColorCenter (possibly with a filter) to use for the foreground
      */
     public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, String fontpath,
+                       SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter) {
+        this(gridWidth, gridHeight, cellWidth, cellHeight, new TextCellFactory().font(fontpath), bgColorCenter, fgColorCenter);
+    }
+    /**
+     * Create a new SquidLayers widget with the given BitmapFont (already constructed), the given number of cells for
+     * gridWidth and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
+     *
+     * @param gridWidth  in grid cells
+     * @param gridHeight in grid cells
+     * @param cellWidth  in pixels
+     * @param cellHeight in pixels
+     * @param bitmapFont A BitmapFont that you already constructed
+     * @param bgColorCenter a SquidColorCenter (possibly with a filter) to use for the background
+     * @param fgColorCenter a SquidColorCenter (possibly with a filter) to use for the foreground
+     */
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, BitmapFont bitmapFont,
+                       SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter) {
+        this(gridWidth, gridHeight, cellWidth, cellHeight, new TextCellFactory().font(bitmapFont), bgColorCenter, fgColorCenter);
+    }
+    /**
+     * Create a new SquidLayers widget with the given TextCellFactory, the given number of cells for gridWidth
+     * and gridHeight, the size in pixels for each cell given by cellWidth and cellHeight, and the given
+     * SquidColorCenters for background and foreground. Consider using the overloads that take either a path
+     * to a .fnt font file or a BitmapFont for simplicity.
+     *
+     * @param gridWidth  in grid cells
+     * @param gridHeight in grid cells
+     * @param cellWidth  in pixels
+     * @param cellHeight in pixels
+     * @param tcf   A TextCellFactory that will be (re-)initialized here with the given cellHeight and cellWidth.
+     * @param bgColorCenter a SquidColorCenter (possibly with a filter) to use for the background
+     * @param fgColorCenter a SquidColorCenter (possibly with a filter) to use for the foreground
+     */
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, TextCellFactory tcf,
                        SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter) {
         initPalettes();
 
@@ -304,7 +353,7 @@ public class SquidLayers extends Group {
             }
         }
 
-        textFactory = new TextCellFactory().font(fontpath).width(cellWidth).height(cellHeight).initBySize();
+        textFactory = tcf.width(cellWidth).height(cellHeight).initBySize();
 
         backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
         foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
