@@ -1323,7 +1323,6 @@ public class CoordPacker {
         return vla.toArray();
     }
 
-
     /**
      * Expand each "on" position in packed to cover a a square with side length equal to 1 + expansion * 2,
      * centered on the original "on" position, unless the expansion would take a cell further than 0,
@@ -1356,6 +1355,77 @@ public class CoordPacker {
                             dist = hilbertDistances[j + (k << 8)];
                             if (ss.add(dist))
                                 vla.add(dist);
+                        }
+                    }
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+
+        int[] indices = vla.asInts();
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+        return vla.toArray();
+    }
+
+
+    /**
+     * Expand each "on" position in packed to cover a a square with side length equal to 1 + expansion * 2,
+     * centered on the original "on" position, unless the expansion would take a cell further than 0,
+     * width - 1 (for xMove) or height - 1 (for yMove), in which case that cell is stopped at the edge.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param expansion the positive (square) radius, in cells, to expand each cell out by
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @param eightWay true if the expansion should be both diagonal and orthogonal; false for just orthogonal
+     * @return a packed array that encodes "on" for packed and cells that expanded from cells that were "on" in packed
+     */
+    public static short[] expand(short[] packed, int expansion, int width, int height, boolean eightWay)
+    {
+        if(eightWay)
+            return expand(packed, expansion, width, height);
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(256);
+        boolean on = false;
+        int idx = 0, x, y;
+        short dist;
+        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    for (int d = 0; d < 4; d++) {
+                        for (int e = 1; e <= expansion; e++) {
+                            for (int e2 = 0; e2 < expansion; e2++) {
+                                int j = Math.min(width - 1, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
+                                int k = Math.min(height - 1, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
+                                dist = hilbertDistances[j + (k << 8)];
+                                if (ss.add(dist))
+                                    vla.add(dist);
+                            }
                         }
                     }
                 }
@@ -1462,6 +1532,89 @@ public class CoordPacker {
     }
 
     /**
+     * Finds the area around the cells encoded in packed, without including those cells. For each "on"
+     * position in packed, expand it to cover a a square with side length equal to 1 + expansion * 2,
+     * centered on the original "on" position, unless the expansion would take a cell further than 0,
+     * width - 1 (for xMove) or height - 1 (for yMove), in which case that cell is stopped at the edge.
+     * If a cell is "on" in packed, it will always be "off" in the result.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param expansion the positive (square-shaped) radius, in cells, to expand each cell out by
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @param eightWay true if the expansion should be both diagonal and orthogonal; false for just orthogonal
+     * @return a packed array that encodes "on" for cells that were pushed from the edge of packed's "on" cells
+     */
+    public static short[] fringe(short[] packed, int expansion, int width, int height, boolean eightWay)
+    {
+        if(eightWay)
+            return fringe(packed, expansion, width, height);
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(256);
+        boolean on = false;
+        int idx = 0;
+        short x, y, dist;
+        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    ss.add((short) i);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        on = false;
+        idx = 0;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    for (int d = 0; d < 4; d++) {
+                        for (int e = 1; e <= expansion; e++) {
+                            for (int e2 = 0; e2 < expansion; e2++) {
+                                int j = Math.min(width - 1, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
+                                int k = Math.min(height - 1, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
+                                dist = hilbertDistances[j + (k << 8)];
+                                if (ss.add(dist))
+                                    vla.add(dist);
+                            }
+                        }
+                    }
+
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        int[] indices = vla.asInts();
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.toArray();
+    }
+
+    /**
      * Finds the concentric areas around the cells encoded in packed, without including those cells. For each "on"
      * position in packed, expand it to cover a a square with side length equal to 1 + n * 2, where n starts at 1 and
      * goes up to include the expansions parameter, with each expansion centered on the original "on" position, unless
@@ -1509,6 +1662,93 @@ public class CoordPacker {
                                 dist = hilbertDistances[j + (k << 8)];
                                 if (ss.add(dist))
                                     vla.add(dist);
+                            }
+                        }
+                    }
+                }
+                idx += packed[p] & 0xffff;
+            }
+            int[] indices = vla.asInts();
+            Arrays.sort(indices);
+
+            vla = new ShortVLA(128);
+            int current, past = indices[0], skip = 0;
+
+            vla.add((short) indices[0]);
+            for (int i = 1; i < indices.length; i++) {
+                current = indices[i];
+
+                if (current != past)
+                    skip++;
+                if (current - past > 1) {
+                    vla.add((short) (skip + 1));
+                    skip = 0;
+                    vla.add((short) (current - past - 1));
+                }
+                past = current;
+            }
+            vla.add((short) (skip + 1));
+
+            finished[expansion-1] = vla.toArray();
+        }
+        return finished;
+    }
+
+
+    /**
+     * Finds the concentric areas around the cells encoded in packed, without including those cells. For each "on"
+     * position in packed, expand it to cover a a square with side length equal to 1 + n * 2, where n starts at 1 and
+     * goes up to include the expansions parameter, with each expansion centered on the original "on" position, unless
+     * the expansion would take a cell further than 0, width - 1 (for xMove) or height - 1 (for yMove), in which case
+     * that cell is stopped at the edge. If a cell is "on" in packed, it will always be "off" in the results.
+     * Returns a new packed short[][] where the outer array has length equal to expansions and the inner arrays are
+     * packed data encoding a one-cell-wide concentric fringe region. Does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param expansions the positive (square-shaped) radius, in cells, to expand each cell out by, also the length
+     *                   of the outer array returned by this method
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @param eightWay true if the expansion should be both diagonal and orthogonal; false for just orthogonal
+     * @return an array of packed arrays that encode "on" for cells that were pushed from the edge of packed's "on"
+     *          cells; the outer array will have length equal to expansions, and inner arrays will normal packed data
+     */
+    public static short[][] fringes(short[] packed, int expansions, int width, int height, boolean eightWay) {
+        short[][] finished = new short[expansions][];
+        if (packed == null || packed.length <= 1) {
+            Arrays.fill(finished, ALL_WALL);
+            return finished;
+        }
+        ShortSet ss = new ShortSet(256);
+        boolean on = false;
+        int idx = 0;
+        short x, y, dist;
+        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
+        for (int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    ss.add((short) i);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        for (int expansion = 1; expansion <= expansions; expansion++) {
+            ShortVLA vla = new ShortVLA(256);
+            on = false;
+            idx = 0;
+            for (int p = 0; p < packed.length; p++, on = !on) {
+                if (on) {
+                    for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                        x = hilbertX[i];
+                        y = hilbertY[i];
+                        for (int d = 0; d < 4; d++) {
+                            for (int e = 1; e <= expansion; e++) {
+                                for (int e2 = 0; e2 < expansion; e2++) {
+                                    int j = Math.min(width - 1, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
+                                    int k = Math.min(height - 1, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
+                                    dist = hilbertDistances[j + (k << 8)];
+                                    if (ss.add(dist))
+                                        vla.add(dist);
+                                }
                             }
                         }
                     }
