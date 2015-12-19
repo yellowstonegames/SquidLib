@@ -413,5 +413,10 @@ public enum Radius {
                 return (other == DIAMOND || other == OCTAHEDRON);
         }
     }
+    public boolean inRange(int startx, int starty, int endx, int endy, int minRange, int maxRange)
+    {
+        double dist = radius(startx, starty, endx, endy);
+        return dist >= minRange - 0.001 && dist <= maxRange + 0.001;
+    }
 
 }

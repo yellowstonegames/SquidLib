@@ -1,5 +1,6 @@
 package squidpony.squidai;
 
+import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
 /**
@@ -9,19 +10,23 @@ import squidpony.squidmath.Coord;
 public class Threat {
 
     public Coord position;
-    public int minThreatDistance;
-    public int maxThreatDistance;
+    public Reach reach;
 
     public Threat(Coord position, int maxThreatDistance) {
         this.position = position;
-        minThreatDistance = 0;
-        this.maxThreatDistance = (maxThreatDistance < 0) ? 0 : maxThreatDistance;
+        reach = new Reach(maxThreatDistance);
     }
 
     public Threat(Coord position, int minThreatDistance, int maxThreatDistance) {
         this.position = position;
-        this.minThreatDistance = (minThreatDistance < 0) ? 0 : minThreatDistance;
-        this.maxThreatDistance = (this.minThreatDistance > maxThreatDistance)
-                ? this.minThreatDistance : maxThreatDistance;
+        reach = new Reach(minThreatDistance, maxThreatDistance);
+    }
+    public Threat(Coord position, int minThreatDistance, int maxThreatDistance, Radius measurement) {
+        this.position = position;
+        reach = new Reach(minThreatDistance, maxThreatDistance, measurement);
+    }
+    public Threat(Coord position, int minThreatDistance, int maxThreatDistance, Radius measurement, AimLimit limits) {
+        this.position = position;
+        reach = new Reach(minThreatDistance, maxThreatDistance, measurement, limits);
     }
 }

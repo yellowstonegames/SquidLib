@@ -305,6 +305,30 @@ public class Coord implements java.io.Serializable {
 		throw new IllegalStateException(String.format("%s is not adjacent to %s", this, adjacent));
 	}
 
+    /**
+     * Returns true if x is between 0 (inclusive) and width (exclusive) and y is between 0 (inclusive) and height
+     * (exclusive), false otherwise.
+     * @param width the upper limit on x to check, exclusive
+     * @param height the upper limit on y to check, exclusive
+     * @return true if this Coord is within the limits of width and height and has non-negative x and y
+     */
+    public boolean isWithin(int width, int height)
+    {
+        return x >= 0 && y >= 0 && x < width && y < height;
+    }
+    /**
+     * Returns true if x is between minX (inclusive) and maxX (exclusive) and y is between minY (inclusive) and maxY
+     * (exclusive), false otherwise.
+     * @param minX the lower limit on x to check, inclusive
+     * @param minY the lower limit on y to check, inclusive
+     * @param maxX the upper limit on x to check, exclusive
+     * @param maxY the upper limit on y to check, exclusive
+     * @return true if this Coord is within the limits of the given parameters
+     */
+    public boolean isWithinRectangle(int minX, int minY, int maxX, int maxY)
+    {
+        return x >= minX && y >= minY && x < maxX && y < maxY;
+    }
     public int getX() {
         return x;
     }

@@ -31,6 +31,22 @@ public class RNG implements Serializable {
     }
 
     /**
+     * Seeded constructor uses LightRNG, which is of high quality, but low period (which rarely matters for games),
+     * and has good speed and tiny state size.
+     */
+    public RNG(long seed) {
+        this(new LightRNG(seed));
+    }
+
+    /**
+     * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
+     * period (which rarely matters for games), and has good speed and tiny state size.
+     */
+    public RNG(String seedString) {
+        this(new LightRNG(seedString.hashCode()));
+    }
+
+    /**
      * Uses the provided source of randomness for all calculations. This
      * constructor should be used if setting the seed is needed as the provided
      * source of randomness can be seeded as desired before passing it in.

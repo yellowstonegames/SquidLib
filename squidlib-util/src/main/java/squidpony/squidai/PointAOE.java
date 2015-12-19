@@ -19,9 +19,9 @@ import java.util.Set;
  */
 public class PointAOE implements AOE {
     private Coord center, origin = null;
-    private Radius limitType = null;
-    private int minRange = 1, maxRange = 1;
-    private Radius metric = Radius.SQUARE;
+    private int mapWidth, mapHeight;
+    private Reach reach = new Reach(1, 1, Radius.SQUARE, null);
+
     public PointAOE(Coord center)
     {
         this.center = center;
@@ -29,20 +29,24 @@ public class PointAOE implements AOE {
     public PointAOE(Coord center, int minRange, int maxRange)
     {
         this.center = center;
-        this.minRange = minRange;
-        this.maxRange = maxRange;
+        reach.minDistance = minRange;
+        reach.maxDistance = maxRange;
     }
 
     public Coord getCenter() {
         return center;
     }
 
+
     public void setCenter(Coord center) {
-        if(AreaUtils.verifyLimit(limitType, origin, center))
+
+        if (center.isWithin(mapWidth, mapHeight) &&
+                AreaUtils.verifyReach(reach, origin, center))
         {
             this.center = center;
         }
     }
+
     @Override
     public void shift(Coord aim) {
         setCenter(aim);
@@ -72,10 +76,10 @@ public class PointAOE implements AOE {
 
         double dist = 0.0;
         for(Coord p : targets) {
-            if (AreaUtils.verifyLimit(limitType, origin, p)) {
+            if (AreaUtils.verifyReach(reach, origin, p)) {
 
-                dist = metric.radius(origin.x, origin.y, p.x, p.y);
-                if (dist <= maxRange && dist >= minRange) {
+                dist = reach.metric.radius(origin.x, origin.y, p.x, p.y);
+                if (dist <= reach.maxDistance && dist >= reach.minDistance) {
                     ArrayList<Coord> ap = new ArrayList<Coord>();
                     ap.add(p);
                     bestPoints.put(p, ap);
@@ -101,10 +105,10 @@ public class PointAOE implements AOE {
         double dist = 0.0;
 
         for(Coord p : priorityTargets) {
-            if (AreaUtils.verifyLimit(limitType, origin, p)) {
+            if (AreaUtils.verifyReach(reach, origin, p)) {
 
-                dist = metric.radius(origin.x, origin.y, p.x, p.y);
-                if (dist <= maxRange && dist >= minRange) {
+                dist = reach.metric.radius(origin.x, origin.y, p.x, p.y);
+                if (dist <= reach.maxDistance && dist >= reach.minDistance) {
                     ArrayList<Coord> ap = new ArrayList<Coord>();
                     ap.add(p);
                     ap.add(p);
@@ -116,10 +120,10 @@ public class PointAOE implements AOE {
         }
         if(bestPoints.isEmpty()) {
             for (Coord p : lesserTargets) {
-                if (AreaUtils.verifyLimit(limitType, origin, p)) {
+                if (AreaUtils.verifyReach(reach, origin, p)) {
 
-                    dist = metric.radius(origin.x, origin.y, p.x, p.y);
-                    if (dist <= maxRange && dist >= minRange) {
+                    dist = reach.metric.radius(origin.x, origin.y, p.x, p.y);
+                    if (dist <= reach.maxDistance && dist >= reach.minDistance) {
                         ArrayList<Coord> ap = new ArrayList<Coord>();
                         ap.add(p);
                         bestPoints.put(p, ap);
@@ -210,10 +214,10 @@ public class PointAOE implements AOE {
 */
     @Override
     public void setMap(char[][] map) {
-		/*
-		 * Nothing do do. smelc's note: previously 'map' was assigned in a field
-		 * that was never redd.
-		 */
+        if (map != null && map.length > 0) {
+            mapWidth = map.length;
+            mapHeight = map[0].length;
+        }
     }
 
     @Override
@@ -236,45 +240,66 @@ public class PointAOE implements AOE {
     }
 
     @Override
-    public Radius getLimitType() {
-        return limitType;
+    public AimLimit getLimitType() {
+        return reach.limit;
     }
 
     @Override
     public int getMinRange() {
-        return minRange;
+        return reach.minDistance;
     }
 
     @Override
     public int getMaxRange() {
-        return maxRange;
+        return reach.maxDistance;
     }
 
     @Override
     public Radius getMetric() {
-        return metric;
+        return reach.metric;
+    }
+
+    /**
+     * Gets the same values returned by getLimitType(), getMinRange(), getMaxRange(), and getMetric() bundled into one
+     * Reach object.
+     *
+     * @return a non-null Reach object.
+     */
+    @Override
+    public Reach getReach() {
+        return reach;
     }
 
     @Override
-    public void setLimitType(Radius limitType) {
-        this.limitType = limitType;
+    public void setLimitType(AimLimit limitType) {
+        reach.limit = limitType;
 
     }
 
     @Override
     public void setMinRange(int minRange) {
-        this.minRange = minRange;
+        reach.minDistance = minRange;
     }
 
     @Override
     public void setMaxRange(int maxRange) {
-        this.maxRange = maxRange;
+        reach.maxDistance = maxRange;
 
     }
 
     @Override
     public void setMetric(Radius metric) {
-        this.metric = metric;
+        reach.metric = metric;
+    }
+
+    /**
+     * Sets the same values as setLimitType(), setMinRange(), setMaxRange(), and setMetric() using one Reach object.
+     *
+     * @param reach a non-null Reach object.
+     */
+    @Override
+    public void setReach(Reach reach) {
+
     }
 
     /**

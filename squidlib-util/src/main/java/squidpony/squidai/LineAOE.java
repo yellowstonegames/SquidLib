@@ -33,10 +33,9 @@ public class LineAOE implements AOE {
     private int radius;
     private char[][] dungeon;
     private DijkstraMap dijkstra;
-    private Radius rt, limitType = null;
+    private Radius rt;
     private Elias elias;
-    private int minRange = 1, maxRange = 1;
-    private Radius metric = Radius.SQUARE;
+    private Reach reach = new Reach(1, 1, Radius.SQUARE, null);
     public LineAOE(Coord origin, Coord end)
     {
         dijkstra = new DijkstraMap();
@@ -101,8 +100,8 @@ public class LineAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.radius = radius;
-        this.minRange = minRange;
-        this.maxRange = maxRange;
+        reach.minDistance = minRange;
+        reach.maxDistance = maxRange;
         elias = new Elias();
     }
     private double[][] initDijkstra()
@@ -132,45 +131,67 @@ public class LineAOE implements AOE {
     }
 
     @Override
-    public Radius getLimitType() {
-        return limitType;
+    public AimLimit getLimitType() {
+        return reach.limit;
     }
 
     @Override
     public int getMinRange() {
-        return minRange;
+        return reach.minDistance;
     }
 
     @Override
     public int getMaxRange() {
-        return maxRange;
+        return reach.maxDistance;
     }
 
     @Override
     public Radius getMetric() {
-        return metric;
+        return reach.metric;
+    }
+
+    /**
+     * Gets the same values returned by getLimitType(), getMinRange(), getMaxRange(), and getMetric() bundled into one
+     * Reach object.
+     *
+     * @return a non-null Reach object.
+     */
+    @Override
+    public Reach getReach() {
+        return reach;
     }
 
     @Override
-    public void setLimitType(Radius limitType) {
-        this.limitType = limitType;
+    public void setLimitType(AimLimit limitType) {
+        reach.limit = limitType;
 
     }
 
     @Override
     public void setMinRange(int minRange) {
-        this.minRange = minRange;
+        reach.minDistance = minRange;
     }
 
     @Override
     public void setMaxRange(int maxRange) {
-        this.maxRange = maxRange;
+        reach.maxDistance = maxRange;
 
     }
 
     @Override
     public void setMetric(Radius metric) {
-        this.metric = metric;
+        reach.metric = metric;
+    }
+
+    /**
+     * Sets the same values as setLimitType(), setMinRange(), setMaxRange(), and setMetric() using one Reach object.
+     *
+     * @param reach a non-null Reach object.
+     */
+    @Override
+    public void setReach(Reach reach) {
+        if(reach != null)
+            this.reach = reach;
     }
 
 
@@ -179,7 +200,8 @@ public class LineAOE implements AOE {
     }
 
     public void setEnd(Coord end) {
-        if (AreaUtils.verifyLimit(limitType, origin, end)) {
+        if (dungeon != null && end.isWithin(dungeon.length, dungeon[0].length) &&
+                AreaUtils.verifyReach(reach, origin, end)) {
             this.end = end;
             dijkstra.resetMap();
             dijkstra.clearGoals();
@@ -274,7 +296,7 @@ public class LineAOE implements AOE {
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
-                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
+                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyReach(reach, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -301,8 +323,8 @@ public class LineAOE implements AOE {
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (dt.gradientMap[x][y] < DijkstraMap.FLOOR){
-                        dist = metric.radius(origin.x, origin.y, x, y);
-                        if(dist <= maxRange + radius && dist >= minRange - radius)
+                        dist = reach.metric.radius(origin.x, origin.y, x, y);
+                        if(dist <= reach.maxDistance + radius && dist >= reach.minDistance - radius)
                             compositeMap[i][x][y] = dm.physicalMap[x][y];
                         else
                             compositeMap[i][x][y] = DijkstraMap.WALL;
@@ -418,7 +440,7 @@ public class LineAOE implements AOE {
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
-                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyLimit(limitType, origin, tempPt)) ? '!' : dungeonCopy[x][y];
+                    dungeonCopy[x][y] = (dt.gradientMap[x][y] < DijkstraMap.FLOOR || !AreaUtils.verifyReach(reach, origin, tempPt)) ? '!' : dungeonCopy[x][y];
                 }
             }
         }
@@ -444,8 +466,8 @@ public class LineAOE implements AOE {
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (dt.gradientMap[x][y] < DijkstraMap.FLOOR){
-                        dist = metric.radius(origin.x, origin.y, x, y);
-                        if(dist <= maxRange + radius && dist >= minRange - radius) {
+                        dist = reach.metric.radius(origin.x, origin.y, x, y);
+                        if(dist <= reach.maxDistance + radius && dist >= reach.minDistance - radius) {
                             compositeMap[i][x][y] = dm.physicalMap[x][y];
                             dungeonPriorities[x][y] = dungeon[x][y];
                         }
@@ -496,8 +518,8 @@ public class LineAOE implements AOE {
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (dt.gradientMap[x][y] < DijkstraMap.FLOOR){
-                        dist = metric.radius(origin.x, origin.y, x, y);
-                        if(dist <= maxRange + radius && dist >= minRange - radius)
+                        dist = reach.metric.radius(origin.x, origin.y, x, y);
+                        if(dist <= reach.maxDistance + radius && dist >= reach.minDistance - radius)
                             compositeMap[i][x][y] = dm.physicalMap[x][y];
                         else
                             compositeMap[i][x][y] = DijkstraMap.WALL;

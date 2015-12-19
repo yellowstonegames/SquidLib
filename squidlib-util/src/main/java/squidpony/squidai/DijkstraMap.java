@@ -1971,18 +1971,18 @@ public class DijkstraMap {
             short[] packed = CoordPacker.ALL_WALL, tempPacked;
             for (Threat t : threats) {
                 if (fov instanceof FOVCache) {
-                    tempPacked = ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y, t.maxThreatDistance);
+                    tempPacked = ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y, t.reach.maxDistance);
                 } else {
-                    seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.maxThreatDistance, findRadius(measurement));
+                    seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.reach.maxDistance, findRadius(measurement));
                     tempPacked = CoordPacker.pack(seen);
                 }
 
-                if (t.minThreatDistance > 0) {
+                if (t.reach.minDistance > 0) {
                     if (fov instanceof FOVCache) {
                         tempPacked = CoordPacker.differencePacked(tempPacked,
-                                ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y, t.minThreatDistance));
+                                ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y, t.reach.minDistance));
                     } else {
-                        seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.minThreatDistance, findRadius(measurement));
+                        seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.reach.minDistance, findRadius(measurement));
                         tempPacked = CoordPacker.differencePacked(tempPacked, CoordPacker.pack(seen));
                     }
                 }
