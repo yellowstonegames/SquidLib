@@ -498,7 +498,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             // this doesn't check for input, but instead processes and removes Points from awaitedMoves.
             else if(!display.hasActiveAnimations()) {
                 ++framesWithoutAnimation;
-                if (framesWithoutAnimation >= 3) {
+                if (framesWithoutAnimation >= 2) {
                     framesWithoutAnimation = 0;
                     Coord m = awaitedMoves.remove(0);
                     move(ae, m.x, m.y);
@@ -509,7 +509,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         // (because with no animations running the last phase must have ended), or start a new animation soon.
         else if(!display.hasActiveAnimations()) {
             ++framesWithoutAnimation;
-            if (framesWithoutAnimation >= 3) {
+            if (framesWithoutAnimation >= 2) {
                 framesWithoutAnimation = 0;
                 switch (phase) {
                     case ATTACK_ANIM: {

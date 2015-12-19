@@ -322,8 +322,8 @@ public class CoveredPathDemo extends ApplicationAdapter {
         myThreats.get(idx).position = user;
 
         if (health <= 0 || dijkstra == null) {
-            myThreats.get(idx).maxThreatDistance = 0;
-            myThreats.get(idx).minThreatDistance = 0;
+            myThreats.get(idx).reach.maxDistance = 0;
+            myThreats.get(idx).reach.minDistance = 0;
             phase = Phase.ATTACK_ANIM;
             return;
         }

@@ -109,22 +109,25 @@ public interface AOE {
     void setOrigin(Coord origin);
 
     /**
+     * Gets the AimLimit enum that can be used to restrict points this checks (defaults to null if not set).
      * You can use limitType to restrict any Points that might be processed based on the given origin (which will be
-     * used as the geometric origin for any calculations this makes) with Radius values having the following meanings:
+     * used as the geometric origin for any calculations this makes) with AimLimit values having the following meanings:
      *
      * <ul>
-     *     <li>Radius.CIRCLE, Radius.SPHERE, Radius.SQUARE or RADIUS.CUBE will cause the AOE to only consider Points
-     *     along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x axis.
-     *     Essentially, this limits the AOE to queen movement in chess.</li>
-     *     <li>Radius.DIAMOND or Radius.OCTAHEDRON will cause the AOE to only consider Points
-     *     along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x axis.
-     *     Essentially, this limits the AOE to rook movement in chess.</li>
+     *     <li>AimLimit.FREE makes no restrictions; it is equivalent here to passing null for limit.</li>
+     *     <li>AimLimit.EIGHT_WAY will only consider Points to be valid targets
+     *     if they are along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x
+     *     axis. Essentially, this limits the points to those a queen could move to in chess.</li>
+     *     <li>AimLimit.ORTHOGONAL will cause the AOE to only consider Points to be valid targets if
+     *     they are along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x
+     *     axis. Essentially, this limits the points to those a rook could move to in chess.</li>
+     *     <li>AimLimit.DIAGONAL will cause the AOE to only consider Points to be valid targets if they are along a
+     *     straight line with an angle that is 45 degrees greater than a multiple of 90 degrees, relative to the
+     *     positive x axis. Essentially, this limits the points to those a bishop could move to in chess.</li>
      *     <li>null will cause the AOE to consider all points.</li>
      * </ul>
-     *
-     * Points that are not valid for this limit will simply not be considered.
      */
-    Radius getLimitType();
+    AimLimit getLimitType();
     /**
      * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
      */
@@ -143,22 +146,33 @@ public interface AOE {
     Radius getMetric();
 
     /**
+     * Gets the same values returned by getLimitType(), getMinRange(), getMaxRange(), and getMetric() bundled into one
+     * Reach object.
+     * @return a non-null Reach object.
+     */
+    Reach getReach();
+
+    /**
      * You can use limitType to restrict any Points that might be processed based on the given origin (which will be
-     * used as the geometric origin for any calculations this makes) with Radius values having the following meanings:
+     * used as the geometric origin for any calculations this makes) with AimLimit values having the following meanings:
      *
      * <ul>
-     *     <li>Radius.CIRCLE, Radius.SPHERE, Radius.SQUARE or RADIUS.CUBE will cause the AOE to only consider Points
-     *     along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x axis.
-     *     Essentially, this limits the AOE to queen movement in chess.</li>
-     *     <li>Radius.DIAMOND or Radius.OCTAHEDRON will cause the AOE to only consider Points
-     *     along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x axis.
-     *     Essentially, this limits the AOE to rook movement in chess.</li>
-     *     <li>null will cause the AOE to consider all points.</li>
+     *     <li>AimLimit.FREE makes no restrictions; it is equivalent here to passing null for limit.</li>
+     *     <li>AimLimit.EIGHT_WAY will only consider Points to be valid targets
+     *     if they are along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x
+     *     axis. Essentially, this limits the points to those a queen could move to in chess.</li>
+     *     <li>AimLimit.ORTHOGONAL will cause the AOE to only consider Points to be valid targets if
+     *     they are along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x
+     *     axis. Essentially, this limits the points to those a rook could move to in chess.</li>
+     *     <li>AimLimit.DIAGONAL will cause the AOE to only consider Points to be valid targets if they are along a
+     *     straight line with an angle that is 45 degrees greater than a multiple of 90 degrees, relative to the
+     *     positive x axis. Essentially, this limits the points to those a bishop could move to in chess.</li>
      * </ul>
      *
      * Points that are not valid for this limit will simply not be considered.
+     * @param limitType an AimLimit enum
      */
-    void setLimitType(Radius limitType);
+    void setLimitType(AimLimit limitType);
     /**
      * The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.
      */
@@ -175,6 +189,12 @@ public interface AOE {
      * the game, like Radius.SQUARE for Chebyshev distance/8-way movement).
      */
     void setMetric(Radius metric);
+
+    /**
+     * Sets the same values as setLimitType(), setMinRange(), setMaxRange(), and setMetric() using one Reach object.
+     * @param reach a non-null Reach object.
+     */
+    void setReach(Reach reach);
 
     /**
      * If you use FOVCache to pre-compute FOV maps for a level, you can share the speedup from using the cache with

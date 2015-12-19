@@ -20,6 +20,20 @@ public class StatefulRNG extends RNG {
         super((random instanceof StatefulRandomness) ? random : new LightRNG(random.next(32)));
     }
 
+    /**
+     * Seeded constructor uses LightRNG, which is of high quality, but low period (which rarely matters for games),
+     * and has good speed and tiny state size.
+     */
+    public StatefulRNG(long seed) {
+        this(new LightRNG(seed));
+    }
+    /**
+     * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
+     * period (which rarely matters for games), and has good speed and tiny state size.
+     */
+    public StatefulRNG(String seedString) {
+        this(new LightRNG(seedString.hashCode()));
+    }
     @Override
     public RandomnessSource getRandomness() {
         return super.getRandomness();

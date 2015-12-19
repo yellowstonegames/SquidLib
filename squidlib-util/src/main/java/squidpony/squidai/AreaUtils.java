@@ -1,6 +1,5 @@
 package squidpony.squidai;
 
-import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
 import java.util.LinkedHashMap;
@@ -96,45 +95,100 @@ public class AreaUtils {
     /**
      * Checks that the given end Coord can be targeted from the given origin Coord given the directional targeting
      * rules specified by limit. If any of the arguments are null, returns true (it assumes that any limits are not
-     * valid and don't restrict anything). The following Radius enum values for limit have the following meanings:
+     * valid and don't restrict anything). The following AimLimit enum values for limit have the following meanings:
      *
      * <ul>
-     *     <li>Radius.CIRCLE, Radius.SPHERE, Radius.SQUARE or RADIUS.CUBE will only consider Points to be valid targets
+     *     <li>AimLimit.FREE makes no restrictions; it is equivalent here to passing null for limit.</li>
+     *     <li>AimLimit.EIGHT_WAY will only consider Points to be valid targets
      *     if they are along a straight line with an angle that is a multiple of 45 degrees, relative to the positive x
      *     axis. Essentially, this limits the points to those a queen could move to in chess.</li>
-     *     <li>Radius.DIAMOND or Radius.OCTAHEDRON will cause the AOE to only consider Points to be valid targets if
+     *     <li>AimLimit.ORTHOGONAL will cause the AOE to only consider Points to be valid targets if
      *     they are along a straight line with an angle that is a multiple of 90 degrees, relative to the positive x
      *     axis. Essentially, this limits the points to those a rook could move to in chess.</li>
+     *     <li>AimLimit.DIAGONAL will cause the AOE to only consider Points to be valid targets if they are along a
+     *     straight line with an angle that is 45 degrees greater than a multiple of 90 degrees, relative to the
+     *     positive x axis. Essentially, this limits the points to those a bishop could move to in chess.</li>
      * </ul>
      *
-     * @param limit DIAMOND or OCTAHEDRON for rook-like, other enum values for queen-like, null for unrestricted
+     * @param limit an AimLimit enum that restricts valid points unless it is AimLimit.FREE or null
      * @param origin where the user is
      * @param end where the point we want to verify is
      * @return true if the point is a valid target or if the limits are invalid (non-restricting), false otherwise
      */
-    public static boolean verifyLimit(Radius limit, Coord origin, Coord end)
+    public static boolean verifyLimit(AimLimit limit, Coord origin, Coord end)
     {
         if (limit != null && origin != null && end != null) {
             switch (limit) {
-                case SQUARE:
-                case CUBE:
-                case CIRCLE:
-                case SPHERE:
+                case EIGHT_WAY:
+                    if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y) ||
+                            (end.x == origin.x || end.y == origin.y))
+                    {
+                        return true;
+                    }
+                    break;
+                case DIAGONAL:
                     if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y))
                     {
                         return true;
                     }
-                case DIAMOND:
-                case OCTAHEDRON:
+                    break;
+                case ORTHOGONAL:
                     if(end.x == origin.x || end.y == origin.y)
                     {
                         return true;
                     }
                     break;
+                case FREE: return true;
+
             }
             return false;
         }
-        else
-            return true;
+        return true;
+    }
+
+    /**
+     * Checks that the given end Coord can be targeted from the given origin Coord given the complete targeting rules
+     * specified by reach. If any of the arguments are null, returns true (it assumes that any limits are not
+     * valid and don't restrict anything). If reach.limit is null, it also returns true. Otherwise, it uses the metric,
+     * minDistance, and maxDistance from reach to calculate if end is target-able from origin assuming an unobstructed
+     * playing field.
+     *
+     * @param reach a Reach object that, if non-null, gives limits for how targeting can proceed.
+     * @param origin where the user is
+     * @param end where the point we want to verify is
+     * @return true if the point is a valid target or if the limits are invalid (non-restricting), false otherwise
+     */
+    public static boolean verifyReach(Reach reach, Coord origin, Coord end)
+    {
+        if (reach != null && reach.limit != null && origin != null && end != null) {
+            switch (reach.limit) {
+                case EIGHT_WAY:
+                    if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y) ||
+                            (end.x == origin.x || end.y == origin.y))
+                    {
+                        return reach.metric.inRange(origin.x, origin.y, end.x, end.y,
+                                reach.minDistance, reach.maxDistance);
+                    }
+                    break;
+                case DIAGONAL:
+                    if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y))
+                    {
+                        return reach.metric.inRange(origin.x, origin.y, end.x, end.y,
+                                reach.minDistance, reach.maxDistance);
+                    }
+                    break;
+                case ORTHOGONAL:
+                    if(end.x == origin.x || end.y == origin.y)
+                    {
+                        return reach.metric.inRange(origin.x, origin.y, end.x, end.y,
+                                reach.minDistance, reach.maxDistance);
+                    }
+                    break;
+                case FREE: return reach.metric.inRange(origin.x, origin.y, end.x, end.y,
+                            reach.minDistance, reach.maxDistance);
+            }
+            return false;
+        }
+        return true;
     }
 }
