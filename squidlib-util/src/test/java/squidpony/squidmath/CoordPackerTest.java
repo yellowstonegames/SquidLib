@@ -218,6 +218,21 @@ public class CoordPackerTest {
         //printPacked(flooded, 64, 64);
         assertArrayEquals(flooded, manual);
     }
+
+    @Test
+    public void testFloodRadiate()
+    {
+        short[] flooded = flood(dataCross, packSeveral(Coord.get(26, 2)), 2);
+        short[] manual = packSeveral(Coord.get(25, 2), Coord.get(26, 2), Coord.get(27, 2), Coord.get(28, 2),
+                Coord.get(25, 3), Coord.get(26, 3), Coord.get(27, 3),
+                Coord.get(26, 4));
+        //printPacked(flooded, 64, 64);
+        assertArrayEquals(flooded, manual);
+
+        short[] radiated = radiate(removeSeveralPacked(dataCross, Coord.get(31, 25), Coord.get(30, 26)), packOne(27, 23), 10);
+        printPacked(radiated, 64, 64);
+
+    }
     @Test
     public void testPackOptimalParameters()
     {
