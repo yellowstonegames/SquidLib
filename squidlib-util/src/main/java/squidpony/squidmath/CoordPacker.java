@@ -1785,7 +1785,10 @@ public class CoordPacker {
     /**
      * Given a packed array encoding a larger area, a packed array encoding one or more points inside bounds, and an
      * amount of expansion, expands each cell in start by a Manhattan (diamond) radius equal to expansion, limiting any
-     * expansion to within bounds and returning the final expanded (limited) packed data.
+     * expansion to within bounds and returning the final expanded (limited) packed data.  Notably, if a small area is
+     * not present within bounds, then the flood will move around the "hole" similarly to DijkstraMap's behavior;
+     * essentially, it needs to expand around the hole to get to the other side, and this takes more steps of expansion
+     * than crossing straight over.
      * Returns a new packed short[] and does not modify bounds or start.
      * @param bounds packed data representing the maximum extent of the region to flood-fill; often floors
      * @param start a packed array that encodes position(s) that the flood will spread outward from
@@ -1863,8 +1866,95 @@ public class CoordPacker {
 
     /**
      * Given a packed array encoding a larger area, a packed array encoding one or more points inside bounds, and an
+     * amount of expansion, expands each cell in start by a radius (if eightWay is true, it uses Chebyshev distance; if
+     * it is false, it uses Manhattan distance) equal to expansion, limiting any expansion to within bounds and
+     * returning the final expanded (limited) packed data. Notably, if a small area is not present within bounds, then
+     * the flood will move around the "hole" similarly to DijkstraMap's behavior; essentially, it needs to expand around
+     * the hole to get to the other side, and this takes more steps of expansion than crossing straight over.
+     * Returns a new packed short[] and does not modify bounds or start.
+     * @param bounds packed data representing the maximum extent of the region to flood-fill; often floors
+     * @param start a packed array that encodes position(s) that the flood will spread outward from
+     * @param expansion the positive (square) radius, in cells, to expand each cell out by
+     * @param eightWay true to flood-fill out in all eight directions at each step, false for just orthogonal
+     * @return a packed array that encodes "on" for cells that are "on" in bounds and are within expansion either
+     * Chebyshev (if eightWay is true) or Manhattan (otherwise) distance from a Coord in start
+     */
+    public static short[] flood(short[] bounds, short[] start, int expansion, boolean eightWay)
+    {
+        if(!eightWay)
+            return flood(bounds, start, expansion);
+        if(bounds == null || bounds.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        int boundSize = count(bounds);
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        boolean on = false;
+        int idx = 0;
+        short x, y, dist;
+        for(int p = 0; p < bounds.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (bounds[p] & 0xffff); i++) {
+                    quickBounds.add((short) i);
+                }
+            }
+            idx += bounds[p] & 0xffff;
+        }
+        short[] s2 = allPackedHilbert(start);
+        int[] xOffsets = new int[]{-1, 0, 1, -1,    1, -1, 0, 1}, yOffsets = new int[]{-1, -1, -1, 0,    0, 1, 1, 1};
+        for (int e = 0; e < expansion; e++) {
+            ShortVLA edge = new ShortVLA(128);
+            for (int s = 0; s < s2.length; s++) {
+                int i = s2[s] & 0xffff;
+                x = hilbertX[i];
+                y = hilbertY[i];
+                for (int d = 0; d < 8; d++) {
+                    int j = Math.min(255, Math.max(0, x + xOffsets[d]));
+                    int k = Math.min(255, Math.max(0, y + yOffsets[d]));
+                    dist = hilbertDistances[j + (k << 8)];
+                    if (quickBounds.contains(dist)) {
+                        if (ss.add(dist)) {
+                            vla.add(dist);
+                            edge.add(dist);
+                        }
+                    }
+                }
+            }
+            s2 = edge.toArray();
+        }
+
+        int[] indices = vla.asInts();
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.toArray();
+    }
+
+    /**
+     * Given a packed array encoding a larger area, a packed array encoding one or more points inside bounds, and an
      * amount of expansion, expands each cell in start by a Manhattan (diamond) radius equal to expansion, limiting any
      * expansion to within bounds and returning the final expanded (limited) packed data.
+     * Though this is otherwise similar to flood(), radiate() will
+     * not move around obstacles and will instead avoid expanding if it would go into any cell that cannot be reached
+     * by a straight line (drawn directly, not in grid steps) that is mostly unobstructed.
      * Returns a new packed short[] and does not modify bounds or start.
      * @param bounds packed data representing the maximum extent of the region to flood-fill; often floors
      * @param start a packed array that encodes position(s) that the flood will spread outward from
@@ -1872,10 +1962,191 @@ public class CoordPacker {
      * @return a packed array that encodes "on" for cells that are "on" in bounds and are within expansion Manhattan
      * distance from a Coord in start
      */
-    public static short[] flood(short[] bounds, short[] start, int expansion, boolean eightWay)
+    public static short[] radiate(short[] bounds, short[] start, int expansion)
+    {
+        if(bounds == null || bounds.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        int boundSize = count(bounds);
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize), partly = new ShortSet(boundSize);
+        boolean on = false;
+        int idx = 0, i, j, k, j1, j2, k1, k2;
+        short x, y, xe, ye, dist, near1, near2;
+        double proportion;
+        for(int p = 0; p < bounds.length; p++, on = !on) {
+            if (on) {
+                for (i = idx; i < idx + (bounds[p] & 0xffff); i++) {
+                    quickBounds.add((short) i);
+                }
+            }
+            idx += bounds[p] & 0xffff;
+        }
+        short[] s2 = allPackedHilbert(start), previousEdge;
+        int[] xOffsets = new int[]{0, 1, 0, -1}, yOffsets = new int[]{1, 0, -1, 0};
+        ShortVLA edge = new ShortVLA(128);
+        for (int s = 0; s < s2.length; s++) {
+            i = s2[s] & 0xffff;
+            x = hilbertX[i];
+            y = hilbertY[i];
+            ss.add(s2[s]);
+            vla.add(s2[s]);
+            previousEdge = new short[]{s2[s]};
+            for (int e = 0; e < expansion; e++) {
+                edge.clear();
+                for (int se = 0; se < previousEdge.length; se++) {
+                    i = previousEdge[se] & 0xffff;
+                    xe = hilbertX[i];
+                    ye = hilbertY[i];
+                    for (int d = 0; d < 4; d++) {
+                        j = Math.min(255, Math.max(0, xe + xOffsets[d]));
+                        k = Math.min(255, Math.max(0, ye + yOffsets[d]));
+                        dist = hilbertDistances[j + (k << 8)];
+                        if (quickBounds.contains(dist)) {
+                            if (j > x) {
+                                if (k == y) {
+                                    j1 = j - 1;
+                                    j2 = j1;
+                                    k1 = k;
+                                    k2 = k;
+                                    proportion = 0.0;
+                                }
+                                else
+                                {
+                                    double ky = Math.abs(k - y);
+                                    if (j - x > ky) {
+                                        j1 = j - 1;
+                                        j2 = j1;
+                                        k1 = k;
+                                        k2 = (k > y) ? k - 1 : k + 1;
+                                        proportion = ky * ky / ((j - x) * (j - x));
+                                    } else {
+                                        j1 = j;
+                                        j2 = j - 1;
+                                        k1 = (k > y) ? k - 1 : k + 1;
+                                        k2 = k1;
+                                        proportion = ((j - x) * (j - x)) / (ky * ky);
+                                    }
+                                }
+                            } else if (j < x) {
+                                if (k == y) {
+                                    j1 = j + 1;
+                                    j2 = j1;
+                                    k1 = k;
+                                    k2 = k;
+                                    proportion = 0.0;
+                                }
+                                else
+                                {
+                                    double ky = Math.abs(k - y);
+                                    if (x - j > ky) {
+                                        j1 = j + 1;
+                                        j2 = j1;
+                                        k1 = k;
+                                        k2 = (k > y) ? k - 1 : k + 1;
+                                        proportion = ky * ky / ((j - x) * (j - x));
+                                    } else {
+                                        j1 = j;
+                                        j2 = j + 1;
+                                        k1 = (k > y) ? k - 1 : k + 1;
+                                        k2 = k1;
+                                        proportion = ((j - x) * (j - x)) / (ky * ky);
+                                    }
+                                }
+                            } else {
+                                if (k == y) {
+                                    continue;
+                                } else {
+                                    j1 = j;
+                                    j2 = j;
+                                    k1 = (k > y) ? k - 1 : k + 1;
+                                    k2 = k1;
+                                    proportion = 0.0;
+                                }
+                            }
+                            near1 = hilbertDistances[j1 + (k1 << 8)];
+                            near2 = hilbertDistances[j2 + (k2 << 8)];
+                            if(proportion < 0.2) {
+                                if (ss.contains(near1))
+                                {
+                                    if (ss.add(dist)) {
+                                        vla.add(dist);
+                                        edge.add(dist);
+                                    }
+                                }
+                            }
+                            else if(proportion > 0.8) {
+                                if (ss.contains(near2))
+                                {
+                                    if (ss.add(dist)) {
+                                        vla.add(dist);
+                                        edge.add(dist);
+                                    }
+                                }
+                                else if(partly.contains(near2))
+                                {
+                                    partly.add(dist);
+                                }
+
+                            }
+                            else {
+                                if ((ss.contains(near1) && ss.contains(near2)) && ss.add(dist)) {
+                                    vla.add(dist);
+                                    edge.add(dist);
+                                }
+                            }
+                        }
+                    }
+                }
+                previousEdge = edge.toArray();
+            }
+        }
+
+        int[] indices = vla.asInts();
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.toArray();
+    }
+
+
+    /**
+     * Given a packed array encoding a larger area, a packed array encoding one or more points inside bounds, and an
+     * amount of expansion, expands each cell in start by a radius (if eightWay is true, it uses Chebyshev distance; if
+     * it is false, it uses Manhattan distance) equal to expansion, limiting any expansion to within bounds and
+     * returning the final expanded (limited) packed data. Though this is otherwise similar to flood(), radiate() will
+     * not move around obstacles and will instead avoid expanding if it would go into any cell that cannot be reached
+     * by a straight line (drawn directly, not in grid steps) that is mostly unobstructed.
+     * Returns a new packed short[] and does not modify bounds or start.
+     * @param bounds packed data representing the maximum extent of the region to flood-fill; often floors
+     * @param start a packed array that encodes position(s) that the flood will spread outward from
+     * @param expansion the positive (square) radius, in cells, to expand each cell out by
+     * @param eightWay true to flood-fill out in all eight directions at each step, false for just orthogonal
+     * @return a packed array that encodes "on" for cells that are "on" in bounds and are within expansion either
+     * Chebyshev (if eightWay is true) or Manhattan (otherwise) distance from a Coord in start
+     */
+    public static short[] radiate(short[] bounds, short[] start, int expansion, boolean eightWay)
     {
         if(!eightWay)
-            return flood(bounds, start, expansion);
+            return radiate(bounds, start, expansion);
         if(bounds == null || bounds.length <= 1)
         {
             return ALL_WALL;
