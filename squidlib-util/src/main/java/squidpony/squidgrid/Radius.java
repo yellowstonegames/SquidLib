@@ -419,4 +419,25 @@ public enum Radius {
         return dist >= minRange - 0.001 && dist <= maxRange + 0.001;
     }
 
+    public int roughDistance(int xPos, int yPos) {
+        int x = Math.abs(xPos), y = Math.abs(yPos);
+        switch (this) {
+            case CIRCLE:
+            case SPHERE:
+            {
+                if(x == y)
+                    return 3 * x;
+                else if(x < y)
+                    return 3 * x + 2 * (y - x);
+                else
+                    return 3 * y + 2 * (x - y);
+            }
+            case DIAMOND:
+            case OCTAHEDRON:
+                return 2 * (x + y);
+            default:
+                return 2 * Math.max(x, y);
+        }
+    }
+
 }

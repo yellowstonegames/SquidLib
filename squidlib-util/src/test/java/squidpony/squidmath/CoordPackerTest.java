@@ -218,20 +218,39 @@ public class CoordPackerTest {
         //printPacked(flooded, 64, 64);
         assertArrayEquals(flooded, manual);
     }
-
+/*
     @Test
     public void testFloodRadiate()
     {
+        /*
         short[] flooded = flood(dataCross, packSeveral(Coord.get(26, 2)), 2);
         short[] manual = packSeveral(Coord.get(25, 2), Coord.get(26, 2), Coord.get(27, 2), Coord.get(28, 2),
                 Coord.get(25, 3), Coord.get(26, 3), Coord.get(27, 3),
                 Coord.get(26, 4));
         //printPacked(flooded, 64, 64);
         assertArrayEquals(flooded, manual);
+* /
+        for (int i = 10; i < 50; i++) {
+            for (int j = 0; j < 10; j++) {
+                short[] radiated = radiate(removeSeveralPacked(dataCross, Coord.get(28+j, i), Coord.get(27+j, i+1), Coord.get(28+j, i+1)), packOne(26, 23), 10);
+                count(radiated);
+            }
+        }
+        //printPacked(radiated, 64, 64);
+    }
+*/
+    @Test
+    public void testGroupFOV()
+    {
 
-        short[] radiated = radiate(removeSeveralPacked(dataCross, Coord.get(31, 25), Coord.get(30, 26)), packOne(27, 23), 10);
-        printPacked(radiated, 64, 64);
-
+        for (int i = 10; i < 50; i++) {
+            for (int j = 0; j < 10; j++) {
+                short[] groupFOVed = radiate(removeSeveralPacked(dataCross, Coord.get(28+j, i), Coord.get(27+j, i+1), Coord.get(28+j, i+1)), packOne(26, 23), 10);
+                count(groupFOVed);
+            }
+        }
+        //short[] groupFOVed = radiate(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 23), 10);
+        //printPacked(groupFOVed, 64, 64);
     }
     @Test
     public void testPackOptimalParameters()
