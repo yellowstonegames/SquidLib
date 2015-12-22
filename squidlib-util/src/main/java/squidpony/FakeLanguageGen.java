@@ -2,8 +2,11 @@ package squidpony;
 
 import squidpony.squidmath.RNG;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * A text generator for producing sentences and/or words in nonsense languages that fit a theme. This does not use an
@@ -11,15 +14,19 @@ import java.util.Map;
  * safely assume it won't generate a meaningful sentence except in the absolute unlikeliest of cases.
  * Created by Tommy Ettinger on 11/29/2015.
  */
-public class FakeLanguageGen {
-    protected final String[] openingVowels, midVowels, openingConsonants, midConsonants, closingConsonants, vowelSplitters,
-            closingSyllables;
-    protected final LinkedHashMap<Integer, Double> syllableFrequencies;
-    protected double totalSyllableFrequency = 0.0;
-    protected final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
+public class FakeLanguageGen implements Serializable {
+    private static final long serialVersionUID = -3578460257281186351L;
+    public final String[] openingVowels, midVowels, openingConsonants, midConsonants, closingConsonants,
+            vowelSplitters, closingSyllables;
+    public final LinkedHashMap<Integer, Double> syllableFrequencies;
+    public double totalSyllableFrequency = 0.0;
+    public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
+    private static final Pattern removeRepeats = Pattern.compile("(.)\\1+(.)\\2+");
 
     /**
      * Ia! Ia! Cthulhu Rl'yeh ftaghn! Useful for generating cultist ramblings or unreadable occult texts.
+     * <br>
+     * Zvrugg pialuk, ya'as irlemrugle'eith iposh hmo-es nyeighi, glikreirk shaivro'ei!
      */
     public static final FakeLanguageGen LOVECRAFT = new FakeLanguageGen(
             new String[]{"a", "i", "o", "e", "u", "a", "i", "o", "e", "u", "ia", "ai", "aa", "ei"},
@@ -30,7 +37,58 @@ public class FakeLanguageGen {
             new String[]{"aghn", "ulhu", "urath", "oigor", "alos", "'yeh", "achtal", "urath", "ikhet", "adzek"},
             new String[]{"'", "-"}, new int[]{1, 2, 3}, new double[]{6, 7, 2}, 0.4, 0.31, 0.07, 0.04);
     /**
+     * Imitation English; may seem closer to Dutch in some generated text, and is not exactly the best imitation.
+     * Should seem pretty fake to many readers; does not filter out dictionary words. If you want to
+     * avoid generating certain words, you can subclass FakeLanguageGen and modify the word() method.
+     * <br>
+     * Mont tiste frot; mousation hauddes?
+     * Lily wrely stiebes; flarrousseal gapestist.
+     */
+    public static final FakeLanguageGen ENGLISH = new FakeLanguageGen(
+            new String[]{
+                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                    "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
+                    "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
+                    "au", "ai", "ai", "ou", "ea", "ie", "io", "ei",
+            },
+            new String[]{"u", "u", "oa", "oo", "oo", "oo", "ee", "ee", "ee", "ee",},
+            new String[]{
+                    "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gl", "gr", "h", "j", "k", "l", "m", "n",
+                    "p", "pl", "pr", "qu", "r", "s", "sh", "sk", "st", "sp", "sl", "sm", "sn", "t", "tr", "th", "thr", "v", "w", "y", "z",
+                    "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gr", "h", "j", "k", "l", "m", "n",
+                    "p", "pl", "pr", "r", "s", "sh", "st", "sp", "sl", "t", "tr", "th", "w", "y",
+                    "b", "br", "c", "ch", "d", "dr", "f", "g", "h", "j", "l", "m", "n",
+                    "p", "r", "s", "sh", "st", "sl", "t", "tr", "th",
+                    "b", "d", "f", "g", "h", "l", "m", "n",
+                    "p", "r", "s", "sh", "t", "th",
+                    "b", "d", "f", "g", "h", "l", "m", "n",
+                    "p", "r", "s", "sh", "t", "th",
+                    "r", "s", "t", "l", "n",
+                    "str", "spr", "spl", "wr", "kn", "kn", "gn",
+            },
+            new String[]{"x", "cst", "bs", "ff", "lg", "g", "gs",
+                    "ll", "ltr", "mb", "mn", "mm", "ng", "ng", "ngl", "nt", "ns", "nn", "ps", "mbl", "mpr",
+                    "pp", "ppl", "ppr", "rr", "rr", "rr", "rl", "rtn", "ngr", "ss", "sc", "rst", "tt", "tt", "ts", "ltr", "zz"
+            },
+            new String[]{"b", "rb", "bb", "c", "rc", "ld", "d", "ds", "dd", "f", "ff", "lf", "rf", "rg", "gs", "ch", "lch", "rch", "tch",
+                    "ck", "ck", "lk", "rk", "l", "ll", "lm", "m", "rm", "mp", "n", "nk", "nch", "nd", "ng", "ng", "nt", "ns", "lp", "rp",
+                    "p", "r", "rn", "rts", "s", "s", "s", "s", "ss", "ss", "st", "ls", "t", "t", "ts", "w", "wn", "x", "ly", "lly", "z",
+                    "b","c","d","f","g","k","l","m","n","p","r","s","t","w",
+            },
+            new String[]{"ate", "ite", "ism", "ist", "er", "er", "er", "ed", "ed", "ed", "es", "es", "ied", "y", "y", "y", "y",
+                    "ate", "ite", "ism", "ist", "er", "er", "er", "ed", "ed", "ed", "es", "es", "ied", "y", "y", "y", "y",
+                    "ate", "ite", "ism", "ist", "er", "er", "er", "ed", "ed", "ed", "es", "es", "ied", "y", "y", "y", "y",
+                    "ay", "ay", "ey", "oy", "ay", "ay", "ey", "oy",
+                    "ough", "aught", "ant", "ont", "oe", "ance", "ell", "eal", "oa", "urt", "ut", "iom", "ion", "ion", "ision", "ation", "ation", "ition",
+                    "ough", "aught", "ant", "ont", "oe", "ance", "ell", "eal", "oa", "urt", "ut", "iom", "ion", "ion", "ision", "ation", "ation", "ition",
+                    "ily", "ily", "ily", "adly", "owly", "oorly", "ardly", "iedly",
+            },
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{7, 8, 4, 1}, 0.22, 0.1, 0.0, 0.25);
+    /**
      * Imitation ancient Greek, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
+     * <br>
+     * Psuilas alor; aipeomarta le liaspa...
      */
     public static final FakeLanguageGen GREEK_ROMANIZED = new FakeLanguageGen(
             new String[]{"a", "a", "a", "o", "o", "o", "e", "e", "i", "i", "i", "au", "ai", "ai", "oi", "oi", "ia", "io", "ou", "ou", "eo", "ei"},
@@ -44,6 +102,8 @@ public class FakeLanguageGen {
      * Imitation ancient Greek, using the original Greek alphabet. People may try to translate it and get gibberish.
      * Make sure the font you use to render this supports the Greek alphabet! In the GDX display module, the "smooth"
      * fonts support all the Greek you need for this.
+     * <br>
+     * Ψυιλασ αλορ; αιπεομαρτα λε λιασπα...
      */
     public static final FakeLanguageGen GREEK_AUTHENTIC = new FakeLanguageGen(
             new String[]{"α", "α", "α", "ο", "ο", "ο", "ε", "ε", "ι", "ι", "ι", "αυ", "αι", "αι", "οι", "οι", "ια", "ιο", "ου", "ου", "εο", "ει"},
@@ -58,6 +118,8 @@ public class FakeLanguageGen {
      * Imitation modern French, using (too many of) the accented vowels that are present in the language. Translating it
      * will produce gibberish if it produces anything at all. In the GDX display module, the "smooth" and "unicode"
      * fonts support all the accented characters you need for this.
+     * <br>
+     * Fa veau, ja ri avé re orçe jai braï aisté.
      */
     public static final FakeLanguageGen FRENCH = new FakeLanguageGen(
             new String[]{"a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
@@ -92,6 +154,8 @@ public class FakeLanguageGen {
 
     /**
      * Imitation modern Russian, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
+     * <br>
+     * Zhydotuf ruts pitsas, gogutiar shyskuchebab - gichapofeglor giunuz ieskaziuzhin.
      */
     public static final FakeLanguageGen RUSSIAN_ROMANIZED = new FakeLanguageGen(
             new String[]{"a", "e", "e", "i", "i", "o", "u", "ie", "y", "e", "iu", "ia", "y", "a", "a", "o", "u"},
@@ -112,6 +176,8 @@ public class FakeLanguageGen {
      * Imitation modern Russian, using the authentic Cyrillic alphabet used in Russia and other countries.
      * Make sure the font you use to render this supports the Cyrillic alphabet!
      * In the GDX display module, the "smooth" fonts support all the Cyrillic alphabet you need for this.
+     * <br>
+     * Жыдотуф руц пйцас, гогутяр шыскучэбаб - гйчапофёглор гюнуз ъсказюжин.
      */
     public static final FakeLanguageGen RUSSIAN_AUTHENTIC = new FakeLanguageGen(
             new String[]{"а", "е", "ё", "и", "й", "о", "у", "ъ", "ы", "э", "ю", "я", "ы", "а", "а", "о", "у"},
@@ -258,7 +324,7 @@ public class FakeLanguageGen {
         }
         if (capitalize)
             sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-        return sb.toString();
+        return removeRepeats.matcher(sb.toString()).replaceAll("$1$2");
     }
 
     /**
@@ -303,4 +369,77 @@ public class FakeLanguageGen {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FakeLanguageGen that = (FakeLanguageGen) o;
+
+        if (Double.compare(that.totalSyllableFrequency, totalSyllableFrequency) != 0) return false;
+        if (Double.compare(that.vowelStartFrequency, vowelStartFrequency) != 0) return false;
+        if (Double.compare(that.vowelEndFrequency, vowelEndFrequency) != 0) return false;
+        if (Double.compare(that.vowelSplitFrequency, vowelSplitFrequency) != 0) return false;
+        if (Double.compare(that.syllableEndFrequency, syllableEndFrequency) != 0) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(openingVowels, that.openingVowels)) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(midVowels, that.midVowels)) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(openingConsonants, that.openingConsonants)) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(midConsonants, that.midConsonants)) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(closingConsonants, that.closingConsonants)) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(vowelSplitters, that.vowelSplitters)) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(closingSyllables, that.closingSyllables)) return false;
+        return syllableFrequencies.equals(that.syllableFrequencies);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = Arrays.hashCode(openingVowels);
+        result = 31 * result + Arrays.hashCode(midVowels);
+        result = 31 * result + Arrays.hashCode(openingConsonants);
+        result = 31 * result + Arrays.hashCode(midConsonants);
+        result = 31 * result + Arrays.hashCode(closingConsonants);
+        result = 31 * result + Arrays.hashCode(vowelSplitters);
+        result = 31 * result + Arrays.hashCode(closingSyllables);
+        result = 31 * result + syllableFrequencies.hashCode();
+        temp = Double.doubleToLongBits(totalSyllableFrequency);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(vowelStartFrequency);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(vowelEndFrequency);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(vowelSplitFrequency);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(syllableEndFrequency);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "FakeLanguageGen{" +
+                "openingVowels=" + Arrays.toString(openingVowels) +
+                ", midVowels=" + Arrays.toString(midVowels) +
+                ", openingConsonants=" + Arrays.toString(openingConsonants) +
+                ", midConsonants=" + Arrays.toString(midConsonants) +
+                ", closingConsonants=" + Arrays.toString(closingConsonants) +
+                ", vowelSplitters=" + Arrays.toString(vowelSplitters) +
+                ", closingSyllables=" + Arrays.toString(closingSyllables) +
+                ", syllableFrequencies=" + syllableFrequencies +
+                ", totalSyllableFrequency=" + totalSyllableFrequency +
+                ", vowelStartFrequency=" + vowelStartFrequency +
+                ", vowelEndFrequency=" + vowelEndFrequency +
+                ", vowelSplitFrequency=" + vowelSplitFrequency +
+                ", syllableEndFrequency=" + syllableEndFrequency +
+                '}';
+    }
 }
