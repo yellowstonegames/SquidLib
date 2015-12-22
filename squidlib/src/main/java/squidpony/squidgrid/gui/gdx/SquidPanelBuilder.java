@@ -33,6 +33,12 @@ public abstract class SquidPanelBuilder extends IPanelBuilder.Skeleton {
 	protected final int fontOffset;
 
 	/**
+	 * The color passed to {@link SquidPanel#setDefaultForeground(Color)} when
+	 * building a new panel, if non-{@code null}.
+	 */
+	protected /* @Nullable */ Color defaultForegroundColor;
+
+	/**
 	 * @param smallestFont
 	 *            The smallest font size available.
 	 * @param largestFont
@@ -105,6 +111,8 @@ public abstract class SquidPanelBuilder extends IPanelBuilder.Skeleton {
 			final SquidPanel result = new SquidPanel(hCells, vCells, tcf);
 			if (icc != null)
 				result.setColorCenter(icc);
+			if (defaultForegroundColor != null)
+				result.setDefaultForeground(defaultForegroundColor);
 			return result;
 		} else
 			throw new IllegalStateException("Non square cells aren't supported");
@@ -164,6 +172,15 @@ public abstract class SquidPanelBuilder extends IPanelBuilder.Skeleton {
 	@Override
 	public boolean hasFontOfSize(int sz) {
 		return sz % 2 == 0 && smallestFont <= sz && sz <= largestFont;
+	}
+
+	/**
+	 * @param c
+	 *            The default foreground color that freshly created panels will
+	 *            have. Can be {@code null} to use {@link SquidPanel}'s default.
+	 */
+	public void setDefaultForegroundColor(/* @Nullable */Color c) {
+		this.defaultForegroundColor = c;
 	}
 
 	/**
