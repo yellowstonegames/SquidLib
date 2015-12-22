@@ -3,9 +3,7 @@ package squidpony;
 import squidpony.squidmath.RNG;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -19,7 +17,7 @@ public class FakeLanguageGen implements Serializable {
     public final String[] openingVowels, midVowels, openingConsonants, midConsonants, closingConsonants,
             vowelSplitters, closingSyllables;
     public final LinkedHashMap<Integer, Double> syllableFrequencies;
-    public double totalSyllableFrequency = 0.0;
+    protected double totalSyllableFrequency = 0.0;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     private static final Pattern removeRepeats = Pattern.compile("(.)\\1+(.)\\2+");
 
@@ -367,6 +365,63 @@ public class FakeLanguageGen implements Serializable {
         }
         sb.append(rng.getRandomElement(endPunctuation));
         return sb.toString();
+    }
+
+    private String[] merge1000(RNG r, String[] me, String[] other, double otherInfluence)
+    {
+        String[] ret = new String[1000];
+        int otherCount = (int)(1000 * otherInfluence);
+        int idx = 0;
+        if(other.length > 0) {
+            String[] tmp = r.shuffle(other);
+            for (idx = 0; idx < otherCount; idx++) {
+                ret[idx] = tmp[idx % tmp.length];
+            }
+        }
+        if(me.length > 0) {
+            String[] tmp = r.shuffle(me);
+            for (; idx < 1000; idx++) {
+                ret[idx] = tmp[idx % tmp.length];
+            }
+        }
+        return ret;
+    }
+
+    public FakeLanguageGen mix(FakeLanguageGen other, double otherInfluence)
+    {
+        otherInfluence = Math.max(0.0, Math.min(otherInfluence, 1.0));
+        double myInfluence = 1.0 - otherInfluence;
+        RNG r = new RNG((hashCode() & 0xffffffffL) | ((other.hashCode() & 0xffffffffL) << 32)
+                ^ Double.doubleToLongBits(otherInfluence));
+        String[] ov = merge1000(r, openingVowels, other.openingVowels, otherInfluence),
+                mv = merge1000(r, midVowels, other.midVowels, otherInfluence),
+                oc = merge1000(r, openingConsonants, other.openingConsonants, otherInfluence),
+                mc = merge1000(r, midConsonants, other.midConsonants, otherInfluence),
+                cc = merge1000(r, closingConsonants, other.closingConsonants, otherInfluence),
+                cs = merge1000(r, closingSyllables, other.closingSyllables, otherInfluence),
+                splitters = merge1000(r, vowelSplitters, other.vowelSplitters, otherInfluence);
+
+        LinkedHashMap<Integer, Double> freqs = new LinkedHashMap<Integer, Double>(syllableFrequencies);
+        for(Map.Entry<Integer, Double> kv : other.syllableFrequencies.entrySet())
+        {
+            if(freqs.containsKey(kv.getKey()))
+                freqs.put(kv.getKey(), kv.getValue() + freqs.get(kv.getKey()));
+            else
+                freqs.put(kv.getKey(), kv.getValue());
+        }
+        int[] lens = new int[freqs.size()];
+        double[] odds = new double[freqs.size()];
+        int i = 0;
+        for(Map.Entry<Integer, Double> kv : freqs.entrySet())
+        {
+            lens[i] = kv.getKey();
+            odds[i++] = kv.getValue();
+        }
+        return new FakeLanguageGen(ov, mv, oc, mc, cc, cs, splitters, lens, odds,
+                vowelStartFrequency * myInfluence + other.vowelStartFrequency * otherInfluence,
+                vowelEndFrequency * myInfluence + other.vowelEndFrequency * otherInfluence,
+                vowelSplitFrequency * myInfluence + other.vowelSplitFrequency * otherInfluence,
+                syllableEndFrequency * myInfluence + other.syllableEndFrequency * otherInfluence);
     }
 
     @Override
