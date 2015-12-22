@@ -11,8 +11,14 @@ public class LanguageGenTest {
     public static void main(String[] args)
     {
         RNG rng = new RNG(new LightRNG(0xf00df00L));
-        FakeLanguageGen flg = FakeLanguageGen.LOVECRAFT;
+        FakeLanguageGen flg = FakeLanguageGen.ENGLISH;
 
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ",", ";"},
+                    new String[]{".", ".", ".", "!", "?", "..."}, 0.17));
+        }
+        rng = new RNG(new LightRNG(0xf00df00L));
+        flg = FakeLanguageGen.LOVECRAFT;
         for (int i = 0; i < 40; i++) {
             System.out.println(flg.sentence(rng, 3, 9, new String[]{",", ",", ";"},
                     new String[]{".", ".", "!", "!", "?", "...", "..."}, 0.15));
@@ -38,7 +44,7 @@ public class LanguageGenTest {
         rng = new RNG(new LightRNG(0xf00df00L));
         flg = FakeLanguageGen.RUSSIAN_ROMANIZED;
         for (int i = 0; i < 40; i++) {
-            System.out.println(flg.sentence(rng, 6, 13, new String[]{",", ",", ",", ",", ";", "-"},
+            System.out.println(flg.sentence(rng, 6, 13, new String[]{",", ",", ",", ",", ";", " -"},
                     new String[]{".", ".", ".", "!", "?", "..."}, 0.25));
         }
         rng = new RNG(new LightRNG(0xf00df00L));
