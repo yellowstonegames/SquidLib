@@ -18,6 +18,9 @@ import squidpony.panel.ISquidPanel;
  * 
  * @see SquidLayers for a more advanced Group that supports multiple layers.
  * @author smelC
+ * 
+ * @param <T>
+ *            The type of colors.
  */
 public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 
