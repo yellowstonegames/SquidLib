@@ -1,7 +1,9 @@
 package squidpony.panel;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
@@ -63,6 +65,21 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * @param len
 	 */
 	void setLength(int len);
+
+	/**
+	 * @return {@code true} if {@link #present()} is {@code ""}.
+	 */
+	public boolean isEmpty();
+
+	/**
+	 * @param width
+	 *            A positive integer
+	 * @return {@code this} split in pieces that would fit in a display with
+	 *         {@code width} columns (if all words in {@code this} are smaller
+	 *         or equal in length to {@code width}, otherwise wrapping will fail
+	 *         for these words).
+	 */
+	List<IColoredString<T>> wrap(int width);
 
 	/**
 	 * Empties {@code this}.
@@ -214,6 +231,86 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		}
 
 		@Override
+		public List<IColoredString<T>> wrap(int width) {
+			if (width == 0) {
+				/* Really, you should not rely on this behavior */
+				System.err.println("Cannot wrap string in empty display");
+				final List<IColoredString<T>> result = new LinkedList<IColoredString<T>>();
+				result.add(this);
+				return result;
+			}
+
+			final List<IColoredString<T>> result = new ArrayList<IColoredString<T>>();
+
+			IColoredString<T> current = create();
+			int curlen = 0;
+			final Iterator<Bucket<T>> it = iterator();
+			while (it.hasNext()) {
+				final Bucket<T> next = it.next();
+				final String bucket = next.getText();
+				final String[] split = bucket.split(" ");
+				final T color = next.color;
+				for (int i = 0; i < split.length; i++) {
+					final String chunk = split[i];
+					final int chunklen = chunk.length();
+					if (curlen + chunklen <= width) {
+						/* Can add it */
+						current.append(chunk, color);
+						/*
+						 * Do not forget space on which chunk got split. If the
+						 * space is offscreen, it's harmless, hence not checking
+						 * it.
+						 */
+						current.append(' ', null);
+						curlen++;
+						/* Extend size */
+						curlen += chunklen;
+					} else {
+						/* Need to wrap */
+						/* Flush content so far */
+						if (!current.isEmpty())
+							result.add(current);
+						/*
+						 * else: line was prepared, but did not contain anything
+						 */
+						if (chunklen <= width) {
+							curlen = chunklen;
+							current = create();
+							current.append(chunk, color);
+							/* Reinit size */
+							curlen = chunklen;
+							/*
+							 * Do not forget space on which chunk got split. If
+							 * the space is offscreen, it's harmless, hence not
+							 * checking it.
+							 */
+							current.append(' ', null);
+							curlen++;
+						} else {
+							/*
+							 * This word is too long. Adding it and preparing a
+							 * new line immediately.
+							 */
+							/* Add */
+							result.add(new Impl<T>(chunk, color));
+							/* Prepare for next rolls */
+							current = create();
+							/* Reinit size */
+							curlen = 0;
+						}
+					}
+				}
+			}
+
+			if (!current.isEmpty()) {
+				/* Flush rest */
+				result.add(current);
+			}
+
+			return result;
+		}
+
+		@Override
 		public void clear() {
 			fragments.clear();
 		}
@@ -224,6 +321,18 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			for (Bucket<T> fragment : fragments)
 				result += fragment.getText().length();
 			return result;
+		}
+
+		@Override
+		/* This implementation is resilient to empty buckets */
+		public boolean isEmpty() {
+			for (Bucket<?> bucket : fragments) {
+				if (bucket.text == null || bucket.text.isEmpty())
+					continue;
+				else
+					return false;
+			}
+			return true;
 		}
 
 		@Override
