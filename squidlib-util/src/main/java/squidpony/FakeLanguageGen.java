@@ -4,6 +4,7 @@ import squidpony.squidmath.RNG;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -19,7 +20,91 @@ public class FakeLanguageGen implements Serializable {
     public final LinkedHashMap<Integer, Double> syllableFrequencies;
     protected double totalSyllableFrequency = 0.0;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
-    private static final Pattern removeRepeats = Pattern.compile("(.)\\1+(.)\\2+");
+    private static final Pattern doubleRepeats = Pattern.compile("(.)\\1+(.)\\2+"),
+            repeats = Pattern.compile("(.)\\1+");
+    public static final char[][] accentedVowels = new char[][]{
+            new char[]{
+                    'à', 'á', 'â', 'ã', 'ä', 'å', 'æ','ā', 'ă', 'ą', 'ǻ', 'ǽ'
+            },
+            new char[]{
+                    'è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'
+            },
+            new char[]{
+                    'ì', 'í', 'î', 'ï', 'ĩ', 'ī', 'ĭ', 'į', 'ı',
+            },
+            new char[]{
+                    'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ō', 'ŏ', 'ő', 'œ', 'ǿ'
+            },
+            new char[]{
+                    'ù', 'ú', 'û', 'ü', 'ũ', 'ū', 'ŭ', 'ů', 'ű', 'ų'
+            }
+    },
+            accentedConsonants = new char[][]
+                    {
+                            new char[]{
+                                    'b'
+                            },
+                            new char[]{
+                                    'c', 'ç', 'ć', 'ĉ', 'ċ', 'č',
+                            },
+                            new char[]{
+                                    'd', 'þ', 'ð', 'ď', 'đ',
+                            },
+                            new char[]{
+                                    'f','ſ', 'ƒ',
+                            },
+                            new char[]{
+                                    'g', 'ĝ', 'ğ', 'ġ', 'ģ',
+                            },
+                            new char[]{
+                                    'h', 'ĥ', 'ħ',
+                            },
+                            new char[]{
+                                    'j', 'ĵ', 'ȷ',
+                            },
+                            new char[]{
+                                    'k', 'ķ', 'ĸ',
+                            },
+                            new char[]{
+                                    'l', 'ℓ', 'ĺ', 'ļ', 'ľ', 'ŀ', 'ł',
+                            },
+                            new char[]{
+                                    'm',
+                            },
+                            new char[]{
+                                    'n', 'ñ', 'ń', 'ņ', 'ň', 'ŉ', 'ŋ',
+                            },
+                            new char[]{
+                                    'p',
+                            },
+                            new char[]{
+                                    'q',
+                            },
+                            new char[]{
+                                    'r', 'ŕ', 'ŗ', 'ř',
+                            },
+                            new char[]{
+                                    's', 'ś', 'ŝ', 'ş', 'š', 'ș',
+                            },
+                            new char[]{
+                                    't', 'ţ', 'ť', 'ŧ', 'ț',
+                            },
+                            new char[]{
+                                    'v',
+                            },
+                            new char[]{
+                                    'w', 'ŵ', 'ẁ', 'ẃ', 'ẅ',
+                            },
+                            new char[]{
+                                    'x',
+                            },
+                            new char[]{
+                                    'y', 'ý', 'ÿ', 'ŷ', 'ỳ',
+                            },
+                            new char[]{
+                                    'z', 'ź', 'ż', 'ž',
+                            },
+                    };
 
     /**
      * Ia! Ia! Cthulhu Rl'yeh ftaghn! Useful for generating cultist ramblings or unreadable occult texts.
@@ -322,7 +407,7 @@ public class FakeLanguageGen implements Serializable {
         }
         if (capitalize)
             sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-        return removeRepeats.matcher(sb.toString()).replaceAll("$1$2");
+        return doubleRepeats.matcher(sb.toString()).replaceAll("$1$2");
     }
 
     /**
@@ -387,6 +472,182 @@ public class FakeLanguageGen implements Serializable {
         return ret;
     }
 
+
+    private String[] accentVowels(RNG r, String[] me, double influence)
+    {
+        String[] ret = new String[1000];
+        int otherCount = (int)(1000 * influence);
+        int idx = 0;
+        Matcher matcher;
+        if(me.length > 0) {
+            String[] tmp = r.shuffle(me);
+            for (idx = 0; idx < otherCount; idx++) {
+                ret[idx] = tmp[idx % tmp.length]
+                        .replace('a', accentedVowels[0][r.nextInt(accentedVowels[0].length)])
+                        .replace('e', accentedVowels[1][r.nextInt(accentedVowels[1].length)])
+                        .replace('i', accentedVowels[2][r.nextInt(accentedVowels[2].length)])
+                        .replace('o', accentedVowels[3][r.nextInt(accentedVowels[3].length)])
+                        .replace('u', accentedVowels[4][r.nextInt(accentedVowels[4].length)]);
+                matcher = repeats.matcher(ret[idx]);
+                if(matcher.find())
+                {
+                    ret[idx] = matcher.replaceAll(r.getRandomElement(me));
+                }
+            }
+            for (; idx < 1000; idx++) {
+                ret[idx] = tmp[idx % tmp.length];
+            }
+        }
+        else
+            return new String[]{};
+        return ret;
+    }
+
+    private String[] accentConsonants(RNG r, String[] me, double influence)
+    {
+        String[] ret = new String[1000];
+        int otherCount = (int)(1000 * influence);
+        int idx = 0;
+        Matcher matcher;
+        if(me.length > 0) {
+            String[] tmp = r.shuffle(me);
+            for (idx = 0; idx < otherCount; idx++) {
+                ret[idx] = tmp[idx % tmp.length]
+                        //0
+                        .replace('c', accentedConsonants[1][r.nextInt(accentedConsonants[1].length)])
+                        .replace('d', accentedConsonants[2][r.nextInt(accentedConsonants[2].length)])
+                        .replace('f', accentedConsonants[3][r.nextInt(accentedConsonants[3].length)])
+                        .replace('g', accentedConsonants[4][r.nextInt(accentedConsonants[4].length)])
+                        .replace('h', accentedConsonants[5][r.nextInt(accentedConsonants[5].length)])
+                        .replace('j', accentedConsonants[6][r.nextInt(accentedConsonants[6].length)])
+                        .replace('k', accentedConsonants[7][r.nextInt(accentedConsonants[7].length)])
+                        .replace('l', accentedConsonants[8][r.nextInt(accentedConsonants[8].length)])
+                        //9
+                        .replace('n', accentedConsonants[10][r.nextInt(accentedConsonants[10].length)])
+                        //11
+                        //12
+                        .replace('r', accentedConsonants[13][r.nextInt(accentedConsonants[13].length)])
+                        .replace('s', accentedConsonants[14][r.nextInt(accentedConsonants[14].length)])
+                        .replace('t', accentedConsonants[15][r.nextInt(accentedConsonants[15].length)])
+                        //16
+                        .replace('w', accentedConsonants[17][r.nextInt(accentedConsonants[17].length)])
+                        //18
+                        .replace('y', accentedConsonants[19][r.nextInt(accentedConsonants[19].length)])
+                        .replace('z', accentedConsonants[20][r.nextInt(accentedConsonants[20].length)]);
+
+                matcher = repeats.matcher(ret[idx]);
+                if(matcher.find())
+                {
+                    ret[idx] = matcher.replaceAll(r.getRandomElement(me));
+                }
+            }
+            for (; idx < 1000; idx++) {
+                ret[idx] = tmp[idx % tmp.length];
+            }
+        }
+
+        else
+            return new String[]{};
+        return ret;
+    }
+    private String[] accentBoth(RNG r, String[] me, double vowelInfluence, double consonantInfluence)
+    {
+        String[] ret = new String[1000];
+        int idx = 0;
+        Matcher matcher;
+        if(me.length > 0) {
+            String[] tmp = r.shuffle(me);
+            for (idx = 0; idx < 1000; idx++) {
+                boolean subVowel = r.nextDouble() < vowelInfluence, subCon = r.nextDouble() < consonantInfluence;
+                if (subVowel && subCon) {
+                    ret[idx] = tmp[idx % tmp.length]
+                            .replace('a', accentedVowels[0][r.nextInt(accentedVowels[0].length)])
+                            .replace('e', accentedVowels[1][r.nextInt(accentedVowels[1].length)])
+                            .replace('i', accentedVowels[2][r.nextInt(accentedVowels[2].length)])
+                            .replace('o', accentedVowels[3][r.nextInt(accentedVowels[3].length)])
+                            .replace('u', accentedVowels[4][r.nextInt(accentedVowels[4].length)])
+
+                            //0
+                            .replace('c', accentedConsonants[1][r.nextInt(accentedConsonants[1].length)])
+                            .replace('d', accentedConsonants[2][r.nextInt(accentedConsonants[2].length)])
+                            .replace('f', accentedConsonants[3][r.nextInt(accentedConsonants[3].length)])
+                            .replace('g', accentedConsonants[4][r.nextInt(accentedConsonants[4].length)])
+                            .replace('h', accentedConsonants[5][r.nextInt(accentedConsonants[5].length)])
+                            .replace('j', accentedConsonants[6][r.nextInt(accentedConsonants[6].length)])
+                            .replace('k', accentedConsonants[7][r.nextInt(accentedConsonants[7].length)])
+                            .replace('l', accentedConsonants[8][r.nextInt(accentedConsonants[8].length)])
+                            //9
+                            .replace('n', accentedConsonants[10][r.nextInt(accentedConsonants[10].length)])
+                            //11
+                            //12
+                            .replace('r', accentedConsonants[13][r.nextInt(accentedConsonants[13].length)])
+                            .replace('s', accentedConsonants[14][r.nextInt(accentedConsonants[14].length)])
+                            .replace('t', accentedConsonants[15][r.nextInt(accentedConsonants[15].length)])
+                            //16
+                            .replace('w', accentedConsonants[17][r.nextInt(accentedConsonants[17].length)])
+                            //18
+                            .replace('y', accentedConsonants[19][r.nextInt(accentedConsonants[19].length)])
+                            .replace('z', accentedConsonants[20][r.nextInt(accentedConsonants[20].length)]);
+
+                    matcher = repeats.matcher(ret[idx]);
+                    if(matcher.find())
+                    {
+                        ret[idx] = matcher.replaceAll(r.getRandomElement(me));
+                    }
+                }
+                else if (subVowel) {
+                    ret[idx] = tmp[idx % tmp.length]
+                            .replace('a', accentedVowels[0][r.nextInt(accentedVowels[0].length)])
+                            .replace('e', accentedVowels[1][r.nextInt(accentedVowels[1].length)])
+                            .replace('i', accentedVowels[2][r.nextInt(accentedVowels[2].length)])
+                            .replace('o', accentedVowels[3][r.nextInt(accentedVowels[3].length)])
+                            .replace('u', accentedVowels[4][r.nextInt(accentedVowels[4].length)]);
+
+                    matcher = repeats.matcher(ret[idx]);
+                    if(matcher.find())
+                    {
+                        ret[idx] = matcher.replaceAll(r.getRandomElement(me));
+                    }
+                }
+                else if(subCon) {
+                    ret[idx] = tmp[idx % tmp.length]
+                            //0
+                            .replace('c', accentedConsonants[1][r.nextInt(accentedConsonants[1].length)])
+                            .replace('d', accentedConsonants[2][r.nextInt(accentedConsonants[2].length)])
+                            .replace('f', accentedConsonants[3][r.nextInt(accentedConsonants[3].length)])
+                            .replace('g', accentedConsonants[4][r.nextInt(accentedConsonants[4].length)])
+                            .replace('h', accentedConsonants[5][r.nextInt(accentedConsonants[5].length)])
+                            .replace('j', accentedConsonants[6][r.nextInt(accentedConsonants[6].length)])
+                            .replace('k', accentedConsonants[7][r.nextInt(accentedConsonants[7].length)])
+                            .replace('l', accentedConsonants[8][r.nextInt(accentedConsonants[8].length)])
+                            //9
+                            .replace('n', accentedConsonants[10][r.nextInt(accentedConsonants[10].length)])
+                            //11
+                            //12
+                            .replace('r', accentedConsonants[13][r.nextInt(accentedConsonants[13].length)])
+                            .replace('s', accentedConsonants[14][r.nextInt(accentedConsonants[14].length)])
+                            .replace('t', accentedConsonants[15][r.nextInt(accentedConsonants[15].length)])
+                            //16
+                            .replace('w', accentedConsonants[17][r.nextInt(accentedConsonants[17].length)])
+                            //18
+                            .replace('y', accentedConsonants[19][r.nextInt(accentedConsonants[19].length)])
+                            .replace('z', accentedConsonants[20][r.nextInt(accentedConsonants[20].length)]);
+
+                    matcher = repeats.matcher(ret[idx]);
+                    if(matcher.find())
+                    {
+                        ret[idx] = matcher.replaceAll(r.getRandomElement(me));
+                    }
+                }
+                else ret[idx] = tmp[idx % tmp.length];
+
+            }
+        }
+        else
+            return new String[]{};
+        return ret;
+    }
+
     public FakeLanguageGen mix(FakeLanguageGen other, double otherInfluence)
     {
         otherInfluence = Math.max(0.0, Math.min(otherInfluence, 1.0));
@@ -422,6 +683,33 @@ public class FakeLanguageGen implements Serializable {
                 vowelEndFrequency * myInfluence + other.vowelEndFrequency * otherInfluence,
                 vowelSplitFrequency * myInfluence + other.vowelSplitFrequency * otherInfluence,
                 syllableEndFrequency * myInfluence + other.syllableEndFrequency * otherInfluence);
+    }
+
+    public FakeLanguageGen addAccents(double vowelInfluence, double consonantInfluence)
+    {
+        vowelInfluence = Math.max(0.0, Math.min(vowelInfluence, 1.0));
+        consonantInfluence = Math.max(0.0, Math.min(consonantInfluence, 1.0));
+        RNG r = new RNG((hashCode() & 0xffffffffL) ^
+                ((Double.doubleToLongBits(vowelInfluence) & 0xffffffffL) | (Double.doubleToLongBits(consonantInfluence) << 32)));
+        String[] ov = accentVowels(r, openingVowels, vowelInfluence),
+                mv = accentVowels(r, midVowels, vowelInfluence),
+                oc = accentConsonants(r, openingConsonants, consonantInfluence),
+                mc = accentConsonants(r, midConsonants, consonantInfluence),
+                cc = accentConsonants(r, closingConsonants, consonantInfluence),
+                cs = accentBoth(r, closingSyllables, vowelInfluence, consonantInfluence);
+        int[] lens = new int[syllableFrequencies.size()];
+        double[] odds = new double[syllableFrequencies.size()];
+        int i = 0;
+        for(Map.Entry<Integer, Double> kv : syllableFrequencies.entrySet())
+        {
+            lens[i] = kv.getKey();
+            odds[i++] = kv.getValue();
+        }
+        return new FakeLanguageGen(ov, mv, oc, mc, cc, cs, vowelSplitters, lens, odds,
+                vowelStartFrequency,
+                vowelEndFrequency,
+                vowelSplitFrequency,
+                syllableEndFrequency);
     }
 
     @Override
