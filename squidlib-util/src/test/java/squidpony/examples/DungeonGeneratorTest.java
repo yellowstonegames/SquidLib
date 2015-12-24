@@ -77,7 +77,7 @@ import java.io.IOException;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 120, height = 120, depth = 16;
+    public static int width = 80, height = 120, depth = 16;
     public static void main( String[] args )
     {
         //seed is, in base 36, the number SQUIDLIB

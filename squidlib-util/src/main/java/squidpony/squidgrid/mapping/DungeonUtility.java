@@ -243,7 +243,25 @@ public class DungeonUtility {
     public static char[][] hashesToLines(char[][] map) {
         return hashesToLines(map, false);
     }
-
+    private static final char[] wallLookup = new char[]
+            {
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '┤', '┬', '┼',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '┤', '┬', '┼',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '┤', '┬', '┼',
+                    '#', '│', '─', '└', '│', '│', '┌', '│', '─', '┘', '─', '┴', '┐', '┤', '┬', '┤',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '┤', '┬', '┼',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '┤', '┬', '┼',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '┤', '─', '┴',
+                    '#', '│', '─', '└', '│', '│', '┌', '│', '─', '┘', '─', '┴', '┐', '┤', '─', '┘',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '┤', '┬', '┼',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '─', '┐', '┤', '┬', '┬',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '┤', '┬', '┼',
+                    '#', '│', '─', '└', '│', '│', '┌', '│', '─', '┘', '─', '─', '┐', '┤', '┬', '┐',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '│', '┬', '├',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '─', '┐', '│', '┬', '┌',
+                    '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '│', '─', '└',
+                    '#', '│', '─', '└', '│', '│', '┌', '│', '─', '┘', '─', '─', '┐', '│', '─', '\1'
+            };
     /**
      * Takes a char[][] dungeon map that uses '#' to represent walls, and returns a new char[][] that uses unicode box
      * drawing characters to draw straight, continuous lines for walls, filling regions between walls (that were
@@ -262,216 +280,59 @@ public class DungeonUtility {
      * @return a copy of the map passed as an argument with box-drawing characters replacing '#' walls
      */
     public static char[][] hashesToLines(char[][] map, boolean keepSingleHashes) {
-        int width = map[0].length + 2;
-        int height = map.length + 2;
+        int width = map.length + 2;
+        int height = map[0].length + 2;
 
-        char[][] neo = new char[height][width], dungeon = new char[height][width];
-        for (int i = 1; i < height - 1; i++) {
-            System.arraycopy(map[i - 1], 0, dungeon[i], 1, width - 1 - 1);
-        }
-        for (int i = 0; i < height; i++) {
-            neo[i][0] = '\1';
-            neo[i][width - 1] = '\1';
-            dungeon[i][0] = '\1';
-            dungeon[i][width - 1] = '\1';
+        char[][] dungeon = new char[width][height];
+        for (int i = 1; i < width - 1; i++) {
+            System.arraycopy(map[i - 1], 0, dungeon[i], 1, height - 2);
         }
         for (int i = 0; i < width; i++) {
-            neo[0][i] = '\1';
-            neo[height - 1][i] = '\1';
+            dungeon[i][0] = '\1';
+            dungeon[i][height - 1] = '\1';
+        }
+        for (int i = 0; i < height; i++) {
             dungeon[0][i] = '\1';
-            dungeon[height - 1][i] = '\1';
+            dungeon[width - 1][i] = '\1';
         }
-
-        for (int y = 1; y < height - 1; y++) {
-            for (int x = 1; x < width - 1; x++) {
-                if (map[y - 1][x - 1] == '#') {
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                if (map[x - 1][y - 1] == '#') {
                     int q = 0;
-                    q |= (y <= 1 || map[y - 2][x - 1] == '#') ? 1 : 0;
-                    q |= (y <= 1 || x >= width - 2 || map[y - 2][x] == '#') ? 2 : 0;
-                    q |= (x >= width - 2 || map[y - 1][x] == '#') ? 4 : 0;
-                    q |= (y >= height - 2 || x >= width - 2 || map[y][x] == '#') ? 8 : 0;
-                    q |= (y >= height - 2 || map[y][x - 1] == '#') ? 16 : 0;
-                    q |= (y >= height - 2 || x <= 1 || map[y][x - 2] == '#') ? 32 : 0;
-                    q |= (x <= 1 || map[y - 1][x - 2] == '#') ? 64 : 0;
-                    q |= (y <= 1 || x <= 1 || map[y - 2][x - 2] == '#') ? 128 : 0;
+                    q |= (y <= 1 || map[x - 1][y - 2] == '#' || map[x - 1][y - 2] == '+' || map[x - 1][y - 2] == '/') ? 1 : 0;
+                    q |= (x >= width - 2 || map[x][y - 1] == '#' || map[x][y - 1] == '+' || map[x][y - 1] == '/') ? 2: 0;
+                    q |= (y >= height - 2 || map[x - 1][y] == '#' || map[x - 1][y] == '+' || map[x - 1][y] == '/') ? 4 : 0;
+                    q |= (x <= 1 || map[x - 2][y - 1] == '#' || map[x - 2][y - 1] == '+' || map[x - 2][y - 1] == '/') ? 8 : 0;
 
-                    if (q == 0xff) {
-                        neo[y][x] = '\1';
-                        dungeon[y][x] = '\1';
-                    } else {
-                        neo[y][x] = '#';
-                    }
-                } else {
-                    neo[y][x] = dungeon[y][x];
-                }
-            }
-        }
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (dungeon[y][x] == '#') {
-                    boolean n = (y <= 0 || dungeon[y - 1][x] == '#' || dungeon[y - 1][x] == '+' || dungeon[y - 1][x] == '/');
-                    boolean e = (x >= width - 1 || dungeon[y][x + 1] == '#' || dungeon[y][x + 1] == '+' || dungeon[y][x + 1] == '/');
-                    boolean s = (y >= height - 1 || dungeon[y + 1][x] == '#' || dungeon[y + 1][x] == '+' || dungeon[y + 1][x] == '/');
-                    boolean w = (x <= 0 || dungeon[y][x - 1] == '#' || dungeon[y][x - 1] == '+' || dungeon[y][x - 1] == '/');
-
-                    if (n) {
-                        if (e) {
-                            if (s) {
-                                if (w) {
-                                    neo[y][x] = '┼';
-                                } else {
-                                    neo[y][x] = '├';
-                                }
-                            } else if (w) {
-                                neo[y][x] = '┴';
-                            } else {
-                                neo[y][x] = '└';
-                            }
-                        } else if (s) {
-                            if (w) {
-                                neo[y][x] = '┤';
-                            } else {
-                                neo[y][x] = '│';
-                            }
-                        } else if (w) {
-                            neo[y][x] = '┘';
-                        } else {
-                            neo[y][x] = '│';
-                        }
-                    } else if (e)  // ┼ ├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─
+                    q |= (y <= 1 || x >= width - 2 || map[x][y - 2] == '#' || map[x][y - 2] == '+' || map[x][y - 2] == '/') ? 16 : 0;
+                    q |= (y >= height - 2 || x >= width - 2 || map[x][y] == '#' || map[x][y] == '+' || map[x][y] == '/') ? 32 : 0;
+                    q |= (y >= height - 2 || x <= 1 || map[x - 2][y] == '#' || map[x - 2][y] == '+' || map[x - 2][y] == '/') ? 64 : 0;
+                    q |= (y <= 1 || x <= 1 || map[x - 2][y - 2] == '#' || map[x - 2][y - 2] == '+' || map[x - 2][y - 2] == '/') ? 128 : 0;
+                    if(!keepSingleHashes && wallLookup[q] == '#')
                     {
-                        if (s) {
-                            if (w) {
-                                neo[y][x] = '┬';
-                            } else {
-                                neo[y][x] = '┌';
-                            }
-                        } else if (w) {
-                            neo[y][x] = '─';
-                        } else {
-                            neo[y][x] = '─';
-                        }
-                    } else if (s) {
-                        if (w) {
-                            neo[y][x] = '┐';
-                        } else {
-                            neo[y][x] = '│';
-                        }
-                    } else if (w) {
-                        neo[y][x] = '─';
-                    } else {
-                        neo[y][x] = keepSingleHashes ? '#' : '─';
+                        dungeon[x][y] = '─';
                     }
-
-                } else {
-                    neo[y][x] = dungeon[y][x];
-                }
-            }
-        }
-        //vertical crossbar removal
-        for (int y = 1; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                // ┼ ├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─
-                if (neo[y][x] == '┼' || neo[y][x] == '├' || neo[y][x] == '┤' || neo[y][x] == '┴') {
-                    if (neo[y - 1][x] == '┼' || neo[y - 1][x] == '├' || neo[y - 1][x] == '┤' || neo[y - 1][x] == '┬') {
-                        if ((x >= width - 1 || dungeon[y - 1][x + 1] == '#' || dungeon[y - 1][x + 1] == '\1' || dungeon[y - 1][x + 1] == '+' || dungeon[y - 1][x + 1] == '/') &&
-                                (x <= 0 || dungeon[y - 1][x - 1] == '#' || dungeon[y - 1][x - 1] == '\1' || dungeon[y - 1][x - 1] == '+' || dungeon[y - 1][x - 1] == '/') &&
-                                (x >= width - 1 || dungeon[y][x + 1] == '#' || dungeon[y][x + 1] == '\1' || dungeon[y][x + 1] == '+' || dungeon[y][x + 1] == '/') &&
-                                (x <= 0 || dungeon[y][x - 1] == '#' || dungeon[y][x - 1] == '\1' || dungeon[y][x - 1] == '+' || dungeon[y][x - 1] == '/')) {
-                            switch (neo[y][x]) {
-                                case '┼':
-                                    neo[y][x] = '┬';
-                                    break;
-                                case '├':
-                                    neo[y][x] = '┌';
-                                    break;
-                                case '┤':
-                                    neo[y][x] = '┐';
-                                    break;
-                                case '┴':
-                                    neo[y][x] = '─';
-                                    break;
-                            }
-                            switch (neo[y - 1][x]) {
-                                case '┼':
-                                    neo[y - 1][x] = '┴';
-                                    break;
-                                case '├':
-                                    neo[y - 1][x] = '└';
-                                    break;
-                                case '┤':
-                                    neo[y - 1][x] = '┘';
-                                    break;
-                                case '┬':
-                                    neo[y - 1][x] = '─';
-                                    break;
-
-                            }
-                        }
+                    else
+                    {
+                        dungeon[x][y] = wallLookup[q];
                     }
                 }
             }
         }
-        //horizontal crossbar removal
-        for (int y = 0; y < height; y++) {
-            for (int x = 1; x < width; x++) {
-                // ┼ ├ ┤ ┴ ┬ ┌ ┐ └ ┘ │ ─
-                if (neo[y][x] == '┼' || neo[y][x] == '┤' || neo[y][x] == '┬' || neo[y][x] == '┴') {
-                    if (neo[y][x - 1] == '┼' || neo[y][x - 1] == '├' || neo[y][x - 1] == '┬' || neo[y][x - 1] == '┴') {
-                        if ((y >= height - 1 || dungeon[y + 1][x - 1] == '#' || dungeon[y + 1][x - 1] == '\1' || dungeon[y + 1][x - 1] == '+' || dungeon[y + 1][x - 1] == '/') &&
-                                (y <= 0 || dungeon[y - 1][x - 1] == '#' || dungeon[y - 1][x - 1] == '\1' || dungeon[y - 1][x - 1] == '+' || dungeon[y - 1][x - 1] == '/') &&
-                                (y >= height - 1 || dungeon[y + 1][x] == '#' || dungeon[y + 1][x] == '\1' || dungeon[y + 1][x] == '+' || dungeon[y + 1][x] == '/') &&
-                                (y <= 0 || dungeon[y - 1][x] == '#' || dungeon[y - 1][x] == '\1' || dungeon[y - 1][x] == '+' || dungeon[y - 1][x] == '/')) {
-                            switch (neo[y][x]) {
-                                case '┼':
-                                    neo[y][x] = '├';
-                                    break;
-                                case '┤':
-                                    neo[y][x] = '│';
-                                    break;
-                                case '┬':
-                                    neo[y][x] = '┌';
-                                    break;
-                                case '┴':
-                                    neo[y][x] = '└';
-                                    break;
-                            }
-                            switch (neo[y][x - 1]) {
-                                case '┼':
-                                    neo[y][x - 1] = '┤';
-                                    break;
-                                case '├':
-                                    neo[y][x - 1] = '│';
-                                    break;
-                                case '┬':
-                                    neo[y][x - 1] = '┐';
-                                    break;
-                                case '┴':
-                                    neo[y][x - 1] = '┘';
-                                    break;
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        char[][] portion = new char[height - 2][width - 2];
-        for (int i = 1; i < height - 1; i++) {
-            for (int j = 1; j < width - 1; j++) {
-                switch (neo[i][j]) {
+        char[][] portion = new char[width - 2][height - 2];
+        for (int i = 1; i < width - 1; i++) {
+            for (int j = 1; j < height - 1; j++) {
+                switch (dungeon[i][j]) {
                     case '\1':
                         portion[i - 1][j - 1] = ' ';
                         break;
                     default: // ┼┌┘
-                        portion[i - 1][j - 1] = neo[i][j];
+                        portion[i - 1][j - 1] = dungeon[i][j];
                 }
             }
         }
-        return transposeLines(portion);
+        return portion;
     }
-
     /**
      * Reverses most of the effects of hashesToLines(). The only things that will not be reversed are the placement of
      * space characters in unreachable wall-cells-behind-wall-cells, which remain as spaces. This is useful if you
@@ -777,6 +638,7 @@ public class DungeonUtility {
         }
         return portion;
     }
+
 
     /**
      * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
