@@ -1,6 +1,8 @@
 package squidpony.squidmath;
 
 import org.junit.Test;
+import squidpony.squidai.AimLimit;
+import squidpony.squidai.Reach;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -218,7 +220,7 @@ public class CoordPackerTest {
         //printPacked(flooded, 64, 64);
         assertArrayEquals(flooded, manual);
     }
-/*
+    /*
     @Test
     public void testFloodRadiate()
     {
@@ -229,7 +231,7 @@ public class CoordPackerTest {
                 Coord.get(26, 4));
         //printPacked(flooded, 64, 64);
         assertArrayEquals(flooded, manual);
-* /
+        * /
         for (int i = 10; i < 50; i++) {
             for (int j = 0; j < 10; j++) {
                 short[] radiated = radiate(removeSeveralPacked(dataCross, Coord.get(28+j, i), Coord.get(27+j, i+1), Coord.get(28+j, i+1)), packOne(26, 23), 10);
@@ -238,20 +240,29 @@ public class CoordPackerTest {
         }
         //printPacked(radiated, 64, 64);
     }
-*/
+    */
     @Test
-    public void testGroupFOV()
+    public void testRadiate()
     {
-
-        for (int i = 10; i < 50; i++) {
-            for (int j = 0; j < 10; j++) {
-                short[] groupFOVed = radiate(removeSeveralPacked(dataCross, Coord.get(28+j, i), Coord.get(27+j, i+1), Coord.get(28+j, i+1)), packOne(26, 23), 10);
-                count(groupFOVed);
-            }
-        }
-        //short[] groupFOVed = radiate(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 23), 10);
-        //printPacked(groupFOVed, 64, 64);
+        short[] groupFOVed = radiate(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 23), 10);
+        printPacked(groupFOVed, 64, 64);
     }
+
+    @Test
+    public void testReachable()
+    {
+        Reach reach = new Reach(3, 8, Radius.DIAMOND);
+        short[] groupReachable = reachable(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 22), reach);
+        //printPacked(groupReachable, 64, 64);
+        reach = new Reach(3, 8, Radius.DIAMOND, AimLimit.ORTHOGONAL);
+        groupReachable = reachable(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 22), reach);
+        //printPacked(groupReachable, 64, 64);
+        reach = new Reach(3, 8, Radius.DIAMOND, AimLimit.EIGHT_WAY);
+        groupReachable = reachable(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 22), reach);
+        //printPacked(groupReachable, 64, 64);
+    }
+
+
     @Test
     public void testPackOptimalParameters()
     {
