@@ -1,5 +1,7 @@
 package squidpony.squidmath;
 
+import squidpony.squidai.AimLimit;
+import squidpony.squidai.Reach;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 
@@ -1304,6 +1306,8 @@ public class CoordPacker {
             idx += packed[p] & 0xffff;
         }
         int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
         Arrays.sort(indices);
         vla = new ShortVLA(128);
         int current, past = indices[0], skip = 0;
@@ -1366,6 +1370,8 @@ public class CoordPacker {
         }
 
         int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
         Arrays.sort(indices);
 
         vla = new ShortVLA(128);
@@ -1437,6 +1443,8 @@ public class CoordPacker {
         }
 
         int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
         Arrays.sort(indices);
 
         vla = new ShortVLA(128);
@@ -1511,6 +1519,8 @@ public class CoordPacker {
             idx += packed[p] & 0xffff;
         }
         int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
         Arrays.sort(indices);
 
         vla = new ShortVLA(128);
@@ -1594,6 +1604,8 @@ public class CoordPacker {
             idx += packed[p] & 0xffff;
         }
         int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
         Arrays.sort(indices);
 
         vla = new ShortVLA(128);
@@ -1672,6 +1684,11 @@ public class CoordPacker {
                 idx += packed[p] & 0xffff;
             }
             int[] indices = vla.asInts();
+            if(indices.length < 1)
+            {
+                finished[expansion - 1] = ALL_WALL;
+                continue;
+            }
             Arrays.sort(indices);
 
             vla = new ShortVLA(128);
@@ -1759,6 +1776,11 @@ public class CoordPacker {
                 idx += packed[p] & 0xffff;
             }
             int[] indices = vla.asInts();
+            if(indices.length < 1)
+            {
+                finished[expansion - 1] = ALL_WALL;
+                continue;
+            }
             Arrays.sort(indices);
 
             vla = new ShortVLA(128);
@@ -1843,6 +1865,8 @@ public class CoordPacker {
         }
 
         int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
         Arrays.sort(indices);
 
         vla = new ShortVLA(128);
@@ -1928,6 +1952,8 @@ public class CoordPacker {
         }
 
         int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
         Arrays.sort(indices);
 
         vla = new ShortVLA(128);
@@ -1952,20 +1978,22 @@ public class CoordPacker {
     }
 
 
-    private static void modifiedShadowFOV(int expansion, int viewerX, int viewerY, Radius metric, ShortSet bounds, ShortSet ss, ShortVLA vla)
+    private static void modifiedShadowFOV(int expansion, int viewerX, int viewerY, Radius metric, ShortSet bounds, ShortSet storedSet, ShortVLA vla)
     {
+        if(expansion < 1)
+            return;
         short start = hilbertDistances[viewerX + (viewerY << 8)];
-        if(ss.add(start))
+        if(storedSet.add(start))
             vla.add(start);
 
         for (Direction d : Direction.DIAGONALS) {
-            modifiedShadowCast(expansion, 1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, viewerX, viewerY, metric, bounds, ss, vla);
-            modifiedShadowCast(expansion, 1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, viewerX, viewerY, metric, bounds, ss, vla);
+            modifiedShadowCast(expansion, 1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, viewerX, viewerY, metric, bounds, storedSet, vla);
+            modifiedShadowCast(expansion, 1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, viewerX, viewerY, metric, bounds, storedSet, vla);
         }
     }
 
     private static void modifiedShadowCast(int expansion, int row, double start, double end, int xx, int xy, int yx, int yy,
-                                     int viewerX, int viewerY, Radius metric, ShortSet bounds, ShortSet ss, ShortVLA vla) {
+                                     int viewerX, int viewerY, Radius metric, ShortSet bounds, ShortSet storedSet, ShortVLA vla) {
         double newStart = 0;
         if (start < end) {
             return;
@@ -2007,14 +2035,14 @@ public class CoordPacker {
                         dist = metric.roughDistance(currentX - viewerX, currentY - viewerY);
                         //check if it's within the lightable area and light if needed
                         if (dist <= expansion * 2) {
-                            if(ss.add(currentPos))
+                            if(storedSet.add(currentPos))
                                 vla.add(currentPos);
                         }
                     }
                 } else {
                     if (!bounds.contains(currentPos) && distance < expansion) {//hit a wall within sight line
                         blocked = true;
-                        modifiedShadowCast(expansion, distance + 1, start, leftSlope, xx, xy, yx, yy, viewerX, viewerY, metric, bounds, ss, vla);
+                        modifiedShadowCast(expansion, distance + 1, start, leftSlope, xx, xy, yx, yy, viewerX, viewerY, metric, bounds, storedSet, vla);
                         newStart = rightSlope;
                     }
                     else
@@ -2023,7 +2051,7 @@ public class CoordPacker {
                             dist = metric.roughDistance(currentX - viewerX, currentY - viewerY);
                             //check if it's within the lightable area and light if needed
                             if (dist <= expansion * 2) {
-                                if (ss.add(currentPos))
+                                if (storedSet.add(currentPos))
                                     vla.add(currentPos);
                             }
                         }
@@ -2075,7 +2103,7 @@ public class CoordPacker {
         }
         int boundSize = count(bounds);
         ShortVLA vla = new ShortVLA(256);
-        ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize), partly = new ShortSet(boundSize);
+        ShortSet storedSet = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
         boolean on = false;
         int idx = 0, i;
         short x, y;
@@ -2088,16 +2116,17 @@ public class CoordPacker {
             idx += bounds[p] & 0xffff;
         }
         short[] s2 = allPackedHilbert(start);
-        int[] xOffsets = new int[]{0, 1, 0, -1}, yOffsets = new int[]{1, 0, -1, 0};
         for (int s = 0; s < s2.length; s++) {
             i = s2[s] & 0xffff;
             x = hilbertX[i];
             y = hilbertY[i];
 
-            modifiedShadowFOV(expansion, x, y, metric, quickBounds, ss, vla);
+            modifiedShadowFOV(expansion, x, y, metric, quickBounds, storedSet, vla);
         }
 
         int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
         Arrays.sort(indices);
 
         vla = new ShortVLA(128);
@@ -2144,6 +2173,129 @@ public class CoordPacker {
         return radiate(bounds, start, expansion, Radius.DIAMOND);
     }
 
+    /**
+     * Given a packed array encoding a larger area, a packed array encoding one or more points inside bounds, and a
+     * Reach object that determines targeting constraints, gets all cells contained within bounds that can be targeted
+     * from a cell in start using the rules defined by reach.
+     * Though this is otherwise similar to flood(), reachable() behaves like FOV and will not move around obstacles and
+     * will instead avoid expanding if it would go into any cell that cannot be reached by a straight line (drawn
+     * directly, not in grid steps) that is mostly unobstructed. This does not behave quite like FOV if an AimLimit has
+     * been set in reach to any value other than null or AimLimit.FREE; in these cases it requires an exactly straight
+     * orthogonal or diagonal line without obstructions, checking only cells along the precise path. For diagonals and
+     * eight-way targeting, this means it can target through walls that only meet at a perpendicular diagonal, such as
+     * an X shape where one line is a one-cell-thick diagonal wall and the other is the targeting line. This is normally
+     * only allowed in some games and only if they use Chebyshev (Radius.SQUARE) distance, so be advised that it may not
+     * be desirable behavior.
+     * Returns a new packed short[] and does not modify bounds or start.
+     * @param bounds packed data representing the max extent of the region to check for reach-ability; often floors
+     * @param start a packed array that encodes position(s) that the flood will spread outward from
+     * @param reach a {@link Reach} object that determines minimum and maximum range, distance metric, and AimLimit
+     * @return a packed array that encodes "on" for cells that are "on" in bounds and can be targeted from a cell in
+     * start using the given Reach
+     */
+    public static short[] reachable(short[] bounds, short[] start, Reach reach)
+    {
+        if(bounds == null || bounds.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        int boundSize = count(bounds);
+        ShortVLA vla = new ShortVLA(256), discard = new ShortVLA(128);
+        ShortSet storedSet = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        boolean on = false;
+        int idx = 0, i;
+        short x, y;
+        for(int p = 0; p < bounds.length; p++, on = !on) {
+            if (on) {
+                for (i = idx; i < idx + (bounds[p] & 0xffff); i++) {
+                    quickBounds.add((short) i);
+                }
+            }
+            idx += bounds[p] & 0xffff;
+        }
+        short[] s2 = allPackedHilbert(start);
+        if(reach.limit == null || reach.limit == AimLimit.FREE) {
+            for (int s = 0; s < s2.length; s++) {
+                i = s2[s] & 0xffff;
+                x = hilbertX[i];
+                y = hilbertY[i];
+                //add all cells at less than minimum distance to storedSet.
+                modifiedShadowFOV(reach.minDistance - 1, x, y, reach.metric, quickBounds, storedSet, discard);
+                discard.clear();
+                modifiedShadowFOV(reach.maxDistance, x, y, reach.metric, quickBounds, storedSet, vla);
+            }
+        }
+        else
+        {
+            for (int s = 0; s < s2.length; s++) {
+                i = s2[s] & 0xffff;
+                x = hilbertX[i];
+                y = hilbertY[i];
+                Direction[] dirs;
+                switch (reach.limit)
+                {
+                    case ORTHOGONAL: dirs = Direction.CARDINALS;
+                        break;
+                    case DIAGONAL: dirs = Direction.DIAGONALS;
+                        break;
+                    default: dirs = Direction.OUTWARDS;
+                }
+                Direction dir;
+                DIRECTIONAL:
+                for (int which = 0; which < dirs.length; which++) {
+                    dir = dirs[which];
+                    int d;
+                    //add all cells at less than minimum distance to storedSet.
+                    for (d = 1; d < reach.minDistance; d++) {
+                        int extended = (x + dir.deltaX * d) + ((y + dir.deltaY * d) << 8);
+                        if (extended < 0 || extended > 0xffff)
+                            continue DIRECTIONAL;
+                        short next = hilbertDistances[extended];
+                        if (quickBounds.contains(next))
+                            storedSet.add(next);
+                        else
+                            continue DIRECTIONAL;
+                    }
+                    for (; d <= reach.maxDistance; d++) {
+                        int extended = (x + dir.deltaX * d) + ((y + dir.deltaY * d) << 8);
+                        if (extended < 0 || extended > 0xffff)
+                            continue DIRECTIONAL;
+                        short next = hilbertDistances[extended];
+                        if (quickBounds.contains(next)) {
+                            if (storedSet.add(next))
+                                vla.add(next);
+                        }
+                        else
+                            continue DIRECTIONAL;
+                    }
+                }
+            }
+        }
+        int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.toArray();
+    }
     /**
      * Given a width and height, returns a packed array that encodes "on" for the rectangle from (0,0) to
      * (width - 1, height - 1). Primarily useful with intersectPacked() to ensure things like negatePacked() that can
