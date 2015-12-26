@@ -1,6 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import squidpony.squidmath.LightRNG;
 
 /**
  * A group of nested classes under the empty interface Filters, these all are meant to perform different changes
@@ -320,4 +321,82 @@ public interface Filters {
                     a);
         }
     }
+
+    /**
+     * A Filter that is constructed with a palette of colors and randomly increases or decreases the red, green, and
+     * blue components of any color it is told to alter. Good for a "glitchy screen" effect.
+     */
+    class WiggleFilter extends Filter<Color> {
+        LightRNG rng;
+        public WiggleFilter()
+        {
+            rng = new LightRNG();
+        }
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            return new Color(r - 0.1f + rng.nextInt(5) * 0.05f,
+                    g - 0.1f + rng.nextInt(5) * 0.05f,
+                    b - 0.1f + rng.nextInt(5) * 0.05f,
+                    a);
+        }
+    }
+
+    /**
+     * A Filter that is constructed with a group of colors and forces any color it is told to alter to exactly
+     * the color it was constructed with that has the closest red, green, and blue components. A convenient way to
+     * use this is to pass in one of the color series from SColor, such as RED_SERIES or ACHROMATIC_SERIES.
+     *
+     * Preview using BLUE_GREEN_SERIES foreground, ACHROMATIC_SERIES background: http://i.imgur.com/2HdZpC9.png
+     */
+    class PaletteFilter extends Filter<Color> {
+        /**
+         * Sets up a PaletteFilter with the exact colors to use as individual components; the lengths of each given
+         * array should be identical.
+         *
+         * @param r the red components to use
+         * @param g the green components to use
+         * @param b the blue components to use
+         * @param a the opacity components to use
+         */
+        public PaletteFilter(float[] r, float[] g, float[] b, float[] a) {
+            state = new float[Math.min(r.length, Math.min(g.length, Math.min(b.length,
+                    a.length))) * 4];
+            for (int i = 0; i < state.length / 4; i++) {
+                state[i * 4] = r[i];
+                state[i * 4 + 1] = g[i];
+                state[i * 4 + 2] = b[i];
+                state[i * 4 + 3] = a[i];
+            }
+        }/**
+         * Sets up a PaletteFilter with the exact colors to use as Colors. A convenient way to
+         * use this is to pass in one of the color series from SColor, such as RED_SERIES or ACHROMATIC_SERIES.
+         *
+         * @param colors the Colors to use
+         */
+        public PaletteFilter(Color[] colors) {
+            state = new float[colors.length * 4];
+            for (int i = 0; i < state.length / 4; i++) {
+                state[i * 4] = colors[i].r;
+                state[i * 4 + 1] = colors[i].g;
+                state[i * 4 + 2] = colors[i].b;
+                state[i * 4 + 3] = colors[i].a;
+            }
+        }
+
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            float diff = 9999.0f, temp;
+            int choice = 0;
+            for (int i = 0; i < state.length; i += 4) {
+                temp = Math.abs(state[i] - r) + Math.abs(state[i + 1] - g) + Math.abs(state[i + 2] - b);
+                if(temp < diff) {
+                    diff = temp;
+                    choice = i;
+                }
+            }
+            return new Color(state[choice], state[choice + 1], state[choice + 2],
+                    state[choice + 3]);
+        }
+    }
+
 }

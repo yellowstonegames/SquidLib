@@ -98,7 +98,6 @@ public class SerpentMapGenerator {
         }
         else
             mix = new MixedGenerator(width, height, random, points);
-
     }
 
     /**

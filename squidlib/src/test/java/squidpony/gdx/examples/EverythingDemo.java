@@ -84,7 +84,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // next, we populate the colorCenters array with the SquidColorCenters that will modify any colors we request
         // of them using the filter we specify. Only one SquidColorCenter will be used at any time for foreground, and
         // sometimes another will be used for background.
-        colorCenters = new SquidColorCenter[14];
+        colorCenters = new SquidColorCenter[18];
         // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
         // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
 
@@ -122,12 +122,22 @@ public class EverythingDemo extends ApplicationAdapter {
         colorCenters[10] = new SquidColorCenter(new Filters.SaturationFilter(0.7f));
         colorCenters[11] = new SquidColorCenter(new Filters.SaturationFilter(0.5f));
 
-        colorCenters[12] = DefaultResources.getSCC();
+        // WiggleFilter here is used to randomize the colors slightly.
+
+        colorCenters[12] = new SquidColorCenter(new Filters.WiggleFilter());
         colorCenters[13] = colorCenters[12];
 
-        fgCenter = colorCenters[12];
-        bgCenter = colorCenters[13];
-        currentCenter = 6;
+        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
+
+        colorCenters[14] = new SquidColorCenter(new Filters.PaletteFilter(SColor.BLUE_GREEN_SERIES));
+        colorCenters[15] = new SquidColorCenter(new Filters.PaletteFilter(SColor.ACHROMATIC_SERIES));
+
+        colorCenters[16] = DefaultResources.getSCC();
+        colorCenters[17] = colorCenters[16];
+
+        fgCenter = colorCenters[16];
+        bgCenter = colorCenters[17];
+        currentCenter = 8;
         batch = new SpriteBatch();
         width = 80;
         height = 30;
@@ -304,7 +314,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     case 'f':
                     case 'F':
                     {
-                        currentCenter = (currentCenter + 1) % 7;
+                        currentCenter = (currentCenter + 1) % 9;
                         // idx is 3 when we use the HallucinateFilter, which needs special work
                         changingColors = currentCenter == 3;
                         fgCenter = colorCenters[currentCenter * 2];
