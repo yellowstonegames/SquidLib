@@ -16,7 +16,7 @@ public class ZOI {
     private DijkstraMap dijkstra;
     private Coord[][] influences;
     private short[][] packedGroups;
-
+    private boolean completed = false;
     /**
      * Constructs a Zone of Influence map. Takes a (quite possibly jagged) array of arrays of Coord influences, where
      * the elements of the outer array represent different groups of influencing "factions" or groups that exert control
@@ -105,6 +105,7 @@ public class ZOI {
             }
             packedGroups[i] = CoordPacker.pack(influenced);
         }
+        completed = true;
         return packedGroups;
     }
 
@@ -123,5 +124,41 @@ public class ZOI {
                 found.add(i);
         }
         return found.asInts();
+    }
+    /**
+     * This can be given a Coord to check in the results of the latest calculate() call. Finds the indices of all
+     * influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.
+     * @param point the Coord to test
+     * @return an int[] where each element is the index of an influencing group in zones
+     */
+    public int[] nearestInfluences(Coord point)
+    {
+        if(!completed)
+            return new int[0];
+        ShortVLA found = new ShortVLA(4);
+        for (short i = 0; i < packedGroups.length; i++) {
+            if(CoordPacker.queryPacked(packedGroups[i], point.x, point.y))
+                found.add(i);
+        }
+        return found.asInts();
+    }
+
+    /**
+     * Gets the influencing groups; ideally the result should not be changed without setting it back with setInfluences.
+     * @return influences a jagged array of Coord arrays, where the inner arrays are groups of influences
+     */
+    public Coord[][] getInfluences() {
+        return influences;
+    }
+
+    /**
+     * Changes the influencing groups. This also invalidates the last calculation for the purposes of nearestInfluences,
+     * at least for the overload that takes only a Coord.
+     * @param influences a jagged array of Coord arrays, where the inner arrays are groups of influences
+     */
+    public void setInfluences(Coord[][] influences) {
+        this.influences = influences;
+        packedGroups = new short[influences.length][];
+        completed = false;
     }
 }
