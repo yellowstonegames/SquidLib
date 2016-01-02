@@ -71,13 +71,8 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
      */
     public int nextInt( final int n ) {
         if ( n <= 0 ) throw new IllegalArgumentException();
-        //for(;;) {
             final int bits = nextInt() >>> 1;
         return bits % n;
-            //int value = bits % n;
-            //value = (value < 0) ? -value : value;
-            //if ( bits - value + ( n - 1 ) >= 0 ) return value;
-        //}
     }
 
     /**
