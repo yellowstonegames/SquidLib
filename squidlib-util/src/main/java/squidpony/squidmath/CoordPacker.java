@@ -3125,6 +3125,41 @@ public class CoordPacker {
         System.out.println("]");
     }
 
+    /**
+     * Encodes a short array of packed data as a (larger, more memory-hungry) ASCII string, which can be decoded using
+     * CoordPacker.decodeASCII() . Uses 64 printable chars, from ';' (ASCII 59) to 'z' (ASCII 122).
+     * @param packed a packed data item produced by pack() or some other method from this class.
+     * @return a printable String, which can be decoded with CoordPacker.decodeASCII()
+     */
+    public static String encodeASCII(short[] packed)
+    {
+        int len = packed.length * 3;
+        char[] chars = new char[len];
+        for (int i = 0, c = 0; c < len; i++, c += 3) {
+            chars[c] = (char)((packed[i] & 31) + 59);
+            chars[c+1] = (char)(((packed[i] >> 5) & 31) + 59);
+            chars[c+2] = (char)(((packed[i] >>> 10) & 63) + 59);
+        }
+        return new String(chars);
+    }
+    /**
+     * Given a String specifically produced by CoordPacker.encodeASCII(), this will produce a packed data array.
+     * @param text a String produced by CoordPacker.encodeASCII(); this will almost certainly fail on other strings.
+     * @return the packed data as a short array that was originally used to encode text
+     */
+    public static short[] decodeASCII(String text)
+    {
+        int len = text.length();
+        if(len % 3 != 0)
+            return ALL_WALL;
+        char[] chars = text.toCharArray();
+        short[] packed = new short[len / 3];
+        for (int c = 0, i = 0; c < len; i++, c += 3) {
+            packed[i] = (short)(((chars[c] - 59) & 31) | (((chars[c+1] - 59) & 31) << 5) | (((chars[c+2] - 59) & 63) << 10));
+        }
+        return packed;
+    }
+
 
 
     /**

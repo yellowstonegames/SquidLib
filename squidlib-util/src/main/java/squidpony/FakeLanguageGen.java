@@ -3,6 +3,7 @@ package squidpony;
 import squidpony.squidmath.RNG;
 
 import java.io.Serializable;
+import java.text.Normalizer;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,8 +21,8 @@ public class FakeLanguageGen implements Serializable {
     public final LinkedHashMap<Integer, Double> syllableFrequencies;
     protected double totalSyllableFrequency = 0.0;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
-    private static final Pattern doubleRepeats = Pattern.compile("(.)\\1+(.)\\2+"),
-            repeats = Pattern.compile("(.)\\1+");
+    protected static final Pattern doubleRepeats = Pattern.compile("(.)\\1+(.)\\2+"),
+            repeats = Pattern.compile("(.)\\1+"), diacritics = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
     public static final char[][] accentedVowels = new char[][]{
             new char[]{
                     'à', 'á', 'â', 'ã', 'ä', 'å', 'æ','ā', 'ă', 'ą', 'ǻ', 'ǽ'
@@ -702,6 +703,60 @@ public class FakeLanguageGen implements Serializable {
         int i = 0;
         for(Map.Entry<Integer, Double> kv : syllableFrequencies.entrySet())
         {
+            lens[i] = kv.getKey();
+            odds[i++] = kv.getValue();
+        }
+        return new FakeLanguageGen(ov, mv, oc, mc, cc, cs, vowelSplitters, lens, odds,
+                vowelStartFrequency,
+                vowelEndFrequency,
+                vowelSplitFrequency,
+                syllableEndFrequency);
+    }
+
+    /**
+     * Removes accented characters from a string; if the "base" characters are non-English anyway then the result won't
+     * be an ASCII string, but otherwise it probably will be.
+     * <br>
+     * Credit to user hashable from http://stackoverflow.com/a/1215117
+     *
+     * @param str a string that may contain accented characters
+     * @return a string with all accented characters replaced with their (possibly ASCII) counterparts
+     */
+    public static String removeAccents(String str) {
+        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+        return diacritics.matcher(nfdNormalizedString).replaceAll("");
+    }
+
+    public FakeLanguageGen removeAccents() {
+
+        String[] ov = openingVowels.clone(),
+                mv = midVowels.clone(),
+                oc = openingConsonants.clone(),
+                mc = midConsonants.clone(),
+                cc = closingConsonants.clone(),
+                cs = closingSyllables.clone();
+        for (int i = 0; i < ov.length; i++) {
+            ov[i] = removeAccents(openingVowels[i]);
+        }
+        for (int i = 0; i < mv.length; i++) {
+            mv[i] = removeAccents(midVowels[i]);
+        }
+        for (int i = 0; i < oc.length; i++) {
+            oc[i] = removeAccents(openingConsonants[i]);
+        }
+        for (int i = 0; i < mc.length; i++) {
+            mc[i] = removeAccents(midConsonants[i]);
+        }
+        for (int i = 0; i < cc.length; i++) {
+            cc[i] = removeAccents(closingConsonants[i]);
+        }
+        for (int i = 0; i < cs.length; i++) {
+            cs[i] = removeAccents(closingSyllables[i]);
+        }
+        int[] lens = new int[syllableFrequencies.size()];
+        double[] odds = new double[syllableFrequencies.size()];
+        int i = 0;
+        for (Map.Entry<Integer, Double> kv : syllableFrequencies.entrySet()) {
             lens[i] = kv.getKey();
             odds[i++] = kv.getValue();
         }
