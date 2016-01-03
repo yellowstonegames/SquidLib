@@ -2,6 +2,7 @@ package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -16,16 +17,57 @@ import java.util.LinkedHashMap;
  * Created by Tommy Ettinger on 1/2/2016.
  */
 public class SpatialMap<I, E> implements Iterable<E> {
-    protected LinkedHashMap<I, E> itemMapping;
-    protected LinkedHashMap<Coord, E> positionMapping;
+
+    public static class SpatialTriple<I,E>
+    {
+        public Coord position;
+        public I id;
+        public E element;
+
+        public SpatialTriple()
+        {
+            position = Coord.get(0,0);
+            id = null;
+            element = null;
+        }
+        public SpatialTriple(Coord position, I id, E element) {
+            this.position = position;
+            this.id = id;
+            this.element = element;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            SpatialTriple<?, ?> that = (SpatialTriple<?, ?>) o;
+
+            if (position != null ? !position.equals(that.position) : that.position != null) return false;
+            if (id != null ? !id.equals(that.id) : that.id != null) return false;
+            return element != null ? element.equals(that.element) : that.element == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = position != null ? position.hashCode() : 0;
+            result = 31 * result + (id != null ? id.hashCode() : 0);
+            result = 31 * result + (element != null ? element.hashCode() : 0);
+            return result;
+        }
+    }
+
+    protected LinkedHashMap<I, SpatialTriple<I, E>> itemMapping;
+    protected LinkedHashMap<Coord, SpatialTriple<I, E>> positionMapping;
 
     /**
      * Constructs a SpatialMap with capacity 32.
      */
     public SpatialMap()
     {
-        itemMapping = new LinkedHashMap<I, E>(32);
-        positionMapping = new LinkedHashMap<Coord, E>(32);
+        itemMapping = new LinkedHashMap<I, SpatialTriple<I, E>>(32);
+        positionMapping = new LinkedHashMap<Coord, SpatialTriple<I, E>>(32);
     }
 
     /**
@@ -34,8 +76,8 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public SpatialMap(int capacity)
     {
-        itemMapping = new LinkedHashMap<I, E>(capacity);
-        positionMapping = new LinkedHashMap<Coord, E>(capacity);
+        itemMapping = new LinkedHashMap<I, SpatialTriple<I, E>>(capacity);
+        positionMapping = new LinkedHashMap<Coord, SpatialTriple<I, E>>(capacity);
     }
 
     /**
@@ -48,8 +90,10 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public SpatialMap(Coord[] coords, I[] ids, E[] elements)
     {
-        itemMapping = new LinkedHashMap<I, E>(Math.min(coords.length, Math.min(ids.length, elements.length)));
-        positionMapping = new LinkedHashMap<Coord, E>(Math.min(coords.length, Math.min(ids.length, elements.length)));
+        itemMapping = new LinkedHashMap<I, SpatialTriple<I, E>>(
+                Math.min(coords.length, Math.min(ids.length, elements.length)));
+        positionMapping = new LinkedHashMap<Coord, SpatialTriple<I, E>>(
+                Math.min(coords.length, Math.min(ids.length, elements.length)));
 
         for (int i = 0; i < coords.length && i < ids.length && i < elements.length; i++) {
             add(coords[i], ids[i], elements[i]);
@@ -69,32 +113,37 @@ public class SpatialMap<I, E> implements Iterable<E> {
     public void add(Coord coord, I id, E element)
     {
         if(itemMapping.containsKey(id))
-            return;
-        E nextPosition = positionMapping.get(coord);
-        if(nextPosition == null)
+            return;;
+        if(positionMapping.get(coord) == null)
         {
-            itemMapping.put(id, element);
-            positionMapping.put(coord, element);
+            SpatialTriple<I, E> triple = new SpatialTriple<I, E>(coord, id, element);
+            itemMapping.put(id, triple);
+            positionMapping.put(coord, triple);
         }
     }
 
     /**
-     * Changes the element's value associated with id. The key id should exist before calling this.
+     * Changes the element's value associated with id. The key id should exist before calling this; if there is no
+     * matching id, this returns null.
      * @param id the identity of the element to modify
      * @param newValue the element value to replace the previous element with.
      * @return the previous element value associated with id
      */
     public E modify(I id, E newValue)
     {
-        if(itemMapping.containsKey(id))
-            return itemMapping.put(id, newValue);
+        SpatialTriple<I, E> gotten = itemMapping.get(id);
+        if(gotten != null) {
+            E previous = gotten.element;
+            gotten.element = newValue;
+            return previous;
+        }
         return null;
     }
 
     /**
-     * The preferred way to move an element from one position to another; moves whatever is at the Coord position
-     * previous to the new Coord position target. The element will not be present at its original position if target is
-     * unoccupied, but nothing will change if target is occupied.
+     * Move an element from one position to another; moves whatever is at the Coord position previous to the new Coord
+     * position target. The element will not be present at its original position if target is unoccupied, but nothing
+     * will change if target is occupied.
      * @param previous the starting Coord position of an element to move
      * @param target the Coord position to move the element to
      * @return the moved element if movement was successful or null otherwise
@@ -102,17 +151,18 @@ public class SpatialMap<I, E> implements Iterable<E> {
     public E move(Coord previous, Coord target)
     {
         if(positionMapping.containsKey(previous) && !positionMapping.containsKey(target)) {
-            E elem = positionMapping.remove(previous);
-            positionMapping.put(target, elem);
-            return elem;
+            SpatialTriple<I, E> gotten = positionMapping.remove(previous);
+            gotten.position = target;
+            positionMapping.put(target, gotten);
+            return gotten.element;
         }
         return null;
     }
 
     /**
-     * The less-recommended way to move an element, picked by its identity, to a new Coord position. Finds the element
-     * through a lower-performance way than the other overload of move(), but does not need the previous position.
-     * The target position must be empty for this to move successfully, and the id must exist.
+     * Move an element, picked by its identity, to a new Coord position. Finds the element using only the id, and does
+     * not need the previous position. The target position must be empty for this to move successfully, and the id must
+     * exist in this data structure for this to move anything.
      * @param id the identity of the element to move
      * @param target the Coord position to move the element to
      * @return the moved element if movement was successful or null otherwise
@@ -120,19 +170,11 @@ public class SpatialMap<I, E> implements Iterable<E> {
     public E move(I id, Coord target)
     {
         if(itemMapping.containsKey(id) && !positionMapping.containsKey(target)) {
-            Iterator<Coord> coordIterator = positionMapping.keySet().iterator();
-            if(!coordIterator.hasNext())
-                return null;
-            Coord current = coordIterator.next();
-            for (I i :itemMapping.keySet()) {
-                if(i.equals(id))
-                {
-                    E elem = positionMapping.remove(current);
-                    positionMapping.put(target, elem);
-                    return elem;
-                }
-                current = coordIterator.next();
-            }
+            SpatialTriple<I, E> gotten = itemMapping.get(id);
+            positionMapping.remove(gotten.position);
+            gotten.position = target;
+            positionMapping.put(target, gotten);
+            return gotten.element;
         }
         return null;
     }
@@ -146,17 +188,10 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public E remove(Coord coord)
     {
-        Iterator<I> keyIterator = itemMapping.keySet().iterator();
-        if(!keyIterator.hasNext())
-            return null;
-        I current = keyIterator.next();
-        for (Coord c:positionMapping.keySet()) {
-            if(c.equals(coord))
-            {
-                itemMapping.remove(current);
-                return positionMapping.remove(coord);
-            }
-            current = keyIterator.next();
+        SpatialTriple<I, E> gotten = positionMapping.remove(coord);
+        if(gotten != null) {
+            itemMapping.remove(gotten.id);
+            return gotten.element;
         }
         return null;
     }
@@ -169,29 +204,36 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public E remove(I id)
     {
-        Iterator<Coord> coordIterator = positionMapping.keySet().iterator();
-        if(!coordIterator.hasNext())
-            return null;
-        Coord current = coordIterator.next();
-        for (I i :itemMapping.keySet()) {
-            if(i.equals(id))
-            {
-                positionMapping.remove(current);
-                return itemMapping.remove(id);
-            }
-            current = coordIterator.next();
+        SpatialTriple<I, E> gotten = itemMapping.remove(id);
+        if(gotten != null) {
+            positionMapping.remove(gotten.position);
+            return gotten.element;
         }
         return null;
     }
 
     /**
-     * Checks whether this contains the given element.
+     * Checks whether this contains the given element. Slower than containsKey and containsPosition (linear time).
      * @param o an Object that should be an element if you expect this to possibly return true
      * @return true if o is contained as an element in this data structure
      */
     public boolean containsValue(Object o)
     {
-        return itemMapping.containsValue(o);
+        if(o == null)
+        {
+            for(SpatialTriple<I,E> v : itemMapping.values())
+            {
+                if(v != null && v.element == null)
+                    return true;
+            }
+        }
+        else {
+            for (SpatialTriple<I, E> v : itemMapping.values()) {
+                if (v != null && v.element != null && v.element.equals(o))
+                    return true;
+            }
+        }
+        return false;
     }
     /**
      * Checks whether this contains the given identity key.
@@ -219,7 +261,10 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public E get(Coord c)
     {
-        return positionMapping.get(c);
+        SpatialTriple<I, E> gotten = positionMapping.get(c);
+        if(gotten != null)
+            return gotten.element;
+        return null;
     }
 
     /**
@@ -229,8 +274,38 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public E get(I i)
     {
-        return itemMapping.get(i);
+        SpatialTriple<I, E> gotten = itemMapping.get(i);
+        if(gotten != null)
+            return gotten.element;
+        return null;
     }
+
+    /**
+     * Gets the position of the element with the given identity.
+     * @param i the identity of the element to get a position from
+     * @return the position of the element if it exists or null otherwise
+     */
+    public Coord getPosition(I i)
+    {
+        SpatialTriple<I, E> gotten = itemMapping.get(i);
+        if(gotten != null)
+            return gotten.position;
+        return null;
+    }
+
+    /**
+     * Gets the identity of the element at the given Coord position.
+     * @param c the position to get an identity from
+     * @return the identity of the element if it exists at the given position or null otherwise
+     */
+    public I getIdentity(Coord c)
+    {
+        SpatialTriple<I, E> gotten = positionMapping.get(c);
+        if(gotten != null)
+            return gotten.id;
+        return null;
+    }
+
     public void clear()
     {
         itemMapping.clear();
@@ -246,11 +321,31 @@ public class SpatialMap<I, E> implements Iterable<E> {
     }
     public Object[] toArray()
     {
-        return itemMapping.values().toArray();
+        Object[] contents = itemMapping.values().toArray();
+        for (int i = 0; i < contents.length; i++) {
+            contents[i] = ((SpatialTriple)contents[i]).element;
+        }
+        return contents;
     }
+
+    /**
+     * Replaces the contents of the given array with the elements this holds, in insertion order, until either this
+     * data structure or the array has been exhausted.
+     * @param a the array to replace; should usually have the same length as this data structure's size.
+     * @return an array of elements that should be the same as the changed array originally passed as a parameter.
+     */
     public E[] toArray(E[] a)
     {
-        return itemMapping.values().toArray(a);
+        Collection<SpatialTriple<I,E>> contents = itemMapping.values();
+        int i = 0;
+        for (SpatialTriple<I,E> triple : contents) {
+            if(i < a.length)
+                a[i] = triple.element;
+            else
+                break;
+            i++;
+        }
+        return a;
     }
 
     /**
@@ -260,7 +355,21 @@ public class SpatialMap<I, E> implements Iterable<E> {
     @Override
     public Iterator<E> iterator()
     {
-        return itemMapping.values().iterator();
+        final Iterator<SpatialTriple<I, E>> it = itemMapping.values().iterator();
+        return new Iterator<E>() {
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public E next() {
+                SpatialTriple<I,E> triple = it.next();
+                if(triple != null)
+                    return triple.element;
+                return null;
+            }
+        };
     }
     /**
      * Iterates through positions in insertion order; has less predictable iteration order than the other iterators.
