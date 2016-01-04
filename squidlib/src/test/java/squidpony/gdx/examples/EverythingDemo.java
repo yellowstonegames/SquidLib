@@ -141,14 +141,14 @@ public class EverythingDemo extends ApplicationAdapter {
         batch = new SpriteBatch();
         width = 80;
         height = 30;
-        cellWidth = 12;
-        cellHeight = 24;
+        cellWidth = 20;
+        cellHeight = 20;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.smoothNameLarge, bgCenter, fgCenter);
+        display = new SquidLayers(width, height, cellWidth, cellHeight,
+                new TextCellFactory().defaultDistanceFieldFont(), bgCenter, fgCenter);
         display.setAnimationDuration(0.03f);
-        messages = new SquidMessageBox(width, 4, new TextCellFactory().font(DefaultResources.smoothNameLarge)
-                .width(cellWidth).height(cellHeight).initBySize());
+        messages = new SquidMessageBox(width, 4, display.getTextFactory());
         stage = new Stage(new ScreenViewport(), batch);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
