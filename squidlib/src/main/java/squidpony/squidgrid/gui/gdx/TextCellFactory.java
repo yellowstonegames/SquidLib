@@ -53,7 +53,7 @@ public class TextCellFactory {
     protected IColorCenter<Color> scc;
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     protected int width = 1, height = 1;
-    private boolean initialized = false;
+    private boolean initialized = false, distanceField = false;
 
     /**
      * Creates a default valued factory. One of the initialization methods must
@@ -121,6 +121,10 @@ public class TextCellFactory {
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
         temp.dispose();
+        if(distanceField)
+        {
+            bmpFont.getData().setScale(width / 34f, height / 34f);
+        }
         initialized = true;
         return this;
     }
@@ -251,6 +255,39 @@ public class TextCellFactory {
     }
 
     /**
+     * Sets the font to a distance field font with the given String path to a .fnt file and String path to a texture.
+     * Distance field fonts should scale cleanly to multiple resolutions without artifacts. Does not use AssetManager
+     * since you shouldn't need to reload the font if it scales with one image.
+     * @param fontPath the path to a .fnt bitmap font file, usually created by Hiero or included here
+     * @param texturePath the path to the texture used by the bitmap font
+     * @return
+     */
+    public TextCellFactory fontDistanceField(String fontPath, String texturePath) {
+        Texture tex;
+        if (Gdx.files.internal(fontPath).exists()) {
+            tex = new Texture(Gdx.files.internal(texturePath), true);
+            tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
+        } else if (Gdx.files.classpath(fontPath).exists()) {
+            tex = new Texture(Gdx.files.classpath(texturePath), true);
+            tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
+        } else {
+            bmpFont = DefaultResources.getDefaultFont();
+            Gdx.app.error("TextCellFactory", "Could not find font files, using defaults");
+            return this;
+        }
+        if (Gdx.files.internal(fontPath).exists()) {
+            bmpFont = new BitmapFont(Gdx.files.internal(fontPath), new TextureRegion(tex), false);
+            distanceField = true;
+        } else if (Gdx.files.classpath(fontPath).exists()) {
+            bmpFont = new BitmapFont(Gdx.files.classpath(fontPath), new TextureRegion(tex), false);
+            distanceField = true;
+        } else {
+            bmpFont = DefaultResources.getDefaultFont();
+            Gdx.app.error("TextCellFactory", "Could not find font files, using defaults");
+        }
+        return this;
+    }
+    /**
      * Sets this factory to use a default 12x24 font that supports Latin, Greek, Cyrillic, and many more, including
      * box-drawing characters, zodiac signs, playing-card suits, and chess piece symbols. This is enough to support the
      * output of anything that DungeonUtility can make for a dungeon or FakeLanguageGen can make for text with its
@@ -294,6 +331,11 @@ public class TextCellFactory {
     public TextCellFactory defaultSquareFont()
     {
         bmpFont = DefaultResources.getDefaultFont();
+        return this;
+    }
+    public TextCellFactory defaultDistanceFieldFont()
+    {
+        this.fontDistanceField(DefaultResources.distanceFieldSquare, DefaultResources.distanceFieldSquareTexture);
         return this;
     }
 
@@ -890,4 +932,7 @@ public class TextCellFactory {
         return block;
     }
 
+    public boolean isDistanceField() {
+        return distanceField;
+    }
 }

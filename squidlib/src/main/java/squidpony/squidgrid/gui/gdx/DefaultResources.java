@@ -38,7 +38,9 @@ public class DefaultResources implements LifecycleListener {
             unicodeNameLarge = "Mandrill-12x32.fnt",
             narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt",
             smoothName = "Inconsolata-LGC-8x18.fnt",
-            smoothNameLarge = "Inconsolata-LGC-12x24.fnt";
+            smoothNameLarge = "Inconsolata-LGC-12x24.fnt",
+            distanceFieldSquare = "Inconsolata-LGC-Square-distance.fnt",
+            distanceFieldSquareTexture = "Inconsolata-LGC-Square-distance.png";
     private SquidColorCenter scc = null;
     private Texture tentacle = null;
     private TextureRegion tentacleRegion = null;

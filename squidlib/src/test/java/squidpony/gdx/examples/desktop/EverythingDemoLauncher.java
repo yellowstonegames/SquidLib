@@ -9,8 +9,8 @@ public class EverythingDemoLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "SquidLib GDX Everything Demo";
-		config.width = 80 * 12;
-		config.height = 34 * 24;
+		config.width = 80 * 20;
+		config.height = 34 * 20;
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-128.png", Files.FileType.Classpath);

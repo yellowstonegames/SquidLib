@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
-
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
@@ -44,6 +44,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected Color lightingColor = SColor.WHITE;
     protected final TextCellFactory textFactory;
     protected LinkedHashSet<AnimatedEntity> animatedEntities;
+    protected boolean distanceField = false;
+    protected ShaderProgram shader = null;
 
     /**
      * Creates a bare-bones panel with all default values for text rendering.
@@ -124,6 +126,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         int h = gridHeight * cellHeight;
         setSize(w, h);
         animatedEntities = new LinkedHashSet<AnimatedEntity>();
+        if(factory.isDistanceField())
+        {
+            distanceField = true;
+            shader = new ShaderProgram(Gdx.files.classpath("distance.vert"), Gdx.files.classpath("distance.frag"));
+            if (!shader.isCompiled()) {
+                Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + shader.getLog());
+            }
+        }
     }
 
     /**
@@ -418,6 +428,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     @Override
     public void draw (Batch batch, float parentAlpha) {
         Color tmp;
+        if(distanceField)
+        {
+            shader.setUniformf("scale", cellHeight / 40f);
+            batch.setShader(shader);
+        }
         for (int x = gridOffsetX; x < gridWidth; x++) {
             for (int y = gridOffsetY; y < gridHeight; y++) {
                 tmp = scc.filter(colors[x][y]);
