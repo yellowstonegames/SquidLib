@@ -123,7 +123,7 @@ public class TextCellFactory {
         temp.dispose();
         if(distanceField)
         {
-            bmpFont.getData().setScale(width / 34f, height / 34f);
+            bmpFont.getData().setScale(width / 36f, height / 36f);
         }
         initialized = true;
         return this;
