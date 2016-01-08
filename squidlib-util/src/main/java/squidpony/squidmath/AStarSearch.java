@@ -3,9 +3,8 @@ package squidpony.squidmath;
 
 import squidpony.squidgrid.Direction;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Queue;
 
 /**
@@ -154,9 +153,10 @@ public class AStarSearch {
             }
         }
 
-        Deque<Coord> deq = new ArrayDeque<>();
+        /* Not using Deque nor ArrayDeqye, they aren't Gwt compatible */
+        final LinkedList<Coord> deq = new LinkedList<Coord>();
         while (!p.equals(start)) {
-            deq.offerFirst(p);
+            deq.addFirst(p);
             p = parent[p.x][p.y];
         }
         return deq;

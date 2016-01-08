@@ -1,5 +1,6 @@
 package squidpony.squidai;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidgrid.*;
 import squidpony.squidmath.*;
 
@@ -913,7 +914,6 @@ public class DijkstraMap {
         if (closed.containsKey(start2))
             closed.remove(start2);
         gradientMap[start2.x][start2.y] = 0.0;
-        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -991,10 +991,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -1049,7 +1046,6 @@ public class DijkstraMap {
         if (closed.containsKey(start2))
             closed.remove(start2);
         gradientMap[start2.x][start2.y] = 0.0;
-        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -1272,10 +1268,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -1428,10 +1421,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -1632,10 +1622,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -1788,10 +1775,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2017,10 +2001,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2220,10 +2201,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2321,7 +2299,7 @@ public class DijkstraMap {
         } else {
             cachedLongerPaths = preferLongerPaths;
             cachedImpassable = new LinkedHashSet<Coord>(impassable2);
-            cachedFearSources = fearSources.clone();
+            cachedFearSources = GwtCompatibility.cloneCoords(fearSources);
             cachedSize = 1;
             resetMap();
             for (Coord goal : fearSources) {
@@ -2347,10 +2325,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2441,10 +2416,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2577,10 +2549,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2716,10 +2685,7 @@ public class DijkstraMap {
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2807,7 +2773,7 @@ public class DijkstraMap {
         } else {
             cachedLongerPaths = preferLongerPaths;
             cachedImpassable = new LinkedHashSet<Coord>(impassable2);
-            cachedFearSources = fearSources.clone();
+            cachedFearSources = GwtCompatibility.cloneCoords(fearSources);
             cachedSize = size;
             resetMap();
             for (Coord goal : fearSources) {
@@ -2834,10 +2800,7 @@ public class DijkstraMap {
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2891,17 +2854,13 @@ public class DijkstraMap {
         RNG rng2 = new StatefulRNG(new LightRNG(0xf00d));
         path = new ArrayList<Coord>();
         Coord currentPos = target;
-        double paidLength = 0.0;
         while (true) {
             if (frustration > 2000) {
                 path = new ArrayList<Coord>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            Direction[] dirs0 = rng2.shuffle((measurement == Measurement.MANHATTAN)
-                    ? Direction.CARDINALS : Direction.OUTWARDS);
-            Direction[] dirs = Arrays.copyOf(dirs0, dirs0.length + 1);
-            dirs[dirs0.length] = Direction.NONE;
+            final Direction[] dirs = appendDir(shuffleDirs(rng2), Direction.NONE);
             int choice = rng2.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2920,7 +2879,6 @@ public class DijkstraMap {
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(0, currentPos);
-            paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
 
             if (gradientMap[currentPos.x][currentPos.y] == 0)
@@ -2984,4 +2942,20 @@ public class DijkstraMap {
         }
         return 1.0;
     }
+    
+    /* For Gwt compatibility */
+    private Direction[] shuffleDirs(RNG rng) {
+    	final Direction[] src = measurement == Measurement.MANHATTAN
+    			? Direction.CARDINALS : Direction.OUTWARDS;
+    	return rng.shuffle(src, new Direction[src.length]);
+    }
+
+    /* For Gwt compatibility */
+    private static Direction[] appendDir(Direction[] src, Direction additional) {
+    	final Direction[] result = new Direction[src.length + 1];
+    	for (int i = 0; i < src.length; i++)
+    		result[i] = src[i];
+    	result[result.length - 1] = additional;
+    	return result;
+	}
 }

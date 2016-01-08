@@ -76,31 +76,27 @@ public abstract class SquidPanelBuilder extends IPanelBuilder.Skeleton {
 		return result;
 	}
 
-	/**
-	 * @param hCells
-	 *            The number of horizontal cells of the panel to build.
-	 * @param vCells
-	 *            The number of vertical cells of the panel to build.
-	 * @param cellWidth
-	 *            The width of a cell (in pixels).
-	 * @param cellHeight
-	 *            The height of a cell (in pixels).
-	 * @param tcf_
-	 *            The text cell factory to use, if any.
-	 * @return A freshly built panel.
-	 */
 	@Override
 	public SquidPanel buildByCells(int hCells, int vCells, int cellWidth, int cellHeight,
-			/* @Nullable */ TextCellFactory tcf_) {
-		final TextCellFactory tcf = tcf_ == null ? new TextCellFactory(assetManager) : tcf_;
+			/*@Nullable*/ TextCellFactory tcf_) {
+		final TextCellFactory tcf;
+		final boolean freshTCF;
+		if (tcf_ != null && tcf_.width() == cellWidth && tcf_.height() == cellHeight) {
+			/* Can reuse */
+			tcf = tcf_;
+			freshTCF = false;
+		} else {
+			tcf = new TextCellFactory(assetManager);
+			freshTCF = true;
+		}
 
 		if (cellWidth == cellHeight) {
 			final int fontSize = fontSizeForCellSize(cellWidth);
 			if (!hasFontOfSize(fontSize))
-				throw new IllegalStateException(String.format("Not font of size %d", fontSize));
+				throw new IllegalStateException("Not font of size " + fontSize);
 
 			final String fontFile = fontfile(fontSize);
-			if (tcf_ == null) {
+			if (freshTCF) {
 				/* Initialize it */
 				tcf.font(fontFile);
 				for (TextureRegion region : tcf.font().getRegions())

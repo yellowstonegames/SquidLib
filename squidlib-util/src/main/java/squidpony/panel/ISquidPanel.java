@@ -94,12 +94,6 @@ public interface ISquidPanel<T> {
 	void clear(int x, int y);
 
 	/**
-	 * Cause everything that has been prepared for drawing (such as with put) to
-	 * actually be drawn.
-	 */
-	void refresh();
-
-	/**
 	 * @return The number of cells that this panel spans, horizontally.
 	 */
 	int gridWidth();

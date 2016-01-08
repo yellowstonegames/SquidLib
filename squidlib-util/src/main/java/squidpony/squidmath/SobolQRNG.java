@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import squidpony.annotation.GwtIncompatible;
+
 /**
  * Implementation of a Sobol sequence as a Quasi-Random Number Generator.
  * <p>
@@ -51,6 +53,7 @@ import java.util.StringTokenizer;
  *
  * Created by Tommy Ettinger on 5/2/2015 based off Apache Commons Math 4.
  */
+@GwtIncompatible /* Because of getResourceAsStream */
 public class SobolQRNG implements RandomnessSource {
 
 	/** The number of bits to use. */

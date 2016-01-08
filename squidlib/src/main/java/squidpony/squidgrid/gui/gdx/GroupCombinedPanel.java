@@ -205,12 +205,6 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 		return bg.cellHeight();
 	}
 
-	@Override
-	public void refresh() {
-		bg.refresh();
-		fg.refresh();
-	}
-
 	protected void addActors() {
 		addActor((SquidPanel) bg.getBacker());
 		addActor((SquidPanel) fg.getBacker());
@@ -228,7 +222,7 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 
 	@Override
 	public String toString() {
-		return String.format("%s@%s", this.getClass().getSimpleName(), Integer.toHexString(hashCode()));
+		return this.getClass().getSimpleName() + "@" + Integer.toHexString(hashCode());
 	}
 
 }
