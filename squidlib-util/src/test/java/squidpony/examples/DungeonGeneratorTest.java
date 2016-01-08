@@ -2,7 +2,7 @@ package squidpony.examples;
 
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.SerpentMapGenerator;
+import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
@@ -83,7 +83,11 @@ public class DungeonGeneratorTest {
         //seed is, in base 36, the number SQUIDLIB
         StatefulRNG rng = new StatefulRNG(new LightRNG(2252637788195L));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
-
+        /*DungeonBoneGen dungeonBoneGen = new DungeonBoneGen(rng);
+        for (TilesetType tt : TilesetType.values()) {
+            System.out.println("private void init_" + tt.name() + "(){ tilesetCache.put(TilesetType." + tt.name() + ", " + dungeonBoneGen.source(tt) +
+            ");}");
+        }*/
         /*
         String[][] tiles = new DungeonBoneGen().getTiles(TilesetType.DEFAULT_DUNGEON);
         for(String[] tile : tiles)
@@ -96,15 +100,16 @@ public class DungeonGeneratorTest {
             System.out.println("},");
         }
         */
-/*
+
         dungeonGenerator.addDoors(15, false);
         dungeonGenerator.addWater(25);
         dungeonGenerator.addTraps(2);
-        MixedGenerator mix = new MixedGenerator(width, height, rng);
-        mix.putCaveCarvers(3);
-        mix.putWalledBoxRoomCarvers(2);
-        mix.putWalledRoundRoomCarvers(2);
-        dungeonGenerator.generate(mix.generate());
+//        MixedGenerator mix = new MixedGenerator(width, height, rng);
+//        mix.putCaveCarvers(3);
+//        mix.putWalledBoxRoomCarvers(2);
+//        mix.putWalledRoundRoomCarvers(2);
+//        dungeonGenerator.generate(mix.generate());
+        dungeonGenerator.generate(TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS);
         char[][] dungeon = dungeonGenerator.getDungeon();
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
@@ -112,8 +117,8 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(dungeon)));
         System.out.println(dungeonGenerator);
-*/
 
+/*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);
         //dungeonGenerator.addWater(20);
@@ -133,6 +138,8 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
+        */
+
         /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);

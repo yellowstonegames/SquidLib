@@ -141,8 +141,8 @@ public class EverythingDemo extends ApplicationAdapter {
         batch = new SpriteBatch();
         width = 80;
         height = 30;
-        cellWidth = 20;
-        cellHeight = 20;
+        cellWidth = 15;
+        cellHeight = 15;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
