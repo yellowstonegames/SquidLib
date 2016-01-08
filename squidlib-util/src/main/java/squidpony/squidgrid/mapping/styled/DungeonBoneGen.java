@@ -1,11 +1,8 @@
 package squidpony.squidgrid.mapping.styled;
 
-import com.google.gson.Gson;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -14,7 +11,6 @@ import java.util.Random;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonBoneGen {
-    private Gson gson;
 
     /**
      * Gets the current RNG.
@@ -36,8 +32,6 @@ public class DungeonBoneGen {
      * The current RNG, a squidpony.squidmath.RNG
      */
     public RNG rng;
-    private static InputStream[] jsonStreams = null;
-    private static HashMap<TilesetType, Tileset> tilesetCache = new HashMap<TilesetType, Tileset>();
     private int[][] c_color, h_color, v_color;
 
     /**
@@ -111,8 +105,7 @@ public class DungeonBoneGen {
      *               be used to generate a seed for the internal RNG this class uses.
      */
     public DungeonBoneGen(Random random) {
-        rng = new RNG(new LightRNG(random.nextLong()));
-        initialize();
+        this(new RNG(new LightRNG(random.nextLong())));
     }
     /**
      * Constructs a DungeonGen that uses the given squidpony.squidmath.RNG.
@@ -121,45 +114,16 @@ public class DungeonBoneGen {
      */
     public DungeonBoneGen(RNG random) {
         rng = random;
-        initialize();
+        c_color = new int[1][1];
+		h_color = new int[1][1];
+		v_color = new int[1][1];
     }
 
     /**
      * Constructs a DungeonGen that uses the default RNG.
      */
     public DungeonBoneGen() {
-        rng = new RNG(new LightRNG());
-        initialize();
-    }
-
-    private void initialize() {
-        c_color = new int[1][1];
-        h_color = new int[1][1];
-        v_color = new int[1][1];
-        gson = new Gson();
-        if (jsonStreams == null) {
-            jsonStreams = new InputStream[]{
-                    getClass().getResourceAsStream("/default_dungeon.js"),
-                    getClass().getResourceAsStream("/caves_limit_connectivity.js"),
-                    getClass().getResourceAsStream("/caves_tiny_corridors.js"),
-                    getClass().getResourceAsStream("/corner_caves.js"),
-                    getClass().getResourceAsStream("/horizontal_corridors_v1.js"),
-                    getClass().getResourceAsStream("/horizontal_corridors_v2.js"),
-                    getClass().getResourceAsStream("/horizontal_corridors_v3.js"),
-                    getClass().getResourceAsStream("/limit_connectivity_fat.js"),
-                    getClass().getResourceAsStream("/limited_connectivity.js"),
-                    getClass().getResourceAsStream("/maze_2_wide.js"),
-                    getClass().getResourceAsStream("/maze_plus_2_wide.js"),
-                    getClass().getResourceAsStream("/open_areas.js"),
-                    getClass().getResourceAsStream("/ref2_corner_caves.js"),
-                    getClass().getResourceAsStream("/rooms_and_corridors.js"),
-                    getClass().getResourceAsStream("/rooms_and_corridors_2_wide_diagonal_bias.js"),
-                    getClass().getResourceAsStream("/rooms_limit_connectivity.js"),
-                    getClass().getResourceAsStream("/round_rooms_diagonal_corridors.js"),
-                    getClass().getResourceAsStream("/simple_caves_2_wide.js"),
-                    getClass().getResourceAsStream("/square_rooms_with_random_rects.js")
-            };
-        }
+        this(new RNG(new LightRNG()));
     }
 
     private char[][] insert(char[][] mat, String[] items, int coord1, int coord2) {
@@ -285,14 +249,6 @@ public class DungeonBoneGen {
         return null;
     }
 
-    private static String stringifyStream(InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is);
-        s.useDelimiter("\\A");
-        String nx = s.hasNext() ? s.next() : "";
-        s.close();
-        return nx;
-    }
-
     /**
      * Generate a dungeon given a TilesetType enum.
      * The main way of generating dungeons with DungeonGen.
@@ -305,13 +261,7 @@ public class DungeonBoneGen {
      * @return A row-major char[][] with h rows and w columns; it will be filled with '#' for walls and '.' for floors.
      */
     public char[][] generate(TilesetType tt, int w, int h) {
-        if (tilesetCache.containsKey(tt)) {
-            return generate(tilesetCache.get(tt), w, h);
-        } else {
-            Tileset ts = gson.fromJson(stringifyStream(jsonStreams[tt.ordinal()]), Tileset.class);
-            tilesetCache.put(tt, ts);
-            return generate(ts, w, h);
-        }
+    	return generate(tt.getTileset(), w, h);
     }
 
     /**
@@ -566,13 +516,7 @@ public class DungeonBoneGen {
      * @return an array of 2D char arrays representing tiles
      */
     public String[][] getTiles(TilesetType tt) {
-        Tileset ts;
-        if (tilesetCache.containsKey(tt)) {
-            ts = tilesetCache.get(tt);
-        } else {
-            ts = gson.fromJson(stringifyStream(jsonStreams[tt.ordinal()]), Tileset.class);
-            tilesetCache.put(tt, ts);
-        }
+        final Tileset ts = tt.getTileset();
 
         String[][] result = new String[ts.h_tiles.length + ts.v_tiles.length][];
         for (int i = 0; i < ts.h_tiles.length; i++) {

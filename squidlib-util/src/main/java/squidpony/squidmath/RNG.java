@@ -3,6 +3,8 @@ package squidpony.squidmath;
 import java.io.Serializable;
 import java.util.*;
 
+import squidpony.annotation.GwtIncompatible;
+
 /**
  * A wrapper class for working with random number generators in a more friendly
  * way.
@@ -26,6 +28,7 @@ public class RNG implements Serializable {
      * Default constructor uses Mersenne Twister, which is of high quality and
      * fairly high speed.
      */
+	@GwtIncompatible
     public RNG() {
         this(new MersenneTwister());
     }
@@ -233,6 +236,7 @@ public class RNG implements Serializable {
      * from all possible elements but order is retained. Will "loop around" to contain element 0 of l after the last
      * element of l, then element 1, etc.
 	 */
+    @GwtIncompatible /* Because of Collections.rotate */
 	public <T> List<T> randomRotation(final List<T> l) {
 		final int sz = l.size();
 		if (sz == 0)
@@ -317,14 +321,15 @@ public class RNG implements Serializable {
             }
         };
     }
+
     /**
      * Shuffle an array using the Fisher-Yates algorithm.
      * @param elements an array of T; will not be modified
      * @param <T> can be any non-primitive type.
      * @return a shuffled copy of elements
      */
-    public <T> T[] shuffle(T[] elements)
-    {
+    @GwtIncompatible
+    public <T> T[] shuffle(T[] elements) {
         T[] array = elements.clone();
         int n = array.length;
         for (int i = 0; i < n; i++)
@@ -336,7 +341,37 @@ public class RNG implements Serializable {
         }
         return array;
     }
+
     /**
+     * Shuffle an array using the Fisher-Yates algorithm.
+     * @param elements an array of T; will not be modified
+     * @param <T> can be any non-primitive type.
+     * @param dest
+     * 			Where to put the shuffle. It MUST have the same length as {@code elements}
+     * @return {@code dest}
+     * @throws IllegalStateException
+     * 			If {@code dest.length != elements.length}
+     */
+    /* This method has this prototype to be compatible with GWT. */
+    public <T> T[] shuffle(T[] elements, T[] dest)
+    {
+    	if (dest.length != elements.length)
+    		throw new IllegalStateException("Input arrays must be of the same sizes");
+    	/* smelC: KISS implementation for now */
+    	for (int i = 0; i < elements.length; i++)
+    		dest[i] = elements[i];
+    	/* The usual code now */
+        for (int i = 0; i < elements.length; i++)
+        {
+            int r = i + nextInt(elements.length - i);
+            T t = dest[r];
+            dest[r] = dest[i];
+            dest[i] = t;
+        }
+    	return dest;
+    }
+
+	/**
      * Shuffle a {@link List} using the Fisher-Yates algorithm.
      * @param elements a List of T; will not be modified
      * @param <T> can be any non-primitive type.
@@ -361,6 +396,7 @@ public class RNG implements Serializable {
      * @param <T> can be any non-primitive type.
      * @return an array of T that has length equal to the smaller of count or data.length
      */
+    @GwtIncompatible /* because it calls shuffle(T[]) */
     public <T> T[] randomPortion(T[] data, int count)
     {
         T[] array = Arrays.copyOf(data, Math.min(count, data.length));
@@ -413,6 +449,7 @@ public class RNG implements Serializable {
     /**
      * @return a value from the gaussian distribution
      */
+    @GwtIncompatible /* because of StrictMath.log() */
     public synchronized double nextGaussian() {
         if (haveNextNextGaussian) {
             haveNextNextGaussian = false;
@@ -545,6 +582,5 @@ public class RNG implements Serializable {
     public void setRandomness(RandomnessSource random) {
         this.random = random;
     }
-
 
 }

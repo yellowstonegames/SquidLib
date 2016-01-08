@@ -1,9 +1,9 @@
 package squidpony.squidgrid;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -208,7 +208,8 @@ public class FOV {
 
         double decay = 1.0 / rad;
 
-        double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? Math.IEEEremainder(angle + 720.0, 360.0) : angle);
+		double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0)
+				? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
         double span2 = Math.toRadians(span);
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
@@ -259,12 +260,13 @@ public class FOV {
 
 
     private double[][] doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
-        Deque<Coord> dq = new LinkedList<>();
+    	/* Not using Deque's interface, it isn't GWT compatible */
+        final LinkedList<Coord> dq = new LinkedList<>();
         int width = lightMap.length;
         int height = lightMap[0].length;
         dq.offer(Coord.get(x, y));
         while (!dq.isEmpty()) {
-            Coord p = dq.pop();
+            Coord p = dq.removeFirst();
             if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
                 continue;//no light to spread
             }
@@ -292,12 +294,13 @@ public class FOV {
 
 
     private double[][] doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy, double angle, double span) {
-        Deque<Coord> dq = new LinkedList<>();
+    	/* Not using Deque's interface, it isn't GWT compatible */
+        final LinkedList<Coord> dq = new LinkedList<>();
         int width = lightMap.length;
         int height = lightMap[0].length;
         dq.offer(Coord.get(x, y));
         while (!dq.isEmpty()) {
-            Coord p = dq.pop();
+            Coord p = dq.removeFirst();
             if (lightMap[p.x][p.y] <= 0 || indirect[p.x][p.y]) {
                 continue;//no light to spread
             }
@@ -310,7 +313,8 @@ public class FOV {
                     continue;
                 }
                 double newAngle = Math.atan2(y2 - starty, x2 - startx) + Math.PI * 2;
-                if(Math.abs(Math.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0) continue;
+				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0)
+					continue;
 
                 double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy );
                 if (lightMap[x2][y2] < surroundingLight) {
@@ -463,7 +467,8 @@ public class FOV {
                     break;
                 }
                 double newAngle = Math.atan2(currentY - starty, currentX - startx) + Math.PI * 2;
-                if(Math.abs(Math.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0) continue;
+				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0)
+					continue;
 
                 //check if it's within the lightable area and light if needed
                 if (radiusStrategy.radius(deltaX, deltaY) <= radius) {
@@ -489,4 +494,5 @@ public class FOV {
         }
         return lightMap;
     }
+
 }

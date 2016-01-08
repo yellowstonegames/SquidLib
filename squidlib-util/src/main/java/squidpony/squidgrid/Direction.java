@@ -244,8 +244,7 @@ public enum Direction {
 		case UP:
 			return false;
 		}
-		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
-				this));
+		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
 	}
 
 	/**
@@ -265,8 +264,7 @@ public enum Direction {
 		case RIGHT:
 			return false;
 		}
-		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
-				this));
+		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
 	}
 
 	/**
@@ -286,8 +284,7 @@ public enum Direction {
 		case UP_RIGHT:
 			return false;
 		}
-		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
-				this));
+		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
 	}
 
 	/**
@@ -307,8 +304,7 @@ public enum Direction {
 		case UP_RIGHT:
 			return false;
 		}
-		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
-				this));
+		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
 	}
 
 	/**
@@ -328,8 +324,7 @@ public enum Direction {
 		case UP_LEFT:
 			return false;
 		}
-		throw new IllegalStateException(String.format("Unmatched %s: %s", getClass().getSimpleName(),
-				this));
+		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
 	}
 
 

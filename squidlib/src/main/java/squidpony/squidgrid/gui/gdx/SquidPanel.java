@@ -1155,11 +1155,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     {
         animatedEntities.remove(ae);
     }
-	@Override
-	public void refresh() {
-		/* smelC: should we do something here ? */
-        /* Tommy Ettinger: potentially, but it would need to call draw, and that means keeping a Batch. */
-	}
 
 	@Override
 	public ISquidPanel<Color> getBacker() {

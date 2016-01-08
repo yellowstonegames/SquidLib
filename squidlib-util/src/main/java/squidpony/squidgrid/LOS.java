@@ -1,5 +1,6 @@
 package squidpony.squidgrid;
 
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordDouble;
@@ -30,6 +31,10 @@ public class LOS {
              * Uses Wu's Algorithm as modified by Elias to draw the line. Does
              * not end at an obstruction but rather returns one of the possible
              * attempted paths in full.
+             * 
+             * <p>
+             * Beware it is Gwt incompatible.
+             * </p>
              */
             ELIAS = 2,
             /**
@@ -129,7 +134,10 @@ public class LOS {
             case BRESENHAM:
                 return bresenhamReachable(radiusStrategy);
             case ELIAS:
-                return eliasReachable(radiusStrategy);
+            	throw new IllegalStateException("Elias LOS is Gwt Incompatible");
+            	/* FIXME Find a way around that */
+            	// Required to compile with GWT:
+            	// return eliasReachable(radiusStrategy);
             case RAY:
                 return rayReachable(radiusStrategy);
         }
@@ -269,6 +277,7 @@ public class LOS {
         return (int) end.x == targetx && (int) end.y == targety;
     }
 
+    @GwtIncompatible /* Because of Thread */
     private boolean eliasReachable(Radius radiusStrategy) {
         if(elias == null)
             elias = new Elias();

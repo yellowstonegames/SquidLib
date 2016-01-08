@@ -113,7 +113,7 @@ public class SpatialMap<I, E> implements Iterable<E> {
     public void add(Coord coord, I id, E element)
     {
         if(itemMapping.containsKey(id))
-            return;;
+            return;
         if(positionMapping.get(coord) == null)
         {
             SpatialTriple<I, E> triple = new SpatialTriple<I, E>(coord, id, element);
@@ -323,7 +323,7 @@ public class SpatialMap<I, E> implements Iterable<E> {
     {
         Object[] contents = itemMapping.values().toArray();
         for (int i = 0; i < contents.length; i++) {
-            contents[i] = ((SpatialTriple)contents[i]).element;
+            contents[i] = ((SpatialTriple<?,?>)contents[i]).element;
         }
         return contents;
     }
@@ -368,6 +368,11 @@ public class SpatialMap<I, E> implements Iterable<E> {
                 if(triple != null)
                     return triple.element;
                 return null;
+            }
+
+            @Override
+            public void remove() {
+            	throw new UnsupportedOperationException();
             }
         };
     }

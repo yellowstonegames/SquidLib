@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.Direction;
 
 import java.util.Arrays;
@@ -302,7 +303,7 @@ public class Coord implements java.io.Serializable {
 			if (x + d.deltaX == adjacent.x && y + d.deltaY == adjacent.y)
 				return d;
 		}
-		throw new IllegalStateException(String.format("%s is not adjacent to %s", this, adjacent));
+		throw new IllegalStateException(this + " is not adjacent to " + adjacent);
 	}
 
     /**
@@ -377,6 +378,8 @@ public class Coord implements java.io.Serializable {
             }
         }
     }
+
+    @GwtIncompatible /* Because of Arrays.copyOf */
     public static void expandPool(int xIncrease, int yIncrease)
     {
         if(xIncrease < 0 || yIncrease < 0)
