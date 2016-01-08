@@ -114,8 +114,6 @@ public interface ICombinedPanel<T> {
 	 */
 	void fillBG(T color);
 
-	void refresh();
-
 	/**
 	 * A generic implementation of {@link ICombinedPanel}. Useful to combine
 	 * things. If you're a new user, you likely would prefer the more specific
@@ -220,12 +218,6 @@ public interface ICombinedPanel<T> {
 				for (int y = 0; y < height; y++)
 					putBG(x, y, color);
 			}
-		}
-
-		@Override
-		public void refresh() {
-			bg.refresh();
-			fg.refresh();
 		}
 
 	}

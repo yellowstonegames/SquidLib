@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import squidpony.IColorCenter;
+import squidpony.annotation.GwtIncompatible;
 
 /**
  * Class for creating text blocks.
@@ -572,6 +573,7 @@ public class TextCellFactory {
      * @param codepoint
      * @return
      */
+    @GwtIncompatible /* Because of Character.isISOControl */
     public boolean willFit(int codepoint) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
