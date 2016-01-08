@@ -20,4 +20,28 @@ public class Tile {
         f_constraint = 0;
         data = new String[]{};
     }
+
+    public Tile(int a_constraint, int b_constraint, int c_constraint, int d_constraint, int e_constraint, int f_constraint, String[] data) {
+        this.a_constraint = a_constraint;
+        this.b_constraint = b_constraint;
+        this.c_constraint = c_constraint;
+        this.d_constraint = d_constraint;
+        this.e_constraint = e_constraint;
+        this.f_constraint = f_constraint;
+        this.data = data;
+    }
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder(512);
+        sb.append('"');
+        sb.append(data[0]);
+        sb.append('"');
+        for (int i = 1; i < data.length; i++) {
+            sb.append(", \"");
+            sb.append(data[i]);
+            sb.append('"');
+        }
+        return "new Tile(" + a_constraint + ", " + b_constraint + ", " + c_constraint + ", " + d_constraint
+                + ", " + e_constraint + ", " + f_constraint + ", new String[]{" + sb +  "})";
+    }
 }

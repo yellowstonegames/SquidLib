@@ -14,4 +14,14 @@ public class Maximums {
         h = 64;
         v = 64;
     }
+
+    public Maximums(int h, int v) {
+        this.h = h;
+        this.v = v;
+    }
+
+    public String toString()
+    {
+        return "new Maximums(" + h + ", " + v + ")";
+    }
 }
