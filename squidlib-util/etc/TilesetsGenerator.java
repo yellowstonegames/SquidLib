@@ -34,13 +34,13 @@ public class TilesetsGenerator {
 	private static final String EOL = System.getProperty("line.separator");
 
 	public static void main(String[] args) {
-		final String[] jss = { "caves_limit_connectivity.js", "caves_tiny_corridors.js", "corner_caves.js",
-				"default_dungeon.js", "horizontal_corridors_v1.js", "horizontal_corridors_v2.js",
-				"horizontal_corridors_v3.js", "limit_connectivity_fat.js", "limited_connectivity.js",
-				"maze_2_wide.js", "maze_plus_2_wide.js", "open_areas.js", "ref2_corner_caves.js",
-				"rooms_and_corridors_2_wide_diagonal_bias.js", "rooms_and_corridors.js",
-				"rooms_limit_connectivity.js", "round_rooms_diagonal_corridors.js", "simple_caves_2_wide.js",
-				"square_rooms_with_random_rects.js" };
+		final String[] jss = {"etc/caves_limit_connectivity.js", "etc/caves_tiny_corridors.js", "etc/corner_caves.js",
+				"etc/default_dungeon.js", "etc/horizontal_corridors_v1.js", "etc/horizontal_corridors_v2.js",
+				"etc/horizontal_corridors_v3.js", "etc/limit_connectivity_fat.js", "etc/limited_connectivity.js",
+				"etc/maze_2_wide.js", "etc/maze_plus_2_wide.js", "etc/open_areas.js", "etc/ref2_corner_caves.js",
+				"etc/rooms_and_corridors_2_wide_diagonal_bias.js", "etc/rooms_and_corridors.js",
+				"etc/rooms_limit_connectivity.js", "etc/round_rooms_diagonal_corridors.js", "etc/simple_caves_2_wide.js",
+				"etc/square_rooms_with_random_rects.js"};
 		main0(jss);
 	}
 
