@@ -105,7 +105,7 @@ public class DungeonBoneGen {
      *               be used to generate a seed for the internal RNG this class uses.
      */
     public DungeonBoneGen(Random random) {
-        this(new RNG(new LightRNG(random.nextLong())));
+        this(new RNG(random.nextLong()));
     }
     /**
      * Constructs a DungeonGen that uses the given squidpony.squidmath.RNG.
