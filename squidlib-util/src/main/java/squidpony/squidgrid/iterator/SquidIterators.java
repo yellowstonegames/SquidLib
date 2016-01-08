@@ -317,10 +317,10 @@ public class SquidIterators {
 
 			if (xstart < 0 || width <= xstart)
 				throw new IllegalArgumentException(
-						String.format("x-coordinate: %d in grid with width %d", xstart, width));
+						"x-coordinate: " + xstart + " in grid with width " + width);
 			if (ystart < 0 || height <= ystart)
 				throw new IllegalArgumentException(
-						String.format("y-coordinate: %d in grid with height %d", xstart, width));
+						"y-coordinate: " + ystart + " in grid with height " + height);
 
 			this.xstart = xstart;
 			this.ystart = ystart;
@@ -413,11 +413,11 @@ public class SquidIterators {
 		public VerticalUp(int startx, int starty, int width, int height) {
 			if (startx < 0 || width <= startx)
 				throw new IllegalStateException(
-						String.format("Illegal x-coordinate: %d (map's width: %d)", startx, width));
+						"Illegal x-coordinate: " + startx + " (map's width: " + width + ")");
 			this.startx = startx;
 			if (starty < 0 || height <= starty)
 				throw new IllegalStateException(
-						String.format("Illegal y-coordinate: %d (map's height: %d)", starty, height));
+						"Illegal y-coordinate: " + starty + " (map's width: " + height + ")");
 			this.starty = starty;
 
 			this.width = width;

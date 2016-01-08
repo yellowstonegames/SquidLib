@@ -5,6 +5,9 @@ package squidpony.squidgrid.mapping.styled;
  * Created by Tommy Ettinger on 3/10/2015.
  */
 public class Config {
+
+	/* If this list of fields is modified, TilesetsGenerator should be modified too */
+
     public boolean is_corner;
     public int num_color_0, num_color_1, num_color_2, num_color_3, num_color_4 = 0, num_color_5 = 0;
     public int num_x_variants, num_y_variants, short_side_length;

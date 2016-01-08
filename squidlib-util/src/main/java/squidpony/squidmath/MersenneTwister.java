@@ -3,6 +3,8 @@ package squidpony.squidmath;
 import java.security.SecureRandom;
 import java.util.concurrent.locks.ReentrantLock;
 
+import squidpony.annotation.GwtIncompatible;
+
 /**
  * Customized extension of Random to allow for common roguelike operations.
  *
@@ -16,6 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Lewis Potter
  */
+@GwtIncompatible /* Because of SecureRandom */
 public class MersenneTwister implements RandomnessSource {
 
 	// The actual seed size isn't that important, but it should be a multiple of 4.

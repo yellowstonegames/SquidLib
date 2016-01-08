@@ -96,14 +96,21 @@ public class CoordDouble implements java.io.Serializable {
         return "Coord (x " + x + ", y " + y + ")";
     }
 
-    @Override
-    public int hashCode() {
-        long hash = 0x9E3779B97F4A7C15l + Double.doubleToRawLongBits(x);
-        hash = (hash ^ (hash >> 30)) * 0xBF58476D1CE4E5B9l;
-        hash = (hash ^ (hash >> 27)) * (0x94D049BB133111EBl  + Double.doubleToRawLongBits(y));
-        hash = hash ^ (hash >> 31);
-        return (int)hash;
-    }
+	@Override
+	/*
+	 * smelC: This is Eclipse-generated code. The previous version was
+	 * Gwt-incompatible (because of Double.doubleToRawLongBits).
+	 */
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(x);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
 
     @Override
     public boolean equals(Object o) {

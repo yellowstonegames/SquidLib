@@ -80,7 +80,7 @@ public class MixedGenerator {
         this.roomWidth = width / 64.0f;
         this.roomHeight = height / 64.0f;
         if(width <= 2 || height <= 2)
-            throw new ExceptionInInitializerError("width and height must be greater than 2");
+            throw new IllegalStateException("width and height must be greater than 2");
         this.rng = rng;
         dungeon = new char[width][height];
         marked = new boolean[width][height];
@@ -135,7 +135,7 @@ public class MixedGenerator {
         this.roomWidth = (width / 64.0f) * roomSizeMultiplier;
         this.roomHeight = (height / 64.0f) * roomSizeMultiplier;
         if(width <= 2 || height <= 2)
-            throw new ExceptionInInitializerError("width and height must be greater than 2");
+            throw new IllegalStateException("width and height must be greater than 2");
         this.rng = rng;
         dungeon = new char[width][height];
         marked = new boolean[width][height];
@@ -267,7 +267,7 @@ public class MixedGenerator {
             totalLength = 1;
         }
         else
-            allCarvings = rng.shuffle(allCarvings);
+            allCarvings = rng.shuffle(allCarvings, new CarverType[allCarvings.length]);
 
         for (int p = 0, c = 0; p < totalPoints; p++, c = (++c) % totalLength) {
             long pair = points.get(p);

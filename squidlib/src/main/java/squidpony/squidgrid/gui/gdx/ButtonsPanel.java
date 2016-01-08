@@ -353,18 +353,16 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			final int availableW = pixelsWidth();
 			if (availableW < width)
 				Gdx.app.log("layout",
-						String.format(
-								"Cannot layout %s correctly. Required pixels width: %d. Pixels width available: %d",
-								getClass().getSimpleName(), width, availableW));
+						"Cannot layout " + getClass().getSimpleName() + " correctly. Required pixels width: "
+								+ width + ". Pixels width available: " + availableW);
 
 			/* The call to #cellHeight() requires #bg to be set */
 			final int height = vcells * cellHeight();
 			final int availableH = pixelsHeight();
 			if (availableH < height)
 				Gdx.app.log("layout",
-						String.format(
-								"Cannot layout %s. Required pixels height: %d. Pixels height available: %d",
-								getClass().getSimpleName(), height, availableH));
+						"Cannot layout " + getClass().getSimpleName() + " correctly. Required pixels height: "
+								+ height + ". Pixels height available: " + availableH);
 		}
 
 		final int gridHeight = bg.gridHeight();
@@ -726,8 +724,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 				/* Iterate over the bucket's text */
 				for (int i = 0; i < bound; i++) {
 					final char c = bucketText.charAt(i);
-					if (set || shortcuts.containsKey(Character.toLowerCase(c))
-							|| !Character.isLetter(c)) {
+					if (set || shortcuts.containsKey(Character.toLowerCase(c)) || !Character.isLetter(c)) {
 						/*
 						 * Shortcut already used or we went into the 'else'
 						 * already, or character is inadequate.
@@ -798,8 +795,8 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			displayMarginsAround(left, botLeftY, insideWidth, insideHeight);
 
 		if (this.buttons == null)
-			throw new NullPointerException(String.format("%s: this.buttons should not be null at this moment",
-					getClass().getSimpleName()));
+			throw new NullPointerException(
+					getClass().getSimpleName() + ": this.buttons should not be null at this moment");
 
 		this.buttons.add(new Rectangle(left, botLeftY, insideWidth, insideHeight));
 	}
@@ -892,14 +889,13 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 		private int check(int i, String s) {
 			if (i < 0)
-				Gdx.app.log("layout", String.format("Invalid rectangle component (%s): %d", s, i));
+				Gdx.app.log("layout", "Invalid rectangle component (" + s + "): " + i);
 			return i;
 		}
 
 		@Override
 		public String toString() {
-			return String.format("Rectangle at (%d,%d): width %d, height %d", botLeftX, botLeftY, width,
-					height);
+			return "Rectangle at (" + botLeftX + "," + botLeftY + "), width: " + width + ", height:" + height;
 		}
 	}
 }

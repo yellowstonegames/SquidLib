@@ -253,16 +253,19 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				for (int i = 0; i < split.length; i++) {
 					final String chunk = split[i];
 					final int chunklen = chunk.length();
-					if (curlen + chunklen <= width) {
+					if (curlen + chunklen + (0 < curlen ? 1 : 0) <= width) {
+						if (0 < curlen) {
+							/*
+							 * Do not forget space on which chunk got split. If
+							 * the space is offscreen, it's harmless, hence not
+							 * checking it.
+							 */
+							current.append(' ', null);
+							curlen++;
+						}
+
 						/* Can add it */
 						current.append(chunk, color);
-						/*
-						 * Do not forget space on which chunk got split. If the
-						 * space is offscreen, it's harmless, hence not checking
-						 * it.
-						 */
-						current.append(' ', null);
-						curlen++;
 						/* Extend size */
 						curlen += chunklen;
 					} else {
@@ -279,13 +282,6 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 							current.append(chunk, color);
 							/* Reinit size */
 							curlen = chunklen;
-							/*
-							 * Do not forget space on which chunk got split. If
-							 * the space is offscreen, it's harmless, hence not
-							 * checking it.
-							 */
-							current.append(' ', null);
-							curlen++;
 						} else {
 							/*
 							 * This word is too long. Adding it and preparing a
@@ -348,7 +344,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 					return next.color;
 				now += flen;
 			}
-			throw new NoSuchElementException(String.format("Character at index %d in %s", index, this));
+			throw new NoSuchElementException("Character at index " + index + " in " + this);
 		}
 
 		@Override
@@ -435,7 +431,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			if (color == null)
 				return text;
 			else
-				return String.format("%s (%s)", text, color);
+				return text + "(" + color + ")";
 		}
 
 	}

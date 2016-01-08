@@ -83,8 +83,8 @@ public interface IPanelBuilder {
 	/**
 	 * @param cellSize
 	 * @return The font size to use for a square cell size of {@code cellSize}.
-	 *         Return a value smaller than {@code cellSize} if you have
-	 *         characters that are drawn outside cell's bounds.
+	 *         Generally, it is {@code cellSize}; but it can be less in case
+	 *         glyphs are too large.
 	 */
 	public int fontSizeForCellSize(int cellSize);
 
