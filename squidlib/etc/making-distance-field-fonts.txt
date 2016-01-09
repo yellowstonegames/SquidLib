@@ -1,0 +1,103 @@
+The method that is required to make monospace distance field fonts that display correctly is... interesting.
+The following method works for Inconsolata-LGC-Square2.ttf , in this folder. Any other fonts are likely to require
+at least some changes to the specific numbers. Instructions are for Windows, because BMFont doesn't run natively on
+Linux or Mac OSX, but you can use Wine to run BMFont on a non-Win32 OS, and any changes are likely to only be related
+to the usage of semicolons to separate classpath jars on Windows and colons to separate them on Linux (and OSX?).
+
+Steps:
+1:
+Download a LibGDX nightly .zip from relatively recently; these steps were done on the 12-31-2015 nightly and should
+probably be unchanged in similar versions or in the 1.7.2 .zip distribution. Unzip the archive where you can easily
+access it on the command line. Also, install the TTF font you want to make into a distance field font. If all you have
+is an OTF font, it needs to be converted to TTF for BMFont to use it; there are plenty of online converters out there.
+2:
+First we need to generate the .fnt file with the positions and glyphs exactly where we want them for the final image.
+There will be a PNG generated with this .fnt, but it only matters as a reference for determining the correctness of the
+distance field font we generate later.
+3:
+Run BMFont, open Font Settings (shortcut is [F]) and select your font's name in the dropdown box. The size should be
+larger than normal for text, enough to almost completely fill a 1024x1024 texture with all the glyphs you want in the
+font. You will probably need to come back to the font size in a bit and tweak it to fit. You will need to have the size
+you end up using noted for later; this step generates the ideal size for the .fnt, and to match the ideal size for the
+.png later, we will need an exact multiple of the size we use here. Match char height should be unselected, do not
+include kerning pairs should be selected, and font smoothing and super sampling must be deselected. In most cases
+(individual fonts may have their own needs), render from TrueType outline and TrueType hinting should be selected, if
+only to keep continuity with the later steps that need these, and to ensure the sizes match up between the .fnt and the
+altered .png we will make later. Outline thickness should probably be 0 unless you have a very good reason to change it
+(hairline fonts need it higher, but most fonts should have it firmly at 0).
+4:
+In BMFont, change the Export Settings (shortcut is [T]) to have 1024 width, 1024 height, at least 1 for each of the
+padding entries, and 0 for both spacing entries. Bit depth should be 8, 'A' channel should be 'glyph', nothing inverted,
+font descriptor should be Text, textures should be PNG.
+5:
+In BMFont, select every Unicode character block you want in the font by clicking the checkbox next to the block's name
+(like Greek and Coptic, or Box Drawing) so it is fully green if you want everything in it or fully white if you want
+nothing in it.
+6:
+Visualize the font by pressing [V] or selecting it from the top menu. This will look terrible, it's because there's no
+smoothing, there will be smoothing added by the distance field generator, so don't worry about it at this point. If the
+font fits tightly on one 1024x1024 page, we're done. You can go between pages if there are multiple by pressing the left
+and right arrow keys, and the title of the visualization window should say 1/1 if there's only one page. If there's a
+lot of extra space on one page, you should increase the font size as in step 3. If there are multiple pages, decrease
+the font size (as in step 3) or remove unnecessary characters from the font as in step 5. Once you're satisfied that it
+fits as tightly as you can manage, go on to generating.
+7:
+Generate the font using Save Bitmap Font As (shortcut is [Ctrl-S]), and save the .fnt file where you can find it. The
+.png file that accompanies it should be kept for a little while longer; it should not be deleted yet despite how
+terrible it probably looks. This PNG should NOT be in the libGDX nightly directory, since we'll be writing a replacement
+to that folder and we don't want to overwrite this PNG when we do that.
+8:
+Now we need to generate a 8x scaled version of the font using mostly the same parameters. You can use a larger scale
+factor if your computer can safely manipulate images larger than 8192x8192, or a smaller scale if it can only handle up
+to 4096. If you find your computer struggling on a 4096x4096 image... Maybe you should update your hardware, or
+better yet, try these steps on a friend's more modern computer, since we won't be needing to deal with the large scales
+for long. The resulting image should be fine even on older Android phones, and it's only the intermediate steps that
+produce very large images.
+9:
+Run BMFont, open Font Settings (shortcut is [F]) and select your font's name in the dropdown box if it isn't still
+selected. The size should be exactly 8 times the size you used previously, enough to almost completely fill a 8192x8192
+texture with all the glyphs you want in the font (in Step 10, some other values will change that mean visualizing won't
+be accurate just yet). Match char height should be unselected, do not include kerning pairs should be selected, and
+font smoothing and super sampling must be deselected. In most cases (individual fonts may have their own needs), render
+from TrueType outline and TrueType hinting should be selected, since these make the outline more accurate for many fonts
+without adding grayscale colors from smoothing (which we cannot have, period, for the distance field generator to work).
+Outline thickness should probably be 0 unless you have a very good reason to change it (hairline fonts need it higher,
+but most fonts should have it firmly at 0; if you use an outline, it should be 8 times the outline used earlier).
+10:
+In BMFont, change the export settings to have 8192 width, 8192 height, and some variant on the padding entries. The
+exact numbers may vary based on even extremely small offsets present in the font file, but in the case of
+Inconsolata-LGC-Square2.ttf, these went from 1 all around in step 4 to 8 6 8 6 (going clockwise from the top) when
+scaled up, due to the font growing slightly wider relative to its height as the scale went up. The padding may need to
+be adjusted after generating to match the positions and order of glyphs in the PNG generated in step 7. Usually, the
+numbers should default to 8 all around and only need adjusting if inspection after generating shows a difference between
+the earlier PNG and the PNG generated in step 13. No other fields in this settings window should be changed.
+11:
+Change absolutely no characters in the list of highlighted unicode glyphs. None. This affects the layout of the .png we
+are trying to make relative to the positions in the original .fnt.
+12:
+Visualize again, make sure it fits on 1 page. It may not if the padding needs changing, so if there are multiple pages,
+reduce the padding as in step 10 until the first character on each row is the same in the visualization here and the PNG
+made in step 7.
+13:
+Generate a second .fnt and corresponding .png file, with a different name from before. We only care about the PNG this
+time. Make sure the PNG is in the same folder as the unzipped GDX nightly. Also, make sure the approximate layout of the
+step-7-PNG and step-13-PNG are the same; glyph positions on the grid must be identical. If they aren't, change the
+padding in step 10 and try again.
+14:
+Now it's LibGDX's time to shine. At the command prompt, from the folder holding the unzipped GDX nightly, run this
+command, replacing INPUT_FONT_8192x8192.png with the name of the PNG generated in step 13, and OUTPUT_FONT_1024x1024.png
+with the name of the PNG generated in step 7:
+
+java -cp gdx.jar;gdx-natives.jar;gdx-backend-lwjgl.jar;gdx-backend-lwjgl-natives.jar;extensions\gdx-tools\gdx-tools.jar com.badlogic.gdx.tools.distancefield.DistanceFieldGenerator --downscale 8 --spread 32 INPUT_FONT_8192x8192.png OUTPUT_FONT_1024x1024.png
+
+You may need to tweak the downscale if you couldn't generate an 8x scaled image, or change the spread if it doesn't look
+crisp when you actually test it.
+15:
+Copy the .fnt from step 7 and the new PNG from step 14 (the placeholder name used here was OUTPUT_FONT_1024x1024.png,
+but of course it should be the name of the PNG that was generated along with the .fnt from step 7, since the .fnt will
+look for a PNG by that name) into the assets or resources folder of your libGDX project.
+16:
+From here on out it's mostly down to experimentation with the techniques used in SquidLib to adapt for a different size
+of bitmap font, and possibly changing the distance.frag shader supplied with SquidLib to adjust crispness ever-so-
+slightly (the difference between 0.0625 and 0.062 is noticeable on small details like the double-dots over many letters
+in non-English languages; yes, that's 1.0/2000.0). Good luck!
