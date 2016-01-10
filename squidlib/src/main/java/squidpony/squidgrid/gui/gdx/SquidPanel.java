@@ -430,13 +430,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         Color tmp;
         if(distanceField)
         {
-            shader.setUniformf("scale", cellHeight / 36f);
+            shader.setUniformf("scale", cellWidth / textFactory.getDistanceFieldScaleX());
             batch.setShader(shader);
         }
         for (int x = gridOffsetX; x < gridWidth; x++) {
             for (int y = gridOffsetY; y < gridHeight; y++) {
                 tmp = scc.filter(colors[x][y]);
-                textFactory.draw(batch, contents[x][y], tmp, 1f * x * cellWidth, 1f * (gridHeight - y) * cellHeight);
+                textFactory.draw(batch, contents[x][y], tmp, 1f * x * cellWidth, 1f * (gridHeight - y) * cellHeight + 1f);
             }
         }
         super.draw(batch, parentAlpha);

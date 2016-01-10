@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import squidpony.IColorCenter;
-import squidpony.annotation.GwtIncompatible;
 
 /**
  * Class for creating text blocks.
@@ -54,6 +53,7 @@ public class TextCellFactory {
     protected IColorCenter<Color> scc;
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     protected int width = 1, height = 1;
+    protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;
     private boolean initialized = false, distanceField = false;
 
     /**
@@ -124,7 +124,8 @@ public class TextCellFactory {
         temp.dispose();
         if(distanceField)
         {
-            bmpFont.getData().setScale(width / 36f, height / 36f);
+            bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
+            //distanceFieldScaleX *= (((float)width) / height) / (distanceFieldScaleX / distanceFieldScaleY);
         }
         initialized = true;
         return this;
@@ -286,6 +287,8 @@ public class TextCellFactory {
             bmpFont = DefaultResources.getDefaultFont();
             Gdx.app.error("TextCellFactory", "Could not find font files, using defaults");
         }
+        distanceFieldScaleX = bmpFont.getData().getGlyph(' ').xadvance - 1f;
+        distanceFieldScaleY = bmpFont.getLineHeight() - 1f;
         return this;
     }
     /**
@@ -337,6 +340,11 @@ public class TextCellFactory {
     public TextCellFactory defaultDistanceFieldFont()
     {
         this.fontDistanceField(DefaultResources.distanceFieldSquare, DefaultResources.distanceFieldSquareTexture);
+        return this;
+    }
+    public TextCellFactory defaultNarrowDistanceFieldFont()
+    {
+        this.fontDistanceField(DefaultResources.distanceFieldNarrow, DefaultResources.distanceFieldNarrowTexture);
         return this;
     }
 
@@ -573,13 +581,14 @@ public class TextCellFactory {
      * @param codepoint
      * @return
      */
-    @GwtIncompatible /* Because of Character.isISOControl */
     public boolean willFit(int codepoint) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         
-        if (!Character.isValidCodePoint(codepoint) || Character.isISOControl(codepoint)) {
+        if (!Character.isValidCodePoint(codepoint) ||
+                (codepoint <= 0x001F) || (codepoint >= 0x007F && codepoint <= 0x009F)) // same as isIsoControl
+        {
             return true;
         }
 
@@ -936,5 +945,12 @@ public class TextCellFactory {
 
     public boolean isDistanceField() {
         return distanceField;
+    }
+
+    public float getDistanceFieldScaleX() {
+        return distanceFieldScaleX;
+    }
+    public float getDistanceFieldScaleY() {
+        return distanceFieldScaleY;
     }
 }
