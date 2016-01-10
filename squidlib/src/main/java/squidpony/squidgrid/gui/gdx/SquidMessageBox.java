@@ -262,12 +262,12 @@ public class SquidMessageBox extends SquidPanel {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
         put(basicBorders);
         for (int i = 1; i < gridHeight - 1 && i <= messageIndex; i++) {
             put(1, gridHeight - 1 - i, messages.get(messageIndex + 1 - i));
         }
         act(Gdx.graphics.getDeltaTime());
-        super.draw(batch, parentAlpha);
     }
 
     /**
