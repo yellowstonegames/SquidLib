@@ -1,10 +1,7 @@
 package squidpony.squidgrid;
 
 import squidpony.annotation.GwtIncompatible;
-import squidpony.squidmath.Bresenham;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordDouble;
-import squidpony.squidmath.Elias;
+import squidpony.squidmath.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,26 +19,36 @@ import java.util.Queue;
  */
 public class LOS {
 
-    public static final int //constants to indicate desired type of solving algorithm to use
-            /**
-             * A Bresenham-based line-of-sight algorithm.
-             */
-            BRESENHAM = 1,
-            /**
-             * Uses Wu's Algorithm as modified by Elias to draw the line. Does
-             * not end at an obstruction but rather returns one of the possible
-             * attempted paths in full.
-             * 
-             * <p>
-             * Beware it is Gwt incompatible.
-             * </p>
-             */
-            ELIAS = 2,
-            /**
-             * Uses a series of rays internal to the start and end point to
-             * determine visibility. Does not respect translucency.
-             */
-            RAY = 3;
+    //constants to indicate desired type of solving algorithm to use
+    /**
+     * A Bresenham-based line-of-sight algorithm.
+     */
+    public static final int BRESENHAM = 1;
+    /**
+     * Uses Wu's Algorithm as modified by Elias to draw the line. Does
+     * not end at an obstruction but rather returns one of the possible
+     * attempted paths in full.
+     *
+     * <p>
+     * Beware it is Gwt incompatible.
+     * </p>
+     */
+    public static final int ELIAS = 2;
+    /**
+     * Uses a series of rays internal to the start and end point to
+     * determine visibility. Does not respect translucency.
+     */
+    public static final int RAY = 3;
+    /**
+     * Draws a line using only North/South/East/West movement.
+     */
+    public static final int ORTHO = 4;
+    /**
+     * Optimized algorithm for Bresenham-like lines. I'm not sure
+     * how well it works in practice, but it may be useful as a
+     * building block for more complex LOS.
+     */
+    public static final int DDA = 5;
     private Queue<Coord> lastPath = new LinkedList<>();
     private int type;
     private double[][] resistanceMap;
@@ -140,6 +147,10 @@ public class LOS {
             	// return eliasReachable(radiusStrategy);
             case RAY:
                 return rayReachable(radiusStrategy);
+            case ORTHO:
+                return orthoReachable(radiusStrategy);
+            case DDA:
+                return ddaReachable(radiusStrategy);
         }
         return false;
     }
@@ -182,9 +193,8 @@ public class LOS {
         Queue<Coord> path = Bresenham.line2D(startx, starty, targetx, targety);
         lastPath = new LinkedList<>();
         lastPath.add(Coord.get(startx, starty));
-        double force = 1;
         double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);
-        double currentForce = force;
+        double currentForce = 1;
         for (Coord p : path) {
             lastPath.offer(p);
             if (p.x == targetx && p.y == targety) {
@@ -197,6 +207,49 @@ public class LOS {
             if (currentForce - (r * decay) <= 0) {
                 return false;//too much resistance
             }
+        }
+        return false;//never got to the target point
+    }
+
+    private boolean orthoReachable(Radius radiusStrategy) {
+        List<Coord> path = OrthoLine.line(startx, starty, targetx, targety);
+        lastPath = new LinkedList<>();
+        double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);
+        double currentForce = 1;
+        for (Coord p : path) {
+            lastPath.offer(p);
+            if (p.x == targetx && p.y == targety) {
+                return true;//reached the end
+            }
+            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+                currentForce -= resistanceMap[p.x][p.y];
+            }
+            double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+            if (currentForce - (r * decay) <= 0) {
+                return false;//too much resistance
+            }
+        }
+        return false;//never got to the target point
+    }
+
+    private boolean ddaReachable(Radius radiusStrategy) {
+        List<Coord> path = DDALine.line(startx, starty, targetx, targety);
+        lastPath = new LinkedList<>();
+        double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);
+        double currentForce = 1;
+        for (Coord p : path) {
+            if (p.x == targetx && p.y == targety) {
+                lastPath.offer(p);
+                return true;//reached the end
+            }
+            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+                currentForce -= resistanceMap[p.x][p.y];
+            }
+            double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+            if (currentForce - (r * decay) <= 0) {
+                return false;//too much resistance
+            }
+            lastPath.offer(p);
         }
         return false;//never got to the target point
     }

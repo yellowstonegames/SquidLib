@@ -85,7 +85,7 @@ public class DungeonUtility {
      * Uses this class' rng field for pseudo-random number generation.
      *
      * @param packed a packed array produced by CoordPacker encoding the cells to choose from as "on"
-     * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small
+     * @return a Coord that corresponds to a '.' in map, or (-1, -1) if a '.' cannot be found or if map is too small
      */
     public Coord randomCell(short[] packed) {
         return CoordPacker.singleRandom(packed, rng);
