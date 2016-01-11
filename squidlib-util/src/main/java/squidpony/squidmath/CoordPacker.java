@@ -3028,13 +3028,13 @@ public class CoordPacker {
      * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
      *               not be null (this method does not check).
      * @param rng the random number generator used to decide random factors
-     * @return a Coord corresponding to a random "on" cell in packed
+     * @return a Coord corresponding to a random "on" cell in packed, or the Coord (-1, -1) if packed is empty
      */
     public static Coord singleRandom(short[] packed, RNG rng)
     {
         int counted = count(packed);
         if(counted == 0)
-            return null;
+            return Coord.get(-1,-1);
         int r = rng.nextInt(counted);
         int c = 0, idx = 0;
         boolean on = false;
@@ -3048,7 +3048,7 @@ public class CoordPacker {
                 c += packed[i] & 0xFFFF;
             }
         }
-        return null;
+        return Coord.get(-1,-1);
 
     }
 
