@@ -3,10 +3,7 @@ package squidpony.squidgrid;
 import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.*;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Line of Sight (LOS) algorithms find if there is or is not a path between two
@@ -49,6 +46,15 @@ public class LOS {
      * building block for more complex LOS.
      */
     public static final int DDA = 5;
+    /**
+     * Draws a line as if with a thick brush, going from a point between
+     * a corner of the starting cell and the center of the starting cell
+     * to the corresponding corner of the target cell, and considers the
+     * target visible if any portion of the thick stroke reached it. Will
+     * result in 1-width lines for exactly-orthogonal or exactly-diagonal
+     * lines and some parts of other lines, but usually is 2 cells wide.
+     */
+    public static final int THICK = 6;
     private Queue<Coord> lastPath = new LinkedList<>();
     private int type;
     private double[][] resistanceMap;
@@ -151,6 +157,8 @@ public class LOS {
                 return orthoReachable(radiusStrategy);
             case DDA:
                 return ddaReachable(radiusStrategy);
+            case THICK:
+                return thickReachable(radiusStrategy);
         }
         return false;
     }
@@ -251,6 +259,53 @@ public class LOS {
             }
             lastPath.offer(p);
         }
+        return false;//never got to the target point
+    }
+
+    private boolean thickReachable(Radius radiusStrategy) {
+        double dist = radiusStrategy.radius(startx, starty, targetx, targety), decay = 1 / dist;
+        LinkedHashSet<Coord> visited = new LinkedHashSet<Coord>((int) dist + 3);
+        List<List<Coord>> paths = new ArrayList<List<Coord>>(4);
+        /* // actual corners
+        paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0));
+        paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0xffff));
+        paths.add(DDALine.line(startx, starty, targetx, targety, 0xffff, 0));
+        paths.add(DDALine.line(startx, starty, targetx, targety, 0xffff, 0xffff));
+        */
+        // halfway between the center and a corner
+        paths.add(DDALine.line(startx, starty, targetx, targety, 0x3fff, 0x3fff));
+        paths.add(DDALine.line(startx, starty, targetx, targety, 0x3fff, 0xbfff));
+        paths.add(DDALine.line(startx, starty, targetx, targety, 0xbfff, 0x3fff));
+        paths.add(DDALine.line(startx, starty, targetx, targety, 0xbfff, 0xbfff));
+
+        int length = Math.max(paths.get(0).size(), Math.max(paths.get(1).size(),
+                Math.max(paths.get(2).size(), paths.get(3).size())));
+        double[] forces = new double[]{1,1,1,1};
+        boolean[] go = new boolean[]{true, true, true, true};
+        Coord p;
+        for (int d = 0; d < length; d++) {
+            for (int pc = 0; pc < 4; pc++) {
+                List<Coord> path = paths.get(pc);
+                if(d < path.size() && go[pc])
+                    p = path.get(d);
+                else continue;
+                if (p.x == targetx && p.y == targety) {
+                    visited.add(p);
+                    lastPath.addAll(visited);
+                    return true;//reached the end
+                }
+                if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+                    forces[pc] -= resistanceMap[p.x][p.y];
+                }
+                double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+                if (forces[pc] - (r * decay) <= 0) {
+                    go[pc] = false;
+                    continue;//too much resistance
+                }
+                visited.add(p);
+            }
+        }
+        lastPath.addAll(visited);
         return false;//never got to the target point
     }
 
