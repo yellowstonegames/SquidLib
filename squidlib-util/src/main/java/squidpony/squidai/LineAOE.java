@@ -1,9 +1,10 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.FOVCache;
+import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.Elias;
 
 import java.util.*;
 
@@ -34,7 +35,7 @@ public class LineAOE implements AOE {
     private char[][] dungeon;
     private DijkstraMap dijkstra;
     private Radius rt;
-    private Elias elias;
+    private LOS los;
     private Reach reach = new Reach(1, 1, Radius.SQUARE, null);
     public LineAOE(Coord origin, Coord end)
     {
@@ -44,7 +45,7 @@ public class LineAOE implements AOE {
         this.origin = origin;
         this.end = end;
         radius = 0;
-        elias = new Elias();
+        los = new LOS(LOS.DDA);
     }
     public LineAOE(Coord origin, Coord end, int radius)
     {
@@ -54,7 +55,7 @@ public class LineAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.radius = radius;
-        elias = new Elias();
+        los = new LOS(LOS.DDA);
     }
     public LineAOE(Coord origin, Coord end, int radius, Radius radiusType)
     {
@@ -77,7 +78,7 @@ public class LineAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.radius = radius;
-        elias = new Elias();
+        los = new LOS(LOS.DDA);
     }
     public LineAOE(Coord origin, Coord end, int radius, Radius radiusType, int minRange, int maxRange)
     {
@@ -102,11 +103,12 @@ public class LineAOE implements AOE {
         this.radius = radius;
         reach.minDistance = minRange;
         reach.maxDistance = maxRange;
-        elias = new Elias();
+        los = new LOS(LOS.DDA);
     }
     private double[][] initDijkstra()
     {
-        List<Coord> lit = elias.line(origin, end);
+        los.isReachable(dungeon, origin.x, origin.y, end.x, end.y, rt);
+        Queue<Coord> lit = los.getLastPath();
 
         dijkstra.initialize(dungeon);
         for(Coord p : lit)
@@ -279,12 +281,15 @@ public class LineAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
+        double[][] resMap = DungeonUtility.generateResistances(dungeon);
         Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
 
             for(Coord p : lit)
             {
@@ -309,7 +314,8 @@ public class LineAOE implements AOE {
             t = ts[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
 
             for(Coord p : lit)
             {
@@ -423,12 +429,14 @@ public class LineAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
+        double[][] resMap = DungeonUtility.generateResistances(dungeon);
         Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
 
             for(Coord p : lit)
             {
@@ -452,7 +460,8 @@ public class LineAOE implements AOE {
             t = pts[i];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
 
             for(Coord p : lit)
             {
@@ -505,7 +514,8 @@ public class LineAOE implements AOE {
             t = lts[i - pts.length];
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
 
             for(Coord p : lit)
             {
