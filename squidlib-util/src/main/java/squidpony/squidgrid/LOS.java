@@ -60,20 +60,36 @@ public class LOS {
     private double[][] resistanceMap;
     private int startx, starty, targetx, targety;
     private Elias elias = null;
+
+    /**
+     * Gets the radius strategy this uses.
+     * @return the current Radius enum used to measure distance; starts at CIRCLE if not specified
+     */
     public Radius getRadiusStrategy() {
         return radiusStrategy;
     }
 
+    /**
+     * Set the radius strategy to the given Radius; the default is CIRCLE if this is not called.
+     * @param radiusStrategy a Radius enum to determine how distances are measured
+     */
     public void setRadiusStrategy(Radius radiusStrategy) {
         this.radiusStrategy = radiusStrategy;
     }
 
     private Radius radiusStrategy = Radius.CIRCLE;
 
+    /**
+     * Constructs an LOS that will draw Bresenham lines and measure distances using the CIRCLE radius strategy.
+     */
     public LOS() {
         this(BRESENHAM);
     }
 
+    /**
+     * Constructs an LOS with the given type number, which must equal a static field in this class such as BRESENHAM.
+     * @param type an int that must correspond to the value of a static field in this class (such as BRESENHAM)
+     */
     public LOS(int type) {
         this.type = type;
         if(type == ELIAS)
@@ -87,11 +103,11 @@ public class LOS {
      * Uses RadiusStrategy.CIRCLE, or whatever RadiusStrategy was set with setRadiusStrategy .
      *
      * @param walls '#' is fully opaque, anything else is fully transparent, as always this uses x,y indexing.
-     * @param startx
-     * @param starty
-     * @param targetx
-     * @param targety
-     * @return
+     * @param startx starting x position on the grid
+     * @param starty starting y position on the grid
+     * @param targetx ending x position on the grid
+     * @param targety ending y position on the grid
+     * @return true if a line can be drawn without being obstructed, false otherwise
      */
     public boolean isReachable(char[][] walls, int startx, int starty, int targetx, int targety) {
         if(walls.length < 1) return false;
@@ -115,11 +131,11 @@ public class LOS {
      * Uses RadiusStrategy.CIRCLE, or whatever RadiusStrategy was set with setRadiusStrategy .
      *
      * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.
-     * @param startx
-     * @param starty
-     * @param targetx
-     * @param targety
-     * @return
+     * @param startx starting x position on the grid
+     * @param starty starting y position on the grid
+     * @param targetx ending x position on the grid
+     * @param targety ending y position on the grid
+     * @return true if a line can be drawn without being obstructed, false otherwise
      */
     public boolean isReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety) {
         return isReachable(resistanceMap, startx, starty, targetx, targety, radiusStrategy);
@@ -130,14 +146,15 @@ public class LOS {
      * point without intervening obstructions.
      *
      * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.
-     * @param startx
-     * @param starty
-     * @param targetx
-     * @param targety
+     * @param startx starting x position on the grid
+     * @param starty starting y position on the grid
+     * @param targetx ending x position on the grid
+     * @param targety ending y position on the grid
      * @param radiusStrategy the strategy to use in computing unit distance
-     * @return
+     * @return true if a line can be drawn without being obstructed, false otherwise
      */
     public boolean isReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety, Radius radiusStrategy) {
+        if(resistanceMap.length < 1) return false;
         this.resistanceMap = resistanceMap;
         this.startx = startx;
         this.starty = starty;
@@ -168,12 +185,12 @@ public class LOS {
      * point without intervening obstructions.
      *
      * @param walls '#' is fully opaque, anything else is fully transparent, as always this uses x,y indexing.
-     * @param startx
-     * @param starty
-     * @param targetx
-     * @param targety
+     * @param startx starting x position on the grid
+     * @param starty starting y position on the grid
+     * @param targetx ending x position on the grid
+     * @param targety ending y position on the grid
      * @param radiusStrategy the strategy to use in computing unit distance
-     * @return
+     * @return true if a line can be drawn without being obstructed, false otherwise
      */
     public boolean isReachable(char[][] walls, int startx, int starty, int targetx, int targety, Radius radiusStrategy) {
         if(walls.length < 1) return false;
@@ -186,6 +203,62 @@ public class LOS {
             }
         }
         return isReachable(resMap, startx, starty, targetx, targety, radiusStrategy);
+    }
+
+    /**
+     * Returns true if a line can be drawn from the any of the points within spread cells of the start point,
+     * to any of the corresponding points at the same direction and distance from the target point, without
+     * intervening obstructions. Primarily useful to paint a broad line that can be retrieved with getLastPath.
+     *
+     * @param walls '#' is fully opaque, anything else is fully transparent, as always this uses x,y indexing.
+     * @param startx starting x position on the grid
+     * @param starty starting y position on the grid
+     * @param targetx ending x position on the grid
+     * @param targety ending y position on the grid
+     * @param radiusStrategy the strategy to use in computing unit distance
+     * @param spread the number of cells outward, measured by radiusStrategy, to place extra start and target points
+     * @return true if a line can be drawn without being obstructed, false otherwise
+     */
+    public boolean spreadReachable(char[][] walls, int startx, int starty, int targetx, int targety, Radius radiusStrategy, int spread) {
+        if(walls.length < 1) return false;
+        resistanceMap = new double[walls.length][walls[0].length];
+        for(int x = 0; x < walls.length; x++)
+        {
+            for(int y = 0; y < walls[0].length; y++)
+            {
+                resistanceMap[x][y] = (walls[x][y] == '#') ? 1.0 : 0.0;
+            }
+        }
+        this.startx = startx;
+        this.starty = starty;
+        this.targetx = targetx;
+        this.targety = targety;
+
+        return brushReachable(radiusStrategy, spread);
+    }
+    /**
+     * Returns true if a line can be drawn from the any of the points within spread cells of the start point,
+     * to any of the corresponding points at the same direction and distance from the target point, without
+     * intervening obstructions. Primarily useful to paint a broad line that can be retrieved with getLastPath.
+     *
+     * @param resistanceMap 0.0 is fully transparent, 1.0 is fully opaque, as always this uses x,y indexing.
+     * @param startx starting x position on the grid
+     * @param starty starting y position on the grid
+     * @param targetx ending x position on the grid
+     * @param targety ending y position on the grid
+     * @param radiusStrategy the strategy to use in computing unit distance
+     * @param spread the number of cells outward, measured by radiusStrategy, to place extra start and target points
+     * @return true if a line can be drawn without being obstructed, false otherwise
+     */
+    public boolean spreadReachable(double[][] resistanceMap, int startx, int starty, int targetx, int targety, Radius radiusStrategy, int spread) {
+        if(resistanceMap.length < 1) return false;
+        this.resistanceMap = resistanceMap;
+        this.startx = startx;
+        this.starty = starty;
+        this.targetx = targetx;
+        this.targety = targety;
+
+        return brushReachable(radiusStrategy, spread);
     }
     /**
      * Returns the path of the last LOS calculation, with the starting point as
@@ -263,6 +336,7 @@ public class LOS {
     }
 
     private boolean thickReachable(Radius radiusStrategy) {
+        lastPath = new LinkedList<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety), decay = 1 / dist;
         LinkedHashSet<Coord> visited = new LinkedHashSet<Coord>((int) dist + 3);
         List<List<Coord>> paths = new ArrayList<List<Coord>>(4);
@@ -307,6 +381,60 @@ public class LOS {
         }
         lastPath.addAll(visited);
         return false;//never got to the target point
+    }
+
+    private boolean brushReachable(Radius radiusStrategy, int spread) {
+        lastPath = new LinkedList<>();
+        double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2, decay = 1 / dist;
+        LinkedHashSet<Coord> visited = new LinkedHashSet<Coord>((int)(dist + 3) * spread);
+        List<List<Coord>> paths = new ArrayList<List<Coord>>((int)(radiusStrategy.volume2D(spread) * 1.25));
+        int length = 0;
+        List<Coord> currentPath;
+        for (int i = -spread; i <= spread; i++) {
+            for (int j = -spread; j <= spread; j++) {
+                if(radiusStrategy.inRange(startx, starty, startx + i, starty + j, 0, spread)
+                        && startx + i >= 0 && starty + j >= 0
+                        && startx + i < resistanceMap.length && starty + j < resistanceMap[0].length
+                        && targetx + i >= 0 && targety + j >= 0
+                        && targetx + i < resistanceMap.length && targety + j < resistanceMap[0].length) {
+                    for (int q = 0x3fff; q < 0xffff; q += 0x8000) {
+                        for (int r = 0x3fff; r < 0xffff; r += 0x8000) {
+                            currentPath = DDALine.line(startx+i, starty+j, targetx+i, targety+j, q, r);
+                            paths.add(currentPath);
+                            length = Math.max(length, currentPath.size());
+                        }
+                    }
+                }
+            }
+        }
+        double[] forces = new double[paths.size()];
+        Arrays.fill(forces, 1.0);
+        boolean[] go = new boolean[paths.size()];
+        Arrays.fill(go, true);
+        Coord p;
+        boolean found = false;
+        for (int d = 0; d < length; d++) {
+            for (int pc = 0; pc < paths.size(); pc++) {
+                List<Coord> path = paths.get(pc);
+                if(d < path.size() && go[pc])
+                    p = path.get(d);
+                else continue;
+                if (p.x == targetx && p.y == targety) {
+                    found = true;
+                }
+                if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+                    forces[pc] -= resistanceMap[p.x][p.y];
+                }
+                double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+                if (forces[pc] - (r * decay) <= 0) {
+                    go[pc] = false;
+                    continue;//too much resistance
+                }
+                visited.add(p);
+            }
+        }
+        lastPath.addAll(visited);
+        return found;//never got to the target point
     }
 
     private boolean rayReachable(Radius radiusStrategy) {

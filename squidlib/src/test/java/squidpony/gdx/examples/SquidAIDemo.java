@@ -61,7 +61,6 @@ public class SquidAIDemo extends ApplicationAdapter {
         cellHeight = 12;
         display = new SquidLayers(width * 2, height, cellWidth, cellHeight, DefaultResources.narrowName);
         display.setAnimationDuration(0.15f);
-        display.addExtraLayer();
         stage = new Stage(new ScreenViewport(), batch);
 
         lrng = new LightRNG(0x1337BEEF);

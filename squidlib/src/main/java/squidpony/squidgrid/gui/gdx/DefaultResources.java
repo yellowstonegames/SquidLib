@@ -103,7 +103,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow1 == null)
         {
             try {
-                instance.narrow1 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-6x12.fnt"), Gdx.files.classpath("Rogue-Zodiac-6x12.png"), false);
+                instance.narrow1 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-6x12.fnt"), Gdx.files.classpath("Rogue-Zodiac-6x12_0.png"), false);
             } catch (Exception e) {
             }
         }
@@ -120,7 +120,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow2 == null)
         {
             try {
-                instance.narrow2 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-12x24.fnt"), Gdx.files.classpath("Rogue-Zodiac-12x24.png"), false);
+                instance.narrow2 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-12x24.fnt"), Gdx.files.classpath("Rogue-Zodiac-12x24_0.png"), false);
             } catch (Exception e) {
             }
         }
@@ -136,7 +136,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow3 == null)
         {
             try {
-                instance.narrow3 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-18x36.fnt"), Gdx.files.classpath("Rogue-Zodiac-18x36.png"), false);
+                instance.narrow3 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-18x36.fnt"), Gdx.files.classpath("Rogue-Zodiac-18x36_0.png"), false);
             } catch (Exception e) {
             }
         }

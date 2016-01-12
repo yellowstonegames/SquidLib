@@ -1,9 +1,10 @@
 package squidpony.squidai;
 
 import squidpony.squidgrid.FOVCache;
+import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.Elias;
 
 import java.util.*;
 
@@ -39,7 +40,7 @@ public class BeamAOE implements AOE {
     private char[][] dungeon;
     private DijkstraMap dijkstra;
     private Radius rt;
-    private Elias elias;
+    private LOS los;
 
     private Reach reach = new Reach(1, 1, Radius.SQUARE, null);
 
@@ -53,7 +54,7 @@ public class BeamAOE implements AOE {
         length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
         reach.maxDistance = length;
         radius = 0;
-        elias = new Elias();
+        los = new LOS(LOS.THICK);
     }
     public BeamAOE(Coord origin, Coord end, int radius)
     {
@@ -65,7 +66,7 @@ public class BeamAOE implements AOE {
         this.radius = radius;
         length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
         reach.maxDistance = length;
-        elias = new Elias();
+        los = new LOS(LOS.THICK);
     }
     public BeamAOE(Coord origin, Coord end, int radius, Radius radiusType)
     {
@@ -90,7 +91,7 @@ public class BeamAOE implements AOE {
         this.radius = radius;
         length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
         reach.maxDistance = length;
-        elias = new Elias();
+        los = new LOS(LOS.THICK);
     }
 
     public BeamAOE(Coord origin, double angle, int length)
@@ -105,7 +106,7 @@ public class BeamAOE implements AOE {
         this.length = length;
         reach.maxDistance = this.length;
         radius = 0;
-        elias = new Elias();
+        los = new LOS(LOS.THICK);
     }
     public BeamAOE(Coord origin, double angle, int length, int radius)
     {
@@ -119,7 +120,7 @@ public class BeamAOE implements AOE {
         this.radius = radius;
         this.length = length;
         reach.maxDistance = this.length;
-        elias = new Elias();
+        los = new LOS(LOS.THICK);
     }
     public BeamAOE(Coord origin, double angle, int length, int radius, Radius radiusType)
     {
@@ -146,11 +147,12 @@ public class BeamAOE implements AOE {
         this.radius = radius;
         this.length = length;
         reach.maxDistance = this.length;
-        elias = new Elias();
+        los = new LOS(LOS.THICK);
     }
     private double[][] initDijkstra()
     {
-        List<Coord> lit = elias.line(origin, end, 0.4);
+        los.isReachable(dungeon, origin.x, origin.y, end.x, end.y, rt);
+        Queue<Coord> lit = los.getLastPath();
 
         dijkstra.initialize(dungeon);
         for(Coord p : lit)
@@ -323,12 +325,15 @@ public class BeamAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
+        double[][] resMap = DungeonUtility.generateResistances(dungeon);
         Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
+
 
             for(Coord p : lit)
             {
@@ -353,7 +358,8 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, ts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
 
             for(Coord p : lit)
             {
@@ -466,12 +472,14 @@ public class BeamAOE implements AOE {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         DijkstraMap dt = new DijkstraMap(dungeon, dijkstra.measurement);
+        double[][] resMap = DungeonUtility.generateResistances(dungeon);
         Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = rt.extend(origin, exs[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
 
             for(Coord p : lit)
             {
@@ -496,7 +504,8 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, pts[i], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
 
             for(Coord p : lit)
             {
@@ -550,7 +559,8 @@ public class BeamAOE implements AOE {
             t = rt.extend(origin, lts[i - pts.length], length, false, dungeon.length, dungeon[0].length);
             dt.resetMap();
             dt.clearGoals();
-            List<Coord> lit = elias.line(origin, t, 0.4);
+            los.isReachable(resMap, origin.x, origin.y, t.x, t.y, rt);
+            Queue<Coord> lit = los.getLastPath();
 
             for(Coord p : lit)
             {
