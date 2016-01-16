@@ -42,6 +42,7 @@ public class XorRNG implements RandomnessSource {
         return (int) (nextLong() & (1L << bits) - 1);
     }
 
+    @Override
     public long nextLong() {
         long s1 = state0;
         final long s0 = state1;

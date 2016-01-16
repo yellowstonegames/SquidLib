@@ -23,7 +23,7 @@ public class Tile {
     }
 
 	/**
-	 * Constructor used from {@link TilesetsGenerator}.
+	 * Constructor used internally.
 	 * 
 	 * @param a_constraint
 	 * @param b_constraint

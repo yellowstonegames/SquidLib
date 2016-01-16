@@ -20,4 +20,13 @@ public interface RandomnessSource extends Serializable {
      */
     int next(int bits);
 
+    /**
+     *
+     * Using this method, any algorithm that needs to efficiently generate more
+     * than 32 bits of random data can interface with this randomness source.
+     *
+     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
+     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
+     */
+    long nextLong();
 }

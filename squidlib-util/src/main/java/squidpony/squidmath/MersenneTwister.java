@@ -1,9 +1,9 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.GwtIncompatible;
+
 import java.security.SecureRandom;
 import java.util.concurrent.locks.ReentrantLock;
-
-import squidpony.annotation.GwtIncompatible;
 
 /**
  * Customized extension of Random to allow for common roguelike operations.
@@ -22,7 +22,7 @@ import squidpony.annotation.GwtIncompatible;
 public class MersenneTwister implements RandomnessSource {
 
 	// The actual seed size isn't that important, but it should be a multiple of 4.
-    private static final int SEED_SIZE_BYTES = 8;
+    private static final int SEED_SIZE_BYTES = 16;
     // Magic numbers from original C version.
     private static final int N = 624;
     private static final int M = 397;
@@ -169,6 +169,10 @@ public class MersenneTwister implements RandomnessSource {
         y ^= (y >>> 18);
 
         return y >>> (32 - bits);
+    }
+    @Override
+    public final long nextLong() {
+        return ((next(32) & 0xffffffffL) << 32) | (next(32) & 0xffffffffL);
     }
 
 }
