@@ -85,5 +85,20 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
                     new String[]{".", ".", "!", "?", "..."}, 0.18));
         }
+
+
+        rng = new RNG(new LightRNG(0xf00df00L));
+        flg = FakeLanguageGen.JAPANESE_ROMANIZED;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 13, new String[]{",", ",", ",", ",", ";"},
+                    new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.12));
+        }
+
+        rng = new RNG(new LightRNG(0xf00df00L));
+        flg = FakeLanguageGen.FRENCH.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.65);
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 6, 12, new String[]{",", ",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "...", "..."}, 0.17));
+        }
     }
 }
