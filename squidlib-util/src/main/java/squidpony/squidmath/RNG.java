@@ -1,9 +1,9 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.GwtIncompatible;
+
 import java.io.Serializable;
 import java.util.*;
-
-import squidpony.annotation.GwtIncompatible;
 
 /**
  * A wrapper class for working with random number generators in a more friendly
@@ -25,34 +25,41 @@ public class RNG implements Serializable {
 	private static final long serialVersionUID = 5716284182286645149L;
 
     /**
-     * Default constructor uses Mersenne Twister, which is of high quality and
-     * fairly high speed.
+     * Default constructor; uses SplitMix64, which is of high quality, but low period (which rarely matters for games),
+     * and has good speed, tiny state size, and excellent 64-bit number generation.
+     * <br>
+     * Compatibility note: previous versions of SquidLib used Mersenne Twister by default. Due to the incompatibility
+     * of the threads used by this Mersenne Twister implementation with GWT and HTML5 applications, the randomness
+     * algorithm has been changed to a marginally faster, more compatible algorithm, though it does suffer from a much
+     * lower period. If you need drastically larger periods than 2^64, you can pass a MersenneTwister object to the
+     * constructor that takes a RandomnessSource. If you don't know what the period of a PRNG is, you probably don't
+     * need to worry about it; it's mainly relevant to heavily multi-threaded applications anyway.
      */
 	@GwtIncompatible
     public RNG() {
-        this(new MersenneTwister());
+        this(new LightRNG());
     }
 
     /**
-     * Seeded constructor uses LightRNG, which is of high quality, but low period (which rarely matters for games),
-     * and has good speed and tiny state size.
+     * Seeded constructor; uses LightRNG, which is of high quality, but low period (which rarely matters for games),
+     * and has good speed, tiny state size, and excellent 64-bit number generation.
      */
     public RNG(long seed) {
         this(new LightRNG(seed));
     }
 
     /**
-     * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
-     * period (which rarely matters for games), and has good speed and tiny state size.
+     * String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
+     * seed for LightRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+     * tiny state size, and excellent 64-bit number generation.
      */
     public RNG(String seedString) {
-        this(new LightRNG(seedString.hashCode()));
+        this(new LightRNG(stableHash(seedString)));
     }
 
     /**
      * Uses the provided source of randomness for all calculations. This
-     * constructor should be used if setting the seed is needed as the provided
-     * source of randomness can be seeded as desired before passing it in.
+     * constructor should be used if an alternate RandomnessSource other than LightRNG is desirable.
      *
      * @param random the source of randomness
      */
@@ -60,6 +67,15 @@ public class RNG implements Serializable {
         this.random = random;
     }
 
+    protected static long stableHash(String s)
+    {
+        byte[] b = s.getBytes();
+        long l = 0;
+        for (int i = 0, c = 0; c < 9; i = (i + 1) % b.length, c++) {
+            l ^= b[i] << (c * 7);
+        }
+        return l;
+    }
     /**
      * @author Tommy Ettinger
      */
@@ -475,7 +491,7 @@ public class RNG implements Serializable {
      * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)
      */
     public double nextDouble() {
-        return (((long) (next(26)) << 27) + next(27)) * DOUBLE_UNIT;
+        return (random.nextLong() & 0xfffffffffffffL) * DOUBLE_UNIT;
     }
 
     /**
@@ -510,7 +526,7 @@ public class RNG implements Serializable {
      * @return a 64-bit random long.
      */
     public long nextLong() {
-        return ((long) (next(32)) << 32) + next(32);
+        return random.nextLong();
     }
 
     /**
@@ -525,12 +541,12 @@ public class RNG implements Serializable {
             return 0;
         }
 
-        long r = ((long)next(31) << 32) + next(32);
+        long r = random.nextLong();
         long m = bound - 1;
         if ((bound & m) == 0) { // i.e., bound is a power of 2
             r = (r & m);
         } else {
-            for (long u = r; u - (r = u % bound) + m < 0; u = ((long)next(31) << 32) + next(32)) {
+            for (long u = r; u - (r = u % bound) + m < 0; u = random.nextLong()) {
             }
         }
         return r;

@@ -1,22 +1,46 @@
 /*
-Written in 2015 by Sebastiano Vigna (vigna@acm.org)
-
-To the extent possible under law, the author has dedicated all copyright
-and related and neighboring rights to this software to the public domain
-worldwide. This software is distributed without any warranty.
-
-See <http://creativecommons.org/publicdomain/zero/1.0/>. */
+ * Ported to Java from the PCG library. Its copyright header follows:
+ *
+ * PCG Random Number Generation for C++
+ *
+ * Copyright 2014 Melissa O'Neill <oneill@pcg-random.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * For additional information about the PCG random number generation scheme,
+ * including its license and other licensing options, visit
+ *
+ *     http://www.pcg-random.org
+ */
 package squidpony.squidmath;
 
 /**
- * This is a SplittableRandom-style generator, meant to have a tiny state
- * that can be efficiently stored and passed, that also performs pseudo-
+ * This is a RandomnessSource in the PCG-Random family. It performs pseudo-
  * random modifications to the output based on the techniques from the
  * Permuted Congruential Generators created by M.E. O'Neill.
- * It should be rather fast, though LightRNG is probably slightly faster,
- * but the quality of this generator should be better, if it matters.
- * Written in 2015 by Sebastiano Vigna (vigna@acm.org)
- * @author Sebastiano Vigna
+ * Specifically, this variant is:
+ * RXS M XS -- random xorshift, mcg multiply, fixed xorshift
+ *
+ * The most statistically powerful generator, but all those steps
+ * make it slower than some of the others.
+ *
+ * Because it's usually used in contexts where the state type and the
+ * result type are the same, it is a permutation and is thus invert-able.
+ * We thus provide a (protected) function to invert it.
+ * <br>
+ * It should actually be somewhat faster than LightRNG, though this needs
+ * to be tested.
+ * @author Melissa E. O'Neill (Go HMC!)
  * @author Tommy Ettinger
  */
 public class PermutedRNG implements RandomnessSource, StatefulRandomness
@@ -34,7 +58,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      */
     public long state;
 
-	private static final long serialVersionUID = -2319339396218218531L;
+	private static final long serialVersionUID = 3291443966125527620L;
 
     /** Creates a new generator seeded using Math.random. */
     public PermutedRNG() {
@@ -42,7 +66,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     }
 
     public PermutedRNG(final long seed) {
-        state = seed;
+        state = (seed + 1442695040888963407L) * 6364136223846793005L + 1442695040888963407L;
     }
 
     @Override
@@ -50,20 +74,41 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         return (int)( nextInt() & ( 1L << bits ) - 1 );
     }
 
+
+    /**
+     * From the PCG-Random source:
+     * XorShifts are invert-able, but they are something of a pain to invert.
+     * This function backs them out.
+     * @param n a XorShift-ed value
+     * @param bits the number of bits we still need to invert, not constant
+     * @param shift the crazy one; the wild-card; it's some weird value every time it's used
+     * @return a long that inverts the shift done to n
+     */
+    private static long unxorshift(long n, int bits, int shift)
+    {
+        if (2*shift >= bits) {
+            return n ^ (n >>> shift);
+        }
+        long lowmask1 = (1L << (bits - shift*2)) - 1;
+        long highmask1 = ~lowmask1;
+        long top1 = n;
+        long bottom1 = n & lowmask1;
+        top1 ^= top1 >>> shift;
+        top1 &= highmask1;
+        n = top1 | bottom1;
+        long lowmask2 = (1L << (bits - shift)) - 1;
+        long bottom2 = n & lowmask2;
+        bottom2 = unxorshift(bottom2, bits - shift, shift);
+        bottom2 &= lowmask1;
+        return top1 | bottom2;
+    }
+
     /**
      * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.
      * @return any int, all 32 bits are random
      */
     public int nextInt() {
-        long z = ( state += 0x9E3779B97F4A7C15l );
-        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9l;
-        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBl;
-        z = z ^ (z >>> 31);
-        return Integer.rotateRight((int)((z ^ (z >>> 18)) >>> 27), (int)(z >>> 59));
-        /*
-        int xs = (int)((z ^ (z >>> 18)) >>> 27), rot = (int)(z >>> 59);
-        return (xs >>> rot) | (xs << (-rot & 31));
-        */
+        return (int)(nextLong() >> 32);
     }
     /**
      * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
@@ -72,8 +117,29 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      *
      * @return any long, all 64 bits are random
      */
-    public long nextLong() {
-        return ((long)nextInt() << 32) | (nextInt() & 0xffffffffL);
+    @Override
+    public long nextLong()
+    {
+        // increment  = 1442695040888963407L;
+        // multiplier = 6364136223846793005L;
+
+        final long old = permute(state);
+        state = state * 6364136223846793005L + 1442695040888963407L;
+        return old;
+    }
+    private static long permute(long p)
+    {
+        p ^= p >>> (5 + ((p >>> 59) & 31));
+        p *= -5840758589994634535L;
+        return p ^ (p >>> 43);
+
+    }
+
+    protected static long invert(long internal)
+    {
+        internal = unxorshift(internal, 64, 43);
+        internal *= -3437190434928431767L;
+        return unxorshift(internal, 64, 5 + ((int)(internal >>> 59) & 31));
     }
 
     /**
@@ -82,14 +148,13 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      * @return a random int less than n and at least equal to 0
      */
     public int nextInt( final int n ) {
-        if ( n <= 0 ) throw new IllegalArgumentException();
-        //for(;;) {
-            final int bits = nextInt() >>> 1;
-        return bits % n;
-        //int value = bits % n;
-            //value = (value < 0) ? -value : value;
-            //if ( bits - value + ( n - 1 ) >= 0 ) return value;
-        //}
+        if ( n <= 0 ) return 0;
+        int threshold = (0x7fffffff - n + 1) % n;
+        for (;;) {
+            int bits = (int)(nextLong() & 0x7fffffff);
+            if (bits >= threshold)
+                return bits % n;
+        }
     }
 
     /**
@@ -111,14 +176,13 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      * @return a random long less than n
      */
     public long nextLong( final long n ) {
-        if ( n <= 0 ) throw new IllegalArgumentException();
-        //for(;;) {
-            final long bits = nextLong() >>> 1;
-            return bits % n;
-            //long value = bits % n;
-            //value = (value < 0) ? -value : value;
-            //if ( bits - value + ( n - 1 ) >= 0 ) return value;
-        //}
+        if ( n <= 0 ) return 0;
+        long threshold = (0x7fffffffffffffffL - n + 1) % n;
+        for (;;) {
+            long bits = nextLong() & 0x7fffffffffffffffL;
+            if (bits >= threshold)
+                return bits % n;
+        }
     }
 
     /**
@@ -130,7 +194,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      * @return a random long at least equal to lower and less than upper
      */
     public long nextLong( final long lower, final long upper ) {
-        if ( upper - lower <= 0 ) throw new IllegalArgumentException();
+        if ( upper - lower <= 0 ) return 0;
         return lower + nextLong(upper - lower);
     }
 
@@ -175,19 +239,19 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      * @return a random true or false value.
      */
     public boolean nextBoolean() {
-        return ( nextInt() & 1 ) != 0L;
+        return ( nextLong() & 1L ) != 0L;
     }
 
     /**
      * Given a byte array as a parameter, this will fill the array with random bytes (modifying it
-     * in-place). Calls nextInt() {@code Math.ceil(bytes.length / 4.0)} times.
+     * in-place). Calls nextLong() {@code Math.ceil(bytes.length / 8.0)} times.
      * @param bytes a byte array that will have its contents overwritten with random bytes.
      */
     public void nextBytes( final byte[] bytes ) {
         int i = bytes.length, n = 0;
         while( i != 0 ) {
-            n = Math.min(i, 4 );
-            for ( int bits = nextInt(); n-- != 0; bits >>= 4 ) bytes[ --i ] = (byte)bits;
+            n = Math.min(i, 8 );
+            for ( long bits = nextLong(); n-- != 0; bits >>>= 8 ) bytes[ --i ] = (byte)bits;
         }
     }
 
@@ -224,6 +288,26 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      */
     public long skip(long advance)
     {
-        return state += 0x9E3779B97F4A7C15l * advance;
+        // The method used here is based on Brown, "Random Number Generation
+        // with Arbitrary Stride,", Transactions of the American Nuclear
+        // Society (Nov. 1994).  The algorithm is very similar to fast
+        // exponentiation.
+        //
+        // Even though advance is a signed long, it is treated as unsigned, effectively, for the purposes
+        // of how many iterations it goes through (at most 63 for forwards, 64 for "backwards").
+        if(advance == 0)
+            return state;
+        long acc_mult = 1, acc_plus = 0, cur_mult = 6364136223846793005L, cur_plus = 1442695040888963407L;
+
+        do {
+            if ((advance & 1L) != 0L) {
+                acc_mult *= cur_mult;
+                acc_plus = acc_plus*cur_mult + cur_plus;
+            }
+            cur_plus = (cur_mult+1L)*cur_plus;
+            cur_mult *= cur_mult;
+            advance >>>= 1;
+        }while (advance > 0L);
+        return acc_mult * state + acc_plus;
     }
 }

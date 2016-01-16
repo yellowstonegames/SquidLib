@@ -16,6 +16,8 @@
  */
 package squidpony.squidmath;
 
+import squidpony.annotation.GwtIncompatible;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,8 +26,6 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
-import squidpony.annotation.GwtIncompatible;
 
 /**
  * Implementation of a Sobol sequence as a Quasi-Random Number Generator.
@@ -321,12 +321,7 @@ public class SobolQRNG implements RandomnessSource {
         }
 
         // find the index c of the rightmost 0
-        int c = 1;
-        int value = count - 1;
-        while ((value & 1) == 1) {
-            value >>= 1;
-            c++;
-        }
+        int c = 1 + Integer.numberOfTrailingZeros(count);
 
         for (int i = 0; i < dimension; i++) {
             x[i] ^= direction[i][c];
@@ -348,12 +343,7 @@ public class SobolQRNG implements RandomnessSource {
         }
 
         // find the index c of the rightmost 0
-        int c = 1;
-        int value = count - 1;
-        while ((value & 1) == 1) {
-            value >>= 1;
-            c++;
-        }
+        int c = 1 + Integer.numberOfTrailingZeros(count);
 
         for (int i = 0; i < dimension; i++) {
             x[i] ^= direction[i][c];
@@ -375,12 +365,7 @@ public class SobolQRNG implements RandomnessSource {
         }
 
         // find the index c of the rightmost 0
-        int c = 1;
-        int value = count - 1;
-        while ((value & 1) == 1) {
-            value >>= 1;
-            c++;
-        }
+        int c = 1 + Integer.numberOfTrailingZeros(count);
 
         for (int i = 0; i < dimension; i++) {
             x[i] ^= direction[i][c];
@@ -402,12 +387,7 @@ public class SobolQRNG implements RandomnessSource {
         }
 
         // find the index c of the rightmost 0
-        int c = 1;
-        int value = count - 1;
-        while ((value & 1) == 1) {
-            value >>= 1;
-            c++;
-        }
+        int c = 1 + Integer.numberOfTrailingZeros(count);
 
         for (int i = 0; i < dimension; i++) {
             x[i] ^= direction[i][c];
@@ -475,4 +455,20 @@ public class SobolQRNG implements RandomnessSource {
         return (int) (nextIntVector()[0] & (1L << bits) - 1);
     }
 
+    /**
+     * Using this method, any algorithm that needs to efficiently generate more
+     * than 32 bits of random data can interface with this randomness source.
+     * <p/>
+     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
+     *
+     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
+     */
+    @Override
+    public long nextLong() {
+        if (dimension > 1) {
+            long[] l = nextLongVector();
+            return (l[0] << 32) ^ (l[1]);
+        }
+        return (nextLongVector()[0] << 32) ^ (nextLongVector()[0]);
+    }
 }
