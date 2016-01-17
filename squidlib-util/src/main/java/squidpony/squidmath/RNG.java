@@ -36,7 +36,6 @@ public class RNG implements Serializable {
      * constructor that takes a RandomnessSource. If you don't know what the period of a PRNG is, you probably don't
      * need to worry about it; it's mainly relevant to heavily multi-threaded applications anyway.
      */
-	@GwtIncompatible
     public RNG() {
         this(new LightRNG());
     }
