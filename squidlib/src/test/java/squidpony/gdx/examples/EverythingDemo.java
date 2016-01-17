@@ -16,6 +16,7 @@ import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.SpatialMap;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -26,12 +27,40 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 
 public class EverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
+    private static class Monster {
+        public AnimatedEntity entity;
+        public int state;
+        public Monster(Actor actor, int x, int y, int state)
+        {
+            entity = new AnimatedEntity(actor, x, y);
+            this.state = state;
+        }
+        public Monster(AnimatedEntity ae, int state)
+        {
+            entity = ae;
+            this.state = state;
+        }
+        public Monster change(int state)
+        {
+            this.state = state;
+            return this;
+        }
+        public Monster change(AnimatedEntity ae)
+        {
+            entity = ae;
+            return this;
+        }
+        public Monster move(int x, int y)
+        {
+            entity.gridX = x;
+            entity.gridY = y;
+            return this;
+        }
+    }
     SpriteBatch batch;
 
     private Phase phase = Phase.WAIT;
@@ -63,7 +92,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private int health = 7;
     private SquidColorCenter fgCenter, bgCenter;
     private Color bgColor;
-    private HashMap<AnimatedEntity, Integer> monsters;
+    private SpatialMap<Integer, Monster> monsters;
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage;
     private int framesWithoutAnimation = 0;
@@ -141,8 +170,8 @@ public class EverythingDemo extends ApplicationAdapter {
         batch = new SpriteBatch();
         width = 80;
         height = 30;
-        cellWidth = 10;
-        cellHeight = 20;
+        cellWidth = 11;
+        cellHeight = 22;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
@@ -179,13 +208,13 @@ public class EverythingDemo extends ApplicationAdapter {
         Coord pl = dungeonGen.utility.randomCell(placement);
         placement = CoordPacker.removePacked(placement, pl.x, pl.y);
         int numMonsters = 25;
-        monsters = new HashMap<AnimatedEntity, Integer>(numMonsters);
+        monsters = new SpatialMap<Integer, Monster>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
-            monsters.put(display.animateActor(monPos.x, monPos.y, 'Я',
-                    fgCenter.filter(display.getPalette().get(11))), 0);
+            monsters.put(monPos, i, new Monster(display.animateActor(monPos.x, monPos.y, 'Я',
+                    fgCenter.filter(display.getPalette().get(11))), 0));
         }
         // your choice of FOV matters here.
         fov = new FOV(FOV.RIPPLE_TIGHT);
@@ -401,13 +430,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 // recalculate FOV, store it in fovmap for the render to use.
                 fovmap = fov.calculateFOV(res, newX, newY, 8, Radius.SQUARE);
                 display.slide(player, newX, newY);
-
-                for(AnimatedEntity ae : monsters.keySet()) {
-                    if (newX == ae.gridX && newY == ae.gridY) {
-                        monsters.remove(ae);
-                        break;
-                    }
-                }
+                monsters.remove(Coord.get(newX, newY));
             }
 
             phase = Phase.PLAYER_ANIM;
@@ -415,13 +438,10 @@ public class EverythingDemo extends ApplicationAdapter {
     }
 
     // check if a monster's movement would overlap with another monster.
-    private boolean checkOverlap(AnimatedEntity ae, int x, int y, ArrayList<Coord> futureOccupied)
+    private boolean checkOverlap(Monster mon, int x, int y, ArrayList<Coord> futureOccupied)
     {
-        for(AnimatedEntity mon : monsters.keySet())
-        {
-            if(mon.gridX == x && mon.gridY == y && !mon.equals(ae))
-                return true;
-        }
+        if(monsters.containsPosition(Coord.get(x, y)) && !mon.equals(monsters.get(Coord.get(x, y))))
+            return true;
         for(Coord p : futureOccupied)
         {
             if(x == p.x && y == p.y)
@@ -442,23 +462,21 @@ public class EverythingDemo extends ApplicationAdapter {
         // this is an important piece of DijkstraMap usage; the argument is a Set of Points for squares that
         // temporarily cannot be moved through (not walls, which are automatically known because the map char[][]
         // was passed to the DijkstraMap constructor, but things like moving creatures and objects).
-        LinkedHashSet<Coord> monplaces = new LinkedHashSet<>(monsters.size());
-        for(AnimatedEntity ae : monsters.keySet())
-        {
-            monplaces.add(Coord.get(ae.gridX, ae.gridY));
-        }
+        LinkedHashSet<Coord> monplaces = monsters.positions();
+
         pathMap = getToPlayer.scan(monplaces);
 
         // recalculate FOV, store it in fovmap for the render to use.
         fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
         // handle monster turns
-        ArrayList<Coord> nextMovePositions = new ArrayList<>(25);
-        for(Map.Entry<AnimatedEntity, Integer> mon : monsters.entrySet())
+        ArrayList<Coord> nextMovePositions = new ArrayList<Coord>(25);
+        for(Coord pos : monsters.positions())
         {
+            Monster mon = monsters.get(pos);
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
-            if(mon.getValue() > 0 || fovmap[mon.getKey().gridX][mon.getKey().gridY] > 0.1)
+            if(mon.state > 0 || fovmap[pos.x][pos.y] > 0.1)
             {
-                if(mon.getValue() == 0)
+                if(mon.state == 0)
                 {
                     messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
@@ -470,9 +488,9 @@ public class EverythingDemo extends ApplicationAdapter {
                 double best = 9999.0;
                 for(Direction d : rng.shuffle(Direction.OUTWARDS))
                 {
-                    Coord tmp = Coord.get(mon.getKey().gridX + d.deltaX, mon.getKey().gridY + d.deltaY);
+                    Coord tmp = pos.translate(d);
                     if(pathMap[tmp.x][tmp.y] < best &&
-                            !checkOverlap(mon.getKey(), tmp.x, tmp.y, nextMovePositions))
+                            !checkOverlap(mon, tmp.x, tmp.y, nextMovePositions))
                     {
                         // pathMap is a 2D array of doubles where 0 is the goal (the player).
                         // we use best to store which option is closest to the goal.
@@ -481,34 +499,31 @@ public class EverythingDemo extends ApplicationAdapter {
                     }
                 }
                 if(choice != null) {
-                    Coord tmp = Coord.get(mon.getKey().gridX + choice.deltaX, mon.getKey().gridY + choice.deltaY);
+                    Coord tmp = pos.translate(choice);
                     // if we would move into the player, instead damage the player and give newMons the current
                     // position of this monster.
-                    if (player.gridX == tmp.x && player.gridY == tmp.y) {
+                    if (tmp.x == player.gridX && tmp.y == player.gridY) {
                         display.wiggle(player);
                         health--;
                         player.setText("" + health);
-                        monsters.put(mon.getKey(), 1);
+                        monsters.positionalModify(pos, mon.change(1));
                     }
                     // otherwise store the new position in newMons.
                     else {
                         /*if (fovmap[mon.getKey().x][mon.getKey().y] > 0.0) {
                             display.put(mon.getKey().x, mon.getKey().y, 'M', 11);
                         }*/
-                        nextMovePositions.add(Coord.get(tmp.x, tmp.y));
-                        monsters.put(mon.getKey(), 1);
-                        display.slide(mon.getKey(), tmp.x, tmp.y);
+                        nextMovePositions.add(tmp);
+                        monsters.positionalModify(pos, mon.change(1));
+                        monsters.move(pos, tmp);
+                        display.slide(mon.entity, tmp.x, tmp.y);
 
                     }
                 }
                 else
                 {
-                    monsters.put(mon.getKey(), 1);
+                    monsters.positionalModify(pos, mon.change(1));
                 }
-            }
-            else
-            {
-                monsters.put(mon.getKey(), mon.getValue());
             }
         }
 
@@ -700,10 +715,10 @@ public class EverythingDemo extends ApplicationAdapter {
             batch.begin();
             // the player needs to get drawn every frame, of course.
             display.drawActor(batch, 1.0f, player);
-            for (AnimatedEntity mon : monsters.keySet()) {
+            for (Monster mon : monsters) {
                 // monsters are only drawn if within FOV.
-                if (fovmap[mon.gridX][mon.gridY] > 0.0) {
-                    display.drawActor(batch, 1.0f, mon);
+                if (fovmap[mon.entity.gridX][mon.entity.gridY] > 0.0) {
+                    display.drawActor(batch, 1.0f, mon.entity);
                 }
             }
             // batch must end if it began.

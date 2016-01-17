@@ -2,9 +2,7 @@ package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 /**
  * A data structure that seems to be re-implemented often for games, this associates Coord positions and generic I
@@ -151,6 +149,23 @@ public class SpatialMap<I, E> implements Iterable<E> {
     }
 
     /**
+     * Inserts a new element with the given identity and Coord position, potentially overwriting an existing element.
+     * <br>
+     * If you want to alter an existing element, use modify() or move().
+     * @param coord the Coord position to place the element at; should be empty
+     * @param id the identity to associate the element with; should be unused
+     * @param element the element to add
+     */
+    public void put(Coord coord, I id, E element)
+    {
+        SpatialTriple<I, E> triple = new SpatialTriple<I, E>(coord, id, element);
+        itemMapping.remove(id);
+        positionMapping.remove(coord);
+        itemMapping.put(id, triple);
+        positionMapping.put(coord, triple);
+    }
+
+    /**
      * Changes the element's value associated with id. The key id should exist before calling this; if there is no
      * matching id, this returns null.
      * @param id the identity of the element to modify
@@ -160,6 +175,23 @@ public class SpatialMap<I, E> implements Iterable<E> {
     public E modify(I id, E newValue)
     {
         SpatialTriple<I, E> gotten = itemMapping.get(id);
+        if(gotten != null) {
+            E previous = gotten.element;
+            gotten.element = newValue;
+            return previous;
+        }
+        return null;
+    }
+    /**
+     * Changes the element's value associated with pos. The key pos should exist before calling this; if there is no
+     * matching position, this returns null.
+     * @param pos the position of the element to modify
+     * @param newValue the element value to replace the previous element with.
+     * @return the previous element value associated with id
+     */
+    public E positionalModify(Coord pos, E newValue)
+    {
+        SpatialTriple<I, E> gotten = positionMapping.get(pos);
         if(gotten != null) {
             E previous = gotten.element;
             gotten.element = newValue;
@@ -334,6 +366,35 @@ public class SpatialMap<I, E> implements Iterable<E> {
         return null;
     }
 
+    /**
+     * Get a Set of all positions used for values in this data structure, returning a LinkedHashSet (defensively copying
+     * the key set used internally) for its stable iteration order.
+     * @return a LinkedHashSet of Coord corresponding to the positions present in this data structure.
+     */
+    public LinkedHashSet<Coord> positions()
+    {
+        return new LinkedHashSet<Coord>(positionMapping.keySet());
+    }
+    /**
+     * Get a Set of all identities used for values in this data structure, returning a LinkedHashSet (defensively
+     * copying the key set used internally) for its stable iteration order.
+     * @return a LinkedHashSet of I corresponding to the identities present in this data structure.
+     */
+    public LinkedHashSet<I> identities()
+    {
+        return new LinkedHashSet<I>(itemMapping.keySet());
+    }
+
+    /**
+     * Gets all data stored in this as a collection of values similar to Map.Entry, but containing a Coord, I, and E
+     * value for each entry, in insertion order. The type is SpatialTriple, defined in a nested class.
+     * @return a Collection of SpatialTriple of I, E
+     */
+    public Collection<SpatialTriple<I, E>> triples()
+    {
+        return itemMapping.values();
+    }
+
     public void clear()
     {
         itemMapping.clear();
@@ -400,9 +461,19 @@ public class SpatialMap<I, E> implements Iterable<E> {
 
             @Override
             public void remove() {
-            	throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException();
             }
         };
+    }
+
+    /**
+     * Iterates through values similar to Map.Entry, but containing a Coord, I, and E value for each entry, in insertion
+     * order. The type is SpatialTriple, defined in a nested class.
+     * @return an Iterator of SpatialTriple of I, E
+     */
+    public Iterator<SpatialTriple<I, E>> tripleIterator()
+    {
+        return itemMapping.values().iterator();
     }
     /**
      * Iterates through positions in insertion order; has less predictable iteration order than the other iterators.
