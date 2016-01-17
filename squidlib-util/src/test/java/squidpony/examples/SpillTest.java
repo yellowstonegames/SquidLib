@@ -10,6 +10,7 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
@@ -40,7 +41,7 @@ public class SpillTest {
             ArrayList<Coord> ordered = spreader.start(entry, 20, impassable);
             ordered.addAll(spreader.start(entry, 35, impassable));
             boolean[][] sm = spreader.spillMap;
-            char[][] md = dun.clone(),
+            char[][] md = Arrays.copyOf(dun, dun.length),
                     hl = DungeonUtility.hashesToLines(dun);
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
@@ -79,7 +80,7 @@ public class SpillTest {
 
             ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
             short[][] sm = spreader.spillMap;
-            char[][] md = dun.clone(),
+            char[][] md = Arrays.copyOf(dun, dun.length),
                     hl = DungeonUtility.hashesToLines(dun);
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {

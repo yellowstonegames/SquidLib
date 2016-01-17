@@ -56,7 +56,7 @@ public class RNGTest {
                prr = pr.asRandom(),
                xrr = xr.asRandom(),
                drr = dr.asRandom();
-        int c = 0, bound = 1 << 16;
+        int c = 0;
         for(int i = 0; i < 99; i++)
         {
             c = light.nextInt();
@@ -106,7 +106,7 @@ public class RNGTest {
         prr = pr.asRandom();
         xrr = xr.asRandom();
 
-        long l = 0, longBound = 1L << 48;
+        long l = 0;
         for(int i = 0; i < 99; i++)
         {
             l = light.nextLong();
@@ -130,7 +130,6 @@ public class RNGTest {
             l = xrr.nextLong();
             System.out.println("XRR : " + binaryString(l, 8));
             */
-            System.out.println(longBound);
         }
         for(int k = 0; k < 7; k++) {
             for (int i = 63; i >= 0; i--) {
@@ -144,7 +143,58 @@ public class RNGTest {
             System.out.println(lbitsTotal[k]);
             System.out.println(counters[k]);
         }
-        
+
+        light = new LightRNG(0xDADA157);
+        perm = new PermutedRNG(0xDADA157);
+        xor = new XorRNG(0xDADA157);
+
+        lr = new RNG(new LightRNG(0xDADA157));
+        pr = new RNG(new PermutedRNG(0xDADA157));
+        xr = new RNG(new XorRNG(0xDADA157));
+        dr = new DeckRNG(0xDADA157);
+        lrr = lr.asRandom();
+        prr = pr.asRandom();
+        xrr = xr.asRandom();
+        ibits = new int[11][32];
+        ibitsTotal = new int[11];
+        int d = 0;
+        for(int i = 0; i < 99; i++)
+        {
+            d = (int)((light.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("l   : " + binaryString(d, 0));
+            d = (int)((perm.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("p   : " + binaryString(d, 1));
+            d = (int)((xor.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("x   : " + binaryString(d, 2));
+            d = (int)((lr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("LR  : " + binaryString(d, 3));
+            d = (int)((pr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("PR  : " + binaryString(d, 4));
+            d = (int)((xr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("XR  : " + binaryString(d, 5));
+            d = (int)((dr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("DR  : " + binaryString(d, 6));
+            d = (int)((lrr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("LRR : " + binaryString(d, 7));
+            d = (int)((prr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("PRR : " + binaryString(d, 8));
+            d = (int)((xrr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("XRR : " + binaryString(d, 9));
+            d = (int)((xrr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("DRR : " + binaryString(d, 10));
+            System.out.println();
+        }
+        for(int k = 0; k < 11; k++) {
+            for (int i = 31; i >= 0; i--) {
+                System.out.print(String.format("%02d ", ibits[k][i]));
+            }
+            System.out.println();
+        }
+
+        for(int k = 0; k < 11; k++) {
+            System.out.println(ibitsTotal[k]);
+        }
+
 
     }
 }

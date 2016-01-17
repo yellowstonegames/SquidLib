@@ -2004,7 +2004,7 @@ public class FOVCache extends FOV{
          */
         @Override
         public void run() {
-            tmpCache = cache.clone();
+            System.arraycopy(cache, 0, tmpCache, 0, tmpCache.length);
             short[] needsChange = new short[0];
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {

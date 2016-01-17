@@ -16,13 +16,14 @@ import java.util.*;
  */
 public class RNG implements Serializable {
 
-	protected static final double DOUBLE_UNIT = 1.0 / (1L << 53);
+    protected static final double DOUBLE_UNIT = 1.0 / (1L << 53);
+    protected static final float FLOAT_UNIT = 1.0f / (1 << 24);
     protected RandomnessSource random;
     protected double nextNextGaussian;
     protected boolean haveNextNextGaussian = false;
     protected Random ran = null;
 
-	private static final long serialVersionUID = 5716284182286645149L;
+	private static final long serialVersionUID = 3527284182286645149L;
 
     /**
      * Default constructor; uses SplitMix64, which is of high quality, but low period (which rarely matters for games),
@@ -54,7 +55,7 @@ public class RNG implements Serializable {
      * tiny state size, and excellent 64-bit number generation.
      */
     public RNG(String seedString) {
-        this(new LightRNG(stableHash(seedString)));
+        this(new LightRNG(StableHash.hash(seedString)));
     }
 
     /**
@@ -67,15 +68,6 @@ public class RNG implements Serializable {
         this.random = random;
     }
 
-    protected static long stableHash(String s)
-    {
-        byte[] b = s.getBytes();
-        long l = 0;
-        for (int i = 0, c = 0; c < 9; i = (i + 1) % b.length, c++) {
-            l ^= b[i] << (c * 7);
-        }
-        return l;
-    }
     /**
      * @author Tommy Ettinger
      */
@@ -344,18 +336,8 @@ public class RNG implements Serializable {
      * @param <T> can be any non-primitive type.
      * @return a shuffled copy of elements
      */
-    @GwtIncompatible
     public <T> T[] shuffle(T[] elements) {
-        T[] array = elements.clone();
-        int n = array.length;
-        for (int i = 0; i < n; i++)
-        {
-            int r = i + nextInt(n - i);
-            T t = array[r];
-            array[r] = array[i];
-            array[i] = t;
-        }
-        return array;
+        return shuffle(elements, Arrays.copyOf(elements, elements.length));
     }
 
     /**
@@ -373,9 +355,7 @@ public class RNG implements Serializable {
     {
     	if (dest.length != elements.length)
     		throw new IllegalStateException("Input arrays must be of the same sizes");
-    	/* smelC: KISS implementation for now */
-    	for (int i = 0; i < elements.length; i++)
-    		dest[i] = elements[i];
+        System.arraycopy(elements, 0, dest, 0, elements.length);
     	/* The usual code now */
         for (int i = 0; i < elements.length; i++)
         {
@@ -412,7 +392,6 @@ public class RNG implements Serializable {
      * @param <T> can be any non-primitive type.
      * @return an array of T that has length equal to the smaller of count or data.length
      */
-    @GwtIncompatible /* because it calls shuffle(T[]) */
     public <T> T[] randomPortion(T[] data, int count)
     {
         T[] array = Arrays.copyOf(data, Math.min(count, data.length));
@@ -491,7 +470,7 @@ public class RNG implements Serializable {
      * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)
      */
     public double nextDouble() {
-        return (random.nextLong() & 0xfffffffffffffL) * DOUBLE_UNIT;
+        return (random.nextLong() & 0x1fffffffffffffL) * DOUBLE_UNIT;
     }
 
     /**
@@ -500,7 +479,7 @@ public class RNG implements Serializable {
      * @return a value between 0 (inclusive) and max (exclusive)
      */
     public double nextDouble(double max) {
-        return (((long) (next(26)) << 27) + next(27)) * DOUBLE_UNIT * max;
+        return nextDouble() * max;
     }
 
     /**
@@ -510,7 +489,7 @@ public class RNG implements Serializable {
      * @return a value between 0 (inclusive) and 0.99999994 (inclusive)
      */
     public float nextFloat() {
-        return next(24) / ((float) (1 << 24));
+        return next(24) * FLOAT_UNIT;
     }
 
     /**
