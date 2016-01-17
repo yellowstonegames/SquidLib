@@ -13,6 +13,7 @@ import java.util.*;
  * random elements from a collection or array.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
+ * @author Tommy Ettinger
  */
 public class RNG implements Serializable {
 
@@ -77,9 +78,8 @@ public class RNG implements Serializable {
 		private final RandomnessSource randomnessSource;
 
         /**
-         * Creates a new random number generator. This constructor sets
-         * the seed of the random number generator to a value very likely
-         * to be distinct from any other invocation of this constructor.
+         * Creates a new random number generator. This constructor uses
+         * the seed of the given RandomnessSource if it has been seeded.
          * @param randomnessSource a way to get random bits, supplied by RNG
          */
         public CustomRandom(RandomnessSource randomnessSource) {
