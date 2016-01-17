@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.annotation.GwtIncompatible;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -60,7 +61,7 @@ public class MersenneTwister implements RandomnessSource {
         if (seed == null || seed.length != SEED_SIZE_BYTES) {
             throw new IllegalArgumentException("Mersenne Twister RNG requires a 128-bit (16-byte) seed.");
         }
-        this.seed = seed.clone();
+        this.seed = Arrays.copyOf(seed, seed.length);
 
         int[] seedInts = convertBytesToInts(this.seed);
 
@@ -133,7 +134,7 @@ public class MersenneTwister implements RandomnessSource {
     }
 
     public byte[] getSeed() {
-        return seed.clone();
+        return Arrays.copyOf(seed, seed.length);
     }
 
     @Override

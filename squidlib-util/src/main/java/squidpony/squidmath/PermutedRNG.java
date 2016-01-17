@@ -38,8 +38,10 @@ package squidpony.squidmath;
  * result type are the same, it is a permutation and is thus invert-able.
  * We thus provide a (protected) function to invert it.
  * <br>
- * It should actually be somewhat faster than LightRNG, though this needs
- * to be tested.
+ * Even though benchmarks on similar programs in C would lead you to
+ * believe this should be somewhat faster than LightRNG, benchmarking
+ * with JMH seems to show LightRNG being between 2 and 3 times faster
+ * than PermutedRNG, and both drastically faster than java.util.Random .
  * @author Melissa E. O'Neill (Go HMC!)
  * @author Tommy Ettinger
  */

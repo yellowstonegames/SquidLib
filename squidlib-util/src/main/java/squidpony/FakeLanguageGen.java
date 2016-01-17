@@ -1051,12 +1051,12 @@ public class FakeLanguageGen implements Serializable {
     }
     public FakeLanguageGen removeAccents() {
 
-        String[] ov = openingVowels.clone(),
-                mv = midVowels.clone(),
-                oc = openingConsonants.clone(),
-                mc = midConsonants.clone(),
-                cc = closingConsonants.clone(),
-                cs = closingSyllables.clone();
+        String[] ov = Arrays.copyOf(openingVowels, openingVowels.length),
+                mv = Arrays.copyOf(midVowels, midVowels.length),
+                oc = Arrays.copyOf(openingConsonants, openingConsonants.length),
+                mc = Arrays.copyOf(midConsonants, midConsonants.length),
+                cc = Arrays.copyOf(closingConsonants, closingConsonants.length),
+                cs = Arrays.copyOf(closingSyllables, closingSyllables.length);
         for (int i = 0; i < ov.length; i++) {
             ov[i] = removeAccents(openingVowels[i]);
         }

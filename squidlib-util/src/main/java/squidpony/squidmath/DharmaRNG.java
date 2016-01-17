@@ -104,7 +104,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public double nextDouble() {
-        double gen = (((long) (super.next(26)) << 27) + super.next(27)) * DOUBLE_UNIT;
+        double gen = random.nextLong() * DOUBLE_UNIT;
         /*if(Math.abs((produced + gen) - (baseline + fairness)) > 1.5) {
             //do some reseeding here if possible
         }*/
@@ -376,6 +376,11 @@ public class DharmaRNG extends RNG {
     @Override
     public <T> T[] shuffle(T[] elements) {
         return super.shuffle(elements);
+    }
+
+    @Override
+    public <T> T[] shuffle(T[] elements, T[] dest) {
+        return super.shuffle(elements, dest);
     }
 
     @Override

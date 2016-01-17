@@ -1,11 +1,13 @@
 package squidpony.squidmath;
 
 /**
+ * A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
+ * set or retrieved using setState() or getState().
  * Created by Tommy Ettinger on 9/15/2015.
  */
 public class StatefulRNG extends RNG {
 
-	private static final long serialVersionUID = 4801506898212937160L;
+	private static final long serialVersionUID = 3801506898212937163L;
 
 	public StatefulRNG() {
         super(new LightRNG());
@@ -27,7 +29,7 @@ public class StatefulRNG extends RNG {
      * period (which rarely matters for games), and has good speed and tiny state size.
      */
     public StatefulRNG(String seedString) {
-        this(new LightRNG(seedString.hashCode()));
+        this(new LightRNG(StableHash.hash(seedString)));
     }
 
     @Override

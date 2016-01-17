@@ -40,49 +40,54 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.PermutedRNG;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class RNGBenchmark {
 
+    private static long seed = 9000;
+    /*
     public long doLight()
     {
-        LightRNG rng = new LightRNG(0x1337beefc0debabeL);
-        long done = 0;
-        for (int i = 0; i < 0xfffffff; i++) {
-            done += rng.nextLong();
+        LightRNG rng = new LightRNG(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
         }
-        return done;
+        return seed;
     }
-    /*
-     * JMH generates lots of synthetic code for the benchmarks for you
-     * during the benchmark compilation. JMH can measure the benchmark
-     * methods in lots of modes. Users may select the default benchmark
-     * mode with the special annotation, or select/override the mode via
-     * the runtime options.
-     *
-     * When you are puzzled with some particular behavior, it usually helps
-     * to look into the generated code. You might see the code is doing not
-     * something you intend it to do. Good experiments always follow up on
-     * the experimental setup, and cross-checking the generated code is an
-     * important part of that follow up.
-     *
-     * The generated code for this particular sample is somewhere at
-     *  target/generated-sources/annotations/.../JMHSample_02_BenchmarkModes.java
-     */
 
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
     public void measureLight() throws InterruptedException {
+        seed = 9000;
         doLight();
+    }
+    */
+    public long doRandom()
+    {
+        Random rng = new Random(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.SampleTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureRandom() throws InterruptedException {
+        seed = 9000;
+        doRandom();
     }
 
     public long doPermuted()
     {
-        PermutedRNG rng = new PermutedRNG(0x1337beefc0debabeL);
+        PermutedRNG rng = new PermutedRNG(seed);
         long done = 0;
         for (int i = 0; i < 0xfffffff; i++) {
             done += rng.nextLong();
@@ -94,6 +99,7 @@ public class RNGBenchmark {
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePermuted() throws InterruptedException {
+        seed = 9000;
         doPermuted();
     }
 */
