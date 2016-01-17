@@ -73,7 +73,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
 
     @Override
     public int next( int bits ) {
-        return (int)( nextInt() & ( 1L << bits ) - 1 );
+        return (int)( nextLong() & ( 1L << bits ) - 1 );
     }
 
 
@@ -107,6 +107,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
 
     /**
      * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.
+     * Calls nextLong() exactly one time.
      * @return any int, all 32 bits are random
      */
     public int nextInt() {
@@ -114,8 +115,6 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     }
     /**
      * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
-     *
-     * Generates two 32-bit integers using two calls to nextInt() and combines them into one long.
      *
      * @return any long, all 64 bits are random
      */
@@ -146,6 +145,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
 
     /**
      * Exclusive on the upper bound n.  The lower bound is 0.
+     * Will call nextLong() with no arguments at least 1 time, possibly more.
      * @param n the upper bound; should be positive
      * @return a random int less than n and at least equal to 0
      */
@@ -161,6 +161,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
 
     /**
      * Inclusive lower, exclusive upper.
+     * Will call nextLong() with no arguments at least 1 time, possibly more.
      * @param lower the lower bound, inclusive, can be positive or negative
      * @param upper the upper bound, exclusive, should be positive, must be greater than lower
      * @return a random int at least equal to lower and less than upper
@@ -173,7 +174,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     /**
      * Exclusive on the upper bound n. The lower bound is 0.
      *
-     * Will call nextInt() 2 times.
+     * Will call nextLong() with no arguments at least 1 time, possibly more.
      * @param n the upper bound; should be positive
      * @return a random long less than n
      */
@@ -190,7 +191,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     /**
      * Exclusive on the upper bound n. The lower bound is 0.
      *
-     * Will call nextInt() at least 2 times, possibly more.
+     * Will call nextLong() at least 1 time, possibly more.
      * @param lower the lower bound, inclusive, can be positive or negative
      * @param upper the upper bound, exclusive, should be positive, must be greater than lower
      * @return a random long at least equal to lower and less than upper
@@ -203,7 +204,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     /**
      * Gets a uniform random double in the range [0.0,1.0)
      *
-     * Calls nextInt() exactly two times.
+     * Calls nextLong() exactly one time.
      *
      * @return a random double at least equal to 0.0 and less than 1.0
      */
@@ -215,7 +216,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      * Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer
      * is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.
      *
-     * Calls nextInt() exactly two times.
+     * Calls nextLong() exactly one time.
      *
      *  @param outer the exclusive outer bound, can be negative
      * @return a random double between 0.0 (inclusive) and outer (exclusive)
@@ -227,17 +228,17 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     /**
      * Gets a uniform random float in the range [0.0,1.0)
      *
-     * Calls nextInt() exactly one time.
+     * Calls nextLong() exactly one time.
      *
      * @return a random float at least equal to 0.0f and less than 1.0f
      */
     public float nextFloat() {
-        return (float)( ( nextInt() & FLOAT_MASK ) * NORM_24 );
+        return (float)( ( nextLong() & FLOAT_MASK ) * NORM_24 );
     }
 
     /**
      * Gets a random value, true or false.
-     * Calls nextInt() once.
+     * Calls nextLong() once.
      * @return a random true or false value.
      */
     public boolean nextBoolean() {
@@ -275,7 +276,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
     }
     /**
      * Gets the current state of this generator.
-     * @return the current seed of this PermutedRNG, changed once per call to nextInt()
+     * @return the current seed of this PermutedRNG, changed once per call to nextLong()
      */
     @Override
 	public long getState( ) {
@@ -284,7 +285,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
 
     /**
      * Advances or rolls back the PermutedRNG's state without actually generating numbers. Skip forward
-     * or backward a number of steps specified by advance, where a step is equal to one call to nextInt().
+     * or backward a number of steps specified by advance, where a step is equal to one call to nextLong().
      * @param advance Number of future generations to skip past. Can be negative to backtrack.
      * @return the state after skipping.
      */

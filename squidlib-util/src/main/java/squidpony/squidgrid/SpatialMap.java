@@ -101,6 +101,34 @@ public class SpatialMap<I, E> implements Iterable<E> {
     }
 
     /**
+     * Constructs a SpatialMap given collections of Coord, identity, and element; all 3 collections should have the same
+     * length, since this will use only up to the minimum length of these collections for how many it adds. Each unique
+     * id will be added with the corresponding element at the corresponding Coord position if that position is not
+     * already filled.
+     * @param coords a starting collection of Coord positions; indices here correspond to the other parameters
+     * @param ids a starting collection of identities; indices here correspond to the other parameters
+     * @param elements a starting collection of elements; indices here correspond to the other parameters
+     */
+    public SpatialMap(Collection<Coord> coords, Collection<I> ids, Collection<E> elements)
+    {
+        itemMapping = new LinkedHashMap<I, SpatialTriple<I, E>>(
+                Math.min(coords.size(), Math.min(ids.size(), elements.size())));
+        positionMapping = new LinkedHashMap<Coord, SpatialTriple<I, E>>(
+                Math.min(coords.size(), Math.min(ids.size(), elements.size())));
+        if(itemMapping.size() <= 0)
+            return;
+        Iterator<Coord> cs = coords.iterator();
+        Iterator<I> is = ids.iterator();
+        Iterator<E> es = elements.iterator();
+        Coord c = cs.next();
+        I i = is.next();
+        E e = es.next();
+        for (; cs.hasNext() && is.hasNext() && es.hasNext(); c = cs.next(), i = is.next(), e = es.next()) {
+            add(c, i, e);
+        }
+    }
+
+    /**
      * Adds a new element with the given identity and Coord position. If the position is already occupied by an element
      * in this data structure, returns null. If the identity is already used, this also returns null. If the identity
      * and position are both unused, this adds element to the data structure.

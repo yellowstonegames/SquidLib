@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
  * existing word list as a basis for its output, so it may or may not produce existing words occasionally, but you can
  * safely assume it won't generate a meaningful sentence except in the absolute unlikeliest of cases.
  * Created by Tommy Ettinger on 11/29/2015.
+ * @author Tommy Ettinger
  */
 public class FakeLanguageGen implements Serializable {
     private static final long serialVersionUID = -2396642435461186352L;

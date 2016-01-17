@@ -4,6 +4,7 @@ package squidpony.squidmath;
  * A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  * set or retrieved using setState() or getState().
  * Created by Tommy Ettinger on 9/15/2015.
+ * @author Tommy Ettinger
  */
 public class StatefulRNG extends RNG {
 
