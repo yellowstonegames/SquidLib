@@ -23,7 +23,7 @@ public class LightRNGTest {
 		assertEquals(1, rng.next(1));
 		assertEquals(-1877671296, rng.nextInt());
 		rng.setState(rng.state * 11234L);
-		assertEquals(101, rng.nextInt(10, 230));
+		assertEquals(125, rng.nextInt(10, 230));
 	}
 
 	@Test
@@ -31,16 +31,16 @@ public class LightRNGTest {
 		LightRNG rng = new LightRNG(2L);
         assertEquals(-7541218347953203506L, rng.nextLong());
         assertEquals(-4627371582388691390L, rng.nextLong());
-		assertEquals(75L, rng.nextLong(100));
+		assertEquals(43L, rng.nextLong(100));
 		assertEquals(-4327252827158612380L, rng.nextLong());
 		assertEquals(5747796768693156649L, rng.nextLong());
 		assertEquals(6394052312532759219L, rng.nextLong());
-		assertEquals(5L, rng.nextLong(1, 10));
-        assertEquals(77L, rng.nextLong(100));
-        assertEquals(19L, rng.nextLong(100));
-        assertEquals(66L, rng.nextLong(100));
-        assertEquals(14L, rng.nextLong(100));
-        assertEquals(7L, rng.nextLong(100));
+		assertEquals(1L, rng.nextLong(1, 10));
+        assertEquals(47L, rng.nextLong(100));
+        assertEquals(39L, rng.nextLong(100));
+        assertEquals(24L, rng.nextLong(100));
+        assertEquals(29L, rng.nextLong(100));
+        assertEquals(15L, rng.nextLong(100));
     }
 
 	@Test
@@ -73,9 +73,9 @@ public class LightRNGTest {
 		assertTrue(l.nextBoolean());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testNextIntException() {
-		l.nextInt(0);
+		assertEquals(0, l.nextInt(0));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -83,9 +83,9 @@ public class LightRNGTest {
 		l.nextInt(2, 1);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testNextLongException() {
-		l.nextLong(0);
+		assertEquals(0, l.nextLong(0));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

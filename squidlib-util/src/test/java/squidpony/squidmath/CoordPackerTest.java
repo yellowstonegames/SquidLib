@@ -245,7 +245,7 @@ public class CoordPackerTest {
     public void testRadiate()
     {
         short[] groupFOVed = radiate(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 23), 10);
-        printPacked(groupFOVed, 64, 64);
+        //printPacked(groupFOVed, 64, 64);
     }
 
     @Test

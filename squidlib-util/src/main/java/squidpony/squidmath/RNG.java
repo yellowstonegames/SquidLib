@@ -24,7 +24,7 @@ public class RNG implements Serializable {
     protected boolean haveNextNextGaussian = false;
     protected Random ran = null;
 
-	private static final long serialVersionUID = 3527284182286645149L;
+	private static final long serialVersionUID = 2352426757973945149L;
 
     /**
      * Default constructor; uses SplitMix64, which is of high quality, but low period (which rarely matters for games),
@@ -62,7 +62,7 @@ public class RNG implements Serializable {
      * Uses the provided source of randomness for all calculations. This
      * constructor should be used if an alternate RandomnessSource other than LightRNG is desirable.
      *
-     * @param random the source of randomness
+     * @param random the source of pseudo-randomness, such as a MersenneTwister or SobolQRNG object
      */
     public RNG(RandomnessSource random) {
         this.random = random;
@@ -150,6 +150,20 @@ public class RNG implements Serializable {
      */
     public int between(int min, int max) {
         return nextInt(max - min) + min;
+    }
+
+    /**
+     * Returns a value between min (inclusive) and max (exclusive).
+     *
+     * The inclusive and exclusive behavior is to match the behavior of the
+     * similar method that deals with floating point values.
+     *
+     * @param min the minimum bound on the return value (inclusive)
+     * @param max the maximum bound on the return value (exclusive)
+     * @return the found value
+     */
+    public long between(long min, long max) {
+        return nextLong(max - min) + min;
     }
 
     /**
@@ -514,20 +528,14 @@ public class RNG implements Serializable {
      * @param bound the upper bound (exclusive)
      * @return the found number
      */
-    public long nextLong(long bound) {
-        if (bound <= 0) {
-            return 0;
+    public long nextLong( final long bound ) {
+        if ( bound <= 0 ) return 0;
+        long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
+        for (;;) {
+            long bits = random.nextLong() & 0x7fffffffffffffffL;
+            if (bits >= threshold)
+                return bits % bound;
         }
-
-        long r = random.nextLong();
-        long m = bound - 1;
-        if ((bound & m) == 0) { // i.e., bound is a power of 2
-            r = (r & m);
-        } else {
-            for (long u = r; u - (r = u % bound) + m < 0; u = random.nextLong()) {
-            }
-        }
-        return r;
     }
     /**
      * Returns a random integer below the given bound, or 0 if the bound is 0 or
@@ -536,22 +544,15 @@ public class RNG implements Serializable {
      * @param bound the upper bound (exclusive)
      * @return the found number
      */
-    public int nextInt(int bound) {
-        if (bound <= 0) {
-            return 0;
+    public int nextInt(final int bound) {
+        if ( bound <= 0 ) return 0;
+        int threshold = (0x7fffffff - bound + 1) % bound;
+        for (;;) {
+            int bits = random.next(31);
+            if (bits >= threshold)
+                return bits % bound;
         }
-
-        int r = next(31);
-        int m = bound - 1;
-        if ((bound & m) == 0) { // i.e., bound is a power of 2
-            r = (int) ((bound * (long) r) >> 31);
-        } else {
-            for (int u = r; u - (r = u % bound) + m < 0; u = next(31)) {
-            }
-        }
-        return r;
     }
-
     /**
      * Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).
      * @return a 32-bit random int.

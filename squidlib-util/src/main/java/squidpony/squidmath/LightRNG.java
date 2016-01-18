@@ -27,7 +27,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
     /** 2 raised to the -24. */
     private static final double NORM_24 = 1. / ( 1L << 24 );
 
-	private static final long serialVersionUID = -1656615589113474497L;
+	private static final long serialVersionUID = -374415589203474497L;
 
     public long state; /* The state can be seeded with any value. */
 
@@ -66,16 +66,19 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
     }
 
     /**
-     * Exclusive on the upper bound n.  The lower bound is 0.
-     * @param n the upper bound; should be positive
+     * Exclusive on the upper bound.  The lower bound is 0.
+     * @param bound the upper bound; should be positive
      * @return a random int less than n and at least equal to 0
      */
-    public int nextInt( final int n ) {
-        if ( n <= 0 ) throw new IllegalArgumentException();
-            final int bits = nextInt() >>> 1;
-        return bits % n;
+    public int nextInt( final int bound ) {
+        if ( bound <= 0 ) return 0;
+        int threshold = (0x7fffffff - bound + 1) % bound;
+        for (;;) {
+            int bits = (int)(nextLong() & 0x7fffffff);
+            if (bits >= threshold)
+                return bits % bound;
+        }
     }
-
     /**
      * Inclusive lower, exclusive upper.
      * @param lower the lower bound, inclusive, can be positive or negative
@@ -83,24 +86,23 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
      * @return a random int at least equal to lower and less than upper
      */
     public int nextInt( final int lower, final int upper ) {
-        if ( upper - lower <= 0 ) throw new IllegalArgumentException();
+        if ( upper - lower <= 0 ) throw new IllegalArgumentException("Upper bound must be greater than lower bound");
         return lower + nextInt(upper - lower);
     }
 
     /**
-     * Exclusive on the upper bound n. The lower bound is 0.
-     * @param n the upper bound; should be positive
+     * Exclusive on the upper bound. The lower bound is 0.
+     * @param bound the upper bound; should be positive
      * @return a random long less than n
      */
-    public long nextLong( final long n ) {
-        if ( n <= 0 ) throw new IllegalArgumentException();
-        //for(;;) {
-            final long bits = nextLong() >>> 1;
-        return bits % n;
-            //long value = bits % n;
-            //value = (value < 0) ? -value : value;
-            //if ( bits - value + ( n - 1 ) >= 0 ) return value;
-        //}
+    public long nextLong( final long bound ) {
+        if ( bound <= 0 ) return 0;
+        long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
+        for (;;) {
+            long bits = nextLong() & 0x7fffffffffffffffL;
+            if (bits >= threshold)
+                return bits % bound;
+        }
     }
 
     /**
@@ -110,7 +112,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
      * @return a random long at least equal to lower and less than upper
      */
     public long nextLong( final long lower, final long upper ) {
-        if ( upper - lower <= 0 ) throw new IllegalArgumentException();
+        if ( upper - lower <= 0 )  throw new IllegalArgumentException("Upper bound must be greater than lower bound");
         return lower + nextLong(upper - lower);
     }
     /**
