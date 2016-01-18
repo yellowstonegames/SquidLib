@@ -78,7 +78,9 @@ public class DungeonGenerator {
     public DungeonUtility utility;
     private int height, width;
     public Coord stairsUp = null, stairsDown = null;
-    public RNG rng;
+    public StatefulRNG rng;
+    private long rebuildSeed;
+    private boolean seedFixed = false;
 
     private char[][] dungeon = null;
 
@@ -138,9 +140,10 @@ public class DungeonGenerator {
      */
     public DungeonGenerator()
     {
-        rng = new RNG(new LightRNG());
+        rng = new StatefulRNG();
         gen = new DungeonBoneGen(rng);
         utility = new DungeonUtility(rng);
+        rebuildSeed = rng.getState();
         height = 40;
         width = 40;
         fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
@@ -166,9 +169,10 @@ public class DungeonGenerator {
      */
     public DungeonGenerator(int width, int height, RNG rng)
     {
-        this.rng = rng;
-        gen = new DungeonBoneGen(rng);
-        utility = new DungeonUtility(rng);
+        this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());
+        gen = new DungeonBoneGen(this.rng);
+        utility = new DungeonUtility(this.rng);
+        rebuildSeed = this.rng.getState();
         this.height = height;
         this.width = width;
         fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
@@ -180,9 +184,10 @@ public class DungeonGenerator {
      */
     public DungeonGenerator(DungeonGenerator copying)
     {
-        rng = new RNG(copying.rng.getRandomness());
+        rng = new StatefulRNG(copying.rng.getState());
         gen = new DungeonBoneGen(rng);
         utility = new DungeonUtility(rng);
+        rebuildSeed = rng.getState();
         height = copying.height;
         width = copying.width;
         fx = new EnumMap<FillEffect, Integer>(copying.fx);
@@ -420,6 +425,8 @@ public class DungeonGenerator {
      */
     public char[][] generate(TilesetType kind)
     {
+        seedFixed = true;
+        rebuildSeed = rng.getState();
         return generate(gen.generate(kind, width, height));
     }
 
@@ -436,6 +443,11 @@ public class DungeonGenerator {
      */
     public char[][] generate(char[][] baseDungeon)
     {
+        if(!seedFixed)
+        {
+            rebuildSeed = rng.getState();
+        }
+        seedFixed = false;
         char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
@@ -484,6 +496,11 @@ public class DungeonGenerator {
      * @return a char[][] dungeon
      */
     public char[][] generateRespectingStairs(char[][] baseDungeon) {
+        if(!seedFixed)
+        {
+            rebuildSeed = rng.getState();
+        }
+        seedFixed = false;
         char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         stairsUp = null;
@@ -977,9 +994,26 @@ public class DungeonGenerator {
     }
 
     /**
+     * Gets the seed that can be used to rebuild an identical dungeon to the latest one generated (or the seed that
+     * will be used to generate the first dungeon if none has been made yet). You can pass the long this returns to
+     * the setState() method on this class' rng field, which assuming all other calls to generate a dungeon are
+     * identical, will ensure generate() or generateRespectingStairs() will produce the same dungeon output as the
+     * dungeon originally generated with the seed this returned.
+     * <br>
+     * You can also call getState() on the rng field yourself immediately before generating a dungeon, but this method
+     * handles some complexities of when the state is actually used to generate a dungeon; since StatefulRNG objects can
+     * be shared between different classes that use random numbers, the state could change between when you call
+     * getState() and when this class generates a dungeon. Using getRebuildSeed() eliminates that confusion.
+     * @return a seed as a long that can be passed to setState() on this class' rng field to recreate a dungeon
+     */
+    public long getRebuildSeed() {
+        return rebuildSeed;
+    }
+
+    /**
      * Provides a string representation of the latest generated dungeon.
      *
-     * @return
+     * @return a printable string version of the latest generated dungeon.
      */
     @Override
 	public String toString() {

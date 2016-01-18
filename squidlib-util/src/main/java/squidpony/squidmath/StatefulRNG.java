@@ -8,14 +8,14 @@ package squidpony.squidmath;
  */
 public class StatefulRNG extends RNG {
 
-	private static final long serialVersionUID = 3801506898212937163L;
+	private static final long serialVersionUID = -2456306898212937163L;
 
 	public StatefulRNG() {
         super(new LightRNG());
     }
 
     public StatefulRNG(RandomnessSource random) {
-        super((random instanceof StatefulRandomness) ? random : new LightRNG(random.next(32)));
+        super((random instanceof StatefulRandomness) ? random : new LightRNG(random.nextLong()));
     }
 
     /**

@@ -21,10 +21,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.MixedGenerator;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -64,8 +61,7 @@ public class EverythingDemo extends ApplicationAdapter {
     SpriteBatch batch;
 
     private Phase phase = Phase.WAIT;
-    private RNG rng;
-    private LightRNG lrng;
+    private StatefulRNG rng;
     private SquidLayers display;
     private SquidMessageBox messages;
     /** Non-{@code null} iff '?' was pressed before */
@@ -106,8 +102,7 @@ public class EverythingDemo extends ApplicationAdapter {
     @Override
     public void create () {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
-        lrng = new LightRNG(0xBADBEEFB0BBL);
-        rng = new RNG(lrng);
+        rng = new StatefulRNG(0xBADBEEFB0BBL);
 
         // for demo purposes, we allow changing the SquidColorCenter and the filter effect associated with it.
         // next, we populate the colorCenters array with the SquidColorCenters that will modify any colors we request
@@ -604,13 +599,15 @@ public class EverythingDemo extends ApplicationAdapter {
 
     public void putMap()
     {
+        boolean overlapping = false;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
+                overlapping = monsters.containsPosition(Coord.get(i,j)) || (player.gridX == i && player.gridY == j);
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
                 // and 1.0), with 1.0 being almost pure white at +215 lightness and 0.0 being rather dark at -105.
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
-                    display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
+                    display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
                             lights[i][j] + (int) (-105 + 320 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else if (seen[i][j]) {

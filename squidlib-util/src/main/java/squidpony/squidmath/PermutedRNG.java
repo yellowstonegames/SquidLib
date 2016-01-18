@@ -60,7 +60,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      */
     public long state;
 
-	private static final long serialVersionUID = 3291443966125527620L;
+	private static final long serialVersionUID = 3637443966125527620L;
 
     /** Creates a new generator seeded using Math.random. */
     public PermutedRNG() {
@@ -111,7 +111,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
      * @return any int, all 32 bits are random
      */
     public int nextInt() {
-        return (int)(nextLong() >> 32);
+        return (int)nextLong();
     }
     /**
      * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
@@ -124,10 +124,13 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         // increment  = 1442695040888963407L;
         // multiplier = 6364136223846793005L;
 
-        final long old = permute(state);
+        long p = state;
+        p ^= p >>> (5 + ((p >>> 59) & 31));
+        p *= -5840758589994634535L;
         state = state * 6364136223846793005L + 1442695040888963407L;
-        return old;
+        return p ^ (p >>> 43);
     }
+
     private static long permute(long p)
     {
         p ^= p >>> (5 + ((p >>> 59) & 31));
