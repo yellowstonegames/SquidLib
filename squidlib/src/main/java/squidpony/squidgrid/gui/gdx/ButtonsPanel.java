@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
+import squidpony.SquidTags;
 import squidpony.annotation.Beta;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
@@ -227,6 +229,34 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	public /* @Nullable */ Set<Integer> doNotBind;
 
 	/**
+	 * Whether this panel supports scrolling. This'll make this panel display
+	 * '...' and '...' as the first and last entries if it cannot display the
+	 * entirety of {@link #buttonsTexts}. This is only supported if
+	 * {@link #interButtonMargin} is 0. This makes the {@link InputProcessor}
+	 * returned by {@link #putAll(boolean, boolean)} handle scrolling with arrow
+	 * down/arrow up/j/k ( the last two coming from vim) and with mouse clicks
+	 * on '...'. Don't use that if your panel isn't at least of height 3 (i.e.
+	 * supports:
+	 * 
+	 * <pre>
+	 * ...
+	 * item_n
+	 * ...
+	 * </pre>
+	 * 
+	 * )
+	 * 
+	 * <p>
+	 * This flag require {@link SquidPanel}s to be preallocated (i.e. to be
+	 * given at creation time).
+	 * </p>
+	 */
+	public boolean enableScrolling;
+
+	/** The text of the buttons to scroll */
+	public String scrollText = " ..."; // " …" <- not in fancy fonts
+
+	/**
 	 * Really, if you're muting this beyond {@link #init(List)}, you're doing
 	 * bad.
 	 */
@@ -248,6 +278,14 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 	protected int hcells = -1;
 	protected int vcells = -1;
+
+	/**
+	 * The indexes of buttons displayed. May not cover {@link #buttonsTexts}, if
+	 * scrolling is possible.
+	 */
+	protected /* @Nullable */ FirstAndLastButtonIndex firstLastButtonIndexes;
+
+	private int topMargin;
 
 	/**
 	 * If you use this constructor, you can use {@link PreAllocatedPanels} to
@@ -330,11 +368,26 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 * @throws NullPointerException
 	 *             If the text of buttons wasn't given at creation time, and
 	 *             {@link #init(List)} wasn't called since then.
+	 * @throws IllegalStateException
+	 *             If {@link #enableScrolling} is ON but {@link #bg} isn't set.
 	 */
 	public InputProcessor putAll(boolean addListener, boolean putBordersAndMargins) {
+		/*
+		 * The number of cells that this panel can span. It is taken from the
+		 * panels if they are preallocated. If that's the case, the panel will
+		 * draw vertical dots that allow to "scroll". This is only done if
+		 * {@link #interButtonMarginn} is 0.
+		 */
+		if (enableScrolling && bg == null)
+			throw new IllegalStateException("Panels must be preallocated if scrolling is enabled");
+		final int nbVDisplayedCells = enableScrolling ? bg.gridHeight() : Integer.MAX_VALUE;
+		final int nbHDisplayedCells = enableScrolling ? bg.gridWidth() : Integer.MAX_VALUE;
+		if (nbVDisplayedCells < Integer.MAX_VALUE)
+			Gdx.app.log(SquidTags.LAYOUT,
+					"Available rectangle (in cells): " + nbHDisplayedCells + "x" + nbVDisplayedCells);
 		{
 			hcells = computeRequiredCellsWidth();
-			vcells = computeRequiredCellsHeight();
+			vcells = enableScrolling ? nbVDisplayedCells : computeRequiredCellsHeight();
 
 			if (bg == null) {
 				/* Panels weren't given at creation time */
@@ -359,7 +412,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			/* The call to #cellHeight() requires #bg to be set */
 			final int height = vcells * cellHeight();
 			final int availableH = pixelsHeight();
-			if (availableH < height)
+			if (!enableScrolling && availableH < height)
 				Gdx.app.log("layout",
 						"Cannot layout " + getClass().getSimpleName() + " correctly. Required pixels height: "
 								+ height + ". Pixels height available: " + availableH);
@@ -371,34 +424,74 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 		/*
 		 * Inexact division is floored (3/2 = 1), hence this aligns to the top.
 		 */
-		int topMargin = totalVerticalMargin / 2;
+		this.topMargin = totalVerticalMargin / 2;
 
 		if (buttonsTexts == null)
 			throw new NullPointerException(
 					"The text of buttons must be set before displaying a " + getClass().getSimpleName());
 
-		final int nbButtons = buttonsTexts.size();
+		this.buttons = new ArrayList<Rectangle>(buttonsTexts.size());
 
-		this.buttons = new ArrayList<Rectangle>(nbButtons);
+		return putAll0(addListener, putBordersAndMargins, 0, false);
+	}
 
+	/**
+	 * Missing doc: see {@link #putAll(boolean, boolean)}.
+	 * 
+	 * @param scroll
+	 *            Whether this is a scrolling request.
+	 */
+	private InputProcessor putAll0(boolean addListener, boolean putBordersAndMargins, int buttonStartingIndex,
+			boolean scroll) {
 		if (bgColor != null) {
 			/* Paint whole background */
-			fillBG(bgColor);
+			fill(false, bgColor);
 		}
+
+		if (scroll) {
+			/*
+			 * Repaint whole foreground, to avoid leaving the end of longest
+			 * entries visible.
+			 */
+			fill(true, bgColor);
+		}
+
+		final int nbButtons = buttonsTexts.size();
+		final int nbVDisplayedCells = enableScrolling ? bg.gridHeight() : Integer.MAX_VALUE;
 
 		int m = topMargin;
 		/* In number of cells */
 		final int buttonHeight = buttonCellsHeight();
-		for (int i = 0; i < nbButtons; i++) {
+		int i = buttonStartingIndex;
+		boolean first = true;
+		for (; i < nbButtons; i++) {
 			final int alignment;
+			final int nextm = m + buttonHeight + interButtonMargin;
 			if (buttonsAlignment != null && i < buttonsAlignment.length)
 				alignment = buttonsAlignment[i];
 			else
 				/* The default: centering */
 				alignment = 0;
-			putButton(i, m, alignment, putBordersAndMargins);
-			m += buttonHeight;
-			m += interButtonMargin;
+			/*
+			 * Lhs: '...' for 'scroll up' (first button). Rhs: '...' for scoll
+			 * down (last button).
+			 */
+			final boolean last = i == nbButtons - 1;
+			final boolean firstDots = first && 0 < i;
+			final boolean lastDots = !last && (nbVDisplayedCells <= nextm);
+			putButton(i, m, alignment, putBordersAndMargins, firstDots || lastDots);
+			if (firstDots || lastDots)
+				i--;
+			m = nextm;
+			first = false;
+			if (nbVDisplayedCells <= m)
+				break;
+		}
+
+		firstLastButtonIndexes = new FirstAndLastButtonIndex(buttonStartingIndex, i);
+		if ((firstLastButtonIndexes.last - firstLastButtonIndexes.start) < buttonsTexts.size()) {
+			Gdx.app.log(SquidTags.LAYOUT, "Displaying buttons " + firstLastButtonIndexes + ", out of [0,"
+					+ buttonsTexts.size() + "].");
 		}
 
 		if (putBordersAndMargins)
@@ -420,10 +513,20 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 		if (addListener) {
 			addListener(new InputListener() {
+
+				@Override
+				public boolean keyDown(InputEvent event, int keycode) {
+					return result.keyDown(keycode);
+				}
+
+				@Override
+				public boolean keyUp(InputEvent event, int keycode) {
+					return result.keyUp(keycode);
+				}
+
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					/* Because we want to receive touchUp */
-					return true;
+					return result.touchDown(MathUtils.round(x), MathUtils.round(y), pointer, button);
 				}
 
 				@Override
@@ -438,6 +541,8 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 			});
 		}
+
+		putHook();
 
 		return result;
 	}
@@ -512,6 +617,12 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 		return new InputAdapter() {
 
 			@Override
+			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				/* Because we wanna receive touchUp */
+				return true;
+			}
+
+			@Override
 			public boolean touchUp(int x, int gdxy, int pointer, int button) {
 				final int y;
 				if (y_gdxToSquid())
@@ -536,9 +647,21 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 					/* It's a hit! */
 
-					if (doNotBind == null || !doNotBind.contains(i))
+					if (enableScrolling && i == 0 && 0 < firstLastButtonIndexes.start) {
+						final boolean b = scrollUp(Input.Keys.UP);
+						assert b;
+						return true;
+					} else if (i == scrollDownButtonIndex()) {
+						final boolean b = scrollDown(Input.Keys.DOWN);
+						assert b;
+						return true;
+					}
+
+					final int j = i + firstLastButtonIndexes.start + (hasScrollUp() ? -1 : 0);
+
+					if (doNotBind == null || !doNotBind.contains(j))
 						/* Send event */
-						selectedButton(i);
+						selectedButton(j);
 
 					return true;
 				}
@@ -568,6 +691,22 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 	protected InputProcessor buildKeyInputProcessor() {
 		return new InputAdapter() {
+
+			@Override
+			public boolean keyDown(int keycode) {
+				return false;
+			}
+
+			@Override
+			public boolean keyUp(int keycode) {
+				if (scrollDown(keycode)) {
+					return true;
+				} else if (scrollUp(keycode)) {
+					return true;
+				} else
+					return super.keyDown(keycode);
+			}
+
 			@Override
 			public boolean keyTyped(char character) {
 				if (shortcuts == null)
@@ -708,8 +847,19 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			 */
 			return text;
 
+		/* @Nullable */ Character prevShortcut = null;
+
 		if (shortcuts == null)
 			shortcuts = new HashMap<Character, Integer>();
+		else {
+			for (Map.Entry<Character, Integer> entry : shortcuts.entrySet()) {
+				if (entry.getValue() == buttonIndex) {
+					/* Shortcut was decided already, let's reuse it */
+					prevShortcut = entry.getKey();
+					break;
+				}
+			}
+		}
 
 		final IColoredString<T> result = new IColoredString.Impl<T>();
 		boolean set = false;
@@ -724,10 +874,17 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 				/* Iterate over the bucket's text */
 				for (int i = 0; i < bound; i++) {
 					final char c = bucketText.charAt(i);
-					if (set || shortcuts.containsKey(Character.toLowerCase(c)) || !Character.isLetter(c)) {
+					if (!set && prevShortcut != null && Character.toLowerCase(c) == prevShortcut) {
+						/* Shortcut was assigned already, let's display it */
+						result.append(c, shortcutCharacterColor);
+						/* To avoid coming here in next rolls */
+						set = true;
+					} else if (set || shortcuts.containsKey(Character.toLowerCase(c))
+							|| !Character.isLetter(c) || (enableScrolling && (c == 'j' || c == 'k'))) {
 						/*
 						 * Shortcut already used or we went into the 'else'
-						 * already, or character is inadequate.
+						 * already, or character is inadequate, or character can
+						 * be used to scroll (in vim-style).
 						 */
 						result.append(c, bucketColor);
 					} else {
@@ -743,15 +900,124 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	}
 
 	/**
+	 * Callback done when {@code this} is reput, because of a scrolling request
+	 */
+	protected void putHook() {
+		/* Default implementation, you should override */
+	}
+
+	/**
+	 * @param keycode
+	 * @return Whether the request was handled.
+	 */
+	protected boolean scrollDown(int keycode) {
+		if (enableScrolling
+				&& (keycode == Input.Keys.DOWN || keycode == Input.Keys.NUMPAD_2
+						|| /* vim-style */ keycode == Input.Keys.J)
+				&& firstLastButtonIndexes.last < buttonsTexts.size() - 1) {
+			/*
+			 * A request to scroll down && last displayed button is not last
+			 * button. If this is the first scroll, we straight go to the third
+			 * item (if possible, that's why there's the Math.min call), to
+			 * avoid just replacing the first one by '...'.
+			 */
+			final int nbButtons = buttonsTexts.size();
+			final int i = Math.min(firstLastButtonIndexes.start + (firstLastButtonIndexes.start == 0 ? 2 : 1),
+					nbButtons - 1);
+			Gdx.app.log(SquidTags.LAYOUT, "Putting buttons of " + ButtonsPanel.this.getClass().getSimpleName()
+					+ " from index " + i + " when scrolling down");
+			ButtonsPanel.this.putAll0(false, false, i, true);
+			return true;
+		} else
+			return false;
+	}
+
+	protected boolean scrollUp(int keycode) {
+		if (enableScrolling && (keycode == Input.Keys.UP || keycode == Input.Keys.NUMPAD_8
+				|| /* vim-style */ keycode == Input.Keys.K) && 0 < firstLastButtonIndexes.start) {
+			/*
+			 * A request to scroll up && first displayed button is not the first
+			 * button
+			 */
+			final int i = firstLastButtonIndexes.start - 1;
+			Gdx.app.log(SquidTags.LAYOUT, "Putting buttons of " + ButtonsPanel.this.getClass().getSimpleName()
+					+ " from index " + i + " when scrolling up");
+			ButtonsPanel.this.putAll0(false, false, i, true);
+			return true;
+		} else
+			return false;
+	}
+
+	/**
+	 * @return The index of the scroll down button, if any. Otherwise -1.
+	 */
+	protected int scrollDownButtonIndex() {
+		if (enableScrolling) {
+			if (firstLastButtonIndexes.nbButtons() == buttonsTexts.size())
+				/* No scrolling */
+				return -1;
+			else {
+				if (firstLastButtonIndexes.start == 0)
+					return firstLastButtonIndexes.last + 1;
+				else {
+					/**
+					 * After scrolling down from:
+					 * 
+					 * <pre>
+					 * i0
+					 * i1
+					 * ...
+					 * </pre>
+					 * 
+					 * we have
+					 * 
+					 * <pre>
+					 * ...
+					 * i2
+					 * i3
+					 * ...
+					 * </pre>
+					 * 
+					 * and start=2 and end=3
+					 */
+					return firstLastButtonIndexes.nbButtons() + 2;
+				}
+			}
+		} else
+			return -1;
+	}
+
+	/**
+	 * @return Whether the scroll up button is being shown.
+	 */
+	protected boolean hasScrollUp() {
+		return enableScrolling && 0 < firstLastButtonIndexes.start;
+	}
+
+	/**
+	 * @return Whether the scroll up button is being shown.
+	 */
+	protected boolean hasScrollDown() {
+		if (enableScrolling) {
+			return firstLastButtonIndexes.last < buttonsTexts.size();
+		} else
+			return false;
+	}
+
+	/**
 	 * @param i
 	 *            The button index with {@link #buttonsTexts}.
 	 * @param y
 	 *            The y offset from the panel's top.
 	 * @param alignment
 	 *            The alignment, in the format of {@link #buttonsAlignment}.
+	 * @param displayVDots
+	 *            if {@link #scroll} must be displayed instead of the button's
+	 *            text.
 	 */
-	private void putButton(int i, int y, int alignment, boolean putMargins) {
-		final IColoredString<T> text = buttonsTexts.get(i);
+	private void putButton(int i, int y, int alignment, boolean putMargins, boolean displayVDots) {
+		final IColoredString<T> text = displayVDots ? IColoredString.Impl.<T> create(scrollText, null)
+				: buttonsTexts.get(i);
 		final int textLength = text.length();
 
 		final int insideWidth = textLength + (xpadding * 2);
@@ -817,7 +1083,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	}
 
 	/**
-	 * This method's implementation should not inspect {@link #fg} or
+	 * This method's implementation should not only rely on {@link #fg} or
 	 * {@link #bg}, because they may not have been set yet
 	 */
 	private int computeRequiredCellsHeight() {
@@ -896,6 +1162,29 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 		@Override
 		public String toString() {
 			return "Rectangle at (" + botLeftX + "," + botLeftY + "), width: " + width + ", height:" + height;
+		}
+	}
+
+	/**
+	 * @author smelC
+	 */
+	protected static class FirstAndLastButtonIndex {
+
+		protected final int start;
+		protected final int last;
+
+		protected FirstAndLastButtonIndex(int start, int last) {
+			this.start = start;
+			this.last = last;
+		}
+
+		int nbButtons() {
+			return last - start;
+		}
+
+		@Override
+		public String toString() {
+			return "[" + start + "," + last + "]";
 		}
 	}
 }

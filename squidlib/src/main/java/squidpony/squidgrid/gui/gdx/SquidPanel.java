@@ -743,7 +743,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
         Actor a = textFactory.makeActor(contents[x][y], scc.filter(colors[x][y]));
         a.setName(contents[x][y]);
-        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+        a.setPosition((x * cellWidth) + getX(), ((gridHeight - y - 1) * cellHeight) + getY());
 
         addActor(a);
 

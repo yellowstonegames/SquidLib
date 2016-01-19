@@ -91,7 +91,7 @@ public class UIUtil {
 			renderer.rect(botLeftX + width, botLeftY - margin, margin, height + (margin * 2));
 		}
 		/* Bottom margin */
-		renderer.rect(botLeftX, botLeftY - margin, width, margin);
+		renderer.rect(botLeftX, (botLeftY - margin) + 1, width, margin);
 		/* Top margin */
 		renderer.rect(botLeftX, botLeftY + height, width, margin);
 

@@ -574,7 +574,7 @@ public class EverythingDemo extends ApplicationAdapter {
 		gcp.setPosition(((width / 2) - (w / 2)) * cellWidth, (height / 2) * cellHeight);
 
 		/* Fill the background with some grey */
-		gcp.fillBG(new Color(0.3f, 0.3f, 0.3f, 0.9f));
+		gcp.fill(false, new Color(0.3f, 0.3f, 0.3f, 0.9f));
 
 		/* Now, to set the text we have to follow SquidPanel's convention */
 		/* First 0: align left, second 0: first line */
