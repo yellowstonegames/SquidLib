@@ -25,11 +25,10 @@ import squidpony.squidmath.StatefulRNG;
  */
 public class DefaultResources implements LifecycleListener {
     private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
-            smooth1 = null,
-            smooth2 = null,
+            smooth1 = null, smooth2 = null, smoothSquare = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null;
-    private BitmapFont[] zooms = null;
+    private TextCellFactory distanceNarrow = null, distanceSquare = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
             unicodeName = "Mandrill-6x16.fnt",
@@ -217,78 +216,61 @@ public class DefaultResources implements LifecycleListener {
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * This variant is (almost) perfectly square, and box drawing characters should line up at size 20x20 px, but other
      * glyphs will have much more horizontal spacing than in other fonts. Caches the font for later calls.
-     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 16 (pt?).
+     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 20x20 pixels.
      */
     public static BitmapFont getSquareSmoothFont()
     {
         initialize();
-        if(instance.zooms == null)
-        {
-            instance.zooms = new BitmapFont[12];
-        }
-        if(instance.zooms[1] == null)
+        if(instance.smoothSquare == null)
         {
             try {
-                instance.zooms[1] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-16.fnt"));
+                instance.smoothSquare = new BitmapFont(Gdx.files.classpath("Inconsolata-LGC-Square.fnt"), Gdx.files.classpath("Inconsolata-LGC-Square.png"), false);
             } catch (Exception e) {
             }
         }
-        return instance.zooms[1];
+        return instance.smoothSquare;
     }
+
     /**
-     * Returns a size you specify of a very smooth and generally good-looking font (based on Inconsolata) as an embedded
-     * resource. The zoomLevel should be between 0 and 11 inclusive, and will be clamped to this range if outside it.
-     * The actual pixel size varies a lot between zoomLevels; zoomLevel 0 should work at 17x17 px, zoomLevel 1 at 20x20
-     * px, up to zoomLevel 11 at 51x51 px. This font fully supports Latin, Greek, Cyrillic, and of particular interest
-     * to SquidLib, Box Drawing characters. This variant is (almost) perfectly square, and box drawing characters should
-     * line up at square sizes, but other glyphs will have much more horizontal spacing than in other fonts. Caches the
-     * font for later calls.
-     * @param zoomLevel between 0 and 11 inclusive; higher numbers give bigger fonts
-     * @return the BitmapFont object representing Inconsolata-LGC-Square at the given zoomLevel.
+     * Returns a TextCellFactory already configured to use a square font that should scale cleanly to many sizes. Caches
+     * the result for later calls.
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * @return the TextCellFactory object that can represent many sizes of the square font Inconsolata-LGC-Square.ttf.
      */
-    public static BitmapFont getZoomedFont(int zoomLevel)
+    public static TextCellFactory getStretchableSquareFont()
     {
         initialize();
-        zoomLevel = Math.max(0, Math.min(zoomLevel, 11));
-        if(instance.zooms == null)
-        {
-            instance.zooms = new BitmapFont[12];
-        }
-        if(instance.zooms[zoomLevel] == null)
+        if(instance.distanceSquare == null)
         {
             try {
-                switch (zoomLevel)
-                {
-                    case 0: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-14.fnt"));
-                        break;
-                    case 1: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-16.fnt"));
-                        break;
-                    case 2: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-18.fnt"));
-                        break;
-                    case 3: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-20.fnt"));
-                        break;
-                    case 4: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-22.fnt"));
-                        break;
-                    case 5: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-24.fnt"));
-                        break;
-                    case 6: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-26.fnt"));
-                        break;
-                    case 7: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-28.fnt"));
-                        break;
-                    case 8: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-31.fnt"));
-                        break;
-                    case 9: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-35.fnt"));
-                        break;
-                    case 10: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-39.fnt"));
-                        break;
-                    case 11: instance.zooms[zoomLevel] = new BitmapFont(Gdx.files.classpath("zoom/Inconsolata-LGC-Square-42.fnt"));
-                        break;
-
-                }
+                instance.distanceSquare = new TextCellFactory().defaultDistanceFieldFont();
             } catch (Exception e) {
             }
         }
-        return instance.zooms[zoomLevel];
+        return instance.distanceSquare;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a narrow font (twice as tall as it is wide) that should scale
+     * cleanly to many sizes. Caches the result for later calls.
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * @return the TextCellFactory object that can represent many sizes of the font Inconsolata-LGC-Custom.ttf.
+     */
+    public static TextCellFactory getStretchableFont()
+    {
+        initialize();
+        if(instance.distanceNarrow == null)
+        {
+            try {
+                instance.distanceNarrow = new TextCellFactory().defaultNarrowDistanceFieldFont();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return instance.distanceNarrow;
     }
 
     /**
@@ -399,6 +381,18 @@ public class DefaultResources implements LifecycleListener {
             square2.dispose();
             square1 = null;
         }
+        if(smoothSquare != null) {
+            smoothSquare.dispose();
+            smoothSquare = null;
+        }
+        if(distanceSquare != null) {
+            distanceSquare.dispose();
+            distanceSquare = null;
+        }
+        if(distanceNarrow != null) {
+            distanceNarrow.dispose();
+            distanceNarrow = null;
+        }
         if (unicode1 != null) {
             unicode1.dispose();
             unicode1 = null;
@@ -410,18 +404,6 @@ public class DefaultResources implements LifecycleListener {
         if(tentacle != null) {
             tentacle.dispose();
             tentacle = null;
-        }
-
-
-        if(zooms != null) {
-            for (int i = 0; i < 12; i++) {
-                if(zooms[i] != null)
-                {
-                    zooms[i].dispose();
-                    zooms[i] = null;
-                }
-            }
-            zooms = null;
         }
     }
 

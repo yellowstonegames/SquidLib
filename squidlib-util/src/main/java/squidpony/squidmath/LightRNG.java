@@ -11,7 +11,27 @@ package squidpony.squidmath;
 /**
  * This is a SplittableRandom-style generator, meant to have a tiny state
  * that permits storing many different generators with low overhead.
- * It should be rather fast, though no guarantees can be made.
+ * It should be rather fast, though no guarantees can be made on all hardware.
+ * <br>
+ * Benchmarking on a Windows laptop with an i7-4700MQ processor running OpenJDK 8
+ * reports generation of 64-bit random long output as 17.8x faster than generating
+ * an equivalent number of random longs with java.util.Random, and generation of
+ * 32-bit random int output as 9.8x faster. Specifically, generating 1 billion longs
+ * took about 1.28 nanoseconds per long (1.277 seconds for the whole group) with
+ * LightRNG, while java.util.Random (which is meant to produce int, to be fair) took
+ * about 22.8 nanoseconds per long (22.797 seconds for the whole group). XorRNG
+ * appears to be occasionally faster on int output than LightRNG, but it isn't clear
+ * why or what causes that (JIT or GC internals, possibly). XorRNG is slightly
+ * slower at generating 64-bit random data, including long and double, but not by
+ * a significant degree (a multiplier between 0.9 and 1.2 times). The only deciding
+ * factor then is state size, where LightRNG is as small as possible for any JVM
+ * object with even a single field: 16 bytes (on a 64-bit JVM; 8-byte objects with
+ * 4 bytes or less of non-static members may be possible on 32-bit JVMs but I can't
+ * find anything confirming that guess).
+ * <br>
+ * So yes, this should be very fast, and with only a single long used per LightRNG,
+ * it is about as memory-efficient as these generators get.
+ * <br>
  * Written in 2015 by Sebastiano Vigna (vigna@acm.org)
  * @author Sebastiano Vigna
  * @author Tommy Ettinger

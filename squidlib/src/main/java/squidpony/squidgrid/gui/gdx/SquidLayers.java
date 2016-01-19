@@ -241,6 +241,20 @@ public class SquidLayers extends Group {
                 DefaultResources.getSCC(), DefaultResources.getSCC());
     }
     /**
+     * Create a new SquidLayers widget with the given path pre-constructed TextCellFactory, the given number of cells
+     * for gridWidth and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
+     *
+     * @param gridWidth  in grid cells
+     * @param gridHeight in grid cells
+     * @param cellWidth  in pixels
+     * @param cellHeight in pixels
+     * @param tcf        A TextCellFactory that you already constructed
+     */
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, TextCellFactory tcf) {
+        this(gridWidth, gridHeight, cellWidth, cellHeight, tcf,
+                DefaultResources.getSCC(), DefaultResources.getSCC());
+    }
+    /**
      * Create a new SquidLayers widget with a default font (it will be square if cellWidth and cellHeight are equal, or
      * narrow otherwise), the given number of cells for gridWidth
      * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
