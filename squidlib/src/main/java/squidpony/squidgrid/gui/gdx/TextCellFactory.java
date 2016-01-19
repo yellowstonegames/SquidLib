@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
 
 /**
@@ -34,7 +35,7 @@ import squidpony.IColorCenter;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class TextCellFactory {
+public class TextCellFactory implements Disposable {
 
     /**
      * The commonly used symbols in roguelike games.
@@ -260,9 +261,20 @@ public class TextCellFactory {
      * Sets the font to a distance field font with the given String path to a .fnt file and String path to a texture.
      * Distance field fonts should scale cleanly to multiple resolutions without artifacts. Does not use AssetManager
      * since you shouldn't need to reload the font if it scales with one image.
-     * @param fontPath the path to a .fnt bitmap font file, usually created by Hiero or included here
+     * <br>
+     * At least two distance field fonts are included in SquidLib; one is square, one is narrow, and they can both be
+     * accessed using either the predefined TextCellFactory objects in DefaultResources, accessible with
+     * getStretchableFont() for narrow or getStretchableSquareFont() for square, or the setter methods in this class,
+     * defaultDistanceFieldFont() for square and defaultNarrowDistanceFieldFont() for narrow.
+     * <br>
+     * To create distance field fonts that work well with monospace layout is... time-consuming and error-prone, though
+     * not especially difficult for most fonts. The process is documented as well as we can, given how differently all
+     * fonts are made, in a file not included in the distribution JAR but present on GitHub:
+     * https://github.com/SquidPony/SquidLib/blob/master/squidlib/etc/making-distance-field-fonts.txt
+     * @param fontPath the path to a .fnt bitmap font file with distance field effects applied, which requires a complex
+     *                 process to create.
      * @param texturePath the path to the texture used by the bitmap font
-     * @return
+     * @return this factory for method chaining
      */
     public TextCellFactory fontDistanceField(String fontPath, String texturePath) {
         Texture tex;
@@ -339,12 +351,12 @@ public class TextCellFactory {
     }
     public TextCellFactory defaultDistanceFieldFont()
     {
-        this.fontDistanceField(DefaultResources.distanceFieldSquare, DefaultResources.distanceFieldSquareTexture);
+        fontDistanceField(DefaultResources.distanceFieldSquare, DefaultResources.distanceFieldSquareTexture);
         return this;
     }
     public TextCellFactory defaultNarrowDistanceFieldFont()
     {
-        this.fontDistanceField(DefaultResources.distanceFieldNarrow, DefaultResources.distanceFieldNarrowTexture);
+        fontDistanceField(DefaultResources.distanceFieldNarrow, DefaultResources.distanceFieldNarrowTexture);
         return this;
     }
 
@@ -952,5 +964,14 @@ public class TextCellFactory {
     }
     public float getDistanceFieldScaleY() {
         return distanceFieldScaleY;
+    }
+
+    /**
+     * Releases all resources of this object.
+     */
+    @Override
+    public void dispose() {
+        if(bmpFont != null) bmpFont.dispose();
+        if(block != null) block.dispose();
     }
 }

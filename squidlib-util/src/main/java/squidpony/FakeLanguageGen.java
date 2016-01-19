@@ -687,20 +687,20 @@ public class FakeLanguageGen implements Serializable {
             midPunctuationFrequency = 1.0 / midPunctuationFrequency;
         }
         StringBuilder sb = new StringBuilder(12 * maxWords);
-        sb.append(word(true));
+        sb.append(word(rng, true));
         for (int i = 1; i < minWords; i++) {
             if (rng.nextDouble() < midPunctuationFrequency) {
                 sb.append(rng.getRandomElement(midPunctuation));
             }
             sb.append(' ');
-            sb.append(word(false));
+            sb.append(word(rng, false));
         }
         for (int i = minWords; i < maxWords && rng.nextInt(2 * maxWords) > i; i++) {
             if (rng.nextDouble() < midPunctuationFrequency) {
                 sb.append(rng.getRandomElement(midPunctuation));
             }
             sb.append(' ');
-            sb.append(word(false));
+            sb.append(word(rng, false));
         }
         sb.append(rng.getRandomElement(endPunctuation));
         return sb.toString();
@@ -755,9 +755,9 @@ public class FakeLanguageGen implements Serializable {
         }
         int frustration = 0;
         StringBuilder sb = new StringBuilder(maxChars);
-        String next = word(true);
+        String next = word(rng, true);
         while (next.length() >= maxChars - 1 && frustration < 50) {
-            next = word(true);
+            next = word(rng, true);
             frustration++;
         }
         if(frustration >= 50) return "!";
@@ -766,9 +766,9 @@ public class FakeLanguageGen implements Serializable {
             if (rng.nextDouble() < midPunctuationFrequency && sb.length() < maxChars - 3) {
                 sb.append(rng.getRandomElement(midPunctuation));
             }
-            next = word(false);
+            next = word(rng, false);
             while (sb.length() + next.length() >= maxChars - 2 && frustration < 50) {
-                next = word(false);
+                next = word(rng, false);
                 frustration++;
             }
             if(frustration >= 50) break;
@@ -779,9 +779,9 @@ public class FakeLanguageGen implements Serializable {
             if (rng.nextDouble() < midPunctuationFrequency && sb.length() < maxChars - 3) {
                 sb.append(rng.getRandomElement(midPunctuation));
             }
-            next = word(false);
+            next = word(rng, false);
             while (sb.length() + next.length() >= maxChars - 2 && frustration < 50) {
-                next = word(false);
+                next = word(rng, false);
                 frustration++;
             }
             if(frustration >= 50) break;

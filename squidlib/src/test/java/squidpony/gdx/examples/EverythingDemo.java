@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.DijkstraMap;
@@ -21,7 +21,9 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.MixedGenerator;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -173,7 +175,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 new TextCellFactory().defaultNarrowDistanceFieldFont(), bgCenter, fgCenter);
         display.setAnimationDuration(0.03f);
         messages = new SquidMessageBox(width, 4, display.getTextFactory());
-        stage = new Stage(new ScreenViewport(), batch);
+        stage = new Stage(new StretchViewport(width * cellWidth, (height + 4) * cellHeight), batch);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
         messages.setPosition(0, 0);
