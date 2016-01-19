@@ -349,6 +349,7 @@ public class RNG implements Serializable {
      * @param <T> can be any non-primitive type.
      * @return a shuffled copy of elements
      */
+    @GwtIncompatible
     public <T> T[] shuffle(T[] elements) {
         return shuffle(elements, Arrays.copyOf(elements, elements.length));
     }
@@ -405,6 +406,7 @@ public class RNG implements Serializable {
      * @param <T> can be any non-primitive type.
      * @return an array of T that has length equal to the smaller of count or data.length
      */
+    @GwtIncompatible
     public <T> T[] randomPortion(T[] data, int count)
     {
         T[] array = Arrays.copyOf(data, Math.min(count, data.length));

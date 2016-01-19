@@ -290,36 +290,31 @@ public class SquidInput extends InputAdapter {
     @Override
 	public synchronized boolean touchDown (int screenX, int screenY, int pointer, int button) {
         if(ignoreInput) return false;
-        mouse.touchDown(screenX, screenY, pointer, button);
-        return false;
+        return mouse.touchDown(screenX, screenY, pointer, button);
     }
 
     @Override
 	public synchronized boolean touchUp (int screenX, int screenY, int pointer, int button) {
         if(ignoreInput) return false;
-        mouse.touchUp(screenX, screenY, pointer, button);
-        return false;
+        return mouse.touchUp(screenX, screenY, pointer, button);
     }
 
     @Override
 	public synchronized boolean touchDragged (int screenX, int screenY, int pointer) {
         if(ignoreInput) return false;
-        mouse.touchDragged(screenX, screenY, pointer);
-        return false;
+        return mouse.touchDragged(screenX, screenY, pointer);
     }
 
     @Override
 	public synchronized boolean mouseMoved (int screenX, int screenY) {
         if(ignoreInput) return false;
-        mouse.mouseMoved(screenX, screenY);
-        return false;
+        return mouse.mouseMoved(screenX, screenY);
     }
 
     @Override
 	public synchronized boolean scrolled (int amount) {
         if(ignoreInput) return false;
-        mouse.scrolled(amount);
-        return false;
+        return mouse.scrolled(amount);
     }
 
     /**

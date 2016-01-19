@@ -1,7 +1,9 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
+import squidpony.SquidTags;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ICombinedPanel;
 import squidpony.panel.ISquidPanel;
@@ -36,7 +38,8 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 	 *             In various cases of errors regarding sizes of panels.
 	 */
 	public GroupCombinedPanel(ISquidPanel<T> bg, ISquidPanel<T> fg) {
-		setPanels(bg, fg);
+		if (bg != null && fg != null)
+			setPanels(bg, fg);
 	}
 
 	/**
@@ -63,6 +66,12 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 	 *             In various cases of errors regarding sizes of panels.
 	 */
 	public final void setPanels(ISquidPanel<T> bg, ISquidPanel<T> fg) {
+		if (bg == null || fg == null) {
+			Gdx.app.log(SquidTags.LAYOUT,
+					"You should not call this method with a null panel. Avoiding an NPE, but you should fix that.");
+			return;
+		}
+
 		if (this.bg != null)
 			throw new IllegalStateException("Cannot change the background panel");
 		this.bg = bg;
@@ -159,13 +168,19 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 	}
 
 	@Override
-	public void fillBG(T color) {
+	public void fill(Boolean what, T color) {
 		final int gridWidth = getGridWidth();
 		final int gridHeight = getGridHeight();
 
 		for (int x = 0; x < gridWidth; x++) {
-			for (int y = 0; y < gridHeight; y++)
-				putBG(x, y, color);
+			for (int y = 0; y < gridHeight; y++) {
+				final boolean fg = what == null || what;
+				final boolean bg = what == null || !what;
+				if (fg)
+					putFG(x, y, ' ', color);
+				if (bg)
+					putBG(x, y, color);
+			}
 		}
 	}
 
