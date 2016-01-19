@@ -107,12 +107,15 @@ public interface ICombinedPanel<T> {
 	 * {@code fgc} for the foreground.
 	 */
 	void put(int x, int y, String s, T bgc, T fgc);
-	
+
 	/**
+	 * @param what
+	 *            {@code true} to fill the foreground, {@code false} to fill the
+	 *            background. {@code null} to fill both.
 	 * @param color
 	 *            The color to put within this panel.
 	 */
-	void fillBG(T color);
+	void fill(Boolean what, T color);
 
 	/**
 	 * A generic implementation of {@link ICombinedPanel}. Useful to combine
@@ -213,10 +216,16 @@ public interface ICombinedPanel<T> {
 		}
 
 		@Override
-		public void fillBG(T color) {
+		public void fill(Boolean what, T color) {
 			for (int x = 0; x < width; x++) {
-				for (int y = 0; y < height; y++)
-					putBG(x, y, color);
+				for (int y = 0; y < height; y++) {
+					final boolean fg = what == null || what;
+					final boolean bg = what == null || !what;
+					if (fg)
+						putFG(x, y, ' ', color);
+					if (bg)
+						putBG(x, y, color);
+				}
 			}
 		}
 

@@ -101,7 +101,8 @@ public class SquidMessageBox extends SquidPanel {
     private void makeBordersClickable()
     {
         addListener(new InputListener(){
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            @Override
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 if(x >= 0 && x < getWidth())
                 {
                     if(y < cellHeight)
