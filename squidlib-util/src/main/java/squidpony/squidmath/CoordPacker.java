@@ -1333,6 +1333,8 @@ public class CoordPacker {
      * Expand each "on" position in packed to cover a a square with side length equal to 1 + expansion * 2,
      * centered on the original "on" position, unless the expansion would take a cell further than 0,
      * width - 1 (for xMove) or height - 1 (for yMove), in which case that cell is stopped at the edge.
+     * Uses 8-way movement (Chebyshev distance) unless the overload of this function that takes a boolean argument
+     * eightWay is used and that argument is false.
      * Returns a new packed short[] and does not modify packed.
      * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
      * @param expansion the positive (square) radius, in cells, to expand each cell out by
@@ -1417,7 +1419,7 @@ public class CoordPacker {
         ShortVLA vla = new ShortVLA(256);
         ShortSet ss = new ShortSet(256);
         boolean on = false;
-        int idx = 0, x, y;
+        int idx = 0, x, y, j, k;
         short dist;
         int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
         for(int p = 0; p < packed.length; p++, on = !on) {
@@ -1428,8 +1430,8 @@ public class CoordPacker {
                     for (int d = 0; d < 4; d++) {
                         for (int e = 1; e <= expansion; e++) {
                             for (int e2 = 0; e2 < expansion; e2++) {
-                                int j = Math.min(width - 1, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
-                                int k = Math.min(height - 1, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
+                                j = Math.min(width - 1, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
+                                k = Math.min(height - 1, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
                                 dist = hilbertDistances[j + (k << 8)];
                                 if (ss.add(dist))
                                     vla.add(dist);
@@ -1466,6 +1468,145 @@ public class CoordPacker {
         return vla.toArray();
     }
 
+    /**
+     * Finds the area made by removing the "on" positions in packed that are within the specified retraction distance of
+     * an "off" position or the edge of the map. This essentially finds a shrunken version of packed.
+     * Uses 8-way movement (Chebyshev distance) unless the overload of this function that takes a boolean argument
+     * eightWay is used and that argument is false.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param retraction the positive (square) radius, in cells, to pull each cell in by
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @return a short[] that encodes "on" for cells that were "on" in packed and were far enough from an "off" cell
+     */
+    public static short[] retract(short[] packed, int retraction, int width, int height)
+    {
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        boolean on = false;
+        int idx = 0, x, y;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                INDICES:
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++)
+                {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    for (int j = x - retraction; j <= x + retraction; j++) {
+                        for (int k = y - retraction; k <= y + retraction; k++) {
+                            if(j < 0 || k < 0 || j >= width || k >= height ||
+                                    !queryPackedHilbert(packed, hilbertDistances[j + (k << 8)]))
+                                continue INDICES;
+                        }
+                    }
+
+                    vla.add((short)i);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+
+        int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+        return vla.toArray();
+    }
+    /**
+     * Finds the area made by removing the "on" positions in packed that are within the specified retraction distance of
+     * an "off" position or the edge of the map. This essentially finds a shrunken version of packed.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param retraction the positive (square) radius, in cells, to pull each cell in by
+     * @param width the maximum width; cells outside this are considered "off" for this method's purposes
+     * @param height the maximum height; cells outside this are considered "off" for this method's purposes
+     * @param eightWay true if the retraction should be both diagonal and orthogonal; false for just orthogonal
+     * @return a packed array that encodes "on" for packed and cells that expanded from cells that were "on" in packed
+     */
+    public static short[] retract(short[] packed, int retraction, int width, int height, boolean eightWay)
+    {
+        if(eightWay)
+            return retract(packed, retraction, width, height);
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        boolean on = false;
+        int idx = 0, x, y, j, k;
+        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                INDICES:
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++)
+                {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    for (int d = 0; d < 4; d++) {
+                        for (int e = 1; e <= retraction; e++) {
+                            for (int e2 = 0; e2 < retraction; e2++) {
+                                j = x + xOffsets[d] * e + yOffsets[d + 1] * e2;
+                                k = y + yOffsets[d] * e + xOffsets[d + 1] * e2;
+                                if (j < 0 || k < 0 || j >= width || k >= height ||
+                                        !queryPackedHilbert(packed, hilbertDistances[j + (k << 8)]))
+                                    continue INDICES;
+                            }
+                        }
+                    }
+                    vla.add((short)i);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+
+        int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+        return vla.toArray();
+    }
+
+
 
     /**
      * Finds the area around the cells encoded in packed, without including those cells. For each "on"
@@ -1473,6 +1614,8 @@ public class CoordPacker {
      * centered on the original "on" position, unless the expansion would take a cell further than 0,
      * width - 1 (for xMove) or height - 1 (for yMove), in which case that cell is stopped at the edge.
      * If a cell is "on" in packed, it will always be "off" in the result.
+     * Uses 8-way movement (Chebyshev distance) unless the overload of this function that takes a boolean argument
+     * eightWay is used and that argument is false.
      * Returns a new packed short[] and does not modify packed.
      * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
      * @param expansion the positive (square-shaped) radius, in cells, to expand each cell out by
@@ -1803,6 +1946,145 @@ public class CoordPacker {
             finished[expansion-1] = vla.toArray();
         }
         return finished;
+    }
+
+    /**
+     * Finds the area consisting of the "on" positions in packed that are within the specified depth distance of an
+     * "off" position or the edge of the map. This essentially finds the part of packed that is close to its edge.
+     * Uses 8-way movement (Chebyshev distance) unless the overload of this function that takes a boolean argument
+     * eightWay is used and that argument is false.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param depth the positive (square) radius, in cells, to go inward from an "off" cell into the "in" cells
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @return a short[] that encodes "on" for cells that were "on" in packed and were close enough to an "off" cell
+     */
+    public static short[] surface(short[] packed, int depth, int width, int height)
+    {
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        boolean on = false;
+        int idx = 0, x, y;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                INDICES:
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++)
+                {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    for (int j = Math.max(0, x - depth); j <= Math.min(width - 1, x + depth); j++) {
+                        for (int k = Math.max(0, y - depth); k <= Math.min(height - 1, y + depth); k++) {
+                            if(!queryPackedHilbert(packed, hilbertDistances[j + (k << 8)]))
+                            {
+                                vla.add((short)i);
+                                continue INDICES;
+                            }
+                        }
+                    }
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+
+        int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+        return vla.toArray();
+    }
+    /**
+     * Finds the area consisting of the "on" positions in packed that are within the specified depth distance of an
+     * "off" position or the edge of the map. This essentially finds the part of packed that is close to its edge.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param depth the positive (square) radius, in cells, to go inward from an "off" cell into the "in" cells
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @param eightWay true if the retraction should be both diagonal and orthogonal; false for just orthogonal
+     * @return a short[] that encodes "on" for cells that were "on" in packed and were close enough to an "off" cell
+     */
+    public static short[] surface(short[] packed, int depth, int width, int height, boolean eightWay)
+    {
+        if(eightWay)
+            return surface(packed, depth, width, height);
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        boolean on = false;
+        int idx = 0, x, y, j, k;
+        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                INDICES:
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++)
+                {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    for (int d = 0; d < 4; d++) {
+                        for (int e = 1; e <= depth; e++) {
+                            for (int e2 = 0; e2 < depth; e2++) {
+                                j = x + xOffsets[d] * e + yOffsets[d + 1] * e2;
+                                k = y + yOffsets[d] * e + xOffsets[d + 1] * e2;
+                                if (j < 0 || k < 0 || j >= width || k >= height ||
+                                        !queryPackedHilbert(packed, hilbertDistances[j + (k << 8)])) {
+                                    vla.add((short)i);
+                                    continue INDICES;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+
+        int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+        return vla.toArray();
     }
 
 
@@ -3093,6 +3375,44 @@ public class CoordPacker {
         return coords;
     }
 
+
+    /**
+     * Takes multiple pieces of packed data as short[], encoded by pack() or another similar method of this class, and
+     * generates a 2D int array with the specified width and height and a starting value of 0 for all elements, then
+     * where every occurrence of a cell as "on" in a piece of packed data increments the cell's value in the returned
+     * array. Width and height do not technically need to match the dimensions of the original 2D array, but under most
+     * circumstances where they don't match, the data produced will be junk.
+     * @param width the width of the 2D array that will be returned; should match the unpacked array's width
+     * @param height the height of the 2D array that will be returned; should match the unpacked array's height
+     * @param many a vararg or array of short[] encoded by calling one of this class' packing methods on a 2D array
+     * @return an int[][] storing at least 0 for all cells, plus 1 for every element of packed that has that cell "on"
+     */
+    public static int[][] sumMany(int width, int height, short[] ... many)
+    {
+        if(many == null)
+            throw new ArrayIndexOutOfBoundsException("CoordPacker.sumMany() must be given a non-null many arg");
+        int[][] unpacked = new int[width][height];
+        for (int e = 0; e < many.length; e++) {
+            boolean on = false;
+            int idx = 0;
+            short x = 0, y = 0;
+            for(int p = 0; p < many[e].length; p++, on = !on) {
+                if (on) {
+                    for (int toSkip = idx + (many[e][p] & 0xffff); idx < toSkip && idx < 0x10000; idx++) {
+                        x = hilbertX[idx];
+                        y = hilbertY[idx];
+                        if(x >= width || y >= height)
+                            continue;
+                        unpacked[x][y]++;
+                    }
+                } else {
+                    idx += many[e][p] & 0xffff;
+                }
+            }
+        }
+        return unpacked;
+    }
+
     /**
      * Quick utility method for printing packed data as a grid of 1 (on) and/or 0 (off). Useful primarily for debugging.
      * @param packed a packed short[] such as one produced by pack()
@@ -3162,372 +3482,6 @@ public class CoordPacker {
 
 
     /**
-     * Compresses a double[][] (typically one generated by {@link squidpony.squidgrid.FOV}) that only stores two
-     * relevant states (one of which should be 0 or less, the other greater than 0), returning a short[] as described in
-     * the {@link CoordPacker} class documentation. This short[] can be passed to CoordPacker.unpackZ() to restore the
-     * relevant states and their positions as a boolean[][] (with false meaning 0 or less and true being any double
-     * greater than 0). As stated in the class documentation, the compressed result is intended to use as little memory
-     * as possible for most roguelike FOV maps.
-     * <br>
-     * This uses Z-Coding instead of Hilbert Curves, which may provide suitable compression while requiring less of a
-     * constant memory cost for the lookup tables that the Hilbert Curves need to perform quickly.
-     * <br>
-     * <b>To store more than two states</b>, you should use packMultiZ().
-     *
-     * @param map a double[][] that probably was returned by FOV. If you obtained a double[][] from DijkstraMap, it
-     *            will not meaningfully compress with this method.
-     * @return a packed short[] that should, in most circumstances, be passed to unpackZ() when it needs to be used.
-     */
-    public static short[] packZ(double[][] map)
-    {
-        if(map == null || map.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.packZ() must be given a non-empty array");
-        int xSize = map.length, ySize = map[0].length;
-        if(xSize > 256 || ySize > 256)
-            throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
-        ShortVLA packing = new ShortVLA(64);
-        boolean on = false, current;
-        int skip = 0, limit = 0x10000;
-        if(ySize <= 128) {
-            limit >>= 1;
-            if (xSize <= 128) {
-                limit >>= 1;
-                if (ySize <= 64) {
-                    limit >>= 1;
-                    if (xSize <= 64) {
-                        limit >>= 1;
-                        if (ySize <= 32) {
-                            limit >>= 1;
-                            if (xSize <= 32) {
-                                limit >>= 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        short x, y;
-        for(int i = 0; i < limit; i++, skip++)
-        {
-            x = zDecodeX(i);
-            y = zDecodeY(i);
-            if(x >= xSize || y >= ySize) {
-                if(on) {
-                    on = false;
-                    packing.add((short) skip);
-                    skip = 0;
-                }
-                continue;
-            }
-            current = map[x][y] > 0.0;
-            if(current != on)
-            {
-                packing.add((short) skip);
-                skip = 0;
-                on = current;
-            }
-        }
-        if(on)
-            packing.add((short)skip);
-        return packing.toArray();
-    }
-
-    /**
-     * Compresses a boolean[][], returning a short[] as described in the {@link CoordPacker} class documentation. This
-     * short[] can be passed to CoordPacker.unpackZ() to restore the boolean[][]. As stated in the class documentation,
-     * the compressed result is intended to use as little memory as possible for most roguelike FOV maps.
-     * <br>
-     * This uses Z-Coding instead of Hilbert Curves, which may provide suitable compression while requiring less of a
-     * constant memory cost for the lookup tables that the Hilbert Curves need to perform quickly.
-     * <br>
-     * <b>To store more than two states</b>, you should use packMultiZ().
-     *
-     * @param map a boolean[][] that should be mostly false.
-     * @return a packed short[] that should, in most circumstances, be passed to unpackZ() when it needs to be used.
-     */
-    public static short[] packZ(boolean[][] map)
-    {
-        if(map == null || map.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.packZ() must be given a non-empty array");
-        int xSize = map.length, ySize = map[0].length;
-        if(xSize > 256 || ySize > 256)
-            throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
-        ShortVLA packing = new ShortVLA(64);
-        boolean on = false, current;
-        int skip = 0, limit = 0x10000;
-        if(ySize <= 128) {
-            limit >>= 1;
-            if (xSize <= 128) {
-                limit >>= 1;
-                if (ySize <= 64) {
-                    limit >>= 1;
-                    if (xSize <= 64) {
-                        limit >>= 1;
-                        if (ySize <= 32) {
-                            limit >>= 1;
-                            if (xSize <= 32) {
-                                limit >>= 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        short x, y;
-        for(int i = 0; i < limit; i++, skip++)
-        {
-            x = zDecodeX(i);
-            y = zDecodeY(i);
-            if(x >= xSize || y >= ySize) {
-                if(on) {
-                    on = false;
-                    packing.add((short) skip);
-                    skip = 0;
-                }
-                continue;
-            }
-            current = map[x][y];
-            if(current != on)
-            {
-                packing.add((short) skip);
-                skip = 0;
-                on = current;
-            }
-        }
-        if(on)
-            packing.add((short)skip);
-        return packing.toArray();
-    }
-
-    /**
-     * Compresses a double[][] (typically one generated by {@link squidpony.squidgrid.FOV}) that stores any number of
-     * states and a double[] storing up to 63 states, ordered from lowest to highest, returning a short[][] as described
-     * in the {@link CoordPacker} class documentation. This short[][] can be passed to CoordPacker.unpackMultiDoubleZ()
-     * to restore the state at a position to the nearest state in levels, rounded down, and return a double[][] that
-     * should preserve the states as closely as intended for most purposes.
-     *<br>
-     * As stated in the class documentation, the compressed result is intended to use as little memory as possible for
-     * most roguelike FOV maps.
-     *<br>
-     * <b>To store only two states</b>, you should use packZ(), unless the double[][] divides data into on and off based
-     * on a relationship to some number other than 0.0. To (probably poorly?) pack all the walls (and any cells with
-     * values higher than DijkstraMap.WALL) in a DijkstraMap's 2D array of doubles called dijkstraArray, you could call
-     * <code>packMulti(dijkstraArray, new double[]{DijkstraMap.WALL});</code>
-     * Then, you would use only the one sub-element of the returned short[][].
-     * <br>
-     * This uses Z-Coding instead of Hilbert Curves, which may provide suitable compression while requiring less of a
-     * constant memory cost for the lookup tables that the Hilbert Curves need to perform quickly.
-     *
-     * @param map a double[][] that probably was returned by FOV. If you obtained a double[][] from DijkstraMap, it
-     *            will not meaningfully compress with this method unless you have very specific needs.
-     * @param levels a double[] starting with the lowest value that should be counted as "on" (the outermost cells of
-     *               an FOV map that has multiple grades of brightness would be counted by this) and ascending until the
-     *               last value; the last value should be highest (commonly 1.0 for FOV), and will be used for any cells
-     *               higher than all the other levels values. An example is an array of: 0.25, 0.5, 0.75, 1.0
-     * @return a packed short[][] that should, in most circumstances, be passed to unpackMultiDouble() or
-     *               unpackMultiByte() when it needs to be used. The 2D array will be jagged with an outer length equal
-     *               to the length of levels and sub-arrays that go from having longer lengths early on to very compact
-     *               lengths by the end of the short[][].
-     */
-    public static short[][] packMultiZ(double[][] map, double[] levels) {
-        if (levels == null || levels.length == 0)
-            throw new UnsupportedOperationException("Must be given at least one level");
-        if (levels.length > 63)
-            throw new UnsupportedOperationException(
-                    "Too many levels to efficiently pack; should be less than 64 but was given " +
-                            levels.length);
-        if (map == null || map.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.packMultiZ() must be given a non-empty array");
-        int xSize = map.length, ySize = map[0].length;
-        if (xSize > 256 || ySize > 256)
-            throw new UnsupportedOperationException("Map size is too large to efficiently pack, aborting");
-        int limit = 0x10000, llen = levels.length;
-        long on = 0, current = 0;
-        ShortVLA[] packing = new ShortVLA[llen];
-        int[] skip = new int[llen];
-
-        if(ySize <= 128) {
-            limit >>= 1;
-            if (xSize <= 128) {
-                limit >>= 1;
-                if (ySize <= 64) {
-                    limit >>= 1;
-                    if (xSize <= 64) {
-                        limit >>= 1;
-                        if (ySize <= 32) {
-                            limit >>= 1;
-                            if (xSize <= 32) {
-                                limit >>= 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        short[][] packed = new short[llen][];
-        short x, y;
-        for(int l = 0; l < llen; l++) {
-            packing[l] = new ShortVLA(64);
-            for (int i = 0; i < limit; i++, skip[l]++) {
-                x = zDecodeX(i);
-                y = zDecodeY(i);
-                if (x >= xSize || y >= ySize) {
-                    if ((on & (1L << l)) != 0L) {
-                        on ^= (1L << l);
-                        packing[l].add((short) skip[l]);
-                        skip[l] = 0;
-                    }
-                    continue;
-                }
-                // sets the bit at position l in current to 1 if the following is true, 0 if it is false:
-                //     map[x][y] >= levels[l]
-                // looks more complicated than it is.
-                current ^= ((map[x][y] >= levels[l] ? -1 : 0) ^ current) & (1 << l);
-                if (((current >> l) & 1L) != ((on >> l) & 1L)) {
-                    packing[l].add((short) skip[l]);
-                    skip[l] = 0;
-                    on = current;
-
-                    // sets the bit at position l in on to the same as the bit at position l in current.
-                    on ^= (-((current >> l) & 1L) ^ on) & (1L << l);
-
-                }
-            }
-
-            if (((on >> l) & 1L) == 1L)
-                packing[l].add((short) skip[l]);
-            packed[l] = packing[l].toArray();
-        }
-        return packed;
-    }
-
-    /**
-     * Decompresses a short[] returned by pack() or a sub-array of a short[][] returned by packMulti(), as described in
-     * the {@link CoordPacker} class documentation. This returns a boolean[][] that stores the same values that were
-     * packed if the overload of pack() taking a boolean[][] was used. If a double[][] was compressed with pack(), the
-     * boolean[][] this returns will have true for all values greater than 0 and false for all others. If this is one
-     * of the sub-arrays compressed by packMulti(), the index of the sub-array will correspond to an index in the levels
-     * array passed to packMulti(), and any cells that were at least equal to the corresponding value in levels will be
-     * true, while all others will be false. Width and height do not technically need to match the dimensions of the
-     * original 2D array, but under most circumstances where they don't match, the data produced will be junk.
-     * <br>
-     * This uses Z-Coding instead of Hilbert Curves, which may provide suitable compression while requiring less of a
-     * constant memory cost for the lookup tables that the Hilbert Curves need to perform quickly.
-     *
-     * @param packed a short[] encoded by calling one of this class' packing methods (Z variant) on a 2D array.
-     * @param width the width of the 2D array that will be returned; should match the unpacked array's width.
-     * @param height the height of the 2D array that will be returned; should match the unpacked array's height.
-     * @return a boolean[][] storing which cells encoded by packed are on (true) or off (false).
-     */
-    public static boolean[][] unpackZ(short[] packed, int width, int height)
-    {
-        if(packed == null || packed.length == 0)
-            throw new ArrayIndexOutOfBoundsException("CoordPacker.unpackZ() must be given a non-empty array");
-        boolean[][] unpacked = new boolean[width][height];
-        boolean on = false;
-        int idx = 0;
-        for(int p = 0; p < packed.length; p++, on = !on) {
-            if (on) {
-                for (int toSkip = idx +(packed[p] & 0xffff); idx < toSkip; idx++) {
-                    unpacked[zDecodeX(idx)][zDecodeY(idx)] = true;
-                }
-            } else {
-                idx += packed[p] & 0xffff;
-            }
-        }
-        return unpacked;
-    }
-
-    /**
-     * Decompresses a short[][] returned by packMulti() and produces an approximation of the double[][] it compressed
-     * using the given levels double[] as the values to assign, as described in the {@link CoordPacker} class
-     * documentation. The length of levels and the length of the outer array of packed must be equal. However, the
-     * levels array passed to this method does not have to be identical to the levels array passed to packMulti(); this
-     * could be used to pack numbers in grades of 0.25, 0.5, 0.75, 1.0, and unpack it with a different levels array to
-     * get numbers that translate packed values of 0.25 to -1.0, 0.5 to -2.0, 0.75 to -3.0, and 1.0 to -999.0. Width and
-     * height do not technically need to match the dimensions of the original 2D array, but under most circumstances
-     * where they don't match, the data produced will be junk.
-     * <br>
-     * This uses Z-Coding instead of Hilbert Curves, which may provide suitable compression while requiring less of a
-     * constant memory cost for the lookup tables that the Hilbert Curves need to perform quickly.
-     *
-     * @param packed a short[][] encoded by calling this class' packMultiZ() method on a 2D array.
-     * @param width the width of the 2D array that will be returned; should match the unpacked array's width.
-     * @param height the height of the 2D array that will be returned; should match the unpacked array's height.
-     * @param levels a double[] that must have the same length as packed, and will be used to assign cells in the
-     *               returned double[][] based on what levels parameter was used to compress packed
-     * @return a double[][] where the values that corresponded to the nth value in the levels parameter used to
-     * compress packed will now correspond to the nth value in the levels parameter passed to this method.
-     */
-    public static double[][] unpackMultiDoubleZ(short[][] packed, int width, int height, double[] levels)
-    {
-        if(packed == null || packed.length == 0)
-            throw new ArrayIndexOutOfBoundsException(
-                    "CoordPacker.unpackMultiDoubleZ() must be given a non-empty array");
-        if (levels == null || levels.length != packed.length)
-            throw new UnsupportedOperationException("The lengths of packed and levels must be equal");
-        if (levels.length > 63)
-            throw new UnsupportedOperationException(
-                    "Too many levels to be packed by CoordPacker; should be less than 64 but was given " +
-                            levels.length);
-        double[][] unpacked = new double[width][height];
-        for(int l = 0; l < packed.length; l++) {
-            boolean on = false;
-            int idx = 0;
-            for (int p = 0; p < packed[l].length; p++, on = !on) {
-                if (on) {
-                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip; idx++) {
-                        unpacked[zDecodeX(idx)][zDecodeY(idx)] = levels[l];
-                    }
-                } else {
-                    idx += packed[l][p] & 0xffff;
-                }
-            }
-        }
-        return unpacked;
-    }
-
-    /**
-     * Decompresses a short[][] returned by packMulti() and produces a simple 2D array where the values are bytes
-     * corresponding to the highest levels index (in the original levels parameter passed to packMulti) matched by a
-     * cell, or 0 if the cell didn't match any levels during compression, as described in the {@link CoordPacker} class
-     * documentation. Width and height do not technically need to match the dimensions of the original 2D array, but
-     * under most circumstances where they don't match, the data produced will be junk.
-     * <br>
-     * This uses Z-Coding instead of Hilbert Curves, which may provide suitable compression while requiring less of a
-     * constant memory cost for the lookup tables that the Hilbert Curves need to perform quickly.
-     *
-     * @param packed a short[][] encoded by calling this class' packMultiZ() method on a 2D array.
-     * @param width the width of the 2D array that will be returned; should match the unpacked array's width.
-     * @param height the height of the 2D array that will be returned; should match the unpacked array's height.
-     * @return a byte[][] where the values that corresponded to the nth value in the levels parameter used to
-     * compress packed will now correspond to bytes with the value n+1, or 0 if they were "off" in the original array.
-     */
-    public static byte[][] unpackMultiByteZ(short[][] packed, int width, int height)
-    {
-        if(packed == null || packed.length == 0)
-            throw new ArrayIndexOutOfBoundsException(
-                    "CoordPacker.unpackMultiByteZ() must be given a non-empty array");
-        byte[][] unpacked = new byte[width][height];
-        byte lPlus = 1;
-        for(int l = 0; l < packed.length; l++, lPlus++) {
-            boolean on = false;
-            int idx = 0;
-            for (int p = 0; p < packed[l].length; p++, on = !on) {
-                if (on) {
-                    for (int toSkip = idx + (packed[l][p] & 0xffff); idx < toSkip; idx++) {
-                        unpacked[zDecodeX(idx)][zDecodeY(idx)] = lPlus;
-                    }
-                } else {
-                    idx += packed[l][p] & 0xffff;
-                }
-            }
-        }
-        return unpacked;
-    }
-
-
-    /**
      * Encode a number n as a Gray code; Gray codes have a relation to the Hilbert curve and may be useful.
      * Source: http://xn--2-umb.com/15/hilbert , http://aggregate.org/MAGIC/#Gray%20Code%20Conversion
      * @param n any int
@@ -3548,54 +3502,6 @@ public class CoordPacker {
         while ((n >>= 1) != 0)
             p ^= n;
         return p;
-    }
-
-    /**
-     * Not currently used, may be used in the future.
-     * Source: https://www.cs.dal.ca/research/techreports/cs-2006-07 ; algorithm provided in pseudocode
-     * @param n any int
-     * @param mask a bitmask that has some significance to the compacting algorithm
-     * @param i i is I have no clue
-     * @return some kind of magic
-     */
-    public static int grayCodeRank(int n, int mask, int i)
-    {
-        int r = 0;
-        for (int k = n - 1; k >= 0; k--)
-        {
-            if(((mask >> k) & 1) == 1)
-                r = (r << 1) | ((i >> k) & 1);
-        }
-        return  r;
-    }
-
-    /**
-     *
-     * Source: https://www.cs.dal.ca/research/techreports/cs-2006-07 ; algorithm provided in pseudocode
-     * @param n a gray code, I think
-     * @param mask some bitmask or something? check the paper
-     * @param altMask another bitmask I guess, again, check the paper
-     * @param rank if I had to wager a guess, this is something about rank
-     * @return some other kind of magic
-     */
-    public static int grayCodeRankInverse(int n, int mask, int altMask, int rank)
-    {
-        int i = 0, g = 0, j = Integer.bitCount(mask) - 1;
-        for(int k = n - 1; k >= 0; k--)
-        {
-            if(((mask >> k) & 1) == 1)
-            {
-                i ^= (-((rank >> j) & 1) ^ i) & (1 << k);
-                g ^= (-((((i >> k) & 1) + ((i >> k) & 1)) % 2) ^ g) & (1 << k);
-                --j;
-            }
-            else
-            {
-                g ^= (-((altMask >> k) & 1) ^ g) & (1 << k);
-                i ^= (-((((g >> k) & 1) + ((i >> (k+1)) & 1)) % 2) ^ i) & (1 << k);
-            }
-        }
-        return  i;
     }
 
     /**
@@ -4007,78 +3913,6 @@ public class CoordPacker {
         index2 &= 0x00005555;
         return index1 | ( index2 << 1 );
     }
-    /**
-     * Takes two 16-bit unsigned integers index1 and index2, and returns a Morton code, with interleaved index1 and
-     * index2 bits and index1 in the least significant bit. With this method, index1 and index2 can have up to 16 bits.
-     * This returns a 32-bit Morton code and may encode information in the sign bit.
-     * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param index1 a non-negative integer using at most 16 bits, to be placed in the "x" slots
-     * @param index2 a non-negative integer using at most 16 bits, to be placed in the "y" slots
-     * @return a Morton code that interleaves the two numbers as one 32-bit int
-     */
-    public static int mortonEncode16(int index1, int index2)
-    { // pack 2 16-bit indices into a 32-bit Morton code
-        index1 &= 0x0000ffff;
-        index2 &= 0x0000ffff;
-        index1 |= ( index1 << 8 );
-        index2 |= ( index2 << 8 );
-        index1 &= 0x00ff00ff;
-        index2 &= 0x00ff00ff;
-        index1 |= ( index1 << 4 );
-        index2 |= ( index2 << 4 );
-        index1 &= 0x0f0f0f0f;
-        index2 &= 0x0f0f0f0f;
-        index1 |= ( index1 << 2 );
-        index2 |= ( index2 << 2 );
-        index1 &= 0x33333333;
-        index2 &= 0x33333333;
-        index1 |= ( index1 << 1 );
-        index2 |= ( index2 << 1 );
-        index1 &= 0x55555555;
-        index2 &= 0x55555555;
-        return index1 | ( index2 << 1 );
-    }
-
-    /**
-     * Takes a Morton code, with interleaved x and y bits and x in the least significant bit, and returns the short
-     * representing the x position.
-     * This uses 16 bits of the 32-bit Morton code/Z-Code.
-     * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param morton A Morton code or Z-Code that interleaves two 8-bit numbers
-     * @return A short that represents the x position extracted from the Morton code/Z-Code
-     */
-    public static short zDecodeX( final int morton )
-    { // unpack the 8-bit (unsigned) first index from a 16-bit (unsigned) Morton code/Z-Code
-        short value1 = (short)(morton & 0xffff);
-        value1 &= 0x5555;
-        value1 |= ( value1 >> 1 );
-        value1 &= 0x3333;
-        value1 |= ( value1 >> 2 );
-        value1 &= 0x0f0f;
-        value1 |= ( value1 >> 4 );
-        value1 &= 0x00ff;
-        return value1;
-    }
-    /**
-     * Takes a Morton code, with interleaved x and y bits and x in the least significant bit, and returns the short
-     * representing the y position.
-     * This uses 16 bits of the 32-bit Morton code/Z-Code.
-     * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param morton A Morton code or Z-Code that interleaves two 8-bit numbers
-     * @return A short that represents the y position extracted from the Morton code/Z-Code
-     */
-    public static short zDecodeY( final int morton )
-    { // unpack the 8-bit (unsigned) second index from a 16-bit (unsigned) Morton code/Z-Code
-        short value2 = (short)((morton & 0xffff) >>> 1 );
-        value2 &= 0x5555;
-        value2 |= ( value2 >> 1 );
-        value2 &= 0x3333;
-        value2 |= ( value2 >> 2 );
-        value2 &= 0x0f0f;
-        value2 |= ( value2 >> 4 );
-        value2 &= 0x00ff;
-        return value2;
-    }
 
     /**
      * Takes a Morton code, with interleaved x and y bits and x in the least significant bit, and returns the Coord
@@ -4135,39 +3969,6 @@ public class CoordPacker {
         value2 |= ( value2 >> 4 );
         value1 &= 0x00ff;
         value2 &= 0x00ff;
-        return Coord.get(value1, value2);
-    }
-    /**
-     * Takes a Morton code, with interleaved x and y bits and x in the least significant bit, and returns the Coord
-     * representing the same x, y position. With this method, x and y can have up to 16 bits, but Coords returned by
-     * this method will not be cached if they have a x or y component greater than 255.
-     * This uses 32 bits of the Morton code and will treat the sign bit as the most significant bit of y, unsigned.
-     * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param morton an int containing two interleaved shorts.
-     * @return a Coord matching the x and y extracted from the Morton code
-     */
-    public static Coord mortonDecode16( final int morton )
-    { // unpack 2 16-bit indices from a 32-bit Morton code
-        int value1 = morton;
-        int value2 = ( value1 >>> 1 );
-        value1 &= 0x55555555;
-        value2 &= 0x55555555;
-        value1 |= ( value1 >>> 1 );
-        value2 |= ( value2 >>> 1 );
-        value1 &= 0x33333333;
-        value2 &= 0x33333333;
-        value1 |= ( value1 >>> 2 );
-        value2 |= ( value2 >>> 2 );
-        value1 &= 0x0f0f0f0f;
-        value2 &= 0x0f0f0f0f;
-        value1 |= ( value1 >>> 4 );
-        value2 |= ( value2 >>> 4 );
-        value1 &= 0x00ff00ff;
-        value2 &= 0x00ff00ff;
-        value1 |= ( value1 >>> 8 );
-        value2 |= ( value2 >>> 8 );
-        value1 &= 0x0000ffff;
-        value2 &= 0x0000ffff;
         return Coord.get(value1, value2);
     }
 }
