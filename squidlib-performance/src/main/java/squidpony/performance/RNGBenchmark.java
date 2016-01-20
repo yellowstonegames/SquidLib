@@ -40,31 +40,32 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.PermutedRNG;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.XorRNG;
+import squidpony.squidmath.*;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
- * Benchmark                         Mode  Cnt            Score           Error  Units
- * RNGBenchmark.measureLight         avgt    5   1277240378.000 ±  34812997.664  ns/op
- * RNGBenchmark.measureLightInt      avgt    5   1276836850.400 ±  13889082.122  ns/op
- * RNGBenchmark.measureLightIntR     avgt    5   1432702326.200 ±  14138978.267  ns/op
- * RNGBenchmark.measureLightR        avgt    5   1280120494.200 ±  17439614.691  ns/op
- * RNGBenchmark.measurePermuted      avgt    5   1655878391.400 ±  14836230.911  ns/op
- * RNGBenchmark.measurePermutedInt   avgt    5   1735990246.400 ±  70822131.289  ns/op
- * RNGBenchmark.measurePermutedIntR  avgt    5   1735206027.400 ±  65551227.406  ns/op
- * RNGBenchmark.measurePermutedR     avgt    5   1661871519.600 ±  18076393.095  ns/op
- * RNGBenchmark.measureRandom        avgt    5  22797439764.000 ± 487694768.260  ns/op
- * RNGBenchmark.measureRandomInt     avgt    5  12602026661.500 ± 210395645.743  ns/op
- * RNGBenchmark.measureXor           avgt    5   1380311138.800 ±  20607362.908  ns/op
- * RNGBenchmark.measureXorInt        avgt    5   1273759930.900 ±  16671583.022  ns/op
- * RNGBenchmark.measureXorIntR       avgt    5   1217313410.900 ±  15963882.599  ns/op
- * RNGBenchmark.measureXorR          avgt    5   1339543649.600 ±  11389540.760  ns/op
+ * Benchmark                         Mode  Cnt            Score            Error  Units
+ * RNGBenchmark.measureLight         avgt    3   1275059037.000 ±   61737532.875  ns/op
+ * RNGBenchmark.measureLightInt      avgt    3   1278703443.000 ±   66201423.790  ns/op
+ * RNGBenchmark.measureLightIntR     avgt    3   1427303028.000 ±  200958011.322  ns/op
+ * RNGBenchmark.measureLightR        avgt    3   1269081959.667 ±   86190018.925  ns/op
+ * RNGBenchmark.measureMT            avgt    3  43085766002.333 ± 2268888793.171  ns/op
+ * RNGBenchmark.measureMTInt         avgt    3  22167143778.000 ±  828756142.658  ns/op
+ * RNGBenchmark.measureMTIntR        avgt    3  22132403458.000 ±  383655518.387  ns/op
+ * RNGBenchmark.measureMTR           avgt    3  43006069307.000 ± 2473850311.634  ns/op
+ * RNGBenchmark.measurePermuted      avgt    3   1637032592.333 ±   59199840.006  ns/op
+ * RNGBenchmark.measurePermutedInt   avgt    3   1734496732.000 ±   93718940.208  ns/op
+ * RNGBenchmark.measurePermutedIntR  avgt    3   1737075300.667 ±  241897619.330  ns/op
+ * RNGBenchmark.measurePermutedR     avgt    3   1668389798.667 ±  378429094.045  ns/op
+ * RNGBenchmark.measureRandom        avgt    3  22703702167.000 ±  392502237.818  ns/op
+ * RNGBenchmark.measureRandomInt     avgt    3  12593739050.667 ±  197683615.906  ns/op
+ * RNGBenchmark.measureXor           avgt    3   1384086605.000 ±  174305317.575  ns/op
+ * RNGBenchmark.measureXorInt        avgt    3   1276688870.167 ±  133364204.061  ns/op
+ * RNGBenchmark.measureXorIntR       avgt    3   1214642941.833 ±   51259344.714  ns/op
+ * RNGBenchmark.measureXorR          avgt    3   1346017624.333 ±  151221919.876  ns/op
  */
 public class RNGBenchmark {
 
@@ -309,6 +310,84 @@ public class RNGBenchmark {
     public void measureXorIntR() throws InterruptedException {
         iseed = 9000;
         doXorIntR();
+    }
+
+
+
+
+
+    public long doMT()
+    {
+        byte[] bseed = new byte[16];
+        Arrays.fill(bseed, (byte)seed);
+        MersenneTwister rng = new MersenneTwister(bseed);
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureMT() throws InterruptedException {
+        seed = 9000;
+        doMT();
+    }
+
+    public long doMTInt()
+    {
+        byte[] bseed = new byte[16];
+        Arrays.fill(bseed, (byte)iseed);
+        MersenneTwister rng = new MersenneTwister(bseed);
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.next(32);
+        }
+        return iseed;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureMTInt() throws InterruptedException {
+        iseed = 9000;
+        doMTInt();
+    }
+
+    public long doMTR()
+    {
+        byte[] bseed = new byte[16];
+        Arrays.fill(bseed, (byte)seed);
+        RNG rng = new RNG(new MersenneTwister(bseed));
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureMTR() throws InterruptedException {
+        seed = 9000;
+        doMTR();
+    }
+
+    public long doMTIntR()
+    {
+        byte[] bseed = new byte[16];
+        Arrays.fill(bseed, (byte)iseed);
+        RNG rng = new RNG(new MersenneTwister(bseed));
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureMTIntR() throws InterruptedException {
+        iseed = 9000;
+        doMTIntR();
     }
 
     /*
