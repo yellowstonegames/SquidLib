@@ -100,17 +100,19 @@ public class SquidMessageBox extends SquidPanel {
     }
     private void makeBordersClickable()
     {
+        final float cellH = getHeight() / gridHeight;
+        clearListeners();
         addListener(new InputListener(){
             @Override
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 if(x >= 0 && x < getWidth())
                 {
-                    if(y < cellHeight)
+                    if(y < cellH)
                     {
                         nudgeDown();
                         return true;
                     }
-                    else if(y >= getHeight() - cellHeight)
+                    else if(y >= getHeight() - cellH * 2)
                     {
                         nudgeUp();
                         return true;
@@ -272,16 +274,18 @@ public class SquidMessageBox extends SquidPanel {
     }
 
     /**
-     * Sets the position of the actor's bottom left corner; ACTUALLY NEEDED to make the borders clickable. It can't know
-     * the boundaries of the clickable area until it knows its own position.
+     * Set the x, y position of the lower left corner, plus set the width and height.
+     * ACTUALLY NEEDED to make the borders clickable. It can't know
+     * the boundaries of the clickable area until it knows its own position and bounds.
      *
      * @param x x position in pixels or other units that libGDX is set to use
-     * @param y y position in pixels or other units that libGDX is set to use
+     * @param x y position in pixels or other units that libGDX is set to use
+     * @param width the width in pixels (usually) of the message box; changes on resize
+     * @param height the height in pixels (usually) of the message box; changes on resize
      */
     @Override
-    public void setPosition(float x, float y) {
-        super.setPosition(x, y);
-        setBounds(x, y, gridWidth * cellWidth, gridHeight * cellHeight);
+    public void setBounds(float x, float y, float width, float height) {
+        super.setBounds(x, y, width, height);
         makeBordersClickable();
     }
 }

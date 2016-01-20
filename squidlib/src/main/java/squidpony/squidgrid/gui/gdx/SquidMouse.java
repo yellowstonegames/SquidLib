@@ -161,11 +161,11 @@ public class SquidMouse extends InputAdapter {
     }
 
 	protected int translateX(int screenX) {
-		return MathUtils.clamp((MathUtils.floor((screenX + offsetX) / cellWidth)), 0, (int)(gridWidth - 1)); //MathUtils.floor((offsetX * 0f) / cellWidth)
+		return MathUtils.clamp(MathUtils.floor((screenX + offsetX) / cellWidth), 0, (int)(gridWidth - 1)); //MathUtils.floor((offsetX * 0f) / cellWidth)
 	}
 
 	protected int translateY(int screenY) {
-		return MathUtils.clamp((MathUtils.floor((screenY + offsetY) / cellHeight)), 0, (int)(gridHeight - 1)); //MathUtils.floor((offsetY * 0f) / cellHeight)
+		return MathUtils.clamp(MathUtils.floor((screenY + offsetY) / cellHeight), 0, (int)(gridHeight - 1)); //MathUtils.floor((offsetY * 0f) / cellHeight)
 	}
 
     @Override

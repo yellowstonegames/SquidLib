@@ -733,6 +733,13 @@ public class EverythingDemo extends ApplicationAdapter {
     @Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		input.getMouse().reinitialize((float) width / this.width, (height - messages.getHeight()) / this.height, this.width, this.height, 0, 0);
+        // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
+        stage.getViewport().update(width, height);
+        // total new screen height in pixels divided by total number of rows on the screen
+        float cellHigh = height / (this.height + messages.getGridHeight());
+        // message box should be given updated bounds since I don't think it will do this automatically
+        messages.setBounds(0, 0, width, cellHigh * messages.getGridHeight());
+        // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
+		input.getMouse().reinitialize((float) width / this.width, cellHigh, this.width, this.height, 0, 0);
 	}
 }
