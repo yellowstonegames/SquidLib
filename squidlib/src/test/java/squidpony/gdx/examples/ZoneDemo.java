@@ -121,7 +121,8 @@ public class ZoneDemo extends ApplicationAdapter {
     public void move() {
         for (int i = 0; i < centers.length; i++) {
             AnimatedEntity ae = centerEntities[i];
-            Direction[] dirs = rng.shuffle(Direction.CARDINALS);
+            Direction[] dirs = new Direction[4];
+            rng.shuffle(Direction.CARDINALS, dirs);
             for (int j = 0; j < dirs.length; j++) {
                 int newX = ae.gridX + dirs[j].deltaX, newY = ae.gridY + dirs[j].deltaY;
                 if (bareDungeon[newX][newY] != '#' &&

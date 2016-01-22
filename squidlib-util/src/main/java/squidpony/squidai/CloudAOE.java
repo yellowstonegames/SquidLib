@@ -1,5 +1,6 @@
 package squidpony.squidai;
 
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Spill;
@@ -739,6 +740,7 @@ public class CloudAOE implements AOE {
      *
      * @param cache The FOVCache for the current level; can be null to stop using the cache
      */
+    @GwtIncompatible
     @Override
     public void setCache(FOVCache cache) {
 

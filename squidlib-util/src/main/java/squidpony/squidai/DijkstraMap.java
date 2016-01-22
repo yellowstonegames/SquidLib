@@ -1,6 +1,7 @@
 package squidpony.squidai;
 
 import squidpony.GwtCompatibility;
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.*;
 import squidpony.squidmath.*;
 
@@ -1689,6 +1690,7 @@ public class DijkstraMap {
      * @param targets        a vararg or array of Coord that this will try to pathfind toward
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
      */
+    @GwtIncompatible
     public ArrayList<Coord> findAttackPath(int moveLength, int preferredRange, FOVCache cache, Set<Coord> impassable,
                                            Set<Coord> onlyPassable, Coord start, Coord... targets) {
         return findAttackPath(moveLength, preferredRange, preferredRange, cache, impassable, onlyPassable, start, targets);
@@ -1716,6 +1718,7 @@ public class DijkstraMap {
      * @param targets           a vararg or array of Coord that this will try to pathfind toward
      * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
      */
+    @GwtIncompatible
     public ArrayList<Coord> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, FOVCache cache,
                                            Set<Coord> impassable, Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
@@ -2078,6 +2081,7 @@ public class DijkstraMap {
      * @param targets    a Set of Coord, not an array of Coord or variable argument list as in other methods.
      * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech
      */
+    @GwtIncompatible
     public ArrayList<Coord> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, FOVCache cache,
                                               Set<Coord> impassable, Set<Coord> allies, Coord start, Set<Coord> targets) {
         if (!initialized) return null;

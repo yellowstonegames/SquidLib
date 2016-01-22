@@ -1,5 +1,6 @@
 package squidpony.squidai;
 
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
@@ -711,6 +712,7 @@ public class LineAOE implements AOE {
      *
      * @param cache The FOVCache for the current level; can be null to stop using the cache
      */
+    @GwtIncompatible
     @Override
     public void setCache(FOVCache cache) {
 

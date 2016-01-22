@@ -42,6 +42,15 @@ public class DeckRNG extends StatefulRNG {
     }
 
     /**
+     * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
+     * period (which rarely matters for games), and has good speed and tiny state size.
+     *
+     * @param seedString a String to use as a seed; will be hashed in a uniform way across platforms.
+     */
+    public DeckRNG(String seedString) {
+        this(StableHash.hash(seedString));
+    }
+    /**
      * Seeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields
      * that would affect future pseudo-random number generation.
      * @param random will be used to generate a new seed, but will not be assigned as this object's RandomnessSource
@@ -282,9 +291,44 @@ public class DeckRNG extends StatefulRNG {
         return super.getRandomStartIterable(list);
     }
 
+
+    /**
+     * Returns a value between min (inclusive) and max (exclusive).
+     * <p/>
+     * The inclusive and exclusive behavior is to match the behavior of the
+     * similar method that deals with floating point values.
+     *
+     * @param min the minimum bound on the return value (inclusive)
+     * @param max the maximum bound on the return value (exclusive)
+     * @return the found value
+     */
+    @Override
+    public long between(long min, long max) {
+        return nextLong(max - min) + min;
+    }
+
+    /**
+     * Shuffle an array using the Fisher-Yates algorithm.
+     *
+     * @param elements an array of T; will not be modified
+     * @return a shuffled copy of elements
+     */
     @Override
     public <T> T[] shuffle(T[] elements) {
         return super.shuffle(elements);
+    }
+
+    /**
+     * Shuffle an array using the Fisher-Yates algorithm.
+     *
+     * @param elements an array of T; will not be modified
+     * @param dest     Where to put the shuffle. It MUST have the same length as {@code elements}
+     * @return {@code dest}
+     * @throws IllegalStateException If {@code dest.length != elements.length}
+     */
+    @Override
+    public <T> T[] shuffle(T[] elements, T[] dest) {
+        return super.shuffle(elements, dest);
     }
 
     @Override

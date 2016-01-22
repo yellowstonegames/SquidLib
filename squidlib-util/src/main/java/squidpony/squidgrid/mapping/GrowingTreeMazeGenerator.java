@@ -48,7 +48,7 @@ public class GrowingTreeMazeGenerator {
         while (!deck.isEmpty()) {
             int i = choosing.chooseIndex(deck.size());
             Coord p = deck.get(i);
-            dirs = rng.shuffle(dirs);
+            rng.shuffle(dirs, dirs);
 
             boolean foundNeighbor = false;
             for (Direction dir : dirs) {

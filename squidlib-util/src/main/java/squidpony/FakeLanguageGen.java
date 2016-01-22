@@ -804,13 +804,15 @@ public class FakeLanguageGen implements Serializable {
         int otherCount = (int) (1000 * otherInfluence);
         int idx = 0;
         if (other.length > 0) {
-            String[] tmp = rng.shuffle(other);
+            String[] tmp = new String[other.length];
+            rng.shuffle(other, tmp);
             for (idx = 0; idx < otherCount; idx++) {
                 ret[idx] = tmp[idx % tmp.length];
             }
         }
         if (me.length > 0) {
-            String[] tmp = rng.shuffle(me);
+            String[] tmp = new String[me.length];
+            rng.shuffle(me, tmp);
             for (; idx < 1000; idx++) {
                 ret[idx] = tmp[idx % tmp.length];
             }
@@ -831,7 +833,8 @@ public class FakeLanguageGen implements Serializable {
         int idx = 0;
         Matcher matcher;
         if (me.length > 0) {
-            String[] tmp = rng.shuffle(me);
+            String[] tmp = new String[me.length];
+            rng.shuffle(me, tmp);
             for (idx = 0; idx < otherCount; idx++) {
                 ret[idx] = tmp[idx % tmp.length]
                         .replace('a', accentedVowels[0][rng.nextInt(accentedVowels[0].length)])
@@ -858,7 +861,8 @@ public class FakeLanguageGen implements Serializable {
         int idx = 0;
         Matcher matcher;
         if (me.length > 0) {
-            String[] tmp = rng.shuffle(me);
+            String[] tmp = new String[me.length];
+            rng.shuffle(me, tmp);
             for (idx = 0; idx < otherCount; idx++) {
                 ret[idx] = tmp[idx % tmp.length]
                         //0
@@ -901,7 +905,8 @@ public class FakeLanguageGen implements Serializable {
         int idx = 0;
         Matcher matcher;
         if (me.length > 0) {
-            String[] tmp = rng.shuffle(me);
+            String[] tmp = new String[me.length];
+            rng.shuffle(me, tmp);
             for (idx = 0; idx < 1000; idx++) {
                 boolean subVowel = rng.nextDouble() < vowelInfluence, subCon = rng.nextDouble() < consonantInfluence;
                 if (subVowel && subCon) {

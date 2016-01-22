@@ -1,5 +1,6 @@
 package squidpony.squidai;
 
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
@@ -312,6 +313,7 @@ public class PointAOE implements AOE {
      *
      * @param cache The FOVCache for the current level; can be null to stop using the cache
      */
+    @GwtIncompatible
     @Override
     public void setCache(FOVCache cache) {
 

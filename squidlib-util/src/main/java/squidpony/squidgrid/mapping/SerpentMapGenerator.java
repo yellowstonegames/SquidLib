@@ -52,7 +52,7 @@ public class SerpentMapGenerator {
     public SerpentMapGenerator(int width, int height, RNG rng, boolean symmetrical)
     {
         if(width <= 2 || height <= 2)
-            throw new ExceptionInInitializerError("width and height must be greater than 2");
+            throw new IllegalArgumentException("width and height must be greater than 2");
         random = rng;
         long columnAlterations = random.nextLong(0x1000000000000L);
         float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);
@@ -132,7 +132,7 @@ public class SerpentMapGenerator {
     public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance, boolean symmetrical)
     {
         if(width <= 2 || height <= 2)
-            throw new ExceptionInInitializerError("width and height must be greater than 2");
+            throw new IllegalArgumentException("width and height must be greater than 2");
         random = rng;
         long columnAlterations = random.nextLong(0x1000000000000L);
         float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);

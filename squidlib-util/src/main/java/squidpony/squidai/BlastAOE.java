@@ -1,5 +1,6 @@
 package squidpony.squidai;
 
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
@@ -615,6 +616,7 @@ public class BlastAOE implements AOE {
      *
      * @param cache The FOVCache for the current level; can be null to stop using the cache
      */
+    @GwtIncompatible
     @Override
     public void setCache(FOVCache cache) {
         this.cache = cache;
