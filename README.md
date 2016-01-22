@@ -1,7 +1,7 @@
 SquidLib is a Java library that provides a full featured toolbox for working with turn based games in Swing and libGDX.
 --  
 
-SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, and other projects.
+SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, [Dungeon Mercenary](http://www.schplaf.org/hgames/), and other projects.
 
 [![Join the slow-paced chat at https://gitter.im/SquidPony/SquidLib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SquidPony/SquidLib)
 
