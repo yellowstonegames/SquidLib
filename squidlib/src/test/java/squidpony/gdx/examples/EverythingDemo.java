@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
+import squidpony.panel.ISquidPanel;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
@@ -27,6 +28,7 @@ import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 public class EverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
@@ -554,40 +556,108 @@ public class EverythingDemo extends ApplicationAdapter {
         IColoredString<Color> helping2 = new IColoredString.Impl<Color>("Use ? for help, f to change colors, q to quit.", Color.WHITE);
         IColoredString<Color> helping3 = new IColoredString.Impl<Color>("Click the top or bottom border of the lower message box to scroll.", Color.WHITE);
 
-		/* The panel's width */
-        final int w = Math.max(helping3.length(), cs.length());
-		/* The panel's height. */
-        final int h = 5;
-        final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
-        final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
-        final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<Color>();
-		/*
-		 * We're setting them late just for the demo, as it avoids giving 'w'
-		 * and 'h' at construction time.
-		 */
-		gcp.setPanels(bg, fg);
+        /* Some grey color */
+        final Color bgColor = new Color(0.3f, 0.3f, 0.3f, 0.9f);
 
-		/*
-		 * Set the position (the center), using libgdx's 'setPosition'
-		 * method, that takes the bottom left corner as input.
-		 */
-		gcp.setPosition(((width / 2) - (w / 2)) * cellWidth, (height / 2) * cellHeight);
+        final Actor a;
+        if (rng.nextBoolean()) {
+			/*
+			 * Use GroupCombinedPanel. See the else for a more automated way to
+			 * do the job.
+			 */
 
-		/* Fill the background with some grey */
-		gcp.fill(false, new Color(0.3f, 0.3f, 0.3f, 0.9f));
+			/* The panel's width */
+        	final int w = Math.max(helping3.length(), cs.length());
+        	/* The panel's height. */
+        	final int h = 5;
+        	final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
+        	final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
+        	final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<Color>();
+        	a = gcp;
+        	/*
+        	 * We're setting them late just for the demo, as it avoids giving 'w'
+        	 * and 'h' at construction time.
+        	 */
+        	gcp.setPanels(bg, fg);
 
-		/* Now, to set the text we have to follow SquidPanel's convention */
-		/* First 0: align left, second 0: first line */
-        gcp.putFG(0, 0, cs);
+        	/*
+        	 * Set the position (the center), using libgdx's 'setPosition'
+        	 * method, that takes the bottom left corner as input.
+        	 */
+        	gcp.setPosition(((width / 2) - (w / 2)) * cellWidth, (height / 2) * cellHeight);
 
-		/* 0: align left, 2: third line */
-        gcp.putFG(0, 2, helping1);
-        gcp.putFG(0, 3, helping2);
-        gcp.putFG(0, 4, helping3);
+        	/* Fill the background */
+        	gcp.fill(false, bgColor);
 
-        help = gcp;
+        	/* Now, to set the text we have to follow SquidPanel's convention */
+        	/* First 0: align left, second 0: first line */
+        	gcp.putFG(0, 0, cs);
 
-		stage.addActor(gcp);
+        	/* 0: align left, 2: third line */
+        	gcp.putFG(0, 2, helping1);
+        	gcp.putFG(0, 3, helping2);
+        	gcp.putFG(0, 4, helping3);
+		} else {
+			/*
+			 * Use TextPanel. There's less job to do than with
+			 * GroupCombinedPanel. It doesn't seem like it when reading this
+			 * code, but this actually does much more than GroupCombinedPanel,
+			 * because we do line wrapping and justifying, without having to
+			 * worry about sizes since TextPanel layouts on its own (see how 'w'
+			 * and 'h' aren't hard-coded below ?)
+			 * 
+			 * It actually looks worse than the GroupCombinedPanel business, but
+			 * hey that's to show you an example!
+			 */
+			final TextPanel<Color> tp = new TextPanel<Color>() {
+				@Override
+				protected ISquidPanel<Color> buildPanel(int width, int height) {
+					return new SquidPanel(width, height, display.getTextFactory());
+				}
+			};
+			a = tp;
+			tp.maxWidth = /*
+							 * for wrapping to do something, but it could simply
+							 * be bareDungeon.length
+							 */ helping3.length() / 2;
+			tp.maxHeight = bareDungeon[0].length;
+			tp.backgroundColor = bgColor;
+			tp.borderSize = display.getCellHeight() / 4;
+			tp.borderColor = new Color(0.9f, 0.1f, 0.0f, 0.5f);
+			tp.justifyText = true;
+
+			final List<IColoredString<Color>> text = new ArrayList<IColoredString<Color>>();
+			text.add(cs);
+			/* Jump line */
+			text.add(IColoredString.Impl.<Color> create());
+			/* No need to call IColoredString::wrap, TextPanel does it on its own */
+			text.add(helping1);
+			text.add(IColoredString.Impl.<Color> create());
+			text.add(helping2);
+			text.add(IColoredString.Impl.<Color> create());
+			text.add(helping3);
+
+			tp.init(text);
+
+			/*
+			 * Call these after 'init', because it computes the actual size of
+			 * 'tp'
+			 */
+			final int w = tp.getGridWidth();
+			final int h = tp.getGridHeight();
+
+			a.setPosition(((width / 2) - (w / 2)) * cellWidth, ((height / 2) - (h / 2)) * cellHeight);
+
+			/*
+			 * The panel's text is set, as well as its position. We're ready to
+			 * put it:
+			 */
+			tp.put(true);
+		}
+
+        help = a;
+
+		stage.addActor(a);
 	}
 
 	private void clearHelp() {
@@ -728,6 +798,14 @@ public class EverythingDemo extends ApplicationAdapter {
             fgCenter.clearCache();
             bgCenter.clearCache();
         }
+		if (help instanceof TextPanel) {
+			final TextPanel<?> tp = (TextPanel<?>) help;
+			/*
+			 * Needed because drawing the stage erased them. No big deal,
+			 * ShapeRenderer is super fast.
+			 */
+			tp.putBorder();
+		}
     }
 
     @Override

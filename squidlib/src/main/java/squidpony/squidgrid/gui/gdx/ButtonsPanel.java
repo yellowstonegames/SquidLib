@@ -12,12 +12,15 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import squidpony.SquidTags;
-import squidpony.annotation.Beta;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
@@ -78,7 +81,6 @@ import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
  * @param <T>
  *            The type of colors.
  */
-@Beta
 public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T> {
 
 	/**
@@ -1012,7 +1014,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 * @param alignment
 	 *            The alignment, in the format of {@link #buttonsAlignment}.
 	 * @param displayVDots
-	 *            if {@link #scroll} must be displayed instead of the button's
+	 *            if {@link #scrollText} must be displayed instead of the button's
 	 *            text.
 	 */
 	private void putButton(int i, int y, int alignment, boolean putMargins, boolean displayVDots) {
