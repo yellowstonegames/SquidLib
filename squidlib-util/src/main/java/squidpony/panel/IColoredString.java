@@ -82,6 +82,18 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	List<IColoredString<T>> wrap(int width);
 
 	/**
+	 * This method does NOT guarantee that the result's length is {@code width}.
+	 * It is impossible to do correct justifying if {@code this}'s length is
+	 * greater than {@code width} or if {@code this} has no space character.
+	 * 
+	 * @param width
+	 * @return A variant of {@code this} where spaces have been introduced
+	 *         in-between words, so that {@code this}'s length is as close as
+	 *         possible to {@code width}. Or {@code this} itself if unaffected.
+	 */
+	IColoredString<T> justify(int width);
+
+	/**
 	 * Empties {@code this}.
 	 */
 	void clear();
@@ -193,6 +205,10 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				append(ofragment.getText(), ofragment.getColor());
 		}
 
+		public void append(Bucket<T> bucket) {
+			this.fragments.add(new Bucket<T>(bucket.getText(), bucket.getColor()));
+		}
+
 		@Override
 		public void setLength(int len) {
 			int l = 0;
@@ -241,6 +257,14 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			}
 
 			final List<IColoredString<T>> result = new ArrayList<IColoredString<T>>();
+			if (isEmpty()) {
+				/*
+				 * Catch this case early on, as empty lines are eaten below (see
+				 * code after the while). Checking emptyness is cheap anyway.
+				 */
+				result.add(this);
+				return result;
+			}
 
 			IColoredString<T> current = create();
 			int curlen = 0;
@@ -251,10 +275,17 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				final String[] split = bucket.split(" ");
 				final T color = next.color;
 				for (int i = 0; i < split.length; i++) {
+					if (i == split.length - 1 && bucket.endsWith(" "))
+						/*
+						 * Do not loose trailing space that got eaten by
+						 * 'bucket.split'.
+						 */
+						split[i] = split[i] + " ";
 					final String chunk = split[i];
 					final int chunklen = chunk.length();
-					if (curlen + chunklen + (0 < curlen ? 1 : 0) <= width) {
-						if (0 < curlen) {
+					final boolean addLeadingSpace = 0 < curlen && 0 < i;
+					if (curlen + chunklen + (addLeadingSpace ? 1 : 0) <= width) {
+						if (addLeadingSpace) {
 							/*
 							 * Do not forget space on which chunk got split. If
 							 * the space is offscreen, it's harmless, hence not
@@ -302,6 +333,146 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				/* Flush rest */
 				result.add(current);
 			}
+
+			return result;
+		}
+
+		@Override
+		/*
+		 * smelC: not the cutest result (we should add spaces both from the left
+		 * and the right, instead of just from the left), but better than
+		 * nothing.
+		 */
+		public IColoredString<T> justify(int width) {
+			int length = length();
+
+			if (width <= length)
+				/*
+				 * If width==length, we're good. If width<length, we cannot
+				 * adjust
+				 */
+				return this;
+
+			int totalDiff = width - length;
+			assert 0 < totalDiff;
+
+			if (width <= totalDiff * 3)
+				/* Too much of a difference, it would look very weird. */
+				return this;
+
+			final IColoredString.Impl<T> result = create();
+
+			ListIterator<IColoredString.Bucket<T>> it = fragments.listIterator();
+			final int nbb = fragments.size();
+			final int[] bucketToNbSpaces = new int[nbb];
+			/* The number of buckets that can contribute to justifying */
+			int totalNbSpaces = 0;
+			/* The index of the last bucket that has spaces */
+			int lastHopeIndex = -1;
+			{
+				int i = 0;
+				while (it.hasNext()) {
+					final Bucket<T> next = it.next();
+					final int nbs = nbSpaces(next.getText());
+					totalNbSpaces += nbs;
+					bucketToNbSpaces[i] = nbs;
+					i++;
+				}
+
+				if (totalNbSpaces == 0)
+					/* Cannot do anything */
+					return this;
+
+				for (int j = bucketToNbSpaces.length - 1; 0 <= j; j--) {
+					if (0 < bucketToNbSpaces[j]) {
+						lastHopeIndex = j;
+						break;
+					}
+				}
+				/* Holds because we ruled out 'totalNbSpaces == 0' before */
+				assert 0 <= lastHopeIndex;
+			}
+
+			int toAddPerSpace = totalNbSpaces == 0 ? 0 : (totalDiff / totalNbSpaces);
+			int totalRest = totalDiff - (toAddPerSpace * totalNbSpaces);
+			assert 0 <= totalRest;
+
+			int bidx = -1;
+
+			it = fragments.listIterator();
+
+			while (it.hasNext() && 0 < totalDiff) {
+				bidx++;
+				final Bucket<T> next = it.next();
+				final String bucket = next.getText();
+				final int blength = bucket.length();
+				final int localNbSpaces = bucketToNbSpaces[bidx];
+				if (localNbSpaces == 0) {
+					/* Cannot change it */
+					result.append(next);
+					continue;
+				}
+				int localDiff = localNbSpaces * toAddPerSpace;
+				assert localDiff <= totalDiff;
+				int nb = localDiff / localNbSpaces;
+				int localRest = localDiff - (nb * localNbSpaces);
+				if (localRest == 0 && 0 < totalRest) {
+					/*
+					 * Take one for the group. This avoids flushing all spaces
+					 * needed in the 'last hope' cases below.
+					 */
+					localRest = 1;
+				}
+				assert 0 <= localRest;
+				assert localRest <= totalRest;
+				String novel = "";
+				int eatenSpaces = 1;
+				for (int i = 0; i < blength; i++) {
+					final char c = bucket.charAt(i);
+					novel += c;
+					if (c == ' ' && (0 < localDiff || 0 < totalDiff || 0 < localRest || 0 < totalRest)) {
+						/* Can (and should) add an extra space */
+						for (int j = 0; j < nb && 0 < localDiff; j++) {
+							novel += " ";
+							localDiff--;
+							totalDiff--;
+						}
+						if (0 < localRest || 0 < totalRest) {
+							if (eatenSpaces == localNbSpaces) {
+								/* I'm the last hope for this bucket */
+								for (int j = 0; j < localRest; j++) {
+									novel += " ";
+									localRest--;
+									totalRest--;
+								}
+								if (bidx == lastHopeIndex) {
+									/* I'm the last hope globally */
+									while (0 < totalRest) {
+										novel += " ";
+										totalRest--;
+									}
+								}
+							} else {
+								if (0 < localRest && 0 < totalRest) {
+									/* Not the last hope: take one only */
+									novel += " ";
+									localRest--;
+									totalRest--;
+								}
+							}
+						}
+						eatenSpaces++;
+					}
+				}
+				/* I did my job */
+				assert localRest == 0;
+				/* If I was the hope, I did my job */
+				assert bidx != lastHopeIndex || totalRest == 0;
+				result.append(novel, next.getColor());
+			}
+
+			while (it.hasNext())
+				result.append(it.next());
 
 			return result;
 		}
@@ -370,6 +541,17 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				return o2 == null;
 			else
 				return o1.equals(o2);
+		}
+
+		private int nbSpaces(String s) {
+			final int bd = s.length();
+			int result = 0;
+			for (int i = 0; i < bd; i++) {
+				final char c = s.charAt(i);
+				if (c == ' ')
+					result++;
+			}
+			return result;
 		}
 	}
 
