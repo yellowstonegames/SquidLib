@@ -153,9 +153,9 @@ public class ClassicRogueMapGenerator {
         }
         unconnected = rng.shuffle(unconnected);
 
-        Direction[]  dirToCheck;
+        Direction[]  dirToCheck = new Direction[4];
         for (ClassicRogueRoom room : unconnected) {
-            dirToCheck = rng.shuffle(Direction.CARDINALS);
+            rng.shuffle(Direction.CARDINALS, dirToCheck);
             for (Direction dir : dirToCheck) {
                 int nextX = room.x + dir.deltaX;
                 int nextY = room.y + dir.deltaY;

@@ -61,9 +61,9 @@ public class SerpentDeepMapGenerator {
     public SerpentDeepMapGenerator(int width, int height, int depth, RNG rng, double branchingChance)
     {
         if(width <= 2 || height <= 2)
-            throw new ExceptionInInitializerError("width and height must be greater than 2");
+            throw new IllegalArgumentException("width and height must be greater than 2");
         if(depth < 1)
-            throw new ExceptionInInitializerError("depth must be at least 1");
+            throw new IllegalArgumentException("depth must be at least 1");
         random = rng;
         this.width = width;
         this.height = height;

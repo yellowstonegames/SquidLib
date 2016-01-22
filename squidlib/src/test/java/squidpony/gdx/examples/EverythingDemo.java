@@ -180,7 +180,7 @@ public class EverythingDemo extends ApplicationAdapter {
         stage = new Stage(new StretchViewport(width * cellWidth, (height + 4) * cellHeight), batch);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
-        messages.setPosition(0, 0);
+        messages.setBounds(0, 0, cellWidth * width, cellHeight * 4);
         display.setPosition(0, messages.getHeight());
         messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
                 " Click the top or bottom border of this box to scroll.");
@@ -485,7 +485,9 @@ public class EverythingDemo extends ApplicationAdapter {
                 // is more than one equally good best option.
                 Direction choice = null;
                 double best = 9999.0;
-                for(Direction d : rng.shuffle(Direction.OUTWARDS))
+                Direction[] ds = new Direction[8];
+                rng.shuffle(Direction.OUTWARDS, ds);
+                for(Direction d : ds)
                 {
                     Coord tmp = pos.translate(d);
                     if(pathMap[tmp.x][tmp.y] < best &&

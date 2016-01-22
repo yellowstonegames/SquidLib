@@ -34,7 +34,7 @@ public class SquidMessageBox extends SquidPanel {
     public SquidMessageBox(int gridWidth, int gridHeight) {
         super(gridWidth, gridHeight);
         if(gridHeight < 3)
-            throw new ExceptionInInitializerError("gridHeight must be at least 3, was given: " + gridHeight);
+            throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         messages.add(new IColoredString.Impl<Color>());
         basicBorders = assembleBorders();
         lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
@@ -51,7 +51,7 @@ public class SquidMessageBox extends SquidPanel {
     public SquidMessageBox(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
         super(gridWidth, gridHeight, cellWidth, cellHeight);
         if(gridHeight < 3)
-            throw new ExceptionInInitializerError("gridHeight must be at least 3, was given: " + gridHeight);
+            throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         messages.add(new IColoredString.Impl<Color>());
         basicBorders = assembleBorders();
         lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
@@ -71,7 +71,7 @@ public class SquidMessageBox extends SquidPanel {
     public SquidMessageBox(int gridWidth, int gridHeight, TextCellFactory factory) {
         super(gridWidth, gridHeight, factory);
         if(gridHeight < 3)
-            throw new ExceptionInInitializerError("gridHeight must be at least 3, was given: " + gridHeight);
+            throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         messages.add(new IColoredString.Impl<Color>());
         basicBorders = assembleBorders();
         lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
@@ -93,7 +93,7 @@ public class SquidMessageBox extends SquidPanel {
     public SquidMessageBox(int gridWidth, int gridHeight, final TextCellFactory factory, IColorCenter<Color> center) {
         super(gridWidth, gridHeight, factory, center);
         if(gridHeight < 3)
-            throw new ExceptionInInitializerError("gridHeight must be at least 3, was given: " + gridHeight);
+            throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         messages.add(new IColoredString.Impl<Color>());
         basicBorders = assembleBorders();
         lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
