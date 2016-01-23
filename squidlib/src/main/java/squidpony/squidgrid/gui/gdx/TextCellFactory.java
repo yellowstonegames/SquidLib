@@ -864,6 +864,25 @@ public class TextCellFactory implements Disposable {
      * Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
      * for preparing glyphs for animation effects, and is used internally for this purpose.
      * @param s a String to make into an Actor, which can be null for a solid block.
+     * @return the Actor, with no position set.
+     */
+    public Label makeWrappingString(String s) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (s == null) {
+            s = "";
+        }
+        Label lb = new Label(s, new Label.LabelStyle(bmpFont, null));
+        lb.setWrap(true);
+        // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+        return lb;
+
+    }
+    /**
+     * Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
+     * for preparing glyphs for animation effects, and is used internally for this purpose.
+     * @param s a String to make into an Actor, which can be null for a solid block.
      * @param color a Color to tint s with.
      * @return the Actor, with no position set.
      */

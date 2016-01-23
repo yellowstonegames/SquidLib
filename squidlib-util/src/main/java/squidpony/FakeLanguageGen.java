@@ -1,5 +1,6 @@
 package squidpony;
 
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
  * Created by Tommy Ettinger on 11/29/2015.
  * @author Tommy Ettinger
  */
+@GwtIncompatible
 public class FakeLanguageGen implements Serializable {
     private static final long serialVersionUID = -2396642435461186352L;
     public final String[] openingVowels, midVowels, openingConsonants, midConsonants, closingConsonants,
@@ -27,12 +29,12 @@ public class FakeLanguageGen implements Serializable {
     protected final Pattern[] sanityChecks;
     public static final StatefulRNG srng = new StatefulRNG();
     protected static final Pattern doubleRepeats = Pattern.compile("(.)\\1+(.)\\2+"),
-            repeats = Pattern.compile("(.)\\1+"), diacritics = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+            repeats = Pattern.compile("(.)\\1+"), diacritics = Pattern.compile("[\\u0300-\\u036F\\u1DC0-\\u1DFF]+");
     public static final Pattern[]
             vulgarChecks = new Pattern[]
             {
                     Pattern.compile("[SsξCcсςС][hнН].*[dtтτТΤf]"),
-                    Pattern.compile("([PpрρРΡ][hнН])|[KkкκКΚFfDdCcсςС].{1,4}[kcсςСxхжχХЖΧ]"), // lots of these end in a 'k' sound, huh
+                    Pattern.compile("([PpрρРΡ][hнН])|[KkкκКΚFfDdCcсςС].{1,4}[KkкκКΚCcсςСxхжχХЖΧ]"), // lots of these end in a 'k' sound, huh
                     Pattern.compile("[BbъыбвβЪЫБВΒ]..?.?[cсςС][hнН]"),
                     Pattern.compile("[WwшщψШЩHhнН]..?[rяЯ]"),
                     Pattern.compile("[TtтτТΤ]..?[tтτТΤ]"),
@@ -579,7 +581,7 @@ public class FakeLanguageGen implements Serializable {
      * @return a word in the fake language as a String
      */
     public String word(RNG rng, boolean capitalize) {
-        String finished = "thaw"; // the last word in stolentelling
+        String finished;
         while(true) {
             StringBuilder sb = new StringBuilder(20);
             if (rng.nextDouble() < vowelStartFrequency) {

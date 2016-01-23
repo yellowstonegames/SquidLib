@@ -1,13 +1,8 @@
 package squidpony.panel;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-
 import squidpony.annotation.Beta;
+
+import java.util.*;
 
 /**
  * A {@link String} divided in chunks of different colors. Use the
@@ -115,6 +110,14 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * @return The text that {@code this} represents.
 	 */
 	String present();
+
+	/**
+	 * Given some way of converting from a T value to an in-line markup tag, returns a string representation of
+	 * this IColoredString with in-line markup representing colors.
+	 * @param markup an IMarkup implementation
+	 * @return a String with markup inserted inside.
+	 */
+	String presentWithMarkup(IMarkup<T> markup);
 
 	/**
 	 * A basic implementation of {@link IColoredString}.
@@ -523,6 +526,26 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			final StringBuilder result = new StringBuilder();
 			for (Bucket<T> fragment : fragments)
 				result.append(fragment.text);
+			return result.toString();
+		}
+
+		/**
+		 * Given some way of converting from a T value to an in-line markup tag, returns a string representation of
+		 * this IColoredString with in-line markup representing colors.
+		 * @param markup an IMarkup implementation
+         * @return a String with markup inserted inside.
+         */
+		@Override
+		public String presentWithMarkup(IMarkup<T> markup) {
+			final StringBuilder result = new StringBuilder();
+			for (Bucket<T> fragment : fragments) {
+				if(fragment.color != null)
+					result.append(markup.getMarkup(fragment.color));
+				else
+					result.append(markup.closeMarkup());
+				result.append(fragment.text);
+			}
+            result.append(markup.closeMarkup());
 			return result.toString();
 		}
 

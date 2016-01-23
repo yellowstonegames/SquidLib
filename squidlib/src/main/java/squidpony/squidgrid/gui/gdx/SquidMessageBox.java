@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 /**
  * A specialized SquidPanel that is meant for displaying messages in a scrolling pane. You primarily use this class by
@@ -22,8 +22,10 @@ import java.util.regex.Pattern;
  */
 public class SquidMessageBox extends SquidPanel {
     protected ArrayList<IColoredString<Color>> messages = new ArrayList<IColoredString<Color>>(256);
+    protected ArrayList<Label> labels = new ArrayList<Label>(256);
     protected int messageIndex = 0;
-    private static Pattern lineWrapper;
+    //private static Pattern lineWrapper;
+    protected GDXMarkup markup = new GDXMarkup();
     private char[][] basicBorders;
     /**
      * Creates a bare-bones panel with all default values for text rendering.
@@ -35,9 +37,9 @@ public class SquidMessageBox extends SquidPanel {
         super(gridWidth, gridHeight);
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
-        messages.add(new IColoredString.Impl<Color>());
         basicBorders = assembleBorders();
-        lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
+        appendMessage("");
+        //lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
     }
 
     /**
@@ -52,9 +54,9 @@ public class SquidMessageBox extends SquidPanel {
         super(gridWidth, gridHeight, cellWidth, cellHeight);
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
-        messages.add(new IColoredString.Impl<Color>());
         basicBorders = assembleBorders();
-        lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
+        appendMessage("");
+        //lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
     }
 
     /**
@@ -72,9 +74,9 @@ public class SquidMessageBox extends SquidPanel {
         super(gridWidth, gridHeight, factory);
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
-        messages.add(new IColoredString.Impl<Color>());
         basicBorders = assembleBorders();
-        lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
+        appendMessage("");
+        //lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
     }
 
     /**
@@ -94,9 +96,10 @@ public class SquidMessageBox extends SquidPanel {
         super(gridWidth, gridHeight, factory, center);
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
-        messages.add(new IColoredString.Impl<Color>());
         basicBorders = assembleBorders();
-        lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
+        appendMessage("");
+        //lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
+
     }
     private void makeBordersClickable()
     {
@@ -146,28 +149,11 @@ public class SquidMessageBox extends SquidPanel {
             appendMessage(message);
             return;
         }
-        ArrayList<IColoredString.Impl<Color>> truncated = new ArrayList<IColoredString.Impl<Color>>(8);
-        int start = 0, end = gridWidth - 2;
-        Matcher m = lineWrapper.matcher(message);
-        while (true){
-            String line = "";
-            //String line = message.substring(start, Math.min(start + gridWidth - 2, message.length()));
-            if(!m.find())
-                break;
-            end = m.end();
-            if(end < 0) {
-                end = message.length();
-            }
-            else
-            {
-                line = m.group().trim();
-            }
-            truncated.add(new IColoredString.Impl<Color>(line, defaultForeground));
-            start = end;
-            if(start >= message.length())
-                break;
+        List<IColoredString<Color>> truncated = new IColoredString.Impl<Color>(message, defaultForeground).wrap(gridWidth - 2);;
+        for (IColoredString<Color> t : truncated)
+        {
+            appendMessage(t.present());
         }
-        messages.addAll(truncated);
         messageIndex = messages.size() - 1;
     }
 
@@ -181,7 +167,6 @@ public class SquidMessageBox extends SquidPanel {
         IColoredString.Impl<Color> truncated = new IColoredString.Impl<Color>();
         truncated.append(message);
         truncated.setLength(gridWidth - 2);
-        messages.add(truncated);
         messageIndex = messages.size() - 1;
     }
 
@@ -197,29 +182,10 @@ public class SquidMessageBox extends SquidPanel {
             appendMessage(message);
             return;
         }
-        ArrayList<IColoredString.Impl<Color>> truncated = new ArrayList<IColoredString.Impl<Color>>(8);
-        int start = 0, end = gridWidth - 2;
-        Matcher m = lineWrapper.matcher(message.present());
-        while (true){
-            IColoredString.Impl<Color> line = new IColoredString.Impl<>();
-            //String line = message.substring(start, Math.min(start + gridWidth - 2, message.length()));
-            if(!m.find())
-                break;
-            end = m.end();
-            if(end < 0) {
-                end = message.length();
-            }
-            else
-            {
-                char[] glyphs = m.group().trim().toCharArray();
-                for (int i = 0; i < glyphs.length; i++) {
-                    line.append(glyphs[i], message.colorAt(start + i));
-                }
-            }
-            truncated.add(line);
-            start = end;
-            if(start >= message.length())
-                break;
+        List<IColoredString<Color>> truncated = message.wrap(gridWidth - 2);;
+        for (IColoredString<Color> t : truncated)
+        {
+            appendMessage(t);
         }
         messages.addAll(truncated);
         messageIndex = messages.size() - 1;
