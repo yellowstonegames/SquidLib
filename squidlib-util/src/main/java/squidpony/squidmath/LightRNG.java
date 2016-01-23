@@ -205,7 +205,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
      * @return the current seed of this LightRNG, changed once per call to nextLong()
      */
     @Override
-    public long getState( ) {
+    public long getState() {
         return state;
     }
 
