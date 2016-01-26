@@ -1224,7 +1224,7 @@ public class CoordPacker {
      * @param x between 0 and 255, inclusive
      * @param y between 0 and 255, inclusive
      * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
-     *               returned by packMulti(); none of the arrays can be null.
+     *               returned by packMulti(); null elements in packed will be skipped.
      * @return an ArrayList of all packed arrays that store true at the given x,y location.
      */
     public static ArrayList<short[]> findManyPacked(int x, int y, short[] ... packed)
@@ -1232,6 +1232,7 @@ public class CoordPacker {
         ArrayList<short[]> packs = new ArrayList<short[]>(packed.length);
         int hilbertDistance = posToHilbert(x, y);
         for (int a = 0; a < packed.length; a++) {
+            if(packed[a] == null) continue;
             int total = 0;
             boolean on = false;
             for (int p = 0; p < packed[a].length; p++, on = !on) {
@@ -1255,10 +1256,10 @@ public class CoordPacker {
      * and Hilbert Curve indices unnecessarily, which could matter for high-performance code.
      * @param hilbert a Hilbert Curve index, such as one taken directly from a packed short[] without extra processing
      * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
-     *               returned by packMulti(); none of the arrays can be null.
+     *               returned by packMulti(); null elements in packed will be skipped.
      * @return an ArrayList of all packed arrays that store true at the given x,y location.
      */
-    public static ArrayList<short[]> findPackedHilbert(short hilbert, short[] ... packed)
+    public static ArrayList<short[]> findManyPackedHilbert(short hilbert, short[] ... packed)
     {
         ArrayList<short[]> packs = new ArrayList<short[]>(packed.length);
         int hilbertDistance = hilbert & 0xffff;
@@ -3506,7 +3507,7 @@ public class CoordPacker {
 
     /**
      * Encodes a short array of packed data as a (larger, more memory-hungry) ASCII string, which can be decoded using
-     * CoordPacker.decodeASCII() . Uses 64 printable chars, from ';' (ASCII 59) to 'z' (ASCII 122).
+     * CoordPacker.decodeASCII() . Uses 64 printable chars, from '?' (ASCII 63) to '~' (ASCII 126).
      * @param packed a packed data item produced by pack() or some other method from this class.
      * @return a printable String, which can be decoded with CoordPacker.decodeASCII()
      */
@@ -3515,9 +3516,9 @@ public class CoordPacker {
         int len = packed.length * 3;
         char[] chars = new char[len];
         for (int i = 0, c = 0; c < len; i++, c += 3) {
-            chars[c] = (char)((packed[i] & 31) + 59);
-            chars[c+1] = (char)(((packed[i] >> 5) & 31) + 59);
-            chars[c+2] = (char)(((packed[i] >>> 10) & 63) + 59);
+            chars[c] = (char)((packed[i] & 31) + 63);
+            chars[c+1] = (char)(((packed[i] >> 5) & 31) + 63);
+            chars[c+2] = (char)(((packed[i] >>> 10) & 63) + 63);
         }
         return new String(chars);
     }
@@ -3534,7 +3535,7 @@ public class CoordPacker {
         char[] chars = text.toCharArray();
         short[] packed = new short[len / 3];
         for (int c = 0, i = 0; c < len; i++, c += 3) {
-            packed[i] = (short)(((chars[c] - 59) & 31) | (((chars[c+1] - 59) & 31) << 5) | (((chars[c+2] - 59) & 63) << 10));
+            packed[i] = (short)(((chars[c] - 63) & 31) | (((chars[c+1] - 63) & 31) << 5) | (((chars[c+2] - 63) & 63) << 10));
         }
         return packed;
     }
