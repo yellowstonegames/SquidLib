@@ -48,7 +48,7 @@ public class DeckRNG extends StatefulRNG {
      * @param seedString a String to use as a seed; will be hashed in a uniform way across platforms.
      */
     public DeckRNG(String seedString) {
-        this(StableHash.hash(seedString));
+        this(CrossHash.hash(seedString));
     }
     /**
      * Seeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields

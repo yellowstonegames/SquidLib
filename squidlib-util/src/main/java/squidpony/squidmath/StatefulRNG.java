@@ -30,7 +30,7 @@ public class StatefulRNG extends RNG {
      * period (which rarely matters for games), and has good speed and tiny state size.
      */
     public StatefulRNG(String seedString) {
-        this(new LightRNG(StableHash.hash(seedString)));
+        this(new LightRNG(CrossHash.hash(seedString)));
     }
 
     @Override

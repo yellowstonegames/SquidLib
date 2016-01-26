@@ -55,7 +55,7 @@ public class RNG implements Serializable {
      * tiny state size, and excellent 64-bit number generation.
      */
     public RNG(String seedString) {
-        this(new LightRNG(StableHash.hash(seedString)));
+        this(new LightRNG(CrossHash.hash(seedString)));
     }
 
     /**
