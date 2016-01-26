@@ -1219,6 +1219,66 @@ public class CoordPacker {
     }
 
     /**
+     * Quickly determines if an x,y position is true or false in one of the given packed arrays, without unpacking them,
+     * and returns a List of all packed arrays that contain the position.
+     * @param x between 0 and 255, inclusive
+     * @param y between 0 and 255, inclusive
+     * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
+     *               returned by packMulti(); none of the arrays can be null.
+     * @return an ArrayList of all packed arrays that store true at the given x,y location.
+     */
+    public static ArrayList<short[]> findManyPacked(int x, int y, short[] ... packed)
+    {
+        ArrayList<short[]> packs = new ArrayList<short[]>(packed.length);
+        int hilbertDistance = posToHilbert(x, y);
+        for (int a = 0; a < packed.length; a++) {
+            int total = 0;
+            boolean on = false;
+            for (int p = 0; p < packed[a].length; p++, on = !on) {
+                total += packed[a][p] & 0xffff;
+                if (hilbertDistance < total)
+                {
+                    if(on)
+                        packs.add(packed[a]);
+                    break;
+                }
+            }
+        }
+        return packs;
+    }
+    /**
+     * Quickly determines if a Hilbert Curve index corresponds to true or false in one of the given packed arrays,
+     * without unpacking them, and returns a List of all packed arrays that contain the position.
+     * <br>
+     * Typically this method will not be needed by library-consuming code unless that code deals with Hilbert Curves in
+     * a frequent and deeply involved manner. It does have the potential to avoid converting to and from x,y coordinates
+     * and Hilbert Curve indices unnecessarily, which could matter for high-performance code.
+     * @param hilbert a Hilbert Curve index, such as one taken directly from a packed short[] without extra processing
+     * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
+     *               returned by packMulti(); none of the arrays can be null.
+     * @return an ArrayList of all packed arrays that store true at the given x,y location.
+     */
+    public static ArrayList<short[]> findPackedHilbert(short hilbert, short[] ... packed)
+    {
+        ArrayList<short[]> packs = new ArrayList<short[]>(packed.length);
+        int hilbertDistance = hilbert & 0xffff;
+        for (int a = 0; a < packed.length; a++) {
+            int total = 0;
+            boolean on = false;
+            for (int p = 0; p < packed[a].length; p++, on = !on) {
+                total += packed[a][p] & 0xffff;
+                if (hilbertDistance < total)
+                {
+                    if(on)
+                        packs.add(packed[a]);
+                    break;
+                }
+            }
+        }
+        return packs;
+    }
+
+    /**
      * Gets all positions that are "on" in the given packed array, without unpacking it, and returns them as a Coord[].
      * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
      *               not be null (this method does not check due to very tight performance constraints).
