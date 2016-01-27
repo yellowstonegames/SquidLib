@@ -8,6 +8,7 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A static class that can be used to modify the char[][] dungeons that other generators produce.
@@ -932,4 +933,51 @@ public class DungeonUtility {
         }
         return portion;
     }
+
+	/**
+	 * @param rng
+	 * @param map
+	 * @param acceptable
+	 * @param frustration
+	 *            The number of trials that this method can do. Usually 16 or
+	 *            32.
+	 * @return A random cell in {@code map} whose symbol is in
+	 *         {@code acceptable}. Or {@code null} if not found.
+	 */
+	public static /* @Nullable */Coord getRandomCell(RNG rng, char[][] map, Set<Character> acceptable,
+			int frustration) {
+		if (frustration < 0)
+			throw new IllegalStateException("Frustration should not be negative");
+		final int width = map.length;
+		final int height = width == 0 ? 0 : map[0].length;
+		int i = 0;
+		while (i < frustration) {
+			final int x = rng.nextInt(width);
+			final int y = rng.nextInt(height);
+			if (acceptable.contains(map[x][y]))
+				return Coord.get(x, y);
+			i++;
+		}
+		return null;
+	}
+
+	/**
+	 * @param level
+	 * @param c
+	 * @return {@code true} if {@code c} is valid in {@code level},
+	 *         {@code false} otherwise.
+	 */
+	public static boolean inLevel(char[][] level, Coord c) {
+		return inLevel(level, c.x, c.y);
+	}
+
+	/**
+	 * @param level
+	 * @param c
+	 * @return {@code true} if {@code c} is valid in {@code level},
+	 *         {@code false} otherwise.
+	 */
+	public static boolean inLevel(char[][] level, int x, int y) {
+		return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
+	}
 }
