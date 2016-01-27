@@ -48,6 +48,16 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	void appendInt(int i, /* @Nullable */T color);
 
 	/**
+	 * Mutates {@code this} by appending {@code f} to it.
+	 * 
+	 * @param f
+	 *            The float to append.
+	 * @param color
+	 *            {@code text}'s color. Or {@code null} to let the panel decide.
+	 */
+	void appendFloat(float f, /* @Nullable */T color);
+
+	/**
 	 * Mutates {@code this} by appending {@code other} to it.
 	 * 
 	 * @param other
@@ -199,6 +209,12 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		@Override
 		public void appendInt(int i, T color) {
 			append(String.valueOf(i), color);
+		}
+
+		@Override
+		public void appendFloat(float f, T color) {
+			final int i = Math.round(f);
+			append(i == f ? String.valueOf(i) : String.valueOf(f), color);
 		}
 
 		@Override

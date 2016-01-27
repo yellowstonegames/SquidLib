@@ -12,6 +12,8 @@ import java.util.Set;
  * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for
  * gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.
  * Created by Tommy Ettinger on 4/7/2015.
+ * 
+ * @see KissSpill An alternative implementation with a lighter API
  */
 public class Spill {
     /**
