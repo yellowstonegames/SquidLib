@@ -48,6 +48,25 @@ import squidpony.squidmath.StatefulRNG;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ *
+ *
+ CoordPackerBenchmark.measureExpand     avgt    3    900228206.833 ±    21968143.986  ns/op
+ CoordPackerBenchmark.measureFringe     avgt    3    641602426.833 ±    27212281.762  ns/op
+ CoordPackerBenchmark.measureIntersect  avgt    3     43690482.937 ±     5320462.022  ns/op
+ CoordPackerBenchmark.measurePack       avgt    3    109464965.333 ±     6017179.639  ns/op
+ CoordPackerBenchmark.measureRetract    avgt    3  13193960943.000 ±   242817831.253  ns/op
+ CoordPackerBenchmark.measureSurface    avgt    3  13620270404.000 ± 10192036140.599  ns/op
+ CoordPackerBenchmark.measureUnion      avgt    3     23350198.759 ±     1748064.376  ns/op
+
+ CoordPackerBenchmark.measureExpand     avgt    3    873295078.833 ±     9816457.477  ns/op
+ CoordPackerBenchmark.measureFringe     avgt    3    662366321.333 ±   102458917.511  ns/op
+ CoordPackerBenchmark.measureIntersect  avgt    3     42639848.333 ±     1993339.568  ns/op
+ CoordPackerBenchmark.measurePack       avgt    3    112526685.556 ±     1660470.101  ns/op
+ CoordPackerBenchmark.measureRetract    avgt    3   2898240290.667 ±    70354485.221  ns/op
+ CoordPackerBenchmark.measureSurface    avgt    3   2668457224.000 ±   208057266.995  ns/op
+ CoordPackerBenchmark.measureUnion      avgt    3     24108143.476 ±     1636907.341  ns/op
+ */
 public class CoordPackerBenchmark {
 
     public static final int DIMENSION = 120;
