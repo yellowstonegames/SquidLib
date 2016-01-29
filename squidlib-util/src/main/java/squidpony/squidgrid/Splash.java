@@ -1,36 +1,43 @@
 package squidpony.squidgrid;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
+
+import java.util.*;
 
 /**
  * A alternative to {@link Spill}, whose purpose is to have a simpler API. You
  * can specify the characters that are impassable (in other words: that should
  * not be spilled on) using {@link #addImpassableChar(char)} and
- * {@link #rmImpassableChar(char)}. By default the set of impassable characters
+ * {@link #removeImpassableChar(char)}. By default the set of impassable characters
  * is {@code '#'}.
  * 
  * @author smelC
  * 
  * @see Spill An alternative implementation of spilling.
  */
-public class KissSpill {
+public class Splash {
 
+	private static Splash splashCache = null;
+	private static int splashHash = -1;
 	protected final Set<Character> impassable;
 
 	/**
 	 * A fresh instance, whose only impassable character is '#'.
 	 */
-	public KissSpill() {
+	public Splash() {
 		this.impassable = new HashSet<Character>();
+		/* The default */
+		addImpassableChar('#');
+	}
+	/**
+	 * A fresh instance, adding the chars in blocked to the set of impassable characters,
+	 * then also adding '#' if it isn't present. You can remove '#' with
+	 * {@link #removeImpassableChar(char)} if you use '#' to mean something non-blocking.
+	 */
+	public Splash(Set<Character> blocked) {
+		this.impassable = new HashSet<Character>(blocked);
 		/* The default */
 		addImpassableChar('#');
 	}
@@ -52,13 +59,13 @@ public class KissSpill {
 	 *            The character to remove.
 	 * @return Whether it was in there.
 	 */
-	public boolean rmImpassableChar(char c) {
+	public boolean removeImpassableChar(char c) {
 		return this.impassable.remove(c);
 	}
 
 	/**
-	 * @param rng
-	 * @param level
+	 * @param rng used to randomize the floodfill
+	 * @param level char 2D array with x, y indices for the dungeon/map level
 	 * @param start
 	 *            Where the spill should start. It should be passable, otherwise
 	 *            an empty list gets returned. Consider using
@@ -66,8 +73,8 @@ public class KissSpill {
 	 *            to find it.
 	 * @param volume
 	 *            The number of cells to spill on.
-	 * @return The spill. It is list of coordinates (containing {@code start})
-	 *         valid in {@code level} that are all adjacents and whose symbol is
+	 * @return The spill. It is a list of coordinates (containing {@code start})
+	 *         valid in {@code level} that are all adjacent and whose symbol is
 	 *         passable. If non-empty, this is guaranteed to be an
 	 *         {@link ArrayList}.
 	 */
@@ -116,6 +123,39 @@ public class KissSpill {
 
 	protected boolean passable(char c) {
 		return !impassable.contains(c);
+	}
+
+	/**
+	 * @param rng used to randomize the floodfill
+	 * @param level char 2D array with x, y indices for the dungeon/map level
+	 * @param start
+	 *            Where the spill should start. It should be passable, otherwise
+	 *            an empty list gets returned. Consider using
+	 *            {@link DungeonUtility#getRandomCell(RNG, char[][], Set, int)}
+	 *            to find it.
+	 * @param volume
+	 *            The number of cells to spill on.
+	 * @param impassable the set of chars on the level that block the spill, such
+	 *                   as walls or maybe other spilled things (oil and water).
+	 *                   May be null, which makes this treat '#' as impassable.
+	 * @return The spill. It is a list of coordinates (containing {@code start})
+	 *         valid in {@code level} that are all adjacent and whose symbol is
+	 *         passable. If non-empty, this is guaranteed to be an
+	 *         {@link ArrayList}.
+	 */
+	public static List<Coord> spill(RNG rng, char[][] level, Coord start, int volume, Set<Character> impassable)
+	{
+		Set<Character> blocked;
+		if(impassable == null)
+			blocked = new HashSet<Character>(2);
+		else
+			blocked = impassable;
+		if(splashCache == null || blocked.hashCode() != splashHash)
+		{
+			splashHash = blocked.hashCode();
+			splashCache = new Splash(blocked);
+		}
+		return splashCache.spill(rng, level, start, volume);
 	}
 
 }
