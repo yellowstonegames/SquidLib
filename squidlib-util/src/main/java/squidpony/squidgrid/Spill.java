@@ -13,7 +13,7 @@ import java.util.Set;
  * gas propagation, or for all sorts of fluid-dynamics-on-the-cheap.
  * Created by Tommy Ettinger on 4/7/2015.
  * 
- * @see KissSpill An alternative implementation with a lighter API
+ * @see Splash An alternative implementation with a lighter API
  */
 public class Spill {
     /**

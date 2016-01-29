@@ -950,6 +950,8 @@ public class DungeonUtility {
 			throw new IllegalStateException("Frustration should not be negative");
 		final int width = map.length;
 		final int height = width == 0 ? 0 : map[0].length;
+        if(width == 0 || height == 0)
+            throw new IllegalStateException("Map must be non-empty to get a cell from it");
 		int i = 0;
 		while (i < frustration) {
 			final int x = rng.nextInt(width);
@@ -962,8 +964,8 @@ public class DungeonUtility {
 	}
 
 	/**
-	 * @param level
-	 * @param c
+	 * @param level dungeon/map level as 2D char array. x,y indexed
+	 * @param c Coord to check
 	 * @return {@code true} if {@code c} is valid in {@code level},
 	 *         {@code false} otherwise.
 	 */
@@ -972,8 +974,9 @@ public class DungeonUtility {
 	}
 
 	/**
-	 * @param level
-	 * @param c
+	 * @param level dungeon/map level as 2D char array. x,y indexed
+	 * @param x x coordinate to check
+     * @param y y coordinate to check
 	 * @return {@code true} if {@code c} is valid in {@code level},
 	 *         {@code false} otherwise.
 	 */
