@@ -19,6 +19,7 @@ package squidpony.squidmath;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /** An unordered map of regions (specifically, packed data from CoordPacker or something that uses it, like FOVCache or
@@ -351,6 +352,16 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
         }
         return found;
     }
+    /**
+     * Gets a List of all regions containing a given x,y point.
+     * @param x the x coordinate of the point in question
+     * @param y the y coordinate of the point in question
+     * @return an ArrayList of all regions in this data structure containing the given x,y point.
+     */
+    public ArrayList<short[]> regionsContaining(int x, int y)
+    {
+        return CoordPacker.findManyPacked(x, y, keyTable);
+    }
 
     public V remove (short[] key) {
         int hashCode = CrossHash.hash(key);
@@ -566,7 +577,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
     public boolean equals (Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof RegionMap)) return false;
-        RegionMap<V> other = (RegionMap)obj;
+        RegionMap<V> other = (RegionMap<V>)obj;
         if (other.size != size) return false;
         short[][] keyTable = this.keyTable;
         V[] valueTable = this.valueTable;
@@ -795,13 +806,13 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
             return this;
         }
 
-        /** Returns a new array containing the remaining values. */
-        public ArrayList<V> toList () {
+        /** Returns a new list containing the remaining values. */
+        public List<V> toList () {
             return toList(new ArrayList<V>(map.size));
         }
 
-        /** Adds the remaining values to the specified array. */
-        public ArrayList<V> toList (ArrayList<V> list) {
+        /** Adds the remaining values to the specified list. */
+        public List<V> toList (List<V> list) {
             while (hasNext)
                 list.add(next());
             return list;
@@ -831,16 +842,16 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
             return this;
         }
 
-        /** Returns a new array containing the remaining keys. */
-        public ArrayList<short[]> toList() {
+        /** Returns a new list containing the remaining keys. */
+        public List<short[]> toList() {
             return toList(new ArrayList<short[]>(map.size));
         }
 
         /** Adds the remaining keys to the array. */
-        public ArrayList<short[]> toList(ArrayList<short[]> array) {
+        public List<short[]> toList(List<short[]> list) {
             while (hasNext)
-                array.add(next());
-            return array;
+                list.add(next());
+            return list;
         }
     }
 }

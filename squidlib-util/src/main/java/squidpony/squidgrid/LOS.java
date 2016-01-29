@@ -41,9 +41,10 @@ public class LOS {
      */
     public static final int ORTHO = 4;
     /**
-     * Optimized algorithm for Bresenham-like lines. I'm not sure
-     * how well it works in practice, but it may be useful as a
-     * building block for more complex LOS.
+     * Optimized algorithm for Bresenham-like lines. There are slight
+     * differences in many parts of the lines this draws when compared
+     * to Bresenham lines, but it may also perform significantly better,
+     * and may also be useful as a building block for more complex LOS.
      */
     public static final int DDA = 5;
     /**

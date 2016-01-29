@@ -28,7 +28,7 @@ public class CrossHash {
         int h = -2128831035, len = data.length, o = 0;
         for (int i = 0; i < len; i++) {
             o |= (data[i]) ? (1 << (i % 8)) : 0;
-            if(i % 8 == 7) {
+            if(i % 8 == 7 || i == len - 1) {
                 h ^= o;
                 h *= 16777619;
                 o = 0;
