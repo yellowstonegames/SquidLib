@@ -1548,6 +1548,10 @@ public class CoordPacker {
      */
     public static short[] retract(short[] packed, int retraction, int width, int height)
     {
+        return differencePacked(packed, fringe(negatePacked(packed), retraction, width, height, true, true));
+    }
+/*    public static short[] retract(short[] packed, int retraction, int width, int height)
+    {
         if(packed == null || packed.length <= 1)
         {
             return ALL_WALL;
@@ -1600,6 +1604,7 @@ public class CoordPacker {
         vla.add((short)(skip+1));
         return vla.toArray();
     }
+    */
     /**
      * Finds the area made by removing the "on" positions in packed that are within the specified retraction distance of
      * an "off" position or the edge of the map. This essentially finds a shrunken version of packed.
@@ -1612,6 +1617,10 @@ public class CoordPacker {
      * @return a packed array that encodes "on" for packed and cells that expanded from cells that were "on" in packed
      */
     public static short[] retract(short[] packed, int retraction, int width, int height, boolean eightWay)
+    {
+        return differencePacked(packed, fringe(negatePacked(packed), retraction, width, height, eightWay, true));
+    }
+    /*
     {
         if(eightWay)
             return retract(packed, retraction, width, height);
@@ -1671,6 +1680,7 @@ public class CoordPacker {
         vla.add((short)(skip+1));
         return vla.toArray();
     }
+    */
 
 
 
@@ -1803,6 +1813,108 @@ public class CoordPacker {
                                 dist = hilbertDistances[j + (k << 8)];
                                 if (ss.add(dist))
                                     vla.add(dist);
+                            }
+                        }
+                    }
+
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
+        Arrays.sort(indices);
+
+        vla = new ShortVLA(128);
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.toArray();
+    }
+    /**
+     * Finds the area around the cells encoded in packed, without including those cells. For each "on"
+     * position in packed, expand it to cover a a square with side length equal to 1 + expansion * 2,
+     * centered on the original "on" position, unless the expansion would take a cell further than 0,
+     * width - 1 (for xMove) or height - 1 (for yMove), in which case that cell is removed if drop is
+     * true, or stopped at the edge if drop is false.
+     * If a cell is "on" in packed, it will always be "off" in the result.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param expansion the positive (square-shaped) radius, in cells, to expand each cell out by
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @param eightWay true if the expansion should be both diagonal and orthogonal; false for just orthogonal
+     * @param drop true to drop cells that would expand into negative coordinates or past width/height, false to stop
+     *             their expansion early
+     * @return a packed array that encodes "on" for cells that were pushed from the edge of packed's "on" cells
+     */
+    public static short[] fringe(short[] packed, int expansion, int width, int height, boolean eightWay, boolean drop)
+    {
+        if(!drop)
+            return fringe(packed, expansion, width, height, eightWay);
+        if(packed == null || packed.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(256);
+        boolean on = false;
+        int idx = 0;
+        short x, y, dist;
+        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    ss.add((short) i);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        on = false;
+        idx = 0;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    if (eightWay) {
+                        for (int j = x - expansion; j <= x + expansion; j++) {
+                            for (int k = y - expansion; k <= y + expansion; k++) {
+                                if (j >= 0 && k >= 0 && j < width && k < height) {
+                                    dist = hilbertDistances[j + (k << 8)];
+                                    if (ss.add(dist))
+                                        vla.add(dist);
+                                }
+                            }
+                        }
+                    } else {
+                        for (int d = 0; d < 4; d++) {
+                            for (int e = 1; e <= expansion; e++) {
+                                for (int e2 = 0; e2 < expansion; e2++) {
+                                    int j = x + xOffsets[d] * e + yOffsets[d + 1] * e2;
+                                    int k = y + yOffsets[d] * e + xOffsets[d + 1] * e2;
+
+                                    if (j >= 0 && k >= 0 && j < width && k < height) {
+                                        dist = hilbertDistances[j + (k << 8)];
+                                        if (ss.add(dist))
+                                            vla.add(dist);
+                                    }
+                                }
                             }
                         }
                     }
@@ -2028,6 +2140,9 @@ public class CoordPacker {
      */
     public static short[] surface(short[] packed, int depth, int width, int height)
     {
+        return intersectPacked(packed, fringe(negatePacked(packed), depth, width, height, true, true));
+    }
+    /*{
         if(packed == null || packed.length <= 1)
         {
             return ALL_WALL;
@@ -2080,6 +2195,7 @@ public class CoordPacker {
         vla.add((short)(skip+1));
         return vla.toArray();
     }
+    */
     /**
      * Finds the area consisting of the "on" positions in packed that are within the specified depth distance of an
      * "off" position or the edge of the map. This essentially finds the part of packed that is close to its edge.
@@ -2093,6 +2209,10 @@ public class CoordPacker {
      */
     public static short[] surface(short[] packed, int depth, int width, int height, boolean eightWay)
     {
+        return intersectPacked(packed, fringe(negatePacked(packed), depth, width, height, eightWay, true));
+    }
+
+    /*{
         if(eightWay)
             return surface(packed, depth, width, height);
         if(packed == null || packed.length <= 1)
@@ -2151,7 +2271,7 @@ public class CoordPacker {
         }
         vla.add((short)(skip+1));
         return vla.toArray();
-    }
+    }*/
 
 
     /**
