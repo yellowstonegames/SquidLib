@@ -13,13 +13,18 @@ import java.util.Arrays;
 /**
  * Provides static methods to encode Coords as single primitive ints in various ways, hence the namesake, but also
  * provides advanced methods to encode 2D arrays of various sorts produced by SquidLib in extremely memory-efficient
- * representations, and decode those representations to various types of 2D array on-demand.
- *<br>
- * NOTE: This class is atypically complex and low-level for SquidLib because it is attempting to attain some very
- * challenging performance gains. You should not consider it idiomatic SquidLib code or start modifying it unless
+ * representations, and decode those representations to various types of 2D array on-demand. There's a detailed
+ * introduction on the SquidLib wiki, https://github.com/SquidPony/SquidLib/wiki/Handling-Map-Regions-with-CoordPacker ,
+ * which is probably the best way to learn the techniques possible with this class. Most methods in this aren't useful
+ * on their own, but can be mixed and matched to get specific regions from a map, such as all floors not adjacent to a
+ * wall, or all grass within 3 squares of deep or shallow water, with walls blocking the distance measurement. You can
+ * also use packed data that this class produces as keys for {@link RegionMap} to associate values with regions.
+ * <br>
+ * NOTE: Internally, this class is atypically complex and low-level for SquidLib because it is attempting to attain some
+ * very challenging performance gains. You should not consider it idiomatic SquidLib code or start modifying it unless
  * you have a good grasp of bitwise operations and the performance implications, particularly in regard to memory
  * consumption, that higher-level and more convenient Java programming techniques have.
- *<br>
+ * <br>
  * The pack() methods in this class take a 2D array with a clear division between cells in an "on" state and cells in an
  * "off" state, and they produce a very tightly compressed short array that can be losslessly decompressed with the
  * unpack() methods to a boolean 2D array that stores equivalent on/off data to the input. The packMulti() method in
@@ -43,7 +48,7 @@ import java.util.Arrays;
  * then pass the short[][] and levels to unpackMultiDouble later, much of the same radius will be filled, but because
  * the sample value 0.1 was less than the smallest value in levels, its cell will be given 0.0. What was originally 0.45
  * will be given the next-lower levels value, 0.25; 0.8 will be given 0.75, and 1.0 will remain 1.0.
- *<br>
+ * <br>
  * This compression is meant to produce a short[] or short[][] that uses as little memory as possible for the specific
  * case of compressing maps with these qualities:
  * <ul>
@@ -58,7 +63,7 @@ import java.util.Arrays;
  * the original double[][] (which wastefully represents 2 states with 8 bytes) yields average memory usage ratios
  * between (with relatively optimal parameters) 0.0001237905030818498 in one of the best cases, and (with some very
  * poor parameters for the dungeon, but still using a realistic FOV map) 0.003135985198889917 in one of the worst.
- *<br>
+ * <br>
  * This table shows the results for the average of 100 runs of pack() in a map with a "good size" and 100 runs in a map
  * with a "bad size." Both the compression ratio vs. a double[][] that stores only whether a cell is on or off and a
  * boolean[][] that stores the same information are provided.
@@ -94,7 +99,7 @@ import java.util.Arrays;
  * efficiently, but the method used here should ensure that even encoding the input FOV map as a flat sequence of
  * single bits and compressing the file should still be on par with the output of pack() due to optimization to
  * ensure nearby cells on a map are compressed together.
- *<br>
+ * <br>
  * The technique used by this class is to walk along a Hilbert Curve, storing whether the walk is traveling through
  * "on" or "off" cells, which can be determined by a comparison to a number or a boolean, then encoding alternate shorts
  * into the short[] to be returned, with even-number indices (starting at 0) in the array corresponding to the number of
