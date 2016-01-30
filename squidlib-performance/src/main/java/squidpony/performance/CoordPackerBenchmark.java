@@ -201,6 +201,75 @@ public class CoordPackerBenchmark {
     public void measureRetract() throws InterruptedException {
         long l = doRetract();
     }
+/*
+    public long doRetract1()
+    {
+        long l = 0;
+        for (int i = 0; i < 1024; i++) {
+            l += CrossHash.hash(CoordPacker.differencePacked(floors[i], CoordPacker.fringe(CoordPacker.negatePacked(floors[i]), 1, DIMENSION, DIMENSION, true, true)));
+        }
+        return l;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureRetract1() throws InterruptedException {
+        System.out.print("Retract 1: ");
+        System.out.println(doRetract1());
+    }
+
+    public long doRetract2()
+    {
+        long l = 0;
+        for (int i = 0; i < 1024; i++) {
+            l += CrossHash.hash(CoordPacker.differencePacked(floors[i], CoordPacker.expand(CoordPacker.negatePacked(floors[i]), 1, DIMENSION, DIMENSION, true)));
+        }
+        return l;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureRetract2() throws InterruptedException {
+        System.out.print("Retract 2: ");
+        System.out.println(doRetract2());
+    }
+
+    public long doSurface1()
+    {
+        long l = 0;
+        for (int i = 0; i < 1024; i++) {
+            l += CrossHash.hash(CoordPacker.intersectPacked(floors[i], CoordPacker.fringe(CoordPacker.negatePacked(floors[i]), 1, DIMENSION, DIMENSION, true, true)));
+        }
+        return l;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureSurface1() throws InterruptedException {
+        System.out.print("Surface 1: ");
+        System.out.println(doSurface1());
+    }
+
+    public long doSurface2()
+    {
+        long l = 0;
+        for (int i = 0; i < 1024; i++) {
+            l += CrossHash.hash(CoordPacker.intersectPacked(floors[i], CoordPacker.expand(CoordPacker.negatePacked(floors[i]), 1, DIMENSION, DIMENSION, true)));
+        }
+        return l;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureSurface2() throws InterruptedException {
+        System.out.print("Surface 2: ");
+        System.out.println(doSurface2());
+    }
+*/
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
      *
