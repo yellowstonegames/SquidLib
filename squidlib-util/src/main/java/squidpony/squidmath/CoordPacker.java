@@ -1548,7 +1548,7 @@ public class CoordPacker {
      */
     public static short[] retract(short[] packed, int retraction, int width, int height)
     {
-        return differencePacked(packed, fringe(negatePacked(packed), retraction, width, height, true, true));
+        return differencePacked(packed, expand(negatePacked(packed), retraction, width, height, true));
     }
 /*    public static short[] retract(short[] packed, int retraction, int width, int height)
     {
@@ -1618,7 +1618,7 @@ public class CoordPacker {
      */
     public static short[] retract(short[] packed, int retraction, int width, int height, boolean eightWay)
     {
-        return differencePacked(packed, fringe(negatePacked(packed), retraction, width, height, eightWay, true));
+        return differencePacked(packed, expand(negatePacked(packed), retraction, width, height, eightWay));
     }
     /*
     {
@@ -2140,7 +2140,7 @@ public class CoordPacker {
      */
     public static short[] surface(short[] packed, int depth, int width, int height)
     {
-        return intersectPacked(packed, fringe(negatePacked(packed), depth, width, height, true, true));
+        return intersectPacked(packed, expand(negatePacked(packed), depth, width, height, true));
     }
     /*{
         if(packed == null || packed.length <= 1)
@@ -2209,7 +2209,7 @@ public class CoordPacker {
      */
     public static short[] surface(short[] packed, int depth, int width, int height, boolean eightWay)
     {
-        return intersectPacked(packed, fringe(negatePacked(packed), depth, width, height, eightWay, true));
+        return intersectPacked(packed, expand(negatePacked(packed), depth, width, height, eightWay));
     }
 
     /*{
