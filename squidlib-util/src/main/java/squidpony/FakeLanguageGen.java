@@ -28,8 +28,7 @@ public class FakeLanguageGen implements Serializable {
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     protected final Pattern[] sanityChecks;
     public static final StatefulRNG srng = new StatefulRNG();
-    protected static final Pattern doubleRepeats = Pattern.compile("(.)\\1+(.)\\2+"),
-            repeats = Pattern.compile("(.)\\1+"), diacritics = Pattern.compile("[\\u0300-\\u036F\\u1DC0-\\u1DFF]+");
+    protected static final Pattern repeats = Pattern.compile("(.)\\1+"), diacritics = Pattern.compile("[\\u0300-\\u036F\\u1DC0-\\u1DFF]+");
     public static final Pattern[]
             vulgarChecks = new Pattern[]
             {
@@ -364,15 +363,15 @@ public class FakeLanguageGen implements Serializable {
             new String[]{},
             new String[]{"k", "ky", "s", "sh", "t", "ts", "ch", "n", "ny", "h", "f", "hy", "m", "my", "y", "r", "ry", "g",
                     "gy", "z", "j", "d", "b", "by", "p", "py",
-                    "k", "t", "n", "s", "k", "t", "n", "s", "sh", "sh", "g", "r", "b",
-                    "k", "t", "n", "s", "k", "t", "n", "s", "sh", "sh", "g", "r", "b",
-                    "k", "t", "n", "s", "k", "t", "n", "s", "sh", "sh", "ch", "ry", "ts"
+                    "k", "t", "n", "s", "k", "t", "d", "s", "sh", "sh", "g", "r", "b",
+                    "k", "t", "n", "s", "k", "t", "b", "s", "sh", "sh", "g", "r", "b",
+                    "k", "t", "n", "s", "k", "t", "z", "s", "sh", "sh", "ch", "ry", "ts"
             },
             new String[]{"k", "ky", "s", "sh", "t", "ts", "ch", "n", "ny", "h", "f", "hy", "m", "my", "y", "r", "ry", "g",
                     "gy", "z", "j", "d", "b", "by", "p", "py",
-                    "k", "t", "n", "s", "k", "t", "n", "s", "sh", "sh", "y", "j", "p", "r", "d",
-                    "k", "t", "n", "s", "k", "t", "n", "s", "sh", "sh", "y", "j", "p", "r", "d",
-                    "k", "t", "n", "s", "f", "g", "z", "b", "d", "ts",
+                    "k", "t", "d", "s", "k", "t", "d", "s", "sh", "sh", "y", "j", "p", "r", "d",
+                    "k", "t", "b", "s", "k", "t", "b", "s", "sh", "sh", "y", "j", "p", "r", "d",
+                    "k", "t", "z", "s", "f", "g", "z", "b", "d", "ts",
                     "nn", "nn", "nn", "nd", "nz", "", "mm", "kk", "kk", "tt", "ss", "ssh", "tch"},
             new String[]{"n"},
             new String[]{},
@@ -584,15 +583,8 @@ public class FakeLanguageGen implements Serializable {
         String finished;
         while(true) {
             StringBuilder sb = new StringBuilder(20);
-            if (rng.nextDouble() < vowelStartFrequency) {
-                sb.append(rng.getRandomElement(openingVowels));
-                sb.append(rng.getRandomElement(midConsonants));
-            } else {
-                sb.append(rng.getRandomElement(openingConsonants));
-            }
-
             double syllableChance = rng.nextDouble(totalSyllableFrequency);
-            int syllables = 1;
+            int syllables = 1, i = 0;
             for (Map.Entry<Integer, Double> kv : syllableFrequencies.entrySet()) {
                 if (syllableChance < kv.getValue()) {
                     syllables = kv.getKey();
@@ -600,7 +592,74 @@ public class FakeLanguageGen implements Serializable {
                 } else
                     syllableChance -= kv.getValue();
             }
-            for (int i = 0; i < syllables - 1; i++) {
+            if (rng.nextDouble() < vowelStartFrequency) {
+                sb.append(rng.getRandomElement(openingVowels));
+                sb.append(rng.getRandomElement(midConsonants));
+                i++;
+            } else {
+                sb.append(rng.getRandomElement(openingConsonants));
+            }
+
+            for (; i < syllables - 1; i++) {
+                sb.append(rng.getRandomElement(midVowels));
+                if (rng.nextDouble() < vowelSplitFrequency) {
+                    sb.append(rng.getRandomElement(vowelSplitters));
+                    sb.append(rng.getRandomElement(midVowels));
+                }
+                sb.append(rng.getRandomElement(midConsonants));
+            }
+            if (rng.nextDouble() < syllableEndFrequency) {
+                sb.append(rng.getRandomElement(closingSyllables));
+            } else {
+                sb.append(rng.getRandomElement(midVowels));
+                if (rng.nextDouble() < vowelSplitFrequency) {
+                    sb.append(rng.getRandomElement(vowelSplitters));
+                    sb.append(rng.getRandomElement(midVowels));
+                }
+                if (rng.nextDouble() >= vowelEndFrequency) {
+                    sb.append(rng.getRandomElement(closingConsonants));
+                    if (rng.nextDouble() < syllableEndFrequency) {
+                        sb.append(rng.getRandomElement(closingSyllables));
+                    }
+                }
+            }
+            if (capitalize)
+                sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+            finished = sb.toString();
+            if(sanityChecks != null && !checkAll(finished, sanityChecks))
+                continue;
+            else if(clean && !checkAll(finished, vulgarChecks))
+                continue;
+            break;
+        }
+        return finished;
+    }/**
+     * Generate a word from this FakeLanguageGen using the specified RNG.
+     *
+     * @param rng        the RNG to use for the randomized string building
+     * @param capitalize true if the word should start with a capital letter, false otherwise
+     * @return a word in the fake language as a String
+     */
+    public String word(RNG rng, boolean capitalize, int approxSyllables) {
+        String finished;
+        if(approxSyllables <= 0)
+        {
+            finished = rng.getRandomElement(openingVowels);
+            if(capitalize) return finished.substring(0, 1).toUpperCase();
+            else return finished.substring(0, 1);
+        }
+        while(true) {
+            StringBuilder sb = new StringBuilder(20);
+            int i = 0;
+            if (rng.nextDouble() < vowelStartFrequency) {
+                sb.append(rng.getRandomElement(openingVowels));
+                sb.append(rng.getRandomElement(midConsonants));
+                i++;
+            } else {
+                sb.append(rng.getRandomElement(openingConsonants));
+            }
+
+            for (; i < approxSyllables - 1; i++) {
                 sb.append(rng.getRandomElement(midVowels));
                 if (rng.nextDouble() < vowelSplitFrequency) {
                     sb.append(rng.getRandomElement(vowelSplitters));
@@ -1002,10 +1061,13 @@ public class FakeLanguageGen implements Serializable {
 
         String[] ov = merge1000(rng, openingVowels, other.openingVowels, otherInfluence),
                 mv = merge1000(rng, midVowels, other.midVowels, otherInfluence),
-                oc = merge1000(rng, openingConsonants, other.openingConsonants, otherInfluence),
+                oc = merge1000(rng, openingConsonants, other.openingConsonants, otherInfluence *
+                        Math.max(0.0, Math.min(1.0, (1.0 - other.vowelStartFrequency + vowelStartFrequency)))),
                 mc = merge1000(rng, midConsonants, other.midConsonants, otherInfluence),
-                cc = merge1000(rng, closingConsonants, other.closingConsonants, otherInfluence),
-                cs = merge1000(rng, closingSyllables, other.closingSyllables, otherInfluence),
+                cc = merge1000(rng, closingConsonants, other.closingConsonants, otherInfluence *
+                        Math.max(0.0, Math.min(1.0, (1.0 - other.vowelEndFrequency + vowelEndFrequency)))),
+                cs = merge1000(rng, closingSyllables, other.closingSyllables, otherInfluence *
+                        Math.max(0.0, Math.min(1.0, (other.syllableEndFrequency - syllableEndFrequency)))),
                 splitters = merge1000(rng, vowelSplitters, other.vowelSplitters, otherInfluence);
 
         LinkedHashMap<Integer, Double> freqs = new LinkedHashMap<Integer, Double>(syllableFrequencies);

@@ -99,11 +99,32 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 6, 12, new String[]{",", ",", ",", ";"},
                     new String[]{".", ".", "!", "?", "...", "..."}, 0.17));
         }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.75);
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 6, 12, new String[]{",", ",", ",", ";", " -"},
+                    new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.2));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.GREEK_ROMANIZED.mix(
+                FakeLanguageGen.RUSSIAN_ROMANIZED.mix(
+                        FakeLanguageGen.FRENCH.removeAccents().mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.6), 0.8),
+                0.85); //.addAccents(0.4, 0.1);
+        for (int i = 0; i < 40; i++) {
+            System.out.println("The " + flg.word(rng, true, rng.between(2, 4)) + " approaches!");
+        }
+
+
+        //For generating the random guard interjections in some demos
+        /*
         System.out.println();
         rng.setState(0xBEEFF00DC00L);
         for (int i = 0; i < 80; i++) {
             System.out.println("\"" + FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 4,
                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.2, 60) + "\",");
         }
+        */
     }
 }
