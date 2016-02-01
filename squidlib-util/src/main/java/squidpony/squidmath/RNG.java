@@ -408,8 +408,9 @@ public class RNG implements Serializable {
      */
     public <T> T[] randomPortion(T[] data, int count)
     {
-        T[] array = Arrays.copyOf(data, Math.min(count, data.length));
+        T[] array = Arrays.copyOf(data, data.length);
         shuffle(data, array);
+        array = Arrays.copyOf(array, Math.min(count, data.length));
         return array;
     }
 
