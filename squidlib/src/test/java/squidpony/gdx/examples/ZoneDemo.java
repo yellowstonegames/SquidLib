@@ -220,7 +220,7 @@ public class ZoneDemo extends ApplicationAdapter {
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.draw();
 
-        // disolay does not draw all AnimatedEntities by default.
+        // display does not draw all AnimatedEntities by default.
         batch.begin();
         for(AnimatedEntity mon : display.getAnimatedEntities(2)) {
             display.drawActor(batch, 1.0f, mon);

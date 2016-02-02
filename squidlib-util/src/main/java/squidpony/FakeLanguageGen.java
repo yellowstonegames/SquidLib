@@ -376,11 +376,29 @@ public class FakeLanguageGen implements Serializable {
             new String[]{"n"},
             new String[]{},
             new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 4, 5, 4, 3}, 0.3, 0.9, 0.0, 0.0, japaneseSanityChecks, true);
-
-
     /**
-     * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .
+     * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
+     * creature or place names in fantasy settings.
+     * <br>
+     * Treinane, Ifoth, Enaisamus, Bruna, Toudini, Suzhono, Tykano, Taibet, Unuzhu, Sanoupa...
      */
+    public static final FakeLanguageGen FANTASY_NAME = GREEK_ROMANIZED.mix(
+            RUSSIAN_ROMANIZED.mix(
+                    FRENCH.removeAccents().mix(
+                            JAPANESE_ROMANIZED, 0.6), 0.8), 0.85);
+    /**
+     * A mix of four different languages with many accented characters added onto an ASCII base, that can be good for
+     * generating single words for creature or place names in fantasy settings that should have a "fancy" feeling from
+     * having unnecessary accents added primarily for visual reasons.
+     * <br>
+     * Āípomyos, Moskatã, Ozès, Brèňankāĩp, Inǻnki, Kòngėnin, Ĭthås, Favîpi, Tesøŭŕšţøŗ, Vïpâ...
+     */
+    public static final FakeLanguageGen FANCY_FANTASY_NAME = FANTASY_NAME.addAccents(0.45, 0.15);
+
+
+            /**
+             * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .
+             */
     public FakeLanguageGen() {
         this(
                 new String[]{
