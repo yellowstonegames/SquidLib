@@ -1333,6 +1333,71 @@ public class CoordPacker {
         return vla.toArray();
     }
 
+    /**
+     * Gets the positions that are "on" in the given packed array, without unpacking it, repeatedly goes through a
+     * number of "on" cells equal to fraction and stores one of those cells as a Coord, and returns the accumulated
+     * portion of positions as a Coord[].
+     * <br>
+     * For purposes of finding mostly cells with a similar distance to each other but without obvious patterns, a value
+     * of 5, 6, or 7 for fraction works well.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @param fraction the approximate fraction of "on" cells to use
+     * @return a Coord[] corresponding to a fraction of the "on" cells in packed.
+     */
+    public static Coord[] fractionPacked(short[] packed, int fraction)
+    {
+        if(fraction <= 1)
+            return allPacked(packed);
+        ShortVLA vla = new ShortVLA(64);
+        boolean on = false;
+        int idx = 0, ctr = 0;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++, ctr = (ctr + 1) % fraction) {
+                    if(ctr == 0)
+                        vla.add((short)i);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        int[] distances = vla.asInts();
+        Coord[] cs = new Coord[distances.length];
+        for (int i = 0; i < distances.length; i++) {
+            cs[i] = Coord.get(hilbertX[distances[i]], hilbertY[distances[i]]);
+        }
+        return cs;
+    }
+
+    /**
+     * Gets the positions that are "on" in the given packed array, without unpacking it, repeatedly goes through a
+     * number of "on" cells equal to fraction and stores one of those cells as a Coord, and returns the accumulated
+     * portion of positions as an array of Hilbert Curve indices.
+     * <br>
+     * For purposes of finding mostly cells with a similar distance to each other but without obvious patterns, a value
+     * of 5, 6, or 7 for fraction works well.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @param fraction the approximate fraction of "on" cells to use
+     * @return a Hilbert Curve index array corresponding to a fraction of the "on" cells in packed.
+     */
+    public static short[] fractionPackedHilbert(short[] packed, int fraction)
+    {
+        ShortVLA vla = new ShortVLA(64);
+        boolean on = false;
+        int idx = 0, ctr = 0;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++, ctr = (ctr + 1) % fraction) {
+                    if(ctr == 0)
+                        vla.add((short)i);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        return vla.toArray();
+    }
+
     private static int clamp(int n, int min, int max)
     {
         return Math.min(Math.max(min, n), max - 1);
@@ -2297,7 +2362,7 @@ public class CoordPacker {
         int boundSize = count(bounds);
         ShortVLA vla = new ShortVLA(256);
         ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
-        boolean on = false;
+        boolean on = false, justAdded;
         int idx = 0;
         short x, y, dist;
         for(int p = 0; p < bounds.length; p++, on = !on) {
@@ -2311,6 +2376,7 @@ public class CoordPacker {
         short[] s2 = allPackedHilbert(start);
         int[] xOffsets = new int[]{0, 1, 0, -1}, yOffsets = new int[]{1, 0, -1, 0};
         for (int e = 0; e < expansion; e++) {
+            justAdded = false;
             ShortVLA edge = new ShortVLA(128);
             for (int s = 0; s < s2.length; s++) {
                 int i = s2[s] & 0xffff;
@@ -2324,10 +2390,13 @@ public class CoordPacker {
                         if (ss.add(dist)) {
                             vla.add(dist);
                             edge.add(dist);
+                            justAdded = true;
                         }
                     }
                 }
             }
+            if(!justAdded)
+                break;
             s2 = edge.toArray();
         }
 
@@ -2384,7 +2453,7 @@ public class CoordPacker {
         int boundSize = count(bounds);
         ShortVLA vla = new ShortVLA(256);
         ShortSet ss = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
-        boolean on = false;
+        boolean on = false, justAdded;
         int idx = 0;
         short x, y, dist;
         for(int p = 0; p < bounds.length; p++, on = !on) {
@@ -2398,6 +2467,7 @@ public class CoordPacker {
         short[] s2 = allPackedHilbert(start);
         int[] xOffsets = new int[]{-1, 0, 1, -1,    1, -1, 0, 1}, yOffsets = new int[]{-1, -1, -1, 0,    0, 1, 1, 1};
         for (int e = 0; e < expansion; e++) {
+            justAdded = false;
             ShortVLA edge = new ShortVLA(128);
             for (int s = 0; s < s2.length; s++) {
                 int i = s2[s] & 0xffff;
@@ -2411,10 +2481,13 @@ public class CoordPacker {
                         if (ss.add(dist)) {
                             vla.add(dist);
                             edge.add(dist);
+                            justAdded = true;
                         }
                     }
                 }
             }
+            if(!justAdded)
+                break;
             s2 = edge.toArray();
         }
 
@@ -3457,6 +3530,44 @@ public class CoordPacker {
         return differencePacked(original, packSeveral(points));
     }
 
+    /**
+     * Given a packed data array that encodes multiple unconnected "on" areas, this finds each isolated area and returns
+     * it as an element in a short[][], with one short[] sub-array per isolated area. Useful when you have, for example,
+     * all the rooms in a dungeon with their connecting corridors removed, but want to separate the rooms. You can get
+     * the aforementioned data assuming a bare dungeon called map with WIDTH and HEIGHT constants with the idiom:
+     * <br>
+     * {@code short[] floors = pack(map, '.'),
+     * rooms = intersectPacked(floors, expand(retract(floors, 1, WIDTH, HEIGHT, true), 1, WIDTH, HEIGHT, true)),
+     * corridors = differencePacked(floors, rooms);}
+     * <br>
+     * You can then get all rooms as separate regions with {@code short[][] separated = split(rooms);}, or substitute
+     * {@code split(corridors)} to get the corridors. The room-finding technique works by shrinking floors by a radius
+     * of 1, which causes thin areas like corridors of 2 or less width to be removed, then expanding the area that
+     * produces by 1 to restore the original size of non-corridor areas, and ensuring that anything produced by that
+     * technique is within the bounds of floors by intersecting that with the original floors data. Corridors are
+     * obtained by removing the rooms from floors.
+     * @param packed a packed data array that probably encodes multiple unconnected "on" areas
+     * @return a short[][] containing each unconnected area from packed as a short[] sub-element
+     */
+    public static short[][] split(short[] packed)
+    {
+        ArrayList<short[]> arrays = new ArrayList<short[]>(32);
+        short[] remaining = Arrays.copyOf(packed, packed.length);
+        while (remaining.length > 1) {
+            boolean on = false;
+            int idx = 0;
+            for (int p = 0; p < remaining.length; p++, on = !on) {
+                if (on) {
+                    short[] area = flood(packed, packOne((short) idx), 256, true);
+                    arrays.add(area);
+                    remaining = differencePacked(remaining, area);
+                    break;
+                }
+                idx += remaining[p] & 0xffff;
+            }
+        }
+        return arrays.toArray(new short[arrays.size()][]);
+    }
     /**
      * Gets a random subset of positions that are "on" in the given packed array, without unpacking it, and returns
      * them as a Coord[]. Random numbers are generated by the rng parameter.

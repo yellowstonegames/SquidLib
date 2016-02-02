@@ -12,7 +12,7 @@ public class MonsterGenTest {
     {
         StatefulRNG rng = new StatefulRNG(0xf00df00L);
 
-        rng.setState(0xf00df00L);
+        rng.setState(0xbababadaL);
         FakeLanguageGen flg = FakeLanguageGen.GREEK_ROMANIZED.mix(
                 FakeLanguageGen.RUSSIAN_ROMANIZED.mix(
                         FakeLanguageGen.FRENCH.removeAccents().mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.6), 0.8),
@@ -22,9 +22,21 @@ public class MonsterGenTest {
         //}
         MonsterGen mg = new MonsterGen();
         System.out.println(MonsterGen.SNAKE.present(true));
+        System.out.println(MonsterGen.SNAKE.presentVisible(true));
         System.out.println(MonsterGen.LION.present(true));
+        System.out.println(MonsterGen.LION.presentVisible(true));
+        System.out.println(MonsterGen.HAWK.present(true));
+        System.out.println(MonsterGen.HAWK.presentVisible(true));
+        System.out.println(MonsterGen.HORSE.present(true));
+        System.out.println(MonsterGen.HORSE.presentVisible(true));
+        System.out.println(MonsterGen.SHOGGOTH.present(true));
+        System.out.println(MonsterGen.SHOGGOTH.presentVisible(true));
         System.out.println(MonsterGen.SNAKE.mix(rng, "slitherking", MonsterGen.LION, 0.5).present(true));
         System.out.println(MonsterGen.LION.mix(rng, "slion", MonsterGen.SNAKE, 0.3).present(true));
+        System.out.println(MonsterGen.HORSE.mix(rng, "elderhorse", MonsterGen.SHOGGOTH, 0.35).present(true));
+        System.out.println(mg.randomizeAppearance(rng, MonsterGen.HAWK, mg.randomName(rng), 3).present(true));
+        System.out.println(mg.randomizePowers(rng, MonsterGen.HAWK, mg.randomName(rng), 3).present(true));
+
 
 
         //For generating the random guard interjections in some demos

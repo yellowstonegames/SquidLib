@@ -135,6 +135,16 @@ public class ShortVLA {
         size += end - start;
     }
 
+    public void addFractionRange (int start, int end, int fraction) {
+        short[] items = this.items;
+        int sizeNeeded = size + (end - start) / fraction + 2;
+        if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
+        for(int r = start, i = size; r < end; r = fraction * ((r / fraction) + 1), i++, size++)
+        {
+            items[i] = (short)(r);
+        }
+    }
+
     public short get (int index) {
         if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
         return items[index];
