@@ -191,7 +191,7 @@ public class BlastAOE implements AOE {
                 }
             }
         }
-        double bestQuality = 99999 * ts.length;
+        double bestQuality = 99999D * ts.length;
         double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
         for (int x = 0; x < qualityMap.length; x++) {
             for (int y = 0; y < qualityMap[x].length; y++) {
@@ -380,7 +380,7 @@ public class BlastAOE implements AOE {
                 }
             }
         }
-        double bestQuality = 99999 * lts.length + 399999 * pts.length;
+        double bestQuality = 99999D * lts.length + 399999D * pts.length;
         double[][] qualityMap = new double[dungeon.length][dungeon[0].length];
         for (int x = 0; x < qualityMap.length; x++) {
             for (int y = 0; y < qualityMap[x].length; y++) {
