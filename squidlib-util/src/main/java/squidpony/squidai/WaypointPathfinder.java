@@ -10,6 +10,8 @@ import squidpony.squidmath.StatefulRNG;
 
 import java.util.*;
 
+import static squidpony.squidmath.CoordPacker.*;
+
 /**
  * Pathfind to known connections between rooms or other "chokepoints" without needing full-map Dijkstra scans.
  * Pre-calculates a path either from or to any given chokepoint to each other chokepoint.
@@ -103,7 +105,8 @@ public class WaypointPathfinder {
                 }
             }
         }
-/*
+
+        /*
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if(expansionMap[x][y] <= 0)
@@ -128,6 +131,176 @@ public class WaypointPathfinder {
             System.out.println();
         }
 */
+
+        dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+
+        int e = 0;
+        for(Map.Entry<Coord, LinkedHashMap<Coord, Edge>> n : waypoints.entrySet())
+        {
+            chokes.remove(n.getKey());
+            if(chokes.isEmpty())
+                break;
+            dm.clearGoals();
+            dm.resetMap();
+            dm.setGoal(n.getKey());
+            dm.scan(null);
+            for(Coord c : chokes)
+            {
+                n.getValue().put(c, new Edge(n.getKey(), c, dm.findPathPreScanned(c), dm.gradientMap[c.x][c.y]));
+            }
+        }
+
+    }
+    /**
+     * Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
+     * Will use the given Radius enum to determine how to handle DijkstraMap measurement in future pathfinding.
+     * Uses rng for all random choices, or a new unseeded RNG if the parameter is null.
+     * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.
+     * @param measurement a Radius that should correspond to how you want path distance calculated.
+     * @param rng an RNG object or null (which will make this use a new RNG); will be used for all random choices
+     * @param thickCorridors true if most chokepoints on the map are 2 cells wide instead of 1
+     */
+    public WaypointPathfinder(char[][] map, Radius measurement, RNG rng, boolean thickCorridors)
+    {
+        if(rng == null)
+            this.rng = new StatefulRNG();
+        else
+            this.rng = rng;
+        this.map = map;
+        width = map.length;
+        height = map[0].length;
+        char[][] simplified = DungeonUtility.simplifyDungeon(map);
+        expansionMap = new int[width][height];
+        waypoints = new LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>>(64);
+        LinkedHashSet<Coord> chokes = new LinkedHashSet<Coord>(128);
+
+        if(thickCorridors)
+        {
+            short[] floors = pack(simplified, '.'),
+                    rooms = flood(floors, retract(floors, 1, 60, 60, true), 2, false),
+                    corridors = differencePacked(floors, rooms),
+                    doors = intersectPacked(rooms, fringe(corridors, 1, 60, 60, false));
+            Coord[] apart = apartPacked(doors, 1);
+            Collections.addAll(chokes, apart);
+            for (int i = 0; i < apart.length; i++) {
+                waypoints.put(apart[i], new LinkedHashMap<Coord, Edge>());
+            }
+        }
+        else {
+            ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
+                    Math.min(width, height) * 0.4f, this.rng, '#');
+            int centerCount = centers.size();
+            dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
+
+            for (Coord center : centers) {
+                dm.clearGoals();
+                dm.resetMap();
+                dm.setGoal(center);
+                dm.scan(null);
+                double current;
+                for (int i = 0; i < width; i++) {
+                    for (int j = 0; j < height; j++) {
+                        current = dm.gradientMap[i][j];
+                        if (current >= DijkstraMap.FLOOR)
+                            continue;
+                        if (center.x == i && center.y == j)
+                            expansionMap[i][j]++;
+                        for (Direction dir : Direction.CARDINALS) {
+                            if (dm.gradientMap[i + dir.deltaX][j + dir.deltaY] == current + 1 ||
+                                    dm.gradientMap[i + dir.deltaX][j + dir.deltaY] == current - 1)
+                                expansionMap[i][j]++;
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    expansionMap[i][j] /= centerCount;
+                }
+            }
+
+            for (int i = 0; i < width; i++) {
+                ELEMENT_WISE:
+                for (int j = 0; j < height; j++) {
+                    if (expansionMap[i][j] <= 0)
+                        continue;
+                    int current = expansionMap[i][j];
+                    boolean good = false;
+                    for (Direction dir : Direction.CARDINALS) {
+                        if (chokes.contains(Coord.get(i + dir.deltaX, j + dir.deltaY)))
+                            continue ELEMENT_WISE;
+                        if (expansionMap[i + dir.deltaX][j + dir.deltaY] > 0 && expansionMap[i + dir.deltaX][j + dir.deltaY] > current + 1 ||
+                                (expansionMap[i + dir.deltaX][j + dir.deltaY] > current && expansionMap[i][j] <= 2)) {
+                            if (expansionMap[i - dir.deltaX][j - dir.deltaY] > 0 && expansionMap[i - dir.deltaX][j - dir.deltaY] >= current) {
+                                good = true;
+                            }
+                        }
+                    }
+
+                    if (good) {
+                        Coord chk = Coord.get(i, j);
+                        chokes.add(chk);
+                        waypoints.put(chk, new LinkedHashMap<Coord, Edge>());
+                    }
+                }
+            }
+        }
+
+        dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
+
+        int e = 0;
+        for(Map.Entry<Coord, LinkedHashMap<Coord, Edge>> n : waypoints.entrySet())
+        {
+            chokes.remove(n.getKey());
+            if(chokes.isEmpty())
+                break;
+            dm.clearGoals();
+            dm.resetMap();
+            dm.setGoal(n.getKey());
+            dm.scan(null);
+            for(Coord c : chokes)
+            {
+                n.getValue().put(c, new Edge(n.getKey(), c, dm.findPathPreScanned(c), dm.gradientMap[c.x][c.y]));
+            }
+        }
+
+    }
+
+    /**
+     * Calculates and stores the specified fraction of walkable points from map as waypoints. Does not perform any
+     * analysis of chokepoints and acts as a more brute-force solution when maps may be unpredictable. The lack of an
+     * analysis step may mean this could have drastically less of a penalty to startup time than the other constructors,
+     * and with the right fraction parameter (29 seems ideal), may perform better as well. Will use the given Radius
+     * enum to determine how to handle DijkstraMap measurement in future pathfinding. Uses rng for all random choices,
+     * or a new unseeded RNG if the parameter is null.
+     * <br>
+     * Remember, a fraction value of 29 works well!
+     * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.
+     * @param measurement a Radius that should correspond to how you want path distance calculated.
+     * @param rng an RNG object or null (which will make this use a new RNG); will be used for all random choices
+     * @param fraction the fractional denominator of passable cells to assign as waypoints; use 29 if you aren't sure
+     */
+    public WaypointPathfinder(char[][] map, Radius measurement, RNG rng, int fraction)
+    {
+        if(rng == null)
+            this.rng = new StatefulRNG();
+        else
+            this.rng = rng;
+        this.map = map;
+        width = map.length;
+        height = map[0].length;
+        char[][] simplified = DungeonUtility.simplifyDungeon(map);
+        expansionMap = new int[width][height];
+        waypoints = new LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>>(64);
+        LinkedHashSet<Coord> chokes = new LinkedHashSet<Coord>(128);
+
+        short[] floors = pack(simplified, '.');
+        Coord[] apart = fractionPacked(floors, fraction);
+        Collections.addAll(chokes, apart);
+        for (int i = 0; i < apart.length; i++) {
+            waypoints.put(apart[i], new LinkedHashMap<Coord, Edge>());
+        }
 
         dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
 
