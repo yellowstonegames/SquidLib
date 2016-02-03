@@ -64,8 +64,8 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public SpatialMap()
     {
-        itemMapping = new LinkedHashMap<I, SpatialTriple<I, E>>(32);
-        positionMapping = new LinkedHashMap<Coord, SpatialTriple<I, E>>(32);
+        itemMapping = new LinkedHashMap<>(32);
+        positionMapping = new LinkedHashMap<>(32);
     }
 
     /**
@@ -74,8 +74,8 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public SpatialMap(int capacity)
     {
-        itemMapping = new LinkedHashMap<I, SpatialTriple<I, E>>(capacity);
-        positionMapping = new LinkedHashMap<Coord, SpatialTriple<I, E>>(capacity);
+        itemMapping = new LinkedHashMap<>(capacity);
+        positionMapping = new LinkedHashMap<>(capacity);
     }
 
     /**
@@ -88,9 +88,9 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public SpatialMap(Coord[] coords, I[] ids, E[] elements)
     {
-        itemMapping = new LinkedHashMap<I, SpatialTriple<I, E>>(
+        itemMapping = new LinkedHashMap<>(
                 Math.min(coords.length, Math.min(ids.length, elements.length)));
-        positionMapping = new LinkedHashMap<Coord, SpatialTriple<I, E>>(
+        positionMapping = new LinkedHashMap<>(
                 Math.min(coords.length, Math.min(ids.length, elements.length)));
 
         for (int i = 0; i < coords.length && i < ids.length && i < elements.length; i++) {
@@ -109,9 +109,9 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public SpatialMap(Collection<Coord> coords, Collection<I> ids, Collection<E> elements)
     {
-        itemMapping = new LinkedHashMap<I, SpatialTriple<I, E>>(
+        itemMapping = new LinkedHashMap<>(
                 Math.min(coords.size(), Math.min(ids.size(), elements.size())));
-        positionMapping = new LinkedHashMap<Coord, SpatialTriple<I, E>>(
+        positionMapping = new LinkedHashMap<>(
                 Math.min(coords.size(), Math.min(ids.size(), elements.size())));
         if(itemMapping.size() <= 0)
             return;
@@ -142,7 +142,7 @@ public class SpatialMap<I, E> implements Iterable<E> {
             return;
         if(positionMapping.get(coord) == null)
         {
-            SpatialTriple<I, E> triple = new SpatialTriple<I, E>(coord, id, element);
+            SpatialTriple<I, E> triple = new SpatialTriple<>(coord, id, element);
             itemMapping.put(id, triple);
             positionMapping.put(coord, triple);
         }
@@ -158,7 +158,7 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public void put(Coord coord, I id, E element)
     {
-        SpatialTriple<I, E> triple = new SpatialTriple<I, E>(coord, id, element);
+        SpatialTriple<I, E> triple = new SpatialTriple<>(coord, id, element);
         itemMapping.remove(id);
         positionMapping.remove(coord);
         itemMapping.put(id, triple);
@@ -373,7 +373,7 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public LinkedHashSet<Coord> positions()
     {
-        return new LinkedHashSet<Coord>(positionMapping.keySet());
+        return new LinkedHashSet<>(positionMapping.keySet());
     }
     /**
      * Get a Set of all identities used for values in this data structure, returning a LinkedHashSet (defensively
@@ -382,7 +382,7 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public LinkedHashSet<I> identities()
     {
-        return new LinkedHashSet<I>(itemMapping.keySet());
+        return new LinkedHashSet<>(itemMapping.keySet());
     }
 
     /**

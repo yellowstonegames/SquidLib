@@ -199,7 +199,7 @@ public class TextCellFactory implements Disposable {
                 bmpFont = DefaultResources.getDefaultFont();
         }
         else {
-            assetManager.load(new AssetDescriptor<BitmapFont>(fontpath, BitmapFont.class));
+            assetManager.load(new AssetDescriptor<>(fontpath, BitmapFont.class));
 			/*
 			 * We're using the AssetManager not be asynchronous, but to avoid
 			 * loading a file twice (because that takes some time (tens of

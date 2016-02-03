@@ -339,8 +339,8 @@ public class LOS {
     private boolean thickReachable(Radius radiusStrategy) {
         lastPath = new LinkedList<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety), decay = 1 / dist;
-        LinkedHashSet<Coord> visited = new LinkedHashSet<Coord>((int) dist + 3);
-        List<List<Coord>> paths = new ArrayList<List<Coord>>(4);
+        LinkedHashSet<Coord> visited = new LinkedHashSet<>((int) dist + 3);
+        List<List<Coord>> paths = new ArrayList<>(4);
         /* // actual corners
         paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0));
         paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0xffff));
@@ -387,8 +387,8 @@ public class LOS {
     private boolean brushReachable(Radius radiusStrategy, int spread) {
         lastPath = new LinkedList<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2, decay = 1 / dist;
-        LinkedHashSet<Coord> visited = new LinkedHashSet<Coord>((int)(dist + 3) * spread);
-        List<List<Coord>> paths = new ArrayList<List<Coord>>((int)(radiusStrategy.volume2D(spread) * 1.25));
+        LinkedHashSet<Coord> visited = new LinkedHashSet<>((int) (dist + 3) * spread);
+        List<List<Coord>> paths = new ArrayList<>((int) (radiusStrategy.volume2D(spread) * 1.25));
         int length = 0;
         List<Coord> currentPath;
         for (int i = -spread; i <= spread; i++) {

@@ -1234,7 +1234,7 @@ public class CoordPacker {
      */
     public static ArrayList<short[]> findManyPacked(int x, int y, short[] ... packed)
     {
-        ArrayList<short[]> packs = new ArrayList<short[]>(packed.length);
+        ArrayList<short[]> packs = new ArrayList<>(packed.length);
         int hilbertDistance = posToHilbert(x, y);
         for (int a = 0; a < packed.length; a++) {
             if(packed[a] == null) continue;
@@ -1266,7 +1266,7 @@ public class CoordPacker {
      */
     public static ArrayList<short[]> findManyPackedHilbert(short hilbert, short[] ... packed)
     {
-        ArrayList<short[]> packs = new ArrayList<short[]>(packed.length);
+        ArrayList<short[]> packs = new ArrayList<>(packed.length);
         int hilbertDistance = hilbert & 0xffff;
         for (int a = 0; a < packed.length; a++) {
             int total = 0;
@@ -3742,7 +3742,7 @@ public class CoordPacker {
      */
     public static ArrayList<short[]> split(short[] packed)
     {
-        ArrayList<short[]> arrays = new ArrayList<short[]>(32);
+        ArrayList<short[]> arrays = new ArrayList<>(32);
         short[] remaining = Arrays.copyOf(packed, packed.length);
         while (remaining.length > 1) {
             boolean on = false;
@@ -3838,7 +3838,7 @@ public class CoordPacker {
     public static ArrayList<Coord> randomPortion(short[] packed, int size, RNG rng)
     {
         int counted = count(packed);
-        ArrayList<Coord> coords = new ArrayList<Coord>(Math.min(counted, size));
+        ArrayList<Coord> coords = new ArrayList<>(Math.min(counted, size));
         if(counted == 0 || size == 0)
             return coords;
         int[] data = rng.randomRange(0, counted, Math.min(counted, size));

@@ -104,8 +104,8 @@ public class BasicDemo extends ApplicationAdapter {
         //creatures, and possibly a subclass for the player.
         player = dungeonGen.utility.randomCell(placement);
         //This is used to allow clicks or taps to take the player to the desired area.
-        toCursor = new ArrayList<Coord>(100);
-        awaitedMoves = new ArrayList<Coord>(100);
+        toCursor = new ArrayList<>(100);
+        awaitedMoves = new ArrayList<>(100);
         //DijkstraMap is the pathfinding swiss-army knife we use here to find a path to the latest cursor position.
         playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.MANHATTAN);
         bgColor = SColor.DARK_SLATE_GRAY;

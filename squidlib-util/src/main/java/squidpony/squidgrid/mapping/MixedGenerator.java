@@ -90,12 +90,12 @@ public class MixedGenerator {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
         }
         totalPoints = sequence.size() - 1;
-        points = new ArrayList<Long>(totalPoints);
+        points = new ArrayList<>(totalPoints);
         for (int i = 0; i < totalPoints; i++) {
             Coord c1 = sequence.get(i), c2 = sequence.get(i + 1);
             points.add(((c1.x & 0xffL) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
         }
-        carvers = new EnumMap<CarverType, Integer>(CarverType.class);
+        carvers = new EnumMap<>(CarverType.class);
     }
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
@@ -148,14 +148,14 @@ public class MixedGenerator {
         {
             totalPoints += vals.size();
         }
-        points = new ArrayList<Long>(totalPoints);
+        points = new ArrayList<>(totalPoints);
         for (Map.Entry<Coord, List<Coord>> kv : connections.entrySet()) {
             Coord c1 = kv.getKey();
             for (Coord c2 : kv.getValue()) {
                 points.add(((c1.x & 0xffL) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
             }
         }
-        carvers = new EnumMap<CarverType, Integer>(CarverType.class);
+        carvers = new EnumMap<>(CarverType.class);
     }
 
     /**

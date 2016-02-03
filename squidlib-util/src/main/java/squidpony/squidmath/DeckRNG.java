@@ -183,7 +183,7 @@ public class DeckRNG extends StatefulRNG {
         if (list.isEmpty()) {
             return null;
         }
-        return new ArrayList<T>(list).get(nextInt(list.size()));
+        return new ArrayList<>(list).get(nextInt(list.size()));
     }
 
     /**
