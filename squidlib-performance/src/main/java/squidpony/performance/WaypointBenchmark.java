@@ -30,6 +30,7 @@
  */
 
 package squidpony.performance;
+
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -52,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WaypointBenchmark {
 
-    public static final int DIMENSION = 120, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 60, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
@@ -61,18 +62,35 @@ public class WaypointBenchmark {
     public static final char[][] map;
     public static final short[] floors;
     static {
-        serpent.putWalledBoxRoomCarvers(1);
+        serpent.putRoundRoomCarvers(1);
         map = dungeonGen.generate(serpent.generate());
+        System.out.println(dungeonGen.toString());
         floors = CoordPacker.pack(map, '.');
     }
 
+    public WaypointPathfinder waypoint()
+    {
+        return new WaypointPathfinder(
+                map, Radius.SQUARE, new StatefulRNG(0x1337BEEF), false);
+    }
+
+    public WaypointPathfinder waypoint2()
+    {
+        return new WaypointPathfinder(
+                map, Radius.SQUARE, new StatefulRNG(0x1337BEEF), true);
+    }
+
+    public WaypointPathfinder waypoint3()
+    {
+        return new WaypointPathfinder(
+                map, Radius.SQUARE, new StatefulRNG(0x1337BEEF), 29);
+    }
     public long doPath()
     {
-        WaypointPathfinder way = new WaypointPathfinder(
-                map, Radius.SQUARE, new StatefulRNG(new LightRNG(0x1337BEEF)));
+        WaypointPathfinder way = waypoint();
         Coord r;
         long scanned = 0;
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
                 if (map[x][y] == '#')
@@ -88,11 +106,107 @@ public class WaypointBenchmark {
         return scanned;
     }
     @Benchmark
-    @BenchmarkMode(Mode.SampleTime)
+    @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePath() throws InterruptedException {
         System.out.println(doPath());
     }
+
+    public long doPath2()
+    {
+        WaypointPathfinder way = waypoint2();
+        Coord r;
+        long scanned = 0;
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                utility.rng.setState((x << 22) | (y << 16) | (x * y));
+                ((StatefulRNG) way.rng).setState((x << 20) | (y << 14) | (x * y));
+                r = utility.randomCell(floors);
+                way.getKnownPath(r, Coord.get(x, y));
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measurePath2() throws InterruptedException {
+        System.out.println(doPath2());
+    }
+
+
+    public long doPath3()
+    {
+        WaypointPathfinder way = waypoint3();
+        Coord r;
+        long scanned = 0;
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                utility.rng.setState((x << 22) | (y << 16) | (x * y));
+                ((StatefulRNG) way.rng).setState((x << 20) | (y << 14) | (x * y));
+                r = utility.randomCell(floors);
+                way.getKnownPath(r, Coord.get(x, y));
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measurePath3() throws InterruptedException {
+        System.out.println(doPath3());
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureWaypoint() throws InterruptedException {
+        WaypointPathfinder w = waypoint();
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureWaypoint2() throws InterruptedException {
+        WaypointPathfinder w = waypoint2();
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void measureWaypoint3() throws InterruptedException {
+        WaypointPathfinder w = waypoint3();
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.SingleShotTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void countWaypoint() throws InterruptedException {
+        WaypointPathfinder w = waypoint();
+        System.out.println("Dijkstra chokepoint count: " + w.getWaypoints().size());
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.SingleShotTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void countWaypoint2() throws InterruptedException {
+        WaypointPathfinder w = waypoint2();
+        System.out.println("Packer chokepoint count: " + w.getWaypoints().size());
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.SingleShotTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void countWaypoint3() throws InterruptedException {
+        WaypointPathfinder w = waypoint3();
+        System.out.println("Apart chokepoint count: " + w.getWaypoints().size());
+    }
+
 
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================

@@ -11,6 +11,7 @@ import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import static org.junit.Assert.*;
@@ -308,13 +309,14 @@ public class CoordPackerTest {
         char[][] map = dungeonGenerator.generate(serpent.generate());
         short[] floors = pack(map, '.');
         Coord[] positions = fractionPacked(floors, 6);
-
+        /*
         System.out.println(positions.length);
         System.out.println(count(floors));
         System.out.println(positions.length * 1.0 / count(floors));
         printPacked(packSeveral(positions), 60, 60);
         System.out.println();
         printPacked(floors, 60, 60);
+        */
 
     }
     //Uncomment the @Test line to get a lot of printed info regarding room-finding
@@ -324,21 +326,30 @@ public class CoordPackerTest {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(60, 60, rng);
         SerpentMapGenerator serpent = new SerpentMapGenerator(60, 60, rng);
-        serpent.putWalledBoxRoomCarvers(1);
-        char[][] map = dungeonGenerator.generate(serpent.generate());
+        serpent.putRoundRoomCarvers(1);
+        serpent.putBoxRoomCarvers(1);
+        char[][] map = dungeonGenerator.generate(); //serpent.generate()
         short[] floors = pack(map, '.'),
-                rooms = intersectPacked(floors, expand(retract(floors, 1, 60, 60, true), 1, 60, 60, true)),
-                corridors = differencePacked(floors, rooms);
+                shrunk = retract(floors, 1, 60, 60, true),
+                rooms = flood(floors, shrunk, 2, false),
+                corridors = differencePacked(floors, rooms),
+                doors = intersectPacked(rooms, fringe(corridors, 1, 60, 60, false));
 
+        printPacked(floors, 60, 60);
+        System.out.println();
+        printPacked(shrunk, 60, 60);
+        System.out.println();
         printPacked(rooms, 60, 60);
         System.out.println();
         printPacked(corridors, 60, 60);
         System.out.println();
-        printPacked(floors, 60, 60);
+        printPacked(doors, 60, 60);
         System.out.println();
-        short[][] separated = split(rooms);
-        for (int i = 0; i < separated.length; i++) {
-            printPacked(separated[i], 60, 60);
+        ArrayList<short[]> separatedCorridors = split(corridors), separatedRooms = split(rooms);
+        for (short[] sep : separatedCorridors) {
+            short[] someDoors = intersectPacked(rooms, fringe(sep, 1, 60, 60, false)),
+                    connectedRooms = flood(rooms, someDoors, 512, false);
+            printPacked(unionPacked(sep, connectedRooms), 60, 60);
             System.out.println();
         }
 

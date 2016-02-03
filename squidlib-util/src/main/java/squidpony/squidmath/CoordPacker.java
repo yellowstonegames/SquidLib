@@ -1383,6 +1383,8 @@ public class CoordPacker {
      */
     public static short[] fractionPackedHilbert(short[] packed, int fraction)
     {
+        if(fraction <= 1)
+            return allPackedHilbert(packed);
         ShortVLA vla = new ShortVLA(64);
         boolean on = false;
         int idx = 0, ctr = 0;
@@ -1398,6 +1400,184 @@ public class CoordPacker {
         return vla.toArray();
     }
 
+    /**
+     * Gets the positions that are "on" in the given packed array, without unpacking it, keeps only positions that are
+     * at least minDistance apart from other positions this will return, and returns the positions as a Coord[].
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @param minDistance the minimum distance (measured 8-way, Chebyshev) between any positions this returns
+     * @return a Coord[] corresponding to a portion of the "on" cells in packed.
+     */
+    public static Coord[] apartPacked(short[] packed, int minDistance)
+    {
+        if(minDistance < 1)
+            return allPacked(packed);
+        ShortVLA vla = new ShortVLA(64);
+        boolean on = false;
+        int idx = 0;
+        ShortSet ss = new ShortSet(256);
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y << 8)];
+                    if (ss.add((short) dist)) {
+                        for (int xx = Math.max(0, x - minDistance); xx <= Math.min(255, x + minDistance); xx++) {
+                            for (int yy = Math.max(0, y - minDistance); yy <= Math.min(255, y + minDistance); yy++) {
+                                dist = hilbertDistances[xx + (yy << 8)];
+                                if(dist >= i)
+                                    ss.add((short) dist);
+                            }
+                        }
+                        vla.add((short) i);
+                    }
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        int[] distances = vla.asInts();
+        Coord[] cs = new Coord[distances.length];
+        for (int i = 0; i < distances.length; i++) {
+            cs[i] = Coord.get(hilbertX[distances[i]], hilbertY[distances[i]]);
+        }
+        return cs;
+    }
+    /**
+     * Gets the positions that are "on" in the given packed array, without unpacking it, keeps only positions that are
+     * at least minDistance apart from other positions this will return, and returns the positions as a Coord[].
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @param minDistance the minimum distance (measurement depends on eightWay) between any positions this returns
+     * @param eightWay true if distance should be measured equally in 8 directions, false to use 4 directions
+     * @return a Coord[] corresponding to a portion of the "on" cells in packed.
+     */
+    public static Coord[] apartPacked(short[] packed, int minDistance, boolean eightWay)
+    {
+        if(minDistance < 1)
+            return allPacked(packed);
+        if(eightWay)
+            return apartPacked(packed, minDistance);
+
+        ShortVLA vla = new ShortVLA(64);
+        boolean on = false;
+        int idx = 0;
+        ShortSet ss = new ShortSet(256);
+        int xx, yy;
+        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y << 8)];
+                    if (ss.add((short) dist)) {
+                        for (int d = 0; d < 4; d++) {
+                            for (int e = 1; e <= minDistance; e++) {
+                                for (int e2 = 0; e2 < minDistance; e2++) {
+                                    xx = Math.min(255, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
+                                    yy = Math.min(255, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
+                                    dist = hilbertDistances[xx + (yy << 8)];
+                                    if (dist >= i)
+                                        ss.add((short) dist);
+                                }
+                            }
+                        }
+                        vla.add((short) i);
+                    }
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        int[] distances = vla.asInts();
+        Coord[] cs = new Coord[distances.length];
+        for (int i = 0; i < distances.length; i++) {
+            cs[i] = Coord.get(hilbertX[distances[i]], hilbertY[distances[i]]);
+        }
+        return cs;
+    }
+
+    /**
+     * Gets the positions that are "on" in the given packed array, without unpacking it, keeps only positions that are
+     * at least minDistance apart from other positions this will return, and returns the positions as an array of
+     * Hilbert Curve indices.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @param minDistance the minimum distance (measured 8-way, Chebyshev) between any positions this returns
+     * @return a Hilbert Curve index array corresponding to a portion of the "on" cells in packed.
+     */
+    public static short[] apartPackedHilbert(short[] packed, int minDistance)
+    {
+        if(minDistance < 1)
+            return allPackedHilbert(packed);
+        ShortVLA vla = new ShortVLA(64);
+        boolean on = false;
+        int idx = 0;
+        ShortSet ss = new ShortSet(256);
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y << 8)];
+                    if (ss.add((short) dist)) {
+                        for (int xx = Math.max(0, x - minDistance); xx <= Math.min(255, x + minDistance); xx++) {
+                            for (int yy = Math.max(0, y - minDistance); yy <= Math.min(255, y + minDistance); yy++) {
+                                dist = hilbertDistances[xx + (yy << 8)];
+                                if(dist >= i)
+                                    ss.add((short) dist);
+                            }
+                        }
+                        vla.add((short) i);
+                    }
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        return vla.toArray();
+    }
+
+    /**
+     * Gets the positions that are "on" in the given packed array, without unpacking it, keeps only positions that are
+     * at least minDistance apart from other positions this will return, and returns the positions as an array of
+     * Hilbert Curve indices.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @param minDistance the minimum distance (measurement depends on eightWay) between any positions this returns
+     * @param eightWay true if distance should be measured equally in 8 directions, false to use 4 directions
+     * @return a Hilbert Curve index array corresponding to a portion of the "on" cells in packed.
+     */
+    public static short[] apartPackedHilbert(short[] packed, int minDistance, boolean eightWay)
+    {
+        if(minDistance < 1)
+            return allPackedHilbert(packed);
+        if(eightWay)
+            return apartPackedHilbert(packed, minDistance);
+
+        ShortVLA vla = new ShortVLA(64);
+        boolean on = false;
+        int idx = 0;
+        ShortSet ss = new ShortSet(256);
+        int xx, yy;
+        int[] xOffsets = new int[]{0, 1, 0, -1, 0}, yOffsets = new int[]{1, 0, -1, 0, 1};
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    int x = hilbertX[i], y = hilbertY[i], dist = hilbertDistances[x + (y << 8)];
+                    if (ss.add((short) dist)) {
+                        for (int d = 0; d < 4; d++) {
+                            for (int e = 1; e <= minDistance; e++) {
+                                for (int e2 = 0; e2 < minDistance; e2++) {
+                                    xx = Math.min(255, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
+                                    yy = Math.min(255, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
+                                    dist = hilbertDistances[xx + (yy << 8)];
+                                    if (dist >= i)
+                                        ss.add((short) dist);
+                                }
+                            }
+                        }
+                        vla.add((short) i);
+                    }
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        return vla.toArray();
+    }
     private static int clamp(int n, int min, int max)
     {
         return Math.min(Math.max(min, n), max - 1);
@@ -1558,6 +1738,9 @@ public class CoordPacker {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
                     x = hilbertX[i];
                     y = hilbertY[i];
+                    dist = hilbertDistances[x + (y << 8)];
+                    if (ss.add(dist))
+                        vla.add(dist);
                     for (int d = 0; d < 4; d++) {
                         for (int e = 1; e <= expansion; e++) {
                             for (int e2 = 0; e2 < expansion; e2++) {
@@ -1596,6 +1779,7 @@ public class CoordPacker {
             past = current;
         }
         vla.add((short)(skip+1));
+
         return vla.toArray();
     }
 
@@ -2374,6 +2558,8 @@ public class CoordPacker {
             idx += bounds[p] & 0xffff;
         }
         short[] s2 = allPackedHilbert(start);
+        ss.addAll(s2);
+        vla.addAll(s2);
         int[] xOffsets = new int[]{0, 1, 0, -1}, yOffsets = new int[]{1, 0, -1, 0};
         for (int e = 0; e < expansion; e++) {
             justAdded = false;
@@ -2382,6 +2568,7 @@ public class CoordPacker {
                 int i = s2[s] & 0xffff;
                 x = hilbertX[i];
                 y = hilbertY[i];
+
                 for (int d = 0; d < 4; d++) {
                     int j = Math.min(255, Math.max(0, x + xOffsets[d]));
                     int k = Math.min(255, Math.max(0, y + yOffsets[d]));
@@ -2465,6 +2652,8 @@ public class CoordPacker {
             idx += bounds[p] & 0xffff;
         }
         short[] s2 = allPackedHilbert(start);
+        ss.addAll(s2);
+        vla.addAll(s2);
         int[] xOffsets = new int[]{-1, 0, 1, -1,    1, -1, 0, 1}, yOffsets = new int[]{-1, -1, -1, 0,    0, 1, 1, 1};
         for (int e = 0; e < expansion; e++) {
             justAdded = false;
@@ -3532,24 +3721,26 @@ public class CoordPacker {
 
     /**
      * Given a packed data array that encodes multiple unconnected "on" areas, this finds each isolated area and returns
-     * it as an element in a short[][], with one short[] sub-array per isolated area. Useful when you have, for example,
-     * all the rooms in a dungeon with their connecting corridors removed, but want to separate the rooms. You can get
-     * the aforementioned data assuming a bare dungeon called map with WIDTH and HEIGHT constants with the idiom:
+     * it as an element in an ArrayList of short[], with one short[] array per isolated area. Useful when you have, for
+     * example, all the rooms in a dungeon with their connecting corridors removed, but want to separate the rooms. You
+     * can get the aforementioned data assuming a bare dungeon called map with WIDTH and HEIGHT constants using:
      * <br>
      * {@code short[] floors = pack(map, '.'),
-     * rooms = intersectPacked(floors, expand(retract(floors, 1, WIDTH, HEIGHT, true), 1, WIDTH, HEIGHT, true)),
-     * corridors = differencePacked(floors, rooms);}
+     * rooms = flood(floors, retract(floors, 1, 60, 60, true), 2, false),
+     * corridors = differencePacked(floors, rooms),
+     * doors = intersectPacked(rooms, fringe(corridors, 1, 60, 60, false));}
      * <br>
-     * You can then get all rooms as separate regions with {@code short[][] separated = split(rooms);}, or substitute
+     * You can then get all rooms as separate regions with {@code List<short[]> apart = split(rooms);}, or substitute
      * {@code split(corridors)} to get the corridors. The room-finding technique works by shrinking floors by a radius
-     * of 1, which causes thin areas like corridors of 2 or less width to be removed, then expanding the area that
-     * produces by 1 to restore the original size of non-corridor areas, and ensuring that anything produced by that
-     * technique is within the bounds of floors by intersecting that with the original floors data. Corridors are
-     * obtained by removing the rooms from floors.
+     * of 1 (8-way), which causes thin areas like corridors of 2 or less width to be removed, then flood-filling the
+     * floors out from the area that produces by 2 cells (4-way this time) to restore the original size of non-corridor
+     * areas (plus some extra to ensure odd shapes are kept). Corridors are obtained by removing the rooms from floors.
+     * The example code also gets the doors (which overlap with rooms, not corridors) by finding where the a room and a
+     * corridor are adjacent.
      * @param packed a packed data array that probably encodes multiple unconnected "on" areas
-     * @return a short[][] containing each unconnected area from packed as a short[] sub-element
+     * @return an ArrayList of short[] containing each unconnected area from packed as a short[] element
      */
-    public static short[][] split(short[] packed)
+    public static ArrayList<short[]> split(short[] packed)
     {
         ArrayList<short[]> arrays = new ArrayList<short[]>(32);
         short[] remaining = Arrays.copyOf(packed, packed.length);
@@ -3558,7 +3749,7 @@ public class CoordPacker {
             int idx = 0;
             for (int p = 0; p < remaining.length; p++, on = !on) {
                 if (on) {
-                    short[] area = flood(packed, packOne((short) idx), 256, true);
+                    short[] area = flood(packed, packOne((short) idx), 512, false);
                     arrays.add(area);
                     remaining = differencePacked(remaining, area);
                     break;
@@ -3566,7 +3757,7 @@ public class CoordPacker {
                 idx += remaining[p] & 0xffff;
             }
         }
-        return arrays.toArray(new short[arrays.size()][]);
+        return arrays;
     }
     /**
      * Gets a random subset of positions that are "on" in the given packed array, without unpacking it, and returns
