@@ -3136,6 +3136,44 @@ public class CoordPacker {
         }
         return c;
     }
+
+
+    /**
+     * Finds the minimum bounding rectangle for a packed array without unpacking it. Returns a Coord array with 2
+     * elements: the minimum-x/minimum-y Coord corner of the bounds, then the maximum-x/maximum-y Coord corner. Both
+     * array elements will be the Coord (-1,-1) if the packed array does not encode any "on" values (all empty).
+     * @param packed a packed short array, as produced by pack()
+     * @return a 2-element Coord array starting with the bounds' minimum corner and followed by the maximum corner
+     */
+    public static Coord[] bounds(short[] packed)
+    {
+        Coord[] c = new Coord[]{Coord.get(-1,-1), Coord.get(-1,-1)};
+        boolean on = false;
+        int idx = 0, min_x = 256, min_y = 256, max_x = -1, max_y = -1, x, y;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    if(min_x > x)
+                        min_x = x;
+                    if(min_y > y)
+                        min_y = y;
+                    if(max_x < x)
+                        max_x = x;
+                    if(max_y < y)
+                        max_y = y;
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        if(min_x < 256) {
+            c[0] = Coord.get(min_x, min_y);
+            c[1] = Coord.get(max_x, max_y);
+        }
+        return c;
+    }
+
     /**
      * Given two packed short arrays, left and right, this produces a packed short array that encodes "on" for any cell
      * that was "on" in either left or in right, and only encodes "off" for cells that were off in both. This method
