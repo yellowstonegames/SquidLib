@@ -25,14 +25,14 @@ public class SoundTest {
 
             System.out.println(dg);
 
-            HashSet<Coord> dudes = new HashSet<Coord>(5);
+            HashSet<Coord> dudes = new HashSet<>(5);
             dudes.add(dg.utility.randomFloor(dun));
             dudes.add(dg.utility.randomFloor(dun));
             dudes.add(dg.utility.randomFloor(dun));
             dudes.add(dg.utility.randomFloor(dun));
             dudes.add(dg.utility.randomFloor(dun));
 
-            HashMap<Coord, Double> noises = new HashMap<Coord, Double>(8);
+            HashMap<Coord, Double> noises = new HashMap<>(8);
             for(int i = 0; i < 6; i++)
             {
                 noises.put(dg.utility.randomStep(dun, dg.utility.randomFloor(dun),

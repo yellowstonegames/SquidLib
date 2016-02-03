@@ -118,8 +118,8 @@ public class PoissonDisk {
         int gridWidth = (int)(dimensions.x / cellSize) + 1;
         int gridHeight = (int)(dimensions.y / cellSize) + 1;
         Coord[][] grid = new Coord[gridWidth][gridHeight];
-        ArrayList<Coord> activePoints = new ArrayList<Coord>();
-        LinkedHashSet<Coord> points = new LinkedHashSet<Coord>(128);
+        ArrayList<Coord> activePoints = new ArrayList<>();
+        LinkedHashSet<Coord> points = new LinkedHashSet<>(128);
 
         //add first point
         boolean added = false;
@@ -194,7 +194,7 @@ public class PoissonDisk {
             if (!found)
                 activePoints.remove(listIndex);
         }
-        activePoints = new ArrayList<Coord>(points);
+        activePoints = new ArrayList<>(points);
         return activePoints;
     }
 
@@ -209,7 +209,7 @@ public class PoissonDisk {
                                              float minimumDistance, RNG rng, Character... blocking) {
         int width = map.length;
         int height = map[0].length;
-        HashSet<Character> blocked = new HashSet<Character>();
+        HashSet<Character> blocked = new HashSet<>();
         Collections.addAll(blocked, blocking);
         boolean restricted = false;
         if (blocked.size() > 0) {
@@ -220,8 +220,8 @@ public class PoissonDisk {
         int gridWidth = (int) (dimensions.x / cellSize) + 1;
         int gridHeight = (int) (dimensions.y / cellSize) + 1;
         Coord[][] grid = new Coord[gridWidth][gridHeight];
-        ArrayList<Coord> activePoints = new ArrayList<Coord>();
-        LinkedHashSet<Coord> points = new LinkedHashSet<Coord>(128);
+        ArrayList<Coord> activePoints = new ArrayList<>();
+        LinkedHashSet<Coord> points = new LinkedHashSet<>(128);
 
         //add first point
 
@@ -294,7 +294,7 @@ public class PoissonDisk {
             if (!found)
                 activePoints.remove(listIndex);
         }
-        activePoints = new ArrayList<Coord>(points);
+        activePoints = new ArrayList<>(points);
         return activePoints;
     }
     /**

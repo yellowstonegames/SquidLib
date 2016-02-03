@@ -21,8 +21,8 @@ import java.util.List;
  * Created by Tommy Ettinger on 12/10/2015.
  */
 public class SquidMessageBox extends SquidPanel {
-    protected ArrayList<IColoredString<Color>> messages = new ArrayList<IColoredString<Color>>(256);
-    protected ArrayList<Label> labels = new ArrayList<Label>(256);
+    protected ArrayList<IColoredString<Color>> messages = new ArrayList<>(256);
+    protected ArrayList<Label> labels = new ArrayList<>(256);
     protected int messageIndex = 0;
     //private static Pattern lineWrapper;
     protected GDXMarkup markup = new GDXMarkup();
@@ -132,7 +132,7 @@ public class SquidMessageBox extends SquidPanel {
      */
     public void appendMessage(String message)
     {
-        IColoredString.Impl<Color> truncated = new IColoredString.Impl<Color>(message, defaultForeground);
+        IColoredString.Impl<Color> truncated = new IColoredString.Impl<>(message, defaultForeground);
         truncated.setLength(gridWidth - 2);
         messages.add(truncated);
         messageIndex = messages.size() - 1;
@@ -149,7 +149,7 @@ public class SquidMessageBox extends SquidPanel {
             appendMessage(message);
             return;
         }
-        List<IColoredString<Color>> truncated = new IColoredString.Impl<Color>(message, defaultForeground).wrap(gridWidth - 2);;
+        List<IColoredString<Color>> truncated = new IColoredString.Impl<>(message, defaultForeground).wrap(gridWidth - 2);;
         for (IColoredString<Color> t : truncated)
         {
             appendMessage(t.present());
@@ -164,7 +164,7 @@ public class SquidMessageBox extends SquidPanel {
      */
     public void appendMessage(IColoredString<Color> message)
     {
-        IColoredString.Impl<Color> truncated = new IColoredString.Impl<Color>();
+        IColoredString.Impl<Color> truncated = new IColoredString.Impl<>();
         truncated.append(message);
         truncated.setLength(gridWidth - 2);
         messageIndex = messages.size() - 1;

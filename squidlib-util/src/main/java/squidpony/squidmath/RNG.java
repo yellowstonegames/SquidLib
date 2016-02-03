@@ -237,7 +237,7 @@ public class RNG implements Serializable {
         if (list.isEmpty()) {
             return null;
         }
-        return new ArrayList<T>(list).get(nextInt(list.size()));
+        return new ArrayList<>(list).get(nextInt(list.size()));
     }
 
 	/**
@@ -267,7 +267,7 @@ public class RNG implements Serializable {
 		 * Collections.rotate should prefer the best-performing way to rotate l, which would be an in-place
 		 * modification for ArrayLists and an append to a sublist for Lists that don't support efficient random access.
 		 */
-        List<T> l2 = new ArrayList<T>(l);
+        List<T> l2 = new ArrayList<>(l);
         Collections.rotate(l2, nextInt(sz));
         return l2;
 	}
@@ -389,7 +389,7 @@ public class RNG implements Serializable {
      */
     public <T> ArrayList<T> shuffle(List<T> elements)
     {
-        ArrayList<T> al = new ArrayList<T>(elements);
+        ArrayList<T> al = new ArrayList<>(elements);
         int n = al.size();
         for (int i = 0; i < n; i++)
         {

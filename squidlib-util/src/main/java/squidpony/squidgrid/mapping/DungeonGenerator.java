@@ -146,7 +146,7 @@ public class DungeonGenerator {
         rebuildSeed = rng.getState();
         height = 40;
         width = 40;
-        fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
+        fx = new EnumMap<>(FillEffect.class);
     }
 
     /**
@@ -175,7 +175,7 @@ public class DungeonGenerator {
         rebuildSeed = this.rng.getState();
         this.height = height;
         this.width = width;
-        fx = new EnumMap<FillEffect, Integer>(FillEffect.class);
+        fx = new EnumMap<>(FillEffect.class);
     }
 
     /**
@@ -190,7 +190,7 @@ public class DungeonGenerator {
         rebuildSeed = rng.getState();
         height = copying.height;
         width = copying.width;
-        fx = new EnumMap<FillEffect, Integer>(copying.fx);
+        fx = new EnumMap<>(copying.fx);
         dungeon = copying.dungeon;
     }
 
@@ -348,7 +348,7 @@ public class DungeonGenerator {
 
     private LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map)
     {
-        LinkedHashSet<Coord> doors = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> doors = new LinkedHashSet<>();
         for(int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map[x].length - 1; y++) {
                 if(map[x][y] == '#')
@@ -528,9 +528,9 @@ public class DungeonGenerator {
     private char[][] innerGenerate(char[][] map)
     {
 
-        LinkedHashSet<Coord> floors = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> floors = new LinkedHashSet<>();
         LinkedHashSet<Coord> doorways;
-        LinkedHashSet<Coord> hazards = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
         Coord temp;
         boolean doubleDoors = false;
         int doorFill = 0;
@@ -573,7 +573,7 @@ public class DungeonGenerator {
         floorRate -= waterRate + grassRate;
         doorways = viableDoorways(doubleDoors, map);
 
-        LinkedHashSet<Coord> obstacles = new LinkedHashSet<Coord>(doorways.size() * doorFill / 100);
+        LinkedHashSet<Coord> obstacles = new LinkedHashSet<>(doorways.size() * doorFill / 100);
         if(doorFill > 0)
         {
             int total = doorways.size() * doorFill / 100;
@@ -641,7 +641,7 @@ public class DungeonGenerator {
         }
 
         MultiSpill ms = new MultiSpill(map, Spill.Measurement.MANHATTAN, rng);
-        LinkedHashMap<Coord, Double> fillers = new LinkedHashMap<Coord, Double>(128);
+        LinkedHashMap<Coord, Double> fillers = new LinkedHashMap<>(128);
         ArrayList<Coord> dots = PoissonDisk.sampleMap(map, Math.min(width, height) / 8f, rng, '#', '+', '/','<', '>');
         for (int i = 0; i < dots.size(); i++) {
             switch (i % 3) {
@@ -741,9 +741,9 @@ public class DungeonGenerator {
 	private char[][] innerGenerateOld(char[][] map)
     {
 
-        LinkedHashSet<Coord> floors = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> floors = new LinkedHashSet<>();
         LinkedHashSet<Coord> doorways;
-        LinkedHashSet<Coord> hazards = new LinkedHashSet<Coord>();
+        LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
         Coord temp;
         boolean doubleDoors = false;
         int doorFill = 0;
@@ -775,7 +775,7 @@ public class DungeonGenerator {
 
         doorways = viableDoorways(doubleDoors, map);
 
-        LinkedHashSet<Coord> obstacles = new LinkedHashSet<Coord>(doorways.size() * doorFill / 100);
+        LinkedHashSet<Coord> obstacles = new LinkedHashSet<>(doorways.size() * doorFill / 100);
         if(doorFill > 0)
         {
             int total = doorways.size() * doorFill / 100;
@@ -861,7 +861,7 @@ public class DungeonGenerator {
                 Coord entry = floors.toArray(new Coord[floors.size()])[rng.nextInt(floors.size())];
                 spill.start(entry, volumes[i] / 3, obstacles);
                 spill.start(entry, 2 * volumes[i] / 3, obstacles);
-                ArrayList<Coord> ordered = new ArrayList<Coord>(spill.start(entry, volumes[i], obstacles));
+                ArrayList<Coord> ordered = new ArrayList<>(spill.start(entry, volumes[i], obstacles));
                 floors.removeAll(ordered);
                 hazards.removeAll(ordered);
                 obstacles.addAll(ordered);
@@ -918,7 +918,7 @@ public class DungeonGenerator {
                 Coord entry = floors.toArray(new Coord[floors.size()])[rng.nextInt(floors.size())];
 //                spill.start(entry, volumes[i] / 3, obstacles);
 //                spill.start(entry, 2 * volumes[i] / 3, obstacles);
-                ArrayList<Coord> ordered = new ArrayList<Coord>(spill.start(entry, volumes[i], obstacles));
+                ArrayList<Coord> ordered = new ArrayList<>(spill.start(entry, volumes[i], obstacles));
                 floors.removeAll(ordered);
                 hazards.removeAll(ordered);
                 obstacles.addAll(ordered);

@@ -145,7 +145,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		 * An empty instance.
 		 */
 		public Impl() {
-			fragments = new LinkedList<Bucket<T>>();
+			fragments = new LinkedList<>();
 		}
 
 		/**
@@ -169,7 +169,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		 * @return {@code new Impl(s, t)}.
 		 */
 		public static <T> IColoredString.Impl<T> create() {
-			return new IColoredString.Impl<T>("", null);
+			return new IColoredString.Impl<>("", null);
 		}
 
 		/**
@@ -179,7 +179,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		 * @return {@code new Impl(s, t)}.
 		 */
 		public static <T> IColoredString.Impl<T> create(String s, /* @Nullable */ T t) {
-			return new IColoredString.Impl<T>(s, t);
+			return new IColoredString.Impl<>(s, t);
 		}
 
 		@Override
@@ -193,7 +193,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				return;
 
 			if (fragments.isEmpty())
-				fragments.add(new Bucket<T>(text, color));
+				fragments.add(new Bucket<>(text, color));
 			else {
 				final Bucket<T> last = fragments.getLast();
 				if (equals(last.color, color)) {
@@ -202,7 +202,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 					fragments.removeLast();
 					fragments.addLast(novel);
 				} else
-					fragments.add(new Bucket<T>(text, color));
+					fragments.add(new Bucket<>(text, color));
 			}
 		}
 
@@ -225,7 +225,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		}
 
 		public void append(Bucket<T> bucket) {
-			this.fragments.add(new Bucket<T>(bucket.getText(), bucket.getColor()));
+			this.fragments.add(new Bucket<>(bucket.getText(), bucket.getColor()));
 		}
 
 		@Override
@@ -270,12 +270,12 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			if (width == 0) {
 				/* Really, you should not rely on this behavior */
 				System.err.println("Cannot wrap string in empty display");
-				final List<IColoredString<T>> result = new LinkedList<IColoredString<T>>();
+				final List<IColoredString<T>> result = new LinkedList<>();
 				result.add(this);
 				return result;
 			}
 
-			final List<IColoredString<T>> result = new ArrayList<IColoredString<T>>();
+			final List<IColoredString<T>> result = new ArrayList<>();
 			if (isEmpty()) {
 				/*
 				 * Catch this case early on, as empty lines are eaten below (see
@@ -338,7 +338,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 							 * new line immediately.
 							 */
 							/* Add */
-							result.add(new Impl<T>(chunk, color));
+							result.add(new Impl<>(chunk, color));
 							/* Prepare for next rolls */
 							current = create();
 							/* Reinit size */
@@ -622,7 +622,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				/* Let's save an allocation */
 				return this;
 			else
-				return new Bucket<T>(this.text + text, color);
+				return new Bucket<>(this.text + text, color);
 		}
 
 		public Bucket<T> setLength(int l) {
@@ -630,7 +630,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			if (here <= l)
 				return this;
 			else
-				return new Bucket<T>(text.substring(0, l), color);
+				return new Bucket<>(text.substring(0, l), color);
 		}
 
 		/**

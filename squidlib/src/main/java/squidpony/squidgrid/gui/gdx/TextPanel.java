@@ -89,7 +89,7 @@ public abstract class TextPanel<T extends Color> extends GroupCombinedPanel<T> {
 	 * @param text
 	 */
 	public void init(List<IColoredString<T>> text) {
-		this.text = new ArrayList<IColoredString<T>>(text);
+		this.text = new ArrayList<>(text);
 
 		prepare();
 	}
@@ -156,7 +156,7 @@ public abstract class TextPanel<T extends Color> extends GroupCombinedPanel<T> {
 			final int w_ = computeRequiredWidth();
 			if (maxWidth < w_) {
 				/* Wrapping needed */
-				final List<IColoredString<T>> wrapped = new ArrayList<IColoredString<T>>(text.size() * 2);
+				final List<IColoredString<T>> wrapped = new ArrayList<>(text.size() * 2);
 				for (IColoredString<T> t : text) {
 					final List<IColoredString<T>> wrap = t.wrap(maxWidth);
 					for (IColoredString<T> ics : wrap)
@@ -177,7 +177,7 @@ public abstract class TextPanel<T extends Color> extends GroupCombinedPanel<T> {
 			w = bg.gridWidth();
 			h = bg.gridHeight();
 			if (justifyText) {
-				final List<IColoredString<T>> adjusted = new ArrayList<IColoredString<T>>(text.size());
+				final List<IColoredString<T>> adjusted = new ArrayList<>(text.size());
 				for (IColoredString<T> t : text)
 					adjusted.add(t.justify(w));
 				text = adjusted;

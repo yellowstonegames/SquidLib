@@ -307,7 +307,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	public ButtonsPanel(ISquidPanel<T> bg, ISquidPanel<T> fg, List<IColoredString<T>> buttonTexts) {
 		super(bg, fg);
 		if (buttonTexts != null) {
-			this.buttonsTexts = new ArrayList<IColoredString<T>>(buttonTexts.size());
+			this.buttonsTexts = new ArrayList<>(buttonTexts.size());
 			this.buttonsTexts.addAll(buttonTexts);
 		}
 	}
@@ -325,7 +325,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 */
 	public ButtonsPanel(/* Nullable */ List<IColoredString<T>> buttonTexts) {
 		if (buttonTexts != null) {
-			this.buttonsTexts = new ArrayList<IColoredString<T>>(buttonTexts.size());
+			this.buttonsTexts = new ArrayList<>(buttonTexts.size());
 			this.buttonsTexts.addAll(buttonTexts);
 		}
 	}
@@ -338,7 +338,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 * @return {@code this}
 	 */
 	public ButtonsPanel<T> init(List<IColoredString<T>> buttonTexts) {
-		this.buttonsTexts = new ArrayList<IColoredString<T>>(buttonTexts);
+		this.buttonsTexts = new ArrayList<>(buttonTexts);
 		return this;
 	}
 
@@ -432,7 +432,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			throw new NullPointerException(
 					"The text of buttons must be set before displaying a " + getClass().getSimpleName());
 
-		this.buttons = new ArrayList<Rectangle>(buttonsTexts.size());
+		this.buttons = new ArrayList<>(buttonsTexts.size());
 
 		return putAll0(addListener, putBordersAndMargins, 0, false);
 	}
@@ -852,7 +852,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 		/* @Nullable */ Character prevShortcut = null;
 
 		if (shortcuts == null)
-			shortcuts = new HashMap<Character, Integer>();
+			shortcuts = new HashMap<>();
 		else {
 			for (Map.Entry<Character, Integer> entry : shortcuts.entrySet()) {
 				if (entry.getValue() == buttonIndex) {
@@ -863,7 +863,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			}
 		}
 
-		final IColoredString<T> result = new IColoredString.Impl<T>();
+		final IColoredString<T> result = new IColoredString.Impl<>();
 		boolean set = false;
 		for (IColoredString.Bucket<T> bucket : text) {
 			final String bucketText = bucket.getText();

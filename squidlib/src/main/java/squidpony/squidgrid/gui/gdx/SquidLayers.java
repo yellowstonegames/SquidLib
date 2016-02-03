@@ -295,7 +295,7 @@ public class SquidLayers extends Group {
 
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
-        extraPanels = new ArrayList<SquidPanel>();
+        extraPanels = new ArrayList<>();
 
         addActorAt(0, backgroundPanel);
         addActorAt(2, foregroundPanel);
@@ -374,7 +374,7 @@ public class SquidLayers extends Group {
 
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
-        extraPanels = new ArrayList<SquidPanel>();
+        extraPanels = new ArrayList<>();
 
         addActorAt(0, backgroundPanel);
         addActorAt(2, foregroundPanel);

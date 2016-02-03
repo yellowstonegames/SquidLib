@@ -541,7 +541,7 @@ public class FakeLanguageGen implements Serializable {
         this.vowelSplitters = vowelSplitters;
         this.closingSyllables = closingSyllables;
 
-        this.syllableFrequencies = new LinkedHashMap<Integer, Double>(syllableLengths.length);
+        this.syllableFrequencies = new LinkedHashMap<>(syllableLengths.length);
         for (int i = 0; i < syllableLengths.length && i < syllableFrequencies.length; i++) {
             this.syllableFrequencies.put(syllableLengths[i], syllableFrequencies[i]);
         }
@@ -1088,7 +1088,7 @@ public class FakeLanguageGen implements Serializable {
                         Math.max(0.0, Math.min(1.0, (other.syllableEndFrequency - syllableEndFrequency)))),
                 splitters = merge1000(rng, vowelSplitters, other.vowelSplitters, otherInfluence);
 
-        LinkedHashMap<Integer, Double> freqs = new LinkedHashMap<Integer, Double>(syllableFrequencies);
+        LinkedHashMap<Integer, Double> freqs = new LinkedHashMap<>(syllableFrequencies);
         for (Map.Entry<Integer, Double> kv : other.syllableFrequencies.entrySet()) {
             if (freqs.containsKey(kv.getKey()))
                 freqs.put(kv.getKey(), kv.getValue() + freqs.get(kv.getKey()));

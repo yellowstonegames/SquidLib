@@ -518,7 +518,7 @@ public class CoordPackerTest {
             short[][] packed;
             int ramPacked = 0, ramFloat = 0, ramDouble = 0;
             Coord viewer;
-            HashSet<Double> seenValues = new HashSet<Double>(FOV_RANGE * 2);
+            HashSet<Double> seenValues = new HashSet<>(FOV_RANGE * 2);
             /*
             System.out.println("Packing levels at range " + FOV_RANGE + ": ");
             for (Double d : packingLevels) {
@@ -650,7 +650,7 @@ public class CoordPackerTest {
             short[][] packed;
             int ramPacked = 0, ramFloat = 0, ramDouble = 0;
             Coord viewer;
-            HashSet<Double> seenValues = new HashSet<Double>(FOV_RANGE * 2);
+            HashSet<Double> seenValues = new HashSet<>(FOV_RANGE * 2);
             /*
             System.out.println("Packing levels at range " + FOV_RANGE + ": ");
             for (Double d : packingLevels) {
