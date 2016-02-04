@@ -3137,7 +3137,6 @@ public class CoordPacker {
         return c;
     }
 
-
     /**
      * Finds the minimum bounding rectangle for a packed array without unpacking it. Returns a Coord array with 2
      * elements: the minimum-x/minimum-y Coord corner of the bounds, then the maximum-x/maximum-y Coord corner. Both
@@ -3170,6 +3169,38 @@ public class CoordPacker {
         if(min_x < 256) {
             c[0] = Coord.get(min_x, min_y);
             c[1] = Coord.get(max_x, max_y);
+        }
+        return c;
+    }
+
+    /**
+     * Given a 2D char array for a map, a piece of packed data defining a region to use from that map, and a filler
+     * char, produces a 2D char array where all positions that are "off" in packed are filled with filler, and the rest
+     * are the same as in map.
+     * @param map a 2D char array that will not be modified
+     * @param packed a packed short array, as produced by pack()
+     * @param filler the char to use for "off" positions in packed
+     * @return a 2D char array similar to map but with any "off" positions in packed replaced with filler
+     */
+    public static char[][] mask(char[][] map, short[] packed, char filler)
+    {
+        if(map.length <= 0)
+            return map;
+        char[][] c = new char[map.length][map[0].length];
+        for (int i = 0; i < map.length; i++) {
+            Arrays.fill(c[i], filler);
+        }
+        boolean on = false;
+        int idx = 0, x, y;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    c[x][y] = map[x][y];
+                }
+            }
+            idx += packed[p] & 0xffff;
         }
         return c;
     }
