@@ -299,24 +299,31 @@ public class CoordPackerTest {
         groupReachable = reachable(removeSeveralPacked(dataCross, Coord.get(30, 25), Coord.get(29, 26), Coord.get(30, 26)), packOne(26, 22), reach);
         //printPacked(groupReachable, 64, 64);
     }
-    @Test
+    //@Test
     public void testFraction()
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
         DungeonGenerator dungeonGenerator = new DungeonGenerator(60, 60, rng);
         SerpentMapGenerator serpent = new SerpentMapGenerator(60, 60, rng);
-        serpent.putWalledBoxRoomCarvers(1);
+        serpent.putRoundRoomCarvers(1);
+        serpent.putBoxRoomCarvers(1);
+        serpent.putCaveCarvers(1);
         char[][] map = dungeonGenerator.generate(serpent.generate());
         short[] floors = pack(map, '.');
-        Coord[] positions = fractionPacked(floors, 6);
+        Coord[] positions = fractionPacked(floors, 29);
         /*
         System.out.println(positions.length);
         System.out.println(count(floors));
         System.out.println(positions.length * 1.0 / count(floors));
-        printPacked(packSeveral(positions), 60, 60);
-        System.out.println();
-        printPacked(floors, 60, 60);
         */
+        printPacked(floors, 60, 60);
+        System.out.println();
+        for (int i = 0; i < positions.length; i++) {
+            map[positions[i].x][positions[i].y] = '!';
+        }
+        dungeonGenerator.setDungeon(map);
+        System.out.println(dungeonGenerator);
+
 
     }
     //Uncomment the @Test line to get a lot of printed info regarding room-finding
@@ -328,7 +335,8 @@ public class CoordPackerTest {
         SerpentMapGenerator serpent = new SerpentMapGenerator(60, 60, rng);
         serpent.putRoundRoomCarvers(1);
         serpent.putBoxRoomCarvers(1);
-        char[][] map = dungeonGenerator.generate(); //serpent.generate()
+        serpent.putCaveCarvers(1);
+        char[][] map = dungeonGenerator.generate(serpent.generate());
         short[] floors = pack(map, '.'),
                 shrunk = retract(floors, 1, 60, 60, true),
                 rooms = flood(floors, shrunk, 2, false),
@@ -346,12 +354,18 @@ public class CoordPackerTest {
         printPacked(doors, 60, 60);
         System.out.println();
         ArrayList<short[]> separatedCorridors = split(corridors), separatedRooms = split(rooms);
+        for (short[] sep : separatedRooms) {
+            printPacked(sep, 60, 60);
+            System.out.println();
+        }
+        /*
         for (short[] sep : separatedCorridors) {
             short[] someDoors = intersectPacked(rooms, fringe(sep, 1, 60, 60, false)),
                     connectedRooms = flood(rooms, someDoors, 512, false);
             printPacked(unionPacked(sep, connectedRooms), 60, 60);
             System.out.println();
         }
+        */
 
     }
 

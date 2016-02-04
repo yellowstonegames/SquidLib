@@ -34,8 +34,14 @@ public class MonsterGenTest {
         System.out.println(MonsterGen.SNAKE.mix(rng, "slitherking", MonsterGen.LION, 0.5).present(true));
         System.out.println(MonsterGen.LION.mix(rng, "slion", MonsterGen.SNAKE, 0.3).present(true));
         System.out.println(MonsterGen.HORSE.mix(rng, "elderhorse", MonsterGen.SHOGGOTH, 0.35).present(true));
-        System.out.println(mg.randomizeAppearance(rng, MonsterGen.HAWK, mg.randomName(rng), 3).present(true));
-        System.out.println(mg.randomizePowers(rng, MonsterGen.HAWK, mg.randomName(rng), 3).present(true));
+        MonsterGen.Chimera mon = mg.randomizeAppearance(rng, MonsterGen.HAWK, mg.randomName(rng), 3);
+        System.out.println(mon + ": " + mon.present(true));
+        mon = mg.randomizePowers(rng, MonsterGen.HAWK, mg.randomName(rng), 3);
+        System.out.println(mon + ": " + mon.present(true));
+        mon = mg.randomize(rng, mg.randomName(rng), 5);
+        System.out.println(mon + ": " + mon.present(true));
+        mon = mg.randomize(rng, mg.randomName(rng), 5);
+        System.out.println(mon + ": " + mon.present(true));
 
 
 

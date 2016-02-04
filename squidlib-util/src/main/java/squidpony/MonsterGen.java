@@ -5,12 +5,7 @@ import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A class for generating random monster descriptions; can be subclassed to generate stats for a specific game. Use the
@@ -26,7 +21,9 @@ public class MonsterGen {
 
     public static StatefulRNG srng = new StatefulRNG();
 
-    public String[] adjectives = new String[]{"hairy", "scaly", "feathered", "chitinous", "pulpy", "writhing", "horrid",
+    public String[] components = new String[]{"head", "tail", "legs", "claws", "fangs", "eyes", "hooves", "beak",
+            "wings", "pseudopods", "snout", "carapace", "sting", "pincers", "fins", "shell"},
+            adjectives = new String[]{"hairy", "scaly", "feathered", "chitinous", "pulpy", "writhing", "horrid",
             "fuzzy", "reptilian", "avian", "insectoid", "tentacled", "thorny", "angular", "curvaceous", "lean",
             "metallic", "stony", "glassy", "gaunt", "obese", "ill-proportioned", "sickly", "asymmetrical", "muscular"},
     powerAdjectives = new String[]{"fire-breathing", "electrified", "frigid", "toxic", "noxious", "nimble",
@@ -148,6 +145,52 @@ public class MonsterGen {
                 }
                 powerPhrases.add(terms[t]);
             }
+        }
+        /**
+         * Constructs a Chimera given a name (typically all lower-case), null if the creature is familiar or a String if
+         * the creature's basic shape is likely to be unknown to players, and several String Collection args for the
+         * different aspects of the Chimera. The first Collection contains what body parts this creature has and could
+         * potentially grant to another creature if mixed; examples are "head", "legs", "claws", "wings", and "eyes".
+         * The next Collection contains "unsaid" adjectives, which are not listed if unknown is false, but may be
+         * contributed to other creatures if mixed (mixing a horse with a snake may make the horse scaly, since "scaly"
+         * is an unsaid adjective for snakes). Next are adjectives that apply to the "whole" creature's appearance,
+         * which don't need to replicate the unsaid adjectives and are often added as a step to randomize a creature;
+         * this Collection is often empty. Next are the power adjectives, which are any special abilities a creature
+         * might have that aren't immediately visible, like "furious" or "toxic". Last are the power phrases, which
+         * follow a format like "can cast arcane spells", "embodies the wilderness", or "constantly drools acid"; it
+         * should be able to be put in a sentence after the word "that", like "a snake that can cast arcane spells".
+         * <br>
+         * The unknown argument determines if descriptions need to include basic properties like calling a Snake scaly
+         * (null in this case) or a Pestilence Fiend chitinous (no one knows what that creature is, so a String needs to
+         * be given so a player and player character that don't know its name can call it something, like "demon").
+         * <br>
+         * An example is {@code Chimera SNAKE = new Chimera("snake", null, "head", "tail", "fangs", "eyes", ";",
+         * "reptilian", "scaly", "lean", "curvaceous", ";", ";", "toxic");}
+         * @param name the name to refer to the creature by and its body parts by when mixed
+         * @param unknown true if the creature's basic shape is unlikely to be known by a player, false for animals and
+         *                possibly common mythological creatures like dragons
+         * @param parts the different body part nouns this creature can contribute to a creature when mixed
+         * @param unsaid appearance adjectives that don't need to be said if the creature is familiar
+         * @param whole appearance adjectives that apply to the whole creature
+         * @param powerAdj power adjectives like "furious" or "fire-breathing"
+         * @param powerPhr power phrases like "can cast arcane spells"
+         */
+        public Chimera(String name, String unknown, Collection<String> parts, Collection<String> unsaid,
+                       Collection<String> whole, Collection<String> powerAdj, Collection<String> powerPhr)
+        {
+            this.name = name;
+            this.unknown = unknown;
+            if(unknown != null)
+                mainForm = unknown;
+            else
+                mainForm = name;
+            this.parts = new LinkedHashMap<String, List<String>>();
+            unsaidAdjectives = new LinkedHashSet<String>(unsaid);
+            wholeAdjectives = new LinkedHashSet<String>(whole);
+            powerAdjectives = new LinkedHashSet<String>(powerAdj);
+            powerPhrases = new LinkedHashSet<String>(powerPhr);
+            ArrayList<String> selfParts = new ArrayList<String>(parts);
+            this.parts.put(name, selfParts);
         }
 
         /**
@@ -453,6 +496,57 @@ public class MonsterGen {
     public Chimera randomizePowers(Chimera creature, String newName, int powerCount)
     {
         return randomizePowers(srng, creature, newName, powerCount);
+    }
+
+    /**
+     * Randomly add appearance and power descriptors to a new Chimera creature with random body part adjectives.
+     * Produces a new Chimera with the specified name, and adds the specified total count (detail) of appearance
+     * adjectives, power adjectives and phrases, and the same count (detail) of body parts.
+     * @param rng the RNG to determine random factors
+     * @param newName the name to call the produced Chimera
+     * @param detail the number of adjectives and phrases to add, also the number of body parts
+     * @return a new Chimera with random traits
+     */
+    public Chimera randomize(RNG rng, String newName, int detail)
+    {
+        ArrayList<String> ps = new ArrayList<String>();
+        Collections.addAll(ps, rng.randomPortion(components, detail));
+        Chimera next = new Chimera(newName, "thing", ps, new ArrayList<String>(),
+                new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+        if(detail > 0) {
+            int powerCount = rng.nextInt(detail), bodyCount = detail - powerCount;
+            int adjs = rng.nextInt(powerCount + 1), phrs = powerCount - adjs;
+
+            Collections.addAll(next.unsaidAdjectives, rng.randomPortion(adjectives, bodyCount));
+            Collections.addAll(next.powerAdjectives, rng.randomPortion(powerAdjectives, adjs));
+            Collections.addAll(next.powerPhrases, rng.randomPortion(powerPhrases, phrs));
+        }
+        return next;
+    }
+
+    /**
+     * Randomly add appearance and power descriptors to a new Chimera creature with random body part adjectives.
+     * Produces a new Chimera with the specified name, and adds the specified total count (detail) of appearance
+     * adjectives, power adjectives and phrases, and the same count (detail) of body parts.
+     * @param newName the name to call the produced Chimera
+     * @param detail the number of adjectives and phrases to add, also the number of body parts
+     * @return a new Chimera with random traits
+     */
+    public Chimera randomize(String newName, int detail)
+    {
+        return randomize(srng, newName, detail);
+    }
+
+    /**
+     * Randomly add appearance and power descriptors to a new Chimera creature with random body part adjectives.
+     * Produces a new Chimera with a random name using FakeLanguageGen, and adds a total of 5 appearance adjectives,
+     * power adjectives and phrases, and 5 body parts. Since this uses FakeLanguageGen, it isn't GWT-compatible.
+     * @return a new Chimera with random traits
+     */
+    @GwtIncompatible
+    public Chimera randomize()
+    {
+        return randomize(srng, randomName(srng), 5);
     }
 
     /**
