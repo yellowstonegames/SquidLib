@@ -61,7 +61,7 @@
 		<findbugs.version>3.0.2</findbugs.version>
 		<cobertura.version>2.7</cobertura.version>
 		<jdk.version>1.7</jdk.version>
-		<gdx.version>1.8.0</gdx.version>
+		<gdx.version>1.9.1</gdx.version>
 		<junit.version>4.11</junit.version>
 	</properties>
 
