@@ -185,7 +185,7 @@ public interface IColorCenter<T> {
 	 */
 	abstract class Skeleton<T> implements IColorCenter<T> {
 
-		private final Map<Long, T> cache = new HashMap<Long, T>(256);
+		private final Map<Long, T> cache = new HashMap<>(256);
 
 		protected /*Nullable*/ IFilter<T> filter;
 

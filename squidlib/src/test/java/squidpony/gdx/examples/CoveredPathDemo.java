@@ -37,7 +37,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
             entity = ae;
             health = hp;
             dijkstra = dijkstraMap;
-            previousPositions = new ArrayList<Coord>(16);
+            previousPositions = new ArrayList<>(16);
         }
     }
     SpriteBatch batch;
@@ -100,14 +100,14 @@ public class CoveredPathDemo extends ApplicationAdapter {
         // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
         short[] placement = CoordPacker.pack(bareDungeon, '.');
 
-        teamRed = new ArrayList<Creature>(numMonsters);
-        teamBlue = new ArrayList<Creature>(numMonsters);
+        teamRed = new ArrayList<>(numMonsters);
+        teamBlue = new ArrayList<>(numMonsters);
 
-        redPlaces = new LinkedHashSet<Coord>(numMonsters);
-        bluePlaces = new LinkedHashSet<Coord>(numMonsters);
+        redPlaces = new LinkedHashSet<>(numMonsters);
+        bluePlaces = new LinkedHashSet<>(numMonsters);
 
-        redThreats = new ArrayList<Threat>(numMonsters);
-        blueThreats = new ArrayList<Threat>(numMonsters);
+        redThreats = new ArrayList<>(numMonsters);
+        blueThreats = new ArrayList<>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
@@ -133,7 +133,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
         getToBlue = new DijkstraMap(bareDungeon, DijkstraMap.Measurement.MANHATTAN);
         getToBlue.rng = rng;
 
-        awaitedMoves = new ArrayList<Coord>(10);
+        awaitedMoves = new ArrayList<>(10);
         colors = DungeonUtility.generatePaletteIndices(decoDungeon);
         bgColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
         lights = DungeonUtility.generateLightnessModifiers(decoDungeon, frames);
@@ -238,7 +238,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
         }*/
         if(path.isEmpty())
             path.add(user);
-        awaitedMoves = new ArrayList<Coord>(path);
+        awaitedMoves = new ArrayList<>(path);
     }
 
     public void move(AnimatedEntity ae, int newX, int newY) {
@@ -266,7 +266,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
 
     private LinkedHashMap<Integer, Threat> convertThreats(List<Threat> ts)
     {
-        LinkedHashMap<Integer, Threat> numbered = new LinkedHashMap<Integer, Threat>();
+        LinkedHashMap<Integer, Threat> numbered = new LinkedHashMap<>();
         int i = 0;
         for (Threat t : ts)
         {

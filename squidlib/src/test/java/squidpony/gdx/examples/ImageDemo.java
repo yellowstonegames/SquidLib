@@ -60,7 +60,7 @@ public class ImageDemo extends ApplicationAdapter {
         Coord pl = dungeonGen.utility.randomFloor(placement);
         placement[pl.x][pl.y] = '@';
         int numMonsters = 15;
-        creatures = new HashMap<Coord, AnimatedEntity>(numMonsters);
+        creatures = new HashMap<>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
             Coord monPos = dungeonGen.utility.randomFloor(placement);

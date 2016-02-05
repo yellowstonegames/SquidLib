@@ -154,7 +154,7 @@ public class AStarSearch {
         }
 
         /* Not using Deque nor ArrayDeqye, they aren't Gwt compatible */
-        final LinkedList<Coord> deq = new LinkedList<Coord>();
+        final LinkedList<Coord> deq = new LinkedList<>();
         while (!p.equals(start)) {
             deq.addFirst(p);
             p = parent[p.x][p.y];

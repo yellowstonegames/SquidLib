@@ -48,7 +48,7 @@ public class WaypointPathfinder {
                 Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];
-        waypoints = new LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>>(64);
+        waypoints = new LinkedHashMap<>(64);
         dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
 
         for (Coord center : centers) {
@@ -79,7 +79,7 @@ public class WaypointPathfinder {
             }
         }
 
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<Coord>(128);
+        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
         for (int i = 0; i < width; i++) {
             ELEMENT_WISE:
             for (int j = 0; j < height; j++) {
@@ -171,8 +171,8 @@ public class WaypointPathfinder {
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
         expansionMap = new int[width][height];
-        waypoints = new LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>>(64);
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<Coord>(128);
+        waypoints = new LinkedHashMap<>(64);
+        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
 
         if(thickCorridors)
         {
@@ -292,8 +292,8 @@ public class WaypointPathfinder {
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
         expansionMap = new int[width][height];
-        waypoints = new LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>>(64);
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<Coord>(128);
+        waypoints = new LinkedHashMap<>(64);
+        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
 
         short[] floors = pack(simplified, '.');
         Coord[] apart = fractionPacked(floors, fraction);
@@ -345,7 +345,7 @@ public class WaypointPathfinder {
                 Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];
-        waypoints = new LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>>(64);
+        waypoints = new LinkedHashMap<>(64);
         dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
 
         for (Coord center : centers) {
@@ -376,7 +376,7 @@ public class WaypointPathfinder {
             }
         }
 
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<Coord>(128);
+        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
         for (int i = 0; i < width; i++) {
             ELEMENT_WISE:
             for (int j = 0; j < height; j++) {
@@ -433,7 +433,7 @@ public class WaypointPathfinder {
         ArrayList<Coord> near = dm.findNearestMultiple(approximateTarget, 5, waypoints.keySet());
         Coord me = dm.findNearest(self, waypoints.keySet());
         double bestCost = 999999.0;
-        ArrayList<Coord> path = new ArrayList<Coord>();
+        ArrayList<Coord> path = new ArrayList<>();
         /*if (waypoints.containsKey(me)) {
             Edge[] ed = waypoints.get(me).values().toArray(new Edge[waypoints.get(me).size()]);
             Arrays.sort(ed);
@@ -453,7 +453,7 @@ public class WaypointPathfinder {
                     continue;
                 if (ed.cost < bestCost) {
                     bestCost = ed.cost;
-                    path = new ArrayList<Coord>(ed.path);
+                    path = new ArrayList<>(ed.path);
                 }
             }
         }
@@ -486,7 +486,7 @@ public class WaypointPathfinder {
 
     public LinkedHashSet<Coord> getWaypoints()
     {
-        return new LinkedHashSet<Coord>(waypoints.keySet());
+        return new LinkedHashSet<>(waypoints.keySet());
     }
 
     private static class Edge implements Comparable<Edge>
