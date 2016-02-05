@@ -207,7 +207,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Coord pl = dungeonGen.utility.randomCell(placement);
         placement = CoordPacker.removePacked(placement, pl.x, pl.y);
         int numMonsters = 25;
-        monsters = new SpatialMap<Integer, Monster>(numMonsters);
+        monsters = new SpatialMap<>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
@@ -227,8 +227,8 @@ public class EverythingDemo extends ApplicationAdapter {
         player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10),
                 fgCenter.filter(display.getPalette().get(30)));
         cursor = Coord.get(-1, -1);
-        toCursor = new ArrayList<Coord>(10);
-        awaitedMoves = new ArrayList<Coord>(10);
+        toCursor = new ArrayList<>(10);
+        awaitedMoves = new ArrayList<>(10);
         playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.EUCLIDEAN);
         final int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
                 initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
@@ -468,7 +468,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // recalculate FOV, store it in fovmap for the render to use.
         fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
         // handle monster turns
-        ArrayList<Coord> nextMovePositions = new ArrayList<Coord>(25);
+        ArrayList<Coord> nextMovePositions = new ArrayList<>(25);
         for(Coord pos : monsters.positions())
         {
             Monster mon = monsters.get(pos);
@@ -539,7 +539,7 @@ public class EverythingDemo extends ApplicationAdapter {
         final int nbMonsters = monsters.size();
 
 		/* Prepare the String to display */
-		final IColoredString<Color> cs = new IColoredString.Impl<Color>();
+		final IColoredString<Color> cs = new IColoredString.Impl<>();
 		cs.append("Still ", null);
         final Color nbColor;
         if (nbMonsters <= 1)
@@ -554,9 +554,9 @@ public class EverythingDemo extends ApplicationAdapter {
         cs.appendInt(nbMonsters, nbColor);
         cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
 
-        IColoredString<Color> helping1 = new IColoredString.Impl<Color>("Use numpad or vi-keys (hjklyubn) to move.", Color.WHITE);
-        IColoredString<Color> helping2 = new IColoredString.Impl<Color>("Use ? for help, f to change colors, q to quit.", Color.WHITE);
-        IColoredString<Color> helping3 = new IColoredString.Impl<Color>("Click the top or bottom border of the lower message box to scroll.", Color.WHITE);
+        IColoredString<Color> helping1 = new IColoredString.Impl<>("Use numpad or vi-keys (hjklyubn) to move.", Color.WHITE);
+        IColoredString<Color> helping2 = new IColoredString.Impl<>("Use ? for help, f to change colors, q to quit.", Color.WHITE);
+        IColoredString<Color> helping3 = new IColoredString.Impl<>("Click the top or bottom border of the lower message box to scroll.", Color.WHITE);
 
         /* Some grey color */
         final Color bgColor = new Color(0.3f, 0.3f, 0.3f, 0.9f);
@@ -574,7 +574,7 @@ public class EverythingDemo extends ApplicationAdapter {
         	final int h = 5;
         	final SquidPanel bg = new SquidPanel(w, h, display.getTextFactory());
         	final SquidPanel fg = new SquidPanel(w, h, display.getTextFactory());
-        	final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<Color>();
+        	final GroupCombinedPanel<Color> gcp = new GroupCombinedPanel<>();
         	a = gcp;
         	/*
         	 * We're setting them late just for the demo, as it avoids giving 'w'
@@ -628,7 +628,7 @@ public class EverythingDemo extends ApplicationAdapter {
 			tp.borderColor = new Color(0.9f, 0.1f, 0.0f, 0.5f);
 			tp.justifyText = true;
 
-			final List<IColoredString<Color>> text = new ArrayList<IColoredString<Color>>();
+			final List<IColoredString<Color>> text = new ArrayList<>();
 			text.add(cs);
 			/* Jump line */
 			text.add(IColoredString.Impl.<Color> create());

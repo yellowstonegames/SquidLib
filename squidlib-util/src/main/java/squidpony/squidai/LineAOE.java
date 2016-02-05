@@ -261,12 +261,12 @@ public class LineAOE implements AOE {
     @Override
     public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<Coord, ArrayList<Coord>>();
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
+            return new LinkedHashMap<>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = targets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -372,7 +372,7 @@ public class LineAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Coord> ap = new ArrayList<Coord>();
+                    ArrayList<Coord> ap = new ArrayList<>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
@@ -386,7 +386,7 @@ public class LineAOE implements AOE {
                 }
                 else if(qualityMap[x][y] == bestQuality)
                 {
-                    ArrayList<Coord> ap = new ArrayList<Coord>();
+                    ArrayList<Coord> ap = new ArrayList<>();
 
                     for (int i = 0; i < ts.length && i < 63; ++i) {
                         if((bits & (1 << i)) != 0)
@@ -407,11 +407,11 @@ public class LineAOE implements AOE {
     public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<>();
 
         //requiredExclusions.remove(origin);
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 8);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets * 8);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -577,7 +577,7 @@ public class LineAOE implements AOE {
                 }
                 if(qualityMap[x][y] < bestQuality)
                 {
-                    ArrayList<Coord> ap = new ArrayList<Coord>();
+                    ArrayList<Coord> ap = new ArrayList<>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if((pbits & (1 << i)) != 0)
@@ -595,7 +595,7 @@ public class LineAOE implements AOE {
                     }
                 }
                 else if(qualityMap[x][y] == bestQuality) {
-                    ArrayList<Coord> ap = new ArrayList<Coord>();
+                    ArrayList<Coord> ap = new ArrayList<>();
 
                     for (int i = 0; i < pts.length && i < 63; ++i) {
                         if ((pbits & (1 << i)) != 0) {

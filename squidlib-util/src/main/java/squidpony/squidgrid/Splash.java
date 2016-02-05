@@ -27,7 +27,7 @@ public class Splash {
 	 * A fresh instance, whose only impassable character is '#'.
 	 */
 	public Splash() {
-		this.impassable = new HashSet<Character>();
+		this.impassable = new HashSet<>();
 		/* The default */
 		addImpassableChar('#');
 	}
@@ -37,7 +37,7 @@ public class Splash {
 	 * {@link #removeImpassableChar(char)} if you use '#' to mean something non-blocking.
 	 */
 	public Splash(Set<Character> blocked) {
-		this.impassable = new HashSet<Character>(blocked);
+		this.impassable = new HashSet<>(blocked);
 		/* The default */
 		addImpassableChar('#');
 	}
@@ -82,13 +82,13 @@ public class Splash {
 		if (!DungeonUtility.inLevel(level, start) || !passable(level[start.x][start.y]))
 			return Collections.emptyList();
 
-		final List<Coord> result = new ArrayList<Coord>(volume);
+		final List<Coord> result = new ArrayList<>(volume);
 
 		Direction[] dirs = new Direction[Direction.OUTWARDS.length];
 
-		final LinkedList<Coord> toTry = new LinkedList<Coord>();
+		final LinkedList<Coord> toTry = new LinkedList<>();
 		toTry.add(start);
-		final Set<Coord> trieds = new HashSet<Coord>();
+		final Set<Coord> trieds = new HashSet<>();
 
 		while (!toTry.isEmpty()) {
 			assert result.size() < volume;
@@ -147,7 +147,7 @@ public class Splash {
 	{
 		Set<Character> blocked;
 		if(impassable == null)
-			blocked = new HashSet<Character>(2);
+			blocked = new HashSet<>(2);
 		else
 			blocked = impassable;
 		if(splashCache == null || blocked.hashCode() != splashHash)

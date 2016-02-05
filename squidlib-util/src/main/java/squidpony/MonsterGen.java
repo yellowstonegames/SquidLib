@@ -58,13 +58,13 @@ public class MonsterGen {
                 mainForm = unknown;
             else
                 mainForm = other.name;
-            parts = new LinkedHashMap<String, List<String>>(other.parts);
-            List<String> oldParts = new ArrayList<String>(parts.remove(mainForm));
+            parts = new LinkedHashMap<>(other.parts);
+            List<String> oldParts = new ArrayList<>(parts.remove(mainForm));
             parts.put(name, oldParts);
-            unsaidAdjectives = new LinkedHashSet<String>(other.unsaidAdjectives);
-            wholeAdjectives = new LinkedHashSet<String>(other.wholeAdjectives);
-            powerAdjectives = new LinkedHashSet<String>(other.powerAdjectives);
-            powerPhrases = new LinkedHashSet<String>(other.powerPhrases);
+            unsaidAdjectives = new LinkedHashSet<>(other.unsaidAdjectives);
+            wholeAdjectives = new LinkedHashSet<>(other.wholeAdjectives);
+            powerAdjectives = new LinkedHashSet<>(other.powerAdjectives);
+            powerPhrases = new LinkedHashSet<>(other.powerPhrases);
         }
 
         /**
@@ -101,12 +101,12 @@ public class MonsterGen {
                 mainForm = unknown;
             else
                 mainForm = name;
-            parts = new LinkedHashMap<String, List<String>>();
-            unsaidAdjectives = new LinkedHashSet<String>();
-            wholeAdjectives = new LinkedHashSet<String>();
-            powerAdjectives = new LinkedHashSet<String>();
-            powerPhrases = new LinkedHashSet<String>();
-            ArrayList<String> selfParts = new ArrayList<String>();
+            parts = new LinkedHashMap<>();
+            unsaidAdjectives = new LinkedHashSet<>();
+            wholeAdjectives = new LinkedHashSet<>();
+            powerAdjectives = new LinkedHashSet<>();
+            powerPhrases = new LinkedHashSet<>();
+            ArrayList<String> selfParts = new ArrayList<>();
             int t = 0;
             for (; t < terms.length; t++) {
                 if(terms[t].equals(";"))
@@ -206,7 +206,7 @@ public class MonsterGen {
             else
                 sb.append('a');
             int i = 0;
-            LinkedHashSet<String> allAdjectives = new LinkedHashSet<String>(wholeAdjectives);
+            LinkedHashSet<String> allAdjectives = new LinkedHashSet<>(wholeAdjectives);
             if(unknown != null)
                 allAdjectives.addAll(unsaidAdjectives);
             allAdjectives.addAll(powerAdjectives);
@@ -289,7 +289,7 @@ public class MonsterGen {
                 sb.append('a');
             int i = 0;
 
-            LinkedHashSet<String> allAdjectives = new LinkedHashSet<String>(wholeAdjectives);
+            LinkedHashSet<String> allAdjectives = new LinkedHashSet<>(wholeAdjectives);
             if(unknown != null)
                 allAdjectives.addAll(unsaidAdjectives);
             for(String adj : allAdjectives)
