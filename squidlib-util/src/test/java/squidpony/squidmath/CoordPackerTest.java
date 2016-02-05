@@ -374,7 +374,7 @@ public class CoordPackerTest {
     public void testPackOptimalParameters()
     {
         StatefulRNG rng = new StatefulRNG(new LightRNG(0xAAAA2D2));
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(240, 240, rng);
+        DungeonGenerator dungeonGenerator = new DungeonGenerator(80, 80, rng);
         dungeonGenerator.addDoors(15, true);
         dungeonGenerator.addWater(25);
         dungeonGenerator.addTraps(2);
