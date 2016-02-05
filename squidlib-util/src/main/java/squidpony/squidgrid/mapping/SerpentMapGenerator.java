@@ -85,7 +85,7 @@ public class SerpentMapGenerator {
             rows[i] += rs3;
         }
 
-        List<Coord> points = new ArrayList<Coord>(80);
+        List<Coord> points = new ArrayList<>(80);
         Coord temp;
         for (int i = 0, m = random.nextInt(64), r; i < 256; r = random.between(4, 12), i += r, m += r) {
             temp = CoordPacker.mooreToCoord(m);
@@ -165,14 +165,14 @@ public class SerpentMapGenerator {
             rows[i] += rs3;
         }
 
-        LinkedHashMap<Coord, List<Coord>> connections = new LinkedHashMap<Coord, List<Coord>>(80);
+        LinkedHashMap<Coord, List<Coord>> connections = new LinkedHashMap<>(80);
         Coord temp, t;
         int m = random.nextInt(64), r = random.between(4, 12);
         temp = CoordPacker.mooreToCoord(m);
         Coord starter = CoordPacker.mooreToCoord(m);
         m += r;
         for (int i = r; i < 256; i += r, m += r) {
-            List<Coord> cl = new ArrayList<Coord>(4);
+            List<Coord> cl = new ArrayList<>(4);
             cl.add(Coord.get(columns[temp.x], rows[temp.y]));
             temp = CoordPacker.mooreToCoord(m);
             r = random.between(4, 12);

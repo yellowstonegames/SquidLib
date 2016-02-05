@@ -344,7 +344,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
      */
     public ArrayList<V> allAt(int x, int y)
     {
-        ArrayList<V> found = new ArrayList<V>(capacity);
+        ArrayList<V> found = new ArrayList<>(capacity);
         ArrayList<short[]> regions = CoordPacker.findManyPacked(x, y, keyTable);
         for(short[] region : regions)
         {
@@ -648,8 +648,8 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
      * time this method is called. Use the {@link Entries} constructor for nested or multithreaded iteration. */
     public Entries<V> entries () {
         if (entries1 == null) {
-            entries1 = new Entries<V>(this);
-            entries2 = new Entries<V>(this);
+            entries1 = new Entries<>(this);
+            entries2 = new Entries<>(this);
         }
         if (!entries1.valid) {
             entries1.reset();
@@ -667,8 +667,8 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
      * time this method is called. Use the {@link Values} constructor for nested or multithreaded iteration. */
     public Values<V> values () {
         if (values1 == null) {
-            values1 = new Values<V>(this);
-            values2 = new Values<V>(this);
+            values1 = new Values<>(this);
+            values2 = new Values<>(this);
         }
         if (!values1.valid) {
             values1.reset();
@@ -755,7 +755,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
     }
 
     public static class Entries<V> extends MapIterator<V, Entry<V>> {
-        Entry<V> entry = new Entry<V>();
+        Entry<V> entry = new Entry<>();
 
         public Entries (RegionMap<V> map) {
             super(map);

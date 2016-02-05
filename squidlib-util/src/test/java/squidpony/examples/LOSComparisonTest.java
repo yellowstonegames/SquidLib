@@ -32,7 +32,7 @@ public class LOSComparisonTest {
             short[] flooded = CoordPacker.flood(floors, CoordPacker.packOne(start), 10, true);
             short[] outside = CoordPacker.differencePacked(CoordPacker.rectangle(width, height),// flooded);
                     CoordPacker.expand(flooded, 1, width, height));
-            ArrayList<Coord> allSeen = new ArrayList<Coord>(23 * 23), targets = new ArrayList<Coord>(5);
+            ArrayList<Coord> allSeen = new ArrayList<>(23 * 23), targets = new ArrayList<>(5);
             LOS los;
             if(l < 7) los = new LOS(l);
             else los = new LOS(6);

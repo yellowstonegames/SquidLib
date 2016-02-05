@@ -62,7 +62,7 @@ public class SoundMap
      * The latest results of findAlerted(), with Coord keys representing the positions of creatures that were alerted
      * and Double values representing how loud the sound was when it reached them.
      */
-    public HashMap<Coord, Double> alerted = new HashMap<Coord, Double>();
+    public HashMap<Coord, Double> alerted = new HashMap<>();
     /**
      * Cells with no sound are always marked with 0.
      */
@@ -89,9 +89,9 @@ public class SoundMap
      */
     public SoundMap() {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<Coord, Double>();
-        fresh = new HashMap<Coord, Double>();
-        sounds = new HashMap<Coord, Double>();
+        alerted = new HashMap<>();
+        fresh = new HashMap<>();
+        sounds = new HashMap<>();
     }
 
     /**
@@ -100,9 +100,9 @@ public class SoundMap
      */
     public SoundMap(RNG random) {
         rng = random;
-        alerted = new HashMap<Coord, Double>();
-        fresh = new HashMap<Coord, Double>();
-        sounds = new HashMap<Coord, Double>();
+        alerted = new HashMap<>();
+        fresh = new HashMap<>();
+        sounds = new HashMap<>();
     }
 
     /**
@@ -111,9 +111,9 @@ public class SoundMap
      */
     public SoundMap(final double[][] level) {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<Coord, Double>();
-        fresh = new HashMap<Coord, Double>();
-        sounds = new HashMap<Coord, Double>();
+        alerted = new HashMap<>();
+        fresh = new HashMap<>();
+        sounds = new HashMap<>();
         initialize(level);
     }
     /**
@@ -124,9 +124,9 @@ public class SoundMap
     public SoundMap(final double[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
         this.measurement = measurement;
-        alerted = new HashMap<Coord, Double>();
-        fresh = new HashMap<Coord, Double>();
-        sounds = new HashMap<Coord, Double>();
+        alerted = new HashMap<>();
+        fresh = new HashMap<>();
+        sounds = new HashMap<>();
         initialize(level);
     }
 
@@ -140,9 +140,9 @@ public class SoundMap
      */
     public SoundMap(final char[][] level) {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<Coord, Double>();
-        fresh = new HashMap<Coord, Double>();
-        sounds = new HashMap<Coord, Double>();
+        alerted = new HashMap<>();
+        fresh = new HashMap<>();
+        sounds = new HashMap<>();
         initialize(level);
     }
     /**
@@ -155,9 +155,9 @@ public class SoundMap
      */
     public SoundMap(final char[][] level, char alternateWall) {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<Coord, Double>();
-        fresh = new HashMap<Coord, Double>();
-        sounds = new HashMap<Coord, Double>();
+        alerted = new HashMap<>();
+        fresh = new HashMap<>();
+        sounds = new HashMap<>();
         initialize(level, alternateWall);
     }
 
@@ -173,9 +173,9 @@ public class SoundMap
     public SoundMap(final char[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
         this.measurement = measurement;
-        alerted = new HashMap<Coord, Double>();
-        fresh = new HashMap<Coord, Double>();
-        sounds = new HashMap<Coord, Double>();
+        alerted = new HashMap<>();
+        fresh = new HashMap<>();
+        sounds = new HashMap<>();
         initialize(level);
     }
 
@@ -404,7 +404,7 @@ public class SoundMap
 
         while (numAssigned > 0) {
             numAssigned = 0;
-            HashMap<Coord, Double> fresh2 = new HashMap<Coord, Double>(fresh.size());
+            HashMap<Coord, Double> fresh2 = new HashMap<>(fresh.size());
             fresh2.putAll(fresh);
             fresh.clear();
 
@@ -451,7 +451,7 @@ public class SoundMap
      */
     public HashMap<Coord, Double> findAlerted(Set<Coord> creatures, Map<Coord, Double> extraSounds) {
         if(!initialized) return null;
-        alerted = new HashMap<Coord, Double>(creatures.size());
+        alerted = new HashMap<>(creatures.size());
 
         resetMap();
         for (Map.Entry<Coord, Double> sound : extraSounds.entrySet()) {

@@ -76,8 +76,8 @@ public class SerpentDeepMapGenerator {
 
         columns = new int[16];
         rows = new int[16];
-        linksUp = new ArrayList<LinkedHashSet<Coord>>(depth);
-        linksDown = new ArrayList<LinkedHashSet<Coord>>(depth);
+        linksUp = new ArrayList<>(depth);
+        linksDown = new ArrayList<>(depth);
         for (int i = 0; i < depth; i++) {
             linksUp.add(new LinkedHashSet<Coord>(80));
             linksDown.add(new LinkedHashSet<Coord>(80));
@@ -106,7 +106,7 @@ public class SerpentDeepMapGenerator {
             rows[i] += rs3;
         }
 
-        List<LinkedHashMap<Coord, List<Coord>>> connections = new ArrayList<LinkedHashMap<Coord, List<Coord>>>(depth);
+        List<LinkedHashMap<Coord, List<Coord>>> connections = new ArrayList<>(depth);
         for (int i = 0; i < depth; i++) {
             connections.add(new LinkedHashMap<Coord, List<Coord>>(80));
         }
@@ -120,7 +120,7 @@ public class SerpentDeepMapGenerator {
             tz = z;
             int tx = x, ty = y;
             do {
-                List<Coord> cl = new ArrayList<Coord>(4);
+                List<Coord> cl = new ArrayList<>(4);
 
                 for (int j = 0;
                      j < 2;
@@ -142,7 +142,7 @@ public class SerpentDeepMapGenerator {
                 if(connect != null)
                     connections.get(tz).get(Coord.get(columns[tx], rows[ty])).addAll(cl);
                 else
-                    connections.get(tz).put(Coord.get(columns[tx], rows[ty]), new ArrayList<Coord>(cl));
+                    connections.get(tz).put(Coord.get(columns[tx], rows[ty]), new ArrayList<>(cl));
 
                 x = CoordPacker.getXMoore3D(m, numLayers);
                 y = CoordPacker.getYMoore3D(m, numLayers);
@@ -156,7 +156,7 @@ public class SerpentDeepMapGenerator {
                     if(conn != null)
                         connections.get(z).get(Coord.get(columns[tx], rows[ty])).addAll(cl);
                     else
-                        connections.get(z).put(Coord.get(columns[tx], rows[ty]), new ArrayList<Coord>(cl));
+                        connections.get(z).put(Coord.get(columns[tx], rows[ty]), new ArrayList<>(cl));
                     break;
                 }
                 else {
@@ -176,7 +176,7 @@ public class SerpentDeepMapGenerator {
         }
 
         do {
-            List<Coord> cl = new ArrayList<Coord>(4);
+            List<Coord> cl = new ArrayList<>(4);
 
             for (int j = 0;
                  j < 2;
@@ -198,7 +198,7 @@ public class SerpentDeepMapGenerator {
             if(connect != null)
                 connections.get(tz).get(Coord.get(columns[x], rows[y])).addAll(cl);
             else
-                connections.get(tz).put(Coord.get(columns[x], rows[y]), new ArrayList<Coord>(cl));
+                connections.get(tz).put(Coord.get(columns[x], rows[y]), new ArrayList<>(cl));
 
             if(sz != tz)
                 cl.clear();
@@ -340,14 +340,14 @@ public class SerpentDeepMapGenerator {
             floors[i] = CoordPacker.pack(dungeon[i], '.');
         }
         //using actual dungeon space per layer, not row/column 3D grid space
-        ArrayList<LinkedHashSet<Coord>> ups = new ArrayList<LinkedHashSet<Coord>>(depth),
-                downs = new ArrayList<LinkedHashSet<Coord>>(depth);
+        ArrayList<LinkedHashSet<Coord>> ups = new ArrayList<>(depth),
+                downs = new ArrayList<>(depth);
         for (int i = 0; i < depth; i++) {
             ups.add(new LinkedHashSet<Coord>(40));
             downs.add(new LinkedHashSet<Coord>(40));
             LinkedHashSet<Coord> above = null;
             if (i > 0) {
-                above = new LinkedHashSet<Coord>(linksDown.get(i - 1));
+                above = new LinkedHashSet<>(linksDown.get(i - 1));
                 if(above.size() == 0)
                     continue;
                 Coord higher = random.getRandomElement(above.toArray(new Coord[above.size()]));
@@ -375,7 +375,7 @@ public class SerpentDeepMapGenerator {
         }
 
         for (int i = 0; i < depth; i++) {
-            LinkedHashMap<Coord, Integer> used = new LinkedHashMap<Coord, Integer>(128);
+            LinkedHashMap<Coord, Integer> used = new LinkedHashMap<>(128);
             for(Coord up : ups.get(i))
             {
                 Integer count = used.get(up);

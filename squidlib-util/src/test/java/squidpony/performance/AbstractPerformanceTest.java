@@ -25,7 +25,7 @@ abstract class AbstractPerformanceTest {
 	protected static final int NUM_THREADS = 1;
 	protected static final int NUM_TASKS = 1;
 
-	protected final List<AbstractPerformanceUnit> tasks = new ArrayList<AbstractPerformanceUnit>();
+	protected final List<AbstractPerformanceUnit> tasks = new ArrayList<>();
 
 	/**
 	 * this methods should be implemented by children to create one single unit

@@ -381,7 +381,7 @@ public class Spill {
             impassable = new LinkedHashSet<>();
         if(!physicalMap[entry.x][entry.y] || impassable.contains(entry))
             return null;
-        spreadPattern = new ArrayList<Coord>(volume);
+        spreadPattern = new ArrayList<>(volume);
         spillMap[entry.x][entry.y] = true;
         Coord temp;
         for(int x = 0; x < spillMap.length; x++)

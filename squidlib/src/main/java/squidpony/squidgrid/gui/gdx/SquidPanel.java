@@ -125,7 +125,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;
         setSize(w, h);
-        animatedEntities = new LinkedHashSet<AnimatedEntity>();
+        animatedEntities = new LinkedHashSet<>();
         if(factory.isDistanceField())
         {
             distanceField = true;

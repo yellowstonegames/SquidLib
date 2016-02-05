@@ -66,10 +66,10 @@ public class PointAOE implements AOE {
     @Override
     public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
         if(targets == null)
-            return new LinkedHashMap<Coord, ArrayList<Coord>>();
+            return new LinkedHashMap<>();
 
         int totalTargets = targets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -81,7 +81,7 @@ public class PointAOE implements AOE {
 
                 dist = reach.metric.radius(origin.x, origin.y, p.x, p.y);
                 if (dist <= reach.maxDistance && dist >= reach.minDistance) {
-                    ArrayList<Coord> ap = new ArrayList<Coord>();
+                    ArrayList<Coord> ap = new ArrayList<>();
                     ap.add(p);
                     bestPoints.put(p, ap);
                 }
@@ -95,10 +95,10 @@ public class PointAOE implements AOE {
     public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
-        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<Coord>();
+        if(requiredExclusions == null) requiredExclusions = new LinkedHashSet<>();
 
         int totalTargets = priorityTargets.size() + lesserTargets.size();
-        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<Coord, ArrayList<Coord>>(totalTargets * 4);
+        LinkedHashMap<Coord, ArrayList<Coord>> bestPoints = new LinkedHashMap<>(totalTargets * 4);
 
         if(totalTargets == 0)
             return bestPoints;
@@ -110,7 +110,7 @@ public class PointAOE implements AOE {
 
                 dist = reach.metric.radius(origin.x, origin.y, p.x, p.y);
                 if (dist <= reach.maxDistance && dist >= reach.minDistance) {
-                    ArrayList<Coord> ap = new ArrayList<Coord>();
+                    ArrayList<Coord> ap = new ArrayList<>();
                     ap.add(p);
                     ap.add(p);
                     ap.add(p);
@@ -125,7 +125,7 @@ public class PointAOE implements AOE {
 
                     dist = reach.metric.radius(origin.x, origin.y, p.x, p.y);
                     if (dist <= reach.maxDistance && dist >= reach.minDistance) {
-                        ArrayList<Coord> ap = new ArrayList<Coord>();
+                        ArrayList<Coord> ap = new ArrayList<>();
                         ap.add(p);
                         bestPoints.put(p, ap);
                     }
@@ -223,7 +223,7 @@ public class PointAOE implements AOE {
 
     @Override
     public LinkedHashMap<Coord, Double> findArea() {
-        LinkedHashMap<Coord, Double> ret = new LinkedHashMap<Coord, Double>(1);
+        LinkedHashMap<Coord, Double> ret = new LinkedHashMap<>(1);
         ret.put(Coord.get(center.x, center.y), 1.0);
         return ret;
     }

@@ -86,7 +86,7 @@ public abstract class AbstractTextScreen<T extends Color> extends AbstractSquidS
 			throw new IllegalStateException("Cannot wrap an unitialized " + getClass().getSimpleName());
 
 		final List<IColoredString<T>> tsave = text;
-		text = new ArrayList<IColoredString<T>>(tsave.size() * 2);
+		text = new ArrayList<>(tsave.size() * 2);
 		final int[] asave = alignment;
 		final /* @Nullable */ List<Integer> newAlignments = asave == null ? null
 				: new ArrayList<Integer>(asave.length * 2);

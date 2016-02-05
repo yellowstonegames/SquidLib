@@ -141,7 +141,7 @@ public class FOVCache extends FOV{
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
-        lights = new LinkedHashMap<Coord, Integer>();
+        lights = new LinkedHashMap<>();
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -210,7 +210,7 @@ public class FOVCache extends FOV{
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
-        lights = new LinkedHashMap<Coord, Integer>();
+        lights = new LinkedHashMap<>();
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -282,7 +282,7 @@ public class FOVCache extends FOV{
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
-        this.lights = new LinkedHashMap<Coord, Integer>(lights);
+        this.lights = new LinkedHashMap<>(lights);
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -1617,7 +1617,7 @@ public class FOVCache extends FOV{
         if(!complete || startX < 0 || startX >= width || startY < 0 || startY >= height)
             return new Coord[0];
         int max = distance(endX - startX, endY - startY);
-        ArrayList<Coord> path = new ArrayList<Coord>(max / 2 + 1);
+        ArrayList<Coord> path = new ArrayList<>(max / 2 + 1);
         short[] losCached = losCache[startX + startY * width];
         if(losCached.length == 0)
             return new Coord[0];
@@ -1673,7 +1673,7 @@ public class FOVCache extends FOV{
      */
     public Coord[] sortedLOS(int startX, int startY, int endX, int endY) {
         Coord[] path = calculateLOS(startX, startY, endX, endY);
-        SortedMap<Double, Coord> sorted = new TreeMap<Double, Coord>();
+        SortedMap<Double, Coord> sorted = new TreeMap<>();
         double modifier = 0.0001;
         Coord c;
         for (int i = 0; i < path.length; i++, modifier += 0.0001) {
@@ -1844,8 +1844,8 @@ public class FOVCache extends FOV{
          */
         @Override
         public void run() {
-            ArrayList<ArrayList<LOSUnit>> losUnits = new ArrayList<ArrayList<LOSUnit>>(24);
-            ArrayList<ArrayList<FOVUnit>> fovUnits = new ArrayList<ArrayList<FOVUnit>>(24);
+            ArrayList<ArrayList<LOSUnit>> losUnits = new ArrayList<>(24);
+            ArrayList<ArrayList<FOVUnit>> fovUnits = new ArrayList<>(24);
             for (int p = 0; p < 24; p++) {
                 losUnits.add(new ArrayList<LOSUnit>(mapLimit / 20));
                 fovUnits.add(new ArrayList<FOVUnit>(mapLimit / 20));
@@ -1933,7 +1933,7 @@ public class FOVCache extends FOV{
                 }
             }
 
-            ArrayList<ArrayList<SymmetryUnit>> symUnits = new ArrayList<ArrayList<SymmetryUnit>>(4);
+            ArrayList<ArrayList<SymmetryUnit>> symUnits = new ArrayList<>(4);
             for (int p = 0; p < 4; p++) {
                 symUnits.add(new ArrayList<SymmetryUnit>(mapLimit / 3));
             }
@@ -2017,9 +2017,9 @@ public class FOVCache extends FOV{
             needsChange = differencePacked(needsChange, wallMap);
             resMap = res;
             Coord[] changingCoords = allPacked(needsChange);
-            List<LOSUnit> losUnits = new ArrayList<LOSUnit>(changingCoords.length);
-            List<FOVUnit> fovUnits = new ArrayList<FOVUnit>(changingCoords.length);
-            List<SymmetryUnit> symUnits = new ArrayList<SymmetryUnit>(changingCoords.length);
+            List<LOSUnit> losUnits = new ArrayList<>(changingCoords.length);
+            List<FOVUnit> fovUnits = new ArrayList<>(changingCoords.length);
+            List<SymmetryUnit> symUnits = new ArrayList<>(changingCoords.length);
 
             for (int i = 0, idx; i < changingCoords.length; i++)
             {
