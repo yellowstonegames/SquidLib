@@ -10,7 +10,7 @@ Current Features:
 ###Ease Of Use
 -   Standard GUI notation of (x,y) locations within the grid
 -   Uses Swing components or the scene2d.ui classes from libGDX
-  -   Only one of either Swing or LibGDX is required to use to display a grid; using libGDX should work on desktop and Android, as well as probably iOS via RoboVM (untested).
+  -   Only one of either Swing or LibGDX is required to use to display a grid; using libGDX should work on desktop and Android, plus HTML with some caveats, as well as probably iOS via RoboVM (untested).
 -   Any Font can be used
   -   This means TTF or OTF fonts in Swing
   -   For libGDX, it means bitmap fonts created in the AngelCode format, which can be generated from libGDX's Hiero tool using TTF or OTF fonts as input
@@ -22,7 +22,7 @@ Current Features:
   -   Set size of the cell, number of cells in the grid, and Font to be used
     -   Font is dynamically resized to fit optimally within the cell
 -   Font size and style can be changed on the fly
--   Several fonts provided as resources, one narrow, one square, for unicode line drawing to work out-of-the-box
+-   Several fonts provided as resources, some narrow, some square, for unicode line drawing to work out-of-the-box
 -   Multiple grids of different configurations can be used simultaneously in the same display
 -   Multiple grids of different configurations can be overlayed allowing for transparency effects
   -   A convenience class, SquidLayers provides foreground and background setting with this
@@ -50,6 +50,7 @@ Current Features:
 -   Can perform LIBTCOD style "dark", "light", and "desaturate" commands on any color
 -   Can get an arbitrary amount of blend between two colors
 -   Colors are also available as standard java.awt.Color constants in the Colors class
+-   Starting with 3.0.0 beta 2, you can alter colors automatically using Filters.
 
 ###Roguelike Specific Toolkit
 -   Robust Field of View and Line of Sight system
@@ -57,6 +58,7 @@ Current Features:
   -  Can handle directional FOV by simply specifying an angle and a span in degrees to cover with the FOV
 -   Sound propagation system that can be used like Line of Sight, but for sounds that echo and pass through walls
 -   Spill class implements randomized flood-fill, useful for spreading gases and other fluids
+-   Splash is an easy-to-use implementation of randomized flood-fill for when you don't need all of Spill's features or bloat; it's new in 3.0.0 beta 3.
 
 ###Dungeon Generation Toolkit
 -   Full-featured Herringbone Wang Tile dungeon generator
@@ -68,6 +70,8 @@ Current Features:
 -   Convenience functions/constructors let you use the `char[][]` dungeons to easily build other grid things
   -   DijkstraMap will have walls automatically placed in as obstacles if passed a `char[][]` when it's constucted
   -   FOV resistance maps can be generated automatically by DungeonUtility given a `char[][]`
+- MixedGenerator can produce maps that combine cave areas with artificial areas, starting in 3.0.0 beta 2.
+  - A winding, snake-like path can be produced by SerpentMapGenerator, and has been adapted to generate multi-level dungeons with SerpentDeepMapGenerator. Both of these use MixedGenerator, and so can mix natural rock with worked stone.
 
 ###SquidAI Pathfinding code
 -   Dijkstra Maps and A* can be used for pathfinding and other purposes.
@@ -86,13 +90,16 @@ Current Features:
 -   Demos of all functionality included
 -   EverythingDemo shows off lots of features and is fully documented; a good place to start
 -   SquidAIDemo has two AI teams fight each other with large area-of-effect attacks.
+-   SquidSetup produces a sample project with a heavily-documented basic example to get started.
 
 ###Math Toolkit
 -   Custom extension(s) of Random allows drop-in replacement with added features
   -   In addition to the usual Mersenne Twister, there's a XorShift128+ RNG and a SplitMix64 RNG (called LightRNG)
-    -   LightRNG can skip ahead or behind in its generated sequence.
+    -   LightRNG can skip ahead or behind in its generated sequence, and it's the fastest of all the RNGs here.
   -   DharmaRNG can be used to make more or less "lucky" RNGs that skew towards high or low results
   -   SobolQRNG produces deterministic results that may seem random, but tend to be more evenly distributed
+  -   DeckRNG should be less random during any particular span of random numbers, since it "shuffles" 16 numbers, from low to high, and draws them in a random order.
+  -   PermutedRNG is fairly fast (not quite as fast as LightRNG), but has potential statistical advantages.
 -   Able to find Bresenham Lines for 2D and 3D coordinates.
   -   Also can use Wu or Elias Lines (antialiased Bresenham Lines)
 -   Perlin noise implementation
@@ -137,13 +144,22 @@ Current Features:
   - More options for pathfinding
     - WaypointPathfinder precalculates paths between all doorways or other wide-to-narrow transitions, and can quickly fetch a path that it already knows.
     - DijkstraMap has a few more features, including pathfinding that tries to stay behind cover or out of sight.
+- There's now a third beta!
+  - Distance field fonts! These resize very smoothly and should drastically reduce the number of fonts needed to implement zooming or adapt to multiple screen sizes.
+  - There's "imitation foreign language" generation in FakeLanguageGen, including the ability to mix styles of generated language or scripts.
+  - There's also some early random monster description generation.
+  - You can now analyze a map with RoomFinder after it's been generated to find likely rooms and corridors in it, for various uses.
+  - You can associate regions from CoordPacker with values (something that can't be done with HashMap normally), and query a point to find overlapping regions that contain that point.
+  - SpatialMap provides a common convenience by allowing values to be indexed by a key or by a Coord position, and updates all 3 of these as one entry.
+  - IColoredString has lots of new useful features, including justified and wrapped text, on top of its existing multi-colored text.
+  - SquidMessageBox provides a simple scrolling message box that be used as a scene2d.ui widget, and can display IColoredString data.
 - But, 3.0.0's final release will be major, and so should be expected to *break* API backwards compatibility
   - Any minor releases after 3.0.0 and before 4.0.0 should be expected to *keep* API backwards compatibility, unless a feature is broken or unusable
   - The most significant change in 3.0.0 will be the removal of the Swing-based rendering and full transition to the similar, but much faster and more responsive, libGDX renderer
   - 3.0.0-b1 is the last release to contain Swing. If you're porting code that used an earlier version of SquidLib and need Swing for some reason, you may want to stay with the largely-compatible 2.9.1 instead of the very-different 3.0.0-b1.
     - This should also enable SquidLib to be used for rendering on Android/iOS and not only the desktop platforms Swing is limited to
   - There is now a tool that sets up a project for people who want an easy way to handle the dependencies of SquidLib and/or libGDX
-    - We now have SquidSetup to automatically handle the setup of a new project that uses SquidLib 3.0.0-b2, including fetching dependencies automatically and setting up a project that potentially targets both desktop and Android (possibly iOS as well?)
+    - We now have SquidSetup to automatically handle the setup of a new project that uses SquidLib 3.0.0-b3, including fetching dependencies automatically and setting up a project that potentially targets both desktop and Android, potentially HTML, and possibly iOS as well.
     - If you already use Maven, Gradle, SBT, Leiningen, or some other dependency manager, upgrading should be easier to the 3.0.0 series
     - If you don't, you should, and SquidSetup should handle the hard parts for you.
 
@@ -152,26 +168,26 @@ Download
 
 Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your choice of features, or simply use SquidSetup to make a new project configured the way libGDX prefers to work, and copy in any code you might already have.
 
-Ideally, if you're just starting out you should use SquidSetup. This is [the most recent release](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b2). If your older code did not use a dependency manager like Maven or Gradle, you will have a hard time updating without SquidSetup, so the recommended approach in that case is to make a new project in a folder of your choice, copy all of your old code over into the new project, and if you're satisfied, then copy it back to replace your old project with the reorganized and updated code. If you're updating an existing project that does use a dependency manager, you may not want to create a whole new starting point and copy over your old code, though that can still be a good option. You can instead update your dependencies. All projects need `squidlib-util`, which contains the core logic that anything that uses SquidLib needs, but if you depend on the text-based display module then it will be downloaded automatically as part of depending on the display module. If you use the logic module on its own and handle graphics yourself, you should update your existing Maven, Gradle, etc. project with the [Dependency Information here](http://search.maven.org/#artifactdetails%7Ccom.squidpony%7Csquidlib-util%7C3.0.0-b2%7Cjar). If your project used text-based display in SquidLib 3.0.0-b1, then you need to change a few things.
+Ideally, if you're just starting out you should use SquidSetup. This is [the most recent release](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b3). If your older code did not use a dependency manager like Maven or Gradle, you will have a hard time updating without SquidSetup, so the recommended approach in that case is to make a new project in a folder of your choice, copy all of your old code over into the new project, and if you're satisfied, then copy it back to replace your old project with the reorganized and updated code. If you're updating an existing project that does use a dependency manager, you may not want to create a whole new starting point and copy over your old code, though that can still be a good option. You can instead update your dependencies. All projects need `squidlib-util`, which contains the core logic that anything that uses SquidLib needs, but if you depend on the text-based display module then it will be downloaded automatically as part of depending on the display module. If you use the logic module on its own and handle graphics yourself, you should update your existing Maven, Gradle, etc. project with the [Dependency Information here](http://search.maven.org/#artifactdetails%7Ccom.squidpony%7Csquidlib-util%7C3.0.0-b2%7Cjar). If your project used text-based display in SquidLib 3.0.0-b1, then you need to change a few things.
   - If you used Swing before, you will need to change to use LibGDX. The API is relatively similar, but the typical folder layout is not. You should probably either stick with b1 or earlier, or use SquidSetup.
-  - If you used libGDX before, the name of the dependency changed from `squidlib-gdx` in 3.0.0-b1, to just `squidlib` in 3.0.0-b2. It depends on `squidlib-util` and the core LibGDX library (`gdx`), but needs to be told in this version what platform it targets (this avoids distributing the large LWJGL library, which is used only on desktop, to Android or other platforms that it just weighs down). 
+  - If you used libGDX before, the name of the dependency changed from `squidlib-gdx` in 3.0.0-b1, to just `squidlib` in 3.0.0-b2 and 3.0.0-b3. It depends on `squidlib-util` and the core LibGDX library (`gdx`), but needs to be told in this version what platform it targets (this avoids distributing the large LWJGL library, which is used only on desktop, to Android or other platforms that it just weighs down). 
 
 This last step is slightly more involved than before, and is part of the rationale for making SquidSetup. Using Maven for a desktop project, you would use this dependency in the desktop pom.xml:
 ```
 <dependency>
   <groupId>com.squidpony</groupId>
   <artifactId>squidlib</artifactId>
-  <version>3.0.0-b2</version>
+  <version>3.0.0-b3</version>
 </dependency>
 <dependency>
     <groupId>com.badlogicgames.gdx</groupId>
     <artifactId>gdx-backend-lwjgl</artifactId>
-    <version>1.7.1</version>
+    <version>1.9.1</version>
 </dependency>
 <dependency>
     <groupId>com.badlogicgames.gdx</groupId>
     <artifactId>gdx-platform</artifactId>
-    <version>1.7.1</version>
+    <version>1.9.1</version>
     <classifier>natives-desktop</classifier>
 </dependency>
 ```
@@ -180,32 +196,35 @@ Using Maven for an Android project, you would use these dependencies in the Andr
 <dependency>
   <groupId>com.squidpony</groupId>
   <artifactId>squidlib</artifactId>
-  <version>3.0.0-b2</version>
+  <version>3.0.0-b3</version>
 </dependency>
 <dependency>
     <groupId>com.badlogicgames.gdx</groupId>
     <artifactId>gdx-backend-android</artifactId>
-    <version>1.7.1</version>
+    <version>1.9.1</version>
 </dependency>
 <dependency>
     <groupId>com.badlogicgames.gdx</groupId>
     <artifactId>gdx-platform</artifactId>
-    <version>1.7.1</version>
+    <version>1.9.1</version>
     <classifier>natives-armeabi</classifier>
 </dependency>
 <dependency>
     <groupId>com.badlogicgames.gdx</groupId>
     <artifactId>gdx-platform</artifactId>
-    <version>1.7.1</version>
+    <version>1.9.1</version>
     <classifier>natives-armeabi-v7a</classifier>
 </dependency>
 <dependency>
     <groupId>com.badlogicgames.gdx</groupId>
     <artifactId>gdx-platform</artifactId>
-    <version>1.7.1</version>
+    <version>1.9.1</version>
     <classifier>natives-x86</classifier>
 </dependency>
 ```
+
+HTML support is new in 3.0.0-b3, and you should really use SquidSetup to try it out; a lot of resources are needed in specific places, and I don't know of a good way to get them laid out without using a setup tool.
+
 If you really, truly want to use Swing, you need to use 2.9.1 or 3.0.0-b1.  This is the dependency for SquidLib using the Swing renderer and version 3.0.0-b1, which has known bugs that are fixed in newer versions, but otherwise should "work" on Windows, Mac OS X, and Linux:
 ```
 <dependency>
@@ -243,7 +262,7 @@ If you want to use the LibGDX code in 2.9.1 (anything in a package with "gdx" in
     <classifier>natives-desktop</classifier>
 </dependency>
 ```
-(This is not the absolute-most-recent version of LibGDX, and it may work with more recent versions, but no guarantees can be made. `squidlib` 3.0.0-b2 depends on libGDX 1.7.1, and has similar behavior about dependency handling. `squidlib-gdx` 3.0.0-b1 handles its dependencies on its own, so you don't need this step, except because of that behavior it will always download the desktop dependencies, even when they do nothing on the current platform.)
+(This is not a recent version of LibGDX, and it may work with more recent versions, but no guarantees can be made. `squidlib` 3.0.0-b3 depends on libGDX 1.9.1, `squidlib` 3.0.0-b2 depends on libGDX 1.7.1, and they have similar behavior about dependency handling. `squidlib-gdx` 3.0.0-b1 handles its dependencies on its own, so you don't need this step, except because of that behavior it will always download the desktop dependencies, even when they do nothing on the current platform.)
 
 GitHub repository: https://github.com/SquidPony/SquidLib
 
