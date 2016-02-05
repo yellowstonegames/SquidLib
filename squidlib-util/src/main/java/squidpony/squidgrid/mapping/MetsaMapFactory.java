@@ -214,7 +214,7 @@ public class MetsaMapFactory {
                 px = rng.between(0, width);
                 py = rng.between(0, height);
             }
-            cities.add(Coord.get(4 * round(px / 4), 4 * round(py / 4)));
+            cities.add(Coord.get(4 * round(px / 4f), 4 * round(py / 4f)));
         }
         return weightedMap;
     }
