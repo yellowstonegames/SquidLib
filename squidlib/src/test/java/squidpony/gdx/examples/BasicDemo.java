@@ -9,14 +9,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import squidpony.FakeLanguageGen;
 import squidpony.squidai.DijkstraMap;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BasicDemo extends ApplicationAdapter {
     SpriteBatch batch;
@@ -42,21 +48,22 @@ public class BasicDemo extends ApplicationAdapter {
     private ArrayList<Coord> toCursor;
     private ArrayList<Coord> awaitedMoves;
     private float secondsWithoutMoves;
-    private String[] lang = new String[6];
+    private String[] lang = new String[12];
+    private int langIndex = 0;
     @Override
     public void create () {
         //These variables, corresponding to the screen's width and height in cells and a cell's width and height in
         //pixels, must match the size you specified in the launcher for input to behave.
         //This is one of the more common places a mistake can happen.
         //In our desktop launcher, we gave these arguments to the configuration:
-        //	config.width = 80 * 9;
-        //  config.height = 40 * 20;
+        //	config.width = 80 * 8;
+        //  config.height = 40 * 18;
         //Here, config.height refers to the total number of rows to be displayed on the screen.
         //We're displaying 32 rows of dungeon, then 8 more rows of text generation to show some tricks with language.
         //gridHeight is 32 because that variable will be used for generating the dungeon and handling movement within
         //the upper 32 rows. Anything that refers to the full height, which happens rarely and usually for things like
         //screen resizes, just uses gridHeight + 8. Next to it is gridWidth, which is 80 because we want 80 grid spaces
-        //across the whole screen. cellWidth and cellHeight are both 15, and match the multipliers for config.width and
+        //across the whole screen. cellWidth and cellHeight are 8 and 18, and match the multipliers for config.width and
         //config.height, but in this case don't strictly need to because we soon use a "Stretchable" font. While
         //gridWidth and gridHeight are measured in spaces on the grid, cellWidth and cellHeight are the pixel dimensions
         //of an individual cell. The font will look more crisp if the cell dimensions match the config multipliers
@@ -64,10 +71,10 @@ public class BasicDemo extends ApplicationAdapter {
         //still retain most of that crispness.
         gridWidth = 80;
         gridHeight = 32;
-        cellWidth = 9;
-        cellHeight = 20;
+        cellWidth = 8;
+        cellHeight = 18;
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
-        rng = new RNG("SquidLib Loves Random Numbers!");
+        rng = new RNG("SquidLib!");
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         batch = new SpriteBatch();
@@ -76,6 +83,11 @@ public class BasicDemo extends ApplicationAdapter {
         // the font will try to load Inconsolata-LGC-Custom as an embedded bitmap font with a distance field effect.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(gridWidth, gridHeight + 8, cellWidth, cellHeight, DefaultResources.getStretchableFont());
+        // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
+        // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
+        // if you use '#' for walls instead of box drawing chars, you don't need this.
+        display.getTextFactory().height(cellHeight + 1).initBySize();
+        // this makes animations very fast, which is good for multi-cell movement but bad for attack animations.
         display.setAnimationDuration(0.03f);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
@@ -111,14 +123,22 @@ public class BasicDemo extends ApplicationAdapter {
         bgColor = SColor.DARK_SLATE_GRAY;
         colorIndices = DungeonUtility.generatePaletteIndices(decoDungeon);
         bgColorIndices = DungeonUtility.generateBGPaletteIndices(decoDungeon);
+        // these were generated by the FakeLanguageGen class, which is compatible with most platforms SquidLib runs on,
+        // but not HTML. So they are simply pre-generated chunks of text to show the glyph support in SquidLib.
         lang = new String[]
                 {
-                        FakeLanguageGen.LOVECRAFT.sentence(rng, 4, 7, new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2),
-                        FakeLanguageGen.FRENCH.sentence(rng, 5, 8, new String[]{" -", ",", ",", ";"}, new String[]{"!", "?", ".", "...", ".", "?"}, 0.1),
-                        FakeLanguageGen.GREEK_ROMANIZED.sentence(rng, 5, 8, new String[]{",", ",", ";"}, new String[]{"!", "?", ".", "...", ".", "?"}, 0.15),
-                        FakeLanguageGen.GREEK_AUTHENTIC.sentence(rng, 5, 8, new String[]{",", ",", ";"}, new String[]{"!", "?", ".", "...", ".", "?"}, 0.15),
-                        FakeLanguageGen.RUSSIAN_ROMANIZED.sentence(rng, 4, 7, new String[]{" -", ",", ",", ",", ";"}, new String[]{"!", "!", ".", "...", ".", "?"}, 0.22),
-                        FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 7, new String[]{" -", ",", ",", ",", ";"}, new String[]{"!", "!", ".", "...", ".", "?"}, 0.22),
+                        "Ned jation, quariok sied pebation gnadism erbiss!",
+                        "Tezen kisaiba konnouda, bubotan, ne rijonnozouna?",
+                        "Mà le roe leth glang içoui?",
+                        "Potron oxa kthoi opleipotron ola aisaisp kthou.",
+                        "Εοθιαμ οκραυπ ρεοϕα τερος ψοσποιζ ριαμ.",
+                        "Tuskierovich topliegrachigary khodynamyv, toskiafi!",
+                        "Гыпогозуск, глынуск сид фавуриджйглътод!",
+                        "Hmaagrai eindian, ase agluxi-ugg?",
+                        "Gœu, auna sazeun nonanen kunneûnou ro.",
+                        "Esibőnt sěrmü ęãtsed sàpoupot lóâ delyīŉāy goỳ, sneśiec bism ālsi?",
+                        "Зaчaire vаτяπλaс щεογκιшι cэнαι гεвов; rαυп, ειрйч бιοκριαρτουggrй nι!",
+                        "Gatyriam reta - venőîn dīnøî şonā kazhy ásǻī, tsibiśťinki.",
                 };
 
         // this is a big one.
@@ -248,6 +268,8 @@ public class BasicDemo extends ApplicationAdapter {
         {
             player = player.translate(xmod, ymod);
         }
+        // loops through the text snippets displayed whenever the player moves
+        langIndex = (langIndex + 1) % 12;
     }
 
     /**
@@ -267,10 +289,14 @@ public class BasicDemo extends ApplicationAdapter {
         }
         //places the player as an '@' at his position in orange (6 is an index into SColor.LIMITED_PALETTE).
         display.put(player.x, player.y, '@', 6);
+        //this helps compatibility with the HTML target, which doesn't support String.format()
+        char[] spaceArray = new char[gridWidth];
+        Arrays.fill(spaceArray, ' ');
+        String spaces = String.valueOf(spaceArray);
 
         for (int i = 0; i < 6; i++) {
-            display.putString(0, gridHeight + i + 1, String.format("%" + gridWidth + "s", " "), 0, 1);
-            display.putString(2, gridHeight + i + 1, lang[i], 0, 1);
+            display.putString(0, gridHeight + i + 1, spaces, 0, 1);
+            display.putString(2, gridHeight + i + 1, lang[(langIndex + i) % 12], 0, 1);
         }
     }
     @Override
