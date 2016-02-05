@@ -234,7 +234,7 @@ public class DharmaRNG extends RNG {
         if (list.isEmpty()) {
             return null;
         }
-        return new ArrayList<T>(list).get(nextInt(list.size()));
+        return new ArrayList<>(list).get(nextInt(list.size()));
     }
 
     /**

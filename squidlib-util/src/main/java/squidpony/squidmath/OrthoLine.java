@@ -22,7 +22,7 @@ public class OrthoLine {
     public static List<Coord> line(int startX, int startY, int endX, int endY) {
         int dx = endX - startX, dy = endY - startY, nx = Math.abs(dx), ny = Math.abs(dy);
         int signX = (dx > 0) ? 1 : -1, signY = (dy > 0) ? 1 : -1, workX = startX, workY = startY;
-        LinkedList<Coord> drawn = new LinkedList<Coord>();
+        LinkedList<Coord> drawn = new LinkedList<>();
         drawn.add(Coord.get(startX, startY));
         for (int ix = 0, iy = 0; ix < nx || iy < ny; ) {
             if ((0.5f + ix) / nx < (0.5 + iy) / ny) {

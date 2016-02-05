@@ -66,8 +66,8 @@ public class DividedMazeGenerator {
         stack.offer(new DividedMazeRoom(1, 1, width - 2, height - 2));
         while (!stack.isEmpty()) {
             DividedMazeRoom room = stack.pop();
-            ArrayList<Integer> availX = new ArrayList<Integer>(),
-                               availY = new ArrayList<Integer>();
+            ArrayList<Integer> availX = new ArrayList<>(),
+                               availY = new ArrayList<>();
 
             for (int x = room.left + 1; x < room.right; x++) {
                 boolean top = map[x][room.top - 1];

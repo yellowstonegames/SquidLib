@@ -175,7 +175,7 @@ public abstract class AbstractSquidScreen<T extends Color> extends ScreenAdapter
 	 *         from {@code this}'s content.
 	 */
 	public SquidScreenInput<T> toSquidScreenInput() {
-		return new SquidScreenInput<T>(sizeManager, colorCenter, ipb);
+		return new SquidScreenInput<>(sizeManager, colorCenter, ipb);
 	}
 
 	/**

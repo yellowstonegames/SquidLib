@@ -33,7 +33,7 @@ public class SpillTest {
             System.out.println(dg);
 
             Coord entry = dg.utility.randomFloor(dun);
-            HashSet<Coord> impassable = new HashSet<Coord>();
+            HashSet<Coord> impassable = new HashSet<>();
             impassable.add(Coord.get(entry.x + 2, entry.y));
             impassable.add(Coord.get(entry.x - 2, entry.y));
             impassable.add(Coord.get(entry.x, entry.y + 2));
@@ -69,7 +69,7 @@ public class SpillTest {
             System.out.println(dg);
             short[] valid = CoordPacker.pack(dun, '.');
 
-            LinkedHashMap<Coord, Double> entries = new LinkedHashMap<Coord, Double>(16);
+            LinkedHashMap<Coord, Double> entries = new LinkedHashMap<>(16);
             ArrayList<Coord> section = CoordPacker.randomPortion(valid, 16, rng);
             for (int i = 0; i < 4; i++) {
                 entries.put(section.get(i * 4    ), 1.0);

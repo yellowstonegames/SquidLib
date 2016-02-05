@@ -79,11 +79,11 @@ public class SquidAIDemo extends ApplicationAdapter {
         short[] placement = CoordPacker.pack(bareDungeon, '.');
 
 
-        teamRed = new LinkedHashMap<AnimatedEntity, Integer>(numMonsters);
-        teamBlue = new LinkedHashMap<AnimatedEntity, Integer>(numMonsters);
+        teamRed = new LinkedHashMap<>(numMonsters);
+        teamBlue = new LinkedHashMap<>(numMonsters);
 
-        redPlaces = new LinkedHashSet<Coord>(numMonsters);
-        bluePlaces = new LinkedHashSet<Coord>(numMonsters);
+        redPlaces = new LinkedHashSet<>(numMonsters);
+        bluePlaces = new LinkedHashSet<>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
@@ -141,7 +141,7 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         dijkstraAlert();
 
-        awaitedMoves = new ArrayList<Coord>(10);
+        awaitedMoves = new ArrayList<>(10);
         colors = DungeonUtility.generatePaletteIndices(bareDungeon);
         bgColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
         lights = DungeonUtility.generateLightnessModifiers(bareDungeon);
@@ -278,7 +278,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             }
             System.out.println();
         }*/
-        awaitedMoves = new ArrayList<Coord>(path);
+        awaitedMoves = new ArrayList<>(path);
     }
 
     public void move(AnimatedEntity ae, int newX, int newY) {

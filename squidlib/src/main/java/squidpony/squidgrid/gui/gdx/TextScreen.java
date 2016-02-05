@@ -42,7 +42,7 @@ public abstract class TextScreen extends AbstractTextScreen<Color> {
 			/* Job done already */
 			return;
 
-		gcp = new GroupCombinedPanel<Color>(buildScreenWideSquidPanel(), buildScreenWideSquidPanel());
+		gcp = new GroupCombinedPanel<>(buildScreenWideSquidPanel(), buildScreenWideSquidPanel());
 
 		final int width = gcp.getGridWidth();
 		final int height = gcp.getGridHeight();

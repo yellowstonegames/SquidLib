@@ -86,7 +86,7 @@ public class DijkstraMap {
      * cell; only steps that require movement will be included, and so if the path has not been found or a valid
      * path toward a goal is impossible, this ArrayList will be empty.
      */
-    public ArrayList<Coord> path = new ArrayList<Coord>();
+    public ArrayList<Coord> path = new ArrayList<>();
     /**
      * Goals are always marked with 0.
      */
@@ -133,12 +133,12 @@ public class DijkstraMap {
      */
     public DijkstraMap() {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
 
-        goals = new LinkedHashMap<Coord, Double>();
-        fresh = new LinkedHashMap<Coord, Double>();
-        closed = new LinkedHashMap<Coord, Double>();
-        open = new LinkedHashMap<Coord, Double>();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
     }
 
     /**
@@ -148,12 +148,12 @@ public class DijkstraMap {
      */
     public DijkstraMap(RNG random) {
         rng = random;
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
 
-        goals = new LinkedHashMap<Coord, Double>();
-        fresh = new LinkedHashMap<Coord, Double>();
-        closed = new LinkedHashMap<Coord, Double>();
-        open = new LinkedHashMap<Coord, Double>();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
     }
 
     /**
@@ -163,12 +163,12 @@ public class DijkstraMap {
      */
     public DijkstraMap(final double[][] level) {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
 
-        goals = new LinkedHashMap<Coord, Double>();
-        fresh = new LinkedHashMap<Coord, Double>();
-        closed = new LinkedHashMap<Coord, Double>();
-        open = new LinkedHashMap<Coord, Double>();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -181,12 +181,12 @@ public class DijkstraMap {
     public DijkstraMap(final double[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
         this.measurement = measurement;
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
 
-        goals = new LinkedHashMap<Coord, Double>();
-        fresh = new LinkedHashMap<Coord, Double>();
-        closed = new LinkedHashMap<Coord, Double>();
-        open = new LinkedHashMap<Coord, Double>();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -200,12 +200,12 @@ public class DijkstraMap {
      */
     public DijkstraMap(final char[][] level) {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
 
-        goals = new LinkedHashMap<Coord, Double>();
-        fresh = new LinkedHashMap<Coord, Double>();
-        closed = new LinkedHashMap<Coord, Double>();
-        open = new LinkedHashMap<Coord, Double>();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -221,12 +221,12 @@ public class DijkstraMap {
      */
     public DijkstraMap(final char[][] level, RNG rng) {
         this.rng = rng;
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
 
-        goals = new LinkedHashMap<Coord, Double>();
-        fresh = new LinkedHashMap<Coord, Double>();
-        closed = new LinkedHashMap<Coord, Double>();
-        open = new LinkedHashMap<Coord, Double>();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -240,12 +240,12 @@ public class DijkstraMap {
      */
     public DijkstraMap(final char[][] level, char alternateWall) {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
 
-        goals = new LinkedHashMap<Coord, Double>();
-        fresh = new LinkedHashMap<Coord, Double>();
-        closed = new LinkedHashMap<Coord, Double>();
-        open = new LinkedHashMap<Coord, Double>();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level, alternateWall);
     }
 
@@ -260,13 +260,13 @@ public class DijkstraMap {
      */
     public DijkstraMap(final char[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         this.measurement = measurement;
 
-        goals = new LinkedHashMap<Coord, Double>();
-        fresh = new LinkedHashMap<Coord, Double>();
-        closed = new LinkedHashMap<Coord, Double>();
-        open = new LinkedHashMap<Coord, Double>();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -282,13 +282,13 @@ public class DijkstraMap {
      */
     public DijkstraMap(final char[][] level, Measurement measurement, RNG rng) {
         this.rng = rng;
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         this.measurement = measurement;
 
-        goals = new LinkedHashMap<Coord, Double>();
-        fresh = new LinkedHashMap<Coord, Double>();
-        closed = new LinkedHashMap<Coord, Double>();
-        open = new LinkedHashMap<Coord, Double>();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -737,8 +737,8 @@ public class DijkstraMap {
     public double[][] scan(Set<Coord> impassable) {
         if (!initialized) return null;
         if (impassable == null)
-            impassable = new LinkedHashSet<Coord>();
-        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<Coord, Double>(impassable.size());
+            impassable = new LinkedHashSet<>();
+        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
         for (Coord pt : impassable) {
             blocking.put(pt, WALL);
         }
@@ -750,7 +750,7 @@ public class DijkstraMap {
             gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
-        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -785,7 +785,7 @@ public class DijkstraMap {
                 }
             }
 //            closed.putAll(open);
-            open = new LinkedHashMap<Coord, Double>(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -821,8 +821,8 @@ public class DijkstraMap {
     public double[][] partialScan(int limit, Set<Coord> impassable) {
         if (!initialized) return null;
         if (impassable == null)
-            impassable = new LinkedHashSet<Coord>();
-        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<Coord, Double>(impassable.size());
+            impassable = new LinkedHashSet<>();
+        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
         for (Coord pt : impassable) {
             blocking.put(pt, WALL);
         }
@@ -834,7 +834,7 @@ public class DijkstraMap {
             gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
-        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -871,7 +871,7 @@ public class DijkstraMap {
                 }
             }
 //            closed.putAll(open);
-            open = new LinkedHashMap<Coord, Double>(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
             ++iter;
         }
@@ -950,7 +950,7 @@ public class DijkstraMap {
                 }
             }
 //            closed.putAll(open);
-            open = new LinkedHashMap<Coord, Double>(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -967,7 +967,7 @@ public class DijkstraMap {
      * @return the Coord that it found first.
      */
     public Coord findNearest(Coord start, Coord... targets) {
-        LinkedHashSet<Coord> tgts = new LinkedHashSet<Coord>(targets.length);
+        LinkedHashSet<Coord> tgts = new LinkedHashSet<>(targets.length);
         Collections.addAll(tgts, targets);
         return findNearest(start, tgts);
     }
@@ -982,13 +982,13 @@ public class DijkstraMap {
      * @return an ArrayList of Coord that goes from a cell adjacent to start and goes to one of the targets.
      */
     public ArrayList<Coord> findShortcutPath(Coord start, Coord... targets) {
-        ArrayList<Coord> path = new ArrayList<Coord>(32);
+        ArrayList<Coord> path = new ArrayList<>(32);
         if (targets.length == 0)
             return path;
         Coord currentPos = findNearest(start, targets);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1006,7 +1006,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1035,7 +1035,7 @@ public class DijkstraMap {
         if (!initialized) return null;
         if (targets == null)
             return null;
-        ArrayList<Coord> found = new ArrayList<Coord>(limit);
+        ArrayList<Coord> found = new ArrayList<>(limit);
         if (targets.contains(start))
             return found;
         Coord start2 = start;
@@ -1084,7 +1084,7 @@ public class DijkstraMap {
                 }
             }
 //            closed.putAll(open);
-            open = new LinkedHashMap<Coord, Double>(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -1115,8 +1115,8 @@ public class DijkstraMap {
     public double[][] scan(Set<Coord> impassable, int size) {
         if (!initialized) return null;
         if (impassable == null)
-            impassable = new LinkedHashSet<Coord>();
-        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<Coord, Double>(impassable.size());
+            impassable = new LinkedHashSet<>();
+        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
         for (Coord pt : impassable) {
             blocking.put(pt, WALL);
             for (int x = 0; x < size; x++) {
@@ -1137,7 +1137,7 @@ public class DijkstraMap {
         }
         mappedCount = goals.size();
         double currentLowest = 999000;
-        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<Coord, Double>();
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<>();
         Coord p = Coord.get(0, 0), temp = Coord.get(0, 0);
         for (int y = 0; y < height; y++) {
             I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS:
@@ -1206,7 +1206,7 @@ public class DijkstraMap {
                 }
             }
 //            closed.putAll(open);
-            open = new LinkedHashMap<Coord, Double>(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -1245,14 +1245,14 @@ public class DijkstraMap {
     public ArrayList<Coord> findPath(int length, Set<Coord> impassable,
                                      Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new LinkedHashSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -1265,7 +1265,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1283,7 +1283,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1369,14 +1369,14 @@ public class DijkstraMap {
                 }
             }
         }
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new LinkedHashSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -1418,7 +1418,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1436,7 +1436,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1521,19 +1521,19 @@ public class DijkstraMap {
             }
         }
 
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         if (targets == null || targets.size() == 0)
             return path;
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
 
         if (allies == null)
-            friends = new LinkedHashSet<Coord>();
+            friends = new LinkedHashSet<>();
         else {
-            friends = new LinkedHashSet<Coord>(allies);
+            friends = new LinkedHashSet<>(allies);
             friends.remove(start);
         }
 
@@ -1619,7 +1619,7 @@ public class DijkstraMap {
         Coord currentPos = Coord.get(start.x, start.y);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1645,7 +1645,7 @@ public class DijkstraMap {
                 break;
             }
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1725,14 +1725,14 @@ public class DijkstraMap {
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
 
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new LinkedHashSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -1774,7 +1774,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1792,7 +1792,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1903,14 +1903,14 @@ public class DijkstraMap {
             }
         }
 
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new LinkedHashSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -1925,7 +1925,7 @@ public class DijkstraMap {
         }
         scan(impassable2);
         goals.clear();
-        LinkedHashMap<Coord, Double> cachedGoals = new LinkedHashMap<Coord, Double>();
+        LinkedHashMap<Coord, Double> cachedGoals = new LinkedHashMap<>();
 
         for (int x = 0; x < width; x++) {
             CELL:
@@ -2000,7 +2000,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2103,19 +2103,19 @@ public class DijkstraMap {
             }
         }
 
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         if (targets == null || targets.size() == 0)
             return path;
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
 
         if (allies == null)
-            friends = new LinkedHashSet<Coord>();
+            friends = new LinkedHashSet<>();
         else {
-            friends = new LinkedHashSet<Coord>(allies);
+            friends = new LinkedHashSet<>(allies);
             friends.remove(start);
         }
 
@@ -2201,7 +2201,7 @@ public class DijkstraMap {
         Coord currentPos = Coord.get(start.x, start.y);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2227,7 +2227,7 @@ public class DijkstraMap {
                 break;
             }
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2253,7 +2253,7 @@ public class DijkstraMap {
 
 
     private double cachedLongerPaths = 1.2;
-    private Set<Coord> cachedImpassable = new LinkedHashSet<Coord>();
+    private Set<Coord> cachedImpassable = new LinkedHashSet<>();
     private Coord[] cachedFearSources;
     private double[][] cachedFleeMap;
     private int cachedSize = 1;
@@ -2284,17 +2284,17 @@ public class DijkstraMap {
     public ArrayList<Coord> findFleePath(int length, double preferLongerPaths, Set<Coord> impassable,
                                          Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new LinkedHashSet<>();
         if (fearSources == null || fearSources.length < 1) {
-            path = new ArrayList<Coord>();
+            path = new ArrayList<>();
             return path;
         }
         if (cachedSize == 1 && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable) &&
@@ -2302,7 +2302,7 @@ public class DijkstraMap {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new LinkedHashSet<Coord>(impassable2);
+            cachedImpassable = new LinkedHashSet<>(impassable2);
             cachedFearSources = GwtCompatibility.cloneCoords(fearSources);
             cachedSize = 1;
             resetMap();
@@ -2325,7 +2325,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2342,7 +2342,7 @@ public class DijkstraMap {
                 }
             }
             if (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2394,15 +2394,15 @@ public class DijkstraMap {
     public ArrayList<Coord> findPathLarge(int size, int length, Set<Coord> impassable,
                                           Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new LinkedHashSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -2416,7 +2416,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2434,7 +2434,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2496,15 +2496,15 @@ public class DijkstraMap {
                 }
             }
         }
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new LinkedHashSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -2549,7 +2549,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2567,7 +2567,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2631,15 +2631,15 @@ public class DijkstraMap {
                 }
             }
         }
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new LinkedHashSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -2684,7 +2684,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
 
@@ -2702,7 +2702,7 @@ public class DijkstraMap {
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2758,17 +2758,17 @@ public class DijkstraMap {
     public ArrayList<Coord> findFleePathLarge(int size, int length, double preferLongerPaths, Set<Coord> impassable,
                                               Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new LinkedHashSet<>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new LinkedHashSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new LinkedHashSet<>();
         if (fearSources == null || fearSources.length < 1) {
-            path = new ArrayList<Coord>();
+            path = new ArrayList<>();
             return path;
         }
         if (size == cachedSize && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable)
@@ -2776,7 +2776,7 @@ public class DijkstraMap {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new LinkedHashSet<Coord>(impassable2);
+            cachedImpassable = new LinkedHashSet<>(impassable2);
             cachedFearSources = GwtCompatibility.cloneCoords(fearSources);
             cachedSize = size;
             resetMap();
@@ -2799,7 +2799,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
 
@@ -2817,7 +2817,7 @@ public class DijkstraMap {
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2856,11 +2856,11 @@ public class DijkstraMap {
     public ArrayList<Coord> findPathPreScanned(Coord target) {
         if (!initialized || goals == null || goals.isEmpty()) return null;
         RNG rng2 = new StatefulRNG(new LightRNG(0xf00d));
-        path = new ArrayList<Coord>();
+        path = new ArrayList<>();
         Coord currentPos = target;
         while (true) {
             if (frustration > 2000) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2878,7 +2878,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<Coord>();
+                path = new ArrayList<>();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2903,7 +2903,7 @@ public class DijkstraMap {
      */
     public LinkedHashMap<Coord, Double> floodFill(int radius, Coord... starts) {
         if (!initialized) return null;
-        LinkedHashMap<Coord, Double> fill = new LinkedHashMap<Coord, Double>();
+        LinkedHashMap<Coord, Double> fill = new LinkedHashMap<>();
 
         resetMap();
         for (Coord goal : starts) {

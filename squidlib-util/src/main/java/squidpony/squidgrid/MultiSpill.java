@@ -80,7 +80,7 @@ public class MultiSpill {
     public MultiSpill() {
         rng = new StatefulRNG();
 
-        fresh = new ArrayList<LinkedHashSet<Coord>>();
+        fresh = new ArrayList<>();
     }
     /**
      * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual
@@ -93,7 +93,7 @@ public class MultiSpill {
     public MultiSpill(RNG random) {
         rng = new StatefulRNG(random.getRandomness());
 
-        fresh = new ArrayList<LinkedHashSet<Coord>>();
+        fresh = new ArrayList<>();
     }
 
     /**
@@ -189,7 +189,7 @@ public class MultiSpill {
      * @return this for chaining
      */
     public MultiSpill initialize(final short[][] level) {
-        fresh = new ArrayList<LinkedHashSet<Coord>>();
+        fresh = new ArrayList<>();
         width = level.length;
         height = level[0].length;
         spillMap = new short[width][height];
@@ -214,7 +214,7 @@ public class MultiSpill {
      * @return this for chaining
      */
     public MultiSpill initialize(final char[][] level) {
-        fresh = new ArrayList<LinkedHashSet<Coord>>();
+        fresh = new ArrayList<>();
         width = level.length;
         height = level[0].length;
         spillMap = new short[width][height];
@@ -241,7 +241,7 @@ public class MultiSpill {
      * @return this for chaining
      */
     public MultiSpill initialize(final char[][] level, char alternateWall) {
-        fresh = new ArrayList<LinkedHashSet<Coord>>();
+        fresh = new ArrayList<>();
         width = level.length;
         height = level[0].length;
         spillMap = new short[width][height];
@@ -340,8 +340,8 @@ public class MultiSpill {
             impassable = new LinkedHashSet<>();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
-        ArrayList<Coord> spillers = new ArrayList<Coord>(entries);
-        spreadPattern = new ArrayList<ArrayList<Coord>>(spillers.size());
+        ArrayList<Coord> spillers = new ArrayList<>(entries);
+        spreadPattern = new ArrayList<>(spillers.size());
         fresh.clear();
         for (short i = 0; i < spillers.size(); i++) {
             spreadPattern.add(new ArrayList<Coord>(128));
@@ -422,11 +422,11 @@ public class MultiSpill {
             impassable = new LinkedHashSet<>();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
-        ArrayList<Coord> spillers0 = new ArrayList<Coord>(entries.keySet()),
-                spillers = new ArrayList<Coord>(spillers0.size());
-        ArrayList<Double> biases0 = new ArrayList<Double>(entries.values()),
-                biases = new ArrayList<Double>(biases0.size());
-        spreadPattern = new ArrayList<ArrayList<Coord>>(spillers0.size());
+        ArrayList<Coord> spillers0 = new ArrayList<>(entries.keySet()),
+                spillers = new ArrayList<>(spillers0.size());
+        ArrayList<Double> biases0 = new ArrayList<>(entries.values()),
+                biases = new ArrayList<>(biases0.size());
+        spreadPattern = new ArrayList<>(spillers0.size());
         fresh.clear();
         for (short i = 0, ctr = 0; i < spillers0.size(); i++, ctr++) {
             spreadPattern.add(new ArrayList<Coord>(128));

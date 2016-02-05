@@ -35,7 +35,7 @@ public class DDALine {
         int dx = endX - startX, dy = endY - startY, nx = Math.abs(dx), ny = Math.abs(dy),
                 octant = ((dy < 0) ? 4 : 0) | ((dx < 0) ? 2 : 0) | ((ny > nx) ? 1 : 0), move, frac = 0;
 
-        LinkedList<Coord> drawn = new LinkedList<Coord>();
+        LinkedList<Coord> drawn = new LinkedList<>();
         switch (octant)
         {
             // x positive, y positive
