@@ -4,7 +4,7 @@
 
 	<groupId>com.squidpony</groupId>
 	<artifactId>squidlib-parent</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0-b3</version>
 	<packaging>pom</packaging>
 
 	<name>squidlib-parent</name>
