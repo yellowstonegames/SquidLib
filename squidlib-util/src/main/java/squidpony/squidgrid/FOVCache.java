@@ -1,5 +1,6 @@
 package squidpony.squidgrid;
 
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.ShortVLA;
@@ -77,6 +78,7 @@ import static squidpony.squidmath.CoordPacker.*;
  * Created by Tommy Ettinger on 10/7/2015.
  * @author Tommy Ettinger
  */
+@GwtIncompatible
 public class FOVCache extends FOV{
 
     protected int maxRadius, maxLOSRadius;
@@ -1828,6 +1830,7 @@ public class FOVCache extends FOV{
         return height;
     }
 
+    @GwtIncompatible
     protected class PerformanceUnit implements Runnable
     {
 
@@ -1907,6 +1910,7 @@ public class FOVCache extends FOV{
         }
     }
 
+    @GwtIncompatible
     protected class QualityUnit implements Runnable
     {
 
@@ -1982,6 +1986,7 @@ public class FOVCache extends FOV{
         }
     }
 
+    @GwtIncompatible
     protected class RefreshUnit implements Runnable
     {
         protected double[][] res;
@@ -2063,6 +2068,8 @@ public class FOVCache extends FOV{
             refreshComplete = true;
         }
     }
+
+    @GwtIncompatible
     protected class FOVUnit implements Callable<Long>
     {
         protected int index;
@@ -2083,6 +2090,7 @@ public class FOVCache extends FOV{
         }
     }
 
+    @GwtIncompatible
     protected class LOSUnit implements Callable<Long>
     {
         protected int index;
@@ -2102,6 +2110,8 @@ public class FOVCache extends FOV{
             return storeCellLOS(index);
         }
     }
+
+    @GwtIncompatible
     protected class SymmetryUnit implements Callable<Long>
     {
         protected int index;
