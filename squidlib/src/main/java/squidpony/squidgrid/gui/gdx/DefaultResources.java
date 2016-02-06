@@ -10,11 +10,15 @@ import squidpony.squidmath.StatefulRNG;
 
 /**
  * Default BitmapFonts, a sample image, and a central RNG for use with LibGDX.
- * The fonts provided are all monospaced, with most looking rather similar (straight orthogonal lines and elbow curves),
- * but the one that looks... better than the rest (Inconsolata-LGC, accessible by getLargeSmoothFont()) also supports
- * Greek and Cyrillic, and is the only one to do so. The most Latin script support is in the font Mandrill, accessible
- * by getDefaultUnicodeFont() and getLargeUnicodeFont() in two different sizes, and the latter should be suitable for
- * everything from Polish to Vietnamese.
+ * The fonts provided are all monospaced, with most looking rather similar (straight orthogonal lines and right-angle
+ * curves), but the one that looks... better than the rest (Inconsolata-LGC, accessible by getSmoothFont(),
+ * getLargeSmoothFont(), or as a distance field font that smoothly scales with getStretchableFont() or a square variant
+ * with getStretchableSquareFont()) also supports Greek and Cyrillic, and is the only one to do so. If you can't decide,
+ * go with getStretchableFont() or getStretchableSquareFont(), which return TextCellFactory objects.
+ *
+ * The most Latin script support is in the font Mandrill, accessible by getDefaultUnicodeFont() and
+ * getLargeUnicodeFont() in two different sizes, and the latter should be suitable for everything from Spanish and
+ * French, to Polish to Vietnamese.
  * <br>
  * The sample image is a tentacle taken from a public domain icon collection graciously released by Henrique Lazarini;
  * it's fitting for SquidLib to have a tentacle as a logo or something, I guess?
@@ -70,7 +74,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.square1 == null)
         {
             try {
-                instance.square1 = new BitmapFont(Gdx.files.classpath("Zodiac-Square-12x12.fnt"), Gdx.files.classpath("Zodiac-Square-12x12.png"), false);
+                instance.square1 = new BitmapFont(Gdx.files.internal("Zodiac-Square-12x12.fnt"), Gdx.files.internal("Zodiac-Square-12x12.png"), false);
             } catch (Exception e) {
             }
         }
@@ -86,7 +90,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.square2 == null)
         {
             try {
-                instance.square2 = new BitmapFont(Gdx.files.classpath("Zodiac-Square-24x24.fnt"), Gdx.files.classpath("Zodiac-Square-24x24.png"), false);
+                instance.square2 = new BitmapFont(Gdx.files.internal("Zodiac-Square-24x24.fnt"), Gdx.files.internal("Zodiac-Square-24x24.png"), false);
             } catch (Exception e) {
             }
         }
@@ -102,7 +106,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow1 == null)
         {
             try {
-                instance.narrow1 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-6x12.fnt"), Gdx.files.classpath("Rogue-Zodiac-6x12_0.png"), false);
+                instance.narrow1 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-6x12.fnt"), Gdx.files.internal("Rogue-Zodiac-6x12_0.png"), false);
             } catch (Exception e) {
             }
         }
@@ -119,7 +123,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow2 == null)
         {
             try {
-                instance.narrow2 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-12x24.fnt"), Gdx.files.classpath("Rogue-Zodiac-12x24_0.png"), false);
+                instance.narrow2 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-12x24.fnt"), Gdx.files.internal("Rogue-Zodiac-12x24_0.png"), false);
             } catch (Exception e) {
             }
         }
@@ -135,7 +139,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.narrow3 == null)
         {
             try {
-                instance.narrow3 = new BitmapFont(Gdx.files.classpath("Rogue-Zodiac-18x36.fnt"), Gdx.files.classpath("Rogue-Zodiac-18x36_0.png"), false);
+                instance.narrow3 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-18x36.fnt"), Gdx.files.internal("Rogue-Zodiac-18x36_0.png"), false);
             } catch (Exception e) {
             }
         }
@@ -154,7 +158,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smooth1 == null)
         {
             try {
-                instance.smooth1 = new BitmapFont(Gdx.files.classpath("Inconsolata-LGC-8x18.fnt"), Gdx.files.classpath("Inconsolata-LGC-8x18.png"), false);
+                instance.smooth1 = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-8x18.fnt"), Gdx.files.internal("Inconsolata-LGC-8x18.png"), false);
             } catch (Exception e) {
             }
         }
@@ -172,7 +176,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smooth2 == null)
         {
             try {
-                instance.smooth2 = new BitmapFont(Gdx.files.classpath("Inconsolata-LGC-12x24.fnt"), Gdx.files.classpath("Inconsolata-LGC-12x24.png"), false);
+                instance.smooth2 = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-12x24.fnt"), Gdx.files.internal("Inconsolata-LGC-12x24.png"), false);
             } catch (Exception e) {
             }
         }
@@ -188,7 +192,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.unicode1 == null)
         {
             try {
-                instance.unicode1 = new BitmapFont(Gdx.files.classpath("Mandrill-6x16.fnt"), Gdx.files.classpath("Mandrill-6x16.png"), false);
+                instance.unicode1 = new BitmapFont(Gdx.files.internal("Mandrill-6x16.fnt"), Gdx.files.internal("Mandrill-6x16.png"), false);
             } catch (Exception e) {
             }
         }
@@ -205,7 +209,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.unicode2 == null)
         {
             try {
-                instance.unicode2 = new BitmapFont(Gdx.files.classpath("Mandrill-12x32.fnt"), Gdx.files.classpath("Mandrill-12x32.png"), false);
+                instance.unicode2 = new BitmapFont(Gdx.files.internal("Mandrill-12x32.fnt"), Gdx.files.internal("Mandrill-12x32.png"), false);
             } catch (Exception e) {
             }
         }
@@ -224,7 +228,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smoothSquare == null)
         {
             try {
-                instance.smoothSquare = new BitmapFont(Gdx.files.classpath("Inconsolata-LGC-Square.fnt"), Gdx.files.classpath("Inconsolata-LGC-Square.png"), false);
+                instance.smoothSquare = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square.fnt"), Gdx.files.internal("Inconsolata-LGC-Square.png"), false);
             } catch (Exception e) {
             }
         }
@@ -285,7 +289,7 @@ public class DefaultResources implements LifecycleListener {
         if(instance.tentacle == null || instance.tentacleRegion == null)
         {
             try {
-                instance.tentacle = new Texture(Gdx.files.classpath("Tentacle.png"));
+                instance.tentacle = new Texture(Gdx.files.internal("Tentacle.png"));
                 instance.tentacleRegion = new TextureRegion(instance.tentacle);
             } catch (Exception ignored) {
             }
@@ -294,8 +298,8 @@ public class DefaultResources implements LifecycleListener {
     }
 
     /**
-     * This is a static global LightRNG that's meant for usage in cases where the seed does not matter and any changes
-     * to this LightRNG's state will not change behavior elsewhere in the program; this means the GUI mainly.
+     * This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any
+     * changes to this RNG's state will not change behavior elsewhere in the program; this means the GUI mainly.
      */
     public static StatefulRNG getGuiRandom()
     {
@@ -307,8 +311,8 @@ public class DefaultResources implements LifecycleListener {
         return instance.guiRandom;
     }
     /**
-     * This is a static global LightRNG that's meant for usage in cases where the seed does not matter and any changes
-     * to this LightRNG's state will not change behavior elsewhere in the program; this means the GUI mainly.
+     * This is a static global SquidColorCenter that can be used in places that just need an existing object that can do
+     * things like analyze hue or saturation of a color.
      */
     public static SquidColorCenter getSCC()
     {

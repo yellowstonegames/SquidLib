@@ -343,17 +343,17 @@ public class RNG implements Serializable {
         };
     }
 
-    /**
+    /*
      * Shuffle an array using the Fisher-Yates algorithm.
      * @param elements an array of T; will not be modified
      * @param <T> can be any non-primitive type.
      * @return a shuffled copy of elements
-     */
+     * /
     @GwtIncompatible
     public <T> T[] shuffle(T[] elements) {
         return shuffle(elements, Arrays.copyOf(elements, elements.length));
     }
-
+    */
     /**
      * Shuffle an array using the Fisher-Yates algorithm.
      * @param elements an array of T; will not be modified
