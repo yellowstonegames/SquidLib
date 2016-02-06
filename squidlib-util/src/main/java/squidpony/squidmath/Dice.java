@@ -1,6 +1,7 @@
 package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
+import squidpony.annotation.GwtIncompatible;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
+@GwtIncompatible
 public class Dice {
 
     private static final Pattern guessPattern = Pattern.compile("\\s*(\\d+)?\\s*(?:([:])\\s*(\\d+))??\\s*(?:([d:])\\s*(\\d+))?\\s*(?:([+-/*])\\s*(\\d+))?\\s*");

@@ -1,5 +1,7 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.GwtIncompatible;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -190,6 +192,7 @@ public class DeckRNG extends StatefulRNG {
      * @return a value from the gaussian distribution
      */
     @Override
+    @GwtIncompatible
     public synchronized double nextGaussian() {
         if (haveNextNextGaussian) {
             haveNextNextGaussian = false;
@@ -282,6 +285,7 @@ public class DeckRNG extends StatefulRNG {
     }
 
     @Override
+    @GwtIncompatible
     public <T> List<T> randomRotation(List<T> l) {
         return super.randomRotation(l);
     }
@@ -307,17 +311,18 @@ public class DeckRNG extends StatefulRNG {
         return nextLong(max - min) + min;
     }
 
-    /**
+    /*
      * Shuffle an array using the Fisher-Yates algorithm.
      *
      * @param elements an array of T; will not be modified
      * @return a shuffled copy of elements
-     */
+     * /
     @Override
+    @GwtIncompatible
     public <T> T[] shuffle(T[] elements) {
         return super.shuffle(elements);
     }
-
+*/
     /**
      * Shuffle an array using the Fisher-Yates algorithm.
      *
