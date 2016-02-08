@@ -5,9 +5,11 @@ import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Generate dungeons based on a random, winding, looping path through 3D space, requiring a character to move up and
@@ -24,7 +26,7 @@ public class SerpentDeepMapGenerator {
     private MixedGenerator[] mix;
     private int[] columns, rows;
     private int width, height, depth;
-    private ArrayList<LinkedHashSet<Coord>> linksUp,linksDown;
+    private List<LinkedHashSet<Coord>> linksUp,linksDown;
     private RNG random;
 
     /**
@@ -340,7 +342,7 @@ public class SerpentDeepMapGenerator {
             floors[i] = CoordPacker.pack(dungeon[i], '.');
         }
         //using actual dungeon space per layer, not row/column 3D grid space
-        ArrayList<LinkedHashSet<Coord>> ups = new ArrayList<>(depth),
+        List<LinkedHashSet<Coord>> ups = new ArrayList<>(depth),
                 downs = new ArrayList<>(depth);
         for (int i = 0; i < depth; i++) {
             ups.add(new LinkedHashSet<Coord>(40));
@@ -359,7 +361,7 @@ public class SerpentDeepMapGenerator {
                     short[] near = CoordPacker.intersectPacked(nearAbove, CoordPacker.flood(floors[i],
                             CoordPacker.packOne(columns[higher.x], rows[higher.y]),
                             dlimit));
-                    ArrayList<Coord> subLinks = CoordPacker.randomPortion(near, 1, random);
+                    Collection<Coord> subLinks = CoordPacker.randomPortion(near, 1, random);
                     ups.get(i).addAll(subLinks);
                     downs.get(i-1).addAll(subLinks);
                     for(Coord abv : linksDown.get(i-1))
@@ -375,7 +377,7 @@ public class SerpentDeepMapGenerator {
         }
 
         for (int i = 0; i < depth; i++) {
-            LinkedHashMap<Coord, Integer> used = new LinkedHashMap<>(128);
+            Map<Coord, Integer> used = new LinkedHashMap<>(128);
             for(Coord up : ups.get(i))
             {
                 Integer count = used.get(up);

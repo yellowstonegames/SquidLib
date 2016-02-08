@@ -108,8 +108,8 @@ public class DijkstraMap {
      * Goals that pathfinding will seek out. The Double value should almost always be 0.0 , the same as the static GOAL
      * constant in this class.
      */
-    public LinkedHashMap<Coord, Double> goals;
-    private LinkedHashMap<Coord, Double> fresh, closed, open;
+    public Map<Coord, Double> goals;
+    private Map<Coord, Double> fresh, closed, open;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
@@ -738,7 +738,7 @@ public class DijkstraMap {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new LinkedHashSet<>();
-        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
+        Map<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
         for (Coord pt : impassable) {
             blocking.put(pt, WALL);
         }
@@ -750,7 +750,7 @@ public class DijkstraMap {
             gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
-        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<>();
+        Map<Coord, Double> lowest = new LinkedHashMap<>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -822,7 +822,7 @@ public class DijkstraMap {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new LinkedHashSet<>();
-        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
+        Map<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
         for (Coord pt : impassable) {
             blocking.put(pt, WALL);
         }
@@ -834,7 +834,7 @@ public class DijkstraMap {
             gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
-        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<>();
+        Map<Coord, Double> lowest = new LinkedHashMap<>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -967,7 +967,7 @@ public class DijkstraMap {
      * @return the Coord that it found first.
      */
     public Coord findNearest(Coord start, Coord... targets) {
-        LinkedHashSet<Coord> tgts = new LinkedHashSet<>(targets.length);
+        Set<Coord> tgts = new LinkedHashSet<>(targets.length);
         Collections.addAll(tgts, targets);
         return findNearest(start, tgts);
     }
@@ -1116,7 +1116,7 @@ public class DijkstraMap {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new LinkedHashSet<>();
-        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
+        Map<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
         for (Coord pt : impassable) {
             blocking.put(pt, WALL);
             for (int x = 0; x < size; x++) {
@@ -1137,7 +1137,7 @@ public class DijkstraMap {
         }
         mappedCount = goals.size();
         double currentLowest = 999000;
-        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<>();
+        Map<Coord, Double> lowest = new LinkedHashMap<>();
         Coord p = Coord.get(0, 0), temp = Coord.get(0, 0);
         for (int y = 0; y < height; y++) {
             I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS:
@@ -1246,7 +1246,7 @@ public class DijkstraMap {
                                      Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         path = new ArrayList<>();
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
         else
@@ -1370,7 +1370,7 @@ public class DijkstraMap {
             }
         }
         path = new ArrayList<>();
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
         else
@@ -1511,7 +1511,7 @@ public class DijkstraMap {
         double[][] userDistanceMap;
         double paidLength = 0.0;
 
-        LinkedHashSet<Coord> friends;
+        Set<Coord> friends;
 
 
         for (int x = 0; x < width; x++) {
@@ -1524,7 +1524,7 @@ public class DijkstraMap {
         path = new ArrayList<>();
         if (targets == null || targets.size() == 0)
             return path;
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
         else
@@ -1559,7 +1559,7 @@ public class DijkstraMap {
         clearGoals();
 
         Coord tempPt = Coord.get(0, 0);
-        LinkedHashMap<Coord, ArrayList<Coord>> ideal;
+        Map<Coord, ArrayList<Coord>> ideal;
         // generate an array of the single best location to attack when you are in a given cell.
         for (int x = 0; x < width; x++) {
             CELL:
@@ -1726,7 +1726,7 @@ public class DijkstraMap {
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
 
         path = new ArrayList<>();
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
         else
@@ -1866,7 +1866,7 @@ public class DijkstraMap {
 
 
         path = new ArrayList<Coord>();
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<Coord>();
         else
@@ -2069,7 +2069,7 @@ public class DijkstraMap {
 
 
         path = new ArrayList<Coord>();
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<Coord>();
         else
@@ -2292,7 +2292,7 @@ public class DijkstraMap {
         }
 
         path = new ArrayList<>();
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
         else
@@ -2473,7 +2473,7 @@ public class DijkstraMap {
         double[][] userDistanceMap = new double[width][height];
         double paidLength = 0.0;
 
-        LinkedHashSet<Coord> friends;
+        Set<Coord> friends;
 
 
         for (int x = 0; x < width; x++) {
@@ -2486,7 +2486,7 @@ public class DijkstraMap {
         path = new ArrayList<>();
         if (targets == null || targets.size() == 0)
             return path;
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
         else
@@ -2521,7 +2521,7 @@ public class DijkstraMap {
         clearGoals();
 
         Coord tempPt = Coord.get(0, 0);
-        LinkedHashMap<Coord, ArrayList<Coord>> ideal;
+        Map<Coord, ArrayList<Coord>> ideal;
         // generate an array of the single best location to attack when you are in a given cell.
         for (int x = 0; x < width; x++) {
             CELL:
@@ -2775,7 +2775,7 @@ public class DijkstraMap {
                                           Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         path = new ArrayList<>();
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
         else
@@ -2877,7 +2877,7 @@ public class DijkstraMap {
             }
         }
         path = new ArrayList<>();
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
         else
@@ -3012,7 +3012,7 @@ public class DijkstraMap {
             }
         }
         path = new ArrayList<>();
-        LinkedHashSet<Coord> impassable2;
+        Set<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
         else

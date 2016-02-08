@@ -404,7 +404,7 @@ public class SoundMap
 
         while (numAssigned > 0) {
             numAssigned = 0;
-            HashMap<Coord, Double> fresh2 = new HashMap<>(fresh.size());
+            Map<Coord, Double> fresh2 = new HashMap<>(fresh.size());
             fresh2.putAll(fresh);
             fresh.clear();
 
@@ -449,7 +449,7 @@ public class SoundMap
      * @param extraSounds
      * @return
      */
-    public HashMap<Coord, Double> findAlerted(Set<Coord> creatures, Map<Coord, Double> extraSounds) {
+    public Map<Coord, Double> findAlerted(Set<Coord> creatures, Map<Coord, Double> extraSounds) {
         if(!initialized) return null;
         alerted = new HashMap<>(creatures.size());
 

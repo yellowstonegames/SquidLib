@@ -128,7 +128,7 @@ public class MixedGenerator {
      * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public MixedGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections,
+    public MixedGenerator(int width, int height, RNG rng, Map<Coord, List<Coord>> connections,
                           float roomSizeMultiplier) {
         this.width = width;
         this.height = height;
