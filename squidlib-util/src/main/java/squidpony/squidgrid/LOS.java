@@ -339,7 +339,7 @@ public class LOS {
     private boolean thickReachable(Radius radiusStrategy) {
         lastPath = new LinkedList<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety), decay = 1 / dist;
-        LinkedHashSet<Coord> visited = new LinkedHashSet<>((int) dist + 3);
+        Set<Coord> visited = new LinkedHashSet<>((int) dist + 3);
         List<List<Coord>> paths = new ArrayList<>(4);
         /* // actual corners
         paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0));
@@ -387,7 +387,7 @@ public class LOS {
     private boolean brushReachable(Radius radiusStrategy, int spread) {
         lastPath = new LinkedList<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2, decay = 1 / dist;
-        LinkedHashSet<Coord> visited = new LinkedHashSet<>((int) (dist + 3) * spread);
+        Set<Coord> visited = new LinkedHashSet<>((int) (dist + 3) * spread);
         List<List<Coord>> paths = new ArrayList<>((int) (radiusStrategy.volume2D(spread) * 1.25));
         int length = 0;
         List<Coord> currentPath;
@@ -521,7 +521,7 @@ public class LOS {
         List<Coord> ePath = elias.line(startx, starty, targetx, targety);
         lastPath = new LinkedList<>(ePath);//save path for later retreival
 
-        HashMap<eliasWorker, Thread> pool = new HashMap<>();
+        Map<eliasWorker, Thread> pool = new HashMap<>();
 
         for (Coord p : ePath) {
             eliasWorker worker = new eliasWorker(p.x, p.y, radiusStrategy);

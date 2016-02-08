@@ -63,7 +63,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
     private int framesWithoutAnimation = 0, moveLength = 6;
-    private ArrayList<Coord> awaitedMoves;
+    private List<Coord> awaitedMoves;
     private int scheduledMoves = 0, whichIdx = 0;
     private boolean blueTurn = false;
     private double frames = 0.0;
@@ -278,15 +278,15 @@ public class CoveredPathDemo extends ApplicationAdapter {
     private void postMove(int idx) {
 
         int i = 0, myMax, myMin;
-        LinkedHashSet<Coord> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
+        Set<Coord> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
         DijkstraMap dijkstra = null;
-        ArrayList<Coord> previous = null;
+        List<Coord> previous = null;
         Color whichTint = Color.WHITE;
-        ArrayList<Creature> whichEnemyTeam;
-        LinkedHashMap<Integer, Threat> myThreats, enemyThreats;
+        List<Creature> whichEnemyTeam;
+        Map<Integer, Threat> myThreats, enemyThreats;
         if (blueTurn) {
             whichFoes = redPlaces;
             whichAllies = bluePlaces;

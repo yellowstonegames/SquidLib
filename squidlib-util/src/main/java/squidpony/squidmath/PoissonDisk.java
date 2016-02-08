@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * This provides a Uniform Poisson Disk Sampling technique that can be used to generate random points that have a
@@ -307,7 +308,7 @@ public class PoissonDisk {
      * @param blocked a Set of Characters that block a tile from being chosen
      * @return a Coord that corresponds to a map element equal to tile, or null if tile cannot be found or if map is too small.
      */
-    public static Coord randomUnblockedTile(Coord minPosition, Coord maxPosition, char[][] map, RNG rng, HashSet<Character> blocked)
+    public static Coord randomUnblockedTile(Coord minPosition, Coord maxPosition, char[][] map, RNG rng, Set<Character> blocked)
     {
         int width = map.length;
         int height = map[0].length;

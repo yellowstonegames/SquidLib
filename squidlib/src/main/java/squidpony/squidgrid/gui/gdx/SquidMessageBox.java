@@ -21,7 +21,7 @@ import java.util.List;
  * Created by Tommy Ettinger on 12/10/2015.
  */
 public class SquidMessageBox extends SquidPanel {
-    protected ArrayList<IColoredString<Color>> messages = new ArrayList<>(256);
+    protected List<IColoredString<Color>> messages = new ArrayList<>(256);
     protected ArrayList<Label> labels = new ArrayList<>(256);
     protected int messageIndex = 0;
     //private static Pattern lineWrapper;

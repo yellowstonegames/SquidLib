@@ -9,6 +9,7 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * a simple performance test
@@ -66,7 +67,7 @@ final class WaypointPerformanceTest extends AbstractPerformanceTest {
 		@Override
 		protected void doWork() {
 			Coord r, s;
-            ArrayList<Coord> path;
+            List<Coord> path;
 			pathfinder = new WaypointPathfinder(map, Radius.DIAMOND, new StatefulRNG(new LightRNG(0x1337BEEF)));
 			for (int x = 1; x < WIDTH - 1; x++) {
 				for (int y = 1; y < HEIGHT - 1; y++) {

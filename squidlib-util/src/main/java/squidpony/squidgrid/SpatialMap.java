@@ -56,8 +56,8 @@ public class SpatialMap<I, E> implements Iterable<E> {
         }
     }
 
-    protected LinkedHashMap<I, SpatialTriple<I, E>> itemMapping;
-    protected LinkedHashMap<Coord, SpatialTriple<I, E>> positionMapping;
+    protected Map<I, SpatialTriple<I, E>> itemMapping;
+    protected Map<Coord, SpatialTriple<I, E>> positionMapping;
 
     /**
      * Constructs a SpatialMap with capacity 32.
