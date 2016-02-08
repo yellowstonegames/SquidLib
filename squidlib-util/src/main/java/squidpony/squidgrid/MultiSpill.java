@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -67,7 +66,7 @@ public class MultiSpill {
      * are reached on all sides and the Spill has no more room to fill.
      */
     public int filled = 0;
-    private List<LinkedHashSet<Coord>> fresh;
+    private ArrayList<LinkedHashSet<Coord>> fresh;
     /**
      * The StatefulRNG used to decide how to randomly fill a space; can have its state set and read.
      */
@@ -309,7 +308,7 @@ public class MultiSpill {
 
     protected void setFresh(int idx, final Coord pt) {
         if(!initialized) return;
-        for(Set<Coord> f : fresh)
+        for(LinkedHashSet<Coord> f : fresh)
         {
             if(f.contains(pt))
                 return;
@@ -341,7 +340,7 @@ public class MultiSpill {
             impassable = new LinkedHashSet<>();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
-        List<Coord> spillers = new ArrayList<>(entries);
+        ArrayList<Coord> spillers = new ArrayList<>(entries);
         spreadPattern = new ArrayList<>(spillers.size());
         fresh.clear();
         for (short i = 0; i < spillers.size(); i++) {
@@ -417,13 +416,13 @@ public class MultiSpill {
      * @return an ArrayList of Points that this will enter, in order starting with entry at index 0, until it
      * reaches its volume or fills its boundaries completely.
      */
-    public ArrayList<ArrayList<Coord>> start(Map<Coord, Double> entries, int volume, Set<Coord> impassable) {
+    public ArrayList<ArrayList<Coord>> start(LinkedHashMap<Coord, Double> entries, int volume, Set<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
             impassable = new LinkedHashSet<>();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
-        List<Coord> spillers0 = new ArrayList<>(entries.keySet()),
+        ArrayList<Coord> spillers0 = new ArrayList<>(entries.keySet()),
                 spillers = new ArrayList<>(spillers0.size());
         ArrayList<Double> biases0 = new ArrayList<>(entries.values()),
                 biases = new ArrayList<>(biases0.size());

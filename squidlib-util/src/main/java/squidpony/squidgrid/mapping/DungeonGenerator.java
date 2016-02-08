@@ -9,12 +9,9 @@ import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 import static squidpony.squidmath.CoordPacker.*;
 
@@ -531,7 +528,7 @@ public class DungeonGenerator {
     private char[][] innerGenerate(char[][] map)
     {
 
-        Set<Coord> floors = new LinkedHashSet<>();
+        LinkedHashSet<Coord> floors = new LinkedHashSet<>();
         LinkedHashSet<Coord> doorways;
         LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
         Coord temp;
@@ -645,7 +642,7 @@ public class DungeonGenerator {
 
         MultiSpill ms = new MultiSpill(map, Spill.Measurement.MANHATTAN, rng);
         LinkedHashMap<Coord, Double> fillers = new LinkedHashMap<>(128);
-        List<Coord> dots = PoissonDisk.sampleMap(map, Math.min(width, height) / 8f, rng, '#', '+', '/','<', '>');
+        ArrayList<Coord> dots = PoissonDisk.sampleMap(map, Math.min(width, height) / 8f, rng, '#', '+', '/','<', '>');
         for (int i = 0; i < dots.size(); i++) {
             switch (i % 3) {
                 case 0:
@@ -660,10 +657,10 @@ public class DungeonGenerator {
             }
         }
 
-        Iterable<ArrayList<Coord>> fills = ms.start(fillers, -1, null);
+        ArrayList<ArrayList<Coord>> fills = ms.start(fillers, -1, null);
 
         int ctr = 0;
-        for(Collection<Coord> pts : fills)
+        for(ArrayList<Coord> pts : fills)
         {
             switch (ctr % 3) {
                 case 0:
@@ -690,7 +687,7 @@ public class DungeonGenerator {
                         }
                     }
                     if(islandSpacing > 1) {
-                        Iterable<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^', '<', '>');
+                        ArrayList<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^', '<', '>');
                         for (Coord c : islands) {
                             map[c.x][c.y] = '.';
                             if (map[c.x - 1][c.y] != '#' && map[c.x - 1][c.y] != '<' && map[c.x - 1][c.y] != '>')
@@ -864,7 +861,7 @@ public class DungeonGenerator {
                 Coord entry = floors.toArray(new Coord[floors.size()])[rng.nextInt(floors.size())];
                 spill.start(entry, volumes[i] / 3, obstacles);
                 spill.start(entry, 2 * volumes[i] / 3, obstacles);
-                Collection<Coord> ordered = new ArrayList<>(spill.start(entry, volumes[i], obstacles));
+                ArrayList<Coord> ordered = new ArrayList<>(spill.start(entry, volumes[i], obstacles));
                 floors.removeAll(ordered);
                 hazards.removeAll(ordered);
                 obstacles.addAll(ordered);
@@ -885,7 +882,7 @@ public class DungeonGenerator {
             while (bonusVolume > 0 && frustration < 50)
             {
                 Coord entry = utility.randomFloor(map);
-                Collection<Coord> finisher = spill.start(entry, bonusVolume, obstacles);
+                ArrayList<Coord> finisher = spill.start(entry, bonusVolume, obstacles);
                 for(Coord p : finisher)
                 {
                     map[p.x][p.y] = '"';
@@ -921,7 +918,7 @@ public class DungeonGenerator {
                 Coord entry = floors.toArray(new Coord[floors.size()])[rng.nextInt(floors.size())];
 //                spill.start(entry, volumes[i] / 3, obstacles);
 //                spill.start(entry, 2 * volumes[i] / 3, obstacles);
-                Collection<Coord> ordered = new ArrayList<>(spill.start(entry, volumes[i], obstacles));
+                ArrayList<Coord> ordered = new ArrayList<>(spill.start(entry, volumes[i], obstacles));
                 floors.removeAll(ordered);
                 hazards.removeAll(ordered);
                 obstacles.addAll(ordered);
@@ -943,7 +940,7 @@ public class DungeonGenerator {
             while (bonusVolume > 0 && frustration < 50)
             {
                 Coord entry = utility.randomFloor(map);
-                Collection<Coord> finisher = spill.start(entry, bonusVolume, obstacles);
+                ArrayList<Coord> finisher = spill.start(entry, bonusVolume, obstacles);
                 for(Coord p : finisher)
                 {
                     map[p.x][p.y] = '~';
@@ -962,7 +959,7 @@ public class DungeonGenerator {
                 }
             }
             if(islandSpacing > 1) {
-                Iterable<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^');
+                ArrayList<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^');
                 for (Coord c : islands) {
                     map[c.x][c.y] = '.';
                     if (map[c.x - 1][c.y] != '#')

@@ -26,7 +26,7 @@ public class PoissonDiskTest {
 
         // System.out.println(dg);
 
-        Iterable<Coord> disks = PoissonDisk.sampleMap(dun, 7f, rng, '#');
+        ArrayList<Coord> disks = PoissonDisk.sampleMap(dun, 7f, rng, '#');
 
         //char[][] hl = DungeonUtility.hashesToLines(dun);
         for(Coord c : disks)

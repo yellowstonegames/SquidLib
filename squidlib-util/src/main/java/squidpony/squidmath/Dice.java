@@ -51,7 +51,7 @@ public class Dice {
      */
     public int bestOf(int n, int dice, int sides) {
         int rolls = Math.min(n, dice);
-        List<Integer> results = new ArrayList<>(dice);
+        ArrayList<Integer> results = new ArrayList<>(dice);
 
         for (int i = 0; i < dice; i++) {
             results.add(rollDice(1, sides));
@@ -89,7 +89,7 @@ public class Dice {
      */
     public int bestOf(int n, int dice, String group) {
         int rolls = Math.min(n, dice);
-        List<Integer> results = new ArrayList<>(dice);
+        ArrayList<Integer> results = new ArrayList<>(dice);
 
         for (int i = 0; i < rolls; i++) {
             results.add(rollGroup(group));

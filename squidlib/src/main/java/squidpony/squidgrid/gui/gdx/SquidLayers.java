@@ -11,7 +11,6 @@ import squidpony.squidgrid.Direction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.List;
 
 /**
  * A helper class to make using multiple HDRPanels easier.
@@ -26,7 +25,7 @@ public class SquidLayers extends Group {
     protected int cellHeight;
     protected SquidPanel backgroundPanel, foregroundPanel;
     protected int[][] lightnesses;
-    protected List<SquidPanel> extraPanels;
+    protected ArrayList<SquidPanel> extraPanels;
     protected TextCellFactory textFactory;
     protected ArrayList<Color> palette;
     protected boolean[][] values;
@@ -637,7 +636,7 @@ public class SquidLayers extends Group {
      * @param bgPalette           an alternate Color ArrayList for the background; can be null to use the default.
      * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
      */
-    public SquidLayers put(int x, int y, char c, int foregroundIndex, ArrayList<Color> fgPalette, int backgroundIndex, List<Color> bgPalette, int backgroundLightness) {
+    public SquidLayers put(int x, int y, char c, int foregroundIndex, ArrayList<Color> fgPalette, int backgroundIndex, ArrayList<Color> bgPalette, int backgroundLightness) {
         if (fgPalette == null) fgPalette = palette;
         if (bgPalette == null) bgPalette = palette;
         foregroundPanel.put(x, y, c, foregroundIndex, fgPalette);
@@ -771,7 +770,7 @@ public class SquidLayers extends Group {
      * @param bgPalette           an alternate Color ArrayList for the background; can be null to use the default.
      * @param backgroundLightness int[][] with elements between -255 and 255 , lower darker, higher lighter.
      */
-    public SquidLayers put(int x, int y, char[][] c, int[][] foregroundIndex, ArrayList<Color> fgPalette, int[][] backgroundIndex, List<Color> bgPalette, int[][] backgroundLightness) {
+    public SquidLayers put(int x, int y, char[][] c, int[][] foregroundIndex, ArrayList<Color> fgPalette, int[][] backgroundIndex, ArrayList<Color> bgPalette, int[][] backgroundLightness) {
         if (fgPalette == null) fgPalette = palette;
         if (bgPalette == null) bgPalette = palette;
         foregroundPanel.put(x, y, c, foregroundIndex, fgPalette);
@@ -1052,7 +1051,7 @@ public class SquidLayers extends Group {
      * @param backgroundIndex the indexed color to use
      * @return this, for chaining
      */
-    public SquidLayers putString(int x, int y, String s, List<Color> alternatePalette, int foregroundIndex, int backgroundIndex) {
+    public SquidLayers putString(int x, int y, String s, ArrayList<Color> alternatePalette, int foregroundIndex, int backgroundIndex) {
         foregroundPanel.put(x, y, s, alternatePalette.get(foregroundIndex));
         for (int i = x; i < s.length() && i < width; i++) {
             backgroundPanel.put(i, y, alternatePalette.get(backgroundIndex));
@@ -1394,10 +1393,10 @@ public class SquidLayers extends Group {
         return foregroundPanel.animateActor(x, y, doubleWidth, c, color);
     }
 
-    public AnimatedEntity animateActor(int x, int y, char c, int index, List<Color> palette, int layer) {
+    public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette, int layer) {
         return animateActor(x, y, c, palette.get(index), layer);
     }
-    public AnimatedEntity animateActor(int x, int y, char c, int index, List<Color> palette) {
+    public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette) {
         return animateActor(x, y, c, palette.get(index));
     }
 
@@ -1479,10 +1478,10 @@ public class SquidLayers extends Group {
         return foregroundPanel.animateActor(x, y, doubleWidth, s, color);
     }
 
-    public AnimatedEntity animateActor(int x, int y, String s, int index, List<Color> palette, int layer) {
+    public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<Color> palette, int layer) {
         return animateActor(x, y, s, palette.get(index), layer);
     }
-    public AnimatedEntity animateActor(int x, int y, String s, int index, List<Color> palette) {
+    public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<Color> palette) {
         return animateActor(x, y, s, palette.get(index));
     }
 
@@ -1506,16 +1505,16 @@ public class SquidLayers extends Group {
         return foregroundPanel.animateActor(x, y, doubleWidth, stretch, tr, color);
     }
 
-    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, List<Color> palette, int layer) {
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, ArrayList<Color> palette, int layer) {
         return animateActor(x, y, tr, palette.get(index), layer);
     }
-    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, List<Color> palette, int layer, boolean doubleWidth) {
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, ArrayList<Color> palette, int layer, boolean doubleWidth) {
         return animateActor(x, y, tr, palette.get(index), layer, doubleWidth, true);
     }
-    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, List<Color> palette, int layer, boolean doubleWidth, boolean stretch) {
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, ArrayList<Color> palette, int layer, boolean doubleWidth, boolean stretch) {
         return animateActor(x, y, tr, palette.get(index), layer, doubleWidth, stretch);
     }
-    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, List<Color> palette) {
+    public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, ArrayList<Color> palette) {
         return animateActor(x, y, tr, palette.get(index));
     }
     public AnimatedEntity animateActor(int x, int y, TextureRegion tr, int index, int layer) {
@@ -1540,7 +1539,7 @@ public class SquidLayers extends Group {
         return animateActor(x, y, tr, Color.WHITE, doubleWidth, stretch);
     }
 
-    public Iterable<AnimatedEntity> getAnimatedEntities(int layer) {
+    public LinkedHashSet<AnimatedEntity> getAnimatedEntities(int layer) {
         SquidPanel p = foregroundPanel;
         switch (layer) {
             case 0:

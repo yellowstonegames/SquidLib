@@ -1849,8 +1849,8 @@ public class FOVCache extends FOV{
          */
         @Override
         public void run() {
-            List<ArrayList<LOSUnit>> losUnits = new ArrayList<>(24);
-            List<ArrayList<FOVUnit>> fovUnits = new ArrayList<>(24);
+            ArrayList<ArrayList<LOSUnit>> losUnits = new ArrayList<>(24);
+            ArrayList<ArrayList<FOVUnit>> fovUnits = new ArrayList<>(24);
             for (int p = 0; p < 24; p++) {
                 losUnits.add(new ArrayList<LOSUnit>(mapLimit / 20));
                 fovUnits.add(new ArrayList<FOVUnit>(mapLimit / 20));
@@ -1939,7 +1939,7 @@ public class FOVCache extends FOV{
                 }
             }
 
-            List<ArrayList<SymmetryUnit>> symUnits = new ArrayList<>(4);
+            ArrayList<ArrayList<SymmetryUnit>> symUnits = new ArrayList<>(4);
             for (int p = 0; p < 4; p++) {
                 symUnits.add(new ArrayList<SymmetryUnit>(mapLimit / 3));
             }

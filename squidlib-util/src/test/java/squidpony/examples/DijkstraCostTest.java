@@ -11,7 +11,6 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Tommy Ettinger on 9/8/2015.
@@ -26,7 +25,7 @@ public class DijkstraCostTest {
             dg.addDoors(8, true);
 
             char[][] dun = dg.generate(TilesetType.DEFAULT_DUNGEON);
-            Map<Character, Double> aquatic = new HashMap<>(16);
+            HashMap<Character, Double> aquatic = new HashMap<>(16);
             aquatic.put('~', 1.0);
             aquatic.put(',', 1.0);
             double[][] costs = DungeonUtility.generateCostMap(dun, aquatic, 999.0);
@@ -80,7 +79,7 @@ public class DijkstraCostTest {
             dg.addDoors(16, true);
 
             dun = dg.generate(TilesetType.DEFAULT_DUNGEON);
-            Map<Character, Double> vampire = new HashMap<>(16);
+            HashMap<Character, Double> vampire = new HashMap<>(16);
             vampire.put('/', 999.0);
             vampire.put('+', 999.0);
             vampire.put('~', 3.0);
@@ -143,7 +142,7 @@ public class DijkstraCostTest {
             dg.addDoors(10, true);
 
             dun = DungeonUtility.closeDoors(dg.generate(TilesetType.DEFAULT_DUNGEON));
-            Map<Character, Double> fancy = new HashMap<>(16);
+            HashMap<Character, Double> fancy = new HashMap<>(16);
             fancy.put(',', 2.0);
             fancy.put('~', 8.0);
             fancy.put('+', 4.0);

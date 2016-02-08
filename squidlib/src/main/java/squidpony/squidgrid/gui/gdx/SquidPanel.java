@@ -19,7 +19,6 @@ import squidpony.squidmath.StatefulRNG;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.List;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -169,7 +168,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
     }
 
-    public void put(int xOffset, int yOffset, char[][] chars, int[][] indices, List<Color> palette) {
+    public void put(int xOffset, int yOffset, char[][] chars, int[][] indices, ArrayList<Color> palette) {
         for (int x = xOffset; x < xOffset + chars.length; x++) {
             for (int y = yOffset; y < yOffset + chars[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
@@ -189,7 +188,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
     }
 
-    public void put(int xOffset, int yOffset, int[][] indices, List<Color> palette) {
+    public void put(int xOffset, int yOffset, int[][] indices, ArrayList<Color> palette) {
         for (int x = xOffset; x < xOffset + indices.length; x++) {
             for (int y = yOffset; y < yOffset + indices[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
@@ -358,11 +357,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         put(x, y, String.valueOf(Character.toChars(c)), color);
     }
 
-    public void put(int x, int y, int index, List<Color> palette) {
+    public void put(int x, int y, int index, ArrayList<Color> palette) {
         put(x, y, palette.get(index));
     }
 
-    public void put(int x, int y, char c, int index, List<Color> palette) {
+    public void put(int x, int y, char c, int index, ArrayList<Color> palette) {
         put(x, y, c, palette.get(index));
     }
 
@@ -572,7 +571,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param palette
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, char c, int index, List<Color> palette)
+    public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette)
     {
         return animateActor(x, y, c, palette.get(index));
     }
@@ -586,7 +585,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param palette
      * @return
      */
-    public AnimatedEntity animateActor(int x, int y, String s, int index, List<Color> palette)
+    public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<Color> palette)
     {
         return animateActor(x, y, s, palette.get(index));
     }

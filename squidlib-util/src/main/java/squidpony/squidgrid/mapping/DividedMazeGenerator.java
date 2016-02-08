@@ -70,7 +70,7 @@ public class DividedMazeGenerator {
         stack.offer(new DividedMazeRoom(1, 1, width - 2, height - 2));
         while (!stack.isEmpty()) {
             DividedMazeRoom room = stack.pop();
-            List<Integer> availX = new ArrayList<>(),
+            ArrayList<Integer> availX = new ArrayList<>(),
                                availY = new ArrayList<>();
 
             for (int x = room.left + 1; x < room.right; x++) {

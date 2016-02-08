@@ -139,7 +139,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 */
 	class Impl<T> implements IColoredString<T> {
 
-		protected final AbstractList<Bucket<T>> fragments;
+		protected final LinkedList<Bucket<T>> fragments;
 
 		/**
 		 * An empty instance.

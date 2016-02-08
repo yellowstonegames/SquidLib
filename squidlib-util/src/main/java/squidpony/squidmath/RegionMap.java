@@ -345,7 +345,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
     public ArrayList<V> allAt(int x, int y)
     {
         ArrayList<V> found = new ArrayList<>(capacity);
-        Iterable<short[]> regions = CoordPacker.findManyPacked(x, y, keyTable);
+        ArrayList<short[]> regions = CoordPacker.findManyPacked(x, y, keyTable);
         for(short[] region : regions)
         {
             found.add(get(region));

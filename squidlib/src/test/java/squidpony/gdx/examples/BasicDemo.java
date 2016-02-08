@@ -23,7 +23,6 @@ import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class BasicDemo extends ApplicationAdapter {
     SpriteBatch batch;
@@ -47,7 +46,7 @@ public class BasicDemo extends ApplicationAdapter {
     private DijkstraMap playerToCursor;
     private Coord cursor, player;
     private ArrayList<Coord> toCursor;
-    private List<Coord> awaitedMoves;
+    private ArrayList<Coord> awaitedMoves;
     private float secondsWithoutMoves;
     private String[] lang = new String[12];
     private int langIndex = 0;
