@@ -10,7 +10,6 @@ import squidpony.squidmath.RNG;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Tommy Ettinger on 4/25/2015.
@@ -26,14 +25,14 @@ public class SoundTest {
 
             System.out.println(dg);
 
-            Set<Coord> dudes = new HashSet<>(5);
+            HashSet<Coord> dudes = new HashSet<>(5);
             dudes.add(dg.utility.randomFloor(dun));
             dudes.add(dg.utility.randomFloor(dun));
             dudes.add(dg.utility.randomFloor(dun));
             dudes.add(dg.utility.randomFloor(dun));
             dudes.add(dg.utility.randomFloor(dun));
 
-            Map<Coord, Double> noises = new HashMap<>(8);
+            HashMap<Coord, Double> noises = new HashMap<>(8);
             for(int i = 0; i < 6; i++)
             {
                 noises.put(dg.utility.randomStep(dun, dg.utility.randomFloor(dun),

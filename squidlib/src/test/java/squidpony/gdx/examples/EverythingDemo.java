@@ -29,7 +29,6 @@ import squidpony.squidmath.StatefulRNG;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public class EverythingDemo extends ApplicationAdapter {
     private enum Phase {WAIT, PLAYER_ANIM, MONSTER_ANIM}
@@ -99,7 +98,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private int framesWithoutAnimation = 0;
     private Coord cursor;
     private ArrayList<Coord> toCursor;
-    private List<Coord> awaitedMoves;
+    private ArrayList<Coord> awaitedMoves;
     private String lang;
     private SquidColorCenter[] colorCenters;
     private int currentCenter;
@@ -235,7 +234,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
         colors = new Color[width][height];
         bgColors = new Color[width][height];
-        List<Color> palette = display.getPalette();
+        ArrayList<Color> palette = display.getPalette();
         bgColor = SColor.DARK_SLATE_GRAY;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -438,7 +437,7 @@ public class EverythingDemo extends ApplicationAdapter {
     }
 
     // check if a monster's movement would overlap with another monster.
-    private boolean checkOverlap(Monster mon, int x, int y, Iterable<Coord> futureOccupied)
+    private boolean checkOverlap(Monster mon, int x, int y, ArrayList<Coord> futureOccupied)
     {
         if(monsters.containsPosition(Coord.get(x, y)) && !mon.equals(monsters.get(Coord.get(x, y))))
             return true;
@@ -462,7 +461,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // this is an important piece of DijkstraMap usage; the argument is a Set of Points for squares that
         // temporarily cannot be moved through (not walls, which are automatically known because the map char[][]
         // was passed to the DijkstraMap constructor, but things like moving creatures and objects).
-        Set<Coord> monplaces = monsters.positions();
+        LinkedHashSet<Coord> monplaces = monsters.positions();
 
         pathMap = getToPlayer.scan(monplaces);
 

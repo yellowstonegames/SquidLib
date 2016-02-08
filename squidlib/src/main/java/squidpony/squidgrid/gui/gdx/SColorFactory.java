@@ -19,8 +19,8 @@ import java.util.*;
  */
 public class SColorFactory {
 
-    private final Map<String, SColor> nameLookup;
-    private final Map<Integer, SColor> valueLookup;
+    private final TreeMap<String, SColor> nameLookup;
+    private final TreeMap<Integer, SColor> valueLookup;
     private RNG rng;
     private Map<Integer, SColor> colorBag;
     private Map<String, ArrayList<SColor>> palettes;
@@ -483,7 +483,7 @@ public class SColorFactory {
      * @return
      */
     public SColor fromPalette(String name, float percent) {
-        List<SColor> list = palettes.get(name);
+        ArrayList<SColor> list = palettes.get(name);
         if (list == null) {
             return null;
         }
@@ -508,7 +508,7 @@ public class SColorFactory {
      * @deprecated Prefer fromPalette over this misspelled version; they are equivalent.
      */
     public SColor fromPallet(String name, float percent) {
-        List<SColor> list = palettes.get(name);
+        ArrayList<SColor> list = palettes.get(name);
         if (list == null) {
             return null;
         }
@@ -537,7 +537,7 @@ public class SColorFactory {
      * @param name
      * @param palette
      */
-    public void addPalette(String name, Iterable<SColor> palette) {
+    public void addPalette(String name, ArrayList<SColor> palette) {
         ArrayList<SColor> temp = new ArrayList<>();
 
         //make sure all the colors in the palette are also in the general color cache

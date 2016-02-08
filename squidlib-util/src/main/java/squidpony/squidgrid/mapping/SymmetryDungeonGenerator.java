@@ -25,7 +25,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
         }
         return listToMap(s2);
     }
-    public static LinkedHashMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, Map<Coord, List<Coord>> connections) {
+    public static LinkedHashMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, LinkedHashMap<Coord, List<Coord>> connections) {
         LinkedHashMap<Coord, List<Coord>> lhm2 = new LinkedHashMap<>(connections.size());
         Set<Coord> keyset = connections.keySet(), newkeys = new LinkedHashSet<>(connections.size());
         for (Coord c : keyset) {
@@ -135,7 +135,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
         return conns;
     }
 
-    protected static LinkedHashMap<Coord, List<Coord>> crossConnect(int width, int height, Map<Coord, List<Coord>> connections)
+    protected static LinkedHashMap<Coord, List<Coord>> crossConnect(int width, int height, LinkedHashMap<Coord, List<Coord>> connections)
     {
         LinkedHashMap<Coord, List<Coord>> conns = new LinkedHashMap<>(connections.size());
         for(Map.Entry<Coord, List<Coord>> entry : connections.entrySet())

@@ -42,12 +42,12 @@ public class SquidAIDemo extends ApplicationAdapter {
     private SquidInput input;
     private static final Color bgColor = SColor.DARK_SLATE_GRAY;
     private LinkedHashMap<AnimatedEntity, Integer> teamRed, teamBlue;
-    private Set<Coord> redPlaces, bluePlaces;
+    private LinkedHashSet<Coord> redPlaces, bluePlaces;
     private Technique redCone, redCloud, blueBlast, blueBeam;
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
     private int framesWithoutAnimation = 0, moveLength = 5;
-    private List<Coord> awaitedMoves;
+    private ArrayList<Coord> awaitedMoves;
     private int redIdx = 0, blueIdx = 0;
     private boolean blueTurn = false;
 
@@ -314,7 +314,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         Coord user = null;
         Color whichTint = Color.WHITE;
         LinkedHashMap<AnimatedEntity, Integer> whichEnemyTeam = null;
-        Map<Coord, Double> effects = null;
+        LinkedHashMap<Coord, Double> effects = null;
         if (blueTurn) {
             whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
             whichFoes = redPlaces;
@@ -356,7 +356,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 visibleTargets.add(p);
             }
         }
-        Map<Coord, ArrayList<Coord>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
+        LinkedHashMap<Coord, ArrayList<Coord>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
         Coord targetCell = null;
         for(Coord ip : ideal.keySet())
         {
