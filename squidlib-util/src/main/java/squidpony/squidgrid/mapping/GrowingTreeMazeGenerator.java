@@ -7,6 +7,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -41,7 +42,7 @@ public class GrowingTreeMazeGenerator {
         x *= 2;
         y *= 2;
 
-        ArrayList<Coord> deck = new ArrayList<>();
+        List<Coord> deck = new ArrayList<>();
         deck.add(Coord.get(x, y));
 
         Direction[] dirs = Direction.CARDINALS;

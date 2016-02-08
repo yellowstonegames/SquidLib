@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A test for the randomized flood-fill in the Spill class. This runs the Spill twice from the same starting position,
@@ -33,12 +35,12 @@ public class SpillTest {
             System.out.println(dg);
 
             Coord entry = dg.utility.randomFloor(dun);
-            HashSet<Coord> impassable = new HashSet<>();
+            Set<Coord> impassable = new HashSet<>();
             impassable.add(Coord.get(entry.x + 2, entry.y));
             impassable.add(Coord.get(entry.x - 2, entry.y));
             impassable.add(Coord.get(entry.x, entry.y + 2));
             impassable.add(Coord.get(entry.x, entry.y - 2));
-            ArrayList<Coord> ordered = spreader.start(entry, 20, impassable);
+            List<Coord> ordered = spreader.start(entry, 20, impassable);
             ordered.addAll(spreader.start(entry, 35, impassable));
             boolean[][] sm = spreader.spillMap;
             char[][] md = Arrays.copyOf(dun, dun.length),
@@ -70,7 +72,7 @@ public class SpillTest {
             short[] valid = CoordPacker.pack(dun, '.');
 
             LinkedHashMap<Coord, Double> entries = new LinkedHashMap<>(16);
-            ArrayList<Coord> section = CoordPacker.randomPortion(valid, 16, rng);
+            List<Coord> section = CoordPacker.randomPortion(valid, 16, rng);
             for (int i = 0; i < 4; i++) {
                 entries.put(section.get(i * 4    ), 1.0);
                 entries.put(section.get(i * 4 + 1), 0.75);

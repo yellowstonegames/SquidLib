@@ -8,6 +8,7 @@ import squidpony.squidgrid.Radius;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 
 /**
@@ -1264,7 +1265,7 @@ public class CoordPacker {
      *               returned by packMulti(); null elements in packed will be skipped.
      * @return an ArrayList of all packed arrays that store true at the given x,y location.
      */
-    public static ArrayList<short[]> findManyPackedHilbert(short hilbert, short[] ... packed)
+    public static Collection<short[]> findManyPackedHilbert(short hilbert, short[] ... packed)
     {
         ArrayList<short[]> packs = new ArrayList<>(packed.length);
         int hilbertDistance = hilbert & 0xffff;

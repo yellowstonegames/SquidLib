@@ -176,7 +176,7 @@ public class RoomFinder {
         else
         {
             found = regions.get(0);
-            ArrayList<List<short[]>> near = rooms.allAt(x, y);
+            Iterable<List<short[]>> near = rooms.allAt(x, y);
             for (List<short[]> links : near) {
                 for(short[] n : links)
                 {
@@ -204,7 +204,7 @@ public class RoomFinder {
     public ArrayList<char[][]> regionsConnected(int x, int y)
     {
         ArrayList<char[][]> regions = new ArrayList<char[][]>(10);
-        ArrayList<List<short[]>> near = rooms.allAt(x, y);
+        Iterable<List<short[]>> near = rooms.allAt(x, y);
         for (List<short[]> links : near) {
             for(short[] n : links)
             {

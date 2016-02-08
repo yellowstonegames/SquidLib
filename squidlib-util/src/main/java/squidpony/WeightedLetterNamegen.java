@@ -6,6 +6,8 @@ import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -256,11 +258,11 @@ public class WeightedLetterNamegen {
     private RNG rng;
     private String[] names;
     private int consonantLimit;
-    private ArrayList<Integer> sizes;
+    private List<Integer> sizes;
 
-    private TreeMap<Character, HashMap<Character, ProbabilityTable<Character>>> letters;
-    private ArrayList<Character> firstLetterSamples;
-    private ArrayList<Character> lastLetterSamples;
+    private Map<Character, HashMap<Character, ProbabilityTable<Character>>> letters;
+    private List<Character> firstLetterSamples;
+    private List<Character> lastLetterSamples;
     private DamerauLevenshteinAlgorithm dla = new DamerauLevenshteinAlgorithm(1, 1, 1, 1);
 
     /**
@@ -414,7 +416,7 @@ public class WeightedLetterNamegen {
     private char getIntermediateLetter(char letterBefore, char letterAfter) {
         if (Character.isLetter(letterBefore) && Character.isLetter(letterAfter)) {
             // First grab all letters that come after the 'letterBefore'
-            HashMap<Character, ProbabilityTable<Character>> wl = letters.get(letterBefore);
+            Map<Character, ProbabilityTable<Character>> wl = letters.get(letterBefore);
             if (wl == null) {
                 return getRandomNextLetter(letterBefore);
             }
