@@ -13,6 +13,7 @@ import squidpony.squidgrid.mapping.styled.TilesetType;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 import static squidpony.squidmath.CoordPacker.*;
@@ -353,7 +354,7 @@ public class CoordPackerTest {
         System.out.println();
         printPacked(doors, 60, 60);
         System.out.println();
-        ArrayList<short[]> separatedCorridors = split(corridors), separatedRooms = split(rooms);
+        Iterable<short[]> separatedCorridors = split(corridors), separatedRooms = split(rooms);
         for (short[] sep : separatedRooms) {
             printPacked(sep, 60, 60);
             System.out.println();
@@ -532,7 +533,7 @@ public class CoordPackerTest {
             short[][] packed;
             int ramPacked = 0, ramFloat = 0, ramDouble = 0;
             Coord viewer;
-            HashSet<Double> seenValues = new HashSet<>(FOV_RANGE * 2);
+            Set<Double> seenValues = new HashSet<>(FOV_RANGE * 2);
             /*
             System.out.println("Packing levels at range " + FOV_RANGE + ": ");
             for (Double d : packingLevels) {
@@ -664,7 +665,7 @@ public class CoordPackerTest {
             short[][] packed;
             int ramPacked = 0, ramFloat = 0, ramDouble = 0;
             Coord viewer;
-            HashSet<Double> seenValues = new HashSet<>(FOV_RANGE * 2);
+            Set<Double> seenValues = new HashSet<>(FOV_RANGE * 2);
             /*
             System.out.println("Packing levels at range " + FOV_RANGE + ": ");
             for (Double d : packingLevels) {

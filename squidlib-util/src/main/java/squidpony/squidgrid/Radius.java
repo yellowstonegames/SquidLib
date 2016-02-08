@@ -227,7 +227,7 @@ public enum Radius {
 
     public Set<Coord> perimeter(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
     {
-        LinkedHashSet<Coord> rim = new LinkedHashSet<>(4 * radiusLength);
+        Set<Coord> rim = new LinkedHashSet<>(4 * radiusLength);
         if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height))
             return rim;
         if(radiusLength < 1) {

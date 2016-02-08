@@ -24,7 +24,7 @@ public class WaypointPathfinder {
     private char[][] map;
     private int[][] expansionMap;
     public RNG rng;
-    private LinkedHashMap<Coord, LinkedHashMap<Coord, Edge>> waypoints;
+    private Map<Coord, LinkedHashMap<Coord, Edge>> waypoints;
 
     /**
      * Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
@@ -44,7 +44,7 @@ public class WaypointPathfinder {
         width = map.length;
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
-        ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
+        List<Coord> centers = PoissonDisk.sampleMap(simplified,
                 Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];
@@ -79,7 +79,7 @@ public class WaypointPathfinder {
             }
         }
 
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
+        Set<Coord> chokes = new LinkedHashSet<>(128);
         for (int i = 0; i < width; i++) {
             ELEMENT_WISE:
             for (int j = 0; j < height; j++) {
@@ -172,7 +172,7 @@ public class WaypointPathfinder {
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
         expansionMap = new int[width][height];
         waypoints = new LinkedHashMap<>(64);
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
+        Set<Coord> chokes = new LinkedHashSet<>(128);
 
         if(thickCorridors)
         {
@@ -187,7 +187,7 @@ public class WaypointPathfinder {
             }
         }
         else {
-            ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
+            List<Coord> centers = PoissonDisk.sampleMap(simplified,
                     Math.min(width, height) * 0.4f, this.rng, '#');
             int centerCount = centers.size();
             dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
@@ -293,7 +293,7 @@ public class WaypointPathfinder {
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
         expansionMap = new int[width][height];
         waypoints = new LinkedHashMap<>(64);
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
+        Set<Coord> chokes = new LinkedHashSet<>(128);
 
         short[] floors = pack(simplified, '.');
         Coord[] apart = fractionPacked(floors, fraction);
@@ -341,7 +341,7 @@ public class WaypointPathfinder {
         width = map.length;
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
-        ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
+        List<Coord> centers = PoissonDisk.sampleMap(simplified,
                 Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];
@@ -376,7 +376,7 @@ public class WaypointPathfinder {
             }
         }
 
-        LinkedHashSet<Coord> chokes = new LinkedHashSet<>(128);
+        Set<Coord> chokes = new LinkedHashSet<>(128);
         for (int i = 0; i < width; i++) {
             ELEMENT_WISE:
             for (int j = 0; j < height; j++) {
@@ -430,7 +430,7 @@ public class WaypointPathfinder {
      * @return an ArrayList of Coord that will go from a cell adjacent to self to a waypoint near approximateTarget
      */
     public ArrayList<Coord> getKnownPath(Coord self, Coord approximateTarget) {
-        ArrayList<Coord> near = dm.findNearestMultiple(approximateTarget, 5, waypoints.keySet());
+        Iterable<Coord> near = dm.findNearestMultiple(approximateTarget, 5, waypoints.keySet());
         Coord me = dm.findNearest(self, waypoints.keySet());
         double bestCost = 999999.0;
         ArrayList<Coord> path = new ArrayList<>();

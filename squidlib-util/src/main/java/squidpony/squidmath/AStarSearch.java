@@ -3,9 +3,11 @@ package squidpony.squidmath;
 
 import squidpony.squidgrid.Direction;
 
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
 
 /**
  * Performs A* search.
@@ -45,7 +47,7 @@ public class AStarSearch {
     }
 
     private final double[][] map;
-    private final HashSet<Coord> open = new HashSet<>();
+    private final Set<Coord> open = new HashSet<>();
     private final int width, height;
     private boolean[][] finished;
     private Coord[][] parent;
@@ -154,7 +156,7 @@ public class AStarSearch {
         }
 
         /* Not using Deque nor ArrayDeqye, they aren't Gwt compatible */
-        final LinkedList<Coord> deq = new LinkedList<>();
+        final Deque<Coord> deq = new LinkedList<>();
         while (!p.equals(start)) {
             deq.addFirst(p);
             p = parent[p.x][p.y];

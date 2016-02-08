@@ -16,6 +16,7 @@ import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ImageDemo extends ApplicationAdapter {
     SpriteBatch batch;
@@ -31,7 +32,7 @@ public class ImageDemo extends ApplicationAdapter {
     private SquidInput input;
     private double counter;
     private static final Color bgColor = SColor.DARK_SLATE_GRAY;
-    private HashMap<Coord, AnimatedEntity> creatures;
+    private Map<Coord, AnimatedEntity> creatures;
     private Stage stage;
     @Override
     public void create () {
