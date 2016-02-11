@@ -104,6 +104,13 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	void clear();
 
 	/**
+	 * This method is typically more efficient than {@link #colorAt(int)}.
+	 * 
+	 * @return The color of the last bucket, if any.
+	 */
+	public /* @Nullable */ T lastColor();
+
+	/**
 	 * @param index
 	 * @return The color at {@code index}, if any.
 	 * @throws NoSuchElementException
@@ -519,6 +526,11 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 					return false;
 			}
 			return true;
+		}
+
+		@Override
+		public T lastColor() {
+			return fragments.isEmpty() ? null : fragments.getLast().color;
 		}
 
 		@Override
