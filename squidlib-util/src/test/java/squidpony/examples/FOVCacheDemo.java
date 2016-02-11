@@ -44,7 +44,7 @@ public class FOVCacheDemo {
             time = System.currentTimeMillis() - time;
             System.out.println("Time spent caching: " + time);
             //byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
-            double[][] gradient = cache.calculateGradedFOV(null, walkable.x, walkable.y, range);
+            double[][] gradient = cache.calculateFOV(null, walkable.x, walkable.y, range);
             //double[][] conical = cache.calculateGradedFOV(new double[1][1], walkable.x, walkable.y, 12, Radius.CIRCLE, rng.nextDouble(360.0), rng.nextDouble(75) + 75);
             for (int j = 0; j < map[0].length; j++) {
                 for (int i = 0; i < map.length; i++) {
@@ -62,13 +62,12 @@ public class FOVCacheDemo {
             }
             System.out.println();
 
-
             time = System.currentTimeMillis();
             cache.awaitRefresh(map);
             time = System.currentTimeMillis() - time;
             System.out.println("Time spent refreshing: " + time);
             //byte[][] gradient = CoordPacker.unpackMultiByte(cache.getCacheEntry(walkable.x, walkable.y), width, height);
-            gradient = cache.calculateGradedFOV(null, walkable.x, walkable.y, range);
+            gradient = cache.calculateFOV(null, walkable.x, walkable.y, range);
             //double[][] conical = cache.calculateGradedFOV(new double[1][1], walkable.x, walkable.y, 12, Radius.CIRCLE, rng.nextDouble(360.0), rng.nextDouble(75) + 75);
             for (int j = 0; j < map[0].length; j++) {
                 for (int i = 0; i < map.length; i++) {

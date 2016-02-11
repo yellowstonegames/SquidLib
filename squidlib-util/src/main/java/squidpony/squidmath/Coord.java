@@ -1,9 +1,6 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.Direction;
-
-import java.util.Arrays;
 
 /**
  * A 2D coordinate.
@@ -379,18 +376,25 @@ public class Coord implements java.io.Serializable {
         }
     }
 
-    @GwtIncompatible /* Because of Arrays.copyOf */
     public static void expandPool(int xIncrease, int yIncrease)
     {
         if(xIncrease < 0 || yIncrease < 0)
             return;
         int width = POOL.length, height = POOL[0].length;
-        POOL = Arrays.copyOf(POOL, width + xIncrease);
-        for (int i = 0; i < width + xIncrease; i++) {
-            POOL[i] = Arrays.copyOf(POOL[i], height + yIncrease);
+        Coord[][] POOL2 = new Coord[width + xIncrease][height + yIncrease];
+        for (int i = 0; i < width; i++) {
+            POOL2[i] = new Coord[height + yIncrease];
+            System.arraycopy(POOL[i], 0, POOL2[i], 0, height);
             for (int j = 0; j < height + yIncrease; j++) {
-                if(POOL[i][j] == null) POOL[i][j] = new Coord(i - 3, j - 3);
+                if(POOL2[i][j] == null) POOL2[i][j] = new Coord(i - 3, j - 3);
             }
         }
+        for (int i = width; i < width + xIncrease; i++) {
+            POOL2[i] = new Coord[height + yIncrease];
+            for (int j = 0; j < height + yIncrease; j++) {
+                POOL2[i][j] = new Coord(i - 3, j - 3);
+            }
+        }
+        POOL = POOL2;
     }
 }
