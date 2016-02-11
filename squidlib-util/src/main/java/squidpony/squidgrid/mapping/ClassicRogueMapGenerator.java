@@ -6,7 +6,6 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -222,14 +221,14 @@ public class ClassicRogueMapGenerator {
     private void fullyConnect() {
         boolean allGood;
         do {
-            Deque<ClassicRogueRoom> deq = new LinkedList<>();
+            LinkedList<ClassicRogueRoom> deq = new LinkedList<>();
             for (int x = 0; x < horizontalRooms; x++) {
                 for (int y = 0; y < verticalRooms; y++) {
                     deq.offer(rooms[x][y]);
                 }
             }
-            Deque<ClassicRogueRoom> connected = new LinkedList<>();
-            connected.add(deq.pop());
+            LinkedList<ClassicRogueRoom> connected = new LinkedList<>();
+            connected.add(deq.removeFirst());
             boolean changed = true;
             testing:
             while (changed) {

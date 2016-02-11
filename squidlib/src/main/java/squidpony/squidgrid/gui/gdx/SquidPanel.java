@@ -129,7 +129,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(factory.isDistanceField())
         {
             distanceField = true;
-            shader = new ShaderProgram(Gdx.files.classpath("distance.vert"), Gdx.files.classpath("distance.frag"));
+            shader = new ShaderProgram(Gdx.files.classpath("distance.vertex.glsl"), Gdx.files.classpath("distance.fragment.glsl"));
             if (!shader.isCompiled()) {
                 Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + shader.getLog());
             }
