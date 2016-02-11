@@ -127,10 +127,9 @@ public class BlastAOE implements AOE {
         Coord tempPt = Coord.get(0, 0);
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
-            else
-                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
@@ -149,10 +148,9 @@ public class BlastAOE implements AOE {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
 
             t = ts[i];
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
-            else
-                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     compositeMap[i][x][y] = (tmpfov[x][y] > 0.0) ? dm.physicalMap[x][y] : DijkstraMap.WALL;
@@ -275,11 +273,7 @@ public class BlastAOE implements AOE {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
-
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
-            else
-                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
@@ -299,10 +293,7 @@ public class BlastAOE implements AOE {
 
             t = pts[i];
 
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
-            else
-                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
             double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
@@ -344,10 +335,7 @@ public class BlastAOE implements AOE {
 
             t = lts[i - pts.length];
 
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, t.x, t.y, radius, radiusType);
-            else
-                tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
+            tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
             double dist = 0.0;
             for (int x = 0; x < dungeon.length; x++) {
@@ -523,10 +511,7 @@ public class BlastAOE implements AOE {
 
     @Override
     public LinkedHashMap<Coord, Double> findArea() {
-        if(cache != null)
-            return AreaUtils.arrayToHashMap(cache.calculateGradedFOV(null, center.x, center.y, radius, radiusType));
-        else
-            return AreaUtils.arrayToHashMap(fov.calculateFOV(map, center.x, center.y, radius, radiusType));
+        return AreaUtils.arrayToHashMap(fov.calculateFOV(map, center.x, center.y, radius, radiusType));
     }
 
     @Override
@@ -604,8 +589,6 @@ public class BlastAOE implements AOE {
             this.reach = reach;
     }
 
-    private FOVCache cache = null;
-
     /**
      * If you use FOVCache to pre-compute FOV maps for a level, you can share the speedup from using the cache with
      * some AOE implementations that rely on FOV. Not all implementations need to actually make use of the cache, but
@@ -619,7 +602,7 @@ public class BlastAOE implements AOE {
     @GwtIncompatible
     @Override
     public void setCache(FOVCache cache) {
-        this.cache = cache;
+        fov = cache;
     }
 
 }

@@ -230,10 +230,7 @@ public class ConeAOE implements AOE {
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, origin.x, origin.y, radius, radiusType, tAngle, span);
-            else
-                tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
@@ -256,10 +253,7 @@ public class ConeAOE implements AOE {
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
 
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, origin.x, origin.y, radius, radiusType, tAngle, span);
-            else
-                tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
 
             for (int x = 0; x < dungeon.length; x++) {
@@ -367,10 +361,7 @@ public class ConeAOE implements AOE {
             tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, origin.x, origin.y, radius, radiusType, tAngle, span);
-            else
-                tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
@@ -392,10 +383,7 @@ public class ConeAOE implements AOE {
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
 
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, origin.x, origin.y, radius, radiusType, tAngle, span);
-            else
-                tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -435,10 +423,7 @@ public class ConeAOE implements AOE {
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
 
-            if(cache != null)
-                tmpfov = cache.calculateGradedFOV(null, origin.x, origin.y, radius, radiusType, tAngle, span);
-            else
-                tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
+            tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
 
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
@@ -629,17 +614,11 @@ public class ConeAOE implements AOE {
 
     @Override
     public LinkedHashMap<Coord, Double> findArea() {
-        LinkedHashMap<Coord, Double> r;
-        if(cache != null)
-            r = AreaUtils.arrayToHashMap(cache.calculateGradedFOV(null, origin.x, origin.y, radius,
-                radiusType, angle, span));
-        else
-            r = AreaUtils.arrayToHashMap(fov.calculateFOV(map, origin.x, origin.y, radius,
+        LinkedHashMap<Coord, Double> r = AreaUtils.arrayToHashMap(fov.calculateFOV(map, origin.x, origin.y, radius,
                 radiusType, angle, span));
         r.remove(origin);
         return r;
     }
-    private FOVCache cache = null;
 
     /**
      * If you use FOVCache to pre-compute FOV maps for a level, you can share the speedup from using the cache with
@@ -654,7 +633,7 @@ public class ConeAOE implements AOE {
     @GwtIncompatible
     @Override
     public void setCache(FOVCache cache) {
-        this.cache = cache;
+        fov = cache;
     }
 
 }

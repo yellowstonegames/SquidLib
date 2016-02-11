@@ -366,9 +366,9 @@ public class MonsterGen {
             String[] unsaid = other.unsaidAdjectives.toArray(new String[other.unsaidAdjectives.size()]),
                     talentAdj = other.powerAdjectives.toArray(new String[other.powerAdjectives.size()]),
                     talentPhr = other.powerPhrases.toArray(new String[other.powerPhrases.size()]);
-            unsaid = rng.randomPortion(unsaid, (int)Math.round(unsaid.length * otherInfluence));
-            talentAdj = rng.randomPortion(talentAdj, (int)Math.round(talentAdj.length * otherInfluence));
-            talentPhr = rng.randomPortion(talentPhr, (int)Math.round(talentPhr.length * otherInfluence));
+            unsaid = portion(rng, unsaid, (int)Math.round(unsaid.length * otherInfluence));
+            talentAdj = portion(rng, talentAdj, (int)Math.round(talentAdj.length * otherInfluence));
+            talentPhr = portion(rng, talentPhr, (int)Math.round(talentPhr.length * otherInfluence));
             Collections.addAll(next.wholeAdjectives, unsaid);
             Collections.addAll(next.powerAdjectives, talentAdj);
             Collections.addAll(next.powerPhrases, talentPhr);
@@ -446,7 +446,7 @@ public class MonsterGen {
     public Chimera randomizeAppearance(RNG rng, Chimera creature, String newName, int adjectiveCount)
     {
         Chimera next = new Chimera(newName, creature);
-        Collections.addAll(next.wholeAdjectives, rng.randomPortion(adjectives, adjectiveCount));
+        Collections.addAll(next.wholeAdjectives, portion(rng, adjectives, adjectiveCount));
         next.wholeAdjectives.removeAll(next.unsaidAdjectives);
         return next;
     }
@@ -479,8 +479,8 @@ public class MonsterGen {
     {
         Chimera next = new Chimera(newName, creature);
         int adjs = rng.nextInt(powerCount + 1), phrs = powerCount - adjs;
-        Collections.addAll(next.powerAdjectives, rng.randomPortion(powerAdjectives, adjs));
-        Collections.addAll(next.powerPhrases, rng.randomPortion(powerPhrases, phrs));
+        Collections.addAll(next.powerAdjectives, portion(rng, powerAdjectives, adjs));
+        Collections.addAll(next.powerPhrases, portion(rng, powerPhrases, phrs));
         return next;
     }
 
@@ -510,16 +510,16 @@ public class MonsterGen {
     public Chimera randomize(RNG rng, String newName, int detail)
     {
         ArrayList<String> ps = new ArrayList<String>();
-        Collections.addAll(ps, rng.randomPortion(components, detail));
+        Collections.addAll(ps, portion(rng, components, detail));
         Chimera next = new Chimera(newName, "thing", ps, new ArrayList<String>(),
                 new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
         if(detail > 0) {
             int powerCount = rng.nextInt(detail), bodyCount = detail - powerCount;
             int adjs = rng.nextInt(powerCount + 1), phrs = powerCount - adjs;
 
-            Collections.addAll(next.unsaidAdjectives, rng.randomPortion(adjectives, bodyCount));
-            Collections.addAll(next.powerAdjectives, rng.randomPortion(powerAdjectives, adjs));
-            Collections.addAll(next.powerPhrases, rng.randomPortion(powerPhrases, phrs));
+            Collections.addAll(next.unsaidAdjectives, portion(rng, adjectives, bodyCount));
+            Collections.addAll(next.powerAdjectives, portion(rng, powerAdjectives, adjs));
+            Collections.addAll(next.powerPhrases, portion(rng, powerPhrases, phrs));
         }
         return next;
     }
@@ -568,6 +568,11 @@ public class MonsterGen {
     public String randomName()
     {
         return randomName(srng);
+    }
+
+    private static String[] portion(RNG rng, String[] source, int amount)
+    {
+        return rng.randomPortion(source, new String[Math.min(source.length, amount)]);
     }
 
 }

@@ -1,5 +1,6 @@
 package squidpony.squidgrid;
 
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.ShortVLA;
@@ -77,6 +78,7 @@ import static squidpony.squidmath.CoordPacker.*;
  * Created by Tommy Ettinger on 10/7/2015.
  * @author Tommy Ettinger
  */
+@GwtIncompatible
 public class FOVCache extends FOV{
 
     protected int maxRadius, maxLOSRadius;
@@ -1380,7 +1382,7 @@ public class FOVCache extends FOV{
             return fov.calculateFOV(resMap, startx, starty, maxRadius, radiusKind);
     }
 
-    /**
+    /*
      * Calculates the Field Of View for the provided map from the given x, y
      * coordinates. Returns a light map where the values are either 1.0 or 0.0.
      * Takes a double radius to extend out to (rounded to the nearest int) and
@@ -1401,16 +1403,17 @@ public class FOVCache extends FOV{
      * @param radius        the distance the light will extend to
      * @return the computed light grid
      */
+    /*
     @Override
     public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius) {
         if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius)
             return unpackDouble(cache[startx + starty * width][maxRadius - (int) Math.round(radius)], width, height);
         else
             return fov.calculateFOV(resMap, startx, starty, radius, radiusKind);
-    }
+    }*/
 
 
-    /**
+    /*
      * Calculates the Field Of View for the provided map from the given x, y
      * coordinates. Returns a light map where the values are either 1.0 or 0.0.
      * Takes a double radius to extend out to (rounded to the nearest int), a
@@ -1435,6 +1438,7 @@ public class FOVCache extends FOV{
      * @param radiusTechnique provides a means to calculate the radius as desired
      * @return the computed light grid
      */
+    /*
     @Override
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
                                    Radius radiusTechnique) {
@@ -1443,9 +1447,9 @@ public class FOVCache extends FOV{
             return unpackDouble(cache[startX + startY * width][maxRadius - (int) Math.round(radius)], width, height);
         else
             return fov.calculateFOV(resMap, startX, startY, radius, radiusTechnique);
-    }
+    }*/
 
-    /**
+    /*
      * Calculates the conical Field Of View for the provided map from the given
      * x, y coordinates. Returns a light map where the values are either 1.0 or
      * 0.0. Takes a double radius to extend out to (rounded to the nearest int),
@@ -1476,7 +1480,7 @@ public class FOVCache extends FOV{
      * @param span            the angle in degrees that measures the full arc contained in the FOV cone
      * @return the computed light grid
      */
-    @Override
+/*    @Override
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
                                    Radius radiusTechnique, double angle, double span) {
         if((qualityComplete || complete) && radius >= 0 && radius <= maxRadius &&
@@ -1486,7 +1490,7 @@ public class FOVCache extends FOV{
         else
             return fov.calculateFOV(resMap, startX, startY, radius, radiusTechnique, angle, span);
     }
-
+*/
     /**
      * Calculates the Field Of View for the provided map from the given x, y
      * coordinates. Returns a light map where the values range from 1.0 (center
@@ -1510,7 +1514,7 @@ public class FOVCache extends FOV{
      * @param radius        the distance the light will extend to
      * @return the computed light grid
      */
-    public double[][] calculateGradedFOV(double[][] resistanceMap, int startx, int starty, double radius) {
+    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius) {
         if((qualityComplete || complete) && radius > 0 && radius <= maxRadius)
             return unpackMultiDoublePartial(cache[startx + starty * width], width, height,
                     levels[(int) Math.round(radius)], (int) Math.round(radius));
@@ -1546,7 +1550,7 @@ public class FOVCache extends FOV{
      * @param radiusTechnique provides a means to calculate the radius as desired
      * @return the computed light grid
      */
-    public double[][] calculateGradedFOV(double[][] resistanceMap, int startX, int startY, double radius,
+    public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
                                    Radius radiusTechnique) {
         if((qualityComplete || complete) && radius > 0 && radius <= maxRadius &&
                 radiusKind.equals2D(radiusTechnique))
@@ -1589,7 +1593,7 @@ public class FOVCache extends FOV{
      * @param span            the angle in degrees that measures the full arc contained in the FOV cone
      * @return the computed light grid
      */
-    public double[][] calculateGradedFOV(double[][] resistanceMap, int startX, int startY, double radius,
+    public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
                                    Radius radiusTechnique, double angle, double span) {
         if((qualityComplete || complete) && radius > 0 && radius <= maxRadius &&
                 radiusKind.equals2D(radiusTechnique))
@@ -1828,6 +1832,7 @@ public class FOVCache extends FOV{
         return height;
     }
 
+    @GwtIncompatible
     protected class PerformanceUnit implements Runnable
     {
 
@@ -1907,6 +1912,7 @@ public class FOVCache extends FOV{
         }
     }
 
+    @GwtIncompatible
     protected class QualityUnit implements Runnable
     {
 
@@ -1982,6 +1988,7 @@ public class FOVCache extends FOV{
         }
     }
 
+    @GwtIncompatible
     protected class RefreshUnit implements Runnable
     {
         protected double[][] res;
@@ -2063,6 +2070,8 @@ public class FOVCache extends FOV{
             refreshComplete = true;
         }
     }
+
+    @GwtIncompatible
     protected class FOVUnit implements Callable<Long>
     {
         protected int index;
@@ -2083,6 +2092,7 @@ public class FOVCache extends FOV{
         }
     }
 
+    @GwtIncompatible
     protected class LOSUnit implements Callable<Long>
     {
         protected int index;
@@ -2102,6 +2112,8 @@ public class FOVCache extends FOV{
             return storeCellLOS(index);
         }
     }
+
+    @GwtIncompatible
     protected class SymmetryUnit implements Callable<Long>
     {
         protected int index;

@@ -1822,6 +1822,167 @@ public class DijkstraMap {
      * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
      * positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
      * given threats are able to see (which should prevent them from attacking), until a cell is reached with
+     * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
+     * which may go further from a goal if the minPreferredRange has not been met at the current distance.
+     * <p/>
+     * Essentially, this method is for finding ways to approach enemies who can attack at range without constantly being
+     * attacked by them. You are expected to call deteriorate() and possible relax() at points when a position becomes
+     * riskier to stay at (then you call deteriorate()) or a position starts to seem like a safer place (then, relax()).
+     * <p/>
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     *
+     * @param moveLength        the length of the path to calculate
+     * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
+     * @param maxPreferredRange the (inclusive) upper bound of the distance this unit will try to keep from a target
+     * @param coverPreference positive, typically around 1.0, higher numbers make the pathfinder stay behind cover
+     *                        more, lower numbers make the pathfinder move more aggressively toward targets
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param threats           a List of Threat objects that store a position, min and max threatening distance
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets           a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     */
+    public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
+                                                  double coverPreference, Set<Coord> impassable,
+                                                  Set<Coord> onlyPassable, List<Threat> threats, Coord start,
+                                                  Coord... targets) {
+        if (!initialized) return null;
+
+        if (minPreferredRange < 0) minPreferredRange = 0;
+        if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
+        double[][] resMap = new double[width][height];
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
+            }
+        }
+
+
+        path = new ArrayList<Coord>();
+        LinkedHashSet<Coord> impassable2;
+        if (impassable == null)
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
+        if (onlyPassable == null)
+            onlyPassable = new LinkedHashSet<Coord>();
+
+        resetMap();
+        for (Coord goal : targets) {
+            setGoal(goal.x, goal.y);
+        }
+        if (goals.isEmpty())
+            return path;
+
+        Measurement mess = measurement;
+        if (measurement == Measurement.EUCLIDEAN) {
+            measurement = Measurement.CHEBYSHEV;
+        }
+        scan(impassable2);
+        goals.clear();
+        LinkedHashMap<Coord, Double> cachedGoals = new LinkedHashMap<Coord, Double>();
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
+                    continue;
+                if (gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange) {
+                    gradientMap[x][y] = 0.001 * (maxPreferredRange - gradientMap[x][y]);
+                    cachedGoals.put(Coord.get(x, y), gradientMap[x][y]);
+                } else
+                    gradientMap[x][y] = FLOOR;
+            }
+        }
+        measurement = mess;
+        double[][] storedScan = scan(impassable2);
+        if(storedScan[start.x][start.y] > moveLength) {
+            clearGoals();
+            resetMap();
+            double[][] seen;
+            short[] packed = CoordPacker.ALL_WALL, floors = CoordPacker.pack(physicalMap, FLOOR), tempPacked;
+            for (Threat t : threats) {
+                packed = CoordPacker.unionPacked(
+                        packed, CoordPacker.reachable(floors, CoordPacker.packOne(t.position), t.reach));
+
+            }
+            short[] unseen = CoordPacker.differencePacked(CoordPacker.rectangle(width, height),
+                    CoordPacker.expand(packed, 1, width, height));
+            Coord[] safe = CoordPacker.allPacked(unseen);
+            for (int i = 0; i < safe.length; i++) {
+                setGoal(safe[i]);
+            }
+            safetyMap = scan(impassable2);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if (storedScan[x][y] < FLOOR)
+                    {
+                        gradientMap[x][y] = storedScan[x][y] * 2.0 * (moveLength+1) + safetyMap[x][y] * coverPreference;
+                    }
+                    //safeMap[x][y] = Math.pow(safeMap[x][y] + safetyMap[x][y], 1.5);
+                }
+            }
+            goals = cachedGoals;
+            scan(impassable2);
+
+            //gradientMap = storedScan;
+        }
+        Coord currentPos = start;
+        double paidLength = 0.0;
+        while (true) {
+            if (frustration > 500) {
+                path = new ArrayList<Coord>();
+                break;
+            }
+            double best = gradientMap[currentPos.x][currentPos.y];
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            int choice = rng.nextInt(dirs.length);
+
+            for (int d = 0; d < dirs.length; d++) {
+                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best) {
+                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
+                        best = gradientMap[pt.x][pt.y];
+                        choice = d;
+                    }
+                }
+            }
+
+            if (best >= gradientMap[currentPos.x][currentPos.y] ||
+                    physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
+                break;
+            }
+            currentPos = currentPos.translate(dirs[choice]);
+            path.add(Coord.get(currentPos.x, currentPos.y));
+            paidLength += costMap[currentPos.x][currentPos.y];
+            frustration++;
+            if(paidLength > moveLength - 1.0)
+                break;
+            if (gradientMap[currentPos.x][currentPos.y] == 0)
+                break;
+        }
+        goals.clear();
+        if (onlyPassable.contains(currentPos) || impassable2.contains(currentPos)) {
+            closed.put(currentPos, WALL);
+            impassable2.add(currentPos);
+            return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
+                    impassable2, onlyPassable, threats, start, targets);
+        }
+
+        frustration = 0;
+        return path;
+    }
+
+    /**
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
+     * positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
+     * given threats are able to see (which should prevent them from attacking), until a cell is reached with
      * a distance from a goal that is at equal to preferredRange,
      * which may go further from a goal if the preferredRange has not been met at the current distance.
      * <p/>
@@ -1838,7 +1999,7 @@ public class DijkstraMap {
      *
      * @param moveLength     the length of the path to calculate
      * @param preferredRange the distance this unit will try to keep from a target
-     * @param fov            a FOV (or FOVCache that has completed its calculations), and will be used for LOS work, may be null
+     * @param fov            a FOV that will be used for LOS work, must not be null
      * @param seekDistantGoals true if this should pathfind to goals that it cannot see, false if FOV restricts pathfinding
      * @param impassable     a Set of impassable Coord positions that may change (not constant like walls); can be null
      * @param onlyPassable   a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
@@ -1878,7 +2039,7 @@ public class DijkstraMap {
      * @param maxPreferredRange the (inclusive) upper bound of the distance this unit will try to keep from a target
      * @param coverPreference positive, typically around 1.0, higher numbers make the pathfinder stay behind cover
      *                        more, lower numbers make the pathfinder move more aggressively toward targets
-     * @param fov               a FOV (or FOVCache that has completed its calculations), and will be used for LOS work, MUST NOT be null
+     * @param fov               a FOV that will be used for LOS work, MUST NOT be null
      * @param seekDistantGoals true if this should pathfind to goals that it cannot see, false if FOV restricts pathfinding
      * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
      * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
@@ -1892,14 +2053,241 @@ public class DijkstraMap {
                                                   Set<Coord> onlyPassable, List<Threat> threats, Coord start,
                                                   Coord... targets) {
         if (!initialized) return null;
+        if(fov == null) {
+            return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
+                    impassable, onlyPassable, threats, start, targets);
+        }
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
         double[][] resMap = new double[width][height];
-        if (fov != null && !(fov instanceof FOVCache)) {
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
+            }
+        }
+
+
+        path = new ArrayList<Coord>();
+        LinkedHashSet<Coord> impassable2;
+        if (impassable == null)
+            impassable2 = new LinkedHashSet<Coord>();
+        else
+            impassable2 = new LinkedHashSet<Coord>(impassable);
+        if (onlyPassable == null)
+            onlyPassable = new LinkedHashSet<Coord>();
+
+        resetMap();
+        for (Coord goal : targets) {
+            setGoal(goal.x, goal.y);
+        }
+        if (goals.isEmpty())
+            return path;
+
+        Measurement mess = measurement;
+        if (measurement == Measurement.EUCLIDEAN) {
+            measurement = Measurement.CHEBYSHEV;
+        }
+        scan(impassable2);
+        goals.clear();
+        LinkedHashMap<Coord, Double> cachedGoals = new LinkedHashMap<Coord, Double>();
+
+        for (int x = 0; x < width; x++) {
+            CELL:
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == WALL || gradientMap[x][y] == DARK)
+                    continue;
+                if (gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange) {
+
+                    double[][] results = new double[width][height];
+                    if (!seekDistantGoals)
+                        results = fov.calculateFOV(resMap, x, y, maxPreferredRange, findRadius(mess));
+                    for (Coord goal : targets) {
+                        if (seekDistantGoals || results[goal.x][goal.y] > 0.0) {
+                            gradientMap[x][y] = 0.001 * (maxPreferredRange - gradientMap[x][y]);
+                            cachedGoals.put(Coord.get(x, y), gradientMap[x][y]);
+                            continue CELL;
+                        }
+                    }
+                    gradientMap[x][y] = FLOOR;
+                } else
+                    gradientMap[x][y] = FLOOR;
+            }
+        }
+        measurement = mess;
+        double[][] storedScan = scan(impassable2);
+        if(storedScan[start.x][start.y] > moveLength) {
+            clearGoals();
+            resetMap();
+            double[][] seen;
+            short[] packed = CoordPacker.ALL_WALL, tempPacked;
+            for (Threat t : threats) {
+                seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.reach.maxDistance, findRadius(measurement));
+                tempPacked = CoordPacker.pack(seen);
+
+                if (t.reach.minDistance > 0) {
+
+                    seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.reach.minDistance, findRadius(measurement));
+                    tempPacked = CoordPacker.differencePacked(tempPacked, CoordPacker.pack(seen));
+
+                }
+                packed = CoordPacker.unionPacked(packed, tempPacked);
+            }
+            short[] unseen = CoordPacker.differencePacked(CoordPacker.rectangle(width, height),
+                    CoordPacker.expand(packed, 1, width, height));
+            Coord[] safe = CoordPacker.allPacked(unseen);
+            for (int i = 0; i < safe.length; i++) {
+                setGoal(safe[i]);
+            }
+            safetyMap = scan(impassable2);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
+                    if (storedScan[x][y] < FLOOR)
+                    {
+                        gradientMap[x][y] = storedScan[x][y] * 2.0 * (moveLength+1) + safetyMap[x][y] * coverPreference;
+                    }
+                    //safeMap[x][y] = Math.pow(safeMap[x][y] + safetyMap[x][y], 1.5);
                 }
+            }
+            goals = cachedGoals;
+            scan(impassable2);
+
+            //gradientMap = storedScan;
+        }
+        Coord currentPos = start;
+        double paidLength = 0.0;
+        while (true) {
+            if (frustration > 500) {
+                path = new ArrayList<Coord>();
+                break;
+            }
+            double best = gradientMap[currentPos.x][currentPos.y];
+            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            int choice = rng.nextInt(dirs.length);
+
+            for (int d = 0; d < dirs.length; d++) {
+                Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
+                if (gradientMap[pt.x][pt.y] < best) {
+                    if (dirs[choice] == Direction.NONE || !path.contains(pt)) {
+                        best = gradientMap[pt.x][pt.y];
+                        choice = d;
+                    }
+                }
+            }
+
+            if (best >= gradientMap[currentPos.x][currentPos.y] ||
+                    physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
+                break;
+            }
+            currentPos = currentPos.translate(dirs[choice]);
+            path.add(Coord.get(currentPos.x, currentPos.y));
+            paidLength += costMap[currentPos.x][currentPos.y];
+            frustration++;
+            if(paidLength > moveLength - 1.0)
+                break;
+            if (gradientMap[currentPos.x][currentPos.y] == 0)
+                break;
+        }
+        goals.clear();
+        if (onlyPassable.contains(currentPos) || impassable2.contains(currentPos)) {
+            closed.put(currentPos, WALL);
+            impassable2.add(currentPos);
+            return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
+                    fov, seekDistantGoals, impassable2, onlyPassable, threats, start, targets);
+        }
+
+        frustration = 0;
+        return path;
+    }
+
+    /**
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
+     * positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
+     * given threats are able to see (which should prevent them from attacking), until a cell is reached with
+     * a distance from a goal that is at equal to preferredRange,
+     * which may go further from a goal if the preferredRange has not been met at the current distance.
+     * <p/>
+     * Essentially, this method is for finding ways to approach enemies who can attack at range without constantly being
+     * attacked by them. You are expected to call deteriorate() and possible relax() at points when a position becomes
+     * riskier to stay at (then you call deteriorate()) or a position starts to seem like a safer place (then, relax()).
+     * <p/>
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     *
+     * @param moveLength     the length of the path to calculate
+     * @param preferredRange the distance this unit will try to keep from a target
+     * @param fov            a FOVCache that has completed its calculations, and will be used for LOS work, may be null
+     * @param seekDistantGoals true if this should pathfind to goals that it cannot see, false if FOV restricts pathfinding
+     * @param impassable     a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable   a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param threats        a List of Threat objects that store a position, min and max threatening distance
+     * @param start          the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets        a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     */
+    @GwtIncompatible
+    public ArrayList<Coord> findCoveredAttackPath(int moveLength, int preferredRange, double coverPreference,
+                                                  FOVCache fov, boolean seekDistantGoals, Set<Coord> impassable,
+                                                  Set<Coord> onlyPassable, List<Threat> threats, Coord start,
+                                                  Coord... targets) {
+        return findCoveredAttackPath(moveLength, preferredRange, preferredRange, coverPreference, fov,
+                seekDistantGoals, impassable, onlyPassable, threats, start, targets);
+    }
+
+    /**
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list of Coord
+     * positions (using the current measurement) needed to get closer to a goal while staying in areas that none of the
+     * given threats are able to see (which should prevent them from attacking), until a cell is reached with
+     * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
+     * which may go further from a goal if the minPreferredRange has not been met at the current distance.
+     * <p/>
+     * Essentially, this method is for finding ways to approach enemies who can attack at range without constantly being
+     * attacked by them. You are expected to call deteriorate() and possible relax() at points when a position becomes
+     * riskier to stay at (then you call deteriorate()) or a position starts to seem like a safer place (then, relax()).
+     * <p/>
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     *
+     * @param moveLength        the length of the path to calculate
+     * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
+     * @param maxPreferredRange the (inclusive) upper bound of the distance this unit will try to keep from a target
+     * @param coverPreference positive, typically around 1.0, higher numbers make the pathfinder stay behind cover
+     *                        more, lower numbers make the pathfinder move more aggressively toward targets
+     * @param fov               a FOVCache that has completed its calculations, and will be used for LOS work
+     * @param seekDistantGoals true if this should pathfind to goals that it cannot see, false if FOV restricts pathfinding
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param threats           a List of Threat objects that store a position, min and max threatening distance
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets           a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     */
+    @GwtIncompatible
+    public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
+                                                  double coverPreference, FOVCache fov, boolean seekDistantGoals, Set<Coord> impassable,
+                                                  Set<Coord> onlyPassable, List<Threat> threats, Coord start,
+                                                  Coord... targets) {
+        if (!initialized) return null;
+        if(fov == null) {
+            return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
+                    impassable, onlyPassable, threats, start, targets);
+        }
+
+        if (minPreferredRange < 0) minPreferredRange = 0;
+        if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
+        double[][] resMap = new double[width][height];
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
             }
         }
 
@@ -1957,21 +2345,13 @@ public class DijkstraMap {
             double[][] seen;
             short[] packed = CoordPacker.ALL_WALL, tempPacked;
             for (Threat t : threats) {
-                if (fov instanceof FOVCache) {
-                    tempPacked = ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y, t.reach.maxDistance);
-                } else {
-                    seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.reach.maxDistance, findRadius(measurement));
-                    tempPacked = CoordPacker.pack(seen);
-                }
+
+                tempPacked = fov.getCacheEntry(t.position.x, t.position.y, t.reach.maxDistance);
+
 
                 if (t.reach.minDistance > 0) {
-                    if (fov instanceof FOVCache) {
                         tempPacked = CoordPacker.differencePacked(tempPacked,
-                                ((FOVCache) fov).getCacheEntry(t.position.x, t.position.y, t.reach.minDistance));
-                    } else {
-                        seen = fov.calculateFOV(resMap, t.position.x, t.position.y, t.reach.minDistance, findRadius(measurement));
-                        tempPacked = CoordPacker.differencePacked(tempPacked, CoordPacker.pack(seen));
-                    }
+                                fov.getCacheEntry(t.position.x, t.position.y, t.reach.minDistance));
                 }
                 packed = CoordPacker.unionPacked(packed, tempPacked);
             }
