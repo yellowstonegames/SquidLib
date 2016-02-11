@@ -343,24 +343,38 @@ public class RNG implements Serializable {
         };
     }
 
-    /*
-     * Shuffle an array using the Fisher-Yates algorithm.
+    /**
+     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.
+     * <br>
+     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
      * @param elements an array of T; will not be modified
      * @param <T> can be any non-primitive type.
      * @return a shuffled copy of elements
-     * /
+     */
     @GwtIncompatible
-    public <T> T[] shuffle(T[] elements) {
-        return shuffle(elements, Arrays.copyOf(elements, elements.length));
+    public <T> T[] shuffle(T[] elements)
+    {
+        int n = elements.length;
+        T[] array = Arrays.copyOf(elements, n);
+        for (int i = 0; i < n; i++)
+        {
+            int r = i + nextInt(n - i);
+            T t = array[r];
+            array[r] = array[i];
+            array[i] = t;
+        }
+        return array;
     }
-    */
+
     /**
-     * Shuffle an array using the Fisher-Yates algorithm.
+     * Shuffle an array using the "inside-out" Fisher-Yates algorithm.
+     * <br>
+     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
      * @param elements an array of T; will not be modified
      * @param <T> can be any non-primitive type.
      * @param dest
      * 			Where to put the shuffle. It MUST have the same length as {@code elements}
-     * @return {@code dest}
+     * @return {@code dest} after modifications
      * @throws IllegalStateException
      * 			If {@code dest.length != elements.length}
      */
@@ -369,14 +383,13 @@ public class RNG implements Serializable {
     {
     	if (dest.length != elements.length)
     		throw new IllegalStateException("Input arrays must be of the same sizes");
-        System.arraycopy(elements, 0, dest, 0, elements.length);
-    	/* The usual code now */
+
         for (int i = 0; i < elements.length; i++)
         {
-            int r = i + nextInt(elements.length - i);
-            T t = dest[r];
-            dest[r] = dest[i];
-            dest[i] = t;
+            int r = nextInt(i + 1);
+            if(r != i)
+                dest[i] = dest[r];
+            dest[r] = elements[i];
         }
     	return dest;
     }
@@ -399,19 +412,37 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Gets a random portion of an array and returns it as a new array. Will only use a given position in the given
-     * array at most once; does this by shuffling a copy of the array and getting a section of it.
+     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
+     * it can, and then returns output. Will only use a given position in the given data at most once; does this by
+     * generating random indices for data's elements, but only as much as needed, assigning the copied section to output
+     * and not modifying data.
+     *
+     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid
+     * copying or creating a new generic array (a problem on GWT).
      * @param data an array of T; will not be modified.
-     * @param count the non-negative number of elements to randomly take from data
+     * @param output an array of T that will be overwritten; should always be instantiated with the portion length
      * @param <T> can be any non-primitive type.
-     * @return an array of T that has length equal to the smaller of count or data.length
+     * @return an array of T that has length equal to output's length and may contain null elements if data is shorter
+     * than output
      */
-    public <T> T[] randomPortion(T[] data, int count)
+    public <T> T[] randomPortion(T[] data, T[] output)
     {
-        T[] array = Arrays.copyOf(data, data.length);
-        shuffle(data, array);
-        array = Arrays.copyOf(array, Math.min(count, data.length));
-        return array;
+        int length = data.length;
+        int[] mapping = new int[length];
+        for (int i = 0; i < length; i++) {
+            mapping[i] = i;
+        }
+
+        for (int i = 0; i < output.length; i++) {
+            int r = nextInt(length);
+
+            output[i] = data[mapping[r]];
+
+            mapping[r] = length-1;
+            length--;
+        }
+
+        return output;
     }
 
     /**

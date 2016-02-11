@@ -3812,7 +3812,8 @@ public class CoordPacker {
     public static ArrayList<short[]> split(short[] packed)
     {
         ArrayList<short[]> arrays = new ArrayList<>(32);
-        short[] remaining = Arrays.copyOf(packed, packed.length);
+        short[] remaining = new short[packed.length];
+        System.arraycopy(packed, 0, remaining, 0, packed.length);
         while (remaining.length > 1) {
             boolean on = false;
             int idx = 0;

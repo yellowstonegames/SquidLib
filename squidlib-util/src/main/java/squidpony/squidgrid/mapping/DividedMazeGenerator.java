@@ -5,7 +5,6 @@ import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -66,10 +65,10 @@ public class DividedMazeGenerator {
     }
 
     private void process() {
-        Deque<DividedMazeRoom> stack = new LinkedList<>();
+        LinkedList<DividedMazeRoom> stack = new LinkedList<>();
         stack.offer(new DividedMazeRoom(1, 1, width - 2, height - 2));
         while (!stack.isEmpty()) {
-            DividedMazeRoom room = stack.pop();
+            DividedMazeRoom room = stack.removeFirst();
             ArrayList<Integer> availX = new ArrayList<>(),
                                availY = new ArrayList<>();
 

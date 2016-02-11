@@ -414,16 +414,21 @@ public class DharmaRNG extends RNG {
     }
 
     /**
-     * Gets a random portion of an array and returns it as a new array. Will only use a given position in the given
-     * array at most once; does this by shuffling a copy of the array and getting a section of it.
+     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
+     * it can, and then returns output. Will only use a given position in the given data at most once; does this by
+     * shuffling a copy of data and getting a section of it that matches the length of output.
      *
-     * @param data  an array of T; will not be modified.
-     * @param count the non-negative number of elements to randomly take from data
-     * @return an array of T that has length equal to the smaller of count or data.length
+     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid
+     * copying or creating a new generic array (a problem on GWT).
+     * @param data an array of T; will not be modified.
+     * @param output an array of T that will be overwritten; should always be instantiated with the portion length
+     * @param <T> can be any non-primitive type.
+     * @return an array of T that has length equal to output's length and may contain null elements if output is shorter
+     * than data
      */
     @Override
-    public <T> T[] randomPortion(T[] data, int count) {
-        return super.randomPortion(data, count);
+    public <T> T[] randomPortion(T[] data, T[] output) {
+        return super.randomPortion(data, output);
     }
 
     /**
