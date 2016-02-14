@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  *
- *
+ Benchmark                              Mode  Cnt           Score           Error     Units
  CoordPackerBenchmark.measureExpand     avgt    3    900228206.833 ±    21968143.986  ns/op
  CoordPackerBenchmark.measureFringe     avgt    3    641602426.833 ±    27212281.762  ns/op
  CoordPackerBenchmark.measureIntersect  avgt    3     43690482.937 ±     5320462.022  ns/op
@@ -66,6 +66,14 @@ import java.util.concurrent.TimeUnit;
  CoordPackerBenchmark.measureRetract    avgt    3   2898240290.667 ±    70354485.221  ns/op
  CoordPackerBenchmark.measureSurface    avgt    3   2668457224.000 ±   208057266.995  ns/op
  CoordPackerBenchmark.measureUnion      avgt    3     24108143.476 ±     1636907.341  ns/op
+
+ CoordPackerBenchmark.measureExpand     avgt    3    903545748.333 ±    64662153.123  ns/op
+ CoordPackerBenchmark.measureFringe     avgt    3    648745341.000 ±    35213867.865  ns/op
+ CoordPackerBenchmark.measureIntersect  avgt    3     42401227.361 ±     6245961.734  ns/op
+ CoordPackerBenchmark.measurePack       avgt    3    110786137.533 ±     4217588.965  ns/op
+ CoordPackerBenchmark.measureRetract    avgt    3   1429771405.667 ±    52878650.572  ns/op
+ CoordPackerBenchmark.measureSurface    avgt    3   1440772193.000 ±   102585931.893  ns/op
+ CoordPackerBenchmark.measureUnion      avgt    3     23457633.434 ±      394246.228  ns/op
  */
 public class CoordPackerBenchmark {
 
@@ -294,7 +302,7 @@ public class CoordPackerBenchmark {
                 .include(CoordPackerBenchmark.class.getSimpleName())
                 .timeout(TimeValue.seconds(30))
                 .warmupIterations(3)
-                .measurementIterations(5)
+                .measurementIterations(3)
                 .forks(1)
                 .build();
 
