@@ -3,6 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -45,7 +46,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected final TextCellFactory textFactory;
     protected LinkedHashSet<AnimatedEntity> animatedEntities;
     protected boolean distanceField = false;
-    protected ShaderProgram shader = null;
+    protected float smoothingMultiplier;
+    protected ShaderProgram shader;
 
     /**
      * Creates a bare-bones panel with all default values for text rendering.
@@ -126,14 +128,20 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         int h = gridHeight * cellHeight;
         setSize(w, h);
         animatedEntities = new LinkedHashSet<>();
+
+        smoothingMultiplier = 1f;
+
         if(factory.isDistanceField())
         {
             distanceField = true;
-            shader = new ShaderProgram(Gdx.files.internal("distance.vertex.glsl"), Gdx.files.internal("distance.fragment.glsl"));
+            shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.fragmentShader);
+            // Gdx.files.internal("distance.vertex.glsl"), Gdx.files.internal("distance.fragment.glsl")
             if (!shader.isCompiled()) {
                 Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + shader.getLog());
             }
         }
+        else
+            shader= SpriteBatch.createDefaultShader();
     }
 
     /**
@@ -428,11 +436,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     @Override
     public void draw (Batch batch, float parentAlpha) {
         Color tmp;
-        if(distanceField)
-        {
-            shader.setUniformf("scale", cellWidth / textFactory.getDistanceFieldScaleX());
-            batch.setShader(shader);
-        }
+
         for (int x = gridOffsetX; x < gridWidth; x++) {
             for (int y = gridOffsetY; y < gridHeight; y++) {
                 tmp = scc.filter(colors[x][y]);
@@ -1291,5 +1295,29 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
         setBounds(x, y, getWidth(), getHeight());
+    }
+
+    /**
+     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
+     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.
+     * @return the current smoothing multiplier as a float, which starts at 1f.
+     */
+    public float getSmoothingMultiplier() {
+        return smoothingMultiplier;
+    }
+
+    /**
+     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
+     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.
+     * @param smoothingMultiplier the new value for the smoothing multiplier as a float; should be fairly close to 1f.
+     */
+    public void setSmoothingMultiplier(float smoothingMultiplier) {
+        this.smoothingMultiplier = smoothingMultiplier;
+    }
+
+    public ShaderProgram configuredShader() {
+        if(distanceField)
+            shader.setUniformf("u_smoothing", 3.5f * smoothingMultiplier * textFactory.bmpFont.getData().scaleX);
+        return shader;
     }
 }

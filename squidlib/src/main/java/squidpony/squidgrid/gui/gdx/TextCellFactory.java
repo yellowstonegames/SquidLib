@@ -48,7 +48,7 @@ public class TextCellFactory implements Disposable {
 	 * loading of a font's file across multiple factories.
 	 */
 	protected /* Nullable */AssetManager assetManager;
-    protected BitmapFont bmpFont = null;
+    public BitmapFont bmpFont = null;
     protected Texture block = null;
     protected String fitting = SQUID_FITTING;
     protected IColorCenter<Color> scc;
@@ -278,10 +278,12 @@ public class TextCellFactory implements Disposable {
      */
     public TextCellFactory fontDistanceField(String fontPath, String texturePath) {
         Texture tex;
-        if (Gdx.files.internal(fontPath).exists()) {
+        if (Gdx.files.internal(texturePath).exists()) {
+            Gdx.app.debug("font", "Using internal font texture at " + texturePath);
             tex = new Texture(Gdx.files.internal(texturePath), true);
             tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
-        } else if (Gdx.files.classpath(fontPath).exists()) {
+        } else if (Gdx.files.classpath(texturePath).exists()) {
+            Gdx.app.debug("font", "Using classpath font texture at " + texturePath);
             tex = new Texture(Gdx.files.classpath(texturePath), true);
             tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
         } else {
@@ -290,9 +292,11 @@ public class TextCellFactory implements Disposable {
             return this;
         }
         if (Gdx.files.internal(fontPath).exists()) {
+            Gdx.app.debug("font", "Using internal font at " + fontPath);
             bmpFont = new BitmapFont(Gdx.files.internal(fontPath), new TextureRegion(tex), false);
             distanceField = true;
         } else if (Gdx.files.classpath(fontPath).exists()) {
+            Gdx.app.debug("font", "Using classpath font at " + fontPath);
             bmpFont = new BitmapFont(Gdx.files.classpath(fontPath), new TextureRegion(tex), false);
             distanceField = true;
         } else {
@@ -675,20 +679,18 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
-        bmpFont.setColor(color);
-
         if (s == null) {
-            Color orig = scc.filter(batch.getColor());
-            batch.setColor(color);
+            Color orig = batch.getColor();
+            batch.setColor(scc.filter(color));
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            Color orig = scc.filter(batch.getColor());
-            batch.setColor(color);
+            Color orig = batch.getColor();
+            batch.setColor(scc.filter(color));
             batch.draw(block, x, y - height, width * s.length(), height);
             batch.setColor(orig);
         } else {
-            bmpFont.setColor(color);
+            bmpFont.setColor(scc.filter(color));
             bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
         }
     }
@@ -732,12 +734,12 @@ public class TextCellFactory implements Disposable {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (tr == null) {
-            Color orig = scc.filter(batch.getColor());
+            Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = scc.filter(batch.getColor());
+            Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
@@ -759,16 +761,14 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
-        bmpFont.setColor(color);
-
         if (tr == null) {
-            Color orig = scc.filter(batch.getColor());
-            batch.setColor(color);
+            Color orig = batch.getColor();
+            batch.setColor(scc.filter(color));
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = scc.filter(batch.getColor());
-            batch.setColor(color);
+            Color orig = batch.getColor();
+            batch.setColor(scc.filter(color));
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
         }
@@ -817,12 +817,12 @@ public class TextCellFactory implements Disposable {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
         if (tr == null) {
-            Color orig = scc.filter(batch.getColor());
+            Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = scc.filter(batch.getColor());
+            Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
@@ -848,13 +848,13 @@ public class TextCellFactory implements Disposable {
         }
 
         if (tr == null) {
-            Color orig = scc.filter(batch.getColor());
-            batch.setColor(color);
+            Color orig = batch.getColor();
+            batch.setColor(scc.filter(color));
             batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
-            Color orig = scc.filter(batch.getColor());
-            batch.setColor(color);
+            Color orig = batch.getColor();
+            batch.setColor(scc.filter(color));
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
         }
@@ -892,19 +892,19 @@ public class TextCellFactory implements Disposable {
         }
         if (s == null) {
             Image im = new Image(block);
-            im.setColor(color);
+            im.setColor(scc.filter(color));
             im.setSize(width, height);
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             Image im = new Image(block);
-            im.setColor(color);
+            im.setColor(scc.filter(color));
             im.setSize(width * s.length(), height);
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
             Label lb = new Label(s, new Label.LabelStyle(bmpFont, null));
-            lb.setColor(color);
+            lb.setColor(scc.filter(color));
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
         }
@@ -923,13 +923,13 @@ public class TextCellFactory implements Disposable {
         }
         if (tr == null) {
             Image im = new Image(block);
-            im.setColor(color);
+            im.setColor(scc.filter(color));
             im.setSize(width, height);
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
             Image im = new Image(tr);
-            im.setColor(color);
+            im.setColor(scc.filter(color));
             im.setSize(width, height);
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
@@ -949,13 +949,13 @@ public class TextCellFactory implements Disposable {
         }
         if (tr == null) {
             Image im = new Image(block);
-            im.setColor(color);
+            im.setColor(scc.filter(color));
             im.setSize(width, height);
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
             Image im = new Image(tr);
-            im.setColor(color);
+            im.setColor(scc.filter(color));
             im.setSize(width, height);
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
