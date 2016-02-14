@@ -1620,6 +1620,7 @@ public class SquidLayers extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        batch.setShader(foregroundPanel.configuredShader());
         super.draw(batch, parentAlpha);
     }
 
@@ -1674,6 +1675,42 @@ public class SquidLayers extends Group {
         {
             panel.setPosition(x, y);
         }
+    }
+
+    public SquidPanel getLayer(int layer)
+    {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        return p;
+    }
+    public SquidPanel getForegroundLayer()
+    {
+        return foregroundPanel;
+    }
+    public SquidPanel getBackgroundLayer()
+    {
+        return backgroundPanel;
+    }
+
+    public SquidLayers setSmoothingMultiplier(float smoothing)
+    {
+        foregroundPanel.smoothingMultiplier = smoothing;
+        backgroundPanel.smoothingMultiplier = smoothing;
+        for(SquidPanel panel : extraPanels)
+        {
+            panel.smoothingMultiplier = smoothing;
+        }
+        return this;
     }
 
 

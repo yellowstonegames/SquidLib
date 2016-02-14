@@ -167,14 +167,14 @@ public class EverythingDemo extends ApplicationAdapter {
         bgCenter = colorCenters[17];
         currentCenter = 8;
         batch = new SpriteBatch();
-        width = 80;
+        width = 50;
         height = 30;
-        cellWidth = 11;
+        cellWidth = 22;
         cellHeight = 22;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
-                new TextCellFactory().defaultNarrowDistanceFieldFont(), bgCenter, fgCenter);
+                DefaultResources.getStretchableSquareFont(), bgCenter, fgCenter);
         display.setAnimationDuration(0.03f);
         messages = new SquidMessageBox(width, 4, display.getTextFactory());
         stage = new Stage(new StretchViewport(width * cellWidth, (height + 4) * cellHeight), batch);
