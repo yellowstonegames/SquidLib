@@ -49,38 +49,35 @@ import squidpony.squidmath.StatefulRNG;
 
 import java.util.concurrent.TimeUnit;
 
+import static squidpony.squidmath.CoordPacker.*;
+
 public class DijkstraBenchmark {
 
-    public static final int DIMENSION = 120, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 100, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
-            new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+            new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
-            new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
-
-    public static final char[][] map;
-    public static final short[] floors;
+            new StatefulRNG(0x1337BEEFDEAL));
+    public static char[][] map;
+    public static short[] floors;
     static {
         serpent.putWalledBoxRoomCarvers(1);
         map = dungeonGen.generate(serpent.generate());
         floors = CoordPacker.pack(map, '.');
+        System.out.println("Floors: " + count(floors));
+        System.out.println("Percentage walkable: " + count(floors) * 100.0 / (DIMENSION * DIMENSION) + "%");
     }
     public long doScan()
     {
         DijkstraMap dijkstra = new DijkstraMap(
-                map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
-        //Coord r;
-        long scanned = 0;
+                map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
 
+        long scanned = 0;
         for (int x = 1; x < DIMENSION - 1; x++) {
             for (int y = 1; y < DIMENSION - 1; y++) {
                 if (map[x][y] == '#')
                     continue;
-                // this should ensure no blatant correlation between R and W
-                //utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-                //r = utility.randomFloor(map);
                 dijkstra.setGoal(x, y);
-                //dijkstra.setGoal(r);
                 dijkstra.scan(null);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
@@ -105,12 +102,12 @@ public class DijkstraBenchmark {
      * The generated code for this particular sample is somewhere at
      *  target/generated-sources/annotations/.../JMHSample_02_BenchmarkModes.java
      */
-    //@Benchmark
-    //@BenchmarkMode(Mode.AverageTime)
-    //@OutputTimeUnit(TimeUnit.MILLISECONDS)
-    //public void measureScan() throws InterruptedException {
-    //    System.out.println(doScan());
-    //}
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureScan() throws InterruptedException {
+        doScan();
+    }
 
     public long doPath()
     {
@@ -135,9 +132,9 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
-    @Benchmark
-    @BenchmarkMode(Mode.SampleTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    //@Benchmark
+    //@BenchmarkMode(Mode.AverageTime)
+    //@OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePath() throws InterruptedException {
         System.out.println(doPath());
     }
@@ -152,9 +149,9 @@ public class DijkstraBenchmark {
      *
      * a) Via the command line from the squidlib-performance module's root folder:
      *    $ mvn clean install
-     *    $ java -jar target/benchmarks.jar DijkstraBenchmark -wi 5 -i 5 -f 1
+     *    $ java -jar target/benchmarks.jar DijkstraBenchmark -wi 3 -i 3 -f 1
      *
-     *    (we requested 5 warmup/measurement iterations, single fork)
+     *    (we requested 3 warmup/measurement iterations, single fork)
      *
      * b) Via the Java API:
      *    (see the JMH homepage for possible caveats when running from IDE:
@@ -164,8 +161,8 @@ public class DijkstraBenchmark {
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(DijkstraBenchmark.class.getSimpleName())
-                .warmupIterations(5)
-                .measurementIterations(5)
+                .warmupIterations(3)
+                .measurementIterations(3)
                 .forks(1)
                 .build();
 

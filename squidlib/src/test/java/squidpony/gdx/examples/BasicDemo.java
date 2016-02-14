@@ -69,10 +69,10 @@ public class BasicDemo extends ApplicationAdapter {
         //of an individual cell. The font will look more crisp if the cell dimensions match the config multipliers
         //exactly, and the stretchable fonts (technically, distance field fonts) can resize to non-square sizes and
         //still retain most of that crispness.
-        gridWidth = 80;
-        gridHeight = 32;
-        cellWidth = 8;
-        cellHeight = 18;
+        gridWidth = 50;
+        gridHeight = 24;
+        cellWidth = 25;
+        cellHeight = 25;
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
         rng = new RNG("SquidLib!");
 
@@ -82,11 +82,12 @@ public class BasicDemo extends ApplicationAdapter {
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, (gridHeight + 8) * cellHeight), batch);
         // the font will try to load Inconsolata-LGC-Custom as an embedded bitmap font with a distance field effect.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(gridWidth, gridHeight + 8, cellWidth, cellHeight, DefaultResources.getStretchableFont());
+        display = new SquidLayers(gridWidth, gridHeight + 8, cellWidth, cellHeight, DefaultResources.getSquareSmoothFont());
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        display.getTextFactory().height(cellHeight + 1).initBySize();
+        //display.getTextFactory().height(cellHeight + 1).initBySize();
+
         // this makes animations very fast, which is good for multi-cell movement but bad for attack animations.
         display.setAnimationDuration(0.03f);
 
@@ -131,7 +132,7 @@ public class BasicDemo extends ApplicationAdapter {
                         "Tezen kisaiba konnouda, bubotan, ne rijonnozouna?",
                         "Mà le roe leth glang içoui?",
                         "Potron oxa kthoi opleipotron ola aisaisp kthou.",
-                        "Εοθιαμ οκραυπ ρεοϕα τερος ψοσποιζ ριαμ.",
+                        "Εοθιαμ οκραυπ ρεοφα τερος ψοσποιζ ριαμ.",
                         "Tuskierovich topliegrachigary khodynamyv, toskiafi!",
                         "Гыпогозуск, глынуск сид фавуриджйглътод!",
                         "Hmaagrai eindian, ase agluxi-ugg?",

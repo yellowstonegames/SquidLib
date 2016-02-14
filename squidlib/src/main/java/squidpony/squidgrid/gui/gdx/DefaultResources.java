@@ -29,7 +29,7 @@ import squidpony.squidmath.StatefulRNG;
  */
 public class DefaultResources implements LifecycleListener {
     private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
-            smooth1 = null, smooth2 = null, smoothSquare = null,
+            smooth1 = null, smooth2 = null, smoothSquare = null, smoothSquareOld = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null;
     private TextCellFactory distanceNarrow = null, distanceSquare = null;
@@ -216,11 +216,11 @@ public class DefaultResources implements LifecycleListener {
         return instance.unicode2;
     }
     /**
-     * Returns a 20x20px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
+     * Returns a 25x25px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
-     * This variant is (almost) perfectly square, and box drawing characters should line up at size 20x20 px, but other
+     * This variant is (almost) perfectly square, and box drawing characters should line up at size 25x25 px, but other
      * glyphs will have much more horizontal spacing than in other fonts. Caches the font for later calls.
-     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 20x20 pixels.
+     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 25x25 pixels.
      */
     public static BitmapFont getSquareSmoothFont()
     {
@@ -228,11 +228,33 @@ public class DefaultResources implements LifecycleListener {
         if(instance.smoothSquare == null)
         {
             try {
-                instance.smoothSquare = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square.fnt"), Gdx.files.internal("Inconsolata-LGC-Square.png"), false);
+                instance.smoothSquare = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square-25x25.fnt"), Gdx.files.internal("Inconsolata-LGC-Square-25x25.png"), false);
             } catch (Exception e) {
             }
         }
         return instance.smoothSquare;
+    }
+
+    /**
+     * NOTE: May have issues with transparency. Prefer using distance field fonts with getStretchableSquareFont() if
+     * possible, or getSquareSmoothFont() for a larger square BitmapFont. Returns a 20x20px, very smooth and generally
+     * good-looking font (based on Inconsolata) as an embedded resource. This font fully supports Latin, Greek,
+     * Cyrillic, and of particular interest to SquidLib, Box Drawing characters. This variant is (almost) perfectly
+     * square, and box drawing characters should line up at size 20x20 px, but other glyphs will have much more
+     * horizontal spacing than in other fonts. Caches the font for later calls.
+     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 20x20 pixels.
+     */
+    public static BitmapFont getSquareSmoothMediumFont()
+    {
+        initialize();
+        if(instance.smoothSquareOld == null)
+        {
+            try {
+                instance.smoothSquareOld = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square.fnt"), Gdx.files.internal("Inconsolata-LGC-Square.png"), false);
+            } catch (Exception e) {
+            }
+        }
+        return instance.smoothSquareOld;
     }
 
     /**
