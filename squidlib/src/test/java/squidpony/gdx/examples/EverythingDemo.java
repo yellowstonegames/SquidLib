@@ -103,6 +103,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private SquidColorCenter[] colorCenters;
     private int currentCenter;
     private boolean changingColors = false;
+    private TextCellFactory textFactory;
     @Override
     public void create () {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
@@ -171,18 +172,19 @@ public class EverythingDemo extends ApplicationAdapter {
         height = 30;
         cellWidth = 10;
         cellHeight = 20;
+        textFactory = DefaultResources.getStretchableFont();
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
-                DefaultResources.getStretchableFont(), bgCenter, fgCenter);
+                textFactory, bgCenter, fgCenter);
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
 
         display.setAnimationDuration(0.03f);
-        messages = new SquidMessageBox(width, 4, display.getTextFactory());
+        messages = new SquidMessageBox(width, 4, textFactory);
 
-        display.getTextFactory().height(cellHeight + 1).initBySize();
+        textFactory.height(cellHeight + 1).initBySize();
 
         stage = new Stage(new StretchViewport(width * cellWidth, (height + 4) * cellHeight), batch);
 
@@ -714,6 +716,7 @@ public class EverythingDemo extends ApplicationAdapter {
         counter += Gdx.graphics.getDeltaTime() * 15;
         // this does the standard lighting for walls, floors, etc. but also uses counter to do the Simplex noise thing.
         lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
+        //textFactory.configureShader(batch);
 
         // you done bad. you done real bad.
         if (health <= 0) {
@@ -789,7 +792,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.draw();
         if(help == null) {
-            // disolay does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
+            // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
             batch.begin();
             // the player needs to get drawn every frame, of course.
             display.drawActor(batch, 1.0f, player);

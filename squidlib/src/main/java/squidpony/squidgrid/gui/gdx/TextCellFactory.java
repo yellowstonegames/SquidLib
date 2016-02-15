@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -34,6 +36,7 @@ import squidpony.IColorCenter;
  * All images have transparent backgrounds.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
+ * @author Tommy Ettinger
  */
 public class TextCellFactory implements Disposable {
 
@@ -55,7 +58,11 @@ public class TextCellFactory implements Disposable {
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     protected int width = 1, height = 1, modifiedHeight = 1;
     protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;
-    private boolean initialized = false, distanceField = false;
+    private boolean initialized = false;
+    protected boolean distanceField = false;
+    protected ShaderProgram shader;
+    protected float smoothingMultiplier = 1f;
+
 
     /**
      * Creates a default valued factory. One of the initialization methods must
@@ -73,12 +80,12 @@ public class TextCellFactory implements Disposable {
      * primarily matters if you are using fonts not bundled with SquidLib, since
      * accessing a BitmapFont with a method (not a String) from DefaultResources
      * caches the BitmapFont already.
-	 * 
+	 *
 	 * @param assetManager an ordinary libGDX AssetManager
 	 */
     public TextCellFactory(/* Nullable */ AssetManager assetManager) {
     	this.assetManager = assetManager;
-        this.scc = DefaultResources.getSCC();
+        scc = DefaultResources.getSCC();
     }
 
     /**
@@ -124,12 +131,22 @@ public class TextCellFactory implements Disposable {
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
         temp.dispose();
+
         if(distanceField)
         {
             modifiedHeight = height - 1;
             bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
+
+            shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.fragmentShader);
+            // Gdx.files.internal("distance.vertex.glsl"), Gdx.files.internal("distance.fragment.glsl")
+            if (!shader.isCompiled()) {
+                Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + shader.getLog());
+            }
             //distanceFieldScaleX *= (((float)width) / height) / (distanceFieldScaleX / distanceFieldScaleY);
         }
+        else
+            shader= SpriteBatch.createDefaultShader();
+
         initialized = true;
         return this;
     }
@@ -262,7 +279,11 @@ public class TextCellFactory implements Disposable {
     /**
      * Sets the font to a distance field font with the given String path to a .fnt file and String path to a texture.
      * Distance field fonts should scale cleanly to multiple resolutions without artifacts. Does not use AssetManager
-     * since you shouldn't need to reload the font if it scales with one image.
+     * since you shouldn't need to reload the font if it scales with one image. You need to configure the shader to use
+     * distance field fonts unless a class already does this for you (SquidLayers handles shader configuration
+     * internally, for example). TextCellFactory has a method, configureShader(Batch), that does this and should be
+     * called while that Batch has begun rendering, typically in an override of some containing Scene2D Group's
+     * draw(Batch, float) method.
      * <br>
      * At least two distance field fonts are included in SquidLib; one is square, one is narrow, and they can both be
      * accessed using either the predefined TextCellFactory objects in DefaultResources, accessible with
@@ -355,11 +376,26 @@ public class TextCellFactory implements Disposable {
         bmpFont = DefaultResources.getDefaultFont();
         return this;
     }
+
+    /**
+     * Sets the TextCellFactory to use a square distance field font that will resize to whatever size you request.
+     * You must configure the shader if you use a distance field font, unless a class does it for you, like SquidLayers.
+     * The configureShader(Batch) method of this class can be used to set up the shader if you don't use SquidLayers;
+     * see its docs for more information.
+     * @return this TextCellFactory set to use a square distance field font
+     */
     public TextCellFactory defaultDistanceFieldFont()
     {
         fontDistanceField(DefaultResources.distanceFieldSquare, DefaultResources.distanceFieldSquareTexture);
         return this;
     }
+    /**
+     * Sets the TextCellFactory to use a half-square distance field font that will resize to whatever size you request.
+     * You must configure the shader if you use a distance field font, unless a class does it for you, like SquidLayers.
+     * The configureShader(Batch) method of this class can be used to set up the shader if you don't use SquidLayers;
+     * see its docs for more information.
+     * @return this TextCellFactory set to use a half-square distance field font
+     */
     public TextCellFactory defaultNarrowDistanceFieldFont()
     {
         fontDistanceField(DefaultResources.distanceFieldNarrow, DefaultResources.distanceFieldNarrowTexture);
@@ -484,10 +520,10 @@ public class TextCellFactory implements Disposable {
         bottomPadding = padding;
         return this;
     }
-    
+
     /**
      * Returns the padding on the left side.
-     * 
+     *
      * @return amount of padding in pixels
      */
     public int leftPadding() {
@@ -507,13 +543,13 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Returns the padding on the right side.
-     * 
+     *
      * @return amount of padding in pixels
      */
     public int rightPadding() {
         return rightPadding;
     }
-    
+
     /**
      * Sets the amount of padding on the right side to the provided value.
      *
@@ -527,13 +563,13 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Returns the padding on the top side.
-     * 
+     *
      * @return amount of padding in pixels
      */
     public int topPadding() {
         return topPadding;
     }
-    
+
     /**
      * Sets the amount of padding on the top side to the provided value.
      *
@@ -547,7 +583,7 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Returns the padding on the bottom side.
-     * 
+     *
      * @return amount of padding in pixels
      */
     public int bottomPadding() {
@@ -577,13 +613,13 @@ public class TextCellFactory implements Disposable {
 			/* Better fail now than later */
 			throw new NullPointerException(
 					"The color center should not be null in " + getClass().getSimpleName());
-		this.scc = icc;
+        scc = icc;
 		return this;
 	}
 
     /**
      * Returns true if this factory is fully initialized and ready to build text cells.
-     * 
+     *
      * @return true if initialized
      */
     public boolean initialized() {
@@ -604,7 +640,7 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
-        
+
         if (!Character.isValidCodePoint(codepoint) ||
                 (codepoint <= 0x001F) || (codepoint >= 0x007F && codepoint <= 0x009F)) // same as isIsoControl
         {
@@ -627,6 +663,7 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
+
         if (s == null) {
             batch.draw(block, x, y - height, width, modifiedHeight);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
@@ -652,6 +689,7 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
+
         if (s == null) {
             Color orig = scc.filter(batch.getColor());
             batch.setColor(r, g, b, a);
@@ -682,6 +720,7 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
+
         if (s == null) {
             Color orig = batch.getColor();
             batch.setColor(scc.filter(color));
@@ -712,6 +751,7 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
+
         if (tr == null) {
             batch.draw(block, x, y - height, width, modifiedHeight);
         } else {
@@ -736,6 +776,7 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
+
         if (tr == null) {
             Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
@@ -764,6 +805,7 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
+
         if (tr == null) {
             Color orig = batch.getColor();
             batch.setColor(scc.filter(color));
@@ -793,6 +835,7 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
+
         if (tr == null) {
             batch.draw(block, x, y - height, width, height);
         } else {
@@ -819,6 +862,7 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
+
         if (tr == null) {
             Color orig = batch.getColor();
             batch.setColor(r, g, b, a);
@@ -988,6 +1032,44 @@ public class TextCellFactory implements Disposable {
         return distanceFieldScaleY;
     }
 
+    /**
+     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
+     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.
+     * @return the current smoothing multiplier as a float, which starts at 1f.
+     */
+    public float getSmoothingMultiplier() {
+        return smoothingMultiplier;
+    }
+
+    /**
+     * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
+     * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.
+     * @param smoothingMultiplier the new value for the smoothing multiplier as a float; should be fairly close to 1f.
+     */
+    public void setSmoothingMultiplier(float smoothingMultiplier) {
+        this.smoothingMultiplier = smoothingMultiplier;
+    }
+
+    /**
+     * If using a distance field font, you MUST call this at some point while the batch has begun, or use code that
+     * calls it for you. A typical point to call it is in the "void draw(Batch batch, float parentAlpha)" method or an
+     * overriding method for a Scene2D class. You should call configureShader rarely, typically only once per frame if
+     * there are no images to render, and this means the logical place to call it is in the outermost Group that
+     * contains any SquidPanel objects or other widgets.
+     * <br>
+     * SquidLayers already calls this method in its draw override, immediately before it calls super.draw(), so you
+     * don't need to call this manually if you use SquidLayers.
+     * <br>
+     * If you don't use a distance field font, you don't need to call this, but calling it won't cause problems.
+     *
+     * @param batch the Batch, such as a SpriteBatch, to configure to render distance field fonts if necessary.
+     */
+    public void configureShader(Batch batch) {
+        if (initialized && distanceField) {
+            shader.setUniformf("u_smoothing", 3.5f * smoothingMultiplier * bmpFont.getData().scaleX);
+            batch.setShader(shader);
+        }
+    }
     /**
      * Releases all resources of this object.
      */
