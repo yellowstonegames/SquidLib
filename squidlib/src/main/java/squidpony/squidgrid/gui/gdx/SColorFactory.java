@@ -15,7 +15,10 @@ import java.util.*;
  * All returned SColor objects are cached so multiple requests for the same
  * SColor will not create duplicate long term objects.
  *
+ * @see SquidColorCenter another technique for caching colors that allows filters.
+ *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
+ * @author Tommy Ettinger - responsible for mutilating this class to work on libGDX
  */
 public class SColorFactory {
 
@@ -27,7 +30,17 @@ public class SColorFactory {
     private long floor = 1;//what multiple to floor rgb values to in order to reduce total colors
 
     /**
-     * Prevents any instances from being created.
+     * Constructs a new SColorFactory with an empty cache.
+     * <br>
+     * Implementation note: SColorFactory initially used static methods and was not intended to
+     * be constructed by users, but for compatibility with Android (where static instances may
+     * linger into another run of an application), it was reworked to require an object to be
+     * constructed and for that object to contain the cache, rather than a static instance. Code
+     * written for earlier versions of SquidLib may use static methods on SColorFactory; most
+     * code written in SquidLib 3.0.0 beta 2 and newer prefers the IColorCenter implementations
+     * such as SquidColorCenter when SColor features such as color names aren't required. As of
+     * the master revision after beta 3, SquidColorCenter implements most of SColorFactory's API,
+     * and also supports a Filter for automatic changes to requested colors..
      */
     public SColorFactory() {
 
@@ -198,6 +211,20 @@ public class SColorFactory {
      */
     public void setFloor(int value) {
         floor = Math.max(1, value);
+    }
+
+    /**
+     * Gets the value at which each of the red, green, and blue values will be
+     * set to the nearest lower multiple of.
+     * <br>
+     * For example, a floor value of 5 would mean that each of those values
+     * would be considered the nearest lower multiple of 5 when building the
+     * colors.
+     *
+     * @return the current floor value as a long, which defaults to 1.
+     */
+    public long getFloor() {
+        return floor;
     }
 
     /**
@@ -427,9 +454,9 @@ public class SColorFactory {
      * Returns a list of colors starting at the first color and moving to the
      * second color. The end point colors are included in the list.
      *
-     * @param color1
-     * @param color2
-     * @return
+     * @param color1 starting color
+     * @param color2 ending color
+     * @return an ArrayList of SColor going from color1 to color2; the length should be no greater than 256.
      */
     public ArrayList<SColor> asGradient(SColor color1, SColor color2) {
         String name = paletteNamer(color1, color2);

@@ -167,16 +167,23 @@ public class EverythingDemo extends ApplicationAdapter {
         bgCenter = colorCenters[17];
         currentCenter = 8;
         batch = new SpriteBatch();
-        width = 50;
+        width = 90;
         height = 30;
-        cellWidth = 22;
-        cellHeight = 22;
+        cellWidth = 10;
+        cellHeight = 20;
         // the font will try to load Inconsolata-LGC as a bitmap font from resources.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
-                DefaultResources.getStretchableSquareFont(), bgCenter, fgCenter);
+                DefaultResources.getStretchableFont(), bgCenter, fgCenter);
+        // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
+        // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
+        // if you use '#' for walls instead of box drawing chars, you don't need this.
+
         display.setAnimationDuration(0.03f);
         messages = new SquidMessageBox(width, 4, display.getTextFactory());
+
+        display.getTextFactory().height(cellHeight + 1).initBySize();
+
         stage = new Stage(new StretchViewport(width * cellWidth, (height + 4) * cellHeight), batch);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
