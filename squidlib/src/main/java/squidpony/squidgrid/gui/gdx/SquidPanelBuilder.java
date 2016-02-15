@@ -93,7 +93,7 @@ public abstract class SquidPanelBuilder extends IPanelBuilder.Skeleton {
 		if (cellWidth == cellHeight) {
 			final int fontSize = fontSizeForCellSize(cellWidth);
 			if (!hasFontOfSize(fontSize))
-				throw new IllegalStateException("Not font of size " + fontSize);
+				throw new IllegalStateException("No font of size " + fontSize);
 
 			final String fontFile = fontfile(fontSize);
 			if (freshTCF) {
