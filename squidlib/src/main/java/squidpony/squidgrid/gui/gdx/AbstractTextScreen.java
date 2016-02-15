@@ -1,13 +1,12 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.graphics.Color;
+import squidpony.panel.IColoredString;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
-import com.badlogic.gdx.graphics.Color;
-
-import squidpony.panel.IColoredString;
 
 /**
  * A screen designed to write some text in full screen. This class supports text
@@ -29,7 +28,7 @@ public abstract class AbstractTextScreen<T extends Color> extends AbstractSquidS
 	protected /* @Nullable */ int[] alignment;
 
 	/**
-	 * @param si
+	 * @param ssi
 	 *            See super class
 	 * @param text
 	 *            The text to display. From top to bottom. Use {@code null}

@@ -60,8 +60,8 @@ public class SColorFactory {
      * This method constructs a list of the SColor constants the first time it
      * is called.
      *
-     * @param s
-     * @return
+     * @param s the name
+     * @return  the SColor by name s
      */
     public SColor colorForName(String s) {
         if (nameLookup.isEmpty()) {
@@ -81,8 +81,8 @@ public class SColorFactory {
      * This method constructs a list of the SColor constants the first time it
      * is called.
      *
-     * @param rgb
-     * @return
+     * @param rgb an int encoding 256 * 256 * red + 256 * green + blue
+     * @return the SColor with value rgb
      */
     public SColor colorForValue(int rgb) {
         if (valueLookup.isEmpty()) {
