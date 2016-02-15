@@ -231,6 +231,15 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	public /* @Nullable */ Set<Integer> doNotBind;
 
 	/**
+	 * If non-{@code null}, {@code this} will avoid characters in this set to
+	 * bind keyboard presses to buttons. Note that this class already rules out
+	 * characters that aren't {@link Character#isLetter(char)}, so you don't
+	 * need it to fill this set with characters such as '#', '/', etc; but you
+	 * need to put 'é', 'à', etc. if you want to rule out "complex" letters.
+	 */
+	public /* @Nullable */ Set<Character> unbindable;
+
+	/**
 	 * Whether this panel supports scrolling. This'll make this panel display
 	 * '...' and '...' as the first and last entries if it cannot display the
 	 * entirety of {@link #buttonsTexts}. This is only supported if
@@ -464,9 +473,10 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 		int m = topMargin;
 		/* In number of cells */
 		final int buttonHeight = buttonCellsHeight();
+		int nbb = 0;
 		int i = buttonStartingIndex;
 		boolean first = true;
-		for (; i < nbButtons; i++) {
+		for (; i < nbButtons; i++, nbb++) {
 			final int alignment;
 			final int nextm = m + buttonHeight + interButtonMargin;
 			if (buttonsAlignment != null && i < buttonsAlignment.length)
@@ -481,7 +491,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			final boolean last = i == nbButtons - 1;
 			final boolean firstDots = first && 0 < i;
 			final boolean lastDots = !last && (nbVDisplayedCells <= nextm);
-			putButton(i, m, alignment, putBordersAndMargins, firstDots || lastDots);
+			putButton(i, m, alignment, putBordersAndMargins, firstDots || lastDots, nbb, scroll);
 			if (firstDots || lastDots)
 				i--;
 			m = nextm;
@@ -493,7 +503,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 		firstLastButtonIndexes = new FirstAndLastButtonIndex(buttonStartingIndex, i);
 		if ((firstLastButtonIndexes.last - firstLastButtonIndexes.start) < buttonsTexts.size()) {
 			Gdx.app.log(SquidTags.LAYOUT, "Displaying buttons " + firstLastButtonIndexes + ", out of [0,"
-					+ buttonsTexts.size() + "].");
+					+ (buttonsTexts.size() - 1) + "].");
 		}
 
 		if (putBordersAndMargins)
@@ -649,7 +659,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 					/* It's a hit! */
 
-					if (enableScrolling && i == 0 && 0 < firstLastButtonIndexes.start) {
+					if (i == 0 && hasScrollUp()) {
 						final boolean b = scrollUp(Input.Keys.UP);
 						assert b;
 						return true;
@@ -661,9 +671,18 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 					final int j = i + firstLastButtonIndexes.start + (hasScrollUp() ? -1 : 0);
 
-					if (doNotBind == null || !doNotBind.contains(j))
-						/* Send event */
-						selectedButton(j);
+					if (doNotBind == null || !doNotBind.contains(j)) {
+						if (j < buttonsTexts.size()) {
+							/* Send event */
+							selectedButton(j);
+						} else {
+							/* Should not happen */
+							Gdx.app.log(SquidTags.LAYOUT,
+									"Skipping invalid button index in " + getClass().getSimpleName() + ": "
+											+ j + ". Maximum index is " + (buttons.size() - 1)
+											+ ". This is a bug.");
+						}
+					}
 
 					return true;
 				}
@@ -882,7 +901,8 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 						/* To avoid coming here in next rolls */
 						set = true;
 					} else if (set || shortcuts.containsKey(Character.toLowerCase(c))
-							|| !Character.isLetter(c) || (enableScrolling && (c == 'j' || c == 'k'))) {
+							|| !Character.isLetter(c) || (unbindable != null && unbindable.contains(c))
+							|| (enableScrolling && (c == 'j' || c == 'k'))) {
 						/*
 						 * Shortcut already used or we went into the 'else'
 						 * already, or character is inadequate, or character can
@@ -997,7 +1017,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	}
 
 	/**
-	 * @return Whether the scroll up button is being shown.
+	 * @return Whether the scroll down button is being shown.
 	 */
 	protected boolean hasScrollDown() {
 		if (enableScrolling) {
@@ -1014,10 +1034,15 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 * @param alignment
 	 *            The alignment, in the format of {@link #buttonsAlignment}.
 	 * @param displayVDots
-	 *            if {@link #scrollText} must be displayed instead of the button's
-	 *            text.
+	 *            if {@link #scrollText} must be displayed instead of the
+	 *            button's text.
+	 * @param nbb
+	 *            The index with {@link #buttons}.
+	 * @param scroll
+	 *            Whether this is a scrolling request.
 	 */
-	private void putButton(int i, int y, int alignment, boolean putMargins, boolean displayVDots) {
+	private void putButton(int i, int y, int alignment, boolean putMargins, boolean displayVDots, int nbb,
+			boolean scroll) {
 		final IColoredString<T> text = displayVDots ? IColoredString.Impl.<T> create(scrollText, null)
 				: buttonsTexts.get(i);
 		final int textLength = text.length();
@@ -1066,7 +1091,10 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			throw new NullPointerException(
 					getClass().getSimpleName() + ": this.buttons should not be null at this moment");
 
-		this.buttons.add(new Rectangle(left, botLeftY, insideWidth, insideHeight));
+		if (scroll)
+			this.buttons.get(nbb).setWidth(insideWidth);
+		else
+			this.buttons.add(new Rectangle(left, botLeftY, insideWidth, insideHeight));
 	}
 
 	/**
@@ -1143,7 +1171,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 		protected final int botLeftY;
 
 		/** The width of this rectangle, in number of cells */
-		protected final int width;
+		protected int width;
 
 		/** The height of this rectangle, in number of cells */
 		protected final int height;
@@ -1153,6 +1181,15 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			this.botLeftY = check(botLeftY, "bottom left y");
 			this.width = check(width, "width");
 			this.height = check(height, "height");
+		}
+
+		/**
+		 * To call when scrolling happens, and a button's text changes.
+		 * 
+		 * @param width
+		 */
+		protected void setWidth(int width) {
+			this.width = width;
 		}
 
 		private int check(int i, String s) {

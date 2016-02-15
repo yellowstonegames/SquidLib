@@ -983,4 +983,25 @@ public class DungeonUtility {
 	public static boolean inLevel(char[][] level, int x, int y) {
 		return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
 	}
+
+	/**
+	 * @param level a dungeon/map level as 2D array. x,y indexed
+	 * @param c Coord to check
+	 * @return {@code true} if {@code c} is valid in {@code level},
+	 *         {@code false} otherwise.
+	 */
+	public static <T> boolean inLevel(T[][] level, Coord c) {
+		return inLevel(level, c.x, c.y);
+	}
+
+	/**
+	 * @param level a dungeon/map level as 2D array. x,y indexed
+	 * @param x x coordinate to check
+     * @param y y coordinate to check
+	 * @return {@code true} if {@code c} is valid in {@code level},
+	 *         {@code false} otherwise.
+	 */
+	public static <T> boolean inLevel(T[][] level, int x, int y) {
+		return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
+	}
 }
