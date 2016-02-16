@@ -80,8 +80,21 @@ public class CoordPackerTest {
                     ", y:" + hilbert3Y[i] +
                     ", z:" + hilbert3Z[i]);
     }
-    //@Test
+    @Test
     public void testMooreCurve3D() {
+        int x0 = getXMoore3D(0, 3), y0 = getYMoore3D(0, 3), z0 = getZMoore3D(0, 3), x1, y1, z1;
+        for (int s = 1; s < 16 * 16 * 8 * 3; s++) {
+            x1 = getXMoore3D(s, 3);
+            y1 = getYMoore3D(s, 3);
+            z1 = getZMoore3D(s, 3);
+            assertEquals(1, Math.abs(x0 - x1) + Math.abs(y0 - y1) + Math.abs(z0 - z1));
+            x0 = x1;
+            y0 = y1;
+            z0 = z1;
+        }
+    }
+    //@Test
+    public void testMooreCurve3DOld() {
         for (int s = 0; s < 12; s++) {
 
             for (int i0 : new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 31, 32, 33, 63, 64, 255, 256, 511, 512, 1023, 1024, 4092, 4093, 4094, 4095}) {

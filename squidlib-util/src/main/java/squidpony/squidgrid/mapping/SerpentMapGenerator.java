@@ -289,4 +289,24 @@ public class SerpentMapGenerator {
     {
         return mix.generate();
     }
+
+    /**
+     * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
+     * MixedGenerator. This array will have the same size as the last char 2D array prduced by generate(), and the value
+     * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).
+     * <ul>
+     *     <li>MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.</li>
+     *     <li>MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.</li>
+     *     <li>MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.</li>
+     *     <li>MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.</li>
+     *     <li>MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.</li>
+     *     <li>MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.</li>
+     *     <li>MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.</li>
+     * </ul>
+     * @return a 2D int array where each element is an environment type constant in MixedGenerator
+     */
+    public int[][] getEnvironment()
+    {
+        return mix.getEnvironment();
+    }
 }

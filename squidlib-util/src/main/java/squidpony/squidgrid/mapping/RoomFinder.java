@@ -33,7 +33,13 @@ public class RoomFinder {
      * Not likely to be used directly, but there may be things you can do with these that are cumbersome using only
      * RoomFinder's simpler API.
      */
-    corridors;
+    corridors,
+    /**
+     * Not likely to be used directly, but there may be things you can do with these that are cumbersome using only
+     * RoomFinder's simpler API. Won't be assigned a value if this class is constructed with a 2D char array; it needs
+     * the two-arg constructor using the environment produced by a MixedGenerator, SerpentMapGenerator, or similar.
+     */
+    caves;
     /**
      * When a RoomFinder is constructed, it stores all points of rooms that are adjacent to another region here.
      */
@@ -46,7 +52,8 @@ public class RoomFinder {
     }
 
     /**
-     * Constructs a RoomFinder given a dungeon map, and finds rooms, corridors, and their connections on the map.
+     * Constructs a RoomFinder given a dungeon map, and finds rooms, corridors, and their connections on the map. Does
+     * not find caves; if a collection of caves is requested from this, it will be non-null but empty.
      * @param dungeon a 2D char array that uses '#' for walls.
      */
     public RoomFinder(char[][] dungeon)
@@ -59,6 +66,9 @@ public class RoomFinder {
         for (int i = 0; i < width; i++) {
             System.arraycopy(dungeon[i], 0, map[i], 0, height);
         }
+        rooms = new RegionMap<>(32);
+        corridors = new RegionMap<>(32);
+        caves = new RegionMap<>(32);
         basic = DungeonUtility.simplifyDungeon(map);
         short[] floors = pack(basic, '.'),
                 r = flood(floors, retract(floors, 1, width, height, true), 2, false),
@@ -92,6 +102,90 @@ public class RoomFinder {
     }
 
     /**
+     * Constructs a RoomFinder given a dungeon map and an environment map (which currently is only produced by
+     * MixedGenerator by the getEnvironment() method after generate() is called, but other classes that use
+     * MixedGenerator may also expose that environment, such as SerpentMapGenerator.getEnvironment()), and finds rooms,
+     * corridors, caves, and their connections on the map.
+     * @param dungeon a 2D char array that uses '#' for walls.
+     * @param environment a 2D int array using constants from MixedGenerator; typically produced by a call to
+     *                    getEnvironment() in MixedGenerator or SerpentMapGenerator after dungeon generation.
+     */
+    public RoomFinder(char[][] dungeon, int[][] environment)
+    {
+        if(dungeon.length <= 0)
+            return;
+        width = dungeon.length;
+        height = dungeon[0].length;
+        map = new char[width][height];
+        for (int i = 0; i < width; i++) {
+            System.arraycopy(dungeon[i], 0, map[i], 0, height);
+        }
+        rooms = new RegionMap<>(32);
+        corridors = new RegionMap<>(32);
+        caves = new RegionMap<>(32);
+
+        basic = DungeonUtility.simplifyDungeon(map);
+        short[] floors = pack(basic, '.'),
+                r = pack(environment, MixedGenerator.ROOM_FLOOR),
+                c = pack(environment, MixedGenerator.CORRIDOR_FLOOR),
+                v = pack(environment, MixedGenerator.CAVE_FLOOR),
+                rc = unionPacked(r, c),
+                d = intersectPacked(r, fringe(c, 1, width, height, false)),
+                m = intersectPacked(rc, fringe(v, 1, width, height, false));
+        connections = allPacked(unionPacked(d, m));
+        List<short[]> rs = split(r), cs = split(c), vs = split(v);
+        short[][] ra = rs.toArray(new short[rs.size()][]),
+                ca = cs.toArray(new short[cs.size()][]),
+                va = vs.toArray(new short[vs.size()][]);
+
+        for (short[] sep : cs) {
+            short[] someDoors = intersectPacked(r, fringe(sep, 1, width, height, false));
+            short[] doors = allPackedHilbert(someDoors);
+            List<short[]> near = new ArrayList<short[]>(16);
+            for (int j = 0; j < doors.length; j++) {
+                near.addAll(findManyPackedHilbert(doors[j], ra));
+            }
+            someDoors = intersectPacked(v, fringe(sep, 1, width, height, false));
+            doors = allPackedHilbert(someDoors);
+            for (int j = 0; j < doors.length; j++) {
+                near.addAll(findManyPackedHilbert(doors[j], va));
+            }
+            corridors.put(sep, near);
+        }
+
+        for (short[] sep : rs) {
+            List<short[]> near = new ArrayList<short[]>(32);
+            short[] aroundDoors = intersectPacked(c, fringe(sep, 1, width, height, false));
+            short[] doors = allPackedHilbert(aroundDoors);
+            for (int j = 0; j < doors.length; j++) {
+                near.addAll(findManyPackedHilbert(doors[j], ca));
+            }
+            aroundDoors = intersectPacked(v, fringe(sep, 1, width, height, false));
+            doors = allPackedHilbert(aroundDoors);
+            for (int j = 0; j < doors.length; j++) {
+                near.addAll(findManyPackedHilbert(doors[j], va));
+            }
+            rooms.put(sep, near);
+        }
+
+        for (short[] sep : vs) {
+            List<short[]> near = new ArrayList<short[]>(48);
+            short[] aroundMouths = intersectPacked(c, fringe(sep, 1, width, height, false));
+            short[] mouths = allPackedHilbert(aroundMouths);
+            for (int j = 0; j < mouths.length; j++) {
+                near.addAll(findManyPackedHilbert(mouths[j], ca));
+            }
+            aroundMouths = intersectPacked(r, fringe(sep, 1, width, height, false));
+            mouths = allPackedHilbert(aroundMouths);
+            for (int j = 0; j < mouths.length; j++) {
+                near.addAll(findManyPackedHilbert(mouths[j], ra));
+            }
+            caves.put(sep, near);
+        }
+
+    }
+
+    /**
      * Gets all the rooms this found during construction, returning them as an ArrayList of 2D char arrays, where an
      * individual room is "masked" so only its contents have normal map chars and the rest have only '#'.
      * @return an ArrayList of 2D char arrays representing rooms.
@@ -122,14 +216,29 @@ public class RoomFinder {
     }
 
     /**
-     * Gets all the rooms and corridors this found during construction, returning them as an ArrayList of 2D char
-     * arrays, where an individual room or corridor is "masked" so only its contents have normal map chars and the rest
-     * have only '#'.
-     * @return an ArrayList of 2D char arrays representing rooms or corridors.
+     * Gets all the caves this found during construction, returning them as an ArrayList of 2D char arrays, where an
+     * individual room is "masked" so only its contents have normal map chars and the rest have only '#'. Will only
+     * return a non-empty collection if the two-arg constructor was used and the environment contains caves.
+     * @return an ArrayList of 2D char arrays representing caves.
+     */
+    public ArrayList<char[][]> findCaves()
+    {
+        ArrayList<char[][]> vs = new ArrayList<char[][]>(caves.size);
+        for(short[] v : caves.keys())
+        {
+            vs.add(mask(map, v, '#'));
+        }
+        return vs;
+    }
+    /**
+     * Gets all the rooms, corridors, and caves this found during construction, returning them as an ArrayList of 2D
+     * char arrays, where an individual room or corridor is "masked" so only its contents have normal map chars and the
+     * rest have only '#'.
+     * @return an ArrayList of 2D char arrays representing rooms, corridors, or caves.
      */
     public ArrayList<char[][]> findRegions()
     {
-        ArrayList<char[][]> rs = new ArrayList<char[][]>(rooms.size + corridors.size);
+        ArrayList<char[][]> rs = new ArrayList<char[][]>(rooms.size + corridors.size + caves.size);
         for(short[] r : rooms.keys())
         {
             rs.add(mask(map, r, '#'));
@@ -137,12 +246,15 @@ public class RoomFinder {
         for(short[] r : corridors.keys()) {
             rs.add(mask(map, r, '#'));
         }
+        for(short[] r : caves.keys()) {
+            rs.add(mask(map, r, '#'));
+        }
         return rs;
     }
 
     /**
-     * Takes an x, y position and finds the room or corridor at that position, if there is one, returning the same 2D
-     * char array format as the other methods.
+     * Takes an x, y position and finds the room, corridor, or cave at that position, if there is one, returning the
+     * same 2D char array format as the other methods.
      * @param x the x coordinate of a position that should be in a room or corridor
      * @param y the y coordinate of a position that should be in a room or corridor
      * @return a masked 2D char array where anything not in the current region is '#'
@@ -151,6 +263,7 @@ public class RoomFinder {
     {
         ArrayList<short[]> regions = rooms.regionsContaining(x, y);
         regions.addAll(corridors.regionsContaining(x, y));
+        regions.addAll(caves.regionsContaining(x, y));
         short[] found;
         if(regions.isEmpty())
             found = ALL_WALL;
@@ -160,7 +273,7 @@ public class RoomFinder {
     }
 
     /**
-     * Takes an x, y position and finds the room or corridor at that position and the rooms or corridors that it
+     * Takes an x, y position and finds the room or corridor at that position and the rooms, corridors or caves that it
      * directly connects to, and returns the group as one merged 2D char array.
      * @param x the x coordinate of a position that should be in a room or corridor
      * @param y the y coordinate of a position that should be in a room or corridor
@@ -170,6 +283,7 @@ public class RoomFinder {
     {
         ArrayList<short[]> regions = rooms.regionsContaining(x, y);
         regions.addAll(corridors.regionsContaining(x, y));
+        regions.addAll(caves.regionsContaining(x, y));
         short[] found;
         if(regions.isEmpty())
             found = ALL_WALL;
@@ -190,13 +304,20 @@ public class RoomFinder {
                     found = unionPacked(found, n);
                 }
             }
+            near = caves.allAt(x, y);
+            for (List<short[]> links : near) {
+                for(short[] n : links)
+                {
+                    found = unionPacked(found, n);
+                }
+            }
         }
         return mask(map, found, '#');
     }
 
     /**
-     * Takes an x, y position and finds the rooms or corridors that are directly connected to the room or corridor at
-     * that position, and returns the group as an ArrayList of 2D char arrays, one per connecting region.
+     * Takes an x, y position and finds the rooms or corridors that are directly connected to the room, corridor or cave
+     * at that position, and returns the group as an ArrayList of 2D char arrays, one per connecting region.
      * @param x the x coordinate of a position that should be in a room or corridor
      * @param y the y coordinate of a position that should be in a room or corridor
      * @return an ArrayList of masked 2D char arrays where anything not in a connected region is '#'
@@ -212,6 +333,12 @@ public class RoomFinder {
             }
         }
         near = corridors.allAt(x, y);
+        for (List<short[]> links : near) {
+            for (short[] n : links) {
+                regions.add(mask(map, n, '#'));
+            }
+        }
+        near = caves.allAt(x, y);
         for (List<short[]> links : near) {
             for (short[] n : links) {
                 regions.add(mask(map, n, '#'));
