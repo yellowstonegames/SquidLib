@@ -269,4 +269,15 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
         super.wallOff(x, y);
         super.wallOff(width - 1 - x, height - 1 - y);
     }
+    /**
+     * Internal use. Marks a point's environment type as the appropriate kind of environment.
+     * @param x x position to mark
+     * @param y y position to mark
+     * @param kind an int that should be one of the constants in MixedGenerator for environment types.
+     */
+    @Override
+    protected void markEnvironment(int x, int y, int kind) {
+        super.markEnvironment(x, y, kind);
+        super.markEnvironment(width - 1 - x, height - 1 - y, kind);
+    }
 }

@@ -23,11 +23,43 @@ public class MixedGenerator {
         BOX_WALLED,
         ROUND_WALLED
     }
+
+    /**
+     * Constant for environment tiles that are not near a cave, room, or corridor. Value is 0.
+     */
+    public static final int UNTOUCHED = 0;
+    /**
+     * Constant for environment tiles that are floors for a room. Value is 1.
+     */
+    public static final int ROOM_FLOOR = 1;
+    /**
+     * Constant for environment tiles that are walls near a room. Value is 2.
+     */
+    public static final int ROOM_WALL = 2;
+    /**
+     * Constant for environment tiles that are floors for a cave. Value is 3.
+     */
+    public static final int CAVE_FLOOR = 3;
+    /**
+     * Constant for environment tiles that are walls near a cave. Value is 4.
+     */
+    public static final int CAVE_WALL = 4;
+    /**
+     * Constant for environment tiles that are floors for a corridor. Value is 5.
+     */
+    public static final int CORRIDOR_FLOOR = 5;
+    /**
+     * Constant for environment tiles that are walls near a corridor. Value is 6.
+     */
+    public static final int CORRIDOR_WALL = 6;
+
     protected EnumMap<CarverType, Integer> carvers;
     protected int width, height;
     protected float roomWidth, roomHeight;
     public RNG rng;
     protected char[][] dungeon;
+    protected boolean generated = false;
+    protected int[][] environment;
     protected boolean[][] marked, walled;
     protected List<Long> points;
     protected int totalPoints;
@@ -83,11 +115,14 @@ public class MixedGenerator {
             throw new IllegalStateException("width and height must be greater than 2");
         this.rng = rng;
         dungeon = new char[width][height];
+        environment = new int[width][height];
         marked = new boolean[width][height];
         walled = new boolean[width][height];
         Arrays.fill(dungeon[0], '#');
+        Arrays.fill(environment[0], UNTOUCHED);
         for (int i = 1; i < width; i++) {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
+            System.arraycopy(environment[0], 0, environment[i], 0, height);
         }
         totalPoints = sequence.size() - 1;
         points = new ArrayList<>(totalPoints);
@@ -138,10 +173,14 @@ public class MixedGenerator {
             throw new IllegalStateException("width and height must be greater than 2");
         this.rng = rng;
         dungeon = new char[width][height];
+        environment = new int[width][height];
         marked = new boolean[width][height];
         walled = new boolean[width][height];
-        for (int i = 0; i < width; i++) {
-            Arrays.fill(dungeon[i], '#');
+        Arrays.fill(dungeon[0], '#');
+        Arrays.fill(environment[0], UNTOUCHED);
+        for (int i = 1; i < width; i++) {
+            System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
+            System.arraycopy(environment[0], 0, environment[i], 0, height);
         }
         totalPoints = 0;
         for(List<Coord> vals : connections.values())
@@ -279,17 +318,18 @@ public class MixedGenerator {
             {
                 case CAVE:
                     markPiercing(end);
+                    markEnvironmentCave(end.x, end.y);
                     store();
                     double weight = 0.75;
                     do {
-                        Coord cent = markPlus(start);
+                        Coord cent = markPlusCave(start);
                         if(cent != null)
                         {
-                            markPiercing(cent);
-                            markPiercing(cent.translate(1, 0));
-                            markPiercing(cent.translate(-1, 0));
-                            markPiercing(cent.translate(0, 1));
-                            markPiercing(cent.translate(0, -1));
+                            markPiercingCave(cent);
+                            markPiercingCave(cent.translate(1, 0));
+                            markPiercingCave(cent.translate(-1, 0));
+                            markPiercingCave(cent.translate(0, 1));
+                            markPiercingCave(cent.translate(0, -1));
                             weight = 0.95;
                         }
                         dir = stepWobbly(start, end, weight);
@@ -307,6 +347,7 @@ public class MixedGenerator {
                     while (start.x != end.x && start.y != end.y)
                     {
                         markPiercing(start);
+                        markEnvironmentCorridor(start.x, start.y);
                         start = start.translate(dir);
                     }
                     markRectangle(start, 1, 1);
@@ -314,6 +355,7 @@ public class MixedGenerator {
                     while (!(start.x == end.x && start.y == end.y))
                     {
                         markPiercing(start);
+                        markEnvironmentCorridor(start.x, start.y);
                         start = start.translate(dir);
                     }
                     break;
@@ -328,6 +370,7 @@ public class MixedGenerator {
                     while (start.x != end.x && start.y != end.y)
                     {
                         markPiercing(start);
+                        markEnvironmentCorridor(start.x, start.y);
                         start = start.translate(dir);
                     }
                     markRectangleWalled(start, 1, 1);
@@ -335,6 +378,7 @@ public class MixedGenerator {
                     while (!(start.x == end.x && start.y == end.y))
                     {
                         markPiercing(start);
+                        markEnvironmentCorridor(start.x, start.y);
                         start = start.translate(dir);
                     }
                     break;
@@ -349,6 +393,7 @@ public class MixedGenerator {
                     while (start.x != end.x && start.y != end.y)
                     {
                         markPiercing(start);
+                        markEnvironmentCorridor(start.x, start.y);
                         start = start.translate(dir);
                     }
                     markCircle(start, 2);
@@ -356,6 +401,7 @@ public class MixedGenerator {
                     while (!(start.x == end.x && start.y == end.y))
                     {
                         markPiercing(start);
+                        markEnvironmentCorridor(start.x, start.y);
                         start = start.translate(dir);
                     }
                     break;
@@ -370,6 +416,7 @@ public class MixedGenerator {
                     while (start.x != end.x && start.y != end.y)
                     {
                         markPiercing(start);
+                        markEnvironmentCorridor(start.x, start.y);
                         start = start.translate(dir);
                     }
                     markCircleWalled(start, 2);
@@ -377,16 +424,27 @@ public class MixedGenerator {
                     while (!(start.x == end.x && start.y == end.y))
                     {
                         markPiercing(start);
+                        markEnvironmentCorridor(start.x, start.y);
                         start = start.translate(dir);
                     }
                     break;
             }
             store();
         }
-
+        markEnvironmentWalls();
+        generated = true;
         return dungeon;
     }
 
+    public int[][] getEnvironment()
+    {
+        return environment;
+    }
+
+    public boolean hasGenerated()
+    {
+        return generated;
+    }
     /**
      * Internal use. Takes cells that have been previously marked and permanently stores them as floors in the dungeon.
      */
@@ -398,6 +456,55 @@ public class MixedGenerator {
                 {
                     dungeon[i][j] = '.';
                     marked[i][j] = false;
+                }
+            }
+        }
+    }
+
+    /**
+     * Internal use. Finds all floor cells by environment and marks untouched adjacent (8-way) cells as walls, using the
+     * appropriate type for the nearby floor.
+     */
+    protected void markEnvironmentWalls()
+    {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if(environment[i][j] == UNTOUCHED)
+                {
+                    boolean allWalls = true;
+                    //lowest precedence, also checks for any floors
+                    for (int x = Math.max(0, i - 1); x <= Math.min(width - 1, i + 1); x++) {
+
+                        for (int y = Math.max(0, j - 1); y <= Math.min(height - 1, j + 1); y++) {
+                            if (environment[x][y] == CORRIDOR_FLOOR) {
+                                markEnvironment(i, j, CORRIDOR_WALL);
+                            }
+                            if(dungeon[x][y] == '.')
+                                allWalls = false;
+                        }
+                    }
+                    //if there are no floors we don't need to check twice again.
+                    if(allWalls)
+                        continue;
+                    //more precedence
+                    for (int x = Math.max(0, i - 1); x <= Math.min(width - 1, i + 1); x++) {
+
+                        for (int y = Math.max(0, j - 1); y <= Math.min(height - 1, j + 1); y++) {
+                            if (environment[x][y] == CAVE_FLOOR) {
+                                markEnvironment(i, j, CAVE_WALL);
+                            }
+                        }
+                    }
+                    //highest precedence
+                    for (int x = Math.max(0, i - 1); x <= Math.min(width - 1, i + 1); x++) {
+
+                        for (int y = Math.max(0, j - 1); y <= Math.min(height - 1, j + 1); y++) {
+                            if (environment[x][y] == ROOM_FLOOR) {
+                                markEnvironment(i, j, ROOM_WALL);
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -428,6 +535,48 @@ public class MixedGenerator {
         }
     }
     /**
+     * Internal use. Marks a point's environment type as the appropriate kind of environment.
+     * @param x x position to mark
+     * @param y y position to mark
+     * @param kind an int that should be one of the constants in MixedGenerator for environment types.
+     */
+    protected void markEnvironment(int x, int y, int kind) {
+        environment[x][y] = kind;
+    }
+
+    /**
+     * Internal use. Marks a point's environment type as a corridor floor.
+     * @param x x position to mark
+     * @param y y position to mark
+     */
+    protected void markEnvironmentCorridor(int x, int y) {
+        if (x > 0 && x < width - 1 && y > 0 && y < height - 1 && environment[x][y] != ROOM_FLOOR && environment[x][y] != CAVE_FLOOR) {
+            markEnvironment(x, y, CORRIDOR_FLOOR);
+        }
+    }
+
+    /**
+     * Internal use. Marks a point's environment type as a room floor.
+     * @param x x position to mark
+     * @param y y position to mark
+     */
+    protected void markEnvironmentRoom(int x, int y) {
+        if (x > 0 && x < width - 1 && y > 0 && y < height - 1) {
+            markEnvironment(x, y, ROOM_FLOOR);
+        }
+    }
+
+    /**
+     * Internal use. Marks a point's environment type as a cave floor.
+     * @param x x position to mark
+     * @param y y position to mark
+     */
+    protected void markEnvironmentCave(int x, int y) {
+        if (x > 0 && x < width - 1 && y > 0 && y < height - 1 && environment[x][y] != ROOM_FLOOR) {
+            markEnvironment(x, y, CAVE_FLOOR);
+        }
+    }
+    /**
      * Internal use. Marks a point to be made into floor.
      * @param x x position to mark
      * @param y y position to mark
@@ -441,6 +590,7 @@ public class MixedGenerator {
     /**
      * Internal use. Marks a point to be made into floor.
      * @param pos position to mark
+     * @return false if everything is normal, true if and only if this failed to mark because the position is walled
      */
     protected boolean mark(Coord pos)
     {
@@ -448,12 +598,21 @@ public class MixedGenerator {
     }
 
     /**
-     * Internal use. Marks a point to be made into floor.
+     * Internal use. Marks a point to be made into floor, piercing walls.
      * @param pos position to mark
      */
     protected void markPiercing(Coord pos)
     {
         markPiercing(pos.x, pos.y);
+    }
+    /**
+     * Internal use. Marks a point to be made into floor, piercing walls, and also marks the point as a cave floor.
+     * @param pos position to mark
+     */
+    protected void markPiercingCave(Coord pos)
+    {
+        markPiercing(pos.x, pos.y);
+        markEnvironmentCave(pos.x, pos.y);
     }
 
     /**
@@ -471,9 +630,32 @@ public class MixedGenerator {
         mark(pos.x, pos.y - 1);
         return block;
     }
+
+    /**
+     * Internal use. Marks a point and the four cells orthogonally adjacent to it, and also marks any cells that weren't
+     * blocked as cave floors.
+     * @param pos center position to mark
+     * @return null if the center of the plus shape wasn't blocked by wall, otherwise the Coord of the center
+     */
+    private Coord markPlusCave(Coord pos) {
+        Coord block = null;
+        if (mark(pos.x, pos.y))
+            block = pos;
+        else
+            markEnvironmentCave(pos.x, pos.y);
+        if(!mark(pos.x + 1, pos.y))
+            markEnvironmentCave(pos.x + 1, pos.y);
+        if(!mark(pos.x - 1, pos.y))
+            markEnvironmentCave(pos.x - 1, pos.y);
+        if(!mark(pos.x, pos.y + 1))
+            markEnvironmentCave(pos.x, pos.y + 1);
+        if(!mark(pos.x, pos.y - 1))
+            markEnvironmentCave(pos.x, pos.y - 1);
+        return block;
+    }
     /**
      * Internal use. Marks a rectangle of points centered on pos, extending halfWidth in both x directions and
-     * halfHeight in both vertical directions.
+     * halfHeight in both vertical directions. Marks all cells in the rectangle as room floors.
      * @param pos center position to mark
      * @param halfWidth the distance from the center to extend horizontally
      * @param halfHeight the distance from the center to extend vertically
@@ -488,6 +670,8 @@ public class MixedGenerator {
             for (int j = pos.y - halfHeight; j <= pos.y + halfHeight; j++) {
                 if(mark(i, j))
                     block = Coord.get(i, j);
+                else
+                    markEnvironmentRoom(i, j);
             }
         }
         return block;
@@ -495,7 +679,8 @@ public class MixedGenerator {
     /**
      * Internal use. Marks a rectangle of points centered on pos, extending halfWidth in both x directions and
      * halfHeight in both vertical directions. Also considers the area just beyond each wall, but not corners, to be
-     * a blocking wall that can only be passed by corridors and small cave openings.
+     * a blocking wall that can only be passed by corridors and small cave openings. Marks all cells in the rectangle as
+     * room floors.
      * @param pos center position to mark
      * @param halfWidth the distance from the center to extend horizontally
      * @param halfHeight the distance from the center to extend vertically
@@ -510,6 +695,8 @@ public class MixedGenerator {
             for (int j = pos.y - halfHeight; j <= pos.y + halfHeight; j++) {
                 if(mark(i, j))
                     block = Coord.get(i, j);
+                else
+                    markEnvironmentRoom(i, j);
             }
         }
         for (int i = Math.max(0, pos.x - halfWidth - 1); i <= Math.min(width - 1, pos.x + halfWidth + 1); i++) {
@@ -522,7 +709,8 @@ public class MixedGenerator {
     }
 
     /**
-     * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement.
+     * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement. Marks
+     * all cells in the circle as room floors.
      * @param pos center position to mark
      * @param radius radius to extend in all directions from center
      * @return null if no points in the circle were blocked by walls, otherwise a Coord blocked by a wall
@@ -539,14 +727,16 @@ public class MixedGenerator {
             {
                 if(mark(pos.x + dx, pos.y + dy))
                     block = pos.translate(dx, dy);
+                else
+                    markEnvironmentRoom(pos.x + dx, pos.y + dy);
             }
         }
         return block;
     }
     /**
      * Internal use. Marks a circle of points centered on pos, extending out to radius in Euclidean measurement.
-     * Also considers the area just beyond each wall, but not corners, to be
-     * a blocking wall that can only be passed by corridors and small cave openings.
+     * Also considers the area just beyond each wall, but not corners, to be a blocking wall that can only be passed by
+     * corridors and small cave openings. Marks all cells in the circle as room floors.
      * @param pos center position to mark
      * @param radius radius to extend in all directions from center
      * @return null if no points in the circle were blocked by walls, otherwise a Coord blocked by a wall
@@ -563,6 +753,8 @@ public class MixedGenerator {
             {
                 if(mark(pos.x + dx, pos.y + dy))
                     block = pos.translate(dx, dy);
+                else
+                    markEnvironmentRoom(pos.x + dx, pos.y + dy);
             }
         }
         for (int dx = -radius; dx <= radius; ++dx)

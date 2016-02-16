@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.SerpentDeepMapGenerator;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
@@ -156,7 +157,9 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
         */
-        /*
+
+        System.out.println("------------------------------------------------------------");
+
         rng.setState(2252637788195L);
         SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, rng, 0.15);
         deepSerpent.putWalledBoxRoomCarvers(2);
@@ -180,7 +183,7 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
 
         }
-        */
+
     }
     public static void mainAlt( String[] args ) {
         LightRNG rng = new LightRNG(2252637788195L);
