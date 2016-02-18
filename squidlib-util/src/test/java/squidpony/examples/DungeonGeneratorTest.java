@@ -2,7 +2,7 @@ package squidpony.examples;
 
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.SerpentDeepMapGenerator;
+import squidpony.squidgrid.mapping.LanesMapGenerator;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
@@ -78,7 +78,7 @@ import java.io.IOException;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 80, height = 120, depth = 16;
+    public static int width = 80, height = 80, depth = 16;
     public static void main( String[] args )
     {
         //seed is, in base 36, the number SQUIDLIB
@@ -157,7 +157,23 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
         */
+        dungeonGenerator = new DungeonGenerator(width, height, rng);
+        //dungeonGenerator.addDoors(15, false);
+        //dungeonGenerator.addWater(20);
+        //dungeonGenerator.addGrass(10);
+        rng.setState(0xf00dd00dL);
+        LanesMapGenerator lanes = new LanesMapGenerator(width, height, rng, 3);
+        lanes.putBoxRoomCarvers(1);
+        dungeon = lanes.generate();
+        char[][] sdungeon = dungeonGenerator.generate(dungeon);
 
+        //sdungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        //sdungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdungeon)));
+        System.out.println(dungeonGenerator);
+/*
         System.out.println("------------------------------------------------------------");
 
         rng.setState(2252637788195L);
@@ -183,7 +199,7 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
 
         }
-
+*/
     }
     public static void mainAlt( String[] args ) {
         LightRNG rng = new LightRNG(2252637788195L);
