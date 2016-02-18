@@ -60,7 +60,7 @@ public class MixedGenerator {
     protected char[][] dungeon;
     protected boolean generated = false;
     protected int[][] environment;
-    protected boolean[][] marked, walled;
+    protected boolean[][] marked, walled, fixedRooms;
     protected List<Long> points;
     protected int totalPoints;
 
@@ -118,6 +118,7 @@ public class MixedGenerator {
         environment = new int[width][height];
         marked = new boolean[width][height];
         walled = new boolean[width][height];
+        fixedRooms = new boolean[width][height];
         Arrays.fill(dungeon[0], '#');
         Arrays.fill(environment[0], UNTOUCHED);
         for (int i = 1; i < width; i++) {
@@ -176,6 +177,7 @@ public class MixedGenerator {
         environment = new int[width][height];
         marked = new boolean[width][height];
         walled = new boolean[width][height];
+        fixedRooms = new boolean[width][height];
         Arrays.fill(dungeon[0], '#');
         Arrays.fill(environment[0], UNTOUCHED);
         for (int i = 1; i < width; i++) {
@@ -431,6 +433,13 @@ public class MixedGenerator {
             }
             store();
         }
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(fixedRooms[x][y])
+                    markPiercingRoom(x, y);
+            }
+        }
+        store();
         markEnvironmentWalls();
         generated = true;
         return dungeon;
@@ -445,6 +454,15 @@ public class MixedGenerator {
     {
         return generated;
     }
+
+    public boolean[][] getFixedRooms() {
+        return fixedRooms;
+    }
+
+    public void setFixedRooms(boolean[][] fixedRooms) {
+        this.fixedRooms = fixedRooms;
+    }
+
     /**
      * Internal use. Takes cells that have been previously marked and permanently stores them as floors in the dungeon.
      */
@@ -613,6 +631,16 @@ public class MixedGenerator {
     {
         markPiercing(pos.x, pos.y);
         markEnvironmentCave(pos.x, pos.y);
+    }
+    /**
+     * Internal use. Marks a point to be made into floor, piercing walls, and also marks the point as a room floor.
+     * @param x x coordinate of position to mark
+     * @param y y coordinate of position to mark
+     */
+    protected void markPiercingRoom(int x, int y)
+    {
+        markPiercing(x, y);
+        markEnvironmentCave(x, y);
     }
 
     /**
