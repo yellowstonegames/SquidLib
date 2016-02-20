@@ -89,7 +89,7 @@ public class LanesMapGenerator {
         int cs = (width - csum);
         int rs = (height - rsum);
         int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
-        for (int i = 7; i >= 0; i--) {
+        for (int i = 0; i <= 7; i++) {
             cs2= cs2 * i / 7;
             rs2 = rs2 * i / 7;
             columns[i] -= cs2;
