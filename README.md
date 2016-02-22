@@ -168,101 +168,9 @@ Download
 
 Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your choice of features, or simply use SquidSetup to make a new project configured the way libGDX prefers to work, and copy in any code you might already have.
 
-Ideally, if you're just starting out you should use SquidSetup. This is [the most recent release](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b3). If your older code did not use a dependency manager like Maven or Gradle, you will have a hard time updating without SquidSetup, so the recommended approach in that case is to make a new project in a folder of your choice, copy all of your old code over into the new project, and if you're satisfied, then copy it back to replace your old project with the reorganized and updated code. If you're updating an existing project that does use a dependency manager, you may not want to create a whole new starting point and copy over your old code, though that can still be a good option. You can instead update your dependencies. All projects need `squidlib-util`, which contains the core logic that anything that uses SquidLib needs, but if you depend on the text-based display module then it will be downloaded automatically as part of depending on the display module. If you use the logic module on its own and handle graphics yourself, you should update your existing Maven, Gradle, etc. project with the [Dependency Information here](http://search.maven.org/#artifactdetails%7Ccom.squidpony%7Csquidlib-util%7C3.0.0-b2%7Cjar). If your project used text-based display in SquidLib 3.0.0-b1, then you need to change a few things.
-  - If you used Swing before, you will need to change to use LibGDX. The API is relatively similar, but the typical folder layout is not. You should probably either stick with b1 or earlier, or use SquidSetup.
-  - If you used libGDX before, the name of the dependency changed from `squidlib-gdx` in 3.0.0-b1, to just `squidlib` in 3.0.0-b2 and 3.0.0-b3. It depends on `squidlib-util` and the core LibGDX library (`gdx`), but needs to be told in this version what platform it targets (this avoids distributing the large LWJGL library, which is used only on desktop, to Android or other platforms that it just weighs down). 
+Ideally, if you're just starting out you should use SquidSetup. This is [the most recent beta release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b3). This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is advised if you want to target HTML (the beta 3 release, put simply, does not work with HTML unless you put serious work into compatibility) or if you want to test new features/fixes as they come in. In the snapshot from February 21, 2016 relative to beta 3, there's several new dungeon generation and room finding features/fixes, SquidColorCenter now matches or exceeds most features in the older SColorFactory, distance field fonts should be better (especially on HTML targets and/or when you use SquidLayers), and so on.
 
-This last step is slightly more involved than before, and is part of the rationale for making SquidSetup. Using Maven for a desktop project, you would use this dependency in the desktop pom.xml:
-```
-<dependency>
-  <groupId>com.squidpony</groupId>
-  <artifactId>squidlib</artifactId>
-  <version>3.0.0-b3</version>
-</dependency>
-<dependency>
-    <groupId>com.badlogicgames.gdx</groupId>
-    <artifactId>gdx-backend-lwjgl</artifactId>
-    <version>1.9.1</version>
-</dependency>
-<dependency>
-    <groupId>com.badlogicgames.gdx</groupId>
-    <artifactId>gdx-platform</artifactId>
-    <version>1.9.1</version>
-    <classifier>natives-desktop</classifier>
-</dependency>
-```
-Using Maven for an Android project, you would use these dependencies in the Android pom.xml:
-```
-<dependency>
-  <groupId>com.squidpony</groupId>
-  <artifactId>squidlib</artifactId>
-  <version>3.0.0-b3</version>
-</dependency>
-<dependency>
-    <groupId>com.badlogicgames.gdx</groupId>
-    <artifactId>gdx-backend-android</artifactId>
-    <version>1.9.1</version>
-</dependency>
-<dependency>
-    <groupId>com.badlogicgames.gdx</groupId>
-    <artifactId>gdx-platform</artifactId>
-    <version>1.9.1</version>
-    <classifier>natives-armeabi</classifier>
-</dependency>
-<dependency>
-    <groupId>com.badlogicgames.gdx</groupId>
-    <artifactId>gdx-platform</artifactId>
-    <version>1.9.1</version>
-    <classifier>natives-armeabi-v7a</classifier>
-</dependency>
-<dependency>
-    <groupId>com.badlogicgames.gdx</groupId>
-    <artifactId>gdx-platform</artifactId>
-    <version>1.9.1</version>
-    <classifier>natives-x86</classifier>
-</dependency>
-```
-
-HTML support is new in 3.0.0-b3, and you should really use SquidSetup to try it out; a lot of resources are needed in specific places, and I don't know of a good way to get them laid out without using a setup tool.
-
-If you really, truly want to use Swing, you need to use 2.9.1 or 3.0.0-b1.  This is the dependency for SquidLib using the Swing renderer and version 3.0.0-b1, which has known bugs that are fixed in newer versions, but otherwise should "work" on Windows, Mac OS X, and Linux:
-```
-<dependency>
-  <groupId>com.squidpony</groupId>
-  <artifactId>squidlib</artifactId>
-  <version>3.0.0-b1</version>
-</dependency>
-```
-
-There's also the last stable release in the 2.x series, which optionally depends on libGDX but will not work on mobile devices:
-```
-<dependency>
-  <groupId>com.squidpony</groupId>
-  <artifactId>squidlib</artifactId>
-  <version>2.9.1</version>
-</dependency>
-```
-
-If you want to use the LibGDX code in 2.9.1 (anything in a package with "gdx" in it, in that release), you need to depend on (an earlier version of) libGDX.
-```
-<dependency>
-    <groupId>com.badlogicgames.gdx</groupId>
-    <artifactId>gdx</artifactId>
-    <version>1.6.4</version>
-</dependency>
-<dependency>
-    <groupId>com.badlogicgames.gdx</groupId>
-    <artifactId>gdx-backend-lwjgl</artifactId>
-    <version>1.6.4</version>
-</dependency>
-<dependency>
-    <groupId>com.badlogicgames.gdx</groupId>
-    <artifactId>gdx-platform</artifactId>
-    <version>1.6.4</version>
-    <classifier>natives-desktop</classifier>
-</dependency>
-```
-(This is not a recent version of LibGDX, and it may work with more recent versions, but no guarantees can be made. `squidlib` 3.0.0-b3 depends on libGDX 1.9.1, `squidlib` 3.0.0-b2 depends on libGDX 1.7.1, and they have similar behavior about dependency handling. `squidlib-gdx` 3.0.0-b1 handles its dependencies on its own, so you don't need this step, except because of that behavior it will always download the desktop dependencies, even when they do nothing on the current platform.)
+More information is available on the wiki here on Github, at the page on [Project Setup](https://github.com/SquidPony/SquidLib/wiki/Project-Setup).
 
 GitHub repository: https://github.com/SquidPony/SquidLib
 
@@ -271,4 +179,4 @@ Blog updates: http://squidpony.com/not-games/squidlib/
 Created by Eben Howard - howard@squidpony.com  
 Currently developed by Tommy Ettinger - tommy.ettinger@gmail.com
 
-Additional work has been greatly appreciated by a team of contributors. smelC and David Becker have each done excellent work in improving and modernizing SquidLib in all sorts of ways. Don't be shy about posting issues! Many of SquidLib's biggest and best changes have been motivated by issues posted by users, including the port to Android!
+Additional work has been greatly appreciated by a team of contributors. smelC and David Becker have each done excellent work in improving and modernizing SquidLib in all sorts of ways. In particular, David Becker needs thanks for handling some very tough work with Maven configuration and encouraging more unit tests (which have caught quite a few bugs), and smelC has found all sorts of ways to give back to SquidLib as he has worked on [Dungeon Mercenary](http://www.schplaf.org/hgames/), including doing most of the work for the HTML target, cleaning up and improving the handling of colors, and emphasizing more flexible ways to work with display (such as zooming the screen on mobile). Don't be shy about posting issues! Many of SquidLib's biggest and best changes have been motivated by issues posted by users, including the port to Android!
