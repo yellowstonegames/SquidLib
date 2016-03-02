@@ -1,5 +1,6 @@
 package squidpony.panel;
 
+import squidpony.IColorCenter;
 import squidpony.annotation.Beta;
 
 /**
@@ -110,12 +111,57 @@ public interface ICombinedPanel<T> {
 
 	/**
 	 * @param what
-	 *            {@code true} to fill the foreground, {@code false} to fill the
-	 *            background. {@code null} to fill both.
+	 * 			  What to fill
 	 * @param color
 	 *            The color to put within this panel.
 	 */
-	void fill(Boolean what, T color);
+	void fill(What what, T color);
+
+	/**
+	 * Changes the underlying {@link IColorCenter}.
+	 * 
+	 * @param icc
+	 */
+	public void setColorCenter(IColorCenter<T> icc);
+
+	/**
+	 * What to fill
+	 * 
+	 * @author smelC
+	 */
+	public static enum What {
+		BG,
+		FG,
+		BG_AND_FG;
+
+		/**
+		 * @return {@code true} if {@code this} contains the background.
+		 */
+		public boolean hasBG() {
+			switch (this) {
+			case BG:
+			case BG_AND_FG:
+				return true;
+			case FG:
+				return false;
+			}
+			throw new IllegalStateException("Unmatched value: " + this);
+		}
+
+		/**
+		 * @return {@code true} if {@code this} contains the foreground.
+		 */
+		public boolean hasFG() {
+			switch (this) {
+			case FG:
+			case BG_AND_FG:
+				return true;
+			case BG:
+				return false;
+			}
+			throw new IllegalStateException("Unmatched value: " + this);
+		}
+	}
 
 	/**
 	 * A generic implementation of {@link ICombinedPanel}. Useful to combine
@@ -216,17 +262,24 @@ public interface ICombinedPanel<T> {
 		}
 
 		@Override
-		public void fill(Boolean what, T color) {
+		public void fill(What what, T color) {
+			/* Nope, not Doom's Big Fucking Gun */
+			final boolean bfg = what.hasFG();
+			final boolean bbg = what.hasBG();
 			for (int x = 0; x < width; x++) {
 				for (int y = 0; y < height; y++) {
-					final boolean fg = what == null || what;
-					final boolean bg = what == null || !what;
-					if (fg)
+					if (bfg)
 						putFG(x, y, ' ', color);
-					if (bg)
+					if (bbg)
 						putBG(x, y, color);
 				}
 			}
+		}
+
+		@Override
+		public void setColorCenter(IColorCenter<T> icc) {
+			bg.setColorCenter(icc);
+			fg.setColorCenter(icc);
 		}
 
 	}

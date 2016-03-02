@@ -3,6 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
+import squidpony.IColorCenter;
 import squidpony.SquidTags;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ICombinedPanel;
@@ -167,21 +168,38 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 		fg.put(x, bg.gridHeight() - 1, string);
 	}
 
+	/**
+	 * Writes {@code string} at the bottom left. If {@code string} is wider than
+	 * {@code this}, its end will be stripped.
+	 * 
+	 * @param string
+	 */
+	public void putBottomLeft(IColoredString<? extends T> string) {
+		fg.put(0, bg.gridHeight() - 1, string);
+	}
+
 	@Override
-	public void fill(Boolean what, T color) {
+	public void fill(What what, T color) {
 		final int gridWidth = getGridWidth();
 		final int gridHeight = getGridHeight();
 
+		final boolean bfg = what.hasFG();
+		final boolean bbg = what.hasBG();
+
 		for (int x = 0; x < gridWidth; x++) {
 			for (int y = 0; y < gridHeight; y++) {
-				final boolean fg = what == null || what;
-				final boolean bg = what == null || !what;
-				if (fg)
+				if (bfg)
 					putFG(x, y, ' ', color);
-				if (bg)
+				if (bbg)
 					putBG(x, y, color);
 			}
 		}
+	}
+
+	@Override
+	public void setColorCenter(IColorCenter<T> icc) {
+		bg.setColorCenter(icc);
+		fg.setColorCenter(icc);
 	}
 
 	/**

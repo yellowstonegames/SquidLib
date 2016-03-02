@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import squidpony.SquidTags;
 import squidpony.annotation.Beta;
 import squidpony.panel.IColoredString;
+import squidpony.panel.ICombinedPanel;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
 
@@ -105,7 +106,7 @@ public abstract class TextPanel<T extends Color> extends GroupCombinedPanel<T> {
 					getClass().getSimpleName() + "::prepare() should be called before put(boolean)");
 
 		if (backgroundColor != null)
-			fill(false, backgroundColor);
+			fill(ICombinedPanel.What.BG, backgroundColor);
 
 		if (putBorders)
 			putBorder();
