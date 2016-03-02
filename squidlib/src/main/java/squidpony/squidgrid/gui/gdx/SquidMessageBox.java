@@ -149,7 +149,7 @@ public class SquidMessageBox extends SquidPanel {
             appendMessage(message);
             return;
         }
-        List<IColoredString<Color>> truncated = new IColoredString.Impl<>(message, defaultForeground).wrap(gridWidth - 2);;
+        List<IColoredString<Color>> truncated = new IColoredString.Impl<>(message, defaultForeground).wrap(gridWidth - 2);
         for (IColoredString<Color> t : truncated)
         {
             appendMessage(t.present());
@@ -182,7 +182,7 @@ public class SquidMessageBox extends SquidPanel {
             appendMessage(message);
             return;
         }
-        List<IColoredString<Color>> truncated = message.wrap(gridWidth - 2);;
+        List<IColoredString<Color>> truncated = message.wrap(gridWidth - 2);
         for (IColoredString<Color> t : truncated)
         {
             appendMessage(t);

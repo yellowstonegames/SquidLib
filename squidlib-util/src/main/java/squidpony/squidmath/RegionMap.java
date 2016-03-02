@@ -603,7 +603,8 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
         return toString(separator, false);
     }
 
-    public String toString () {
+    @Override
+	public String toString () {
         return toString(", ", true);
     }
 
@@ -640,7 +641,8 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
         int highest = Integer.highestOneBit(n);
         return  (highest == Integer.lowestOneBit(n)) ? highest : highest << 1;
     }
-    public Entries<V> iterator () {
+    @Override
+	public Entries<V> iterator () {
         return entries();
     }
 
@@ -705,7 +707,8 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
         public short[] key;
         public V value;
 
-        public String toString () {
+        @Override
+		public String toString () {
             return "Packed Region:" + CoordPacker.encodeASCII(key) + "=" + value;
         }
     }
@@ -739,7 +742,8 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
             }
         }
 
-        public void remove () {
+        @Override
+		public void remove () {
             if (currentIndex < 0) throw new IllegalStateException("next must be called before remove.");
             if (currentIndex >= map.capacity) {
                 map.removeStashIndex(currentIndex);
@@ -762,7 +766,8 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
         }
 
         /** Note the same entry instance is returned each time this method is called. */
-        public Entry<V> next () {
+        @Override
+		public Entry<V> next () {
             if (!hasNext) throw new NoSuchElementException();
             if (!valid) throw new RuntimeException("#iterator() cannot be used nested.");
             short[][] keyTable = map.keyTable;
@@ -773,12 +778,14 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
             return entry;
         }
 
-        public boolean hasNext () {
+        @Override
+		public boolean hasNext () {
             if (!valid) throw new RuntimeException("#iterator() cannot be used nested.");
             return hasNext;
         }
 
-        public Entries<V> iterator () {
+        @Override
+		public Entries<V> iterator () {
             return this;
         }
     }
@@ -788,12 +795,14 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
             super(map);
         }
 
-        public boolean hasNext () {
+        @Override
+		public boolean hasNext () {
             if (!valid) throw new RuntimeException("#iterator() cannot be used nested.");
             return hasNext;
         }
 
-        public V next () {
+        @Override
+		public V next () {
             if (!hasNext) throw new NoSuchElementException();
             if (!valid) throw new RuntimeException("#iterator() cannot be used nested.");
             V value = map.valueTable[nextIndex];
@@ -802,7 +811,8 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
             return value;
         }
 
-        public Values<V> iterator () {
+        @Override
+		public Values<V> iterator () {
             return this;
         }
 
@@ -824,12 +834,14 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
             super((RegionMap<Object>) map);
         }
 
-        public boolean hasNext () {
+        @Override
+		public boolean hasNext () {
             if (!valid) throw new RuntimeException("#iterator() cannot be used nested.");
             return hasNext;
         }
 
-        public short[] next () {
+        @Override
+		public short[] next () {
             if (!hasNext) throw new NoSuchElementException();
             if (!valid) throw new RuntimeException("#iterator() cannot be used nested.");
             short[] key = map.keyTable[nextIndex];
@@ -838,7 +850,8 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
             return key;
         }
 
-        public Keys iterator () {
+        @Override
+		public Keys iterator () {
             return this;
         }
 

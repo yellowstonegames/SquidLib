@@ -463,7 +463,8 @@ public class FOVCache extends FOV{
      * @param viewerY an int less than 256 and less than height
      * @return a multi-packed series of progressively wider FOV radii
      */
-    private short[][] calculatePackedExternalFOV(int viewerX, int viewerY)
+    @SuppressWarnings("unused")
+	private short[][] calculatePackedExternalFOV(int viewerX, int viewerY)
     {
         if(viewerX < 0 || viewerY < 0 || viewerX >= width || viewerY >= height)
             return ALL_WALLS;
@@ -597,7 +598,8 @@ public class FOVCache extends FOV{
     {
         return (((bytesPerItem * length + 12 - 1) / 8) + 1) * 8L;
     }
-    private long arrayMemoryUsage2D(int xSize, int ySize, long bytesPerItem)
+    @SuppressWarnings("unused")
+	private long arrayMemoryUsage2D(int xSize, int ySize, long bytesPerItem)
     {
         return arrayMemoryUsage(xSize, (((bytesPerItem * ySize + 12 - 1) / 8) + 1) * 8L);
     }
@@ -1232,7 +1234,8 @@ public class FOVCache extends FOV{
      * something has gone wrong.
      * @return true if cacheAllPerformance() has successfully completed, false otherwise.
      */
-    private boolean awaitCachePerformance()
+    @SuppressWarnings("unused")
+	private boolean awaitCachePerformance()
     {
         if(performanceThread == null && !complete)
             cacheAllPerformance();
@@ -1317,7 +1320,8 @@ public class FOVCache extends FOV{
     }
 
 
-    private byte heuristic(Direction target) {
+    @SuppressWarnings("unused")
+	private byte heuristic(Direction target) {
         switch (radiusKind) {
             case CIRCLE:
             case SPHERE:
@@ -1514,7 +1518,8 @@ public class FOVCache extends FOV{
      * @param radius        the distance the light will extend to
      * @return the computed light grid
      */
-    public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius) {
+    @Override
+	public double[][] calculateFOV(double[][] resistanceMap, int startx, int starty, double radius) {
         if((qualityComplete || complete) && radius > 0 && radius <= maxRadius)
             return unpackMultiDoublePartial(cache[startx + starty * width], width, height,
                     levels[(int) Math.round(radius)], (int) Math.round(radius));
@@ -1550,7 +1555,8 @@ public class FOVCache extends FOV{
      * @param radiusTechnique provides a means to calculate the radius as desired
      * @return the computed light grid
      */
-    public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
+    @Override
+	public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
                                    Radius radiusTechnique) {
         if((qualityComplete || complete) && radius > 0 && radius <= maxRadius &&
                 radiusKind.equals2D(radiusTechnique))
@@ -1593,7 +1599,8 @@ public class FOVCache extends FOV{
      * @param span            the angle in degrees that measures the full arc contained in the FOV cone
      * @return the computed light grid
      */
-    public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
+    @Override
+	public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
                                    Radius radiusTechnique, double angle, double span) {
         if((qualityComplete || complete) && radius > 0 && radius <= maxRadius &&
                 radiusKind.equals2D(radiusTechnique))
@@ -1627,7 +1634,7 @@ public class FOVCache extends FOV{
             return new Coord[0];
         boolean on = false;
         int idx = 0, xt, yt;
-        short x =0, y = 0, dist = 0;
+        short x =0, y = 0;
         path.add(Coord.get(startX, startY));
         if(startX == endX && startY == endY)
             return path.toArray(new Coord[1]);
