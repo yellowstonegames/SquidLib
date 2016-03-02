@@ -1,23 +1,29 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+
+import squidpony.IFilter;
 import squidpony.squidmath.LightRNG;
 
 /**
- * A group of nested classes under the empty interface Filters, these all are meant to perform different changes
+ * Implementations of {@link IFilter}, that all are meant to perform different changes
  * to colors before they are created (they should be passed to SquidColorCenter's constructor, which can use them).
  * Created by Tommy Ettinger on 10/31/2015.
  */
-public interface Filters {
+public class Filters {
+
+	private Filters() {
+		/* You should not build me */
+	}
 
     /**
      * A Filter that does nothing to the colors it is given but pass them along unchanged.
      */
-    class IdentityFilter extends Filter<Color>
+    public static class IdentityFilter implements IFilter<Color>
     {
         public IdentityFilter()
         {
-            state = new float[0];
+        	/* Nothing to do */
         }
 
         @Override
@@ -29,11 +35,11 @@ public interface Filters {
     /**
      * A Filter that converts all colors passed to it to grayscale, like a black and white film.
      */
-    class GrayscaleFilter extends Filter<Color>
+    public static class GrayscaleFilter implements IFilter<Color>
     {
         public GrayscaleFilter()
         {
-            state = new float[0];
+        	/* Nothing to do */
         }
 
         @Override
@@ -47,7 +53,7 @@ public interface Filters {
      * A Filter that tracks the highest brightness for any component it was assigned and stores it in state as the first
      * and only element.
      */
-    class MaxValueFilter extends Filter<Color>
+    public static class MaxValueFilter extends Filter<Color>
     {
         public MaxValueFilter()
         {
@@ -65,7 +71,7 @@ public interface Filters {
     /**
      * A Filter that performs a brightness adjustment to make dark areas lighter and light areas not much less bright.
      */
-    class GammaCorrectFilter extends Filter<Color> {
+    public static class GammaCorrectFilter extends Filter<Color> {
         /**
          * Sets up a GammaCorrectFilter with the desired gamma adjustment.
          *
@@ -88,7 +94,7 @@ public interface Filters {
      * A Filter that is constructed with a color and linear-interpolates any color it is told to alter toward the color
      * it was constructed with.
      */
-    class LerpFilter extends Filter<Color> {
+    public static class LerpFilter extends Filter<Color> {
         /**
          * Sets up a LerpFilter with the desired color to linearly interpolate towards.
          *
@@ -120,7 +126,7 @@ public interface Filters {
      * A Filter that is constructed with a group of colors and linear-interpolates any color it is told to alter toward
      * the color it was constructed with that has the closest hue.
      */
-    class MultiLerpFilter extends Filter<Color> {
+    public static class MultiLerpFilter extends Filter<Color> {
         private SquidColorCenter globalSCC;
         /**
          * Sets up a MultiLerpFilter with the desired colors to linearly interpolate towards; the lengths of each given
@@ -189,7 +195,7 @@ public interface Filters {
      * distinguishable from other colors by value. Useful for sepia effects, which can be created satisfactorily with
      * {@code new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f)}.
      */
-    class ColorizeFilter extends Filter<Color> {
+    public static class ColorizeFilter extends Filter<Color> {
         private SquidColorCenter globalSCC;
         /**
          * Sets up a ColorizeFilter with the desired color to colorize towards.
@@ -265,7 +271,7 @@ public interface Filters {
      * A short (poorly recorded) video can be seen here http://i.imgur.com/SEw2LXe.gifv ; performance should be smoother
      * during actual gameplay.
      */
-    class HallucinateFilter extends Filter<Color> {
+    public static class HallucinateFilter extends Filter<Color> {
         private SquidColorCenter globalSCC;
         /**
          * Sets up a HallucinateFilter with the timer at 0..
@@ -295,7 +301,7 @@ public interface Filters {
     /**
      * A Filter that multiplies the saturation of any color requested from it by a number given during construction.
      */
-    class SaturationFilter extends Filter<Color> {
+    public static class SaturationFilter extends Filter<Color> {
         private SquidColorCenter globalSCC;
         /**
          * Sets up a SaturationFilter with the desired saturation multiplier. Using a multiplier of 0f, as you would
@@ -326,7 +332,7 @@ public interface Filters {
      * A Filter that is constructed with a palette of colors and randomly increases or decreases the red, green, and
      * blue components of any color it is told to alter. Good for a "glitchy screen" effect.
      */
-    class WiggleFilter extends Filter<Color> {
+    public static class WiggleFilter extends Filter<Color> {
         LightRNG rng;
         public WiggleFilter()
         {
@@ -348,7 +354,7 @@ public interface Filters {
      *
      * Preview using BLUE_GREEN_SERIES foreground, ACHROMATIC_SERIES background: http://i.imgur.com/2HdZpC9.png
      */
-    class PaletteFilter extends Filter<Color> {
+    public static class PaletteFilter extends Filter<Color> {
         /**
          * Sets up a PaletteFilter with the exact colors to use as individual components; the lengths of each given
          * array should be identical.

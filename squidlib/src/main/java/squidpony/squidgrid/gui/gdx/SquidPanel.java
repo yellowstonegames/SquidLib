@@ -1165,6 +1165,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 	 * @throws NullPointerException
 	 *             If {@code scc} is {@code null}.
 	 */
+	@Override
 	public SquidPanel setColorCenter(IColorCenter<Color> scc) {
 		if (scc == null)
 			/* Better fail now than later */

@@ -1,5 +1,6 @@
 package squidpony.panel;
 
+import squidpony.IColorCenter;
 import squidpony.annotation.Beta;
 
 /**
@@ -127,6 +128,14 @@ public interface ISquidPanel<T> {
 	 *         {@code null}.
 	 */
 	T getDefaultForegroundColor();
+
+	/**
+	 * Method to change the backing {@link IColorCenter}.
+	 * 
+	 * @param icc
+	 * @return {@code this}
+	 */
+	public ISquidPanel<T> setColorCenter(IColorCenter<T> icc);
 
 	/**
 	 * @return The panel doing the real job, i.e. an instance of

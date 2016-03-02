@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import squidpony.SquidTags;
 import squidpony.panel.IColoredString;
+import squidpony.panel.ICombinedPanel;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
 
@@ -456,7 +457,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			boolean scroll) {
 		if (bgColor != null) {
 			/* Paint whole background */
-			fill(false, bgColor);
+			fill(ICombinedPanel.What.BG, bgColor);
 		}
 
 		if (scroll) {
@@ -464,7 +465,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			 * Repaint whole foreground, to avoid leaving the end of longest
 			 * entries visible.
 			 */
-			fill(true, bgColor);
+			fill(ICombinedPanel.What.FG, bgColor);
 		}
 
 		final int nbButtons = buttonsTexts.size();
@@ -1136,7 +1137,9 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 	/**
 	 * A convenience subclass for people that give preallocated
-	 * {@link ISquidPanel}s. A single abstract method remains to be implemented.
+	 * {@link ISquidPanel}s. A single abstract method remains to be implemented:
+	 * what to do when a button is pressed, i.e.
+	 * {@link ButtonsPanel#selectedButton(int)}.
 	 * 
 	 * @author smelC
 	 */
