@@ -430,14 +430,16 @@ public class ShortSet {
         return (h ^ h >>> hashShift) & mask;
     }
 
-    public int hashCode () {
+    @Override
+	public int hashCode () {
         int h = 0;
         for (int i = 0, n = capacity + stashSize; i < n; i++)
             if (keyTable[i] != EMPTY) h += keyTable[i];
         return h;
     }
 
-    public boolean equals (Object obj) {
+    @Override
+	public boolean equals (Object obj) {
         if (!(obj instanceof ShortSet)) return false;
         ShortSet other = (ShortSet)obj;
         if (other.size != size) return false;
@@ -447,7 +449,8 @@ public class ShortSet {
         return true;
     }
 
-    public String toString () {
+    @Override
+	public String toString () {
         if (size == 0) return "[]";
         StringBuilder buffer = new StringBuilder(32);
         buffer.append('[');

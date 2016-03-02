@@ -1,5 +1,6 @@
 package squidpony.gdx.examples;
 
+import squidpony.panel.ICombinedPanel;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -598,7 +599,7 @@ public class EverythingDemo extends ApplicationAdapter {
         	gcp.setPosition(((width / 2) - (w / 2)) * cellWidth, (height / 2) * cellHeight);
 
         	/* Fill the background */
-        	gcp.fill(false, bgColor);
+        	gcp.fill(ICombinedPanel.What.BG, bgColor);
 
         	/* Now, to set the text we have to follow SquidPanel's convention */
         	/* First 0: align left, second 0: first line */
