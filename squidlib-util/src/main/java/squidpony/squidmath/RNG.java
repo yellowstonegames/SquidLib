@@ -14,6 +14,7 @@ import java.util.*;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger
+ * @author smelC
  */
 public class RNG implements Serializable {
 
@@ -221,6 +222,59 @@ public class RNG implements Serializable {
     }
 
     /**
+     * Returns a random element from the provided ShortSet. If the set is empty
+     * then an exception is thrown.
+     *
+     * <p>
+     * Requires iterating through a random amount of the elements in set, so performance depends on the size of set but
+     * is likely to be decent. This is mostly meant for internal use, the same as ShortSet.
+     * </p>
+     * @param set the ShortSet to get an element from
+     * @return the randomly selected element
+     */
+    public short getRandomElement(ShortSet set) {
+        if (set.size <= 0) {
+            throw new UnsupportedOperationException("ShortSet cannot be empty when getting a random element");
+        }
+        int n = nextInt(set.size);
+        short s = 0;
+        ShortSet.ShortSetIterator ssi = set.iterator();
+        while (n-- >= 0 && ssi.hasNext)
+            s = ssi.next();
+        ssi.reset();
+        return s;
+    }
+
+    /**
+     * Returns a random element from the provided Collection, which should have predictable iteration order if you want
+     * predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection
+     * (just not predictably in all cases). If you give this a Set, it should be a LinkedHashSet or some form of sorted
+     * Set like TreeSet if you want predictable results. Any List or Queue should be fine. Map does not implement
+     * Collection, thank you very much Java library designers, so you can't actually pass a Map to this, though you can
+     * pass the keys or values. If coll is empty, returns null.
+     *
+     * <p>
+     * Requires iterating through a random amount of coll's elements, so performance depends on the size of coll but is
+     * likely to be decent, as long as iteration isn't unusually slow. This replaces {@code getRandomElement(Queue)},
+     * since Queue implements Collection and the older Queue-using implementation was probably less efficient.
+     * </p>
+     * @param <T> the type of the returned object
+     * @param coll the Collection to get an element from; remember, Map does not implement Collection
+     * @return the randomly selected element
+     */
+    public <T> T getRandomElement(Collection<T> coll) {
+        if (coll.size() <= 0) {
+            return null;
+        }
+        int n = nextInt(coll.size());
+        T t = null;
+        Iterator<T> it = coll.iterator();
+        while (n-- >= 0 && it.hasNext())
+            t = it.next();
+        return t;
+    }
+
+    /*
      * Returns a random elements from the provided queue. If the queue is empty
      * then null is returned.
      * 
@@ -233,12 +287,13 @@ public class RNG implements Serializable {
      * @param list the list to get an element from
      * @return the randomly selected element
      */
+    /*
     public <T> T getRandomElement(Queue<T> list) {
         if (list.isEmpty()) {
             return null;
         }
         return new ArrayList<>(list).get(nextInt(list.size()));
-    }
+    }*/
 
 	/**
      * Given a {@link List} l, this selects a random element of l to be the first value in the returned list l2. It
@@ -313,7 +368,7 @@ public class RNG implements Serializable {
                     @Override
                     public T next() {
                         if (next == start)
-                            throw new NoSuchElementException();
+                            throw new NoSuchElementException("Iteration terminated; check hasNext() before next()");
                         if (next == -1)
 					/* First call */
                             next = start;
@@ -331,7 +386,7 @@ public class RNG implements Serializable {
 
                     @Override
 					public void remove() {
-                    	throw new UnsupportedOperationException();
+                    	throw new UnsupportedOperationException("Remove is not supported from a randomStartIterable");
 					}
 
 					@Override
@@ -372,17 +427,15 @@ public class RNG implements Serializable {
      * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
      * @param elements an array of T; will not be modified
      * @param <T> can be any non-primitive type.
-     * @param dest
-     * 			Where to put the shuffle. It MUST have the same length as {@code elements}
+     * @param dest Where to put the shuffle. If it does not have the same length as {@code elements}, this will use the
+     *             randomPortion method of this class to fill the smaller dest
      * @return {@code dest} after modifications
-     * @throws IllegalStateException
-     * 			If {@code dest.length != elements.length}
      */
     /* This method has this prototype to be compatible with GWT. */
     public <T> T[] shuffle(T[] elements, T[] dest)
     {
     	if (dest.length != elements.length)
-    		throw new IllegalStateException("Input arrays must be of the same sizes");
+            return randomPortion(elements, dest);
 
         for (int i = 0; i < elements.length; i++)
         {
@@ -416,14 +469,14 @@ public class RNG implements Serializable {
      * it can, and then returns output. Will only use a given position in the given data at most once; does this by
      * generating random indices for data's elements, but only as much as needed, assigning the copied section to output
      * and not modifying data.
-     *
+     * <br>
      * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid
      * copying or creating a new generic array (a problem on GWT).
      * @param data an array of T; will not be modified.
      * @param output an array of T that will be overwritten; should always be instantiated with the portion length
      * @param <T> can be any non-primitive type.
-     * @return an array of T that has length equal to output's length and may contain null elements if data is shorter
-     * than output
+     * @return an array of T that has length equal to output's length and may contain unchanged elements (null if output
+     * was empty) if data is shorter than output
      */
     public <T> T[] randomPortion(T[] data, T[] output)
     {
@@ -433,7 +486,7 @@ public class RNG implements Serializable {
             mapping[i] = i;
         }
 
-        for (int i = 0; i < output.length; i++) {
+        for (int i = 0; i < output.length && length > 0; i++) {
             int r = nextInt(length);
 
             output[i] = data[mapping[r]];
@@ -470,11 +523,14 @@ public class RNG implements Serializable {
     {
         if(end <= start || start < 0)
             return new int[0];
-        int[] data = new int[end - start];
+
+        int n = end - start;
+        int[] data = new int[n];
+
         for (int e = start, i = 0; e < end; e++) {
             data[i++] = e;
         }
-        int n = data.length;
+
         for (int i = 0; i < n; i++)
         {
             int r = i + nextInt(n - i);
@@ -517,6 +573,9 @@ public class RNG implements Serializable {
      */
     public double nextDouble() {
         return (random.nextLong() & 0x1fffffffffffffL) * DOUBLE_UNIT;
+        // consider changing to this in a future version; it will break compatibility but should be fast/correct
+        //return Double.longBitsToDouble(0x3FFL << 52 | random.nextLong() >>> 12) - 1.0;
+
     }
 
     /**

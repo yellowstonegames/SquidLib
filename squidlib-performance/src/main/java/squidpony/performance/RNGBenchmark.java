@@ -44,6 +44,7 @@ import squidpony.squidmath.*;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -66,6 +67,28 @@ import java.util.concurrent.TimeUnit;
  * RNGBenchmark.measureXorInt        avgt    3   1276688870.167 ±  133364204.061  ns/op
  * RNGBenchmark.measureXorIntR       avgt    3   1214642941.833 ±   51259344.714  ns/op
  * RNGBenchmark.measureXorR          avgt    3   1346017624.333 ±  151221919.876  ns/op
+ *
+ * RNGBenchmark.measureLight                 avgt    3   1271.746 ±  155.345  ms/op
+ * RNGBenchmark.measureLightInt              avgt    3   1271.499 ±   64.098  ms/op
+ * RNGBenchmark.measureLightIntR             avgt    3   1426.202 ±  132.951  ms/op
+ * RNGBenchmark.measureLightR                avgt    3   1271.037 ±   69.143  ms/op
+ * RNGBenchmark.measureMT                    avgt    3  42625.239 ±  969.951  ms/op
+ * RNGBenchmark.measureMTInt                 avgt    3  22143.479 ± 2771.177  ms/op
+ * RNGBenchmark.measureMTIntR                avgt    3  22322.939 ± 1853.463  ms/op
+ * RNGBenchmark.measureMTR                   avgt    3  43003.067 ± 8246.183  ms/op
+ * RNGBenchmark.measurePermuted              avgt    3   1650.486 ±   24.306  ms/op
+ * RNGBenchmark.measurePermutedInt           avgt    3   1746.945 ±  102.116  ms/op
+ * RNGBenchmark.measurePermutedIntR          avgt    3   1746.471 ±  133.611  ms/op
+ * RNGBenchmark.measurePermutedR             avgt    3   1662.623 ±  154.331  ms/op
+ * RNGBenchmark.measureRandom                avgt    3  22601.739 ±  277.755  ms/op
+ * RNGBenchmark.measureRandomInt             avgt    3  12685.072 ±   75.535  ms/op
+ * RNGBenchmark.measureXor                   avgt    3   1382.533 ±   50.650  ms/op
+ * RNGBenchmark.measureXorInt                avgt    3   1288.620 ±   74.813  ms/op
+ * RNGBenchmark.measureXorIntR               avgt    3   1229.695 ±   85.585  ms/op
+ * RNGBenchmark.measureXorR                  avgt    3   1358.552 ±   78.095  ms/op
+ * RNGBenchmark.measureThreadLocalRandom     avgt    3   1518.164 ±   63.002  ms/op
+ * RNGBenchmark.measureThreadLocalRandomInt  avgt    3   1387.081 ±   26.544  ms/op
+ *
  */
 public class RNGBenchmark {
 
@@ -84,7 +107,7 @@ public class RNGBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureLight() throws InterruptedException {
         seed = 9000;
         doLight();
@@ -102,7 +125,7 @@ public class RNGBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureLightInt() throws InterruptedException {
         iseed = 9000;
         doLightInt();
@@ -119,7 +142,7 @@ public class RNGBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureLightR() throws InterruptedException {
         seed = 9000;
         doLightR();
@@ -137,12 +160,49 @@ public class RNGBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureLightIntR() throws InterruptedException {
         iseed = 9000;
         doLightIntR();
     }
 
+    public long doThreadLocalRandom()
+    {
+        ThreadLocalRandom rng = ThreadLocalRandom.current();
+        //rng.setSeed(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThreadLocalRandom() throws InterruptedException {
+        seed = 9000;
+        doThreadLocalRandom();
+    }
+
+    public long doThreadLocalRandomInt()
+    {
+        ThreadLocalRandom rng = ThreadLocalRandom.current();
+        //rng.setSeed(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThreadLocalRandomInt() throws InterruptedException {
+        iseed = 9000;
+        doThreadLocalRandomInt();
+    }
     public long doRandom()
     {
         Random rng = new Random(seed);
@@ -153,9 +213,9 @@ public class RNGBenchmark {
         return seed;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureRandom() throws InterruptedException {
         seed = 9000;
         doRandom();
@@ -171,9 +231,9 @@ public class RNGBenchmark {
         return iseed;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureRandomInt() throws InterruptedException {
         iseed = 9000;
         doRandomInt();
@@ -190,7 +250,7 @@ public class RNGBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePermuted() throws InterruptedException {
         seed = 9000;
         doPermuted();
@@ -206,7 +266,7 @@ public class RNGBenchmark {
     }
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePermutedInt() throws InterruptedException {
         iseed = 9000;
         doPermutedInt();
@@ -223,7 +283,7 @@ public class RNGBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePermutedR() throws InterruptedException {
         seed = 9000;
         doPermutedR();
@@ -239,7 +299,7 @@ public class RNGBenchmark {
     }
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePermutedIntR() throws InterruptedException {
         iseed = 9000;
         doPermutedIntR();
@@ -257,7 +317,7 @@ public class RNGBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureXor() throws InterruptedException {
         seed = 9000;
         doXor();
@@ -273,7 +333,7 @@ public class RNGBenchmark {
     }
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureXorInt() throws InterruptedException {
         iseed = 9000;
         doXorInt();
@@ -290,7 +350,7 @@ public class RNGBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureXorR() throws InterruptedException {
         seed = 9000;
         doXorR();
@@ -306,7 +366,7 @@ public class RNGBenchmark {
     }
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureXorIntR() throws InterruptedException {
         iseed = 9000;
         doXorIntR();
@@ -327,9 +387,9 @@ public class RNGBenchmark {
         return seed;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureMT() throws InterruptedException {
         seed = 9000;
         doMT();
@@ -345,9 +405,9 @@ public class RNGBenchmark {
         }
         return iseed;
     }
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureMTInt() throws InterruptedException {
         iseed = 9000;
         doMTInt();
@@ -364,9 +424,9 @@ public class RNGBenchmark {
         return seed;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureMTR() throws InterruptedException {
         seed = 9000;
         doMTR();
@@ -382,9 +442,9 @@ public class RNGBenchmark {
         }
         return iseed;
     }
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureMTIntR() throws InterruptedException {
         iseed = 9000;
         doMTIntR();

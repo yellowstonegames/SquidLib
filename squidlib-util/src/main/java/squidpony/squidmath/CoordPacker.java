@@ -2935,6 +2935,106 @@ public class CoordPacker {
     }
 
 
+    /**
+     * Given a packed array encoding a larger area, a packed array encoding one or more points inside bounds, an RNG,
+     * and a volume in cells, expands a random cell in start in a random Manhattan (diamond) direction equal, then
+     * continues to expand from random cells in start or the expanded area until it has filled volume cells, limiting
+     * any expansion to within bounds and returning the final expanded (limited) packed data.  Notably, if a small area
+     * is not present within bounds, then the spill will move around the "hole" similarly to DijkstraMap's behavior;
+     * essentially, it needs to expand around the hole to get to the other side, and this takes more steps of expansion
+     * than crossing straight over.
+     * <br>
+     * Could also be given a name like randomizedFlood(), but spill() is used by the Spill class that does this too.
+     * <br>
+     * Returns a new packed short[] and does not modify bounds or start.
+     * @param bounds packed data representing the maximum extent of the region to random-flood-fill; often floors
+     * @param start a packed array that encodes position(s) that the random-flood will spread outward from
+     * @param volume the total number of cells to try to fill
+     * @param rng used to generate random numbers for the flooding
+     * @return a packed array that encodes "on" for cells that are "on" in bounds and are within expansion Manhattan
+     * distance from a Coord in start
+     */
+    public static short[] spill(short[] bounds, short[] start, int volume, RNG rng)
+    {
+        if(bounds == null || bounds.length <= 1)
+        {
+            return ALL_WALL;
+        }
+        int boundSize = count(bounds);
+        ShortVLA vla = new ShortVLA(256);
+        ShortSet ss = new ShortSet(boundSize), edge = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
+        boolean on = false, justAdded;
+        int idx = 0;
+        short x, y, dist;
+        for(int p = 0; p < bounds.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (bounds[p] & 0xffff); i++) {
+                    quickBounds.add((short) i);
+                }
+            }
+            idx += bounds[p] & 0xffff;
+        }
+        short[] s2 = allPackedHilbert(start);
+        int ct = s2.length;
+        ss.addAll(s2);
+        vla.addAll(s2);
+        edge.addAll(allPackedHilbert(intersectPacked(bounds, fringe(start, 1, 256, 256))));
+        if(edge.size <= 0)
+        {
+            short[] cpy = new short[start.length];
+            System.arraycopy(start, 0, cpy, 0, start.length);
+            return cpy;
+        }
+        int[] xOffsets = new int[]{0, 1, 0, -1}, yOffsets = new int[]{1, 0, -1, 0};
+        for (int v = ct; v < volume; v++) {
+            short s = rng.getRandomElement(edge);
+            edge.remove(s);
+            vla.add(s);
+            int i = s & 0xffff;
+            x = hilbertX[i];
+            y = hilbertY[i];
+
+            for (int d = 0; d < 4; d++) {
+                int j = Math.min(255, Math.max(0, x + xOffsets[d]));
+                int k = Math.min(255, Math.max(0, y + yOffsets[d]));
+                dist = hilbertDistances[j + (k << 8)];
+                if (quickBounds.contains(dist)) {
+                    if (ss.add(dist)) {
+                        edge.add(dist);
+                    }
+                }
+            }
+
+            if(edge.size <= 0)
+                break;
+        }
+
+        int[] indices = vla.asInts();
+        if(indices.length < 1)
+            return ALL_WALL;
+        Arrays.sort(indices);
+
+        vla.clear();
+        int current, past = indices[0], skip = 0;
+
+        vla.add((short)indices[0]);
+        for (int i = 1; i < indices.length; i++) {
+            current = indices[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+
+        return vla.toArray();
+    }
+
     private static void modifiedShadowFOV(int expansion, int viewerX, int viewerY, Radius metric, ShortSet bounds, ShortSet storedSet, ShortVLA vla)
     {
         if(expansion < 1)
