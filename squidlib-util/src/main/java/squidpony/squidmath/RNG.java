@@ -422,13 +422,17 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Shuffle an array using the "inside-out" Fisher-Yates algorithm.
+     * Shuffle an array using the "inside-out" Fisher-Yates algorithm. DO NOT give the same array for both elements and
+     * dest, since the prior contents of dest are rearranged before elements is used, and if they refer to the same
+     * array, then you can end up with bizarre bugs where one previously-unique item shows up dozens of times. If
+     * possible, create a new array with the same length as elements and pass it in as dest; the returned value can be
+     * assigned to whatever you want and will have the same items as the newly-formed array.
      * <br>
      * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
      * @param elements an array of T; will not be modified
      * @param <T> can be any non-primitive type.
      * @param dest Where to put the shuffle. If it does not have the same length as {@code elements}, this will use the
-     *             randomPortion method of this class to fill the smaller dest
+     *             randomPortion method of this class to fill the smaller dest. MUST NOT be the same array as elements!
      * @return {@code dest} after modifications
      */
     /* This method has this prototype to be compatible with GWT. */
@@ -436,7 +440,6 @@ public class RNG implements Serializable {
     {
     	if (dest.length != elements.length)
             return randomPortion(elements, dest);
-
         for (int i = 0; i < elements.length; i++)
         {
             int r = nextInt(i + 1);

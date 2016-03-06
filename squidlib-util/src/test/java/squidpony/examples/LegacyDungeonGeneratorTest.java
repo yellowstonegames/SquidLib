@@ -1,8 +1,6 @@
 package squidpony.examples;
-
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.LanesMapGenerator;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
@@ -77,13 +75,15 @@ import java.io.IOException;
  * Created by Tommy Ettinger on 4/8/2015.
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
-public class DungeonGeneratorTest {
+@SuppressWarnings( "deprecation" )
+public class LegacyDungeonGeneratorTest {
     public static int width = 80, height = 80, depth = 16;
     public static void main( String[] args )
     {
         //seed is, in base 36, the number SQUIDLIB
-        StatefulRNG rng = new StatefulRNG(new LightRNG(2252637788195L));
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
+        //new LightRNG(2252637788195L)
+        StatefulRNG rng = new StatefulRNG();
+        DungeonGenerator dungeonGenerator = new squidpony.squidgrid.mapping.LegacyDungeonGenerator(width, height, rng);
 
         /*
         String[][] tiles = new DungeonBoneGen().getTiles(TilesetType.DEFAULT_DUNGEON);
@@ -97,12 +97,12 @@ public class DungeonGeneratorTest {
             System.out.println("},");
         }
         */
+
         dungeonGenerator.addDoors(15, true);
         dungeonGenerator.addWater(15);
         dungeonGenerator.addGrass(10);
         dungeonGenerator.addBoulders(5);
         dungeonGenerator.addTraps(2);
-
         //MixedGenerator mix = new MixedGenerator(width, height, rng);
         //mix.putCaveCarvers(3);
         //mix.putWalledBoxRoomCarvers(2);
@@ -110,12 +110,17 @@ public class DungeonGeneratorTest {
         //dungeonGenerator.generate(mix.generate());
         dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
         char[][] dungeon = dungeonGenerator.getDungeon();
+        int walls = DungeonUtility.countCells(dungeon, '#'), floors = dungeon.length * dungeon[0].length - walls,
+                water = DungeonUtility.countCells(dungeon, '~') + DungeonUtility.countCells(dungeon, ','),
+                grass = DungeonUtility.countCells(dungeon, '"');
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(dungeon, true)));
         System.out.println(dungeonGenerator);
+        System.out.println("Water/Non-Wall: " + water + "/" + floors + ", or " + (water * 1.0 / floors));
+        System.out.println("Grass/Non-Wall: " + grass + "/" + floors + ", or " + (grass * 1.0 / floors));
 
 /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
@@ -159,7 +164,8 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
         */
-        dungeonGenerator = new DungeonGenerator(width, height, rng);
+        /*
+        dungeonGenerator = new LegacyDungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);
         //dungeonGenerator.addWater(20);
         //dungeonGenerator.addGrass(10);
@@ -175,6 +181,7 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
+        */
 /*
         System.out.println("------------------------------------------------------------");
 
