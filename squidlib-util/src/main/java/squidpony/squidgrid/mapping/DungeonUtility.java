@@ -1004,4 +1004,17 @@ public class DungeonUtility {
 	public static <T> boolean inLevel(T[][] level, int x, int y) {
 		return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
 	}
+
+    public static int countCells(char[][] level, char match)
+    {
+        if(level == null || level.length == 0)
+            return 0;
+        int counter = 0;
+        for (int x = 0; x < level.length; x++) {
+            for (int y = 0; y < level[x].length; y++) {
+                if(level[x][y] == match) counter++;
+            }
+        }
+        return counter;
+    }
 }
