@@ -8,10 +8,17 @@ import squidpony.squidmath.RNG;
 import java.util.*;
 
 /**
- * A dungeon generator that can use a mix of techniques to have part-cave, part-room dungeons.
+ * A dungeon generator that can use a mix of techniques to have part-cave, part-room dungeons. Not entirely intended for
+ * normal use outside of this library, though it can be very useful when you want to make a dungeon match a specific
+ * path and existing generators that use MixedGenerator aren't sufficient. You may want to use a simpler generator based
+ * on this, like SerpentMapGenerator, which generates a long, winding path that loops around on itself. This supports
+ * the getEnvironment() method, which can be used in conjunction with RoomFinder to find where separate room, corridor,
+ * and cave areas have been placed.
  * <br>
  * Based on Michael Patraw's excellent Drunkard's Walk dungeon generator.
  * http://mpatraw.github.io/libdrunkard/
+ * @see squidpony.squidgrid.mapping.SerpentMapGenerator a normal use for MixedGenerator that makes winding dungeons
+ * @see squidpony.squidgrid.mapping.SerpentDeepMapGenerator uses MixedGenerator as it makes a multi-level dungeon
  * Created by Tommy Ettinger on 10/22/2015.
  */
 public class MixedGenerator {
