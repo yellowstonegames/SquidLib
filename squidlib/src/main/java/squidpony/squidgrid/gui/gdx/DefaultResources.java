@@ -33,7 +33,7 @@ public class DefaultResources implements LifecycleListener {
             smooth1 = null, smooth2 = null, smoothSquare = null, smoothSquareOld = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null;
-    private TextCellFactory distanceNarrow = null, distanceSquare = null;
+    private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
             unicodeName = "Mandrill-6x16.fnt",
@@ -46,7 +46,9 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldSquare = "Inconsolata-LGC-Square-distance.fnt",
             distanceFieldSquareTexture = "Inconsolata-LGC-Square-distance.png",
             distanceFieldNarrow = "Inconsolata-LGC-Custom-distance.fnt",
-            distanceFieldNarrowTexture = "Inconsolata-LGC-Custom-distance.png";
+            distanceFieldNarrowTexture = "Inconsolata-LGC-Custom-distance.png",
+            distanceFieldTypewriterNarrow = "CM-Custom-distance.fnt",
+            distanceFieldTypewriterNarrowTexture = "CM-Custom-distance.png";
     public static String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
@@ -332,6 +334,29 @@ public class DefaultResources implements LifecycleListener {
             }
         }
         return instance.distanceNarrow;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use a narrow typewriter-style serif font that should scale
+     * cleanly to many sizes. Caches the result for later calls.
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * @return the TextCellFactory object that can represent many sizes of the font CM-Custom.ttf.
+     */
+    public static TextCellFactory getStretchableTypewriterFont()
+    {
+        initialize();
+        if(instance.typewriterDistanceNarrow == null)
+        {
+            try {
+                instance.typewriterDistanceNarrow = new TextCellFactory()
+                        .fontDistanceField(distanceFieldTypewriterNarrow, distanceFieldTypewriterNarrowTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return instance.typewriterDistanceNarrow;
     }
 
     /**

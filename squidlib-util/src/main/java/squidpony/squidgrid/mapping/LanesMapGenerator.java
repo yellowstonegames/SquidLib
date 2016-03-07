@@ -12,7 +12,20 @@ import java.util.List;
 /**
  * Generate dungeons with between 1 and 3 primary "lanes" going from the upper left "base" to the bottom right "base"
  * (and vice versa, since this is symmetrical). Also fills the area not covered by lanes with "jungle" (random, but
- * symmetrical, cave connections). Dungeons are produced by
+ * symmetrical, room or cave connections). Dungeons are produced by MixedGenerator, like those SerpentMapGenerator
+ * makes, but include the wide lanes going from corner to corner. You can call different methods like putCaveCarvers(),
+ * putBoxRoomCarvers(), putWalledRoundRoomCarvers(), etc. to affect the "jungle", which defaults to caves unless one or
+ * more of the putXXXCarvers methods was called. The lanes are always 5 floor cells wide, measured 8-way. This supports
+ * the getEnvironment() method, which can be used in conjunction with RoomFinder to find where separate room, corridor,
+ * and cave areas have been placed.
+ * <br>
+ * A preview can be seen here https://gist.github.com/tommyettinger/4f57cff23eead11b17bf , with dungeons created with
+ * one, two, and three lanes, and only using box-shaped rooms for "jungle." Currently, the two-lane dungeon seems to be
+ * ideal for maps that aren't incredibly large; the samples are 80x80, but larger maps may have better jungle layout
+ * with three lanes than those three-lane maps can manage on smaller sizes. Another potential advantage of the two-lane
+ * approach is that it can be used to generate a "ring" of wide paths around a central "core" of jungle, which wasn't
+ * originally intended as a use of this generator but could be very useful for games that, for instance, want guards
+ * patrolling an obvious ring, while the player, monsters, and/or other prisoners start in the jungle.
  * Created by Tommy Ettinger on 10/24/2015.
  */
 public class LanesMapGenerator {

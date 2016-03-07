@@ -11,7 +11,12 @@ import java.util.List;
 /**
  * Generate dungeons based on a random, winding, looping path through 2D space. Uses techniques from MixedGenerator.
  * Uses a Moore Curve, which is related to Hilbert Curves but loops back to its starting point, and stretches and
- * distorts the grid to make sure a visual correlation isn't obvious.
+ * distorts the grid to make sure a visual correlation isn't obvious. This supports the getEnvironment() method, which
+ * can be used in conjunction with RoomFinder to find where separate room, corridor, and cave areas have been placed.
+ * <br>
+ * To get a sense of what kinds of map this generates, you can look at a sample map on
+ * https://gist.github.com/tommyettinger/93b47048fc8a209a9712 , which also includes a snippet of Java code that can
+ * generate that map.
  * <br>
  * The name comes from a vivid dream I had about gigantic, multi-colored snakes that completely occupied a roguelike
  * dungeon. Shortly after, I made the connection to the Australian mythology I'd heard about the Rainbow Serpent, which

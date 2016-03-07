@@ -9,7 +9,7 @@ public class BasicDemoLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "SquidLib GDX Basic Demo";
-		config.width = 50 * 22;
+		config.width = 50 * 10;
 		config.height = 32 * 22;
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);

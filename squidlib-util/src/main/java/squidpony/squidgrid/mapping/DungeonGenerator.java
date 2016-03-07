@@ -14,7 +14,9 @@ import static squidpony.squidmath.CoordPacker.*;
 
 /**
  * The primary way to create a more-complete dungeon, layering different effects and modifications on top of
- * a DungeonBoneGen's dungeon.
+ * a DungeonBoneGen's dungeon or another dungeon without such effects. Also ensures only connected regions of the map
+ * are used by filling unreachable areas with walls, and can find far-apart staircase positions if generate() is used or
+ * can keep existing staircases in a map if generateRespectingStairs() is used.
  * <br>
  * The main technique for using this is simple: Construct a DungeonGenerator, usually with the desired width and height,
  * then call any feature adding methods that you want in the dungeon, like addWater(), addTraps, addGrass(), or
@@ -26,6 +28,13 @@ import static squidpony.squidmath.CoordPacker.*;
  * to change those to staircase characters, but there's no requirement to do anything with them. The DungeonUtility
  * field of this class, utility, is a convenient way of accessing the non-static methods in that class, such as
  * randomFloor(), without needing to create another DungeonUtility (this class creates one, so you don't have to).
+ * <br>
+ * Previews for the kinds of dungeon this generates, given a certain argument to generate():
+ * <ul>
+ *     <li>Using TilesetType.DEFAULT_DUNGEON (text, click "Raw", may need to zoom out): https://gist.github.com/tommyettinger/a3bd413b903f2e103541</li>
+ *     <li>Using TilesetType.DEFAULT_DUNGEON (graphical, scroll down and to the right): http://tommyettinger.github.io/home/PixVoxel/dungeon/dungeon.html</li>
+ *     <li>Using SerpentMapGenerator.generate()  (text, click "Raw", may need to zoom out): https://gist.github.com/tommyettinger/93b47048fc8a209a9712</li>
+ * </ul>
  * <br>
  * As of March 6, 2016, the algorithm this uses to place water and grass was swapped for a more precise version. You no
  * longer need to give this 150% in addWater or addGrass to effectively produce 100% water or grass, and this should be
