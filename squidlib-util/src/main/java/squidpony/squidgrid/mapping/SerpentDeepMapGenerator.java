@@ -398,4 +398,27 @@ public class SerpentDeepMapGenerator {
         }
         return dungeon;
     }
+
+    /**
+     * Gets an array (length equals depth) of 2D int arrays representing the environments for levels.
+     * @return an array of 2D int arrays, where each 2D array is a level's environment
+     */
+    public int[][][] getEnvironments()
+    {
+        int[][][] env = new int[depth][][];
+        for (int i = 0; i < depth; i++) {
+            env[i] = mix[i].getEnvironment();
+        }
+        return env;
+    }
+
+    /**
+     * Gets a 2D int array representing the environment for the requested level.
+     * @param level the level to get from the generated dungeon; will be clamped between 0 and depth - 1
+     * @return a 2D int array representing the requested level's environment
+     */
+    public int[][] getEnvironment(int level)
+    {
+        return mix[Math.max(0, Math.min(depth - 1, level))].getEnvironment();
+    }
 }

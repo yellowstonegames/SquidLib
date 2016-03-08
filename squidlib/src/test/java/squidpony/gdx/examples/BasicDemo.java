@@ -65,10 +65,10 @@ public class BasicDemo extends ApplicationAdapter {
         //of an individual cell. The font will look more crisp if the cell dimensions match the config multipliers
         //exactly, and the stretchable fonts (technically, distance field fonts) can resize to non-square sizes and
         //still retain most of that crispness.
-        gridWidth = 50;
+        gridWidth = 80;
         gridHeight = 24;
-        cellWidth = 10;
-        cellHeight = 22;
+        cellWidth = 14;
+        cellHeight = 21;
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
         rng = new RNG("SquidLib!");
 
