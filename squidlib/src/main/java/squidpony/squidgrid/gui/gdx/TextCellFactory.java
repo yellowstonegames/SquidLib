@@ -18,6 +18,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Class for creating text blocks.
  *
@@ -62,6 +65,7 @@ public class TextCellFactory implements Disposable {
     protected boolean distanceField = false;
     protected ShaderProgram shader;
     protected float smoothingMultiplier = 1f;
+    protected java.util.LinkedHashMap<String, String> swap = new LinkedHashMap<>(32);
 
 
     /**
@@ -669,7 +673,10 @@ public class TextCellFactory implements Disposable {
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             batch.draw(block, x, y - height, width * s.length(), modifiedHeight);
         } else {
-            bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+            if(swap.containsKey(s))
+                bmpFont.draw(batch, swap.get(s), x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+            else
+                bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
         }
     }
     /**
@@ -702,7 +709,10 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(r, g, b, a);
-            bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+            if(swap.containsKey(s))
+                bmpFont.draw(batch, swap.get(s), x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+            else
+                bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
         }
     }
 
@@ -733,7 +743,10 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(scc.filter(color));
-            bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+            if(swap.containsKey(s))
+                bmpFont.draw(batch, swap.get(s), x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+            else
+                bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
         }
     }
 
@@ -909,7 +922,7 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
-     * for preparing glyphs for animation effects, and is used internally for this purpose.
+     * for preparing glyphs for animation effects.
      * @param s a String to make into an Actor, which can be null for a solid block.
      * @return the Actor, with no position set.
      */
@@ -950,7 +963,11 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            Label lb = new Label(s, new Label.LabelStyle(bmpFont, null));
+            Label lb;
+            if(swap.containsKey(s))
+                lb = new Label(swap.get(s), new Label.LabelStyle(bmpFont, null));
+            else
+                lb = new Label(s, new Label.LabelStyle(bmpFont, null));
             lb.setColor(scc.filter(color));
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
@@ -1077,5 +1094,163 @@ public class TextCellFactory implements Disposable {
     public void dispose() {
         if(bmpFont != null) bmpFont.dispose();
         if(block != null) block.dispose();
+    }
+
+    /**
+     * Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested
+     * to be drawn, the replace String is used instead. These are used when drawing text in each cell in SquidPanel and
+     * related classes, so Strings longer than 1 char are rare, if they occur at all.
+     * <br>
+     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
+     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
+     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
+     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
+     * @param find the requested String that will be changed
+     * @param replace the replacement String that will be used in place of find
+     * @return this for chaining
+     */
+    public TextCellFactory addSwap(String find, String replace)
+    {
+        if(find.startsWith("\0"))
+            return this;
+        swap.put(find, replace);
+        return this;
+    }
+
+    /**
+     * Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is
+     * used instead.
+     * <br>
+     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
+     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also
+     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
+     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
+     * @param find the requested char that will be changed (converted to a length-1 String)
+     * @param replace the replacement char that will be used in place of find (converted to a length-1 String)
+     * @return this for chaining
+     */
+    public TextCellFactory addSwap(char find, char replace)
+    {
+        if(find == '\0')
+            return this;
+        swap.put(String.valueOf(find), String.valueOf(replace));
+        return this;
+    }
+
+    /**
+     * Removes the replacement pair, if present, that searches for the given key, find.
+     * <br>
+     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
+     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
+     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
+     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
+     * @param find the String that would be changed in the replacement pair
+     * @return this for chaining
+     */
+    public TextCellFactory removeSwap(String find)
+    {
+        swap.remove(find);
+        return this;
+    }
+
+    /**
+     * Removes the replacement pair, if present, that searches for the given key, find.
+     * <br>
+     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
+     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also
+     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
+     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
+     * @return this for chaining
+     */
+    public TextCellFactory removeSwap(char find)
+    {
+        swap.remove(String.valueOf(find));
+        return this;
+    }
+
+    /**
+     * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their
+     * values in the LinkedHashMap.
+     * <br>
+     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
+     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
+     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
+     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
+     * @return the mapping of replacement pairs
+     */
+    public LinkedHashMap<String, String> getAllSwaps() {
+        return swap;
+    }
+
+    /**
+     * Sets the mapping of replacement pairs to a different one as a Map of String keys to String values.
+     * <br>
+     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
+     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
+     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
+     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
+     * @param swaps the Map of replacement pairs; keys requested for drawing will be replaced with their values
+     * @return this for chaining
+     */
+    public TextCellFactory setAllSwaps(Map<String, String> swaps) {
+        this.swap = new LinkedHashMap<>(swaps.size());
+        for(Map.Entry<String, String> kv : swaps.entrySet())
+        {
+            if(!kv.getKey().startsWith("\0"))
+                this.swap.put(kv.getKey(), kv.getValue());
+        }
+        return this;
+    }
+
+    /**
+     * Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the
+     * entries in a Map of String keys to String values.
+     * <br>
+     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
+     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
+     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
+     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
+     * @param swaps the Map of replacement pairs to add; keys requested for drawing will be replaced with their values
+     * @return this for chaining
+     */
+    public TextCellFactory addSwaps(Map<String, String> swaps) {
+
+        for(Map.Entry<String, String> kv : swaps.entrySet())
+        {
+            if(!kv.getKey().startsWith("\0"))
+                swap.put(kv.getKey(), kv.getValue());
+        }
+        return this;
+    }
+
+    /**
+     * Clears all replacement pairs this has been told to swap.
+     * <br>
+     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
+     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
+     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also
+     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn
+     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use
+     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
+     * @return this for chaining
+     */
+    public TextCellFactory clearSwaps()
+    {
+        swap.clear();
+        return this;
     }
 }
