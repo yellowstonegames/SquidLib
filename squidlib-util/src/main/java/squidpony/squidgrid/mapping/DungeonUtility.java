@@ -1005,6 +1005,12 @@ public class DungeonUtility {
 		return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
 	}
 
+    /**
+     * Quickly counts the number of char elements in level that are equal to match.
+     * @param level the 2D char array to count cells in
+     * @param match the char to search for
+     * @return the number of cells that matched
+     */
     public static int countCells(char[][] level, char match)
     {
         if(level == null || level.length == 0)
@@ -1016,5 +1022,24 @@ public class DungeonUtility {
             }
         }
         return counter;
+    }
+
+    /**
+     * For when you want to print a 2D char array. Prints on multiple lines, with a trailing newline.
+     * @param level a 2D char array to print with a trailing newline
+     */
+    public static void debugPrint(char[][] level)
+    {
+        if(level == null || level.length == 0 || level[0].length == 0)
+            System.out.println("INVALID DUNGEON LEVEL");
+        else {
+            for (int y = 0; y < level[0].length; y++) {
+                for (int x = 0; x < level.length; x++) {
+                    System.out.print(level[x][y]);
+                }
+                System.out.println();
+
+            }
+        }
     }
 }

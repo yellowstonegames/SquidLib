@@ -532,7 +532,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
         short[][] oldKeyTable = keyTable;
         V[] oldValueTable = valueTable;
 
-        keyTable = (short[][])new Object[newSize + stashCapacity];
+        keyTable = new short[newSize + stashCapacity][];
         valueTable = (V[])new Object[newSize + stashCapacity];
 
         int oldSize = size;

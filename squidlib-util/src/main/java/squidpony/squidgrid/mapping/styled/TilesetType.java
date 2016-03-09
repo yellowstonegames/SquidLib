@@ -1,23 +1,6 @@
 package squidpony.squidgrid.mapping.styled;
 
-import squidpony.tileset.CavesLimitConnectivity;
-import squidpony.tileset.CavesTinyCorridors;
-import squidpony.tileset.CornerCaves;
-import squidpony.tileset.DefaultDungeon;
-import squidpony.tileset.HorizontalCorridorsV1;
-import squidpony.tileset.HorizontalCorridorsV2;
-import squidpony.tileset.HorizontalCorridorsV3;
-import squidpony.tileset.LimitConnectivityFat;
-import squidpony.tileset.LimitedConnectivity;
-import squidpony.tileset.Maze2Wide;
-import squidpony.tileset.MazePlus2Wide;
-import squidpony.tileset.OpenAreas;
-import squidpony.tileset.RoomsAndCorridors;
-import squidpony.tileset.RoomsAndCorridors2WideDiagonalBias;
-import squidpony.tileset.RoomsLimitConnectivity;
-import squidpony.tileset.RoundRoomsDiagonalCorridors;
-import squidpony.tileset.SimpleCaves2Wide;
-import squidpony.tileset.SquareRoomsWithRandomRects;
+import squidpony.tileset.*;
 
 /**
  * An enumeration of all the kinds of dungeon that DungeonGen
@@ -148,5 +131,57 @@ public enum TilesetType {
 		}
 		throw new IllegalStateException("Unmatched: " + this);
 	}
+
+    /**
+     * Returns MixedGenerator.CAVE_FLOOR (which is 3) or MixedGenerator.ROOM_FLOOR (which is 1) based on whether this
+     * TilesetType predominantly generates caves or rooms. This is relevant for certain feature placement.
+     * @return 3 if this produces mostly caves, or 1 if it produces mostly rooms
+     */
+	public int environment() {
+        int caves = 3, rooms = 1;
+        switch (this) {
+            case CAVES_LIMIT_CONNECTIVITY:
+                return caves;
+            case CAVES_TINY_CORRIDORS:
+                return caves;
+            case CORNER_CAVES:
+                return caves;
+            case DEFAULT_DUNGEON:
+                return rooms;
+            case HORIZONTAL_CORRIDORS_A:
+                return rooms;
+            case HORIZONTAL_CORRIDORS_B:
+                return rooms;
+            case HORIZONTAL_CORRIDORS_C:
+                return rooms;
+            case LIMITED_CONNECTIVITY:
+                return rooms;
+            case LIMIT_CONNECTIVITY_FAT:
+                return rooms;
+            case MAZE_A:
+                return rooms;
+            case MAZE_B:
+                return rooms;
+            case OPEN_AREAS:
+                return caves;
+            case REFERENCE_CAVES:
+                return caves;
+            case ROOMS_AND_CORRIDORS_A:
+                return rooms;
+            case ROOMS_AND_CORRIDORS_B:
+                return rooms;
+            case ROOMS_LIMIT_CONNECTIVITY:
+                return rooms;
+            case ROUND_ROOMS_DIAGONAL_CORRIDORS:
+                return rooms;
+            case SIMPLE_CAVES:
+                return caves;
+            case SQUARE_ROOMS_WITH_RANDOM_RECTS:
+                return rooms;
+        }
+        throw new IllegalStateException("Unmatched: " + this);
+
+
+    }
 }
 

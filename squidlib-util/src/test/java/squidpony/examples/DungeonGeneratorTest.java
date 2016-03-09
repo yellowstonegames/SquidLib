@@ -1,9 +1,6 @@
 package squidpony.examples;
 
-import squidpony.squidgrid.mapping.DungeonGenerator;
-import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.LanesMapGenerator;
-import squidpony.squidgrid.mapping.SerpentMapGenerator;
+import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
@@ -142,6 +139,29 @@ public class DungeonGeneratorTest {
 
         System.out.println("------------------------------------------------------------");
 
+        SectionDungeonGenerator sdg = new SectionDungeonGenerator(width, height, rng);
+        sdg.addDoors(12, false);
+        //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
+        sdg.addGrass(SectionDungeonGenerator.CAVE, 80);
+        //sdg.addBoulders(SectionDungeonGenerator.CAVE, 7);
+        rng.setState(2252637788195L);
+        serpent = new SerpentMapGenerator(width, height, rng, 0.2);
+        serpent.putWalledBoxRoomCarvers(5);
+        serpent.putWalledRoundRoomCarvers(3);
+        serpent.putCaveCarvers(6);
+        map = serpent.generate();
+        sdg.generate(map, serpent.getEnvironment());
+
+        sdungeon = sdg.getDungeon();
+        sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
+        sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+
+        sdg.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdungeon)));
+        System.out.println(sdg);
+
+        System.out.println("------------------------------------------------------------");
+
         /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);
@@ -163,6 +183,7 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(sdungeon)));
         System.out.println(dungeonGenerator);
         */
+        /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);
         //dungeonGenerator.addWater(20);
@@ -219,6 +240,7 @@ public class DungeonGeneratorTest {
         System.out.println(dungeonGenerator);
 
         System.out.println("------------------------------------------------------------");
+        */
 /*
         rng.setState(2252637788195L);
         SerpentDeepMapGenerator deepSerpent = new SerpentDeepMapGenerator(width, height, depth, rng, 0.15);
