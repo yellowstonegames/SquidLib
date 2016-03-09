@@ -274,7 +274,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 
 		@Override
 		public List<IColoredString<T>> wrap(int width) {
-			if (width == 0) {
+			if (width <= 0) {
 				/* Really, you should not rely on this behavior */
 				System.err.println("Cannot wrap string in empty display");
 				final List<IColoredString<T>> result = new LinkedList<>();

@@ -979,16 +979,17 @@ public class DijkstraMap {
      *
      * @param start   your starting location
      * @param targets an array or vararg of Coords to pathfind to the nearest of
-     * @return an ArrayList of Coord that goes from a cell adjacent to start and goes to one of the targets.
+     * @return an ArrayList of Coord that goes from a cell adjacent to start and goes to one of the targets. Copy of path.
      */
     public ArrayList<Coord> findShortcutPath(Coord start, Coord... targets) {
-        ArrayList<Coord> path = new ArrayList<>(32);
-        if (targets.length == 0)
-            return path;
+        if (targets.length == 0) {
+            path.clear();
+            return new ArrayList<>(path);
+        }
         Coord currentPos = findNearest(start, targets);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1006,7 +1007,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1017,7 +1018,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         Collections.reverse(path);
-        return path;
+        return new ArrayList<>(path);
 
     }
 
@@ -1029,7 +1030,7 @@ public class DijkstraMap {
      * @param start   the cell to use as the origin for finding the nearest targets
      * @param limit   the maximum number of targets to find before returning
      * @param targets the Coords that this is trying to find; it will stop once it finds enough (based on limit)
-     * @return the Coord that it found first.
+     * @return the Coords that it found first.
      */
     public ArrayList<Coord> findNearestMultiple(Coord start, int limit, Set<Coord> targets) {
         if (!initialized) return null;
@@ -1234,18 +1235,20 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
-     *
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      * @param length       the length of the path to calculate
      * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
      * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets      a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findPath(int length, Set<Coord> impassable,
                                      Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
-        path = new ArrayList<>();
+        path.clear();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -1259,13 +1262,13 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
         scan(impassable2);
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1283,7 +1286,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1304,7 +1307,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -1317,6 +1320,9 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength     the length of the path to calculate
      * @param preferredRange the distance this unit will try to keep from a target
@@ -1326,7 +1332,7 @@ public class DijkstraMap {
      * @param onlyPassable   a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start          the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets        a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findAttackPath(int moveLength, int preferredRange, LOS los, Set<Coord> impassable,
                                            Set<Coord> onlyPassable, Coord start, Coord... targets) {
@@ -1344,6 +1350,9 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength        the length of the path to calculate
      * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
@@ -1354,7 +1363,7 @@ public class DijkstraMap {
      * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets           a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
                                            Set<Coord> impassable, Set<Coord> onlyPassable, Coord start, Coord... targets) {
@@ -1369,7 +1378,7 @@ public class DijkstraMap {
                 }
             }
         }
-        path = new ArrayList<>();
+        path.clear();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -1383,7 +1392,7 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -1418,7 +1427,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1436,7 +1445,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1459,7 +1468,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -1468,25 +1477,28 @@ public class DijkstraMap {
      * considered valid if they are at a valid range for the given Technique to hit at least one target
      * and ideal if that Technique can affect as many targets as possible from a cell that can be moved
      * to with at most movelength steps.
-     * <p/>
+     * <br>
      * The return value of this method is the path to get to a location to attack, but on its own it
      * does not tell the user how to perform the attack.  It does set the targetMap 2D Coord array field
      * so that if your position at the end of the returned path is non-null in targetMap, it will be
      * a Coord that can be used as a target position for Technique.apply() . If your position at the end
      * of the returned path is null, then an ideal attack position was not reachable by the path.
-     * <p/>
+     * <br>
      * This needs a char[][] dungeon as an argument because DijkstraMap does not always have a char[][]
      * version of the map available to it, and certain AOE implementations that a Technique uses may
      * need a char[][] specifically to determine what they affect.
-     * <p/>
+     * <br>
      * The maximum length of the returned list is given by moveLength; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in allies
      * (which is typically filled with friendly units that can be passed through in multi-tile-
      * movement scenarios, and is also used considered an undesirable thing to affect for the Technique),
      * it will recalculate a move so that it does not pass into that cell.
-     * <p/>
+     * <br>
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a target overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength the maximum distance to try to pathfind out to; if a spot to use a Technique can be found
      *                   while moving no more than this distance, then the targetMap field in this object will have a
@@ -1500,7 +1512,7 @@ public class DijkstraMap {
      * @param allies     called onlyPassable in other methods, here it also represents allies for Technique things
      * @param start      the Coord the pathfinder starts at.
      * @param targets    a Set of Coord, not an array of Coord or variable argument list as in other methods.
-     * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech
+     * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech. Copy of path.
      */
     public ArrayList<Coord> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, LOS los,
                                               Set<Coord> impassable, Set<Coord> allies, Coord start, Set<Coord> targets) {
@@ -1521,9 +1533,9 @@ public class DijkstraMap {
             }
         }
 
-        path = new ArrayList<>();
+        path.clear();
         if (targets == null || targets.size() == 0)
-            return path;
+            return new ArrayList<>(path);
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -1546,7 +1558,7 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         Measurement mess = measurement;
         /*
@@ -1619,7 +1631,7 @@ public class DijkstraMap {
         Coord currentPos = Coord.get(start.x, start.y);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1645,7 +1657,7 @@ public class DijkstraMap {
                 break;
             }
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1666,7 +1678,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
 
@@ -1680,6 +1692,9 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength     the length of the path to calculate
      * @param preferredRange the distance this unit will try to keep from a target
@@ -1688,7 +1703,7 @@ public class DijkstraMap {
      * @param onlyPassable   a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start          the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets        a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     @GwtIncompatible
     public ArrayList<Coord> findAttackPath(int moveLength, int preferredRange, FOVCache cache, Set<Coord> impassable,
@@ -1707,6 +1722,9 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength        the length of the path to calculate
      * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
@@ -1716,7 +1734,7 @@ public class DijkstraMap {
      * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets           a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     @GwtIncompatible
     public ArrayList<Coord> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, FOVCache cache,
@@ -1725,7 +1743,7 @@ public class DijkstraMap {
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
 
-        path = new ArrayList<>();
+        path.clear();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -1739,7 +1757,7 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -1774,7 +1792,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -1792,7 +1810,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -1815,7 +1833,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -1835,6 +1853,9 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength        the length of the path to calculate
      * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
@@ -1846,7 +1867,7 @@ public class DijkstraMap {
      * @param threats           a List of Threat objects that store a position, min and max threatening distance
      * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets           a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
                                                   double coverPreference, Set<Coord> impassable,
@@ -1879,7 +1900,7 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -1976,7 +1997,7 @@ public class DijkstraMap {
         }
 
         frustration = 0;
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -1996,6 +2017,9 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength     the length of the path to calculate
      * @param preferredRange the distance this unit will try to keep from a target
@@ -2006,7 +2030,7 @@ public class DijkstraMap {
      * @param threats        a List of Threat objects that store a position, min and max threatening distance
      * @param start          the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets        a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int preferredRange, double coverPreference,
                                                   FOV fov, boolean seekDistantGoals, Set<Coord> impassable,
@@ -2033,6 +2057,9 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength        the length of the path to calculate
      * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
@@ -2046,7 +2073,7 @@ public class DijkstraMap {
      * @param threats           a List of Threat objects that store a position, min and max threatening distance
      * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets           a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
                                                   double coverPreference, FOV fov, boolean seekDistantGoals, Set<Coord> impassable,
@@ -2082,7 +2109,7 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -2197,7 +2224,7 @@ public class DijkstraMap {
         }
 
         frustration = 0;
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -2217,6 +2244,9 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength     the length of the path to calculate
      * @param preferredRange the distance this unit will try to keep from a target
@@ -2227,7 +2257,7 @@ public class DijkstraMap {
      * @param threats        a List of Threat objects that store a position, min and max threatening distance
      * @param start          the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets        a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     @GwtIncompatible
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int preferredRange, double coverPreference,
@@ -2255,6 +2285,9 @@ public class DijkstraMap {
      * movement scenarios), it will recalculate a move so that it does not pass into that cell.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength        the length of the path to calculate
      * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
@@ -2268,7 +2301,7 @@ public class DijkstraMap {
      * @param threats           a List of Threat objects that store a position, min and max threatening distance
      * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets           a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
      */
     @GwtIncompatible
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
@@ -2291,7 +2324,7 @@ public class DijkstraMap {
             }
         }
 
-        path = new ArrayList<>();
+        path.clear();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -2305,7 +2338,7 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -2380,7 +2413,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2419,7 +2452,7 @@ public class DijkstraMap {
         }
 
         frustration = 0;
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -2447,6 +2480,9 @@ public class DijkstraMap {
      * <p/>
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a target overlapping one.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param moveLength the maximum distance to try to pathfind out to; if a spot to use a Technique can be found
      *                   while moving no more than this distance, then the targetMap field in this object will have a
@@ -2459,7 +2495,7 @@ public class DijkstraMap {
      * @param allies     called onlyPassable in other methods, here it also represents allies for Technique things
      * @param start      the Coord the pathfinder starts at.
      * @param targets    a Set of Coord, not an array of Coord or variable argument list as in other methods.
-     * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech
+     * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech. Copy of path.
      */
     @GwtIncompatible
     public ArrayList<Coord> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, FOVCache cache,
@@ -2470,7 +2506,7 @@ public class DijkstraMap {
             tech.aoe.setCache(cache);
         double[][] resMap = new double[width][height];
         double[][] worthMap = new double[width][height];
-        double[][] userDistanceMap = new double[width][height];
+        double[][] userDistanceMap;
         double paidLength = 0.0;
 
         LinkedHashSet<Coord> friends;
@@ -2483,9 +2519,9 @@ public class DijkstraMap {
             }
         }
 
-        path = new ArrayList<>();
+        path.clear();
         if (targets == null || targets.size() == 0)
-            return path;
+            return new ArrayList<>(path);
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -2508,7 +2544,7 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         Measurement mess = measurement;
         /*
@@ -2581,7 +2617,7 @@ public class DijkstraMap {
         Coord currentPos = Coord.get(start.x, start.y);
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2607,7 +2643,7 @@ public class DijkstraMap {
                 break;
             }
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2628,7 +2664,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
 
@@ -2652,6 +2688,9 @@ public class DijkstraMap {
      * The parameters preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
      * any subsequent calls that use the same values as the last values passed will avoid recalculating
      * unnecessary scans.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param length            the length of the path to calculate
      * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
@@ -2659,12 +2698,12 @@ public class DijkstraMap {
      * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param fearSources       a vararg or array of Coord positions to run away from
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
      */
     public ArrayList<Coord> findFleePath(int length, double preferLongerPaths, Set<Coord> impassable,
                                          Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
-        path = new ArrayList<>();
+        path.clear();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -2674,8 +2713,8 @@ public class DijkstraMap {
         if (onlyPassable == null)
             onlyPassable = new LinkedHashSet<>();
         if (fearSources == null || fearSources.length < 1) {
-            path = new ArrayList<>();
-            return path;
+            path.clear();
+            return new ArrayList<>(path);
         }
         if (cachedSize == 1 && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable) &&
                 Arrays.equals(fearSources, cachedFearSources)) {
@@ -2690,7 +2729,7 @@ public class DijkstraMap {
                 setGoal(goal.x, goal.y);
             }
             if (goals.isEmpty())
-                return path;
+                return new ArrayList<>(path);
 
             scan(impassable2);
 
@@ -2705,7 +2744,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2722,7 +2761,7 @@ public class DijkstraMap {
                 }
             }
             if (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2746,7 +2785,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -2761,6 +2800,9 @@ public class DijkstraMap {
      * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
      * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
      * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param size         the side length of the creature trying to find a path
      * @param length       the length of the path to calculate
@@ -2768,13 +2810,13 @@ public class DijkstraMap {
      * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets      a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
      */
 
     public ArrayList<Coord> findPathLarge(int size, int length, Set<Coord> impassable,
                                           Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
-        path = new ArrayList<>();
+        path.clear();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -2789,14 +2831,14 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         scan(impassable2, size);
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2814,7 +2856,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2836,7 +2878,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -2852,6 +2894,9 @@ public class DijkstraMap {
      * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
      * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
      * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param size           the side length of the creature trying to find a path
      * @param moveLength     the length of the path to calculate
@@ -2862,7 +2907,7 @@ public class DijkstraMap {
      * @param onlyPassable   a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start          the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets        a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findAttackPathLarge(int size, int moveLength, int preferredRange, LOS los, Set<Coord> impassable,
                                                 Set<Coord> onlyPassable, Coord start, Coord... targets) {
@@ -2876,7 +2921,7 @@ public class DijkstraMap {
                 }
             }
         }
-        path = new ArrayList<>();
+        path.clear();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -2891,7 +2936,7 @@ public class DijkstraMap {
             setGoal(goal.x, goal.y);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -2929,7 +2974,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -2947,7 +2992,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -2968,7 +3013,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -2985,6 +3030,9 @@ public class DijkstraMap {
      * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
      * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
      * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param size              the side length of the creature trying to find a path
      * @param moveLength        the length of the path to calculate
@@ -2996,7 +3044,7 @@ public class DijkstraMap {
      * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param targets           a vararg or array of Coord that this will try to pathfind toward
-     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target
+     * @return an ArrayList of Coord that will contain the min-x, min-y locations of this creature as it goes toward a target. Copy of path.
      */
     public ArrayList<Coord> findAttackPathLarge(int size, int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
                                                 Set<Coord> impassable, Set<Coord> onlyPassable, Coord start, Coord... targets) {
@@ -3011,7 +3059,7 @@ public class DijkstraMap {
                 }
             }
         }
-        path = new ArrayList<>();
+        path.clear();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -3026,7 +3074,7 @@ public class DijkstraMap {
             setGoal(goal);
         }
         if (goals.isEmpty())
-            return path;
+            return new ArrayList<>(path);
 
         Measurement mess = measurement;
         if (measurement == Measurement.EUCLIDEAN) {
@@ -3064,7 +3112,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
 
@@ -3082,7 +3130,7 @@ public class DijkstraMap {
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -3105,7 +3153,7 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
@@ -3125,6 +3173,9 @@ public class DijkstraMap {
      * The parameter size refers to the side length of a square unit, such as 2 for a 2x2 unit. The
      * parameter start must refer to the minimum-x, minimum-y cell of that unit if size is &gt; 1, and
      * all positions in the returned path will refer to movement of the minimum-x, minimum-y cell.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param size              the side length of the creature trying the find a path
      * @param length            the length of the path to calculate
@@ -3133,12 +3184,12 @@ public class DijkstraMap {
      * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
      * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
      * @param fearSources       a vararg or array of Coord positions to run away from
-     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
      */
     public ArrayList<Coord> findFleePathLarge(int size, int length, double preferLongerPaths, Set<Coord> impassable,
                                               Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
-        path = new ArrayList<>();
+        path.clear();
         LinkedHashSet<Coord> impassable2;
         if (impassable == null)
             impassable2 = new LinkedHashSet<>();
@@ -3148,8 +3199,8 @@ public class DijkstraMap {
         if (onlyPassable == null)
             onlyPassable = new LinkedHashSet<>();
         if (fearSources == null || fearSources.length < 1) {
-            path = new ArrayList<>();
-            return path;
+            path.clear();
+            return new ArrayList<>(path);
         }
         if (size == cachedSize && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable)
                 && Arrays.equals(fearSources, cachedFearSources)) {
@@ -3164,7 +3215,7 @@ public class DijkstraMap {
                 setGoal(goal.x, goal.y);
             }
             if (goals.isEmpty())
-                return path;
+                return new ArrayList<>(path);
 
             scan(impassable2, size);
 
@@ -3179,7 +3230,7 @@ public class DijkstraMap {
         double paidLength = 0.0;
         while (true) {
             if (frustration > 500) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
 
@@ -3197,7 +3248,7 @@ public class DijkstraMap {
                 }
             }
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -3222,25 +3273,28 @@ public class DijkstraMap {
         }
         frustration = 0;
         goals.clear();
-        return path;
+        return new ArrayList<>(path);
     }
 
 
     /**
      * Intended primarily for internal use. Needs scan() to already be called and at least one goal to already be set,
      * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.
+     * <br>
+     * This caches its result in a member field, path, which can be fetched after finding a path and will change with
+     * each call to a pathfinding method.
      *
      * @param target the target cell
-     * @return an ArrayList of Coord that make up the best path.
+     * @return an ArrayList of Coord that make up the best path. Copy of path.
      */
     public ArrayList<Coord> findPathPreScanned(Coord target) {
         if (!initialized || goals == null || goals.isEmpty()) return null;
         RNG rng2 = new StatefulRNG(new LightRNG(0xf00d));
-        path = new ArrayList<>();
+        path.clear();
         Coord currentPos = target;
         while (true) {
             if (frustration > 2000) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
@@ -3258,7 +3312,7 @@ public class DijkstraMap {
             }
 
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
-                path = new ArrayList<>();
+                path.clear();
                 break;
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
@@ -3269,7 +3323,7 @@ public class DijkstraMap {
                 break;
         }
         frustration = 0;
-        return path;
+        return new ArrayList<>(path);
     }
 
     /**
