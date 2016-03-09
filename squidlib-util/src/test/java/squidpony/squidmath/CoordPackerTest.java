@@ -241,8 +241,8 @@ public class CoordPackerTest {
         //printPacked(flooded, 64, 64);
         assertArrayEquals(flooded, manual);
         flooded = spill(dataCross, packOne(27, 4), 30, srng);
-        printPacked(flooded, 64, 64);
-        System.out.println(count(flooded));
+        //printPacked(flooded, 64, 64);
+        //System.out.println(count(flooded));
 /*
         flooded = spill(dataCross, packOne(27, 4), count(dataCross), srng);
         printPacked(flooded, 64, 64);

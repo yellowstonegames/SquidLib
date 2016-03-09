@@ -126,6 +126,12 @@
 							<includePom>true</includePom>
 						</configuration>
 					</execution>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
 				</executions>
 				<configuration>
 					<includePom>true</includePom>
@@ -146,9 +152,15 @@
 						<configuration>
 						</configuration>
 					</execution>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
 				</executions>
 				<configuration>
-					<debug>true</debug>
+					<debug>false</debug>
 					<minmemory>256m</minmemory>
 					<maxmemory>1024m</maxmemory>
 					<quiet>true</quiet>
@@ -175,7 +187,8 @@
 
 	<reporting>
 		<plugins>
-			<plugin>
+			<!--
+            <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
 				<version>${maven.jxr.version}</version>
@@ -190,11 +203,13 @@
 					<targetJdk>${jdk.version}</targetJdk>
 				</configuration>
 			</plugin>
+            -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
 				<version>${findbugs.version}</version>
 			</plugin>
+			<!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
@@ -207,6 +222,7 @@
 					<check/>
 				</configuration>
 			</plugin>
+            -->
 		</plugins>
 	</reporting>
 
