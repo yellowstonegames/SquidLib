@@ -5,23 +5,27 @@ import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 import static squidpony.squidmath.CoordPacker.*;
 
 /**
- * The primary way to create a more-complete dungeon, layering different effects and modifications on top of
- * a DungeonBoneGen's dungeon or another dungeon without such effects. Also ensures only connected regions of the map
- * are used by filling unreachable areas with walls, and can find far-apart staircase positions if generate() is used or
- * can keep existing staircases in a map if generateRespectingStairs() is used.
+ * A good way to create a more-complete dungeon, layering different effects and modifications on top of a dungeon
+ * produced by DungeonBoneGen or another dungeon without such effects. Unlike DungeonGenerator, this class uses
+ * environment information for the dungeons it is given (or quickly generates such information if using DungeonBoneGen),
+ * and uses that information to only place effects like grass or water where you specify, like "only in caves", or
+ * "doors should never be in caves". Ensures only connected regions of the map are used by filling unreachable areas
+ * with walls, and can find far-apart staircase positions if generate() is used or can keep existing staircases in a map
+ * if generateRespectingStairs() is used.
  * <br>
  * The main technique for using this is simple: Construct a DungeonGenerator, usually with the desired width and height,
  * then call any feature adding methods that you want in the dungeon, like addWater(), addTraps, addGrass(), or
- * addDoors(). Some of these take different parameters, like addDoors() which need to know if it should check openings
- * that are two cells wide to add a door and a wall to, or whether it should only add doors to single-cell openings.
+ * addDoors(). All of these methods except addDoors() take an int argument that corresponds to a constant in this class,
+ * CAVE, CORRIDOR, or ROOM, or ALL, and they will only cause the requested feature to show up in that environment. Some
+ * of these take different parameters, like addDoors() which needs to know if it should check openings that are two
+ * cells wide to add a door and a wall to, or whether it should only add doors to single-cell openings. In the case of
+ * addDoors(), it doesn't take an environment argument since doors almost always are between environments (rooms and
+ * corridors), so placing them only within one or the other doesn't make sense.
  * Then call generate() to get a char[][] with the desired dungeon map, using a fixed repertoire of chars to represent
  * the different features. After calling generate(), you can safely get the values from the stairsUp and stairsDown
  * fields, which are Coords that should be a long distance from each other but connected in the dungeon. You may want
@@ -29,26 +33,13 @@ import static squidpony.squidmath.CoordPacker.*;
  * field of this class, utility, is a convenient way of accessing the non-static methods in that class, such as
  * randomFloor(), without needing to create another DungeonUtility (this class creates one, so you don't have to).
  * <br>
- * Previews for the kinds of dungeon this generates, given a certain argument to generate():
- * <ul>
- *     <li>Using TilesetType.DEFAULT_DUNGEON (text, click "Raw", may need to zoom out): https://gist.github.com/tommyettinger/a3bd413b903f2e103541</li>
- *     <li>Using TilesetType.DEFAULT_DUNGEON (graphical, scroll down and to the right): http://tommyettinger.github.io/home/PixVoxel/dungeon/dungeon.html</li>
- *     <li>Using SerpentMapGenerator.generate()  (text, click "Raw", may need to zoom out): https://gist.github.com/tommyettinger/93b47048fc8a209a9712</li>
- * </ul>
- * <br>
- * As of March 6, 2016, the algorithm this uses to place water and grass was swapped for a more precise version. You no
- * longer need to give this 150% in addWater or addGrass to effectively produce 100% water or grass, and this should be
- * no more than 1.1% different from the percentage you request for any effects. If you need to reproduce dungeons with
- * the same seed and get the same (imprecise) results as before this change, you can use a subclass of this,
- * LegacyDungeonGenerator, which needs the same "150% means 100%, 75% means 50%" adjustments as before. The API should
- * be identical, and both will return DungeonGenerator values when they return something for chaining.
- * @see squidpony.squidgrid.mapping.DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
- * @see squidpony.squidgrid.mapping.LegacyDungeonGenerator for the less-precise behavior; at least it's consistent
+ * @see DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
+ * @see DungeonGenerator for a slightly simpler alternative that does not recognize different sections of dungeon
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
-public class DungeonGenerator {
+public class SectionDungeonGenerator {
 
     /**
      * The effects that can be applied to this dungeon. More may be added in future releases.
@@ -59,10 +50,6 @@ public class DungeonGenerator {
          * Water, represented by '~'
          */
         WATER,
-        /**
-         * Doors, represented by '+' for east-to-west connections or '/' for north-to-south ones.
-         */
-        DOORS,
         /**
          * Traps, represented by '^'
          */
@@ -82,10 +69,34 @@ public class DungeonGenerator {
     }
 
     /**
+     * Constant for features being added to all environment types.
+     */
+    public static final int ALL = 0,
+    /**
+     * Constant for features being added only to rooms.
+     */
+    ROOM = 1,
+    /**
+     * Constant for features being added only to corridors.
+     */
+    CORRIDOR = 2,
+    /**
+     * Constant for features being added only to caves.
+     */
+    CAVE = 3;
+
+    /**
      * The effects that will be applied when generate is called. Strongly prefer using addWater, addDoors, addTraps,
      * and addGrass.
      */
-    public EnumMap<FillEffect, Integer> fx;
+    public EnumMap<FillEffect, Integer> roomFX, corridorFX, caveFX;
+
+    /**
+     * Percentage of viable positions to fill with doors, represented by '+' for east-to-west connections or '/' for
+     * north-to-south ones; this number will be negative if filling two-cell wide positions but will be made positive
+     * when needed.
+     */
+    public int doorFX;
     protected DungeonBoneGen gen;
     public DungeonUtility utility;
     protected int height, width;
@@ -93,6 +104,7 @@ public class DungeonGenerator {
     public StatefulRNG rng;
     protected long rebuildSeed;
     protected boolean seedFixed = false;
+    protected int environmentType = 1;
 
     protected char[][] dungeon = null;
 
@@ -150,7 +162,7 @@ public class DungeonGenerator {
     /**
      * Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.
      */
-    public DungeonGenerator()
+    public SectionDungeonGenerator()
     {
         rng = new StatefulRNG();
         gen = new DungeonBoneGen(rng);
@@ -158,7 +170,9 @@ public class DungeonGenerator {
         rebuildSeed = rng.getState();
         height = 40;
         width = 40;
-        fx = new EnumMap<>(FillEffect.class);
+        roomFX = new EnumMap<>(FillEffect.class);
+        corridorFX = new EnumMap<>(FillEffect.class);
+        caveFX = new EnumMap<>(FillEffect.class);
     }
 
     /**
@@ -167,7 +181,7 @@ public class DungeonGenerator {
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      */
-    public DungeonGenerator(int width, int height)
+    public SectionDungeonGenerator(int width, int height)
     {
     	this(width, height, new RNG(new LightRNG()));
     }
@@ -179,7 +193,7 @@ public class DungeonGenerator {
      * @param rng The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
      *            but if it is not a StatefulRNG, a new StatefulRNG will be used, randomly seeded by this parameter
      */
-    public DungeonGenerator(int width, int height, RNG rng)
+    public SectionDungeonGenerator(int width, int height, RNG rng)
     {
         this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());
         gen = new DungeonBoneGen(this.rng);
@@ -187,14 +201,16 @@ public class DungeonGenerator {
         rebuildSeed = this.rng.getState();
         this.height = height;
         this.width = width;
-        fx = new EnumMap<>(FillEffect.class);
+        roomFX = new EnumMap<>(FillEffect.class);
+        corridorFX = new EnumMap<>(FillEffect.class);
+        caveFX = new EnumMap<>(FillEffect.class);
     }
 
     /**
      * Copies all fields from copying and makes a new DungeonGenerator.
      * @param copying the DungeonGenerator to copy
      */
-    public DungeonGenerator(DungeonGenerator copying)
+    public SectionDungeonGenerator(SectionDungeonGenerator copying)
     {
         rng = new StatefulRNG(copying.rng.getState());
         gen = new DungeonBoneGen(rng);
@@ -202,7 +218,9 @@ public class DungeonGenerator {
         rebuildSeed = rng.getState();
         height = copying.height;
         width = copying.width;
-        fx = new EnumMap<>(copying.fx);
+        roomFX = new EnumMap<>(copying.roomFX);
+        corridorFX = new EnumMap<>(copying.corridorFX);
+        caveFX = new EnumMap<>(copying.caveFX);
         dungeon = copying.dungeon;
     }
 
@@ -213,15 +231,42 @@ public class DungeonGenerator {
      * percentage, unless the pools encounter too much tight space. If this DungeonGenerator previously had addWater
      * called, the latest call will take precedence. No islands will be placed with this variant, but the edge of the
      * water will be shallow, represented by ','.
+     * @param env the environment to apply this to
      * @param percentage the percentage of floor cells to fill with water
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addWater(int percentage)
+    public SectionDungeonGenerator addWater(int env, int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);
-        fx.put(FillEffect.WATER, percentage);
+        switch (env)
+        {
+            case ROOM:
+                if(roomFX.containsKey(FillEffect.WATER)) roomFX.remove(FillEffect.WATER);
+                roomFX.put(FillEffect.WATER, percentage);
+                break;
+            case CORRIDOR:
+                if(corridorFX.containsKey(FillEffect.WATER)) corridorFX.remove(FillEffect.WATER);
+                corridorFX.put(FillEffect.WATER, percentage);
+                break;
+            case CAVE:
+                if(caveFX.containsKey(FillEffect.WATER)) caveFX.remove(FillEffect.WATER);
+                caveFX.put(FillEffect.WATER, percentage);
+                break;
+            default:
+                if(roomFX.containsKey(FillEffect.WATER))
+                    roomFX.put(FillEffect.WATER, Math.min(100, roomFX.get(FillEffect.WATER) + percentage));
+                else
+                    roomFX.put(FillEffect.WATER, percentage);
+                if(corridorFX.containsKey(FillEffect.WATER))
+                    corridorFX.put(FillEffect.WATER, Math.min(100, corridorFX.get(FillEffect.WATER) + percentage));
+                else
+                    corridorFX.put(FillEffect.WATER, percentage);
+                if(caveFX.containsKey(FillEffect.WATER))
+                    caveFX.put(FillEffect.WATER, Math.min(100, caveFX.get(FillEffect.WATER) + percentage));
+                else
+                    caveFX.put(FillEffect.WATER, percentage);
+        }
         return this;
     }
     /**
@@ -231,51 +276,133 @@ public class DungeonGenerator {
      * unless the pools encounter too much tight space. If this DungeonGenerator previously had addWater called, the
      * latest call will take precedence. If islandSpacing is greater than 1, then this will place islands of floor, '.',
      * surrounded by shallow water, ',', at about the specified distance with Euclidean measurement.
+     * @param env the environment to apply this to
      * @param percentage the percentage of floor cells to fill with water
      * @param islandSpacing if greater than 1, islands will be placed randomly this many cells apart.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addWater(int percentage, int islandSpacing)
+    public SectionDungeonGenerator addWater(int env, int percentage, int islandSpacing)
     {
+        addWater(env, percentage);
+
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.WATER)) fx.remove(FillEffect.WATER);
-        fx.put(FillEffect.WATER, percentage);
-        if(fx.containsKey(FillEffect.ISLANDS)) fx.remove(FillEffect.ISLANDS);
-        if(islandSpacing > 1)
-            fx.put(FillEffect.ISLANDS, islandSpacing);
+        switch (env) {
+            case ROOM:
+                if (roomFX.containsKey(FillEffect.ISLANDS)) roomFX.remove(FillEffect.ISLANDS);
+                if(islandSpacing > 1)
+                    roomFX.put(FillEffect.ISLANDS, percentage);
+                break;
+            case CORRIDOR:
+                if (corridorFX.containsKey(FillEffect.ISLANDS)) corridorFX.remove(FillEffect.ISLANDS);
+                if(islandSpacing > 1)
+                    corridorFX.put(FillEffect.ISLANDS, percentage);
+                break;
+            case CAVE:
+                if (caveFX.containsKey(FillEffect.ISLANDS)) caveFX.remove(FillEffect.ISLANDS);
+                if(islandSpacing > 1)
+                    caveFX.put(FillEffect.ISLANDS, percentage);
+                break;
+            default:
+                if (roomFX.containsKey(FillEffect.ISLANDS)) roomFX.remove(FillEffect.ISLANDS);
+                if(islandSpacing > 1)
+                    roomFX.put(FillEffect.ISLANDS, percentage);
+                if (corridorFX.containsKey(FillEffect.ISLANDS)) corridorFX.remove(FillEffect.ISLANDS);
+                if(islandSpacing > 1)
+                    corridorFX.put(FillEffect.ISLANDS, percentage);
+                if (caveFX.containsKey(FillEffect.ISLANDS)) caveFX.remove(FillEffect.ISLANDS);
+                if(islandSpacing > 1)
+                    caveFX.put(FillEffect.ISLANDS, percentage);
+        }
+
         return this;
     }
 
     /**
      * Turns the majority of the given percentage of floor cells into grass cells, represented by '"'. Grass will be
      * clustered into a random number of patches, with more appearing if needed to fill the percentage. Each area will
-     * have randomized volume that should fill or get very close to filling the requested percentage,
+     * have randomized volume that should fill or get very close to filling (two thirds of) the requested percentage,
      * unless the patches encounter too much tight space. If this DungeonGenerator previously had addGrass called, the
      * latest call will take precedence.
-     * @param percentage the percentage of floor cells to fill with grass
+     * @param env the environment to apply this to
+     * @param percentage the percentage of floor cells to fill with grass; this can vary quite a lot. It may be
+     *                   difficult to fill very high (over 66%) percentages of map with grass, though you can do this by
+     *                   giving a percentage of between 100 and 150.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addGrass(int percentage)
+    public SectionDungeonGenerator addGrass(int env, int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.GRASS)) fx.remove(FillEffect.GRASS);
-        fx.put(FillEffect.GRASS, percentage);
+        switch (env)
+        {
+            case ROOM:
+                if(roomFX.containsKey(FillEffect.GRASS)) roomFX.remove(FillEffect.GRASS);
+                roomFX.put(FillEffect.GRASS, percentage);
+                break;
+            case CORRIDOR:
+                if(corridorFX.containsKey(FillEffect.GRASS)) corridorFX.remove(FillEffect.GRASS);
+                corridorFX.put(FillEffect.GRASS, percentage);
+                break;
+            case CAVE:
+                if(caveFX.containsKey(FillEffect.GRASS)) caveFX.remove(FillEffect.GRASS);
+                caveFX.put(FillEffect.GRASS, percentage);
+                break;
+            default:
+                if(roomFX.containsKey(FillEffect.GRASS))
+                    roomFX.put(FillEffect.GRASS, Math.min(100, roomFX.get(FillEffect.GRASS) + percentage));
+                else
+                    roomFX.put(FillEffect.GRASS, percentage);
+                if(corridorFX.containsKey(FillEffect.GRASS))
+                    corridorFX.put(FillEffect.GRASS, Math.min(100, corridorFX.get(FillEffect.GRASS) + percentage));
+                else
+                    corridorFX.put(FillEffect.GRASS, percentage);
+                if(caveFX.containsKey(FillEffect.GRASS))
+                    caveFX.put(FillEffect.GRASS, Math.min(100, caveFX.get(FillEffect.GRASS) + percentage));
+                else
+                    caveFX.put(FillEffect.GRASS, percentage);
+        }
         return this;
     }
     /**
      * Turns the given percentage of floor cells not already adjacent to walls into wall cells, represented by '#'.
      * If this DungeonGenerator previously had addBoulders called, the latest call will take precedence.
+     * @param env the environment to apply this to
      * @param percentage the percentage of floor cells not adjacent to walls to fill with boulders.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addBoulders(int percentage)
+    public SectionDungeonGenerator addBoulders(int env, int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.BOULDERS)) fx.remove(FillEffect.BOULDERS);
-        fx.put(FillEffect.BOULDERS, percentage);
+        switch (env)
+        {
+            case ROOM:
+                if(roomFX.containsKey(FillEffect.BOULDERS)) roomFX.remove(FillEffect.BOULDERS);
+                roomFX.put(FillEffect.BOULDERS, percentage);
+                break;
+            case CORRIDOR:
+                if(corridorFX.containsKey(FillEffect.BOULDERS)) corridorFX.remove(FillEffect.BOULDERS);
+                corridorFX.put(FillEffect.BOULDERS, percentage);
+                break;
+            case CAVE:
+                if(caveFX.containsKey(FillEffect.BOULDERS)) caveFX.remove(FillEffect.BOULDERS);
+                caveFX.put(FillEffect.BOULDERS, percentage);
+                break;
+            default:
+                if(roomFX.containsKey(FillEffect.BOULDERS))
+                    roomFX.put(FillEffect.BOULDERS, Math.min(100, roomFX.get(FillEffect.BOULDERS) + percentage));
+                else
+                    roomFX.put(FillEffect.BOULDERS, percentage);
+                if(corridorFX.containsKey(FillEffect.BOULDERS))
+                    corridorFX.put(FillEffect.BOULDERS, Math.min(100, corridorFX.get(FillEffect.BOULDERS) + percentage));
+                else
+                    corridorFX.put(FillEffect.BOULDERS, percentage);
+                if(caveFX.containsKey(FillEffect.BOULDERS))
+                    caveFX.put(FillEffect.BOULDERS, Math.min(100, caveFX.get(FillEffect.BOULDERS) + percentage));
+                else
+                    caveFX.put(FillEffect.BOULDERS, percentage);
+        }
         return this;
     }
     /**
@@ -289,13 +416,12 @@ public class DungeonGenerator {
      *                    one-cell-wide openings should receive doors. Usually, this should be true.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addDoors(int percentage, boolean doubleDoors)
+    public SectionDungeonGenerator addDoors(int percentage, boolean doubleDoors)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
         if(doubleDoors) percentage *= -1;
-        if(fx.containsKey(FillEffect.DOORS)) fx.remove(FillEffect.DOORS);
-        fx.put(FillEffect.DOORS, percentage);
+        doorFX = percentage;
         return this;
     }
 
@@ -303,16 +429,43 @@ public class DungeonGenerator {
      * Turns the given percentage of open area floor cells into trap cells, represented by '^'. Corridors that have no
      * possible way to move around a trap will not receive traps, ever. If this DungeonGenerator previously had
      * addTraps called, the latest call will take precedence.
+     * @param env the environment to apply this to
      * @param percentage the percentage of valid cells to fill with traps; should be no higher than 5 unless
      *                   the dungeon floor is meant to be a kill screen or minefield.
      * @return this DungeonGenerator; can be chained
      */
-    public DungeonGenerator addTraps(int percentage)
+    public SectionDungeonGenerator addTraps(int env, int percentage)
     {
         if(percentage < 0) percentage = 0;
         if(percentage > 100) percentage = 100;
-        if(fx.containsKey(FillEffect.TRAPS)) fx.remove(FillEffect.TRAPS);
-        fx.put(FillEffect.TRAPS, percentage);
+        switch (env)
+        {
+            case ROOM:
+                if(roomFX.containsKey(FillEffect.TRAPS)) roomFX.remove(FillEffect.TRAPS);
+                roomFX.put(FillEffect.TRAPS, percentage);
+                break;
+            case CORRIDOR:
+                if(corridorFX.containsKey(FillEffect.TRAPS)) corridorFX.remove(FillEffect.TRAPS);
+                corridorFX.put(FillEffect.TRAPS, percentage);
+                break;
+            case CAVE:
+                if(caveFX.containsKey(FillEffect.TRAPS)) caveFX.remove(FillEffect.TRAPS);
+                caveFX.put(FillEffect.TRAPS, percentage);
+                break;
+            default:
+                if(roomFX.containsKey(FillEffect.TRAPS))
+                    roomFX.put(FillEffect.TRAPS, Math.min(100, roomFX.get(FillEffect.TRAPS) + percentage));
+                else
+                    roomFX.put(FillEffect.TRAPS, percentage);
+                if(corridorFX.containsKey(FillEffect.TRAPS))
+                    corridorFX.put(FillEffect.TRAPS, Math.min(100, corridorFX.get(FillEffect.TRAPS) + percentage));
+                else
+                    corridorFX.put(FillEffect.TRAPS, percentage);
+                if(caveFX.containsKey(FillEffect.TRAPS))
+                    caveFX.put(FillEffect.TRAPS, Math.min(100, caveFX.get(FillEffect.TRAPS) + percentage));
+                else
+                    caveFX.put(FillEffect.TRAPS, percentage);
+        }
         return this;
     }
 
@@ -320,9 +473,11 @@ public class DungeonGenerator {
      * Removes any door, water, or trap insertion effects that this DungeonGenerator would put in future dungeons.
      * @return this DungeonGenerator, with all effects removed. Can be chained.
      */
-    public DungeonGenerator clearEffects()
+    public SectionDungeonGenerator clearEffects()
     {
-        fx.clear();
+        roomFX.clear();
+        corridorFX.clear();
+        caveFX.clear();
         return this;
     }
 
@@ -351,8 +506,30 @@ public class DungeonGenerator {
 
         return coll;
     }
+    protected LinkedHashSet<Coord> removeNearby(LinkedHashSet<Coord> coll, char[][] disallowed)
+    {
+        if(coll == null || disallowed == null || disallowed.length == 0 || disallowed[0].length == 0)
+            return new LinkedHashSet<>();
+        LinkedHashSet<Coord> next = new LinkedHashSet<>(coll.size());
+        int width = disallowed.length, height = disallowed[0].length;
+        COORD_WISE:
+        for(Coord c : coll)
+        {
+            for (int x = Math.max(0, c.x - 1); x <= Math.min(width - 1, c.x + 1); x++) {
 
-    protected LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map)
+                for (int y = Math.max(0, c.y - 1); y <= Math.min(height - 1, c.y + 1); y++) {
+                    if(disallowed[x][y] != '#')
+                        continue COORD_WISE;
+                }
+            }
+            next.add(c);
+        }
+
+        return next;
+    }
+
+
+    protected LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map, char[][] allCaves)
     {
         LinkedHashSet<Coord> doors = new LinkedHashSet<>();
         for(int x = 1; x < map.length - 1; x++) {
@@ -401,8 +578,7 @@ public class DungeonGenerator {
             }
         }
 
-
-        return doors;
+        return removeNearby(doors, allCaves);
     }
 
     /**
@@ -425,36 +601,17 @@ public class DungeonGenerator {
      * provide vertical passage. Use the addDoors, addWater, addGrass, and addTraps methods of this class to request
      * these in the generated map.
      * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
-     * @see squidpony.squidgrid.mapping.styled.TilesetType
+     * @see TilesetType
      * @param kind a TilesetType enum value, such as TilesetType.DEFAULT_DUNGEON
      * @return a char[][] dungeon
      */
     public char[][] generate(TilesetType kind)
     {
-        seedFixed = true;
         rebuildSeed = rng.getState();
-        return generate(gen.generate(kind, width, height));
-    }
+        environmentType = kind.environment();
+        char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
 
-    /**
-     * Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated.
-     * Typically, you want to call generate with a TilesetType or no argument for the easiest generation; this method
-     * is meant for adding features like water and doors to existing simple maps.
-     * This uses '#' for walls, '.' for floors, '~' for deep water, ',' for shallow water, '^' for traps, '+' for doors
-     * that provide horizontal passage, and '/' for doors that provide vertical passage.
-     * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
-     * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
-     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors
-     * @return a char[][] dungeon
-     */
-    public char[][] generate(char[][] baseDungeon)
-    {
-        if(!seedFixed)
-        {
-            rebuildSeed = rng.getState();
-        }
         seedFixed = false;
-        char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {
@@ -477,29 +634,91 @@ public class DungeonGenerator {
         }
         stairsDown = singleRandom(pack(dijkstra.gradientMap, maxDijkstra * 0.7,
                 DijkstraMap.FLOOR), rng);
-
-        return innerGenerate(map);
+        RoomFinder rf = new RoomFinder(map, environmentType);
+        return innerGenerate(map, rf);
     }
 
     /**
-     * Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated, and that
-     * already has staircases represented by greater than and less than signs.
+     * Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated and an
+     * environment as an int[][], which can often be obtained from MixedGenerator or classes that use it, like
+     * SerpentMapGenerator, with their getEnvironment method.
      * Typically, you want to call generate with a TilesetType or no argument for the easiest generation; this method
-     * is meant for adding features like water and doors to existing simple maps.
+     * is meant for adding features like water and doors to existing maps while avoiding placing incongruous features in
+     * areas where they don't fit, like a door in a cave or moss in a room.
      * This uses '#' for walls, '.' for floors, '~' for deep water, ',' for shallow water, '^' for traps, '+' for doors
      * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
-     * Also sets the fields stairsUp and stairsDown to null, and expects stairs to be already handled.
-     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors, with stairs already in
+     * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
+     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors
+     * @param environment stores whether a cell is room, corridor, or cave; getEnvironment() typically gives this
      * @return a char[][] dungeon
      */
-    public char[][] generateRespectingStairs(char[][] baseDungeon) {
+    public char[][] generate(char[][] baseDungeon, int[][] environment)
+    {
         if(!seedFixed)
         {
             rebuildSeed = rng.getState();
         }
         seedFixed = false;
         char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
+        int[][] env2 = new int[width][height];
+        for (int x = 0; x < width; x++) {
+            System.arraycopy(environment[x], 0, env2[x], 0, height);
+        }
+
+        DijkstraMap dijkstra = new DijkstraMap(map);
+        int frustrated = 0;
+        do {
+            dijkstra.clearGoals();
+            stairsUp = utility.randomFloor(map);
+            dijkstra.setGoal(stairsUp);
+            dijkstra.scan(null);
+            frustrated++;
+        }while (dijkstra.getMappedCount() < width + height && frustrated < 15);
+        double maxDijkstra = 0.0;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if(dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
+                    map[i][j] = '#';
+                    env2[i][j] = MixedGenerator.UNTOUCHED;
+                }
+                else if(dijkstra.gradientMap[i][j] > maxDijkstra) {
+                    maxDijkstra = dijkstra.gradientMap[i][j];
+                }
+            }
+        }
+        stairsDown = singleRandom(pack(dijkstra.gradientMap, maxDijkstra * 0.7,
+                DijkstraMap.FLOOR), rng);
+        RoomFinder rf = new RoomFinder(map, env2);
+        return innerGenerate(map, rf);
+    }
+
+    /**
+     * Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated, with
+     * staircases represented by greater than and less than signs, and an environment as an int[][], which can often be
+     * obtained from MixedGenerator or classes that use it, like SerpentMapGenerator, with their getEnvironment method.
+     * Typically, you want to call generate with a TilesetType or no argument for the easiest generation; this method
+     * is meant for adding features like water and doors to existing maps while avoiding placing incongruous features in
+     * areas where they don't fit, like a door in a cave or moss in a room.
+     * This uses '#' for walls, '.' for floors, '~' for deep water, ',' for shallow water, '^' for traps, '+' for doors
+     * that provide horizontal passage, and '/' for doors that provide vertical passage.
+     * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
+     * Also sets the fields stairsUp and stairsDown to null, and expects stairs to be already handled.
+     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors, with stairs already in
+     * @param environment stores whether a cell is room, corridor, or cave; getEnvironment() typically gives this
+     * @return a char[][] dungeon
+     */
+    public char[][] generateRespectingStairs(char[][] baseDungeon, int[][] environment) {
+        if(!seedFixed)
+        {
+            rebuildSeed = rng.getState();
+        }
+        seedFixed = false;
+        char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
+        int[][] env2 = new int[width][height];
+        for (int x = 0; x < width; x++) {
+            System.arraycopy(environment[x], 0, env2[x], 0, height);
+        }
         DijkstraMap dijkstra = new DijkstraMap(map);
         stairsUp = null;
         stairsDown = null;
@@ -514,21 +733,98 @@ public class DungeonGenerator {
             for (int j = 0; j < height; j++) {
                 if (dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
+                    env2[i][j] = MixedGenerator.UNTOUCHED;
                 }
             }
         }
-        return innerGenerate(map);
+        RoomFinder rf = new RoomFinder(map, env2);
+        return innerGenerate(map, rf);
     }
 
 
 
+    private char[][] innerGenerate(char[][] map, RoomFinder rf) {
+        char[][] level = new char[width][height];
+        for (int x = 0; x < width; x++) {
+            Arrays.fill(level[x], '#');
+        }
+        char[][] roomMap = innerGenerate(RoomFinder.merge(rf.findRooms()), roomFX),
+                corridorMap = innerGenerate(RoomFinder.merge(rf.findCorridors()), corridorFX),
+                allCaves = RoomFinder.merge(rf.findCaves()),
+                caveMap = innerGenerate(allCaves, caveFX),
+                doorMap = makeDoors(rf.findRooms(), rf.findCorridors(), allCaves);
 
-    private char[][] innerGenerate(char[][] map)
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(doorMap[x][y] == '+' || doorMap[x][y] == '/')
+                    level[x][y] = doorMap[x][y];
+                else if(roomMap[x][y] != '#')
+                    level[x][y] = roomMap[x][y];
+                else if(corridorMap[x][y] != '#')
+                    level[x][y] = corridorMap[x][y];
+                else if(caveMap[x][y] != '#')
+                    level[x][y] = caveMap[x][y];
+            }
+        }
+        dungeon = level;
+        return level;
+
+    }
+    private char[][] makeDoors(ArrayList<char[][]> rooms, ArrayList<char[][]> corridors, char[][] allCaves)
     {
-        LinkedHashSet<Coord> doorways;
+        char[][] map = new char[width][height];
+        for (int x = 0; x < width; x++) {
+            Arrays.fill(map[x], '#');
+        }
+        if(doorFX == 0 || (rooms.isEmpty() && corridors.isEmpty()))
+            return map;
+        boolean doubleDoors = false;
+        int doorFill = doorFX;
+        if(doorFill < 0)
+        {
+            doubleDoors = true;
+            doorFill *= -1;
+        }
+        ArrayList<char[][]> fused = new ArrayList<>(rooms.size() + corridors.size());
+        fused.addAll(rooms);
+        fused.addAll(corridors);
+
+        map = RoomFinder.merge(fused);
+
+        LinkedHashSet<Coord> doorways = viableDoorways(doubleDoors, map, allCaves);
+
+        int total = doorways.size() * doorFill / 100;
+
+        BigLoop:
+        for(int i = 0; i < total; i++) {
+            Coord entry = rng.getRandomElement(doorways);
+            if (map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '>')
+                continue;
+            if (map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#') {
+                map[entry.x][entry.y] = '+';
+            } else {
+                map[entry.x][entry.y] = '/';
+            }
+            Coord[] adj = new Coord[]{Coord.get(entry.x + 1, entry.y), Coord.get(entry.x - 1, entry.y),
+                    Coord.get(entry.x, entry.y + 1), Coord.get(entry.x, entry.y - 1)};
+            for (Coord near : adj) {
+                if (doorways.contains(near)) {
+                    map[near.x][near.y] = '#';
+                    doorways.remove(near);
+                    i++;
+                    doorways.remove(entry);
+                    continue BigLoop;
+                }
+            }
+            doorways.remove(entry);
+        }
+        return map;
+
+    }
+    private char[][] innerGenerate(char[][] map, EnumMap<FillEffect, Integer> fx)
+    {
         LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
         Coord temp;
-        boolean doubleDoors = false;
         int floorCount = DungeonUtility.countCells(map, '.'),
                 doorFill = 0,
                 waterFill = 0,
@@ -536,15 +832,7 @@ public class DungeonGenerator {
                 trapFill = 0,
                 boulderFill = 0,
                 islandSpacing = 0;
-        if(fx.containsKey(FillEffect.DOORS))
-        {
-            doorFill = fx.get(FillEffect.DOORS);
-            if(doorFill < 0)
-            {
-                doubleDoors = true;
-                doorFill *= -1;
-            }
-        }
+
         if(fx.containsKey(FillEffect.GRASS)) {
             grassFill = fx.get(FillEffect.GRASS);
         }
@@ -560,43 +848,6 @@ public class DungeonGenerator {
         if(fx.containsKey(FillEffect.TRAPS)) {
             trapFill = fx.get(FillEffect.TRAPS);
         }
-
-        doorways = viableDoorways(doubleDoors, map);
-
-        LinkedHashSet<Coord> obstacles = new LinkedHashSet<>(doorways.size() * doorFill / 100);
-        if(doorFill > 0)
-        {
-            int total = doorways.size() * doorFill / 100;
-
-            BigLoop:
-            for(int i = 0; i < total; i++)
-            {
-                Coord entry = rng.getRandomElement(doorways);
-                if(map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '>')
-                    continue;
-                if(map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#')
-                {
-                    map[entry.x][entry.y] = '+';
-                }
-                else {
-                    map[entry.x][entry.y] = '/';
-                }
-                obstacles.add(entry);
-                Coord[] adj = new Coord[]{Coord.get(entry.x + 1, entry.y), Coord.get(entry.x - 1, entry.y),
-                        Coord.get(entry.x, entry.y + 1), Coord.get(entry.x, entry.y - 1)};
-                for(Coord near : adj) {
-                    if (doorways.contains(near)) {
-                        map[near.x][near.y] = '#';
-                        obstacles.add(near);
-                        doorways.remove(near);
-                        i++;
-                        doorways.remove(entry);
-                        continue BigLoop;
-                    }
-                }
-                doorways.remove(entry);
-            }
-        }
         if (boulderFill > 0.0) {
             short[] floor = pack(map, '.');
             short[] viable = retract(floor, 1, width, height, true);
@@ -611,7 +862,7 @@ public class DungeonGenerator {
             for (int x = 1; x < map.length - 1; x++) {
                 for (int y = 1; y < map[x].length - 1; y++) {
                     temp = Coord.get(x, y);
-                    if (map[x][y] == '.' && !obstacles.contains(temp)) {
+                    if (map[x][y] == '.') {
                         int ctr = 0;
                         if (map[x + 1][y] != '#') ++ctr;
                         if (map[x - 1][y] != '#') ++ctr;
@@ -724,11 +975,9 @@ public class DungeonGenerator {
             }
         }
 
-        dungeon = map;
         return map;
 
     }
-
 
     /**
      * Gets the seed that can be used to rebuild an identical dungeon to the latest one generated (or the seed that

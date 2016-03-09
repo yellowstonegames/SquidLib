@@ -4,6 +4,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.RegionMap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static squidpony.squidmath.CoordPacker.*;
@@ -68,7 +69,7 @@ public class RoomFinder {
         }
         rooms = new RegionMap<>(32);
         corridors = new RegionMap<>(32);
-        caves = new RegionMap<>(32);
+        caves = new RegionMap<>(4);
         basic = DungeonUtility.simplifyDungeon(map);
         short[] floors = pack(basic, '.'),
                 r = flood(floors, retract(floors, 1, width, height, true), 2, false),
@@ -98,6 +99,59 @@ public class RoomFinder {
                 near.addAll(findManyPackedHilbert(doors[j], ca));
             }
             rooms.put(sep, near);
+        }
+    }
+
+    public RoomFinder(char[][] dungeon, int environmentKind)
+    {
+        if(dungeon.length <= 0)
+            return;
+        width = dungeon.length;
+        height = dungeon[0].length;
+        map = new char[width][height];
+        for (int i = 0; i < width; i++) {
+            System.arraycopy(dungeon[i], 0, map[i], 0, height);
+        }
+        rooms = new RegionMap<>(32);
+        corridors = new RegionMap<>(32);
+        caves = new RegionMap<>(4);
+        basic = DungeonUtility.simplifyDungeon(map);
+
+        if(environmentKind == MixedGenerator.ROOM_FLOOR) {
+            short[] floors = pack(basic, '.'),
+                    r = flood(floors, retract(floors, 1, width, height, true), 2, false),
+                    c = differencePacked(floors, r),
+                    d = intersectPacked(r, fringe(c, 1, width, height, false));
+            connections = allPacked(d);
+            List<short[]> rs = split(r), cs = split(c);
+
+            short[][] ra = rs.toArray(new short[rs.size()][]),
+                    ca = cs.toArray(new short[cs.size()][]);
+
+            for (short[] sep : cs) {
+                short[] someDoors = intersectPacked(r, fringe(sep, 1, width, height, false));
+                short[] doors = allPackedHilbert(someDoors);
+                List<short[]> near = new ArrayList<short[]>(4);
+                for (int j = 0; j < doors.length; j++) {
+                    near.addAll(findManyPackedHilbert(doors[j], ra));
+                }
+                corridors.put(sep, near);
+            }
+
+            for (short[] sep : rs) {
+                List<short[]> near = new ArrayList<short[]>(10);
+                short[] aroundDoors = intersectPacked(c, fringe(sep, 1, width, height, false));
+                short[] doors = allPackedHilbert(aroundDoors);
+                for (int j = 0; j < doors.length; j++) {
+                    near.addAll(findManyPackedHilbert(doors[j], ca));
+                }
+                rooms.put(sep, near);
+            }
+        }
+        else
+        {
+            caves.put(pack(basic, '.'), new ArrayList<short[]>());
+            connections = new Coord[0];
         }
     }
 
@@ -250,6 +304,28 @@ public class RoomFinder {
             rs.add(mask(map, r, '#'));
         }
         return rs;
+    }
+
+    public static char[][] merge(ArrayList<char[][]> regions)
+    {
+        if(regions == null || regions.isEmpty())
+            return null;
+        char[][] first = regions.get(0);
+        int width = first.length, height = first[0].length;
+        char[][] dungeon = new char[first.length][first[0].length];
+        for (int x = 0; x < first.length; x++) {
+            Arrays.fill(dungeon[x], '#');
+        }
+        for(char[][] region : regions)
+        {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if(region[x][y] != '#')
+                        dungeon[x][y] = region[x][y];
+                }
+            }
+        }
+        return dungeon;
     }
 
     /**
