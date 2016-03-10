@@ -816,6 +816,71 @@ public class DungeonUtility {
     }
 
     /**
+     * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
+     * animation frame if rippling water and waving grass using Perlin Noise are desired. Also allows additional chars
+     * to be treated like deep and shallow water regarding the ripple animation.
+     *
+     * @param map a char[][] that you want to be find background lightness modifiers for
+     * @param frame a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
+     *              water and grass move more
+     * @param deepLiquid a char that will be treated like deep water when animating ripples
+     * @param shallowLiquid a char that will be treated like shallow water when animating ripples
+     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
+     */
+    public static int[][] generateLightnessModifiers(char[][] map, double frame, char deepLiquid, char shallowLiquid) {
+        int width = map.length;
+        int height = map[0].length;
+        int[][] portion = new int[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = 30;
+                        break;
+                    case '.':
+                        portion[i][j] = 0;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = -10;
+                        break;
+                    case ',':
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.45));
+                        break;
+                    case '~':
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
+                        break;
+                    case '"':
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 35.0) / 4.0 - 1.5));
+                        break;
+                    case '^':
+                        portion[i][j] = 40;
+                        break;
+                    default:
+                        if(map[i][j] == deepLiquid)
+                            portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
+                        else if(map[i][j] == shallowLiquid)
+                            portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.45));
+                        else portion[i][j] = 0;
+                }
+            }
+        }
+        return portion;
+    }
+
+    /**
      * Given a char[][] for the map, produces a double[][] that can be used with FOV.calculateFOV(). It expects any
      * doors to be represented by '+' if closed or '/' if open (which can be caused by calling
      * DungeonUtility.closeDoors() ), any walls to be '#' or line drawing characters, and it doesn't care what other

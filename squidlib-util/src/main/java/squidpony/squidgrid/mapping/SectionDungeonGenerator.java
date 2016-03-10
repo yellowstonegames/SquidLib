@@ -25,14 +25,22 @@ import static squidpony.squidmath.CoordPacker.*;
  * of these take different parameters, like addDoors() which needs to know if it should check openings that are two
  * cells wide to add a door and a wall to, or whether it should only add doors to single-cell openings. In the case of
  * addDoors(), it doesn't take an environment argument since doors almost always are between environments (rooms and
- * corridors), so placing them only within one or the other doesn't make sense.
- * Then call generate() to get a char[][] with the desired dungeon map, using a fixed repertoire of chars to represent
- * the different features. After calling generate(), you can safely get the values from the stairsUp and stairsDown
- * fields, which are Coords that should be a long distance from each other but connected in the dungeon. You may want
- * to change those to staircase characters, but there's no requirement to do anything with them. The DungeonUtility
- * field of this class, utility, is a convenient way of accessing the non-static methods in that class, such as
- * randomFloor(), without needing to create another DungeonUtility (this class creates one, so you don't have to).
+ * corridors), so placing them only within one or the other doesn't make sense. This class, unlike the normal
+ * DungeonGenerator, also has an addLake() method, which, like addDoors(), doesn't take an environment parameter. It can
+ * be used to turn a large section of what would otherwise be walls into a lake (of some character for deep lake cells
+ * and some character for shallow lake cells), and corridors that cross the lake become bridges, shown as ':'. It should
+ * be noted that because the lake fills walls, it doesn't change the connectivity of the map unless you can cross the
+ * lake. Once you've added any features to the generator's effects list, call generate() to get a char[][] with the
+ * desired dungeon map, using a fixed repertoire of chars to represent the different features, with the exception of the
+ * customization that can be requested from addLake(). If you use the libGDX text-based display module, you can change
+ * what chars are shown by using addSwap() in TextCellFactory. After calling generate(), you can safely get the values
+ * from the stairsUp and stairsDown fields, which are Coords that should be a long distance from each other but
+ * connected in the dungeon. You may want to change those to staircase characters, but there's no requirement to do
+ * anything with them. The DungeonUtility field of this class, utility, is a convenient way of accessing the non-static
+ * methods in that class, such as randomFloor(), without needing to create another DungeonUtility (this class creates
+ * one, so you don't have to).
  * <br>
+ * Example map with a custom-representation lake: https://gist.github.com/tommyettinger/0055075f9de59c452d25
  * @see DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
  * @see DungeonGenerator for a slightly simpler alternative that does not recognize different sections of dungeon
  *
@@ -96,7 +104,20 @@ public class SectionDungeonGenerator {
      * north-to-south ones; this number will be negative if filling two-cell wide positions but will be made positive
      * when needed.
      */
-    public int doorFX;
+    public int doorFX = 0;
+    /**
+     * The char to use for deep lake cells.
+     */
+    public char deepLakeGlyph = '~';
+    /**
+     * The char to use for shallow lake cells.
+     */
+    public char shallowLakeGlyph = ',';
+    /**
+     * The approximate percentage of non-room, non-cave, non-edge-of-map wall cells to try to fill with lake. Corridors
+     * that are covered by a lake will become bridges, the glyph ':'.
+     */
+    public int lakeFX = 0;
     protected DungeonBoneGen gen;
     public DungeonUtility utility;
     protected int height, width;
@@ -221,6 +242,10 @@ public class SectionDungeonGenerator {
         roomFX = new EnumMap<>(copying.roomFX);
         corridorFX = new EnumMap<>(copying.corridorFX);
         caveFX = new EnumMap<>(copying.caveFX);
+        doorFX = copying.doorFX;
+        lakeFX = copying.lakeFX;
+        deepLakeGlyph = copying.deepLakeGlyph;
+        shallowLakeGlyph = copying.shallowLakeGlyph;
         dungeon = copying.dungeon;
     }
 
@@ -422,6 +447,41 @@ public class SectionDungeonGenerator {
         if(percentage > 100) percentage = 100;
         if(doubleDoors) percentage *= -1;
         doorFX = percentage;
+        return this;
+    }
+
+    /**
+     * Instructs the generator to add a lake (here, of water) into a large area that can be filled without overwriting
+     * rooms, caves, or the edge of the map; wall cells will become the deep lake glyph (here, '~'), unless they are
+     * close to an existing room or cave, in which case they become the shallow lake glyph (here, ','), and corridors
+     * that are "covered" by a lake will become bridges, the glyph ':'. If the percentage is too high (40% is probably
+     * too high to adequately fill), this will fill less than the requested percentage rather than fill multiple lakes.
+     * @param percentage The percentage of non-room, non-cave, non-edge-of-map wall cells to try to fill with lake.
+     * @return this for chaining
+     */
+    public SectionDungeonGenerator addLake(int percentage)
+    {
+        return addLake(percentage, '~', ',');
+    }
+
+    /**
+     * Instructs the generator to add a lake into a large area that can be filled without overwriting rooms, caves, or
+     * the edge of the map; wall cells will become the char deepLake, unless they are close to an existing room or cave,
+     * in which case they become the char shallowLake, and corridors that are "covered" by a lake will become bridges,
+     * the glyph ':'. If the percentage is too high (40% is probably too high to adequately fill), this will fill less
+     * than the requested percentage rather than fill multiple lakes.
+     * @param percentage The percentage of non-room, non-cave, non-edge-of-map wall cells to try to fill with lake.
+     * @param deepLake the char to use for deep lake cells, such as '~'
+     * @param shallowLake the char to use for shallow lake cells, such as ','
+     * @return this for chaining
+     */
+    public SectionDungeonGenerator addLake(int percentage, char deepLake, char shallowLake)
+    {
+        if(percentage < 0) percentage = 0;
+        if(percentage > 100) percentage = 100;
+        lakeFX = percentage;
+        deepLakeGlyph = deepLake;
+        shallowLakeGlyph = shallowLake;
         return this;
     }
 
@@ -748,15 +808,22 @@ public class SectionDungeonGenerator {
         for (int x = 0; x < width; x++) {
             Arrays.fill(level[x], '#');
         }
-        char[][] roomMap = innerGenerate(RoomFinder.merge(rf.findRooms()), roomFX),
-                corridorMap = innerGenerate(RoomFinder.merge(rf.findCorridors()), corridorFX),
-                allCaves = RoomFinder.merge(rf.findCaves()),
+        ArrayList<char[][]> rm = rf.findRooms(),
+                cr = rf.findCorridors(),
+                cv = rf.findCaves();
+        char[][] roomMap = innerGenerate(RoomFinder.merge(rm), roomFX),
+                allCorridors = RoomFinder.merge(cr),
+                corridorMap = innerGenerate(allCorridors, corridorFX),
+                allCaves = RoomFinder.merge(cv),
                 caveMap = innerGenerate(allCaves, caveFX),
-                doorMap = makeDoors(rf.findRooms(), rf.findCorridors(), allCaves);
+                doorMap = makeDoors(rm, cr, allCaves),
+                lakeMap = makeLake(rm, cv);
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if(doorMap[x][y] == '+' || doorMap[x][y] == '/')
+                if(corridorMap[x][y] != '#' && lakeMap[x][y] != '#')
+                    level[x][y] = ':';
+                else if(doorMap[x][y] == '+' || doorMap[x][y] == '/')
                     level[x][y] = doorMap[x][y];
                 else if(roomMap[x][y] != '#')
                     level[x][y] = roomMap[x][y];
@@ -764,6 +831,8 @@ public class SectionDungeonGenerator {
                     level[x][y] = corridorMap[x][y];
                 else if(caveMap[x][y] != '#')
                     level[x][y] = caveMap[x][y];
+                else if(lakeMap[x][y] != '#')
+                    level[x][y] = lakeMap[x][y];
             }
         }
         dungeon = level;
@@ -821,6 +890,57 @@ public class SectionDungeonGenerator {
         return map;
 
     }
+    private char[][] makeLake(ArrayList<char[][]> rooms, ArrayList<char[][]> caves)
+    {
+        char[][] map = new char[width][height], fusedMap;
+        for (int x = 0; x < width; x++) {
+            Arrays.fill(map[x], '#');
+        }
+        if(lakeFX == 0 || (rooms.isEmpty() && caves.isEmpty()))
+            return map;
+        int lakeFill = lakeFX;
+
+        ArrayList<char[][]> fused = new ArrayList<>(rooms.size() + caves.size());
+        fused.addAll(rooms);
+        fused.addAll(caves);
+
+        fusedMap = RoomFinder.merge(fused);
+        short[] limit = rectangle(1, 1, width - 2, height - 2),
+                potential = intersectPacked(limit, pack(fusedMap, '#'));
+        int potentialSize = count(potential) * lakeFill / 100;
+        ArrayList<short[]> viable = split(potential);
+        if(viable.isEmpty())
+            return map;
+        short[] chosen = viable.get(0);
+        int minSize = count(chosen);
+        for(short[] sa : viable)
+        {
+            int sz = count(sa);
+            if(sz > minSize)
+            {
+                chosen = sa;
+                minSize = sz;
+            }
+        }
+        Coord center = singleRandom(chosen, rng);
+        short[] flooded = intersectPacked(limit, spill(chosen, packOne(center), potentialSize, rng)),
+                shore = intersectPacked(limit,
+                        flood(fringe(pack(fusedMap, '.'), 3, width, height, true, true),
+                                flooded, 3, false));
+        boolean[][] deep = unpack(flooded, width, height), shallow = unpack(shore, width, height);
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(deep[x][y])
+                    map[x][y] = deepLakeGlyph;
+                else if(shallow[x][y])
+                    map[x][y] = shallowLakeGlyph;
+            }
+        }
+
+        return map;
+    }
+
     private char[][] innerGenerate(char[][] map, EnumMap<FillEffect, Integer> fx)
     {
         LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
