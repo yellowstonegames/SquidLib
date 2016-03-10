@@ -142,13 +142,14 @@ public class DungeonGeneratorTest {
         SectionDungeonGenerator sdg = new SectionDungeonGenerator(width, height, rng);
         sdg.addDoors(12, false);
         //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
-        sdg.addGrass(SectionDungeonGenerator.CAVE, 80);
-        //sdg.addBoulders(SectionDungeonGenerator.CAVE, 7);
+        sdg.addBoulders(SectionDungeonGenerator.CAVE, 8);
+        sdg.addWater(SectionDungeonGenerator.CAVE, 9);
+        sdg.addLake(20, '£', '¢');
         rng.setState(2252637788195L);
         serpent = new SerpentMapGenerator(width, height, rng, 0.2);
         serpent.putWalledBoxRoomCarvers(5);
         serpent.putWalledRoundRoomCarvers(3);
-        serpent.putCaveCarvers(6);
+        serpent.putCaveCarvers(8);
         map = serpent.generate();
         sdg.generate(map, serpent.getEnvironment());
 
@@ -157,7 +158,7 @@ public class DungeonGeneratorTest {
         sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
 
         sdg.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(sdungeon)));
+                DungeonUtility.hashesToLines(sdungeon, true)));
         System.out.println(sdg);
 
         System.out.println("------------------------------------------------------------");
