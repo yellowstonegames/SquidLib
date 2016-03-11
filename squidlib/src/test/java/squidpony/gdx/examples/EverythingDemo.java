@@ -68,6 +68,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private Phase phase = Phase.WAIT;
     private StatefulRNG rng;
     private SquidLayers display;
+    private SquidPanel subCell;
     private SquidMessageBox messages;
     /** Non-{@code null} iff '?' was pressed before */
     private /*Nullable*/ Actor help;
@@ -105,6 +106,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private int currentCenter;
     private boolean changingColors = false;
     private TextCellFactory textFactory;
+    public static final int INTERNAL_ZOOM = 2;
     @Override
     public void create () {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
@@ -171,27 +173,48 @@ public class EverythingDemo extends ApplicationAdapter {
         batch = new SpriteBatch();
         width = 90;
         height = 30;
-        cellWidth = 10;
-        cellHeight = 20;
-        textFactory = DefaultResources.getStretchableFont();
-        // the font will try to load Inconsolata-LGC as a bitmap font from resources.
-        // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
+        //NOTE: cellWidth and cellHeight are assigned values that are significantly larger than the corresponding sizes
+        //in the EverythingDemoLauncher's main method. Because they are scaled up by an integer here, they can be scaled
+        //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
+        //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
+        // values are high) or rendering fewer pixels for speed (when values are low). Using 2 seems to work well.
+        cellWidth = 13 * INTERNAL_ZOOM;
+        cellHeight = 26 * INTERNAL_ZOOM;
+        // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
+        // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
+        // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
+        // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
+        // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
+        // cases but probably not all.
+        textFactory = DefaultResources.getStretchableFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f));
+        // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
+        // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
                 textFactory, bgCenter, fgCenter);
-        // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
-        // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
-        // if you use '#' for walls instead of box drawing chars, you don't need this.
+        //subCell is a SquidPanel, the same class that SquidLayers has for each of its layers, but we want to render
+        //certain effects on top of all other panels, which can't be done in the all-in-one-pass rendering of the grids
+        //in SquidLayers, though it could be done with a slight hassle if the effects are made into AnimatedEntity
+        //objects or Actors, then rendered separately like the monsters are (see render() below). It is called subCell
+        //because its text will be made smaller than a full cell, and appears in the upper left corner for things like
+        //the current health of the player and an '!' for alerted monsters.
+        subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
 
         display.setAnimationDuration(0.03f);
         messages = new SquidMessageBox(width, 4, textFactory);
-
-        textFactory.height(cellHeight + 1).initBySize();
-
+        // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
+        // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
+        // if you use '#' for walls instead of box drawing chars, you don't need this.
+        messages.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM);
+        display.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM);
+        //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
+        //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
+        subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
         stage = new Stage(new StretchViewport(width * cellWidth, (height + 4) * cellHeight), batch);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
         messages.setBounds(0, 0, cellWidth * width, cellHeight * 4);
         display.setPosition(0, messages.getHeight());
+        subCell.setPosition(0, messages.getHeight());
         messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
                 " Click the top or bottom border of this box to scroll.");
         counter = 0;
@@ -234,7 +257,7 @@ public class EverythingDemo extends ApplicationAdapter {
         res = DungeonUtility.generateResistances(decoDungeon);
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
 
-        player = display.animateActor(pl.x, pl.y, Character.forDigit(health, 10),
+        player = display.animateActor(pl.x, pl.y, '@',
                 fgCenter.filter(display.getPalette().get(30)));
         cursor = Coord.get(-1, -1);
         toCursor = new ArrayList<>(10);
@@ -407,6 +430,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
         // and then add display and messages, our two visual components, to the list of things that act in Stage.
         stage.addActor(display);
+        // stage.addActor(subCell); // this is not added since it is manually drawn after other steps
         stage.addActor(messages);
 
     }
@@ -516,7 +540,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     if (tmp.x == player.gridX && tmp.y == player.gridY) {
                         display.wiggle(player);
                         health--;
-                        player.setText("" + health);
+                        //player.setText("" + health);
                         monsters.positionalModify(pos, mon.change(1));
                     }
                     // otherwise store the new position in newMons.
@@ -792,17 +816,23 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.draw();
+        subCell.erase();
         if(help == null) {
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
             batch.begin();
             // the player needs to get drawn every frame, of course.
             display.drawActor(batch, 1.0f, player);
+            subCell.put(player.gridX, player.gridY, Character.forDigit(health, 10), SColor.DARK_PINK);
+
             for (Monster mon : monsters) {
                 // monsters are only drawn if within FOV.
                 if (fovmap[mon.entity.gridX][mon.entity.gridY] > 0.0) {
                     display.drawActor(batch, 1.0f, mon.entity);
+                    if(mon.state > 0)
+                        subCell.put(mon.entity.gridX, mon.entity.gridY, '!', SColor.DARK_RED);
                 }
             }
+            subCell.draw(batch, 1.0F, 0F, messages.getGridHeight() * cellHeight);
             // batch must end if it began.
             batch.end();
         }
