@@ -92,6 +92,26 @@ public class TextCellFactory implements Disposable {
         scc = DefaultResources.getSCC();
     }
 
+    public TextCellFactory copy()
+    {
+        TextCellFactory next = new TextCellFactory(assetManager);
+        next.bmpFont = new BitmapFont(new BitmapFont.BitmapFontData(bmpFont.getData().getFontFile(), false),
+                bmpFont.getRegions(), bmpFont.usesIntegerPositions());
+        next.block = block;
+        next.swap = new LinkedHashMap<>(swap);
+        next.distanceField = distanceField;
+        next.distanceFieldScaleX = distanceFieldScaleX;
+        next.distanceFieldScaleY = distanceFieldScaleY;
+        next.shader = null;
+        next.fitting = fitting;
+        next.height = height;
+        next.width = width;
+        next.modifiedHeight = modifiedHeight;
+        next.smoothingMultiplier = smoothingMultiplier;
+        next.scc = scc;
+        next.initialized = initialized;
+        return next;
+    }
     /**
      * Initializes the factory to then be able to create text cells on demand.
      *
@@ -1062,20 +1082,23 @@ public class TextCellFactory implements Disposable {
      * If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
      * numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.
      * @param smoothingMultiplier the new value for the smoothing multiplier as a float; should be fairly close to 1f.
+     * @return this for chaining
      */
-    public void setSmoothingMultiplier(float smoothingMultiplier) {
+    public TextCellFactory setSmoothingMultiplier(float smoothingMultiplier) {
         this.smoothingMultiplier = smoothingMultiplier;
+        return this;
     }
 
     /**
      * If using a distance field font, you MUST call this at some point while the batch has begun, or use code that
-     * calls it for you. A typical point to call it is in the "void draw(Batch batch, float parentAlpha)" method or an
-     * overriding method for a Scene2D class. You should call configureShader rarely, typically only once per frame if
-     * there are no images to render, and this means the logical place to call it is in the outermost Group that
-     * contains any SquidPanel objects or other widgets.
+     * calls it for you (which is now much of SquidLib). A typical point to call it is in the
+     * "void draw(Batch batch, float parentAlpha)" method or an overriding method for a Scene2D class. You should call
+     * configureShader rarely, typically only a few times per frame if there are no images to render, and this means the
+     * logical place to call it is in the outermost Group that contains any SquidPanel objects or other widgets. If you
+     * have multipleTextCellFactory objects, each one needs to have configureShader called before it is used to draw.
      * <br>
-     * SquidLayers already calls this method in its draw override, immediately before it calls super.draw(), so you
-     * don't need to call this manually if you use SquidLayers.
+     * SquidLayers and SquidPanel already call this method in their draw overrides, so you don't need to call this
+     * manually if you use SquidLayers or SquidPanel.
      * <br>
      * If you don't use a distance field font, you don't need to call this, but calling it won't cause problems.
      *
@@ -1083,8 +1106,9 @@ public class TextCellFactory implements Disposable {
      */
     public void configureShader(Batch batch) {
         if (initialized && distanceField) {
-            shader.setUniformf("u_smoothing", 3.5f * smoothingMultiplier * bmpFont.getData().scaleX);
             batch.setShader(shader);
+            shader.setUniformf("u_smoothing", 3.5f * smoothingMultiplier * bmpFont.getData().scaleX);
+
         }
     }
     /**

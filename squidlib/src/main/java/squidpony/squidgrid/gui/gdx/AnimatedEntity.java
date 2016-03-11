@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 /**
+ * A simple class that wraps an Actor with its grid position, animating state, and if it is a double-width Actor.
  * Created by Tommy Ettinger on 7/22/2015.
  */
 public class AnimatedEntity {

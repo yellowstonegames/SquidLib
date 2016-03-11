@@ -290,8 +290,8 @@ public class SquidLayers extends Group {
             textFactory = textFactory.defaultNarrowFont();
         }
         textFactory = textFactory.width(cellWidth).height(cellHeight).initBySize();
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
+        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory.copy(), bgColorCenter);
+        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory.copy(), fgColorCenter);
 
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
@@ -369,8 +369,8 @@ public class SquidLayers extends Group {
 
         textFactory = tcf.width(cellWidth).height(cellHeight).initBySize();
 
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
+        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory.copy(), bgColorCenter);
+        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory.copy(), fgColorCenter);
 
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
@@ -448,7 +448,7 @@ public class SquidLayers extends Group {
      * @return this for chaining
      */
     public SquidLayers addExtraLayer() {
-        SquidPanel sp = new SquidPanel(width, height, textFactory);
+        SquidPanel sp = new SquidPanel(width, height, textFactory.copy());
         addActor(sp);
         extraPanels.add(sp);
         return this;
@@ -484,6 +484,50 @@ public class SquidLayers extends Group {
 
         return palette;
     }
+
+    /**
+     * Sets the size of the text in the given layer  (but not the size of the cells) to the given width and height in
+     * pixels (which may be stretched by viewports later on, if your program uses them).
+     * @param layer the layer to affect; 0 is background, 1 is unused, 2 is foreground, 3 and higher are extra panels
+     * @param wide the width of a glyph in pixels
+     * @param high the height of a glyph in pixels
+     * @return this for chaining
+     */
+    public SquidLayers setTextSize(int layer, int wide, int high)
+    {
+        SquidPanel p = backgroundPanel;
+        switch (layer) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                p = foregroundPanel;
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        p.setTextSize(wide, high);
+        return this;
+    }
+
+    /**
+     * Sets the size of the text in all layers (but not the size of the cells) to the given width and height in pixels
+     * (which may be stretched by viewports later on, if your program uses them).
+     * @param wide the width of a glyph in pixels
+     * @param high the height of a glyph in pixels
+     * @return this for chaining
+     */
+    public SquidLayers setTextSize(int wide, int high)
+    {
+        setTextSize(0, wide, high);
+        setTextSize(2, wide, high);
+        for (int i = 0; i < extraPanels.size(); i++) {
+            setTextSize(i + 3, wide, high);
+        }
+        return this;
+    }
+
 
     /**
      * Place a char c into the foreground at position x, y, with the default color.
@@ -868,6 +912,32 @@ public class SquidLayers extends Group {
     }
 
     /**
+     * Place a char c into the foreground, with a foreground color specified by an index into the default palette.
+     *
+     * @param layer   the layer to draw into
+     * @param x       in grid cells.
+     * @param y       in grid cells.
+     * @param c       a character to be drawn in the specified layer
+     * @param color   Color for the char being drawn
+     */
+    public SquidLayers putInto(int layer, int x, int y, char c, Color color) {
+        SquidPanel p = backgroundPanel;
+        switch (layer) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                p = foregroundPanel;
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        p.put(x, y, c, color);
+        values[x][y] = true;
+        return this;
+    }
+    /**
      * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
      *
      * @param layer 0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
@@ -1163,6 +1233,23 @@ public class SquidLayers extends Group {
         return this;
     }
 
+    public SquidLayers eraseLayer(int layer)
+    {
+        SquidPanel p = foregroundPanel;
+        switch (layer) {
+            case 0:
+                p = backgroundPanel;
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            default:
+                p = extraPanels.get(layer - 3);
+        }
+        p.erase();
+        return this;
+    }
     /**
      * Erase everything visible in all cells or all layers.  This can be expensive to do in a traditional game loop,
      * since Swing is not meant for that at all.
@@ -1620,7 +1707,7 @@ public class SquidLayers extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        textFactory.configureShader(batch);
+        //textFactory.configureShader(batch);
         super.draw(batch, parentAlpha);
     }
 

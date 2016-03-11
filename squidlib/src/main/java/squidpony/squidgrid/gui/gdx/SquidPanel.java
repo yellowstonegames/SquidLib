@@ -415,14 +415,53 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 		return textFactory;
 	}
 
+    /**
+     * Sets the size of the text in this SquidPanel (but not the size of the cells) to the given width and height in
+     * pixels (which may be stretched by viewports later on, if your program uses them).
+     * @param wide the width of a glyph in pixels
+     * @param high the height of a glyph in pixels
+     * @return this for chaining
+     */
+    public SquidPanel setTextSize(int wide, int high)
+    {
+        textFactory.height(high).width(wide).initBySize();
+        //textFactory.setSmoothingMultiplier((3f + Math.max(cellWidth * 1f / wide, cellHeight * 1f / high)) / 4f);
+        return this;
+    }
+
     @Override
     public void draw (Batch batch, float parentAlpha) {
+        /*if(batch.isDrawing()) {
+            batch.end();
+            batch.begin();
+        }*/
+        textFactory.configureShader(batch);
         Color tmp;
 
         for (int x = gridOffsetX; x < gridWidth; x++) {
             for (int y = gridOffsetY; y < gridHeight; y++) {
                 tmp = scc.filter(colors[x][y]);
                 textFactory.draw(batch, contents[x][y], tmp, 1f * x * cellWidth, 1f * (gridHeight - y) * cellHeight + 1f);
+            }
+        }
+        super.draw(batch, parentAlpha);
+        for(AnimatedEntity ae : animatedEntities)
+        {
+            ae.actor.act(Gdx.graphics.getDeltaTime());
+        }
+    }
+    public void draw (Batch batch, float parentAlpha, float xOffset, float yOffset) {
+        /*if(batch.isDrawing()) {
+            batch.end();
+            batch.begin();
+        }*/
+        textFactory.configureShader(batch);
+        Color tmp;
+
+        for (int x = gridOffsetX; x < gridWidth; x++) {
+            for (int y = gridOffsetY; y < gridHeight; y++) {
+                tmp = scc.filter(colors[x][y]);
+                textFactory.draw(batch, contents[x][y], tmp, xOffset + 1f * x * cellWidth, yOffset + 1f * (gridHeight - y) * cellHeight + 1f);
             }
         }
         super.draw(batch, parentAlpha);
