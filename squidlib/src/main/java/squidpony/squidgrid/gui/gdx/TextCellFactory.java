@@ -61,7 +61,7 @@ public class TextCellFactory implements Disposable {
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     protected int width = 1, height = 1, modifiedHeight = 1;
     protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;
-    private boolean initialized = false;
+    private boolean initialized = false, initializedByFont = false, initializedBySize = false;
     protected boolean distanceField = false;
     protected ShaderProgram shader;
     protected float smoothingMultiplier = 1f;
@@ -109,7 +109,10 @@ public class TextCellFactory implements Disposable {
         next.modifiedHeight = modifiedHeight;
         next.smoothingMultiplier = smoothingMultiplier;
         next.scc = scc;
-        next.initialized = initialized;
+        if(initializedBySize)
+            next.initBySize();
+        else if(initializedByFont)
+            next.initByFont();
         return next;
     }
     /**
@@ -134,6 +137,7 @@ public class TextCellFactory implements Disposable {
         block.draw(temp, 0, 0);
         temp.dispose();
         initialized = true;
+        initializedByFont = true;
         return this;
     }
 
@@ -172,6 +176,7 @@ public class TextCellFactory implements Disposable {
             shader= SpriteBatch.createDefaultShader();
 
         initialized = true;
+        initializedBySize = true;
         return this;
     }
 
