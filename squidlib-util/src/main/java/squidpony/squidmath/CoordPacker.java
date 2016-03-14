@@ -4198,10 +4198,11 @@ public class CoordPacker {
     }
 
     /**
-     * Given a packed data array that encodes multiple unconnected "on" areas, this finds each isolated area and returns
-     * it as an element in an ArrayList of short[], with one short[] array per isolated area. Useful when you have, for
-     * example, all the rooms in a dungeon with their connecting corridors removed, but want to separate the rooms. You
-     * can get the aforementioned data assuming a bare dungeon called map with WIDTH and HEIGHT constants using:
+     * Given a packed data array that encodes multiple unconnected "on" areas, this finds each isolated area (areas that
+     * are only adjacent diagonally are considered separate from each other) and returns it as an element in an
+     * ArrayList of short[], with one short[] array per isolated area. Useful when you have, for example, all the rooms
+     * in a dungeon with their connecting corridors removed, but want to separate the rooms. You can get the
+     * aforementioned data assuming a bare dungeon called map with WIDTH and HEIGHT constants using:
      * <br>
      * {@code short[] floors = pack(map, '.'),
      * rooms = flood(floors, retract(floors, 1, 60, 60, true), 2, false),
@@ -4214,7 +4215,8 @@ public class CoordPacker {
      * floors out from the area that produces by 2 cells (4-way this time) to restore the original size of non-corridor
      * areas (plus some extra to ensure odd shapes are kept). Corridors are obtained by removing the rooms from floors.
      * The example code also gets the doors (which overlap with rooms, not corridors) by finding where the a room and a
-     * corridor are adjacent.
+     * corridor are adjacent. This technique is used with some enhancements in the RoomFinder class.
+     * @see squidpony.squidgrid.mapping.RoomFinder for a class that uses this technique without exposing CoordPacker
      * @param packed a packed data array that probably encodes multiple unconnected "on" areas
      * @return an ArrayList of short[] containing each unconnected area from packed as a short[] element
      */

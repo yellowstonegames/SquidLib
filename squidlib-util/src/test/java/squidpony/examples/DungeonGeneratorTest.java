@@ -2,12 +2,14 @@ package squidpony.examples;
 
 import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.TilesetType;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedHashSet;
 
 /**
  * Sample output: {@code
@@ -149,13 +151,24 @@ public class DungeonGeneratorTest {
         serpent = new SerpentMapGenerator(width, height, rng, 0.2);
         serpent.putWalledBoxRoomCarvers(5);
         serpent.putWalledRoundRoomCarvers(3);
-        serpent.putCaveCarvers(8);
+        serpent.putCaveCarvers(3);
         map = serpent.generate();
         sdg.generate(map, serpent.getEnvironment());
 
         sdungeon = sdg.getDungeon();
         sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdungeon, true)));
+        System.out.println(dungeonGenerator);
+        for(LinkedHashSet<Coord> lhs : sdg.placement.alongStraightWalls)
+        {
+            for(Coord c : lhs)
+            {
+                sdungeon[c.x][c.y] = '}';
+            }
+        }
 
         sdg.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon, true)));
