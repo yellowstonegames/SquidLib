@@ -1,6 +1,9 @@
 package squidpony.examples;
 
-import squidpony.squidgrid.mapping.*;
+import squidpony.squidgrid.mapping.DungeonGenerator;
+import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.SectionDungeonGenerator;
+import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
@@ -162,13 +165,24 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon, true)));
         System.out.println(dungeonGenerator);
-        for(LinkedHashSet<Coord> lhs : sdg.placement.alongStraightWalls)
+
+        for(LinkedHashSet<Coord> lhs : sdg.placement.getAlongStraightWalls())
         {
             for(Coord c : lhs)
             {
                 sdungeon[c.x][c.y] = '}';
             }
         }
+
+        for(LinkedHashSet<Coord> lhs : sdg.placement.getCorners())
+        {
+            for(Coord c : lhs)
+            {
+                sdungeon[c.x][c.y] = 'º';
+            }
+        }
+
+
 
         sdg.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon, true)));
