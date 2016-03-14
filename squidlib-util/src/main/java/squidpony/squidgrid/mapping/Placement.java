@@ -17,9 +17,10 @@ public class Placement {
 
     public RoomFinder finder;
 
-    private short[] allRooms = ALL_WALL, allCaves = ALL_WALL, allCorridors = ALL_WALL;
+    private short[] allRooms = ALL_WALL, allCaves = ALL_WALL, allCorridors = ALL_WALL, working, nonRoom;
 
-    public LinkedHashSet<LinkedHashSet<Coord>> alongStraightWalls;
+    private LinkedHashSet<LinkedHashSet<Coord>> alongStraightWalls = null,
+            corners = null;
 
     private Placement()
     {
@@ -28,9 +29,6 @@ public class Placement {
     public Placement(RoomFinder finder)
     {
         this.finder = finder;
-
-        alongStraightWalls = new LinkedHashSet<>(32);
-        short[] working;
 
         for(short[] region : finder.rooms.keys())
         {
@@ -44,21 +42,51 @@ public class Placement {
         {
             allCorridors = unionPacked(allCorridors, region);
         }
-        short[] tmp = expand(unionPacked(allCorridors, allCaves), 2, finder.width, finder.height, false);
-        for(short[] region : finder.rooms.keys())
+        nonRoom = expand(unionPacked(allCorridors, allCaves), 2, finder.width, finder.height, false);
+    }
+
+    public LinkedHashSet<LinkedHashSet<Coord>> getAlongStraightWalls() {
+        if(alongStraightWalls == null)
         {
-            working =
-                    differencePacked(
-                            fringe(
-                                    retract(region, 1, finder.width, finder.height, false),
-                                    1, finder.width, finder.height, false),
-                            tmp);
-            for(short[] sp : split(working))
-            {
-                if(count(sp) >= 3)
-                    alongStraightWalls.add(arrayToSet(allPacked(sp)));
+            alongStraightWalls = new LinkedHashSet<>(32);
+            for(short[] region : finder.rooms.keys()) {
+                working =
+                        differencePacked(
+                                fringe(
+                                        retract(region, 1, finder.width, finder.height, false),
+                                        1, finder.width, finder.height, false),
+                                nonRoom);
+                for (short[] sp : split(working)) {
+                    if (count(sp) >= 3)
+                        alongStraightWalls.add(arrayToSet(allPacked(sp)));
+                }
+            }
+
+        }
+        return alongStraightWalls;
+    }
+
+    public LinkedHashSet<LinkedHashSet<Coord>> getCorners() {
+        if(corners == null)
+        {
+            corners = new LinkedHashSet<>(32);
+            for(short[] region : finder.rooms.keys()) {
+                working =
+                        differencePacked(
+                                differencePacked(region,
+                                        retract(
+                                                expand(region, 1, finder.width, finder.height, false),
+                                                1, finder.width, finder.height, true)
+                                ),
+                                nonRoom);
+                for(short[] sp : split(working))
+                {
+                    corners.add(arrayToSet(allPacked(sp)));
+                }
+
             }
         }
+        return corners;
     }
 
     private static LinkedHashSet<Coord> arrayToSet(Coord[] arr)
