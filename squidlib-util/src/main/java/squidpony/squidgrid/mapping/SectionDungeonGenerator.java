@@ -128,6 +128,8 @@ public class SectionDungeonGenerator {
     protected int environmentType = 1;
 
     protected char[][] dungeon = null;
+    public RoomFinder finder;
+    public Placement placement;
 
     /**
      * Get the most recently generated char[][] dungeon out of this class. The
@@ -694,8 +696,8 @@ public class SectionDungeonGenerator {
         }
         stairsDown = singleRandom(pack(dijkstra.gradientMap, maxDijkstra * 0.7,
                 DijkstraMap.FLOOR), rng);
-        RoomFinder rf = new RoomFinder(map, environmentType);
-        return innerGenerate(map, rf);
+        finder = new RoomFinder(map, environmentType);
+        return innerGenerate();
     }
 
     /**
@@ -749,8 +751,8 @@ public class SectionDungeonGenerator {
         }
         stairsDown = singleRandom(pack(dijkstra.gradientMap, maxDijkstra * 0.7,
                 DijkstraMap.FLOOR), rng);
-        RoomFinder rf = new RoomFinder(map, env2);
-        return innerGenerate(map, rf);
+        finder = new RoomFinder(map, env2);
+        return innerGenerate();
     }
 
     /**
@@ -797,20 +799,20 @@ public class SectionDungeonGenerator {
                 }
             }
         }
-        RoomFinder rf = new RoomFinder(map, env2);
-        return innerGenerate(map, rf);
+        finder = new RoomFinder(map, env2);
+        return innerGenerate();
     }
 
 
 
-    private char[][] innerGenerate(char[][] map, RoomFinder rf) {
-        char[][] level = new char[width][height];
+    private char[][] innerGenerate() {
+        dungeon = new char[width][height];
         for (int x = 0; x < width; x++) {
-            Arrays.fill(level[x], '#');
+            Arrays.fill(dungeon[x], '#');
         }
-        ArrayList<char[][]> rm = rf.findRooms(),
-                cr = rf.findCorridors(),
-                cv = rf.findCaves();
+        ArrayList<char[][]> rm = finder.findRooms(),
+                cr = finder.findCorridors(),
+                cv = finder.findCaves();
         char[][] roomMap = innerGenerate(RoomFinder.merge(rm), roomFX),
                 allCorridors = RoomFinder.merge(cr),
                 corridorMap = innerGenerate(allCorridors, corridorFX),
@@ -822,21 +824,21 @@ public class SectionDungeonGenerator {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if(corridorMap[x][y] != '#' && lakeMap[x][y] != '#')
-                    level[x][y] = ':';
+                    dungeon[x][y] = ':';
                 else if(doorMap[x][y] == '+' || doorMap[x][y] == '/')
-                    level[x][y] = doorMap[x][y];
+                    dungeon[x][y] = doorMap[x][y];
                 else if(roomMap[x][y] != '#')
-                    level[x][y] = roomMap[x][y];
+                    dungeon[x][y] = roomMap[x][y];
                 else if(corridorMap[x][y] != '#')
-                    level[x][y] = corridorMap[x][y];
+                    dungeon[x][y] = corridorMap[x][y];
                 else if(caveMap[x][y] != '#')
-                    level[x][y] = caveMap[x][y];
+                    dungeon[x][y] = caveMap[x][y];
                 else if(lakeMap[x][y] != '#')
-                    level[x][y] = lakeMap[x][y];
+                    dungeon[x][y] = lakeMap[x][y];
             }
         }
-        dungeon = level;
-        return level;
+        placement = new Placement(finder);
+        return dungeon;
 
     }
     private char[][] makeDoors(ArrayList<char[][]> rooms, ArrayList<char[][]> corridors, char[][] allCaves)
@@ -926,7 +928,8 @@ public class SectionDungeonGenerator {
         short[] flooded = intersectPacked(limit, spill(chosen, packOne(center), potentialSize, rng)),
                 shore = intersectPacked(limit,
                         flood(fringe(pack(fusedMap, '.'), 3, width, height, true, true),
-                                flooded, 3, false));
+                                flooded, 3, false)),
+                lake = unionPacked(flooded, shore);
         boolean[][] deep = unpack(flooded, width, height), shallow = unpack(shore, width, height);
 
         for (int x = 0; x < width; x++) {
@@ -937,14 +940,22 @@ public class SectionDungeonGenerator {
                     map[x][y] = shallowLakeGlyph;
             }
         }
-
+        ArrayList<short[]> change = new ArrayList<>();
+        for(short[] room : finder.rooms.keys())
+        {
+            if(count(intersectPacked(lake, expand(room, 1, width, height))) > 0)
+                change.add(room);
+        }
+        for(short[] region : change)
+        {
+            finder.caves.put(region, finder.rooms.remove(region));
+        }
         return map;
     }
 
     private char[][] innerGenerate(char[][] map, EnumMap<FillEffect, Integer> fx)
     {
         LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
-        Coord temp;
         int floorCount = DungeonUtility.countCells(map, '.'),
                 doorFill = 0,
                 waterFill = 0,
@@ -981,7 +992,6 @@ public class SectionDungeonGenerator {
         if(trapFill > 0) {
             for (int x = 1; x < map.length - 1; x++) {
                 for (int y = 1; y < map[x].length - 1; y++) {
-                    temp = Coord.get(x, y);
                     if (map[x][y] == '.') {
                         int ctr = 0;
                         if (map[x + 1][y] != '#') ++ctr;
