@@ -165,9 +165,9 @@ public class TextCellFactory implements Disposable {
         block.draw(temp, 0, 0);
         temp.dispose();
 
+        actualCellHeight++;
         if(distanceField)
         {
-            actualCellHeight = actualCellHeight + 1;
             bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
 
             shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.fragmentShader);
@@ -1009,13 +1009,15 @@ public class TextCellFactory implements Disposable {
         if (s == null) {
             Image im = new Image(block);
             im.setColor(scc.filter(color));
-            im.setSize(width, height + bmpFont.getDescent() / 2);
+            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth, actualCellHeight + MathUtils.ceil(bmpFont.getDescent() / 2f));
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             Image im = new Image(block);
             im.setColor(scc.filter(color));
-            im.setSize(width * s.length(), height + MathUtils.ceil(bmpFont.getDescent() / 2f));
+            //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth * s.length(), actualCellHeight + MathUtils.ceil(bmpFont.getDescent() / 2f));
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {

@@ -15,6 +15,9 @@ import static squidpony.squidmath.CoordPacker.*;
  */
 public class Placement {
 
+    /**
+     * The RoomFinder this uses internally to find placement areas only where they are appropriate.
+     */
     public RoomFinder finder;
 
     private short[] allRooms = ALL_WALL, allCaves = ALL_WALL, allCorridors = ALL_WALL, working, nonRoom;
@@ -26,8 +29,19 @@ public class Placement {
     {
 
     }
+
+    /**
+     * Constructs a Placement using the given RoomFinder, which will have collections of rooms, corridors, and caves.
+     * A common use case for this class involves the Placement field that is constructed in a SectionDungeonGenerator
+     * when generate() or generateRespectingStairs() in that class is called; if you use SectionDungeonGenerator, there
+     * isn't much need for this constructor, since you can normally use the one created as a field in that class.
+     * @param finder a RoomFinder that must not be null.
+     */
     public Placement(RoomFinder finder)
     {
+        if(finder == null)
+            throw new UnsupportedOperationException("RoomFinder passed to Placement constructor cannot be null");
+
         this.finder = finder;
 
         for(short[] region : finder.rooms.keys())
@@ -45,6 +59,13 @@ public class Placement {
         nonRoom = expand(unionPacked(allCorridors, allCaves), 2, finder.width, finder.height, false);
     }
 
+    /**
+     * Gets a LinkedHashSet of LinkedHashSet of Coord, where each inner LinkedHashSet of Coord refers to a placement
+     * region along a straight wall with length 3 or more, not including corners. Each Coord refers to a single cell
+     * along the straight wall. This could be useful for placing weapon racks in armories, chalkboards in schoolrooms
+     * (tutorial missions, perhaps?), or even large paintings/murals in palaces.
+     * @return a set of sets of Coord where each set of Coord is a wall's viable placement for long things along it
+     */
     public LinkedHashSet<LinkedHashSet<Coord>> getAlongStraightWalls() {
         if(alongStraightWalls == null)
         {
@@ -66,6 +87,13 @@ public class Placement {
         return alongStraightWalls;
     }
 
+    /**
+     * Gets a LinkedHashSet of LinkedHashSet of Coord, where each inner LinkedHashSet of Coord refers to a room's
+     * corners, and each Coord is one of those corners. There are more uses for corner placement than I can list. This
+     * doesn't always identify all corners, since it only finds ones in rooms, and a cave too close to a corner can
+     * cause that corner to be ignored.
+     * @return a set of sets of Coord where each set of Coord is a wall's viable placement for long things along it
+     */
     public LinkedHashSet<LinkedHashSet<Coord>> getCorners() {
         if(corners == null)
         {
