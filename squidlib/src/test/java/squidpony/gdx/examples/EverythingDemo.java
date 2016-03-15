@@ -204,8 +204,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM);
-        display.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM);
+        messages.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM * 2);
+        display.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM * 2);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
@@ -538,7 +538,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     // if we would move into the player, instead damage the player and give newMons the current
                     // position of this monster.
                     if (tmp.x == player.gridX && tmp.y == player.gridY) {
-                        display.wiggle(player);
+                        display.tint(tmp.x, tmp.y, SColor.CHARTREUSE, 0, 1);
                         health--;
                         //player.setText("" + health);
                         monsters.positionalModify(pos, mon.change(1));
@@ -816,6 +816,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.draw();
+        stage.act();
         subCell.erase();
         if(help == null) {
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.

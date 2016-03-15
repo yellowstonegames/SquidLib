@@ -424,7 +424,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public SquidPanel setTextSize(int wide, int high)
     {
-        textFactory.height(high).width(wide).initBySize();
+        textFactory.tweakHeight(high).tweakWidth(wide).initBySize();
         //textFactory.setSmoothingMultiplier((3f + Math.max(cellWidth * 1f / wide, cellHeight * 1f / high)) / 4f);
         return this;
     }
@@ -768,7 +768,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
         Actor a = textFactory.makeActor(contents[x][y], scc.filter(colors[x][y]));
         a.setName(contents[x][y]);
-        a.setPosition((x * cellWidth) + getX(), ((gridHeight - y - 1) * cellHeight) - 1 + getY());
+        a.setPosition((x * cellWidth) - getX(), ((gridHeight - y - 1) * cellHeight) - 1 - getY());
 
         addActor(a);
 
@@ -815,8 +815,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     */
     public void recallActor(Actor a)
     {
-        int x = Math.round(a.getX() / cellWidth),
-             y = gridHeight - Math.round(a.getY() / cellHeight) - 1;
+        int x = Math.round((a.getX() - getX()) / cellWidth),
+             y = gridHeight - Math.round((a.getY() - getY()) / cellHeight) - 1;
         contents[x][y] = a.getName();
         animationCount--;
         removeActor(a);
@@ -1115,16 +1115,33 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         animationCount++;
 
         Color ac = scc.filter(a.getColor());
-        a.addAction(Actions.sequence(
-        		Actions.delay(delay),
-                Actions.color(color, duration * 0.3f),
-                Actions.color(ac, duration * 0.7f),
-                Actions.run(new Runnable() {
+        if(delay > 0)
+            a.addAction(Actions.sequence(
+                    Actions.delay(delay),
+                    Actions.color(color, duration * 0.3f),
+                    Actions.color(ac, duration * 0.7f),
+                    Actions.delay(0.01f, Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            recallActor(a);
+                        }
+                    }))));
+        else
+            a.addAction(Actions.sequence(
+                    Actions.color(color, duration * 0.3f),
+                    Actions.color(ac, duration * 0.7f),
+                    Actions.delay(0.01f, Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            recallActor(a);
+                        }
+                    }))));
+                /*Actions.run(new Runnable() {
                     @Override
                     public void run() {
                         recallActor(a);
                     }
-                })));
+                })*/
     }
 
     /**
