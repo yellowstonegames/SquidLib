@@ -305,13 +305,29 @@ public class RoomFinder {
         }
         return rs;
     }
+    protected static char[][] defaultFill(int width, int height)
+    {
+        char[][] d = new char[width][height];
+        for (int x = 0; x < width; x++) {
+            Arrays.fill(d[x], '#');
+        }
+        return d;
+    }
 
-    public static char[][] merge(ArrayList<char[][]> regions)
+    /**
+     * Merges multiple 2D char arrays where the '#' character means "no value", and combines them so all cells with
+     * value are on one map, with '#' filling any other cells. If regions is empty, this uses width and height to
+     * construct a blank map, all '#'. It will also use width and height for the size of the returned 2D array.
+     * @param regions An ArrayList of 2D char array regions, where '#' is an empty value and all others will be merged
+     * @param width the width of any map this returns
+     * @param height the height of any map this returns
+     * @return a 2D char array that merges all non-'#' areas in regions, and fills the rest with '#'
+     */
+    public static char[][] merge(ArrayList<char[][]> regions, int width, int height)
     {
         if(regions == null || regions.isEmpty())
-            return null;
+            return defaultFill(width, height);
         char[][] first = regions.get(0);
-        int width = first.length, height = first[0].length;
         char[][] dungeon = new char[first.length][first[0].length];
         for (int x = 0; x < first.length; x++) {
             Arrays.fill(dungeon[x], '#');

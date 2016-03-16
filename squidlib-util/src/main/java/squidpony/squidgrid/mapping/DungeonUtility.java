@@ -616,6 +616,7 @@ public class DungeonUtility {
                         portion[i][j] = 2;
                         break;
                     case '.':
+                    case ':':
                         portion[i][j] = 3;
                         break;
                     case '+':
@@ -634,6 +635,70 @@ public class DungeonUtility {
                         break;
                     default:
                         portion[i][j] = 1;
+                }
+            }
+        }
+        return portion;
+    }
+
+    /**
+     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
+     * rendering method. 1 is used as a default and for tiles with nothing in them; if the background is black, then
+     * white would make sense as this default. Other indices used are 2 for walls (this doesn't care if the walls are
+     * hashes or lines), 3 for floors (usually '.'), 4 for doors ('+' and '/' in the map), 5 for water, 6 for traps, and
+     * 20 for grass.
+     *
+     * @param map a char[][] containing foreground characters that you want foreground palette indices for
+     * @return a 2D array of ints that can be used as indices into a palette; palettes are available in related modules
+     */
+    public static int[][] generatePaletteIndices(char[][] map, char deepChar, int deepIndex,
+                                                 char shallowChar, int shallowIndex) {
+
+        int width = map.length;
+        int height = map[0].length;
+        int[][] portion = new int[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = 2;
+                        break;
+                    case '.':
+                    case ':':
+                        portion[i][j] = 3;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = 4;
+                        break;
+                    case ',':
+                    case '~':
+                        portion[i][j] = 5;
+                        break;
+                    case '"':
+                        portion[i][j] = 20;
+                        break;
+                    case '^':
+                        portion[i][j] = 6;
+                        break;
+                    default:
+                        if(map[i][j] == deepChar)
+                            portion[i][j] = deepIndex;
+                        else if(map[i][j] == shallowChar)
+                            portion[i][j] = shallowIndex;
+                        else portion[i][j] = 1;
                 }
             }
         }
@@ -678,6 +743,9 @@ public class DungeonUtility {
                     case '.':
                         portion[i][j] = 0;
                         break;
+                    case ':':
+                        portion[i][j] = 35;
+                        break;
                     case '+':
                     case '/':
                         portion[i][j] = 0;
@@ -696,6 +764,76 @@ public class DungeonUtility {
                         break;
                     default:
                         portion[i][j] = 0;
+                }
+            }
+        }
+        return portion;
+    }
+
+
+    /**
+     * Produces an int[][] that can be used with any palette of your choice for methods in SquidPanel or for your own
+     * rendering method, but meant for the background palette. This will produce 0 for most characters, but deep water
+     * (represented by '~') will produce 24 (in the default palette, this is dark blue-green), shallow water
+     * (represented by ',') will produce 23 (medium blue-green), and grass (represented by '"') will produce 21 (dark
+     * green). If you use SquidLayers, you can cause the lightness of water and grass to vary as if currents or wind
+     * are moving their surface using getLightnessModifiers() and a frame count argument.
+     *
+     * @param map a char[][] containing foreground characters that you want background palette indices for
+     * @return a 2D array of ints that can be used as indices into a palette; palettes are available in related modules
+     */
+    public static int[][] generateBGPaletteIndices(char[][] map, char deepChar, int deepIndex,
+                                                   char shallowChar, int shallowIndex) {
+
+        int width = map.length;
+        int height = map[0].length;
+        int[][] portion = new int[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = 0;
+                        break;
+                    case '.':
+                        portion[i][j] = 0;
+                        break;
+                    case ':':
+                        portion[i][j] = 35;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = 0;
+                        break;
+                    case ',':
+                        portion[i][j] = 23;
+                        break;
+                    case '~':
+                        portion[i][j] = 24;
+                        break;
+                    case '"':
+                        portion[i][j] = 21;
+                        break;
+                    case '^':
+                        portion[i][j] = 0;
+                        break;
+                    default:
+                        if(map[i][j] == deepChar)
+                            portion[i][j] = deepIndex;
+                        else if(map[i][j] == shallowChar)
+                            portion[i][j] = shallowIndex;
+                        else portion[i][j] = 0;
                 }
             }
         }
@@ -728,14 +866,17 @@ public class DungeonUtility {
                     case '─':
                     case '┼':
                     case '#':
-                        portion[i][j] = 0;
+                        portion[i][j] = 30;
                         break;
                     case '.':
-                        portion[i][j] = 20;
+                        portion[i][j] = 0;
+                        break;
+                    case ':':
+                        portion[i][j] = -15;
                         break;
                     case '+':
                     case '/':
-                        portion[i][j] = -20;
+                        portion[i][j] = -10;
                         break;
                     case ',':
                         portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0) / 2.5 - 0.45));
@@ -790,6 +931,9 @@ public class DungeonUtility {
                         break;
                     case '.':
                         portion[i][j] = 0;
+                        break;
+                    case ':':
+                        portion[i][j] = -15;
                         break;
                     case '+':
                     case '/':
@@ -852,6 +996,9 @@ public class DungeonUtility {
                     case '.':
                         portion[i][j] = 0;
                         break;
+                    case ':':
+                        portion[i][j] = -15;
+                        break;
                     case '+':
                     case '/':
                         portion[i][j] = -10;
@@ -870,9 +1017,9 @@ public class DungeonUtility {
                         break;
                     default:
                         if(map[i][j] == deepLiquid)
-                            portion[i][j] = (int) (100 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.65));
+                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i / 5.0, j / 5.0, frame / 21.0) / 2.5 - 0.7));
                         else if(map[i][j] == shallowLiquid)
-                            portion[i][j] = (int) (70 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 25.0) / 2.5 - 0.45));
+                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 30.0) / 2.5 - 0.45));
                         else portion[i][j] = 0;
                 }
             }
