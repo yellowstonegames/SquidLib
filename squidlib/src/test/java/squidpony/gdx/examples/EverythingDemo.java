@@ -250,12 +250,12 @@ public class EverythingDemo extends ApplicationAdapter {
         }
         // your choice of FOV matters here.
         fov = new FOV(FOV.RIPPLE_TIGHT);
+        res = DungeonUtility.generateResistances(decoDungeon);
+        fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
         getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
         getToPlayer.setGoal(pl);
         pathMap = getToPlayer.scan(null);
-        res = DungeonUtility.generateResistances(decoDungeon);
-        fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
 
         player = display.animateActor(pl.x, pl.y, '@',
                 fgCenter.filter(display.getPalette().get(30)));

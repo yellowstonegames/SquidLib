@@ -749,6 +749,8 @@ public class SectionDungeonGenerator {
                 }
             }
         }
+        if(maxDijkstra < 16)
+            return generate(baseDungeon, environment);
         stairsDown = singleRandom(pack(dijkstra.gradientMap, maxDijkstra * 0.7,
                 DijkstraMap.FLOOR), rng);
         finder = new RoomFinder(map, env2);
@@ -813,10 +815,10 @@ public class SectionDungeonGenerator {
         ArrayList<char[][]> rm = finder.findRooms(),
                 cr = finder.findCorridors(),
                 cv = finder.findCaves();
-        char[][] roomMap = innerGenerate(RoomFinder.merge(rm), roomFX),
-                allCorridors = RoomFinder.merge(cr),
+        char[][] roomMap = innerGenerate(RoomFinder.merge(rm, width, height), roomFX),
+                allCorridors = RoomFinder.merge(cr, width, height),
                 corridorMap = innerGenerate(allCorridors, corridorFX),
-                allCaves = RoomFinder.merge(cv),
+                allCaves = RoomFinder.merge(cv, width, height),
                 caveMap = innerGenerate(allCaves, caveFX),
                 doorMap = makeDoors(rm, cr, allCaves),
                 lakeMap = makeLake(rm, cv);
@@ -860,7 +862,7 @@ public class SectionDungeonGenerator {
         fused.addAll(rooms);
         fused.addAll(corridors);
 
-        map = RoomFinder.merge(fused);
+        map = RoomFinder.merge(fused, width, height);
 
         LinkedHashSet<Coord> doorways = viableDoorways(doubleDoors, map, allCaves);
 
@@ -906,7 +908,7 @@ public class SectionDungeonGenerator {
         fused.addAll(rooms);
         fused.addAll(caves);
 
-        fusedMap = RoomFinder.merge(fused);
+        fusedMap = RoomFinder.merge(fused, width, height);
         short[] limit = rectangle(1, 1, width - 2, height - 2),
                 potential = intersectPacked(limit, pack(fusedMap, '#'));
         int potentialSize = count(potential) * lakeFill / 100;
