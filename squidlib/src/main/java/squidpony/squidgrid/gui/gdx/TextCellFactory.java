@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -60,12 +59,15 @@ public class TextCellFactory implements Disposable {
     protected String fitting = SQUID_FITTING;
     protected IColorCenter<Color> scc;
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
-    protected int width = 1, height = 1, actualCellWidth = 1, actualCellHeight = 1;
+    protected int width = 1, height = 1;
+    protected float actualCellWidth = 1, actualCellHeight = 1, lineTweak = 0f;
     protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;
     private boolean initialized = false, initializedByFont = false, initializedBySize = false;
     protected boolean distanceField = false;
     protected ShaderProgram shader;
     protected float smoothingMultiplier = 1f;
+    protected float descent, lineHeight;
+    private Label.LabelStyle style;
     protected java.util.LinkedHashMap<String, String> swap = new LinkedHashMap<>(32);
 
 
@@ -109,6 +111,9 @@ public class TextCellFactory implements Disposable {
         next.width = width;
         next.actualCellWidth = actualCellWidth;
         next.actualCellHeight = actualCellHeight;
+        next.descent = descent;
+        next.lineHeight = lineHeight;
+        next.lineTweak = lineTweak;
         //next.modifiedHeight = modifiedHeight;
         next.smoothingMultiplier = smoothingMultiplier;
         next.scc = scc;
@@ -131,7 +136,10 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory initByFont() {
         bmpFont.setFixedWidthGlyphs(fitting);
         width = (int)bmpFont.getSpaceWidth();
-        height = (int)(bmpFont.getLineHeight());
+        lineHeight = bmpFont.getLineHeight();
+        height = (int)(lineHeight);
+        descent = bmpFont.getDescent();
+
         actualCellWidth = width;
         actualCellHeight = height;
         //modifiedHeight = height;
@@ -141,6 +149,7 @@ public class TextCellFactory implements Disposable {
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
         temp.dispose();
+        style = new Label.LabelStyle(bmpFont, null);
         initialized = true;
         initializedByFont = true;
         return this;
@@ -164,10 +173,10 @@ public class TextCellFactory implements Disposable {
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
         temp.dispose();
-
-        actualCellHeight++;
         if(distanceField)
         {
+            actualCellHeight++;
+
             bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
 
             shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.fragmentShader);
@@ -175,11 +184,17 @@ public class TextCellFactory implements Disposable {
             if (!shader.isCompiled()) {
                 Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + shader.getLog());
             }
+            lineHeight = bmpFont.getLineHeight();
+            lineTweak = lineHeight / 20f;
             //distanceFieldScaleX *= (((float)width) / height) / (distanceFieldScaleX / distanceFieldScaleY);
         }
-        else
-            shader= SpriteBatch.createDefaultShader();
-
+        else {
+            shader = SpriteBatch.createDefaultShader();
+            lineHeight = bmpFont.getLineHeight();
+            //lineTweak = lineHeight * 0.0625f;
+        }
+        descent = bmpFont.getDescent();
+        style = new Label.LabelStyle(bmpFont, null);
         initialized = true;
         initializedBySize = true;
         return this;
@@ -724,15 +739,19 @@ public class TextCellFactory implements Disposable {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
 
+        // + descent * 3 / 2f
+        // - distanceFieldScaleY / 12f
+
+        //height - lineTweak * 2f
         if (s == null) {
-            batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
+            batch.draw(block, x, y - (actualCellHeight - lineTweak * 2f) * 1.25f, actualCellWidth, actualCellHeight + 1 - lineTweak * 1f); // + descent * 1 / 3f
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            batch.draw(block, x, y - height, actualCellWidth * s.length(), actualCellHeight);
+            batch.draw(block, x, y - (actualCellHeight - lineTweak * 2f) * 1.25f, actualCellWidth * s.length(), actualCellHeight + 1 - lineTweak * 1f); // descent * 1 / 3f
         } else {
             if(swap.containsKey(s))
-                bmpFont.draw(batch, swap.get(s), x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+                bmpFont.draw(batch, swap.get(s), x, y/* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
             else
-                bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+                bmpFont.draw(batch, s, x, y/* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
         }
     }
     /**
@@ -756,19 +775,19 @@ public class TextCellFactory implements Disposable {
         if (s == null) {
             Color orig = scc.filter(batch.getColor());
             batch.setColor(r, g, b, a);
-            batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
+            batch.draw(block, x, y - (actualCellHeight - lineTweak * 2f) * 1.25f, actualCellWidth, actualCellHeight + 1 - lineTweak * 1f); // descent * 1 / 3f
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             Color orig = scc.filter(batch.getColor());
             batch.setColor(r, g, b, a);
-            batch.draw(block, x, y - height, actualCellWidth * s.length(), actualCellHeight);
+            batch.draw(block, x, y - (actualCellHeight - lineTweak * 2f) * 1.25f, actualCellWidth * s.length(), actualCellHeight + 1 - lineTweak * 1f); // descent * 1 / 3f
             batch.setColor(orig);
         } else {
             bmpFont.setColor(r, g, b, a);
             if(swap.containsKey(s))
-                bmpFont.draw(batch, swap.get(s), x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+                bmpFont.draw(batch, swap.get(s), x, y/* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
             else
-                bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+                bmpFont.draw(batch, s, x, y/* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
         }
     }
 
@@ -790,19 +809,19 @@ public class TextCellFactory implements Disposable {
         if (s == null) {
             Color orig = batch.getColor();
             batch.setColor(scc.filter(color));
-            batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
+            batch.draw(block, x, y - (actualCellHeight - lineTweak * 2f) * 1.25f, actualCellWidth, actualCellHeight + 1 - lineTweak * 1f); // descent * 1 / 3f
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             Color orig = batch.getColor();
             batch.setColor(scc.filter(color));
-            batch.draw(block, x, y - height, actualCellWidth * s.length(), actualCellHeight);
+            batch.draw(block, x, y - (actualCellHeight - lineTweak * 2f) * 1.25f, actualCellWidth * s.length(), actualCellHeight + 1 - lineTweak * 1f); // descent * 1 / 3f
             batch.setColor(orig);
         } else {
             bmpFont.setColor(scc.filter(color));
             if(swap.containsKey(s))
-                bmpFont.draw(batch, swap.get(s), x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+                bmpFont.draw(batch, swap.get(s), x, y/* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
             else
-                bmpFont.draw(batch, s, x, y - bmpFont.getDescent(), width * s.length(), Align.center, false);
+                bmpFont.draw(batch, s, x, y/* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
         }
     }
 
@@ -966,7 +985,7 @@ public class TextCellFactory implements Disposable {
         if (tr == null) {
             Color orig = batch.getColor();
             batch.setColor(scc.filter(color));
-            batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
+            batch.draw(block, x, y - height, width, height);
             batch.setColor(orig);
         } else {
             Color orig = batch.getColor();
@@ -989,7 +1008,7 @@ public class TextCellFactory implements Disposable {
         if (s == null) {
             s = "";
         }
-        Label lb = new Label(s, new Label.LabelStyle(bmpFont, null));
+        Label lb = new Label(s, style);
         lb.setWrap(true);
         // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
         return lb;
@@ -1010,23 +1029,23 @@ public class TextCellFactory implements Disposable {
             Image im = new Image(block);
             im.setColor(scc.filter(color));
             //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth, actualCellHeight + MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth, actualCellHeight + lineTweak * 1f); //  - lineHeight / actualCellHeight
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             Image im = new Image(block);
             im.setColor(scc.filter(color));
             //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth * s.length(), actualCellHeight + MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth * s.length(), actualCellHeight + lineTweak * 1f); //   - lineHeight / actualCellHeight
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
             Label lb;
             if(swap.containsKey(s))
-                lb = new Label(swap.get(s), new Label.LabelStyle(bmpFont, null));
+                lb = new Label(swap.get(s), style);
             else
-                lb = new Label(s, new Label.LabelStyle(bmpFont, null));
-            lb.setSize(width * s.length(), height - bmpFont.getDescent());
+                lb = new Label(s, style);
+            lb.setSize(width * s.length(), actualCellHeight + lineTweak * 1f);
             lb.setColor(scc.filter(color));
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
@@ -1157,6 +1176,14 @@ public class TextCellFactory implements Disposable {
     public void dispose() {
         if(bmpFont != null) bmpFont.dispose();
         if(block != null) block.dispose();
+    }
+
+    /**
+     * Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.
+     * @return the descent of the BitmapFont this object uses
+     */
+    public float getDescent() {
+        return descent;
     }
 
     /**

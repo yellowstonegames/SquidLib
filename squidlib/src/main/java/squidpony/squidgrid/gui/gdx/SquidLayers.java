@@ -1806,5 +1806,11 @@ public class SquidLayers extends Group {
     public void setBGColorCenter(IColorCenter<Color> scc) {
         backgroundPanel.setColorCenter(scc);
     }
-
+    public void setOffsets(float x, float y)
+    {
+        foregroundPanel.setOffsets(x, y);
+        backgroundPanel.setOffsets(x, y);
+        for(SquidPanel p : extraPanels)
+            p.setOffsets(x, y);
+    }
 }

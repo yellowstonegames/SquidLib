@@ -60,7 +60,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         cellWidth = 6;
         cellHeight = 12;
         display = new SquidLayers(width * 2, height, cellWidth, cellHeight, DefaultResources.narrowName);
-        display.setAnimationDuration(0.15f);
+        display.setAnimationDuration(0.35f);
         stage = new Stage(new ScreenViewport(), batch);
 
         lrng = new LightRNG(0x1337BEEF);
@@ -282,7 +282,7 @@ public class SquidAIDemo extends ApplicationAdapter {
     }
 
     public void move(AnimatedEntity ae, int newX, int newY) {
-        display.slide(ae, newX, newY);
+        display.slide(ae, newX, newY, 2, 0.075f);
         phase = Phase.MOVE_ANIM;
 
     }

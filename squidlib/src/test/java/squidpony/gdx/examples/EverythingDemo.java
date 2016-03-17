@@ -106,7 +106,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private int currentCenter;
     private boolean changingColors = false;
     private TextCellFactory textFactory;
-    public static final int INTERNAL_ZOOM = 2;
+    public static final int INTERNAL_ZOOM = 3;
     @Override
     public void create () {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
@@ -199,7 +199,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //the current health of the player and an '!' for alerted monsters.
         subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
 
-        display.setAnimationDuration(0.05f);
+        display.setAnimationDuration(0.08f);
         messages = new SquidMessageBox(width, 4, textFactory);
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
@@ -428,6 +428,7 @@ public class EverythingDemo extends ApplicationAdapter {
         }));
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
+        subCell.setOffsetY(messages.getGridHeight() * cellHeight);
         // and then add display and messages, our two visual components, to the list of things that act in Stage.
         stage.addActor(display);
         // stage.addActor(subCell); // this is not added since it is manually drawn after other steps
@@ -718,7 +719,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
                             lights[i][j] + (int) (-105 + 320 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
-                } else if (seen[i][j]) {
+                } else {// if (seen[i][j]) {
                     display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]), -140);
                 }
             }
@@ -833,7 +834,7 @@ public class EverythingDemo extends ApplicationAdapter {
                         subCell.put(mon.entity.gridX, mon.entity.gridY, '!', SColor.DARK_RED);
                 }
             }
-            subCell.draw(batch, 1.0F, 0F, messages.getGridHeight() * cellHeight);
+            subCell.draw(batch, 1.0F);
             // batch must end if it began.
             batch.end();
         }
