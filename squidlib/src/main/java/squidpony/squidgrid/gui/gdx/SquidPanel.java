@@ -42,6 +42,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected final Color[][] colors;
     protected Color lightingColor = SColor.WHITE;
     protected final TextCellFactory textFactory;
+    protected float xOffset, yOffset;
     protected LinkedHashSet<AnimatedEntity> animatedEntities;
     protected boolean distanceField = false;
 
@@ -97,6 +98,25 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      *          {@link #setColorCenter(IColorCenter)}.
      */
     public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, IColorCenter<Color> center) {
+        this(gridWidth, gridHeight, factory, center, 0f, 0f);
+    }
+
+    /**
+     * Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
+     * are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
+     *
+     * If the TextCellFactory has not yet been initialized, then it will be sized at 12x12 px per cell. If it is null
+     * then a default one will be created and initialized.
+     *
+     * @param gridWidth the number of cells horizontally
+     * @param gridHeight the number of cells vertically
+     * @param factory the factory to use for cell rendering
+     * @param center
+     * 			The color center to use. Can be {@code null}, but then must be set later on with
+     *          {@link #setColorCenter(IColorCenter)}.
+     */
+    public SquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, IColorCenter<Color> center,
+                      float xOffset, float yOffset) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         this.textFactory = factory;
@@ -122,6 +142,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
         setSize(w, h);
         animatedEntities = new LinkedHashSet<>();
     }
@@ -441,27 +463,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         for (int x = gridOffsetX; x < gridWidth; x++) {
             for (int y = gridOffsetY; y < gridHeight; y++) {
                 tmp = scc.filter(colors[x][y]);
-                textFactory.draw(batch, contents[x][y], tmp, 1f * x * cellWidth, 1f * (gridHeight - y) * cellHeight + 1f);
-            }
-        }
-        super.draw(batch, parentAlpha);
-        for(AnimatedEntity ae : animatedEntities)
-        {
-            ae.actor.act(Gdx.graphics.getDeltaTime());
-        }
-    }
-    public void draw (Batch batch, float parentAlpha, float xOffset, float yOffset) {
-        /*if(batch.isDrawing()) {
-            batch.end();
-            batch.begin();
-        }*/
-        textFactory.configureShader(batch);
-        Color tmp;
-
-        for (int x = gridOffsetX; x < gridWidth; x++) {
-            for (int y = gridOffsetY; y < gridHeight; y++) {
-                tmp = scc.filter(colors[x][y]);
-                textFactory.draw(batch, contents[x][y], tmp, xOffset + 1f * x * cellWidth, yOffset + 1f * (gridHeight - y) * cellHeight + 1f);
+                textFactory.draw(batch, contents[x][y], tmp, xOffset + /*- getX() + */1f * x * cellWidth,
+                        yOffset + /*- getY() + */1f * (gridHeight - y) * cellHeight + 1f);
             }
         }
         super.draw(batch, parentAlpha);
@@ -511,13 +514,16 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, char c, Color color)
     {
+        return animateActor(x, y, false, String.valueOf(c), color);
+        /*
         Actor a = textFactory.makeActor("" + c, color);
         a.setName("" + c);
-        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
 
         AnimatedEntity ae = new AnimatedEntity(a, x, y);
         animatedEntities.add(ae);
         return ae;
+        */
     }
 
     /**
@@ -532,16 +538,19 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, char c, Color color)
     {
+        return animateActor(x, y, doubleWidth, String.valueOf(c), color);
+        /*
         Actor a = textFactory.makeActor("" + c, color);
         a.setName("" + c);
         if(doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
         else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
 
         AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
+        */
     }
 
     /**
@@ -554,13 +563,16 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, String s, Color color)
     {
+        return animateActor(x, y, false, s, color);
+        /*
         Actor a = textFactory.makeActor(s, color);
         a.setName(s);
-        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
 
         AnimatedEntity ae = new AnimatedEntity(a, x, y);
         animatedEntities.add(ae);
         return ae;
+        */
     }
 
     /**
@@ -577,11 +589,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     {
         Actor a = textFactory.makeActor(s, color);
         a.setName(s);
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        /*
         if(doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
         else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
-
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
+        */
         AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
@@ -625,13 +639,16 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, TextureRegion texture)
     {
+        return animateActor(x, y, false, texture, Color.WHITE);
+        /*
         Actor a = textFactory.makeActor(texture, Color.WHITE);
         a.setName("");
-        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
 
         AnimatedEntity ae = new AnimatedEntity(a, x, y);
         animatedEntities.add(ae);
         return ae;
+        */
     }
 
     /**
@@ -645,13 +662,16 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, TextureRegion texture, Color color)
     {
+        return animateActor(x, y, false, texture, color);
+        /*
         Actor a = textFactory.makeActor(texture, color);
         a.setName("");
-        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
 
         AnimatedEntity ae = new AnimatedEntity(a, x, y);
         animatedEntities.add(ae);
         return ae;
+        */
     }
 
     /**
@@ -665,16 +685,20 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture)
     {
+        return animateActor(x, y, doubleWidth, texture, Color.WHITE);
+        /*
         Actor a = textFactory.makeActor(texture, Color.WHITE, (doubleWidth ? 2 : 1) * cellWidth, cellHeight);
+
         a.setName("");
         if(doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
         else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
 
         AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
+        */
     }
 
     /**
@@ -690,11 +714,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture, Color color) {
         Actor a = textFactory.makeActor(texture, color, (doubleWidth ? 2 : 1) * cellWidth, cellHeight);
         a.setName("");
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        /*
         if (doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
         else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
-
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
+        */
         AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
@@ -717,11 +743,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 ? textFactory.makeActor(texture, Color.WHITE, (doubleWidth ? 2 : 1) * cellWidth, cellHeight)
                 : textFactory.makeActor(texture, Color.WHITE, texture.getRegionWidth(), texture.getRegionHeight());
         a.setName("");
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        /*
         if(doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
         else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
-
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight  - textFactory.getDescent() + getY());
+        */
         AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
@@ -745,11 +773,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 ? textFactory.makeActor(texture, color, (doubleWidth ? 2 : 1) * cellWidth, cellHeight)
                 : textFactory.makeActor(texture, color, texture.getRegionWidth(), texture.getRegionHeight());
         a.setName("");
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        /*
         if (doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight  - textFactory.getDescent() + getY());
         else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
-
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight  - textFactory.getDescent() + getY());
+            */
         AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
@@ -763,17 +793,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public Actor cellToActor(int x, int y)
     {
-        if(contents[x][y] == null || contents[x][y].equals(""))
-            return null;
-
-        Actor a = textFactory.makeActor(contents[x][y], scc.filter(colors[x][y]));
-        a.setName(contents[x][y]);
-        a.setPosition((x * cellWidth) - getX(), ((gridHeight - y - 1) * cellHeight) - 1 - getY());
-
-        addActor(a);
-
-        contents[x][y] = "";
-        return a;
+        return cellToActor(x, y, false);
     }
 
     /**
@@ -790,15 +810,33 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
         Actor a = textFactory.makeActor(contents[x][y], scc.filter(colors[x][y]));
         a.setName(contents[x][y]);
+        a.setPosition(adjustX(x, doubleWidth) - getX() * 2, adjustY(y) - getY() * 2); // - textFactory.lineHeight * 0.25f
+
+        /*
         if(doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight  - textFactory.getDescent() + getY());
         else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - 1 + getY());
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight  - textFactory.getDescent() + getY());
+         */
 
         addActor(a);
 
         contents[x][y] = "";
         return a;
+    }
+
+    public float adjustX(float x, boolean doubleWidth)
+    {
+        if(doubleWidth)
+            return x * 2 * cellWidth + getX();
+        else
+            return x * cellWidth + getX();
+    }
+
+    public float adjustY(float y)
+    {
+        return (gridHeight - y - 1) * cellHeight + getY() - textFactory.lineTweak * 3f; // - textFactory.lineHeight
+        //return (gridHeight - y - 1) * cellHeight + textFactory.getDescent() * 3 / 2f + getY();
     }
 
     /*
@@ -816,7 +854,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void recallActor(Actor a)
     {
         int x = Math.round((a.getX() - getX()) / cellWidth),
-             y = gridHeight - Math.round((a.getY() - getY()) / cellHeight) - 1;
+             y = gridHeight - Math.round((a.getY() - getY() + textFactory.lineTweak * 4.5f) / cellHeight) - 1;
         contents[x][y] = a.getName();
         animationCount--;
         removeActor(a);
@@ -827,7 +865,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             ae.gridX = Math.round((ae.actor.getX() - getX()) / (2 * cellWidth));
         else
             ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth);
-        ae.gridY = gridHeight - Math.round((ae.actor.getY() - getY()) / cellHeight) - 1;
+        ae.gridY = gridHeight - Math.round((ae.actor.getY() - getY() + textFactory.lineTweak * 4.5f) / cellHeight) - 1;
         ae.animating = false;
         animationCount--;
     }
@@ -841,8 +879,10 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void bump(final AnimatedEntity ae, Direction direction, float duration)
     {
         final Actor a = ae.actor;
-        final int x = ae.gridX * cellWidth + (int)getX(),
-                y = (gridHeight - ae.gridY - 1) * cellHeight - 1 + (int)getY();
+        final float x = adjustX(ae.gridX, ae.doubleWidth),
+                y = adjustY(ae.gridY);
+        // ae.gridX * cellWidth + (int)getX(),
+        // (gridHeight - ae.gridY - 1) * cellHeight - 1 + (int)getY();
         if(a == null || ae.animating) return;
         duration = clampDuration(duration);
         animationCount++;
@@ -872,16 +912,19 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(a == null) return;
         duration = clampDuration(duration);
         animationCount++;
+        float nextX = adjustX(x, false), nextY = adjustY(y);
+        /*
         x *= cellWidth;
         y = (gridHeight - y - 1);
         y *= cellHeight;
         y -= 1;
         x +=  getX();
         y +=  getY();
+        */
         a.addAction(Actions.sequence(
-                Actions.moveToAligned(x + direction.deltaX / 3F, y + direction.deltaY / 3F,
+                Actions.moveToAligned(nextX + direction.deltaX / 3F, nextY + direction.deltaY / 3F,
                         Align.center, duration * 0.35F),
-                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F),
+                Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration * 0.65F),
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
@@ -921,7 +964,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void slide(final AnimatedEntity ae, int newX, int newY, float duration)
     {
         final Actor a = ae.actor;
-        final int nextX = newX * cellWidth * ((ae.doubleWidth) ? 2 : 1) + (int)getX(), nextY = (gridHeight - newY - 1) * cellHeight - 1 + (int)getY();
+        final float nextX = adjustX(newX, ae.doubleWidth), nextY = adjustY(newY);
+        //final int nextX = newX * cellWidth * ((ae.doubleWidth) ? 2 : 1) + (int)getX(), nextY = (gridHeight - newY - 1) * cellHeight - 1 + (int)getY();
         if(a == null || ae.animating) return;
         duration = clampDuration(duration);
         animationCount++;
@@ -951,14 +995,18 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(a == null) return;
         duration = clampDuration(duration);
         animationCount++;
+        float nextX = adjustX(newX, false), nextY = adjustY(newY);
+
+        /*
         newX *= cellWidth;
         newY = (gridHeight - newY - 1);
         newY *= cellHeight;
         newY -= 1;
         x += getX();
         y += getY();
+        */
         a.addAction(Actions.sequence(
-                Actions.moveToAligned(newX, newY, Align.bottomLeft, duration),
+                Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration),
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
@@ -1008,7 +1056,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void wiggle(final AnimatedEntity ae, float duration) {
 
         final Actor a = ae.actor;
-        final int x = ae.gridX * cellWidth * ((ae.doubleWidth) ? 2 : 1) + (int)getX(), y = (gridHeight - ae.gridY - 1) * cellHeight - 1 + (int)getY();
+        final float x = adjustX(ae.gridX, ae.doubleWidth), y = adjustY(ae.gridY);
+        //final int x = ae.gridX * cellWidth * ((ae.doubleWidth) ? 2 : 1) + (int)getX(), y = (gridHeight - ae.gridY - 1) * cellHeight - 1 + (int)getY();
         if(a == null || ae.animating)
             return;
         duration = clampDuration(duration);
@@ -1048,27 +1097,30 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         if(a == null) return;
         duration = clampDuration(duration);
         animationCount++;
+        float nextX = adjustX(x, false), nextY = adjustY(y);
+        /*
         x *= cellWidth;
         y = (gridHeight - y - 1);
         y *= cellHeight;
         y -= 1;
         x +=  getX();
         y +=  getY();
+        */
         StatefulRNG gRandom = DefaultResources.getGuiRandom();
         a.addAction(Actions.sequence(
-                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(nextX + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        nextY + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(nextX + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        nextY + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(nextX + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        nextY + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                Actions.moveToAligned(nextX + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        nextY + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
                         Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration * 0.2F),
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
@@ -1120,7 +1172,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                     Actions.delay(delay),
                     Actions.color(color, duration * 0.3f),
                     Actions.color(ac, duration * 0.7f),
-                    Actions.delay(0.01f, Actions.run(new Runnable() {
+                    Actions.delay(0.0f, Actions.run(new Runnable() {
                         @Override
                         public void run() {
                             recallActor(a);
@@ -1130,12 +1182,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             a.addAction(Actions.sequence(
                     Actions.color(color, duration * 0.3f),
                     Actions.color(ac, duration * 0.7f),
-                    Actions.delay(0.01f, Actions.run(new Runnable() {
+                    Actions.run(new Runnable() {
                         @Override
                         public void run() {
                             recallActor(a);
                         }
-                    }))));
+                    })));
                 /*Actions.run(new Runnable() {
                     @Override
                     public void run() {
@@ -1334,5 +1386,26 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
         setBounds(x, y, getWidth(), getHeight());
+    }
+
+    public float getxOffset() {
+        return xOffset;
+    }
+
+    public void setOffsetX(float xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    public float getyOffset() {
+        return yOffset;
+    }
+
+    public void setOffsetY(float yOffset) {
+        this.yOffset = yOffset;
+    }
+
+    public void setOffsets(float x, float y) {
+        xOffset = x;
+        yOffset = y;
     }
 }
