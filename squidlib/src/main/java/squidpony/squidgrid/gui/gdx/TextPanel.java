@@ -1,17 +1,16 @@
 package squidpony.squidgrid.gui.gdx;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-
 import squidpony.SquidTags;
 import squidpony.annotation.Beta;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ICombinedPanel;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A panel to display some text. It can either compute its size on its own or
@@ -59,6 +58,7 @@ public abstract class TextPanel<T extends Color> extends GroupCombinedPanel<T> {
 	public CornerStyle borderStyle = CornerStyle.ROUNDED;
 
 	public int borderSize = 0;
+	public float zoomMultiplierX = 1, zoomMultiplierY = 1;
 
 	/** Whether to use {@link IColoredString#justify(int)} on text */
 	public boolean justifyText = true;
@@ -127,7 +127,7 @@ public abstract class TextPanel<T extends Color> extends GroupCombinedPanel<T> {
 			final int w = bg.gridWidth();
 			final int h = bg.gridHeight();
 			UIUtil.drawMarginsAround(x, y, w * bg.cellWidth(), h * bg.cellHeight(), borderSize, borderColor,
-					borderStyle);
+					borderStyle, zoomMultiplierX, zoomMultiplierY);
 		}
 	}
 

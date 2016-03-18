@@ -107,6 +107,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private boolean changingColors = false;
     private TextCellFactory textFactory;
     public static final int INTERNAL_ZOOM = 3;
+    private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
     @Override
     public void create () {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
@@ -658,6 +659,8 @@ public class EverythingDemo extends ApplicationAdapter {
 							 * be bareDungeon.length
 							 */ helping3.length() / 2;
 			tp.maxHeight = bareDungeon[0].length;
+            tp.zoomMultiplierX = currentZoomX;
+            tp.zoomMultiplierY = currentZoomY;
 			tp.backgroundColor = bgColor;
 			tp.borderSize = display.getCellHeight() / 4;
 			tp.borderColor = new Color(0.9f, 0.1f, 0.0f, 0.5f);
@@ -683,7 +686,8 @@ public class EverythingDemo extends ApplicationAdapter {
 			final int w = tp.getGridWidth();
 			final int h = tp.getGridHeight();
 
-			a.setPosition(((width / 2) - (w / 2)) * cellWidth, ((height / 2) - (h / 2)) * cellHeight);
+			a.setPosition(((width / 2) - (w / 2)) * cellWidth,
+                    ((height / 2) - (h / 2)) * cellHeight);
 
 			/*
 			 * The panel's text is set, as well as its position. We're ready to
@@ -849,6 +853,8 @@ public class EverythingDemo extends ApplicationAdapter {
 			 * Needed because drawing the stage erased them. No big deal,
 			 * ShapeRenderer is super fast.
 			 */
+            tp.zoomMultiplierX = currentZoomX;
+            tp.zoomMultiplierY = currentZoomY;
 			tp.putBorder();
 		}
     }
@@ -858,11 +864,14 @@ public class EverythingDemo extends ApplicationAdapter {
 		super.resize(width, height);
         // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
         stage.getViewport().update(width, height);
+        currentZoomX = width * 1f / this.width;
         // total new screen height in pixels divided by total number of rows on the screen
-        float cellHigh = height / (this.height + messages.getGridHeight());
+        currentZoomY = height * 1f / (this.height + messages.getGridHeight());
         // message box should be given updated bounds since I don't think it will do this automatically
-        messages.setBounds(0, 0, width, cellHigh * messages.getGridHeight());
+        messages.setBounds(0, 0, width, currentZoomY * messages.getGridHeight());
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
-		input.getMouse().reinitialize((float) width / this.width, cellHigh, this.width, this.height, 0, 0);
+		input.getMouse().reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0);
+        currentZoomX = cellWidth / currentZoomX;
+        currentZoomY = cellHeight / currentZoomY;
 	}
 }
