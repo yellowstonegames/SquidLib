@@ -520,6 +520,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers setTextSize(int wide, int high)
     {
+        textFactory.tweakHeight(high).tweakWidth(wide).initBySize();
         setTextSize(0, wide, high);
         setTextSize(2, wide, high);
         for (int i = 0; i < extraPanels.size(); i++) {

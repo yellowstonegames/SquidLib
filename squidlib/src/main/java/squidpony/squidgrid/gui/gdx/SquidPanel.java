@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -130,8 +131,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             factory.initByFont();
         }
 
-        cellWidth = factory.width();
-        cellHeight = factory.height();
+        cellWidth = MathUtils.round(factory.actualCellWidth);
+        cellHeight = MathUtils.round(factory.actualCellHeight);
 
         contents = new String[gridWidth][gridHeight];
         colors = new Color[gridWidth][gridHeight];
@@ -835,7 +836,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     public float adjustY(float y)
     {
-        return (gridHeight - y - 1) * cellHeight + getY() - textFactory.lineTweak * 3f; // - textFactory.lineHeight
+        return (gridHeight - y - 1) * cellHeight + getY(); // - textFactory.lineHeight //textFactory.lineTweak * 3f
         //return (gridHeight - y - 1) * cellHeight + textFactory.getDescent() * 3 / 2f + getY();
     }
 
@@ -854,7 +855,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void recallActor(Actor a)
     {
         int x = Math.round((a.getX() - getX()) / cellWidth),
-             y = gridHeight - Math.round((a.getY() - getY() + textFactory.lineTweak * 4.5f) / cellHeight) - 1;
+             y = gridHeight - Math.round((a.getY() - getY()) / cellHeight) - 1;
         contents[x][y] = a.getName();
         animationCount--;
         removeActor(a);
@@ -865,7 +866,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             ae.gridX = Math.round((ae.actor.getX() - getX()) / (2 * cellWidth));
         else
             ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth);
-        ae.gridY = gridHeight - Math.round((ae.actor.getY() - getY() + textFactory.lineTweak * 4.5f) / cellHeight) - 1;
+        ae.gridY = gridHeight - Math.round((ae.actor.getY() - getY()) / cellHeight) - 1;
         ae.animating = false;
         animationCount--;
     }

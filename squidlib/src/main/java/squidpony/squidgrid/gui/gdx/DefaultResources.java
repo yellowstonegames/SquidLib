@@ -112,6 +112,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.square1 = new BitmapFont(Gdx.files.internal("Zodiac-Square-12x12.fnt"), Gdx.files.internal("Zodiac-Square-12x12.png"), false);
+                //instance.square1.getData().padBottom = instance.square1.getDescent();
             } catch (Exception e) {
             }
         }
@@ -128,6 +129,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.square2 = new BitmapFont(Gdx.files.internal("Zodiac-Square-24x24.fnt"), Gdx.files.internal("Zodiac-Square-24x24.png"), false);
+                //instance.square2.getData().padBottom = instance.square2.getDescent();
             } catch (Exception e) {
             }
         }
@@ -144,6 +146,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.narrow1 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-6x12.fnt"), Gdx.files.internal("Rogue-Zodiac-6x12_0.png"), false);
+                //instance.narrow1.getData().padBottom = instance.narrow1.getDescent();
             } catch (Exception e) {
             }
         }
@@ -161,6 +164,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.narrow2 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-12x24.fnt"), Gdx.files.internal("Rogue-Zodiac-12x24_0.png"), false);
+                //instance.narrow2.getData().padBottom = instance.narrow2.getDescent();
             } catch (Exception e) {
             }
         }
@@ -177,6 +181,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.narrow3 = new BitmapFont(Gdx.files.internal("Rogue-Zodiac-18x36.fnt"), Gdx.files.internal("Rogue-Zodiac-18x36_0.png"), false);
+                //instance.narrow3.getData().padBottom = instance.narrow3.getDescent();
             } catch (Exception e) {
             }
         }
@@ -196,6 +201,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.smooth1 = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-8x18.fnt"), Gdx.files.internal("Inconsolata-LGC-8x18.png"), false);
+                //instance.smooth1.getData().padBottom = instance.smooth1.getDescent();
             } catch (Exception e) {
             }
         }
@@ -214,6 +220,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.smooth2 = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-12x24.fnt"), Gdx.files.internal("Inconsolata-LGC-12x24.png"), false);
+                //instance.smooth2.getData().padBottom = instance.smooth2.getDescent();
             } catch (Exception e) {
             }
         }
@@ -230,6 +237,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.unicode1 = new BitmapFont(Gdx.files.internal("Mandrill-6x16.fnt"), Gdx.files.internal("Mandrill-6x16.png"), false);
+                //instance.unicode1.getData().padBottom = instance.unicode1.getDescent();
             } catch (Exception e) {
             }
         }
@@ -247,6 +255,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.unicode2 = new BitmapFont(Gdx.files.internal("Mandrill-12x32.fnt"), Gdx.files.internal("Mandrill-12x32.png"), false);
+                //instance.unicode2.getData().padBottom = instance.unicode2.getDescent();
             } catch (Exception e) {
             }
         }
@@ -266,6 +275,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.smoothSquare = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square-25x25.fnt"), Gdx.files.internal("Inconsolata-LGC-Square-25x25.png"), false);
+                //instance.smoothSquare.getData().padBottom = instance.smoothSquare.getDescent();
             } catch (Exception e) {
             }
         }
@@ -288,6 +298,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.smoothSquareOld = new BitmapFont(Gdx.files.internal("Inconsolata-LGC-Square.fnt"), Gdx.files.internal("Inconsolata-LGC-Square.png"), false);
+                //instance.smoothSquareOld.getData().padBottom = instance.smoothSquareOld.getDescent();
             } catch (Exception e) {
             }
         }
@@ -482,6 +493,10 @@ public class DefaultResources implements LifecycleListener {
         if(distanceNarrow != null) {
             distanceNarrow.dispose();
             distanceNarrow = null;
+        }
+        if(typewriterDistanceNarrow != null) {
+            typewriterDistanceNarrow.dispose();
+            typewriterDistanceNarrow = null;
         }
         if (unicode1 != null) {
             unicode1.dispose();

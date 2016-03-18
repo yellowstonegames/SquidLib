@@ -70,18 +70,45 @@ public class UIUtil {
 	 *            The style with which to draw the margins
 	 */
 	public static void drawMarginsAround(float botLeftX, float botLeftY, int width, int height, int margin,
-			Color color, CornerStyle cornerStyle) {
+										 Color color, CornerStyle cornerStyle) {
+		drawMarginsAround(botLeftX, botLeftY, width, height, margin, color, cornerStyle, 1f, 1f);
+	}
+
+	/**
+	 * @param botLeftX
+	 *            The bottom left x cell of the rectangle to draw around.
+	 * @param botLeftY
+	 *            The bottom left y cell of the rectangle to draw around.
+	 * @param width
+	 *            The width of the button considered.
+	 * @param height
+	 *            The width of the button considered.
+	 * @param margin
+	 *            The size of the margin to draw.
+	 * @param color
+	 *            The color to draw
+	 * @param cornerStyle
+	 *            The style with which to draw the margins
+	 * @param zoomX
+	 *            A multiplier for the world x-size of non-ShapeRenderer objects, that needs to be reversed for this
+	 * @param zoomY
+	 *            A multiplier for the world y-size of non-ShapeRenderer objects, that needs to be reversed for this
+	 */
+	public static void drawMarginsAround(float botLeftX, float botLeftY, int width, int height, int margin,
+										 Color color, CornerStyle cornerStyle, float zoomX, float zoomY) {
 		if (margin == 0 || color == null)
 			/* Nothing to do */
 			return;
+		botLeftY += 1;
 
 		final ShapeRenderer renderer = new ShapeRenderer();
 		renderer.begin(ShapeType.Filled);
+		renderer.scale(1f / zoomX, 1f / zoomY, 1f);
 		renderer.setColor(color);
 
 		if (cornerStyle == CornerStyle.ROUNDED || cornerStyle == CornerStyle.MISSING) {
 			/* Left margin */
-			renderer.rect(botLeftX - margin, botLeftY, margin, height);
+			renderer.rect(botLeftX - margin, botLeftY, margin, height); // + margin * 0.5f
 			/* Right margin */
 			renderer.rect(botLeftX + width, botLeftY, margin, height);
 		} else {
@@ -91,7 +118,7 @@ public class UIUtil {
 			renderer.rect(botLeftX + width, botLeftY - margin, margin, height + (margin * 2));
 		}
 		/* Bottom margin */
-		renderer.rect(botLeftX, (botLeftY - margin) + 1, width, margin);
+		renderer.rect(botLeftX, botLeftY - margin, width, margin);
 		/* Top margin */
 		renderer.rect(botLeftX, botLeftY + height, width, margin);
 
