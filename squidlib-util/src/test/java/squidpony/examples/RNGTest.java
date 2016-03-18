@@ -9,11 +9,12 @@ import java.util.Random;
  * Created by Tommy Ettinger on 7/16/2015.
  */
 public class RNGTest {
-    private static int[][] ibits = new int[11][32], lbits = new int[11][64];
-    private static int[] ibitsTotal = new int[11], lbitsTotal = new int[11];
+    private static int[][] ibits = new int[12][32], lbits = new int[11][64];
+    private static int[] ibitsTotal = new int[12], lbitsTotal = new int[12];
     private static BigInteger[] counters = new BigInteger[]{ BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO,
             BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO,
-            BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO};
+            BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO,
+            BigInteger.ZERO };
     private static String[] kindNames = new String[]{"Light", "Permuted", "Xor",
             "Light+RNG", "Permuted+RNG", "Xor+RNG", "Deck(RNG)",
             "Light+asRandom", "Permuted+asRandom", "Xor+asRandom", "Deck+asRandom"};
@@ -50,7 +51,8 @@ public class RNGTest {
 
         RNG lr = new RNG(new LightRNG(0xDADA157)),
                 pr = new RNG(new PermutedRNG(0xDADA157)),
-                xr = new RNG(new XorRNG(0xDADA157));
+                xr = new RNG(new XorRNG(0xDADA157)),
+                cr = new RNG(new ChaosRNG());
         DeckRNG dr = new DeckRNG(0xDADA157);
         Random lrr = lr.asRandom(),
                prr = pr.asRandom(),
@@ -79,18 +81,20 @@ public class RNGTest {
             System.out.println("PRR : " + binaryString(c, 8));
             c = xrr.nextInt();
             System.out.println("XRR : " + binaryString(c, 9));
-            c = xrr.nextInt();
+            c = drr.nextInt();
             System.out.println("DRR : " + binaryString(c, 10));
+            c = cr.nextInt();
+            System.out.println("CR  : " + binaryString(c, 11));
             System.out.println();
         }
-        for(int k = 0; k < 11; k++) {
+        for(int k = 0; k < 12; k++) {
             for (int i = 31; i >= 0; i--) {
                 System.out.print(String.format("%02d ", ibits[k][i]));
             }
             System.out.println();
         }
 
-        for(int k = 0; k < 11; k++) {
+        for(int k = 0; k < 12; k++) {
             System.out.println(ibitsTotal[k]);
         }
 
@@ -102,6 +106,7 @@ public class RNGTest {
         pr = new RNG(new PermutedRNG(0xDADA157));
         xr = new RNG(new XorRNG(0xDADA157));
         dr = new DeckRNG(0xDADA157);
+        cr = new RNG(new ChaosRNG());
         lrr = lr.asRandom();
         prr = pr.asRandom();
         xrr = xr.asRandom();
@@ -123,6 +128,8 @@ public class RNGTest {
             System.out.println("XR  : " + binaryString(l, 5));
             l = dr.nextLong();
             System.out.println("DR  : " + binaryString(l, 6));
+            l = cr.nextLong();
+            System.out.println("CR  : " + binaryString(l, 7));
             /*l = lrr.nextLong();
             System.out.println("LRR : " + binaryString(l, 6));
             l = prr.nextLong();
@@ -131,14 +138,14 @@ public class RNGTest {
             System.out.println("XRR : " + binaryString(l, 8));
             */
         }
-        for(int k = 0; k < 7; k++) {
+        for(int k = 0; k < 8; k++) {
             for (int i = 63; i >= 0; i--) {
                 System.out.print(String.format("%02d ", lbits[k][i]));
             }
             System.out.println();
         }
 
-        for(int k = 0; k < 7; k++) {
+        for(int k = 0; k < 8; k++) {
             System.out.println(kindNames[k] + " : ");
             System.out.println(lbitsTotal[k]);
             System.out.println(counters[k]);
@@ -152,11 +159,12 @@ public class RNGTest {
         pr = new RNG(new PermutedRNG(0xDADA157));
         xr = new RNG(new XorRNG(0xDADA157));
         dr = new DeckRNG(0xDADA157);
+        cr = new RNG(new ChaosRNG());
         lrr = lr.asRandom();
         prr = pr.asRandom();
         xrr = xr.asRandom();
-        ibits = new int[11][32];
-        ibitsTotal = new int[11];
+        ibits = new int[12][32];
+        ibitsTotal = new int[12];
         int d = 0;
         for(int i = 0; i < 99; i++)
         {
@@ -182,16 +190,18 @@ public class RNGTest {
             System.out.println("XRR : " + binaryString(d, 9));
             d = (int)((xrr.nextDouble() - 0.5) * 0xffffffffL);
             System.out.println("DRR : " + binaryString(d, 10));
+            d = (int)((cr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("CR  : " + binaryString(d, 11));
             System.out.println();
         }
-        for(int k = 0; k < 11; k++) {
+        for(int k = 0; k < 12; k++) {
             for (int i = 31; i >= 0; i--) {
                 System.out.print(String.format("%02d ", ibits[k][i]));
             }
             System.out.println();
         }
 
-        for(int k = 0; k < 11; k++) {
+        for(int k = 0; k < 12; k++) {
             System.out.println(ibitsTotal[k]);
         }
 
