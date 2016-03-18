@@ -174,7 +174,7 @@ public class TextCellFactory implements Disposable {
         temp.dispose();
         if(distanceField)
         {
-            actualCellHeight++;
+            //actualCellHeight++;
 
             bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
 
@@ -1029,14 +1029,14 @@ public class TextCellFactory implements Disposable {
             Image im = new Image(block);
             im.setColor(scc.filter(color));
             //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth, actualCellHeight); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             Image im = new Image(block);
             im.setColor(scc.filter(color));
             //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth * s.length(), actualCellHeight); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
+            im.setSize(actualCellWidth * s.length(), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
