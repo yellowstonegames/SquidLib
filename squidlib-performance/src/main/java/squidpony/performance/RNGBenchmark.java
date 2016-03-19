@@ -42,7 +42,6 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 import squidpony.squidmath.*;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -88,6 +87,26 @@ import java.util.concurrent.TimeUnit;
  * RNGBenchmark.measureXorR                  avgt    3   1358.552 ±   78.095  ms/op
  * RNGBenchmark.measureThreadLocalRandom     avgt    3   1518.164 ±   63.002  ms/op
  * RNGBenchmark.measureThreadLocalRandomInt  avgt    3   1387.081 ±   26.544  ms/op
+ *
+ * Benchmark                                 Mode  Cnt       Score      Error  Units
+ * RNGBenchmark.measureChaosR                avgt    3    1991.710 ±   25.528  ms/op
+ * RNGBenchmark.measureChaosRInt             avgt    3    2013.044 ±   45.370  ms/op
+ * RNGBenchmark.measureLight                 avgt    3    1270.195 ±   25.362  ms/op
+ * RNGBenchmark.measureLightInt              avgt    3    1268.299 ±   51.405  ms/op
+ * RNGBenchmark.measureLightIntR             avgt    3    1430.807 ±   33.260  ms/op
+ * RNGBenchmark.measureLightR                avgt    3    1275.100 ±  108.047  ms/op
+ * RNGBenchmark.measurePermuted              avgt    3    1646.291 ±   15.124  ms/op
+ * RNGBenchmark.measurePermutedInt           avgt    3    1747.967 ±   75.774  ms/op
+ * RNGBenchmark.measurePermutedIntR          avgt    3    1749.495 ±   61.203  ms/op
+ * RNGBenchmark.measurePermutedR             avgt    3    1662.216 ±   30.412  ms/op
+ * RNGBenchmark.measureSecureRandom          avgt    3  162726.751 ± 8173.061  ms/op
+ * RNGBenchmark.measureSecureRandomInt       avgt    3   81390.982 ±  471.706  ms/op
+ * RNGBenchmark.measureThreadLocalRandom     avgt    3    1463.199 ±  164.716  ms/op
+ * RNGBenchmark.measureThreadLocalRandomInt  avgt    3    1395.997 ±  186.706  ms/op
+ * RNGBenchmark.measureXor                   avgt    3    1389.147 ±  128.362  ms/op
+ * RNGBenchmark.measureXorInt                avgt    3    1286.873 ±  152.577  ms/op
+ * RNGBenchmark.measureXorIntR               avgt    3    1228.443 ±  280.454  ms/op
+ * RNGBenchmark.measureXorR                  avgt    3    1355.535 ±   74.150  ms/op
  *
  */
 public class RNGBenchmark {
@@ -374,8 +393,85 @@ public class RNGBenchmark {
 
 
 
+    public long doChaosR()
+    {
+        RNG rng = new RNG(new ChaosRNG());
+        //rng.setSeed(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureChaosR() throws InterruptedException {
+        seed = 9000;
+        doChaosR();
+    }
+
+    public long doChaosRInt()
+    {
+        RNG rng = new RNG(new ChaosRNG());
+        //rng.setSeed(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureChaosRInt() throws InterruptedException {
+        iseed = 9000;
+        doChaosRInt();
+    }
+/*
+    public long doSecureRandom()
+    {
+        SecureRandom rng = new SecureRandom();
+        //rng.setSeed(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureSecureRandom() throws InterruptedException {
+        seed = 9000;
+        doSecureRandom();
+    }
+
+    public long doSecureRandomInt()
+    {
+        SecureRandom rng = new SecureRandom();
+        //rng.setSeed(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureSecureRandomInt() throws InterruptedException {
+        iseed = 9000;
+        doSecureRandomInt();
+    }
+*/
 
 
+    /*
     public long doMT()
     {
         byte[] bseed = new byte[16];
@@ -449,6 +545,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doMTIntR();
     }
+*/
 
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
@@ -460,7 +557,7 @@ public class RNGBenchmark {
      *
      * a) Via the command line from the squidlib-performance module's root folder:
      *    $ mvn clean install
-     *    $ java -jar target/benchmarks.jar RNGBenchmark -wi 3 -i 5 -f 1
+     *    $ java -jar target/benchmarks.jar RNGBenchmark -wi 3 -i 3 -f 1
      *
      *    (we requested 5 warmup/measurement iterations, single fork)
      *
@@ -474,7 +571,7 @@ public class RNGBenchmark {
                 .include(RNGBenchmark.class.getSimpleName())
                 .timeout(TimeValue.seconds(30))
                 .warmupIterations(3)
-                .measurementIterations(5)
+                .measurementIterations(3)
                 .forks(1)
                 .build();
 
