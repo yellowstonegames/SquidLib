@@ -106,7 +106,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private int currentCenter;
     private boolean changingColors = false;
     private TextCellFactory textFactory;
-    public static final int INTERNAL_ZOOM = 3;
+    public static final int INTERNAL_ZOOM = 1;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
     @Override
     public void create () {
