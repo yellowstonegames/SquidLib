@@ -1,9 +1,6 @@
 package squidpony.examples;
 
-import squidpony.squidgrid.mapping.DungeonGenerator;
-import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.SectionDungeonGenerator;
-import squidpony.squidgrid.mapping.SerpentMapGenerator;
+import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
@@ -156,7 +153,8 @@ public class DungeonGeneratorTest {
         serpent.putWalledRoundRoomCarvers(3);
         serpent.putCaveCarvers(3);
         map = serpent.generate();
-        sdg.generate(map, serpent.getEnvironment());
+        int[][] env = serpent.getEnvironment();
+        sdg.generate(map, env);
 
         sdungeon = sdg.getDungeon();
         sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
@@ -166,6 +164,21 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(sdungeon, true)));
         System.out.println(dungeonGenerator);
 
+        /*
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                switch (env[x][y])
+                {
+                    case MixedGenerator.ROOM_FLOOR: sdungeon[x][y] = '1';
+                        break;
+                    case MixedGenerator.CAVE_FLOOR: sdungeon[x][y] = '3';
+                        break;
+                    case MixedGenerator.CORRIDOR_FLOOR: sdungeon[x][y] = '5';
+                        break;
+                }
+            }
+        }
+        */
         for(LinkedHashSet<Coord> lhs : sdg.placement.getAlongStraightWalls())
         {
             for(Coord c : lhs)
@@ -179,6 +192,13 @@ public class DungeonGeneratorTest {
             for(Coord c : lhs)
             {
                 sdungeon[c.x][c.y] = 'º';
+            }
+        }
+        for(LinkedHashSet<Coord> lhs : sdg.placement.getCenters())
+        {
+            for(Coord c : lhs)
+            {
+                sdungeon[c.x][c.y] = '$';
             }
         }
 
