@@ -20,10 +20,9 @@ public class Placement {
      */
     public RoomFinder finder;
 
-    private short[] allRooms = ALL_WALL, allCaves = ALL_WALL, allCorridors = ALL_WALL, working, nonRoom;
-
+    private short[] allRooms = ALL_WALL, allCaves = ALL_WALL, allCorridors = ALL_WALL, working, working2, nonRoom;
     private LinkedHashSet<LinkedHashSet<Coord>> alongStraightWalls = null,
-            corners = null;
+            corners = null, centers = null;
 
     private Placement()
     {
@@ -92,7 +91,7 @@ public class Placement {
      * corners, and each Coord is one of those corners. There are more uses for corner placement than I can list. This
      * doesn't always identify all corners, since it only finds ones in rooms, and a cave too close to a corner can
      * cause that corner to be ignored.
-     * @return a set of sets of Coord where each set of Coord is a wall's viable placement for long things along it
+     * @return a set of sets of Coord where each set of Coord is a room's corners
      */
     public LinkedHashSet<LinkedHashSet<Coord>> getCorners() {
         if(corners == null)
@@ -107,14 +106,52 @@ public class Placement {
                                                 1, finder.width, finder.height, true)
                                 ),
                                 nonRoom);
-                for(short[] sp : split(working))
+                for(Coord c : allPacked(working))
                 {
-                    corners.add(arrayToSet(allPacked(sp)));
+                    LinkedHashSet<Coord> lhs = new LinkedHashSet<Coord>();
+                    lhs.add(c);
+                    corners.add(lhs);
                 }
 
             }
         }
         return corners;
+    }
+    /**
+     * Gets a LinkedHashSet of LinkedHashSet of Coord, where each inner LinkedHashSet of Coord refers to a room's cells
+     * that are furthest from the walls, and each Coord is one of those central positions. There are many uses for this,
+     * like finding a position to place a throne or shrine in a large room where it should be visible from all around.
+     * This doesn't always identify all centers, since it only finds ones in rooms, and it can also find multiple
+     * central points if they are all the same distance from a wall (common in something like a 3x7 room, where it will
+     * find a 1x5 column as the centers of that room).
+     * @return a set of sets of Coord where each set of Coord contains a room's cells that are furthest from the walls.
+     */
+    public LinkedHashSet<LinkedHashSet<Coord>> getCenters() {
+        if(centers == null)
+        {
+            centers = new LinkedHashSet<>(32);
+            for(short[] region : finder.rooms.keys()) {
+
+                working = null;
+                working2 = retract(region, 1, finder.width, finder.height, false);
+                for (int i = 2; i < 7; i++) {
+                    if(count(working2) <= 0)
+                        break;
+                    working = working2;
+                    working2 = retract(region, i, finder.width, finder.height, false);
+                }
+                if(working == null)
+                    continue;
+
+                //working =
+                //        differencePacked(
+                //                working,
+                //                nonRoom);
+                centers.add(arrayToSet(allPacked(working)));
+
+            }
+        }
+        return centers;
     }
 
     private static LinkedHashSet<Coord> arrayToSet(Coord[] arr)

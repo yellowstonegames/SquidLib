@@ -2047,7 +2047,7 @@ public class CoordPacker {
                         vla.add(dist);
                     for (int d = 0; d < 4; d++) {
                         for (int e = 1; e <= expansion; e++) {
-                            for (int e2 = 0; e2 < expansion; e2++) {
+                            for (int e2 = 0; e2 <= expansion - e; e2++) {
                                 j = Math.min(width - 1, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
                                 k = Math.min(height - 1, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
                                 dist = hilbertDistances[j + (k << 8)];
@@ -2360,7 +2360,7 @@ public class CoordPacker {
                     y = hilbertY[i];
                     for (int d = 0; d < 4; d++) {
                         for (int e = 1; e <= expansion; e++) {
-                            for (int e2 = 0; e2 < expansion; e2++) {
+                            for (int e2 = 0; e2 <= expansion - e; e2++) {
                                 int j = Math.min(width - 1, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
                                 int k = Math.min(height - 1, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
                                 dist = hilbertDistances[j + (k << 8)];
@@ -2458,7 +2458,7 @@ public class CoordPacker {
                     } else {
                         for (int d = 0; d < 4; d++) {
                             for (int e = 1; e <= expansion; e++) {
-                                for (int e2 = 0; e2 < expansion; e2++) {
+                                for (int e2 = 0; e2 <= expansion - e; e2++) {
                                     int j = x + xOffsets[d] * e + yOffsets[d + 1] * e2;
                                     int k = y + yOffsets[d] * e + xOffsets[d + 1] * e2;
 
@@ -2509,7 +2509,7 @@ public class CoordPacker {
      * the expansion would take a cell further than 0, width - 1 (for xMove) or height - 1 (for yMove), in which case
      * that cell is stopped at the edge. If a cell is "on" in packed, it will always be "off" in the results.
      * Returns a new packed short[][] where the outer array has length equal to expansions and the inner arrays are
-     * packed data encoding a one-cell-wide concentric fringe region. Does not modify packed.
+     * packed data encoding a one-cell-wide concentric fringe region. Uses 8-way measurement. Does not modify packed.
      * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
      * @param expansions the positive (square-shaped) radius, in cells, to expand each cell out by, also the length
      *                   of the outer array returned by this method
@@ -2570,14 +2570,14 @@ public class CoordPacker {
             vla.add((short) indices[0]);
             for (int i = 1; i < indices.length; i++) {
                 current = indices[i];
-
-                if (current != past)
-                    skip++;
-                if (current - past > 1) {
-                    vla.add((short) (skip + 1));
+                if (current - past > 1)
+                {
+                    vla.add((short) (skip+1));
                     skip = 0;
-                    vla.add((short) (current - past - 1));
+                    vla.add((short)(current - past - 1));
                 }
+                else if(current != past)
+                    skip++;
                 past = current;
             }
             vla.add((short) (skip + 1));
@@ -2590,7 +2590,7 @@ public class CoordPacker {
 
     /**
      * Finds the concentric areas around the cells encoded in packed, without including those cells. For each "on"
-     * position in packed, expand it to cover a a square with side length equal to 1 + n * 2, where n starts at 1 and
+     * position in packed, expand it to cover a a square or diamond with radius equal to n, where n starts at 1 and
      * goes up to include the expansions parameter, with each expansion centered on the original "on" position, unless
      * the expansion would take a cell further than 0, width - 1 (for xMove) or height - 1 (for yMove), in which case
      * that cell is stopped at the edge. If a cell is "on" in packed, it will always be "off" in the results.
@@ -2606,6 +2606,8 @@ public class CoordPacker {
      *          cells; the outer array will have length equal to expansions, and inner arrays will normal packed data
      */
     public static short[][] fringes(short[] packed, int expansions, int width, int height, boolean eightWay) {
+        if(eightWay)
+            return fringes(packed, expansions, width, height);
         short[][] finished = new short[expansions][];
         if (packed == null || packed.length <= 1) {
             Arrays.fill(finished, ALL_WALL);
@@ -2635,7 +2637,7 @@ public class CoordPacker {
                         y = hilbertY[i];
                         for (int d = 0; d < 4; d++) {
                             for (int e = 1; e <= expansion; e++) {
-                                for (int e2 = 0; e2 < expansion; e2++) {
+                                for (int e2 = 0; e2 <= expansion - e; e2++) {
                                     int j = Math.min(width - 1, Math.max(0, x + xOffsets[d] * e + yOffsets[d + 1] * e2));
                                     int k = Math.min(height - 1, Math.max(0, y + yOffsets[d] * e + xOffsets[d + 1] * e2));
                                     dist = hilbertDistances[j + (k << 8)];
@@ -2662,14 +2664,14 @@ public class CoordPacker {
             vla.add((short) indices[0]);
             for (int i = 1; i < indices.length; i++) {
                 current = indices[i];
-
-                if (current != past)
-                    skip++;
-                if (current - past > 1) {
-                    vla.add((short) (skip + 1));
+                if (current - past > 1)
+                {
+                    vla.add((short) (skip+1));
                     skip = 0;
-                    vla.add((short) (current - past - 1));
+                    vla.add((short)(current - past - 1));
                 }
+                else if(current != past)
+                    skip++;
                 past = current;
             }
             vla.add((short) (skip + 1));
@@ -2763,6 +2765,49 @@ public class CoordPacker {
     public static short[] surface(short[] packed, int depth, int width, int height, boolean eightWay)
     {
         return intersectPacked(packed, expand(negatePacked(packed), depth, width, height, eightWay));
+    }
+    /**
+     * Finds the concentric, progressively-smaller surfaces of packed as if packed was shrinking with each iteration.
+     * Essentially, this is the inverse of fringes, where fringe finds a ring around packed and fringes finds concentric
+     * rings around growing versions of packed, while surface finds a ring at the edge and surfaces finds rings at the
+     * edge of shrinking versions of packed.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param depth the positive (square) radius, in cells, to go inward from an "off" cell into the "in" cells
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @return an array of packed short[] that each encodes "on" for cells that were "on" in packed and were at a
+     * distance between 1 and depth to an "off" cell
+     */
+    public static short[][] surfaces(short[] packed, int depth, int width, int height)
+    {
+        short[][] sfs = new short[depth][], frs = fringes(negatePacked(packed), depth, width, height);
+        for (int i = 0; i < depth; i++) {
+            sfs[i] = intersectPacked(packed, frs[i]);
+        }
+        return sfs;
+    }
+    /**
+     * Finds the concentric, progressively-smaller surfaces of packed as if packed was shrinking with each iteration.
+     * Essentially, this is the inverse of fringes, where fringe finds a ring around packed and fringes finds concentric
+     * rings around growing versions of packed, while surface finds a ring at the edge and surfaces finds rings at the
+     * edge of shrinking versions of packed.
+     * Returns a new packed short[] and does not modify packed.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti()
+     * @param depth the positive (square) radius, in cells, to go inward from an "off" cell into the "in" cells
+     * @param width the maximum width; if a cell would move to x at least equal to width, it stops at width - 1
+     * @param height the maximum height; if a cell would move to y at least equal to height, it stops at height - 1
+     * @param eightWay true if the retraction should be both diagonal and orthogonal; false for just orthogonal
+     * @return an array of packed short[] that each encodes "on" for cells that were "on" in packed and were at a
+     * distance between 1 and depth to an "off" cell
+     */
+    public static short[][] surfaces(short[] packed, int depth, int width, int height, boolean eightWay)
+    {
+        short[][] sfs = new short[depth][], frs = fringes(negatePacked(packed), depth, width, height, eightWay);
+        for (int i = 0; i < depth; i++) {
+            sfs[i] = intersectPacked(packed, frs[i]);
+        }
+        return sfs;
     }
 
     /*{
