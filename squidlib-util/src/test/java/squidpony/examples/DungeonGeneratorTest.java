@@ -194,6 +194,7 @@ public class DungeonGeneratorTest {
                 sdungeon[c.x][c.y] = 'º';
             }
         }
+
         for(LinkedHashSet<Coord> lhs : sdg.placement.getCenters())
         {
             for(Coord c : lhs)
@@ -201,13 +202,12 @@ public class DungeonGeneratorTest {
                 sdungeon[c.x][c.y] = '$';
             }
         }
-
-
+        // Just a little fun with Java that uses no alphanumerics other than keywords to express "Hello, World!"
+        //char[] __ = new char[]{'$' << (',' ^ '-'), '`' | ('-' - '('), '$' << (',' ^ '-') | '$', '$' << (',' ^ '-') | '$', '/' + '@', ',', ' ', '(' + '/', '/' + '@', '(' + '%' + '%', '$' << (',' ^ '-') | '$', '*' + ':', '!'};
 
         sdg.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon, true)));
         System.out.println(sdg);
-
         System.out.println("------------------------------------------------------------");
 
         /*
