@@ -9,15 +9,16 @@ import java.util.Random;
  * Created by Tommy Ettinger on 7/16/2015.
  */
 public class RNGTest {
-    private static int[][] ibits = new int[12][32], lbits = new int[11][64];
-    private static int[] ibitsTotal = new int[12], lbitsTotal = new int[12];
+    private static int[][] ibits = new int[15][32], lbits = new int[15][64];
+    private static int[] ibitsTotal = new int[15], lbitsTotal = new int[15];
     private static BigInteger[] counters = new BigInteger[]{ BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO,
             BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO,
             BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO,
-            BigInteger.ZERO };
+            BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO };
     private static String[] kindNames = new String[]{"Light", "Permuted", "Xor",
             "Light+RNG", "Permuted+RNG", "Xor+RNG", "Deck(RNG)",
-            "Light+asRandom", "Permuted+asRandom", "Xor+asRandom", "Deck+asRandom"};
+            "Light+asRandom", "Permuted+asRandom", "Xor+asRandom", "Deck+asRandom",
+            "Chaos", "Chaos+asRandom", "LongPeriod", "LongPeriod+asRandom"};
 
     public static String binaryString(int n, int kind)
     {
@@ -52,12 +53,15 @@ public class RNGTest {
         RNG lr = new RNG(new LightRNG(0xDADA157)),
                 pr = new RNG(new PermutedRNG(0xDADA157)),
                 xr = new RNG(new XorRNG(0xDADA157)),
-                cr = new RNG(new ChaosRNG());
+                cr = new RNG(new ChaosRNG()),
+                lpr = new RNG(new LongPeriodRNG(0xDADA157));
         DeckRNG dr = new DeckRNG(0xDADA157);
         Random lrr = lr.asRandom(),
-               prr = pr.asRandom(),
-               xrr = xr.asRandom(),
-               drr = dr.asRandom();
+                prr = pr.asRandom(),
+                xrr = xr.asRandom(),
+                drr = dr.asRandom(),
+                crr = cr.asRandom(),
+                lprr = lpr.asRandom();
         int c = 0;
         for(int i = 0; i < 99; i++)
         {
@@ -85,16 +89,22 @@ public class RNGTest {
             System.out.println("DRR : " + binaryString(c, 10));
             c = cr.nextInt();
             System.out.println("CR  : " + binaryString(c, 11));
+            c = crr.nextInt();
+            System.out.println("CRR : " + binaryString(c, 12));
+            c = lpr.nextInt();
+            System.out.println("LPR : " + binaryString(c, 13));
+            c = lprr.nextInt();
+            System.out.println("LPRR: " + binaryString(c, 14));
             System.out.println();
         }
-        for(int k = 0; k < 12; k++) {
+        for(int k = 0; k < 15; k++) {
             for (int i = 31; i >= 0; i--) {
                 System.out.print(String.format("%02d ", ibits[k][i]));
             }
-            System.out.println();
+            System.out.println(kindNames[k]);
         }
 
-        for(int k = 0; k < 12; k++) {
+        for(int k = 0; k < 15; k++) {
             System.out.println(ibitsTotal[k]);
         }
 
@@ -107,6 +117,7 @@ public class RNGTest {
         xr = new RNG(new XorRNG(0xDADA157));
         dr = new DeckRNG(0xDADA157);
         cr = new RNG(new ChaosRNG());
+        lpr = new RNG(new LongPeriodRNG(0xDADA157));
         lrr = lr.asRandom();
         prr = pr.asRandom();
         xrr = xr.asRandom();
@@ -129,7 +140,9 @@ public class RNGTest {
             l = dr.nextLong();
             System.out.println("DR  : " + binaryString(l, 6));
             l = cr.nextLong();
-            System.out.println("CR  : " + binaryString(l, 7));
+            System.out.println("CR  : " + binaryString(l, 11));
+            l = lpr.nextLong();
+            System.out.println("LPR : " + binaryString(l, 13));
             /*l = lrr.nextLong();
             System.out.println("LRR : " + binaryString(l, 6));
             l = prr.nextLong();
@@ -138,14 +151,14 @@ public class RNGTest {
             System.out.println("XRR : " + binaryString(l, 8));
             */
         }
-        for(int k = 0; k < 8; k++) {
+        for(int k = 0; k < 15; k++) {
             for (int i = 63; i >= 0; i--) {
                 System.out.print(String.format("%02d ", lbits[k][i]));
             }
-            System.out.println();
+            System.out.println(kindNames[k]);
         }
 
-        for(int k = 0; k < 8; k++) {
+        for(int k = 0; k < 15; k++) {
             System.out.println(kindNames[k] + " : ");
             System.out.println(lbitsTotal[k]);
             System.out.println(counters[k]);
@@ -160,11 +173,15 @@ public class RNGTest {
         xr = new RNG(new XorRNG(0xDADA157));
         dr = new DeckRNG(0xDADA157);
         cr = new RNG(new ChaosRNG());
+        lpr = new RNG(new LongPeriodRNG(0xDADA157));
+
         lrr = lr.asRandom();
         prr = pr.asRandom();
         xrr = xr.asRandom();
-        ibits = new int[12][32];
-        ibitsTotal = new int[12];
+        crr = cr.asRandom();
+        lprr = lpr.asRandom();
+        ibits = new int[15][32];
+        ibitsTotal = new int[15];
         int d = 0;
         for(int i = 0; i < 99; i++)
         {
@@ -192,13 +209,19 @@ public class RNGTest {
             System.out.println("DRR : " + binaryString(d, 10));
             d = (int)((cr.nextDouble() - 0.5) * 0xffffffffL);
             System.out.println("CR  : " + binaryString(d, 11));
+            d = (int)((crr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("CRR : " + binaryString(d, 12));
+            d = (int)((lpr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("LPR : " + binaryString(d, 13));
+            d = (int)((lprr.nextDouble() - 0.5) * 0xffffffffL);
+            System.out.println("LPRR: " + binaryString(d, 14));
             System.out.println();
         }
-        for(int k = 0; k < 12; k++) {
+        for(int k = 0; k < 15; k++) {
             for (int i = 31; i >= 0; i--) {
                 System.out.print(String.format("%02d ", ibits[k][i]));
             }
-            System.out.println();
+            System.out.println(kindNames[k]);
         }
 
         for(int k = 0; k < 12; k++) {

@@ -28,6 +28,7 @@ public class ChaosRNG implements RandomnessSource{
     private long[] state = new long[16];
     private int choice;
     private SecureRandom sec;
+    private static final long serialVersionUID = -254415589291474491L;
 
     /**
      * Builds a ChaosRNG with a cryptographically-random seed. Future random generation uses less secure methods but
@@ -35,7 +36,7 @@ public class ChaosRNG implements RandomnessSource{
      */
     public ChaosRNG()
     {
-        sec = new SecureRandom();sec = new SecureRandom();
+        sec = new SecureRandom();
         byte[] bytes = new byte[128];
         sec.nextBytes(bytes);
         for (int i = sec.nextInt() & 127, c = 0; c < 128; c++, i = i + 1 & 127) {
@@ -67,7 +68,7 @@ public class ChaosRNG implements RandomnessSource{
      */
     public void randomize()
     {
-        sec = new SecureRandom();sec = new SecureRandom();
+        sec = new SecureRandom();
         byte[] bytes = new byte[128];
         sec.nextBytes(bytes);
         for (int i = sec.nextInt() & 127, c = 0; c < 128; c++, i = i + 1 & 127) {
