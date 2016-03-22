@@ -8,6 +8,8 @@ worldwide. This software is distributed without any warranty.
 See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 package squidpony.squidmath;
 
+import squidpony.StringKit;
+
 /**
  * A port of Sebastiano Vigna's XorShift 128+ generator. Should be very fast and produce high-quality output.
  * Original version at http://xorshift.di.unimi.it/xorshift128plus.c
@@ -118,5 +120,10 @@ public class XorRNG implements RandomnessSource {
         state0 = avalanche(seed == 0 ? -1 : seed);
         state1 = avalanche(state0);
         state0 = avalanche(state1);
+    }
+
+    @Override
+    public String toString() {
+        return "XorRNG with state hash 0x" + StringKit.hexHash(state0, state1) + 'L';
     }
 }

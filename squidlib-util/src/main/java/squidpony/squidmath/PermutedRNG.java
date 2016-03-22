@@ -24,6 +24,8 @@
  */
 package squidpony.squidmath;
 
+import squidpony.StringKit;
+
 /**
  * This is a RandomnessSource in the PCG-Random family. It performs pseudo-
  * random modifications to the output based on the techniques from the
@@ -316,4 +318,10 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         }while (advance > 0L);
         return acc_mult * state + acc_plus;
     }
+
+    @Override
+    public String toString() {
+        return "PermutedRNG with state 0x" + StringKit.hex(state) + 'L';
+    }
+
 }

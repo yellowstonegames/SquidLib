@@ -675,4 +675,8 @@ public class RNG implements Serializable {
         this.random = random;
     }
 
+    @Override
+    public String toString() {
+        return "RNG with Randomness Source " + random;
+    }
 }
