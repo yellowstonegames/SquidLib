@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import squidpony.StringKit;
 import squidpony.annotation.GwtIncompatible;
 
 import java.util.*;
@@ -491,7 +492,7 @@ public class DeckRNG extends StatefulRNG {
 
     @Override
     public String toString() {
-        return "DeckRNG{state:" + Long.toHexString(lastShuffledState) +", step:" + step + "}";
+        return "DeckRNG{state: 0x" + StringKit.hex(lastShuffledState) + "L}";
     }
 
     public int getStep() {

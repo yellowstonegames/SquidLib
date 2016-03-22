@@ -8,6 +8,8 @@ worldwide. This software is distributed without any warranty.
 See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 package squidpony.squidmath;
 
+import squidpony.StringKit;
+
 /**
  * This is a SplittableRandom-style generator, meant to have a tiny state
  * that permits storing many different generators with low overhead.
@@ -218,6 +220,12 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
     public long skip(long advance)
     {
         return state += 0x9E3779B97F4A7C15L * advance;
+    }
+
+
+    @Override
+    public String toString() {
+        return "LightRNG with state 0x" + StringKit.hex(state) + 'L';
     }
 
 }

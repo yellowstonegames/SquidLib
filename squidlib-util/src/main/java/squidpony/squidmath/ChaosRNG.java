@@ -76,4 +76,9 @@ public class ChaosRNG implements RandomnessSource{
         }
         choice = sec.nextInt(16);
     }
+
+    @Override
+    public String toString() {
+        return "ChaosRNG with state determined by the power of friendship";
+    }
 }

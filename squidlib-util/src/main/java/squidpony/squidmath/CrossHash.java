@@ -121,4 +121,105 @@ public class CrossHash {
             return 0;
         return hash(s.toCharArray());
     }
+
+    public static long hash64(boolean[] data)
+    {
+        if(data == null)
+            return 0;
+        long h = -3750763034362895579L, len = data.length, o = 0;
+        for (int i = 0; i < len; i++) {
+            o |= (data[i]) ? (1 << (i % 8)) : 0;
+            if(i % 8 == 7 || i == len - 1) {
+                h ^= o;
+                h *= 1099511628211L;
+                o = 0;
+            }
+        }
+        return h;
+    }
+    public static long hash64(byte[] data)
+    {
+        if(data == null)
+            return 0;
+        long h = -3750763034362895579L, len = data.length;
+        for (int i = 0; i < len; i++) {
+            h ^= data[i];
+            h *= 1099511628211L;
+        }
+        return h;
+    }
+    public static long hash64(char[] data)
+    {
+        if(data == null)
+            return 0;
+        long h = -3750763034362895579L, len = data.length;
+        for (int i = 0; i < len; i++) {
+            h ^= data[i] & 0xff;
+            h *= 1099511628211L;
+            h ^= data[i] >>> 8;
+            h *= 1099511628211L;
+        }
+        return h;
+    }
+    public static long hash64(short[] data)
+    {
+        if(data == null)
+            return 0;
+        long h = -3750763034362895579L, len = data.length;
+        for (int i = 0; i < len; i++) {
+            h ^= data[i] & 0xff;
+            h *= 1099511628211L;
+            h ^= data[i] >>> 8;
+            h *= 1099511628211L;
+        }
+        return h;
+    }
+    public static long hash64(int[] data)
+    {
+        if(data == null)
+            return 0;
+        long h = -3750763034362895579L, len = data.length;
+        for (int i = 0; i < len; i++) {
+            h ^= data[i] & 0xff;
+            h *= 1099511628211L;
+            h ^= (data[i] >>> 8) & 0xff;
+            h *= 1099511628211L;
+            h ^= (data[i] >>> 16) & 0xff;
+            h *= 1099511628211L;
+            h ^= data[i] >>> 24;
+            h *= 1099511628211L;
+        }
+        return h;
+    }
+    public static long hash64(long[] data)
+    {
+        if(data == null)
+            return 0;
+        long h = -3750763034362895579L, len = data.length;
+        for (int i = 0; i < len; i++) {
+            h ^= (int)(data[i] & 0xff);
+            h *= 1099511628211L;
+            h ^= (int)((data[i] >>> 8) & 0xff);
+            h *= 1099511628211L;
+            h ^= (int)((data[i] >>> 16) & 0xff);
+            h *= 1099511628211L;
+            h ^= (int)((data[i] >>> 24) & 0xff);
+            h *= 1099511628211L;
+            h ^= (int)((data[i] >>> 32) & 0xff);
+            h *= 1099511628211L;
+            h ^= (int)((data[i] >>> 40) & 0xff);
+            h *= 1099511628211L;
+            h ^= (int)((data[i] >>> 48) & 0xff);
+            h *= 1099511628211L;
+            h ^= (int)(data[i] >>> 56);
+            h *= 1099511628211L;
+        }
+        return h;
+    }
+    public static long hash64(String s)
+    {
+        if(s == null)
+            return 0;
+        return hash64(s.toCharArray());
+    }
 }

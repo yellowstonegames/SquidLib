@@ -491,4 +491,14 @@ public class DharmaRNG extends RNG {
     public int[] randomRange(int start, int end, int count) {
         return super.randomRange(start, end, count);
     }
+
+    @Override
+    public String toString() {
+        return "DharmaRNG{" +
+                "fairness=" + fairness +
+                ", produced=" + produced +
+                ", baseline=" + baseline +
+                "Randomness Source" + random +
+                '}';
+    }
 }
