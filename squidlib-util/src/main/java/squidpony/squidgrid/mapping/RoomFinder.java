@@ -69,7 +69,7 @@ public class RoomFinder {
         }
         rooms = new RegionMap<>(32);
         corridors = new RegionMap<>(32);
-        caves = new RegionMap<>(4);
+        caves = new RegionMap<>(8);
         basic = DungeonUtility.simplifyDungeon(map);
         short[] floors = pack(basic, '.'),
                 r = flood(floors, retract(floors, 1, width, height, true), 2, false),
@@ -114,7 +114,7 @@ public class RoomFinder {
         }
         rooms = new RegionMap<>(32);
         corridors = new RegionMap<>(32);
-        caves = new RegionMap<>(4);
+        caves = new RegionMap<>(8);
         basic = DungeonUtility.simplifyDungeon(map);
 
         if(environmentKind == MixedGenerator.ROOM_FLOOR) {
@@ -150,8 +150,11 @@ public class RoomFinder {
         }
         else
         {
-            caves.put(pack(basic, '.'), new ArrayList<short[]>());
-            connections = new Coord[0];
+            short[] floors = pack(basic, '.');
+            caves.put(floors, new ArrayList<short[]>());
+            connections = allPacked(retract(
+                    differencePacked(floors, retract(floors, 1, width, height, true)),
+                    1, width, height, false));
         }
     }
 

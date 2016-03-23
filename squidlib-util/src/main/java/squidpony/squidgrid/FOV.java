@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class FOV {
 
-    public static final int//
+    public static final int
             /**
              * Performs FOV by pushing values outwards from the source location.
              * It will go around corners a bit.
@@ -60,10 +60,10 @@ public class FOV {
             RIPPLE_VERY_LOOSE = 4,
             /**
              * Uses Shadow Casting FOV algorithm. Treats all translucent cells
-             * as fully transparent. Returns only that the cell is fully lit or
-             * not lit, does not do percentages.
+             * as fully transparent. Returns a percentage from 1.0 (center of
+             * FOV) to 0.0 (outside of FOV).
              */
-            SHADOW = 5;
+    SHADOW = 5;
     private int type = SHADOW;
     private static final Direction[] ccw = new Direction[]
             {Direction.UP_RIGHT, Direction.UP_LEFT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT, Direction.UP_RIGHT},
@@ -167,10 +167,13 @@ public class FOV {
             case SHADOW:
                	// hotfix for too large radius -> set to longest possible straight-line Manhattan distance instead
                 // does not cause problems with brightness falloff because shadowcasting is on/off
-            	// TODO do proper fix for shadowCast
-            	if (rad > width + height){
-            		rad = width + height;
-            	}
+
+                // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever
+                // run through more than 512 iterations of the radius-related loop (which seemed to be the only problem,
+                // running through billions of iterations when Integer/MAX_VALUE is given as a radius).
+                //if (rad > width + height){
+                //    rad = width + height;
+                //}
                 for (Direction d : Direction.DIAGONALS) {
                     shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique);
                     shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, lightMap, resistanceMap, radiusTechnique);
@@ -234,10 +237,13 @@ public class FOV {
             case SHADOW:
                 // hotfix for too large radius -> set to longest possible straight-line Manhattan distance instead
                 // does not cause problems with brightness falloff because shadowcasting is on/off
-                // TODO do proper fix for shadowCast
-                if (rad > width + height){
-                    rad = width + height;
-                }
+
+                // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever
+                // run through more than 512 iterations of the radius-related loop (which seemed to be the only problem,
+                // running through billions of iterations when Integer/MAX_VALUE is given as a radius).
+                //if (rad > width + height){
+                //    rad = width + height;
+                //}
                 int ctr = 0;
                 boolean started = false;
                 for (Direction d : ccw) {
@@ -403,7 +409,7 @@ public class FOV {
         int height = lightMap[0].length;
 
         boolean blocked = false;
-        for (int distance = row; distance <= radius && !blocked; distance++) {
+        for (int distance = row; distance <= radius && distance < width + height && !blocked; distance++) {
             int deltaY = -distance;
             for (int deltaX = -distance; deltaX <= 0; deltaX++) {
                 int currentX = startx + deltaX * xx + deltaY * xy;
@@ -416,11 +422,10 @@ public class FOV {
                 } else if (end > leftSlope) {
                     break;
                 }
-
-
+                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
                 //check if it's within the lightable area and light if needed
-                if (radiusStrategy.radius(deltaX, deltaY) <= radius) {
-                    double bright = 1 - decay * radiusStrategy.radius(deltaX, deltaY);
+                if (deltaRadius <= radius) {
+                    double bright = 1 - decay * deltaRadius;
                     lightMap[currentX][currentY] = bright;
                 }
 
@@ -453,7 +458,7 @@ public class FOV {
         int height = lightMap[0].length;
 
         boolean blocked = false;
-        for (int distance = row; distance <= radius && !blocked; distance++) {
+        for (int distance = row; distance <= radius && distance < width + height && !blocked; distance++) {
             int deltaY = -distance;
             for (int deltaX = -distance; deltaX <= 0; deltaX++) {
                 int currentX = startx + deltaX * xx + deltaY * xy;
@@ -470,9 +475,10 @@ public class FOV {
 				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0)
 					continue;
 
+                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
                 //check if it's within the lightable area and light if needed
-                if (radiusStrategy.radius(deltaX, deltaY) <= radius) {
-                    double bright = 1 - decay * radiusStrategy.radius(deltaX, deltaY);
+                if (deltaRadius <= radius) {
+                    double bright = 1 - decay * deltaRadius;
                     lightMap[currentX][currentY] = bright;
                 }
 
