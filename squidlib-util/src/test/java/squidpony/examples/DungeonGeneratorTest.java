@@ -1,6 +1,10 @@
 package squidpony.examples;
 
-import squidpony.squidgrid.mapping.*;
+import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DungeonGenerator;
+import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.SectionDungeonGenerator;
+import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
@@ -9,7 +13,6 @@ import squidpony.squidmath.StatefulRNG;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.LinkedHashSet;
 
 /**
  * Sample output: {@code
@@ -144,7 +147,7 @@ public class DungeonGeneratorTest {
         SectionDungeonGenerator sdg = new SectionDungeonGenerator(width, height, rng);
         sdg.addDoors(12, false);
         //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
-        sdg.addBoulders(SectionDungeonGenerator.CAVE, 8);
+        sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
         sdg.addWater(SectionDungeonGenerator.CAVE, 9);
         sdg.addLake(20, '£', '¢');
         rng.setState(2252637788195L);
@@ -155,7 +158,8 @@ public class DungeonGeneratorTest {
         map = serpent.generate();
         int[][] env = serpent.getEnvironment();
         sdg.generate(map, env);
-
+        //RNG rand = new RNG();
+        //sdg.generate(rand.getRandomElement(TilesetType.values()));
         sdungeon = sdg.getDungeon();
         sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
@@ -179,6 +183,7 @@ public class DungeonGeneratorTest {
             }
         }
         */
+        /*
         for(LinkedHashSet<Coord> lhs : sdg.placement.getAlongStraightWalls())
         {
             for(Coord c : lhs)
@@ -201,6 +206,10 @@ public class DungeonGeneratorTest {
             {
                 sdungeon[c.x][c.y] = '$';
             }
+        }
+        */
+        for(Coord c : sdg.placement.getHidingPlaces(Radius.CIRCLE, 8)) {
+            sdungeon[c.x][c.y] = 'h';
         }
         // Just a little fun with Java that uses no alphanumerics other than keywords to express "Hello, World!"
         //char[] __ = new char[]{'$' << (',' ^ '-'), '`' | ('-' - '('), '$' << (',' ^ '-') | '$', '$' << (',' ^ '-') | '$', '/' + '@', ',', ' ', '(' + '/', '/' + '@', '(' + '%' + '%', '$' << (',' ^ '-') | '$', '*' + ':', '!'};

@@ -159,8 +159,8 @@ public class RandomBias implements Serializable {
             case EXPONENTIAL: return exponentialQuantile(d);
             case TRUNCATED: return truncatedQuantile(d);
             case TRIANGULAR: return triangularQuantile(d);
-            case EXP_TRI: return mixQuantile(d);
-            default: return softQuantile(d);
+            case SOFT_TRIANGULAR: return softQuantile(d);
+            default: return mixQuantile(d);
         }
     }
 

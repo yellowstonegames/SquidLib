@@ -1,5 +1,7 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
 import java.util.Collections;
@@ -20,10 +22,11 @@ public class Placement {
      */
     public RoomFinder finder;
 
-    private short[] allRooms = ALL_WALL, allCaves = ALL_WALL, allCorridors = ALL_WALL, working, working2, nonRoom;
+    private short[] allRooms = ALL_WALL, allCaves = ALL_WALL, allCorridors = ALL_WALL, allFloors = ALL_WALL,
+            nonRoom;
     private LinkedHashSet<LinkedHashSet<Coord>> alongStraightWalls = null,
             corners = null, centers = null;
-
+    private LinkedHashSet<Coord> hidingPlaces = null;
     private Placement()
     {
 
@@ -55,6 +58,7 @@ public class Placement {
         {
             allCorridors = unionPacked(allCorridors, region);
         }
+        allFloors = unionPacked(unionPacked(allRooms, allCorridors), allCaves);
         nonRoom = expand(unionPacked(allCorridors, allCaves), 2, finder.width, finder.height, false);
     }
 
@@ -69,6 +73,7 @@ public class Placement {
         if(alongStraightWalls == null)
         {
             alongStraightWalls = new LinkedHashSet<>(32);
+            short[] working;
             for(short[] region : finder.rooms.keys()) {
                 working =
                         differencePacked(
@@ -97,6 +102,7 @@ public class Placement {
         if(corners == null)
         {
             corners = new LinkedHashSet<>(32);
+            short[] working;
             for(short[] region : finder.rooms.keys()) {
                 working =
                         differencePacked(
@@ -130,6 +136,7 @@ public class Placement {
         if(centers == null)
         {
             centers = new LinkedHashSet<>(32);
+            short[] working, working2;
             for(short[] region : finder.rooms.keys()) {
 
                 working = null;
@@ -152,6 +159,38 @@ public class Placement {
             }
         }
         return centers;
+    }
+
+    /**
+     * Gets a LinkedHashSet of Coord, where each Coord is hidden (using the given radiusStrategy and range for FOV
+     * calculations) from any doorways or similar narrow choke-points where a character might be easily ambushed. If
+     * multiple choke-points can see a cell (using shadow-casting FOV, which is asymmetrical), then the cell is very
+     * unlikely to be included in the returned Coords, but if a cell is visible from one or no choke-points and is far
+     * enough away, then it is more likely to be included.
+     * @param radiusStrategy a Radius object that will be used to determine visibility.
+     * @param range the minimum distance things are expected to hide at; often related to player FOV range
+     * @return a set of Coord where each Coord is either far away from or is concealed from a door-like area
+     */
+    public LinkedHashSet<Coord> getHidingPlaces(Radius radiusStrategy, int range) {
+        if(hidingPlaces == null)
+        {
+            double[][] composite = new double[finder.width][finder.height],
+                    resMap = DungeonUtility.generateResistances(finder.map),
+                    temp;
+            FOV fov = new FOV(FOV.SHADOW);
+            Coord pt;
+            for (int d = 0; d < finder.connections.length; d++) {
+                pt = finder.connections[d];
+                temp = fov.calculateFOV(resMap, pt.x, pt.y, range, radiusStrategy);
+                for (int x = 0; x < finder.width; x++) {
+                    for (int y = 0; y < finder.height; y++) {
+                        composite[x][y] += temp[x][y] * temp[x][y];
+                    }
+                }
+            }
+            hidingPlaces = arrayToSet(allPacked(intersectPacked(allFloors, pack(composite, 0.25))));
+        }
+        return hidingPlaces;
     }
 
     private static LinkedHashSet<Coord> arrayToSet(Coord[] arr)
