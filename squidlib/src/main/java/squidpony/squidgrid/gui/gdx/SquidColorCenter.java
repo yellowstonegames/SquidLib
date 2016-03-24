@@ -195,6 +195,12 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
         return lerp(color, Color.BLACK, 0.7f);
     }
 
+
+    /**
+     * Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).
+     * @param color the color to desaturate (will not be modified)
+     * @return the grayscale version of color
+     */
     public Color desaturated(Color color)
     {
         float f = color.r * 0.299f + color.g * 0.587f + color.b * 0.114f;
@@ -310,6 +316,62 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
         return colors;
     }
 
+
+    /**
+     * Finds a gradient with the specified number of steps going from fromColor to midColor, then midColor to (possibly)
+     * fromColor, with both included in the gradient but fromColor only repeated at the end if the number of steps is odd.
+     * @param fromColor the color to start with (and end with, if steps is an odd number), included in the gradient
+     * @param midColor the color to use in the middle of the loop, included in the gradient
+     * @param steps the number of elements to use in the gradient, will be at least 3
+     * @return an ArrayList composed of the blending steps from fromColor to midColor to fromColor again, with length equal to steps
+     */
+    public ArrayList<Color> loopingGradient(Color fromColor, Color midColor, int steps)
+    {
+        ArrayList<Color> colors = new ArrayList<>((steps > 3) ? steps : 3);
+        colors.add(filter(fromColor));
+        for (float i = 1; i < steps / 2; i++) {
+            colors.add(lerp(fromColor, midColor, i / (steps / 2)));
+        }
+        for (float i = 0, c = steps / 2; c < steps; i++, c++) {
+            colors.add(lerp(midColor, fromColor, i / (steps / 2)));
+        }
+        return colors;
+    }
+
+    /**
+     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and
+     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should
+     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more
+     * likely to see colors that appear for shorter spans on the color wheel, like orange.
+     * Produces fully saturated and max-brightness colors on the rainbow, which is what many people expect for a rainbow.
+     * @param steps the number of different Color elements to generate in the returned ArrayList
+     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.
+     */
+    public ArrayList<Color> rainbow(int steps)
+    {
+        return rainbow(1.0f, 1.0f, steps);
+    }
+
+    /**
+     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and
+     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should
+     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more
+     * likely to see colors that appear for shorter spans on the color wheel, like orange.
+     * Uses the given saturation and value for all colors in the rainbow, and only changes hue.
+     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale
+     * @param value the brightness of the rainbow's colors; 1.0 is brightest
+     * @param steps the number of different Color elements to generate in the returned ArrayList
+     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.
+     */
+    public ArrayList<Color> rainbow(float saturation, float value, int steps)
+    {
+        steps = (steps > 1) ? steps : 1;
+        ArrayList<Color> colors = new ArrayList<>(steps);
+        for (float i = 0; i < 1f - 0.5f / steps; i+= 1.0f / steps) {
+            colors.add(filter(getHSV(i, saturation, value)));
+        }
+        return colors;
+    }
     @Override
     public String toString() {
         return "SquidColorCenter{" +

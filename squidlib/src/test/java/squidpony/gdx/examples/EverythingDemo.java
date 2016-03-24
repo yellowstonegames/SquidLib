@@ -200,7 +200,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //the current health of the player and an '!' for alerted monsters.
         subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
 
-        display.setAnimationDuration(0.08f);
+        display.setAnimationDuration(0.1f);
         messages = new SquidMessageBox(width, 4, textFactory);
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
@@ -259,7 +259,8 @@ public class EverythingDemo extends ApplicationAdapter {
         pathMap = getToPlayer.scan(null);
 
         player = display.animateActor(pl.x, pl.y, '@',
-                fgCenter.filter(display.getPalette().get(30)));
+                fgCenter.loopingGradient(SColor.CAPE_JASMINE, SColor.HAN_PURPLE, 45), 1.5f, false);
+//                fgCenter.filter(display.getPalette().get(30)));
         cursor = Coord.get(-1, -1);
         toCursor = new ArrayList<>(10);
         awaitedMoves = new ArrayList<>(10);
@@ -540,7 +541,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     // if we would move into the player, instead damage the player and give newMons the current
                     // position of this monster.
                     if (tmp.x == player.gridX && tmp.y == player.gridY) {
-                        display.tint(player, SColor.PURE_CRIMSON, 2, 0.15f);
+                        display.tint(player.gridX, player.gridY, SColor.PURE_CRIMSON, 0, 0.15f);
                         health--;
                         //player.setText("" + health);
                         monsters.positionalModify(pos, mon.change(1));

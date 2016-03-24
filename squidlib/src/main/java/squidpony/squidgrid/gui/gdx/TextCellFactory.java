@@ -18,8 +18,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class for creating text blocks.
@@ -1014,6 +1013,7 @@ public class TextCellFactory implements Disposable {
         return lb;
 
     }
+
     /**
      * Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
      * for preparing glyphs for animation effects, and is used internally for this purpose.
@@ -1047,6 +1047,100 @@ public class TextCellFactory implements Disposable {
                 lb = new Label(s, style);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             lb.setColor(scc.filter(color));
+            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return lb;
+        }
+    }
+
+    /**
+     * Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
+     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
+     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,
+     * though they are affected by their setColors methods. Their color change is not considered an animation for the
+     * purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param s a String to make into an Actor, which can be null for a solid block.
+     * @param colors a List of Color to tint s with, looping through all elements in the list each second
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(String s, Collection<Color> colors) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        ArrayList<Color> colors2;
+        if(colors == null || colors.isEmpty())
+            colors2 = null;
+        else {
+            colors2 = new ArrayList<>(colors.size());
+            for (Color c : colors) {
+                colors2.add(scc.filter(c));
+            }
+        }
+        if (s == null) {
+            ColorChangeImage im = new ColorChangeImage(block, colors2);
+            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            ColorChangeImage im = new ColorChangeImage(block, colors2);
+            //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth * s.length(), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else {
+            ColorChangeLabel lb;
+            if(swap.containsKey(s))
+                lb = new ColorChangeLabel(swap.get(s), style, colors2);
+            else
+                lb = new ColorChangeLabel(s, style, colors2);
+            lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
+            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return lb;
+        }
+    }
+    /**
+     * Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
+     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
+     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,
+     * though they are affected by their setColors methods. Their color change is not considered an animation for the
+     * purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param s a String to make into an Actor, which can be null for a solid block.
+     * @param colors a List of Color to tint s with, looping through all elements in the list each second
+     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(String s, Collection<Color> colors, float loopTime) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        ArrayList<Color> colors2;
+        if(colors == null || colors.isEmpty())
+            colors2 = null;
+        else {
+            colors2 = new ArrayList<>(colors.size());
+            for (Color c : colors) {
+                colors2.add(scc.filter(c));
+            }
+        }
+        if (s == null) {
+            ColorChangeImage im = new ColorChangeImage(block, loopTime, colors2);
+            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            ColorChangeImage im = new ColorChangeImage(block, loopTime, colors2);
+            //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+            im.setSize(actualCellWidth * s.length(), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
+            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            return im;
+        } else {
+            ColorChangeLabel lb;
+            if(swap.containsKey(s))
+                lb = new ColorChangeLabel(swap.get(s), style, loopTime, colors2);
+            else
+                lb = new ColorChangeLabel(s, style, loopTime, colors2);
+            lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
         }
