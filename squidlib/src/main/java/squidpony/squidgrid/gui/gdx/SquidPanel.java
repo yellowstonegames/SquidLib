@@ -16,9 +16,7 @@ import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.StatefulRNG;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -589,6 +587,57 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Color color)
     {
         Actor a = textFactory.makeActor(s, color);
+        a.setName(s);
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        /*
+        if(doubleWidth)
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
+        else
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
+        */
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
+    /**
+     * Create an AnimatedEntity at position x, y, using the String s in the given color. If doubleWidth is true, treats
+     * the String s as starting in the left cell of a pair to be placed in a grid of 2-char cells.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param s
+     * @param colors
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Collection<Color> colors)
+    {
+        Actor a = textFactory.makeActor(s, colors);
+        a.setName(s);
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        /*
+        if(doubleWidth)
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
+        else
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
+        */
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
+    /**
+     * Create an AnimatedEntity at position x, y, using the String s in the given color. If doubleWidth is true, treats
+     * the String s as starting in the left cell of a pair to be placed in a grid of 2-char cells.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param s
+     * @param colors
+     * @param loopTime
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Collection<Color> colors, float loopTime)
+    {
+        Actor a = textFactory.makeActor(s, colors, loopTime);
         a.setName(s);
         a.setPosition(adjustX(x, doubleWidth), adjustY(y));
         /*

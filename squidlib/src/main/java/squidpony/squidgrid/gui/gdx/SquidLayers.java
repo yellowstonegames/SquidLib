@@ -8,9 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import squidpony.IColorCenter;
 import squidpony.squidgrid.Direction;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 /**
  * A helper class to make using multiple HDRPanels easier.
@@ -1479,6 +1477,12 @@ public class SquidLayers extends Group {
     }
     public AnimatedEntity animateActor(int x, int y, char c, Color color, boolean doubleWidth) {
         return foregroundPanel.animateActor(x, y, doubleWidth, c, color);
+    }
+    public AnimatedEntity animateActor(int x, int y, char c, Collection<Color> colors, boolean doubleWidth) {
+        return foregroundPanel.animateActor(x, y, doubleWidth, String.valueOf(c), colors);
+    }
+    public AnimatedEntity animateActor(int x, int y, char c, Collection<Color> colors, float loopTime, boolean doubleWidth) {
+        return foregroundPanel.animateActor(x, y, doubleWidth, String.valueOf(c), colors, loopTime);
     }
 
     public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette, int layer) {
