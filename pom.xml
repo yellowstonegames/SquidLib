@@ -145,12 +145,12 @@
 							<includePom>true</includePom>
 						</configuration>
 					</execution>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
 				</executions>
 				<configuration>
 					<includePom>true</includePom>

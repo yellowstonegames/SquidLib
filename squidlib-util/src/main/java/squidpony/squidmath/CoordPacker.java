@@ -3679,14 +3679,14 @@ public class CoordPacker {
         int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
         while ((elemLeft < left.length || elemRight < right.length) && idx <= 0xffff) {
             if (elemLeft >= left.length) {
-                totalLeft = 0xffff;
+                totalLeft = 0x20000;
                 onLeft = false;
             }
             else if(totalLeft <= idx) {
                 totalLeft += left[elemLeft] & 0xffff;
             }
             if(elemRight >= right.length) {
-                totalRight = 0xffff;
+                totalRight = 0x20000;
                 onRight = false;
             }
             else if(totalRight <= idx) {
@@ -3759,14 +3759,14 @@ public class CoordPacker {
         int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
         while ((elemLeft < left.length && elemRight < right.length) && idx <= 0xffff) {
             if (elemLeft >= left.length) {
-                totalLeft = 0xffff;
+                totalLeft = 0x20000;
                 onLeft = false;
             }
             else if(totalLeft <= idx) {
                 totalLeft += left[elemLeft] & 0xffff;
             }
             if(elemRight >= right.length) {
-                totalRight = 0xffff;
+                totalRight = 0x20000;
                 onRight = false;
             }
             else if(totalRight <= idx) {
@@ -3868,14 +3868,14 @@ public class CoordPacker {
         int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
         while ((elemLeft < left.length || elemRight < right.length) && idx <= 0xffff) {
             if (elemLeft >= left.length) {
-                totalLeft = 0xffff;
+                totalLeft = 0x20000;
                 onLeft = false;
             }
             else if(totalLeft <= idx) {
                 totalLeft += left[elemLeft] & 0xffff;
             }
             if(elemRight >= right.length) {
-                totalRight = 0xffff;
+                totalRight = 0x20000;
                 onRight = false;
             }
             else if(totalRight <= idx) {
@@ -3946,14 +3946,14 @@ public class CoordPacker {
         int idx = 0, skip = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
         while ((elemLeft < left.length || elemRight < right.length) && idx <= 0xffff) {
             if (elemLeft >= left.length) {
-                totalLeft = 0xffff;
+                totalLeft = 0x20000;
                 onLeft = false;
             }
             else if(totalLeft <= idx) {
                 totalLeft += left[elemLeft] & 0xffff;
             }
             if(elemRight >= right.length) {
-                totalRight = 0xffff;
+                totalRight = 0x20000;
                 onRight = false;
             }
             else if(totalRight <= idx) {
