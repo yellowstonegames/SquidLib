@@ -118,7 +118,11 @@ public class SectionDungeonGenerator {
      * that are covered by a lake will become bridges, the glyph ':'.
      */
     public int lakeFX = 0;
-    protected DungeonBoneGen gen;
+    /**
+     * The approximate percentage of non-room, non-cave, non-edge-of-map wall cells to try to fill with maze. Corridors
+     * that are covered by a maze will become part of its layout.
+     */
+    public int mazeFX = 0;
     public DungeonUtility utility;
     protected int height, width;
     public Coord stairsUp = null, stairsDown = null;
@@ -188,7 +192,6 @@ public class SectionDungeonGenerator {
     public SectionDungeonGenerator()
     {
         rng = new StatefulRNG();
-        gen = new DungeonBoneGen(rng);
         utility = new DungeonUtility(rng);
         rebuildSeed = rng.getState();
         height = 40;
@@ -219,7 +222,6 @@ public class SectionDungeonGenerator {
     public SectionDungeonGenerator(int width, int height, RNG rng)
     {
         this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());
-        gen = new DungeonBoneGen(this.rng);
         utility = new DungeonUtility(this.rng);
         rebuildSeed = this.rng.getState();
         this.height = height;
@@ -236,7 +238,6 @@ public class SectionDungeonGenerator {
     public SectionDungeonGenerator(SectionDungeonGenerator copying)
     {
         rng = new StatefulRNG(copying.rng.getState());
-        gen = new DungeonBoneGen(rng);
         utility = new DungeonUtility(rng);
         rebuildSeed = rng.getState();
         height = copying.height;
@@ -453,6 +454,23 @@ public class SectionDungeonGenerator {
     }
 
     /**
+     * Instructs the generator to add a winding section of corridors into a large area that can be filled without
+     * overwriting rooms, caves, or the edge of the map; wall cells will become either '#' or '.' and corridors will be
+     * overwritten. If the percentage is too high (40% is probably too high to adequately fill), this will fill less than
+     * the requested percentage rather than fill multiple mazes.
+     * @param percentage The percentage of non-room, non-cave, non-edge-of-map wall cells to try to fill with maze.
+     * @return this for chaining
+     */
+    public SectionDungeonGenerator addMaze(int percentage)
+    {
+
+        if(percentage < 0) percentage = 0;
+        if(percentage > 100) percentage = 100;
+        mazeFX = percentage;
+        return this;
+    }
+
+    /**
      * Instructs the generator to add a lake (here, of water) into a large area that can be filled without overwriting
      * rooms, caves, or the edge of the map; wall cells will become the deep lake glyph (here, '~'), unless they are
      * close to an existing room or cave, in which case they become the shallow lake glyph (here, ','), and corridors
@@ -540,6 +558,9 @@ public class SectionDungeonGenerator {
         roomFX.clear();
         corridorFX.clear();
         caveFX.clear();
+        lakeFX = 0;
+        mazeFX = 0;
+        doorFX = 0;
         return this;
     }
 
@@ -671,6 +692,7 @@ public class SectionDungeonGenerator {
     {
         rebuildSeed = rng.getState();
         environmentType = kind.environment();
+        DungeonBoneGen gen = new DungeonBoneGen(rng);
         char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
 
         seedFixed = false;
@@ -820,23 +842,25 @@ public class SectionDungeonGenerator {
                 corridorMap = innerGenerate(allCorridors, corridorFX),
                 allCaves = RoomFinder.merge(cv, width, height),
                 caveMap = innerGenerate(allCaves, caveFX),
-                doorMap = makeDoors(rm, cr, allCaves),
-                lakeMap = makeLake(rm, cv);
+                doorMap = makeDoors(rm, cr, allCaves);
+        char[][][] lakesAndMazes = makeLake(rm, cv);
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if(corridorMap[x][y] != '#' && lakeMap[x][y] != '#')
+                if(corridorMap[x][y] != '#' && lakesAndMazes[0][x][y] != '#')
                     dungeon[x][y] = ':';
                 else if(doorMap[x][y] == '+' || doorMap[x][y] == '/')
                     dungeon[x][y] = doorMap[x][y];
                 else if(roomMap[x][y] != '#')
                     dungeon[x][y] = roomMap[x][y];
+                else if(lakesAndMazes[1][x][y] != '#')
+                    dungeon[x][y] = lakesAndMazes[1][x][y];
                 else if(corridorMap[x][y] != '#')
                     dungeon[x][y] = corridorMap[x][y];
                 else if(caveMap[x][y] != '#')
                     dungeon[x][y] = caveMap[x][y];
-                else if(lakeMap[x][y] != '#')
-                    dungeon[x][y] = lakeMap[x][y];
+                else if(lakesAndMazes[0][x][y] != '#')
+                    dungeon[x][y] = lakesAndMazes[0][x][y];
             }
         }
         placement = new Placement(finder);
@@ -894,15 +918,22 @@ public class SectionDungeonGenerator {
         return map;
 
     }
-    private char[][] makeLake(ArrayList<char[][]> rooms, ArrayList<char[][]> caves)
+    private char[][][] makeLake(ArrayList<char[][]> rooms, ArrayList<char[][]> caves)
     {
-        char[][] map = new char[width][height], fusedMap;
+        char[][][] maps = new char[2][width][height];
+        char[][] fusedMap;
         for (int x = 0; x < width; x++) {
-            Arrays.fill(map[x], '#');
+            Arrays.fill(maps[0][x], '#');
+            Arrays.fill(maps[1][x], '#');
         }
-        if(lakeFX == 0 || (rooms.isEmpty() && caves.isEmpty()))
-            return map;
-        int lakeFill = lakeFX;
+        if((lakeFX == 0 && mazeFX == 0) || (rooms.isEmpty() && caves.isEmpty()))
+            return maps;
+        int lakeFill = lakeFX, mazeFill = mazeFX;
+        if(lakeFX + mazeFX > 100)
+        {
+            lakeFill -= (lakeFX + mazeFX - 100) / 2;
+            mazeFill -= (lakeFX + mazeFX - 99) / 2;
+        }
 
         ArrayList<char[][]> fused = new ArrayList<>(rooms.size() + caves.size());
         fused.addAll(rooms);
@@ -911,48 +942,92 @@ public class SectionDungeonGenerator {
         fusedMap = RoomFinder.merge(fused, width, height);
         short[] limit = rectangle(1, 1, width - 2, height - 2),
                 potential = intersectPacked(limit, pack(fusedMap, '#'));
-        int potentialSize = count(potential) * lakeFill / 100;
-        ArrayList<short[]> viable = split(potential);
-        if(viable.isEmpty())
-            return map;
-        short[] chosen = viable.get(0);
-        int minSize = count(chosen);
-        for(short[] sa : viable)
-        {
-            int sz = count(sa);
-            if(sz > minSize)
-            {
-                chosen = sa;
-                minSize = sz;
-            }
-        }
-        Coord center = singleRandom(chosen, rng);
-        short[] flooded = intersectPacked(limit, spill(chosen, packOne(center), potentialSize, rng)),
-                shore = intersectPacked(limit,
-                        flood(fringe(pack(fusedMap, '.'), 3, width, height, true, true),
-                                flooded, 3, false)),
-                lake = unionPacked(flooded, shore);
-        boolean[][] deep = unpack(flooded, width, height), shallow = unpack(shore, width, height);
+        int ctr = count(potential), potentialMazeSize = ctr * mazeFill / 100, potentialLakeSize = ctr * lakeFill / 100;
+        ArrayList<short[]> viable;
+        short[] chosen;
+        int minSize;
+        Coord center;
+        short[] flooded;
+        boolean[][] deep;
+        if(potentialMazeSize > 0) {
+            viable = split(potential);
+            if (viable.isEmpty())
+                return maps;
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if(deep[x][y])
-                    map[x][y] = deepLakeGlyph;
-                else if(shallow[x][y])
-                    map[x][y] = shallowLakeGlyph;
+            chosen = viable.get(0);
+            minSize = count(chosen);
+            for (short[] sa : viable) {
+                int sz = count(sa);
+                if (sz > minSize) {
+                    chosen = sa;
+                    minSize = sz;
+                }
             }
+            PacMazeGenerator pac = new PacMazeGenerator(width - width % 3, height - height % 3, rng);
+            char[][] pacMap = pac.generate();
+            center = singleRandom(chosen, rng);
+            flooded = intersectPacked(limit, spill(chosen, packOne(center), potentialMazeSize, rng));
+            short[] pacEnv = removeIsolated(
+                    intersectPacked(
+                            flooded,
+                            translate(
+                                    pack(pacMap, '.'),
+                                    1, 1, width, height)));
+            deep = unpack(pacEnv, width, height);
+
+            for (int x = 1; x < width - 1; x++) {
+                for (int y = 1; y < height - 1; y++) {
+                    if (deep[x][y])
+                        maps[1][x][y] = pacMap[x-1][y-1];
+                }
+            }
+            finder.corridors.put(pacEnv, new ArrayList<short[]>());
+            potential = differencePacked(potential, flooded);
         }
-        ArrayList<short[]> change = new ArrayList<>();
-        for(short[] room : finder.rooms.keys())
-        {
-            if(count(intersectPacked(lake, expand(room, 1, width, height))) > 0)
-                change.add(room);
+        if(potentialLakeSize > 0) {
+            viable = split(potential);
+            if (viable.isEmpty())
+                return maps;
+            chosen = viable.get(0);
+            minSize = count(chosen);
+            for (short[] sa : viable) {
+                int sz = count(sa);
+                if (sz > minSize) {
+                    chosen = sa;
+                    minSize = sz;
+                }
+            }
+            center = singleRandom(chosen, rng);
+            flooded = intersectPacked(limit, spill(chosen, packOne(center), potentialLakeSize, rng));
+
+            deep = unpack(flooded, width, height);
+
+            short[] shore = intersectPacked(limit,
+                    flood(fringe(pack(fusedMap, '.'), 3, width, height, true, true),
+                            flooded, 3, false)),
+                    lake = unionPacked(flooded, shore);
+
+            boolean[][] shallow = unpack(shore, width, height);
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if (deep[x][y])
+                        maps[0][x][y] = deepLakeGlyph;
+                    else if (shallow[x][y])
+                        maps[0][x][y] = shallowLakeGlyph;
+                }
+            }
+            ArrayList<short[]> change = new ArrayList<>();
+            for (short[] room : finder.rooms.keys()) {
+                if (count(intersectPacked(lake, expand(room, 1, width, height))) > 0)
+                    change.add(room);
+            }
+            for (short[] region : change) {
+                finder.caves.put(region, finder.rooms.remove(region));
+            }
+            //finder.caves.put(lake, new ArrayList<short[]>());
         }
-        for(short[] region : change)
-        {
-            finder.caves.put(region, finder.rooms.remove(region));
-        }
-        return map;
+        return maps;
     }
 
     private char[][] innerGenerate(char[][] map, EnumMap<FillEffect, Integer> fx)

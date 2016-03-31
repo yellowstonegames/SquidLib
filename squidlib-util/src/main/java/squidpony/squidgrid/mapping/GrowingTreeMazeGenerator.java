@@ -18,12 +18,18 @@ import java.util.ArrayList;
 @Beta
 public class GrowingTreeMazeGenerator {
 
-    private RNG rng = new RNG();
+    private RNG rng;
     private int width, height;
 
     public GrowingTreeMazeGenerator(int width, int height) {
         this.width = width;
         this.height = height;
+        rng = new RNG();
+    }
+    public GrowingTreeMazeGenerator(int width, int height, RNG rng) {
+        this.width = width;
+        this.height = height;
+        this.rng = rng;
     }
 
     /**
