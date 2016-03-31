@@ -4284,6 +4284,26 @@ public class CoordPacker {
             }
         }
         return arrays;
+    }public static short[] removeIsolated(short[] packed)
+    {
+        short[] remaining = new short[packed.length], viable = new short[packed.length];
+        System.arraycopy(packed, 0, remaining, 0, packed.length);
+        System.arraycopy(packed, 0, viable, 0, packed.length);
+        while (remaining.length > 1) {
+            boolean on = false;
+            int idx = 0;
+            for (int p = 0; p < remaining.length; p++, on = !on) {
+                if (on) {
+                    short[] area = flood(packed, packOne((short) idx), 512, false);
+                    if(count(area) <= 4)
+                        viable = differencePacked(viable, area);
+                    remaining = differencePacked(remaining, area);
+                    break;
+                }
+                idx += remaining[p] & 0xffff;
+            }
+        }
+        return viable;
     }
     /**
      * Gets a random subset of positions that are "on" in the given packed array, without unpacking it, and returns

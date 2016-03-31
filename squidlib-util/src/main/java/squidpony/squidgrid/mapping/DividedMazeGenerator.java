@@ -31,7 +31,7 @@ public class DividedMazeGenerator {
 
     private int width, height;
     private boolean[][] map;
-    private RNG rng = new RNG();
+    private RNG rng;
 
     /**
      * Sets up the generator to make mazes the given width and height. The mazes
@@ -43,6 +43,21 @@ public class DividedMazeGenerator {
     public DividedMazeGenerator(int width, int height) {
         this.width = width;
         this.height = height;
+        rng = new RNG();
+    }
+
+    /**
+     * Sets up the generator to make mazes the given width and height. The mazes
+     * have a solid wall border.
+     *
+     * @param width in cells
+     * @param height in cells
+     * @param rng the random number generator to use
+     */
+    public DividedMazeGenerator(int width, int height, RNG rng) {
+        this.width = width;
+        this.height = height;
+        this.rng = rng;
     }
 
     /**
