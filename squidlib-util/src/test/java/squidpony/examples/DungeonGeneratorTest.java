@@ -7,7 +7,6 @@ import squidpony.squidgrid.mapping.SectionDungeonGenerator;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -325,13 +324,18 @@ public class DungeonGeneratorTest {
 */
     }
     public static void mainAlt( String[] args ) {
-        LightRNG rng = new LightRNG(2252637788195L);
-        DungeonGenerator dungeonGenerator = new DungeonGenerator(120, 120, new RNG((rng)));
+        RNG rng = new RNG(2252637788195L);
+        SectionDungeonGenerator dungeonGenerator = new SectionDungeonGenerator(120, 120, rng);
         dungeonGenerator.addDoors(15, true);
-        dungeonGenerator.addWater(15);
-        dungeonGenerator.addGrass(15);
-        dungeonGenerator.addBoulders(8);
-        dungeonGenerator.generate();
+        dungeonGenerator.addWater(SectionDungeonGenerator.CAVE, 15);
+        dungeonGenerator.addGrass(SectionDungeonGenerator.CAVE, 15);
+        dungeonGenerator.addBoulders(SectionDungeonGenerator.ALL, 6);
+        dungeonGenerator.addLake(20);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(120, 120, rng, 0.1);
+        serpent.putWalledBoxRoomCarvers(3);
+        serpent.putWalledRoundRoomCarvers(1);
+        serpent.putCaveCarvers(6);
+        dungeonGenerator.generate(serpent.generate(), serpent.getEnvironment());
 
         dungeonGenerator.setDungeon(
                 DungeonUtility.hashesToLines(dungeonGenerator.getDungeon(), true));
@@ -365,6 +369,7 @@ public class DungeonGeneratorTest {
                             sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
                             break;
                         case '"':
+                        case ':':
                             sb.append("<div class=\"isotile\"><img src=\"dungeon/palette47_Grass_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
                             break;
                         case '#':
@@ -427,6 +432,8 @@ public class DungeonGeneratorTest {
                         case ' ':
                             sb.append("<div class=\"isotile\"></div>\n");
                             break;
+                        default:
+                            System.out.println("BAD GLYPH: " + iso[x][y] + " AT X: " + x + ", Y: " + y);
                     }
                 }
             }

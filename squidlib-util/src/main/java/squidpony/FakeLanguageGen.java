@@ -1,12 +1,15 @@
 package squidpony;
 
 import squidpony.annotation.GwtIncompatible;
+import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.io.Serializable;
 import java.text.Normalizer;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,7 +42,7 @@ public class FakeLanguageGen implements Serializable {
                     Pattern.compile("[TtтτТΤ]..?[tтτТΤ]"),
                     Pattern.compile("([PpрρРΡ][hнН])|[Ff]..?[rяЯ][tтτТΤ]"),
                     Pattern.compile("([Ssξ][hнН])|[j][iτιΙ].?[sξzΖ]"),
-                    Pattern.compile("[AaаαАΑΛ][nийИЙΝ]..?[sξlιζzΖ]"),
+                    Pattern.compile("[AaаαАΑΛ][NnийИЙΝ]..?[SsξlιζzΖ]"),
                     Pattern.compile("[AaаαАΑΛ][sξ][sξ]"),
                     Pattern.compile(".[uμυν][hнН]?[nийИЙΝ]+[tтτТΤ]"),
                     Pattern.compile("[NnFf]..?g"), // might as well remove two possible slurs with one check
@@ -291,7 +294,9 @@ public class FakeLanguageGen implements Serializable {
                     "ai", "aie", "aou", "eau", "oi", "oui", "oie", "eu", "eu",
                     "à", "â", "ai", "aî", "aï", "aie", "aou", "aoû", "au", "ay", "e", "é", "ée", "è",
                     "ê", "eau", "ei", "eî", "eu", "eû", "i", "î", "ï", "o", "ô", "oe", "oê", "oë", "œu",
-                    "oi", "oie", "oï", "ou", "oû", "oy", "u", "û", "ue"
+                    "oi", "oie", "oï", "ou", "oû", "oy", "u", "û", "ue",
+                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
             },
             new String[]{"tr", "ch", "m", "b", "b", "br", "j", "j", "j", "j", "g", "t", "t", "t", "c", "d", "f", "f", "h", "n", "l", "l",
                     "s", "s", "s", "r", "r", "r", "v", "v", "p", "pl", "pr", "bl", "br", "dr", "gl", "gr"},
@@ -380,20 +385,20 @@ public class FakeLanguageGen implements Serializable {
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
      * creature or place names in fantasy settings.
      * <br>
-     * Treinane, Ifoth, Enaisamus, Bruna, Toudini, Suzhono, Tykano, Taibet, Unuzhu, Sanoupa...
+     * Adeni, Sainane, Caneros, Sune, Alade, Tidifi, Muni, Gito, Lixoi, Bovi...
      */
     public static final FakeLanguageGen FANTASY_NAME = GREEK_ROMANIZED.mix(
             RUSSIAN_ROMANIZED.mix(
                     FRENCH.removeAccents().mix(
-                            JAPANESE_ROMANIZED, 0.6), 0.8), 0.85);
+                            JAPANESE_ROMANIZED, 0.5), 0.85), 0.925);
     /**
-     * A mix of four different languages with many accented characters added onto an ASCII base, that can be good for
+     * A mix of four different languages with some accented characters added onto an ASCII base, that can be good for
      * generating single words for creature or place names in fantasy settings that should have a "fancy" feeling from
      * having unnecessary accents added primarily for visual reasons.
      * <br>
-     * Āípomyos, Moskatã, Ozès, Brèňankāĩp, Inǻnki, Kòngėnin, Ĭthås, Favîpi, Tesøŭŕšţøŗ, Vïpâ...
+     * Askieno, Blarcīnũn, Mēmida, Zizhounkô, Blęrinaf, Zemĭ, Mónazôr, Renerstă, Uskus, Toufounôr...
      */
-    public static final FakeLanguageGen FANCY_FANTASY_NAME = FANTASY_NAME.addAccents(0.45, 0.15);
+    public static final FakeLanguageGen FANCY_FANTASY_NAME = FANTASY_NAME.addAccents(0.47, 0.07);
 
 
             /**
@@ -1215,13 +1220,13 @@ public class FakeLanguageGen implements Serializable {
     public int hashCode() {
         int result;
         long temp;
-        result = Arrays.hashCode(openingVowels);
-        result = 31 * result + Arrays.hashCode(midVowels);
-        result = 31 * result + Arrays.hashCode(openingConsonants);
-        result = 31 * result + Arrays.hashCode(midConsonants);
-        result = 31 * result + Arrays.hashCode(closingConsonants);
-        result = 31 * result + Arrays.hashCode(vowelSplitters);
-        result = 31 * result + Arrays.hashCode(closingSyllables);
+        result = CrossHash.hash(openingVowels);
+        result = 31 * result + CrossHash.hash(midVowels);
+        result = 31 * result + CrossHash.hash(openingConsonants);
+        result = 31 * result + CrossHash.hash(midConsonants);
+        result = 31 * result + CrossHash.hash(closingConsonants);
+        result = 31 * result + CrossHash.hash(vowelSplitters);
+        result = 31 * result + CrossHash.hash(closingSyllables);
         result = 31 * result + (clean ? 1 : 0);
         result = 31 * result + (syllableFrequencies != null ? syllableFrequencies.hashCode() : 0);
         temp = Double.doubleToLongBits(totalSyllableFrequency);
@@ -1234,7 +1239,7 @@ public class FakeLanguageGen implements Serializable {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(syllableEndFrequency);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + Arrays.hashCode(sanityChecks);
+        result = 31 * result + (sanityChecks != null ? sanityChecks.length + 1 : 0);
         return result;
     }
 
