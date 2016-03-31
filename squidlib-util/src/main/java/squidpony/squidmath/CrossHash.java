@@ -401,4 +401,29 @@ public class CrossHash {
         }
         return h;
     }
+
+    /**
+     * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+     * @param data the char array to hash
+     * @param start the start of the section to hash (inclusive)
+     * @param end the end of the section to hash (exclusive)
+     * @return
+     */
+    public static long hash64(char[] data, int start, int end)
+    {
+        if(data == null)
+            return 0;
+        long h = -3750763034362895579L, len = data.length;
+        start %= len;
+        end %= len;
+        if(end <= start || start < 0 || end <= 0)
+            return 0;
+        for (int i = start; i < end; i++) {
+            h ^= data[i] & 0xff;
+            h *= 1099511628211L;
+            h ^= data[i] >>> 8;
+            h *= 1099511628211L;
+        }
+        return h;
+    }
 }
