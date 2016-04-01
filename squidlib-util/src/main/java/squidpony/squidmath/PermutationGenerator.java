@@ -15,10 +15,7 @@
 // ============================================================================
 package squidpony.squidmath;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Permutation generator for generating all permutations for all sets up to
@@ -50,7 +47,7 @@ public class PermutationGenerator<T> implements Iterable<List<T>>
     /**
      * Permutation generator that generates all possible orderings of
      * the elements in the specified set.
-     * @param elements The elements to permute.
+     * @param elements The elements to permute; will be modified, so this should be copied beforehand
      */
     public PermutationGenerator(T[] elements)
     {
@@ -58,7 +55,7 @@ public class PermutationGenerator<T> implements Iterable<List<T>>
         {
             throw new IllegalArgumentException("Size must be less than or equal to 20.");
         }
-        this.elements = elements.clone();
+        this.elements = elements;
         permutationIndices = new int[elements.length];
         totalPermutations = MathExtras.factorial(elements.length);
         reset();
@@ -190,7 +187,6 @@ public class PermutationGenerator<T> implements Iterable<List<T>>
         return destination;
     }
 
-
     /**
      * Generate the indices into the elements array for the next permutation.  The
      * algorithm is from Kenneth H. Rosen, Discrete Mathematics and its Applications,
@@ -241,7 +237,216 @@ public class PermutationGenerator<T> implements Iterable<List<T>>
         --remainingPermutations;
     }
 
+    private int[] getPermutationShift(T[] perm) {
+        int[] sh = new int[perm.length];
+        boolean[] taken = new boolean[perm.length];
 
+        for (int i = 0; i < perm.length - 1; i++) {
+            int ctr = -1;
+            for (int j = 0; j < perm.length; j++) {
+                if (!taken[j])
+                    ctr++;
+                if (perm[j] == elements[i]) {
+                    taken[j] = true;
+                    sh[i] = ctr;
+                    break;
+                }
+            }
+        }
+        return sh;
+    }
+
+    private int[] getPermutationShift(List<T> perm) {
+        int length = perm.size();
+        int[] sh = new int[length];
+        boolean[] taken = new boolean[length];
+
+        for (int i = 0; i < length - 1; i++) {
+            int ctr = -1;
+            for (int j = 0; j < length; j++) {
+                if (!taken[j])
+                    ctr++;
+                if (perm.get(j) == elements[i]) {
+                    taken[j] = true;
+                    sh[i] = ctr;
+                    break;
+                }
+            }
+        }
+        return sh;
+    }
+
+    /**
+     * Given an array of T that constitutes a permutation of the elements this was constructed with, finds the specific
+     * index of the permutation given a factoradic numbering scheme (not used by the rest of this class, except the
+     * decodePermutation() method). The index can be passed to decodePermutation to reproduce the permutation passed to
+     * this, or modified and then passed to decodePermutation(). Determines equality by identity, not by .equals(), so
+     * that equivalent values that have different references/identities can appear in the permuted elements.
+     * <br>
+     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
+     * @param perm an array of T that must be a valid permutation of this object's elements
+     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()
+     */
+    public long encodePermutation(T[] perm)
+    {
+        long e = 0;
+        if(perm == null || perm.length != elements.length)
+            return e;
+        int[] shift = getPermutationShift(perm);
+        for (int i = 1; i < shift.length; i++) {
+            e += shift[i] * MathExtras.factorialsStart[i];
+        }
+        return e;
+    }
+
+    /**
+     * Given a List of T that constitutes a permutation of the elements this was constructed with, finds the specific
+     * index of the permutation given a factoradic numbering scheme (not used by the rest of this class, except the
+     * decodePermutation() method). The index can be passed to decodePermutation to reproduce the permutation passed to
+     * this, or modified and then passed to decodePermutation(). Determines equality by identity, not by .equals(), so
+     * that equivalent values that have different references/identities can appear in the permuted elements.
+     * <br>
+     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
+     * @param perm a List of T that must be a valid permutation of this object's elements
+     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()
+     */
+    public long encodePermutation(List<T> perm)
+    {
+        long e = 0;
+        if(perm == null || perm.size() != elements.length)
+            return e;
+        int[] shift = getPermutationShift(perm);
+        for (int i = 1; i < shift.length; i++) {
+            e += shift[i] * MathExtras.factorialsStart[i];
+        }
+        return e;
+    }
+
+    private int[] factoradicDecode(long e)
+    {
+        int[] sequence = new int[elements.length];
+        int base = 2;
+
+        for (int k = 1; k < elements.length; k++)
+        {
+            sequence[elements.length - 1 - k] = (int)(e % base);
+            e /= base;
+
+            base++; // b[k+1] = b[k] + 1
+        }
+        return sequence;
+    }
+
+    /**
+     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
+     * this) and an array of T with the same length as the elements this was constructed with, fills the array with the
+     * permutation described by the long as a special (factoradic) index into the possible permutations. You can get an
+     * index for a specific permutation with encodePermutation() or by generating a random number between 0 and
+     * getTotalPermutations(), if you want it randomly.
+     * <br>
+     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
+     * @param encoded the index encoded as a long
+     * @param destination an array of T that must have equivalent length to the elements this was constructed with
+     * @return the looked-up permutation, which is the same value destination will be assigned
+     */
+    public T[] decodePermutation(long encoded, T[] destination)
+    {
+        if(destination == null)
+            return null;
+        encoded %= totalPermutations;
+        int[] sequence = factoradicDecode(encoded);
+        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements
+
+        //char[] permuted = new char[n]; //change for destination
+        boolean[] set = new boolean[elements.length];
+
+        for (int i = 0; i < elements.length; i++)
+        {
+            int s = sequence[i];
+            int remainingPosition = 0;
+            int index;
+
+            // Find the s'th position in the permuted list that has not been set yet.
+            for (index = 0; index < elements.length; index++)
+            {
+                if (!set[index])
+                {
+                    if (remainingPosition == s)
+                        break;
+
+                    remainingPosition++;
+                }
+            }
+
+            destination[index] = elements[i];
+            set[index] = true;
+        }
+        return destination;
+    }
+
+    /**
+     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
+     * this), creates a List filled with the permutation described by the long as a special (factoradic) index into the
+     * possible permutations. You can get an index for a specific permutation with encodePermutation() or by generating a
+     * random number between 0 and getTotalPermutations(), if you want it randomly.
+     * <br>
+     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
+     * @param encoded the index encoded as a long
+     * @return a List of T that corresponds to the permutation at the encoded index
+     */
+    public List<T> decodePermutation(long encoded)
+    {
+        ArrayList<T> list = new ArrayList<T>(elements.length);
+        Collections.addAll(list, elements);
+        return decodePermutation(encoded, list);
+    }
+
+    /**
+     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
+     * this) and a List of T with the same length as the elements this was constructed with, fills the List with the
+     * permutation described by the long as a special (factoradic) index into the possible permutations. You can get an
+     * index for a specific permutation with encodePermutation() or by generating a random number between 0 and
+     * getTotalPermutations(), if you want it randomly.
+     * <br>
+     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
+     * @param encoded the index encoded as a long
+     * @param destination a List of T that must have equivalent size to the elements this was constructed with
+     * @return the looked-up permutation, which is the same value destination will be assigned
+     */
+    public List<T> decodePermutation(long encoded, List<T> destination)
+    {
+        if(destination == null)
+            return null;
+        encoded %= totalPermutations;
+        int[] sequence = factoradicDecode(encoded);
+        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements
+
+        //char[] permuted = new char[n]; //change for destination
+        boolean[] set = new boolean[elements.length];
+
+        for (int i = 0; i < elements.length; i++)
+        {
+            int s = sequence[i];
+            int remainingPosition = 0;
+            int index;
+
+            // Find the s'th position in the permuted list that has not been set yet.
+            for (index = 0; index < elements.length; index++)
+            {
+                if (!set[index])
+                {
+                    if (remainingPosition == s)
+                        break;
+
+                    remainingPosition++;
+                }
+            }
+
+            destination.set(index, elements[i]);
+            set[index] = true;
+        }
+        return destination;
+    }
     /**
      * <p>Provides a read-only iterator for iterating over the permutations
      * generated by this object.  This method is the implementation of the
