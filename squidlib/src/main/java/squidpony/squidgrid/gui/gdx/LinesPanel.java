@@ -19,13 +19,14 @@ import squidpony.panel.IMarkup;
 /**
  * An actor capable of drawing {@link IColoredString}s. It is lines-oriented:
  * putting a line erases the previous line. It is designed for panels to write
- * text with a serif font (where {@link SquidPanel} is inappropriate, because of
- * the too-much space it lefts between characters).
+ * text with a serif font (where {@link SquidPanel} is less appropriate if you
+ * want tight serif display).
  * 
  * <p>
  * This
  * <a href="https://twitter.com/hgamesdev/status/709147572548575233">tweet</a>
- * shows an example. The panel at the top is implemented using this class.
+ * shows an example. The panel at the top of the screenshot is implemented using
+ * this class.
  * </p>
  * 
  * <p>
@@ -34,10 +35,16 @@ import squidpony.panel.IMarkup;
  * brogue's messages area).
  * </p>
  * 
+ * <p>
+ * The usual manner in which this panel is used is with the
+ * {@link #put(int, int, IColoredString)} method, using {@code 0} as the first
+ * parameter, and making {@code y} vary to display on different lines.
+ * </p>
+ * 
  * @author smelC
  * 
- * @see SquidMessageBox An alternative, somehow doing similar business, but
- *      being backed up by {@link SquidPanel}.
+ * @see SquidMessageBox An alternative, doing similar lines-drawing business,
+ *      but being backed up by {@link SquidPanel}.
  */
 public class LinesPanel<T extends Color> extends Actor {
 
@@ -45,11 +52,8 @@ public class LinesPanel<T extends Color> extends Actor {
 
 	public final BitmapFont font;
 
-	/** The number of horizontal cells */
-	public final int hcells;
-
-	/** The number of vertical cells */
-	public final int vcells;
+	/** The number of (vertical) lines that this panel covers */
+	public final int vlines;
 
 	protected boolean gdxYStyle = false;
 
@@ -74,7 +78,7 @@ public class LinesPanel<T extends Color> extends Actor {
 	private /* @Nullable */ ShapeRenderer renderer;
 
 	/**
-	 * <b>This call sets markup in {@code font}</b>
+	 * <b>This call sets markup in {@code font}'s data.</b>
 	 * 
 	 * @param markup
 	 *            The markup to use
@@ -96,8 +100,7 @@ public class LinesPanel<T extends Color> extends Actor {
 		font.getData().markupEnabled |= true;
 		this.font = font;
 
-		this.hcells = (int) Math.floor(pixelwidth / font.getSpaceWidth());
-		this.vcells = (int) Math.floor(pixelheight / font.getLineHeight());
+		this.vlines = (int) Math.floor(pixelheight / font.getLineHeight());
 		this.defaultTextColor = defaultTextColor;
 		this.bgColor = bgColor;
 		this.yToLine = new HashMap<Integer, ToDraw<T>>();
@@ -106,29 +109,59 @@ public class LinesPanel<T extends Color> extends Actor {
 		setHeight(pixelheight);
 	}
 
-	public void put(int x, int y, char c) {
-		put(x, y, c, null);
-	}
-
+	/**
+	 * Writes {@code c} at (x, y).
+	 * 
+	 * @param x
+	 *            The x offset, in terms of width of a character in the font.
+	 * @param y
+	 *            The y offset, in terms of the height of the font.
+	 * @param c
+	 *            What to write
+	 * @param color
+	 *            The color to use. Can be {@code null}.
+	 */
 	public void put(int x, int y, char c, /* @Nullable */ T color) {
 		final IColoredString<T> buf = IColoredString.Impl.<T> create();
 		buf.append(c, color);
 		put(x, y, buf);
 	}
 
-	public void put(int x, int y, String string, T color) {
+	/**
+	 * Writes {@code string} at (x, y).
+	 * 
+	 * @param x
+	 *            The x offset, in terms of width of a character in the font.
+	 * @param y
+	 *            The y offset, in terms of the height of the font.
+	 * @param string
+	 *            What to write
+	 * @param color
+	 *            The color to use. Can be {@code null}.
+	 */
+	public void put(int x, int y, String string, /* @Nullable */ T color) {
 		final IColoredString<T> buf = IColoredString.Impl.<T> create();
 		buf.append(string, color);
 		put(x, y, buf);
 	}
 
+	/**
+	 * Writes {@code ics} at (x, y).
+	 * 
+	 * @param x
+	 *            The x offset, in terms of width of a character in the font.
+	 * @param y
+	 *            The y offset, in terms of the height of the font.
+	 * @param ics
+	 *            What to write
+	 */
 	public void put(int x, int y, IColoredString<T> ics) {
-		if (vcells <= y) {
-			Gdx.app.log(SquidTags.LAYOUT, getClass().getSimpleName() + "'s height is " + vcells + " cell"
-					+ (vcells == 1 ? "" : "s") + ", but it is receiving a request to draw at height " + y);
+		if (vlines <= y) {
+			Gdx.app.log(SquidTags.LAYOUT, getClass().getSimpleName() + "'s height is " + vlines + " cell"
+					+ (vlines == 1 ? "" : "s") + ", but it is receiving a request to draw at height " + y);
 			return;
 		}
-		yToLine.put(gdxYStyle ? vcells - y : y, new ToDraw<T>(x, ics));
+		yToLine.put(gdxYStyle ? vlines - y : y, new ToDraw<T>(x, ics));
 	}
 
 	/**
@@ -226,8 +259,8 @@ public class LinesPanel<T extends Color> extends Actor {
 
 	@Override
 	public String toString() {
-		return super.toString() + " hcells:" + hcells + " vcells:" + vcells + " fontwidth:"
-				+ font.getSpaceWidth() + " fontheight:" + font.getLineHeight();
+		return super.toString() + " vlines:" + vlines + " fontwidth:" + font.getSpaceWidth() + " fontheight:"
+				+ font.getLineHeight();
 	}
 
 	/**
