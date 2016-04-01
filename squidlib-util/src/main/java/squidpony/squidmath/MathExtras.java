@@ -31,8 +31,14 @@ public final class MathExtras
 
     // Cache BigInteger factorial values because they are expensive to generate.
     private static final int CACHE_SIZE = 256;
+    static final long[] factorialsStart = new long[]{
+            0, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600,
+            6227020800L, 87178291200L, 1307674368000L, 20922789888000L, 355687428096000L,
+            6402373705728000L, 121645100408832000L, 2432902008176640000L
+    };
     private static final LinkedHashMap<Integer, BigInteger> BIG_FACTORIALS
         = new LinkedHashMap<Integer, BigInteger>();
+
 
     private MathExtras()
     {
@@ -54,12 +60,13 @@ public final class MathExtras
         {
             throw new IllegalArgumentException("Argument must be in the range 0 - 20.");
         }
+        /*
         long factorial = 1;
         for (int i = n; i > 1; i--)
         {
             factorial *= i;
-        }
-        return factorial;
+        }*/
+        return factorialsStart[n];
     }
 
 
