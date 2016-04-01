@@ -3,11 +3,30 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
  * @author smelC
  */
 public class UIUtil {
+
+	/**
+	 * Draws margins around an actor.
+	 * 
+	 * @param renderer_
+	 *            The renderer to use. If {@code null} a new one will be
+	 *            allocated.
+	 * @param a
+	 * @param margin
+	 *            The size of the margin to draw.
+	 * @param c
+	 *            The margins' colors.
+	 */
+	public static void drawMarginsAround(ShapeRenderer renderer_, Actor a, int margin, Color color,
+			CornerStyle cornerStyle) {
+		drawMarginsAround(renderer_, a.getX(), a.getY(), a.getWidth(), a.getHeight(), margin, color,
+				cornerStyle, 1f, 1f);
+	}
 
 	/**
 	 * Draws margins around a rectangle
@@ -54,6 +73,9 @@ public class UIUtil {
 	}
 
 	/**
+	 * @param renderer_
+	 *            The renderer to use. If {@code null} a new one will be
+	 *            allocated.
 	 * @param botLeftX
 	 *            The bottom left x cell of the rectangle to draw around.
 	 * @param botLeftY
@@ -69,12 +91,15 @@ public class UIUtil {
 	 * @param cornerStyle
 	 *            The style with which to draw the margins
 	 */
-	public static void drawMarginsAround(float botLeftX, float botLeftY, int width, int height, int margin,
-										 Color color, CornerStyle cornerStyle) {
-		drawMarginsAround(botLeftX, botLeftY, width, height, margin, color, cornerStyle, 1f, 1f);
+	public static void drawMarginsAround(ShapeRenderer renderer_, float botLeftX, float botLeftY, float width,
+			float height, float margin, Color color, CornerStyle cornerStyle) {
+		drawMarginsAround(renderer_, botLeftX, botLeftY, width, height, margin, color, cornerStyle, 1f, 1f);
 	}
 
 	/**
+	 * @param renderer_
+	 *            The renderer to use. If {@code null} a new one will be
+	 *            allocated.
 	 * @param botLeftX
 	 *            The bottom left x cell of the rectangle to draw around.
 	 * @param botLeftY
@@ -90,25 +115,27 @@ public class UIUtil {
 	 * @param cornerStyle
 	 *            The style with which to draw the margins
 	 * @param zoomX
-	 *            A multiplier for the world x-size of non-ShapeRenderer objects, that needs to be reversed for this
+	 *            A multiplier for the world x-size of non-ShapeRenderer
+	 *            objects, that needs to be reversed for this
 	 * @param zoomY
-	 *            A multiplier for the world y-size of non-ShapeRenderer objects, that needs to be reversed for this
+	 *            A multiplier for the world y-size of non-ShapeRenderer
+	 *            objects, that needs to be reversed for this
 	 */
-	public static void drawMarginsAround(float botLeftX, float botLeftY, int width, int height, int margin,
-										 Color color, CornerStyle cornerStyle, float zoomX, float zoomY) {
+	public static void drawMarginsAround(ShapeRenderer renderer_, float botLeftX, float botLeftY, float width,
+			float height, float margin, Color color, CornerStyle cornerStyle, float zoomX, float zoomY) {
 		if (margin == 0 || color == null)
 			/* Nothing to do */
 			return;
 		botLeftY += 1;
 
-		final ShapeRenderer renderer = new ShapeRenderer();
+		final ShapeRenderer renderer = renderer_ == null ? new ShapeRenderer() : renderer_;
 		renderer.begin(ShapeType.Filled);
 		renderer.scale(1f / zoomX, 1f / zoomY, 1f);
 		renderer.setColor(color);
 
 		if (cornerStyle == CornerStyle.ROUNDED || cornerStyle == CornerStyle.MISSING) {
 			/* Left margin */
-			renderer.rect(botLeftX - margin, botLeftY, margin, height); // + margin * 0.5f
+			renderer.rect(botLeftX - margin, botLeftY, margin, height);
 			/* Right margin */
 			renderer.rect(botLeftX + width, botLeftY, margin, height);
 		} else {
@@ -134,7 +161,10 @@ public class UIUtil {
 		}
 
 		renderer.end();
-		renderer.dispose();
+
+		if (renderer_ == null)
+			/* I allocated it, I must dispose it */
+			renderer.dispose();
 	}
 
 	/**

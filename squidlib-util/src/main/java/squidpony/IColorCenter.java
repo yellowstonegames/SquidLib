@@ -1,5 +1,6 @@
 package squidpony;
 
+import squidpony.panel.IColoredString;
 import squidpony.squidmath.RNG;
 
 import java.util.HashMap;
@@ -175,6 +176,13 @@ public interface IColorCenter<T> {
      * @return The color that {@code this} shows when {@code c} is requested. May be {@code c} itself.
      */
     T filter(T c);
+
+	/**
+	 * @param ics
+	 * @return {@code ics} filtered according to {@link #filter(Object)}. May be
+	 *         {@code ics} itself if unchanged.
+	 */
+	IColoredString<T> filter(IColoredString<T> ics);
 
 	/**
 	 * A skeletal implementation of {@link IColorCenter}.
@@ -420,6 +428,37 @@ public interface IColorCenter<T> {
         {
         	return get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));
         }
+
+		@Override
+		public IColoredString<T> filter(IColoredString<T> ics) {
+			/*
+			 * It is common not to have a filter or to have the identity one. To
+			 * avoid always copying strings in this case, we first roll over the
+			 * string to see if there'll be a change.
+			 * 
+			 * This is clearly a subjective design choice but my industry
+			 * experience is that minimizing allocations is the thing to do for
+			 * performances, hence I prefer iterating twice to do that.
+			 */
+			boolean change = false;
+			for (IColoredString.Bucket<T> bucket : ics) {
+				final T in = bucket.getColor();
+				final T out = filter(in);
+				if (in != out) {
+					change = true;
+					break;
+				}
+			}
+
+			if (change) {
+				final IColoredString<T> result = IColoredString.Impl.create();
+				for (IColoredString.Bucket<T> bucket : ics)
+					result.append(bucket.getText(), filter(bucket.getColor()));
+				return result;
+			} else
+				/* Only one allocation: the iterator, yay \o/ */
+				return ics;
+		}
 
         /**
 		 * Create a concrete instance of the color type given as a type parameter. That's the

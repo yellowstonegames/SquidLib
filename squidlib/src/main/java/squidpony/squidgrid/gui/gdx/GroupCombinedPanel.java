@@ -112,7 +112,7 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 	}
 
 	@Override
-	public void putFG(int x, int y, IColoredString<? extends T> cs) {
+	public void putFG(int x, int y, IColoredString<T> cs) {
 		checkFG();
 		fg.put(x, y, cs);
 	}
@@ -132,7 +132,7 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 	}
 
 	@Override
-	public void put(int x, int y, T background, IColoredString<? extends T> cs) {
+	public void put(int x, int y, T background, IColoredString<T> cs) {
 		checkFG();
 		checkBG();
 		final int w = getGridWidth();

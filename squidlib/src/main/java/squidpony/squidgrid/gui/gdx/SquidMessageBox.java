@@ -19,6 +19,10 @@ import java.util.List;
  * Height must be at least 3 cells, because clicking/tapping the top or bottom borders (which are part of the grid's
  * height, which leaves 1 row in the middle for a message) will scroll up or down.
  * Created by Tommy Ettinger on 12/10/2015.
+ * 
+ * @see LinesPanel An alternative, which is also designed to write messages (not
+ *      in a scrolling pane though), but which is backed up by {@link Actor}
+ *      instead of {@link SquidPanel} (hence better supports tight serif fonts)
  */
 public class SquidMessageBox extends SquidPanel {
     protected ArrayList<IColoredString<Color>> messages = new ArrayList<>(256);

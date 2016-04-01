@@ -84,7 +84,12 @@ public interface ISquidPanel<T> {
 	 */
 	void put(int x, int y, char c, T color);
 
-	void put(char[][] foregrounds, T[][] colors);
+	/**
+	 * @param foregrounds
+	 *            Can be {@code null}, indicating that only colors must be put.
+	 * @param colors
+	 */
+	void put(/* @Nullable */ char[][] foregrounds, T[][] colors);
 
 	/**
 	 * Removes the contents of this cell, leaving a transparent space.
