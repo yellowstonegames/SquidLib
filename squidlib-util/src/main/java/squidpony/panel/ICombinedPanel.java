@@ -81,7 +81,7 @@ public interface ICombinedPanel<T> {
 	 * @param cs
 	 *            the text to be displayed, with its color.
 	 */
-	void putFG(int x, int y, IColoredString<? extends T> cs);
+	void putFG(int x, int y, IColoredString<T> cs);
 
 	/**
 	 * Puts the color {@code c} at {@code (x, y)}.
@@ -101,7 +101,7 @@ public interface ICombinedPanel<T> {
     /**
      * Put {@code cs} at (x,y) using {@code bgc} for the background.
      */
-	void put(int x, int y, T bgc, IColoredString<? extends T> cs);
+	void put(int x, int y, T bgc, IColoredString<T> cs);
 
 	/**
 	 * Put {@code cs} at (x,y) using {@code bgc} for the background and
@@ -230,7 +230,7 @@ public interface ICombinedPanel<T> {
 		}
 
 		@Override
-		public void putFG(int x, int y, IColoredString<? extends T> cs) {
+		public void putFG(int x, int y, IColoredString<T> cs) {
 			fg.put(x, y, cs);
 		}
 
@@ -246,7 +246,7 @@ public interface ICombinedPanel<T> {
 		}
 
 		@Override
-		public void put(int x, int y, T bgc, IColoredString<? extends T> cs) {
+		public void put(int x, int y, T bgc, IColoredString<T> cs) {
 			final int l = cs.length();
 			for (int i = x; i < l && i < width; i++)
 				bg.put(i, y, bgc);
