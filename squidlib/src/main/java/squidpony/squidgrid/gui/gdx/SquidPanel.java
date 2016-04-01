@@ -156,10 +156,19 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         put(0, 0, chars);
     }
 
-    @Override
-	public void put(char[][] chars, Color[][] foregrounds) {
-        put(0, 0, chars, foregrounds);
-    }
+	@Override
+	public void put(/* @Nullable */char[][] chars, Color[][] foregrounds) {
+		if (chars == null) {
+			/* Only colors to put */
+			final int width = foregrounds.length;
+			final int height = width == 0 ? 0 : foregrounds[0].length;
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++)
+					put(x, y, foregrounds[x][y]);
+			}
+		} else
+			put(0, 0, chars, foregrounds);
+	}
 
     public void put(char[][] chars, int[][] indices, ArrayList<Color> palette) {
         put(0, 0, chars, indices, palette);
