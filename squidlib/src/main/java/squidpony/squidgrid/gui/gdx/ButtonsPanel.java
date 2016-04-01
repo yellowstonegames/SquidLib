@@ -12,13 +12,9 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import squidpony.SquidTags;
 import squidpony.panel.IColoredString;
@@ -812,7 +808,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 		/* Height of the button's inside */
 		final int h = height * ch;
 
-		UIUtil.drawMarginsAround(gdxx, gdxy, w, h, buttonMargin, buttonsMarginColor, cornerStyle);
+		UIUtil.drawMarginsAround(null, gdxx, gdxy, w, h, buttonMargin, buttonsMarginColor, cornerStyle);
 	}
 
 	protected int pixelsWidth() {
@@ -850,8 +846,8 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 */
 	protected void putBorder() {
 		if (0 < borderMargin && borderColor != null)
-			UIUtil.drawMarginsAround(getX(), getY(), getHCells() * cellWidth(), getVCells() * cellHeight(),
-					borderMargin, borderColor, borderStyle);
+			UIUtil.drawMarginsAround(null, getX(), getY(), getHCells() * cellWidth(),
+					getVCells() * cellHeight(), borderMargin, borderColor, borderStyle);
 	}
 
 	/**
@@ -860,7 +856,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 * @param text
 	 * @return The text to display, with the coloring to highlight the shortcut.
 	 */
-	protected IColoredString<? extends T> putShortcut(int buttonIndex, IColoredString<T> text) {
+	protected IColoredString<T> putShortcut(int buttonIndex, IColoredString<T> text) {
 		assert 0 <= buttonIndex && buttonIndex < buttonsTexts.size();
 		if (shortcutCharacterColor == null || (doNotBind != null && doNotBind.contains(buttonIndex)))
 			/*
