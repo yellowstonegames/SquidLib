@@ -26,6 +26,8 @@ public class PoissonDisk {
     private static final int defaultPointsPlaced = 10;
     private static final Radius disk = Radius.CIRCLE;
 
+    private PoissonDisk() {
+    }
 
     /**
      * Get a list of Coords, each randomly positioned around the given center out to the given radius (measured with

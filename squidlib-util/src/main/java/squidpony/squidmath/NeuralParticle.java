@@ -3,6 +3,7 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,7 +26,8 @@ import java.util.List;
  * @author @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
-public class NeuralParticle {
+public class NeuralParticle implements Serializable{
+    private static final long serialVersionUID = -3742942580678517149L;
 
     private final RNG rng;
     private final int maxDistance, minDistance, width, height;

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package squidpony.squidmath;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /** A resizable, ordered or unordered short variable-length array. Avoids the boxing that occurs with {@code ArrayList<Short>}.
@@ -25,7 +26,9 @@ import java.util.Arrays;
  * array) was chosen as a different name. Also uses short instead of int, of course.
  * Copied from LibGDX by Tommy Ettinger on 10/1/2015.
  * @author Nathan Sweet */
-public class ShortVLA {
+public class ShortVLA implements Serializable{
+    private static final long serialVersionUID = -2948161891082748626L;
+
     public short[] items;
     public int size;
     public boolean ordered;

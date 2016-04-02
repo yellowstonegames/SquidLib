@@ -2,12 +2,14 @@ package squidpony.squidmath;
 
 import squidpony.squidgrid.Direction;
 
+import java.io.Serializable;
+
 /**
  * A 2D coordinate.
  * 
  * Created by Tommy Ettinger on 8/12/2015.
  */
-public class Coord implements java.io.Serializable {
+public class Coord implements Serializable {
     private static final long serialVersionUID = 300L;
 
 	/** The x-coordinate. */

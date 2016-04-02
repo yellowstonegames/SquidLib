@@ -72,14 +72,23 @@ public class RNG implements Serializable {
     }
 
     /**
+     * A subclass of java.util.Random that uses a RandomnessSource supplied by the user instead of the default.
      * @author Tommy Ettinger
      */
-    protected static class CustomRandom extends Random
+    public static class CustomRandom extends Random
     {
 
 		private static final long serialVersionUID = 8211985716129281944L;
 		private final RandomnessSource randomnessSource;
 
+        /**
+         * Creates a new random number generator. This constructor uses
+         * a LightRNG with a random seed.
+         */
+        public CustomRandom()
+        {
+            randomnessSource = new LightRNG();
+        }
         /**
          * Creates a new random number generator. This constructor uses
          * the seed of the given RandomnessSource if it has been seeded.

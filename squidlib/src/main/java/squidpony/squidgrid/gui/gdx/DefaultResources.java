@@ -92,6 +92,8 @@ public class DefaultResources implements LifecycleListener {
 
     private DefaultResources()
     {
+        if(Gdx.app == null)
+            throw new IllegalStateException("Gdx.app cannot be null; initialize GUI-using objects in create() or later.");
         Gdx.app.addLifecycleListener(this);
     }
 

@@ -15,6 +15,7 @@
 // ============================================================================
 package squidpony.squidmath;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,13 +35,20 @@ import java.util.List;
  * <a href="http://www.merriampark.com/perm.htm">http://www.merriampark.com/comb.htm</a>).
  * @see PermutationGenerator
  */
-public class CombinationGenerator<T> implements Iterable<List<T>>
+public class CombinationGenerator<T> implements Iterable<List<T>>, Serializable
 {
+    private static final long serialVersionUID = 5998145341506278361L;
+
     private final T[] elements;
     private final int[] combinationIndices;
     private long remainingCombinations;
     private long totalCombinations;
 
+    private CombinationGenerator()
+    {
+        elements = null;
+        combinationIndices = null;
+    };
     /**
      * Create a combination generator that generates all combinations of
      * a specified length from the given set.

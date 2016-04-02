@@ -76,6 +76,10 @@ public class PerlinNoise {
             perm[i] = p[i & 255];
         }
     }
+    private PerlinNoise()
+    {
+
+    }
     // A lookup table to traverse the simplex around a given point in 4D.
     // Details can be found where this table is used, in the 4D noise method.
     private static final int simplex[][]
