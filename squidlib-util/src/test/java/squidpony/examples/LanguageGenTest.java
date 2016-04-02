@@ -52,6 +52,12 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 6, 13, new String[]{",", ",", ",", ",", ";", " -"},
                     new String[]{".", ".", ".", "!", "?", "..."}, 0.25));
         }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.SWAHILI;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
+                    new String[]{".", ".", ".", "!", "?"}, 0.12));
+        }
 
 
         rng.setState(0xf00df00L);
@@ -130,6 +136,7 @@ public class LanguageGenTest {
         System.out.println('"' + FakeLanguageGen.RUSSIAN_ROMANIZED.sentence(rng, 4, 7, new String[]{" -", ",", ",", ",", ";"}, new String[]{"!", "!", ".", "...", ".", "?"}, 0.22) + "\",");
         System.out.println('"' + FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 7, new String[]{" -", ",", ",", ",", ";"}, new String[]{"!", "!", ".", "...", ".", "?"}, 0.22) + "\",");
         System.out.println('"' + FakeLanguageGen.LOVECRAFT.sentence(rng, 4, 7, new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
+        System.out.println('"' + FakeLanguageGen.SWAHILI.sentence(rng, 4, 7, new String[]{",", ",", ";"}, new String[]{"!", "?", ".", ".", "."}, 0.12) + "\",");
         flg = FakeLanguageGen.FRENCH.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.65);
         System.out.println('"' + flg.sentence(rng, 6, 12, new String[]{",", ",", ",", ";"},
                 new String[]{".", ".", "!", "?", "...", "..."}, 0.17) + "\",");
@@ -142,6 +149,12 @@ public class LanguageGenTest {
         flg = FakeLanguageGen.FANCY_FANTASY_NAME;
         System.out.println('"' + flg.sentence(rng, 6, 12, new String[]{",", ",", ",", ";", " -"},
                 new String[]{".", ".", "!", "?", "...", "..."}, 0.2) + "\",");
+        flg = FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.35); //.mix(FakeLanguageGen.FRENCH, 0.35)
+        System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
+                new String[]{"!", "?", ".", ".", "."}, 0.12) + "\",");
+        flg = FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.32).mix(FakeLanguageGen.FANCY_FANTASY_NAME, 0.25);
+        System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
+                new String[]{"!", "?", ".", ".", "."}, 0.12) + "\",");
 
 
         //For generating the random guard interjections in some demos
