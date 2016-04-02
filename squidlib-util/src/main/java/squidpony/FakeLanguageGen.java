@@ -447,6 +447,123 @@ public class FakeLanguageGen implements Serializable {
                 },
                 new String[]{}, new int[]{1, 2, 3, 4}, new double[]{7, 8, 4, 1}, 0.22, 0.1, 0.0, 0.25, englishSanityChecks, true);
     }
+    /**
+     * Swahili is one of the more commonly-spoken languages in sub-Saharan Africa, and serves mainly as a shared language
+     * that is often learned after becoming fluent in one of many other (vaguely-similar) languages of the area. An
+     * example sentence in Swahili, that this might try to imitate aesthetically, is "Mtoto mdogo amekisoma," meaning "The
+     * small child reads it" (where it is a book).
+     * <br>
+     * As an aside, please try to avoid the ugly stereotypes that fantasy media often assigns to speakers of African-like
+     * languages when using this or any of the generators. Many fantasy tropes come from older literature written with
+     * major cultural biases, and real-world cultural elements can be much more interesting to players than yet another
+     * depiction of a "jungle savage" with stereotypical traits. Consider drawing from existing lists of real-world
+     * technological discoveries, like https://en.wikipedia.org/wiki/History_of_science_and_technology_in_Africa , for
+     * inspiration when world-building; though some groups may not have developed agriculture by early medieval times,
+     * their neighbors may be working iron and studying astronomy just a short distance away.
+     * <br>
+     *
+     */
+    public static final FakeLanguageGen SWAHILI = new FakeLanguageGen(
+            new String[]{"a", "i", "o", "e", "u",
+                    "a", "a", "i", "o", "o", "e", "u",
+                    "a", "a", "i", "o", "o", "u",
+                    "a", "a", "i", "i", "o",
+                    "a","a","a","a","a",
+                    "a", "i", "o", "e", "u",
+                    "a", "a", "i", "o", "o", "e", "u",
+                    "a", "a", "i", "o", "o", "u",
+                    "a", "a", "i", "i", "o",
+                    "a","a","a","a","a",
+                    "aa", "aa", "ue", "uo", "ii", "ea"},
+            new String[]{},
+            new String[]{
+                    "b", "h", "j", "l", "s", "y", "m", "n",
+                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                    "b", "h", "j", "l", "s", "y", "m", "n",
+                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                    "b", "h", "j", "l", "s", "y", "m", "n",
+                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                    "b", "h", "j", "l", "s", "y", "m", "n",
+                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                    "nb", "nj", "ns", "nz",
+                    "nb", "nch", "nj", "ns", "ny", "nz",
+                    "nb", "nch", "nf", "ng", "nj", "nk", "np", "ns", "nz",
+                    "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nz",
+                    "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nv", "nw", "nz",
+
+                    "mb", "ms", "my", "mz",
+                    "mb", "mch","ms", "my", "mz",
+                    "mb", "mch", "mk", "mp", "ms", "my", "mz",
+                    "mb", "mch", "md", "mk", "mp", "ms", "mt", "my", "mz",
+                    "mb", "mch", "md", "mf", "mg", "mj", "mk", "mp", "ms", "mt", "mv", "mw", "my", "mz",
+                    "sh", "sh", "sh", "ny", "kw",
+                    "dh", "th", "sh", "ny",
+                    "dh", "th", "sh", "gh", "r", "ny",
+                    "dh", "th", "sh", "gh", "r", "ny",
+            },
+            new String[]{
+                    "b", "h", "j", "l", "s", "y", "m", "n",
+                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                    "b", "h", "j", "l", "s", "y", "m", "n",
+                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                    "b", "h", "j", "l", "s", "y", "m", "n",
+                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                    "b", "h", "j", "l", "s", "y", "m", "n",
+                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                    "nb", "nj", "ns", "nz",
+                    "nb", "nch", "nj", "ns", "ny", "nz",
+                    "nb", "nch", "nf", "ng", "nj", "nk", "np", "ns", "nz",
+                    "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nz",
+                    "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nw", "nz",
+
+                    "mb", "ms", "my", "mz",
+                    "mb", "mch","ms", "my", "mz",
+                    "mb", "mch", "mk", "mp", "ms", "my", "mz",
+                    "mb", "mch", "md", "mk", "mp", "ms", "mt", "my", "mz",
+                    "mb", "mch", "md", "mf", "mg", "mj", "mk", "mp", "ms", "mt", "mw", "my", "mz",
+                    "sh", "sh", "sh", "ny", "kw",
+                    "dh", "th", "sh", "ny",
+                    "dh", "th", "sh", "gh", "r", "ny",
+                    "dh", "th", "sh", "gh", "r", "ny",
+                    "ng", "ng", "ng", "ng", "ng"
+            },
+            new String[]{""},
+            new String[]{"a-@2a", "a-@2a", "a-@3a","a-@2a", "a-@2a", "a-@3a","i-@2i", "i-@2i", "i-@3i",
+                    "e-@2e", "e-@2e", "e-@3e", "u-@2u", "u-@2u", "u-@3u",
+            },
+            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{1, 7, 6, 4, 2}, 0.2, 1.0, 0.0, 0.25, null, true);
 
     /**
      * This is a very complicated constructor! Maybe look at the calls to this to initialize static members of this
@@ -632,7 +749,22 @@ public class FakeLanguageGen implements Serializable {
                 sb.append(rng.getRandomElement(midConsonants));
             }
             if (rng.nextDouble() < syllableEndFrequency) {
-                sb.append(rng.getRandomElement(closingSyllables));
+                String close = rng.getRandomElement(closingSyllables);
+                if((close.contains("@1") && syllables == 1) ||
+                        (close.contains("@2") && syllables == 2) ||
+                        (close.contains("@3") && syllables == 3) )
+                {
+                    sb.append(close.replaceAll("@\\d", sb.toString()));
+                }
+                else if(!close.contains("@"))
+                    sb.append(close);
+                else if (rng.nextDouble() < vowelEndFrequency) {
+                    sb.append(rng.getRandomElement(midVowels));
+                    if (rng.nextDouble() < vowelSplitFrequency) {
+                        sb.append(rng.getRandomElement(vowelSplitters));
+                        sb.append(rng.getRandomElement(midVowels));
+                    }
+                }
             } else {
                 sb.append(rng.getRandomElement(midVowels));
                 if (rng.nextDouble() < vowelSplitFrequency) {
@@ -642,7 +774,15 @@ public class FakeLanguageGen implements Serializable {
                 if (rng.nextDouble() >= vowelEndFrequency) {
                     sb.append(rng.getRandomElement(closingConsonants));
                     if (rng.nextDouble() < syllableEndFrequency) {
-                        sb.append(rng.getRandomElement(closingSyllables));
+                        String close = rng.getRandomElement(closingSyllables);
+                        if((close.contains("@1") && syllables == 1) ||
+                                (close.contains("@2") && syllables == 2) ||
+                                (close.contains("@3") && syllables == 3) )
+                        {
+                            sb.append(close.replaceAll("@\\d", sb.toString()));
+                        }
+                        else if(!close.contains("@"))
+                            sb.append(close);
                     }
                 }
             }
@@ -691,7 +831,21 @@ public class FakeLanguageGen implements Serializable {
                 sb.append(rng.getRandomElement(midConsonants));
             }
             if (rng.nextDouble() < syllableEndFrequency) {
-                sb.append(rng.getRandomElement(closingSyllables));
+                String close = rng.getRandomElement(closingSyllables);
+                if((close.contains("@1") && approxSyllables == 1) || (close.contains("@2") && approxSyllables == 2) ||
+                        (close.contains("@3") && approxSyllables == 3) )
+                {
+                    sb.append(close.replaceAll("@\\d", sb.toString()));
+                }
+                else if(!close.contains("@"))
+                    sb.append(close);
+                else if (rng.nextDouble() < vowelEndFrequency) {
+                    sb.append(rng.getRandomElement(midVowels));
+                    if (rng.nextDouble() < vowelSplitFrequency) {
+                        sb.append(rng.getRandomElement(vowelSplitters));
+                        sb.append(rng.getRandomElement(midVowels));
+                    }
+                }
             } else {
                 sb.append(rng.getRandomElement(midVowels));
                 if (rng.nextDouble() < vowelSplitFrequency) {
@@ -701,7 +855,16 @@ public class FakeLanguageGen implements Serializable {
                 if (rng.nextDouble() >= vowelEndFrequency) {
                     sb.append(rng.getRandomElement(closingConsonants));
                     if (rng.nextDouble() < syllableEndFrequency) {
-                        sb.append(rng.getRandomElement(closingSyllables));
+                        String close = rng.getRandomElement(closingSyllables);
+                        if((close.contains("@1") && approxSyllables == 1) ||
+                                (close.contains("@2") && approxSyllables == 2) ||
+                                (close.contains("@3") && approxSyllables == 3) )
+                        {
+                            close = close.replaceAll("@\\d", sb.toString());
+                            sb.append(close);
+                        }
+                        else if(!close.contains("@"))
+                            sb.append(close);
                     }
                 }
             }
