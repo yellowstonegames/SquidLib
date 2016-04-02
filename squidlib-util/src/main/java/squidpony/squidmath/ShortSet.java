@@ -17,6 +17,7 @@
 
 package squidpony.squidmath;
 
+import java.io.Serializable;
 import java.util.NoSuchElementException;
 
 /** An unordered set that uses short keys. This implementation uses cuckoo hashing using 3 hashes, random walking, and a
@@ -29,7 +30,9 @@ import java.util.NoSuchElementException;
  * @author Nathan Sweet
  * Ported from libGDX by Tommy Ettinger on 10/19/2015.
  */
-public class ShortSet {
+public class ShortSet implements Serializable{
+    private static final long serialVersionUID = -4390851800502156007L;
+
     private static final int PRIME2 = 0xb4b82e39;
     private static final int PRIME3 = 0xced1c241;
     private static final short EMPTY = 0;

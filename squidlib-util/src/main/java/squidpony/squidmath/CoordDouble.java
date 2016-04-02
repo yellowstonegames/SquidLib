@@ -1,10 +1,12 @@
 package squidpony.squidmath;
 
+import java.io.Serializable;
+
 /**
  * Coord using double values for x and y instead of int. Not pooled.
  * Created by Tommy Ettinger on 8/12/2015.
  */
-public class CoordDouble implements java.io.Serializable {
+public class CoordDouble implements Serializable {
     private static final long serialVersionUID = 300L;
     public double x;
     public double y;

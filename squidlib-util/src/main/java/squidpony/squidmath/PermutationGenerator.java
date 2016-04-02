@@ -15,7 +15,12 @@
 // ============================================================================
 package squidpony.squidmath;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Permutation generator for generating all permutations for all sets up to
@@ -36,8 +41,10 @@ import java.util.*;
  * <a href="http://www.merriampark.com/perm.htm">http://www.merriampark.com/perm.htm</a>).
  * @see CombinationGenerator
  */
-public class PermutationGenerator<T> implements Iterable<List<T>>
+public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
 {
+    private static final long serialVersionUID = 514276118639629743L;
+
     private final T[] elements;
     private final int[] permutationIndices;
     private long remainingPermutations;

@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 import squidpony.annotation.GwtIncompatible;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,15 +20,47 @@ import java.util.regex.Pattern;
  */
 @Beta
 @GwtIncompatible
-public class Dice {
+public class Dice implements Serializable {
+
+    private static final long serialVersionUID = -877902743486431146L;
 
     private static final Pattern guessPattern = Pattern.compile("\\s*(\\d+)?\\s*(?:([:])\\s*(\\d+))??\\s*(?:([d:])\\s*(\\d+))?\\s*(?:([+-/*])\\s*(\\d+))?\\s*");
-    private RNG rng = new RNG();
+    private RNG rng;
 
-    private Dice() {
-
+    /**
+     * Creates a new dice roller that uses a random RNG seed for an RNG that it owns.
+     */
+    public Dice() {
+        rng = new RNG();
     }
 
+    /**
+     * Creates a new dice roller that uses the given RNG, which can be seeded before it's given here. The RNG will be
+     * shared, not copied, so requesting a random number from the same RNG in another place may change the value of the
+     * next die roll this makes, and dice rolls this makes will change the state of the shared RNG.
+     * @param rng an RNG that can be seeded; will be shared (dice rolls will change the RNG state outside here)
+     */
+    public Dice(RNG rng)
+    {
+        this.rng = rng;
+    }
+
+    /**
+     * Creates a new dice roller that will use its own RNG, seeded with the given seed.
+     * @param seed a long to use as a seed for a new RNG (can also be an int, short, or byte)
+     */
+    public Dice(long seed)
+    {
+        rng = new RNG(seed);
+    }
+    /**
+     * Creates a new dice roller that will use its own RNG, seeded with the given seed.
+     * @param seed a String to use as a seed for a new RNG
+     */
+    public Dice(String seed)
+    {
+        rng = new RNG(seed);
+    }
     /**
      * Sets the random number generator to be used.
      *

@@ -16,6 +16,7 @@
 
 package squidpony.squidmath;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -38,7 +39,8 @@ import java.util.NoSuchElementException;
  * @author Nathan Sweet
  * @author Tommy Ettinger
  */
-public class RegionMap<V> implements Iterable<RegionMap.Entry<V>> {
+public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable {
+    private static final long serialVersionUID = -6026166931953522091L;
     private static final int PRIME1 = 0xbe1f14b1;
     private static final int PRIME2 = 0xb4b82e39;
     private static final int PRIME3 = 0xced1c241;

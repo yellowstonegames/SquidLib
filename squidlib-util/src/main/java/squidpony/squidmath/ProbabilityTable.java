@@ -2,6 +2,7 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -17,8 +18,8 @@ import java.util.Set;
  * @param <T> The type of object to be held in the table
  */
 @Beta
-public class ProbabilityTable<T> {
-
+public class ProbabilityTable<T> implements Serializable {
+    private static final long serialVersionUID = -1307656083434154736L;
     private final HashMap<T, Integer> table = new HashMap<>();
     private RNG rng;
     private int total = 0;

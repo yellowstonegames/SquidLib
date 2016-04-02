@@ -3,6 +3,7 @@ package squidpony.squidmath;
 
 import squidpony.squidgrid.Direction;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -16,8 +17,8 @@ import java.util.Queue;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class AStarSearch {
-
+public class AStarSearch implements Serializable{
+    private static final long serialVersionUID = -6315495888417856297L;
     /**
      * The type of heuristic to use.
      */

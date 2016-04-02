@@ -3,6 +3,7 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +21,9 @@ import java.util.List;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
-public class Elias {
+public class Elias implements Serializable {
+
+    private static final long serialVersionUID = 5290834334572814012L;
 
     private List<Coord> path;
     private float[][] lightMap;
