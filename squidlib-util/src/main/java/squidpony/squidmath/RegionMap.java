@@ -74,6 +74,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable 
     /** Creates a new map with the specified initial capacity and load factor. This map will hold initialCapacity items before
      * growing the backing table.
      * @param initialCapacity If not a power of two, it is increased to the next nearest power of two. */
+    @SuppressWarnings("unchecked")
     public RegionMap (int initialCapacity, float loadFactor) {
         if (initialCapacity < 0) throw new IllegalArgumentException("initialCapacity must be >= 0: " + initialCapacity);
         initialCapacity = nextPowerOfTwo((int)Math.ceil(initialCapacity / loadFactor));
@@ -521,6 +522,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable 
         if (sizeNeeded >= threshold) resize(nextPowerOfTwo((int)Math.ceil(sizeNeeded / loadFactor)));
     }
 
+    @SuppressWarnings("unchecked")
     private void resize (int newSize) {
         int oldEndIndex = capacity + stashSize;
 
@@ -576,6 +578,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable 
         return h;
     }
 
+    @SuppressWarnings("unchecked")
     public boolean equals (Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof RegionMap)) return false;
@@ -832,6 +835,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable 
     }
 
     public static class Keys extends MapIterator<Object, short[]> {
+        @SuppressWarnings("unchecked")
         public Keys (RegionMap<?> map) {
             super((RegionMap<Object>) map);
         }

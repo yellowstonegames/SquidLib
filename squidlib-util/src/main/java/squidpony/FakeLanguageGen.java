@@ -461,7 +461,7 @@ public class FakeLanguageGen implements Serializable {
      * inspiration when world-building; though some groups may not have developed agriculture by early medieval times,
      * their neighbors may be working iron and studying astronomy just a short distance away.
      * <br>
-     *
+     * Kondueyu; ma mpiyamdabota mise-mise nizakwaja alamsa amja, homa nkajupomba.
      */
     public static final FakeLanguageGen SWAHILI = new FakeLanguageGen(
             new String[]{"a", "i", "o", "e", "u",

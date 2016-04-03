@@ -693,7 +693,7 @@ public class SectionDungeonGenerator {
         rebuildSeed = rng.getState();
         environmentType = kind.environment();
         DungeonBoneGen gen = new DungeonBoneGen(rng);
-        char[][] map = DungeonBoneGen.wallWrap(gen.generate(kind, width, height));
+        char[][] map = DungeonUtility.wallWrap(gen.generate(kind, width, height));
 
         seedFixed = false;
         DijkstraMap dijkstra = new DijkstraMap(map);
@@ -733,7 +733,7 @@ public class SectionDungeonGenerator {
      * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
-     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors
+     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors; may be modified in-place
      * @param environment stores whether a cell is room, corridor, or cave; getEnvironment() typically gives this
      * @return a char[][] dungeon
      */
@@ -744,7 +744,7 @@ public class SectionDungeonGenerator {
             rebuildSeed = rng.getState();
         }
         seedFixed = false;
-        char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
+        char[][] map = DungeonUtility.wallWrap(baseDungeon);
         int[][] env2 = new int[width][height];
         for (int x = 0; x < width; x++) {
             System.arraycopy(environment[x], 0, env2[x], 0, height);
@@ -790,7 +790,8 @@ public class SectionDungeonGenerator {
      * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * Also sets the fields stairsUp and stairsDown to null, and expects stairs to be already handled.
-     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors, with stairs already in
+     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors, with stairs already in;
+     *                    may be modified in-place
      * @param environment stores whether a cell is room, corridor, or cave; getEnvironment() typically gives this
      * @return a char[][] dungeon
      */
@@ -800,7 +801,7 @@ public class SectionDungeonGenerator {
             rebuildSeed = rng.getState();
         }
         seedFixed = false;
-        char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
+        char[][] map = DungeonUtility.wallWrap(baseDungeon);
         int[][] env2 = new int[width][height];
         for (int x = 0; x < width; x++) {
             System.arraycopy(environment[x], 0, env2[x], 0, height);
@@ -1019,7 +1020,7 @@ public class SectionDungeonGenerator {
             }
             ArrayList<short[]> change = new ArrayList<>();
             for (short[] room : finder.rooms.keys()) {
-                if (count(intersectPacked(lake, expand(room, 1, width, height))) > 0)
+                if (intersects(lake, expand(room, 1, width, height)))
                     change.add(room);
             }
             for (short[] region : change) {

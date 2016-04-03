@@ -444,7 +444,7 @@ public class DungeonGenerator {
      * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
-     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors
+     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors; may be modified in-place
      * @return a char[][] dungeon
      */
     public char[][] generate(char[][] baseDungeon)
@@ -454,7 +454,7 @@ public class DungeonGenerator {
             rebuildSeed = rng.getState();
         }
         seedFixed = false;
-        char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
+        char[][] map = DungeonUtility.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {
@@ -490,7 +490,8 @@ public class DungeonGenerator {
      * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * Also sets the fields stairsUp and stairsDown to null, and expects stairs to be already handled.
-     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors, with stairs already in
+     * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors, with stairs already in;
+     *                    may be modified in-place
      * @return a char[][] dungeon
      */
     public char[][] generateRespectingStairs(char[][] baseDungeon) {
@@ -499,7 +500,7 @@ public class DungeonGenerator {
             rebuildSeed = rng.getState();
         }
         seedFixed = false;
-        char[][] map = DungeonBoneGen.wallWrap(baseDungeon);
+        char[][] map = DungeonUtility.wallWrap(baseDungeon);
         DijkstraMap dijkstra = new DijkstraMap(map);
         stairsUp = null;
         stairsDown = null;
