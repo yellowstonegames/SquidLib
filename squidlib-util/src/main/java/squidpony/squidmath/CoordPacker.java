@@ -8,6 +8,7 @@ import squidpony.squidgrid.Radius;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 
 /**
@@ -1485,6 +1486,45 @@ public class CoordPacker {
         return unpacked;
     }
 
+    /**
+     * Given a piece of packed data defining a region to use from that map, a desired width and height, a char to use for
+     * "on" cells and a char to use for "off" cells, produces a 2D char array where all positions that are "off" in packed
+     * are filled with the char passed as f, and the cells that are "on" are filled with the char passed as t.
+     * @param packed a packed short array, as produced by pack()
+     * @param width the desired 2D array width
+     * @param height the desired 2D array height
+     * @param t the char to use for "on" positions in packed
+     * @param f the char to use for "off" positions in packed
+     * @return a 2D char array similar to map but with any "off" positions in packed replaced with filler
+     */
+    public static char[][] unpackChar(short[] packed, int width, int height, char t, char f)
+    {
+        if(width <= 0 || height <= 0)
+            throw new UnsupportedOperationException("Height and width must both be positive in unpackChar");
+
+        char[][] c = new char[width][height];
+
+        if(packed.length <= 1)
+            return c;
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(c[i], f);
+        }
+        boolean on = false;
+        int idx = 0, x, y;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    if(x >= width || y >= height)
+                        continue;
+                    c[x][y] = t;
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        return c;
+    }
     /**
      * Quickly determines if an x,y position is true or false in the given packed array, without unpacking it.
      * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
@@ -3106,7 +3146,7 @@ public class CoordPacker {
         ss.addAll(edge);
         if(edge.size <= 0)
         {
-            if(count(intersectPacked(bounds, start)) <= 0)
+            if(!intersects(bounds, start))
                 return ALL_WALL;
 
             short[] cpy = new short[start.length];
@@ -3502,14 +3542,14 @@ public class CoordPacker {
     }
     /**
      * Given x, y, width and height, returns a packed array that encodes "on" for the rectangle from (x,y) to
-     * (width - 1, height - 1). Primarily useful with intersectPacked() to ensure things like negatePacked() that can
-     * encode "on" cells in any position are instead limited to the bounds of the map, but also handy for basic "box
+     * (width + x - 1, height + y - 1). Primarily useful with intersectPacked() to ensure things like negatePacked() that
+     * can encode "on" cells in any position are instead limited to the bounds of the map, but also handy for basic "box
      * drawing" for other uses.
      * @param x the minimum x coordinate
      * @param y the minimum y coordinate
      * @param width the width of the rectangle
      * @param height the height of the rectangle
-     * @return a packed short[] encoding "on" for all cells with x less than width and y less than height.
+     * @return a packed short[] encoding "on" for all cells between (x,y) and (x+width-1,y+height-1).
      */
     public static short[] rectangle(int x, int y, int width, int height)
     {
@@ -3528,7 +3568,7 @@ public class CoordPacker {
     }
     /**
      * Given x, y, width and height, returns an array of all Hilbert distance within the rectangle from (x,y) to
-     * (width - 1, height - 1).
+     * (width + x - 1, height + y - 1).
      * @param x the minimum x coordinate
      * @param y the minimum y coordinate
      * @param width the width of the rectangle
@@ -3554,6 +3594,19 @@ public class CoordPacker {
         return hilberts;
     }
 
+    /**
+     * Given a center and radius for a circle, plus the width and height for the map boundaries, returns the packed data
+     * that encodes the circle.
+     * @param center center position of the circle
+     * @param radius radius to extend in all directions from center
+     * @param width the maximum width of the map (exclusive); the circle will not extend past this or below 0
+     * @param height the maximum height of the map (exclusive); the circle will not extend past this or below 0
+     * @return a packed short[] encoding "on" for all elements inside the circle
+     */
+    public static short[] circle(Coord center, int radius, int width, int height)
+    {
+        return packSeveral(Radius.CIRCLE.pointsInside(center, radius, false, width, height));
+    }
     /**
      * Counts the number of "on" cells encoded in a packed array without unpacking it.
      * @param packed a packed short array, as produced by pack()
@@ -3654,6 +3707,8 @@ public class CoordPacker {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
                     x = hilbertX[i];
                     y = hilbertY[i];
+                    if(x >= map.length || y >= map[x].length)
+                        continue;
                     c[x][y] = map[x][y];
                 }
             }
@@ -3821,6 +3876,69 @@ public class CoordPacker {
             }
         }
         return packing.toArray();
+    }
+
+    /**
+     * Given two packed short arrays, left and right, this returns true if they encode any overlapping area (their areas
+     * intersect), or false if they do not overlap at all (they don't intersect). This is more efficient than calculating
+     * the intersection with intersectPacked() just to check if it is non-empty, since this method can short-circuit and
+     * return true the moment it finds an intersection, plus it needs less overhead (slightly) to do so.
+     * @param left A packed array such as one produced by pack()
+     * @param right A packed array such as one produced by pack()
+     * @return The boolean true if left and right overlap at all, or false if they lack any intersecting area
+     */
+    public static boolean intersects(short[] left, short[] right)
+    {
+        if(left.length == 0 || right.length == 0)
+            return false;
+        boolean onLeft = false, onRight = false;
+        int idx = 0, elemLeft = 0, elemRight = 0, totalLeft = 0, totalRight = 0;
+        while ((elemLeft < left.length && elemRight < right.length) && idx <= 0xffff) {
+            if (elemLeft >= left.length) {
+                totalLeft = 0x20000;
+                onLeft = false;
+            }
+            else if(totalLeft <= idx) {
+                totalLeft += left[elemLeft] & 0xffff;
+            }
+            if(elemRight >= right.length) {
+                totalRight = 0x20000;
+                onRight = false;
+            }
+            else if(totalRight <= idx) {
+                totalRight += right[elemRight] & 0xffff;
+            }
+            // 300, 5, 6, 8, 2, 4
+            // 290, 12, 9, 1
+            // =
+            // 300, 2, 9, 1
+            // 300 off, 2 on, 9 off, 1 on
+            if(totalLeft < totalRight)
+            {
+                onLeft = !onLeft;
+                idx = totalLeft;
+                if(onLeft && onRight) return true;
+                elemLeft++;
+            }
+            else if(totalLeft == totalRight)
+            {
+                onLeft = !onLeft;
+                onRight = !onRight;
+                idx = totalLeft;
+                if(onLeft && onRight) return true;
+                elemLeft++;
+                elemRight++;
+
+            }
+            else
+            {
+                onRight = !onRight;
+                idx = totalRight;
+                if(onLeft && onRight) return true;
+                elemRight++;
+            }
+        }
+        return false;
     }
 
     /**
@@ -4107,6 +4225,42 @@ public class CoordPacker {
         return vla.toArray();
     }
     /**
+     * Returns a new packed short[] containing the Coords in points as "on" cells, and all other cells "off"
+     * @param points a Collection of Coords that will be encoded as "on"
+     * @return the points given to this encoded as "on" in a packed short array
+     */
+    public static short[] packSeveral(Collection<Coord> points)
+    {
+        int sz = points.size();
+        if(sz == 0)
+            return ALL_WALL;
+        int[] hilbert = new int[sz];
+        int idx = 0;
+        for(Coord c : points)
+        {
+            hilbert[idx++] = coordToHilbert(c);
+        }
+        Arrays.sort(hilbert);
+        ShortVLA vla = new ShortVLA(128);
+        int current, past = hilbert[0], skip = 0;
+
+        vla.add((short)hilbert[0]);
+        for (int i = 1; i < hilbert.length; i++) {
+            current = hilbert[i];
+            if (current - past > 1)
+            {
+                vla.add((short) (skip+1));
+                skip = 0;
+                vla.add((short)(current - past - 1));
+            }
+            else if(current != past)
+                skip++;
+            past = current;
+        }
+        vla.add((short)(skip+1));
+        return vla.toArray();
+    }
+    /**
      * Given one packed short array, original, and a Hilbert Curve index, hilbert, this produces a packed short array
      * that encodes "on" for any cell that was "on" in original, always encodes "on" for the position referred
      * to by hilbert, and encodes "off" for cells that were "off" in original and are not the cell hilbert refers to.
@@ -4143,10 +4297,6 @@ public class CoordPacker {
      * cell hilbert refers to. This method does not do any unpacking (which can be somewhat computationally expensive)
      * and so should be strongly preferred when you have several Hilbert Curve indices, possibly nearby each other but
      * just as possibly not, that you need inserted into a packed array.
-     * <br>
-     *     NOTE: this may not produce an optimally packed result, though the difference in memory consumption is likely
-     *     to be exceedingly small unless there are many nearby elements in hilbert (which may be a better use case for
-     *     unionPacked() anyway).
      * @param original A packed array such as one produced by pack()
      * @param hilbert an array or vararg of Hilbert Curve indices that should be inserted into the result
      * @return A packed array that encodes "on" for all cells that are "on" in original or are contained in hilbert
@@ -4162,15 +4312,26 @@ public class CoordPacker {
      * cell points refers to. This method does not do any unpacking (which can be somewhat computationally expensive)
      * and so should be strongly preferred when you have several Coords, possibly nearby each other but
      * just as possibly not, that you need inserted into a packed array.
-     * <br>
-     *     NOTE: this may not produce an optimally packed result, though the difference in memory consumption is likely
-     *     to be exceedingly small unless there are many nearby elements in hilbert (which may be a better use case for
-     *     unionPacked() anyway).
      * @param original A packed array such as one produced by pack()
      * @param points an array or vararg of Coords that should be inserted into the result
      * @return A packed array that encodes "on" for all cells that are "on" in original or are contained in hilbert
      */
     public static short[] insertSeveralPacked(short[] original, Coord... points)
+    {
+        return unionPacked(original, packSeveral(points));
+    }
+    /**
+     * Given one packed short array, original, and a Collection of Coords, points, this produces a packed
+     * short array that encodes "on" for any cell that was "on" in original, always encodes "on" for the position
+     * referred to by any element of points, and encodes "off" for cells that were "off" in original and are not in any
+     * cell points refers to. This method does not do any unpacking (which can be somewhat computationally expensive)
+     * and so should be strongly preferred when you have several Coords, possibly nearby each other but
+     * just as possibly not, that you need inserted into a packed array.
+     * @param original A packed array such as one produced by pack()
+     * @param points an array or vararg of Coords that should be inserted into the result
+     * @return A packed array that encodes "on" for all cells that are "on" in original or are contained in hilbert
+     */
+    public static short[] insertSeveralPacked(short[] original, Collection<Coord> points)
     {
         return unionPacked(original, packSeveral(points));
     }
@@ -4212,10 +4373,6 @@ public class CoordPacker {
      * does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly preferred
      * when you have several Hilbert Curve indices, possibly nearby each other but just as possibly not, that you need
      * removed from a packed array.
-     * <br>
-     *     NOTE: this may not produce an optimally packed result, though the difference in memory consumption is likely
-     *     to be exceedingly small unless there are many nearby elements in hilbert (which may be a better use case for
-     *     differencePacked() anyway).
      * @param original A packed array such as one produced by pack()
      * @param hilbert an array or vararg of Hilbert Curve indices that should be inserted into the result
      * @return A packed array that encodes "on" for all cells that are "on" in original and aren't contained in hilbert
@@ -4226,21 +4383,33 @@ public class CoordPacker {
     }
 
     /**
-     * Given one packed short array, original, and a number of Hilbert Curve indices, hilbert, this produces a packed
-     * short array that encodes "on" for any cell that was "on" in original, unless it was a position referred to by
-     * hilbert, and encodes "off" for cells that were "off" in original and are a cell hilbert refers to. This method
+     * Given one packed short array, original, and a number of Coords, points, this produces a packed short
+     * array that encodes "on" for any cell that was "on" in original, unless it was a position referred to by an element
+     * in points, and encodes "off" for cells that were "off" in original and are a cell points refers to. This method
      * does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly preferred
      * when you have several Hilbert Curve indices, possibly nearby each other but just as possibly not, that you need
      * removed from a packed array.
-     * <br>
-     *     NOTE: this may not produce an optimally packed result, though the difference in memory consumption is likely
-     *     to be exceedingly small unless there are many nearby elements in hilbert (which may be a better use case for
-     *     differencePacked() anyway).
      * @param original A packed array such as one produced by pack()
-     * @param points an array or vararg of Coords that should be inserted into the result
+     * @param points an array or vararg of Coords that should be removed from the result
      * @return A packed array that encodes "on" for all cells that are "on" in original and aren't contained in points
      */
     public static short[] removeSeveralPacked(short[] original, Coord... points)
+    {
+        return differencePacked(original, packSeveral(points));
+    }
+
+    /**
+     * Given one packed short array, original, and a number of Coords, points, this produces a packed short
+     * array that encodes "on" for any cell that was "on" in original, unless it was a position referred to by an element
+     * in points, and encodes "off" for cells that were "off" in original and are a cell points refers to. This method
+     * does not do any unpacking (which can be somewhat computationally expensive) and so should be strongly preferred
+     * when you have several Hilbert Curve indices, possibly nearby each other but just as possibly not, that you need
+     * removed from a packed array.
+     * @param original A packed array such as one produced by pack()
+     * @param points a Collection of Coords that should be removed from the result
+     * @return A packed array that encodes "on" for all cells that are "on" in original and aren't contained in points
+     */
+    public static short[] removeSeveralPacked(short[] original, Collection<Coord> points)
     {
         return differencePacked(original, packSeveral(points));
     }

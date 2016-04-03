@@ -220,6 +220,8 @@ public enum Radius {
     }
 
 
+
+
     private int clamp(int n, int min, int max)
     {
         return Math.min(Math.max(min, n), max - 1);
@@ -438,6 +440,55 @@ public enum Radius {
             default:
                 return 2 * Math.max(x, y);
         }
+    }
+
+    public Set<Coord> pointsInside(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
+    {
+        LinkedHashSet<Coord> contents = new LinkedHashSet<Coord>((int)Math.ceil(volume2D(radiusLength)));
+        if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height))
+            return contents;
+        if(radiusLength < 1) {
+            contents.add(center);
+            return contents;
+        }
+        switch (this) {
+            case SQUARE:
+            case CUBE:
+            {
+                for (int i = center.x - radiusLength; i <= center.x + radiusLength; i++) {
+                    for (int j = center.y - radiusLength; j <= center.y + radiusLength; j++) {
+                        if(!surpassEdges && (i < 0 || j < 0 || i >= width || j >= height))
+                            continue;
+                        contents.add(Coord.get(i, j));
+                    }
+                }
+            }
+            break;
+            case DIAMOND:
+            case OCTAHEDRON: {
+                for (int i = center.x - radiusLength; i <= center.x + radiusLength; i++) {
+                    for (int j = center.y - radiusLength; j <= center.y + radiusLength; j++) {
+                        if ((Math.abs(center.x - i) + Math.abs(center.y- j) > radiusLength) ||
+                                (!surpassEdges && (i < 0 || j < 0 || i >= width || j >= height)))
+                            continue;
+                        contents.add(Coord.get(i, j));
+                    }
+                }
+            }
+            break;
+            default:
+            {
+                int high;
+                for (int dx = -radiusLength; dx <= radiusLength; ++dx)
+                {
+                    high = (int)Math.floor(Math.sqrt(radiusLength * radiusLength - dx * dx));
+                    for (int dy = -high; dy <= high; ++dy)
+                        contents.add(Coord.get(dx, dy));
+                }
+            }
+        }
+        return contents;
+
     }
 
 }

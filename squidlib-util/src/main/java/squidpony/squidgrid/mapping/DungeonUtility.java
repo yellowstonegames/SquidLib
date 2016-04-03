@@ -96,7 +96,7 @@ public class DungeonUtility {
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has the same value as the
      * parameter tile. Uses this class' rng field for pseudo-random number generation.
      *
-     * @param map a char[][] that should contain the desired tile
+     * @param map  a char[][] that should contain the desired tile
      * @param tile the char to search for
      * @return a Coord that corresponds to a map element equal to tile, or null if tile cannot be found or if map is too small.
      */
@@ -137,8 +137,8 @@ public class DungeonUtility {
      * This can step into walls, and should NOT be used for movement.  It is meant for things like sound that can
      * exist in walls, or for assigning decor to floors or walls that are adjacent to floors.
      *
-     * @param map a char[][] map that this will only use for its width and height; contents are ignored
-     * @param start the starting position
+     * @param map      a char[][] map that this will only use for its width and height; contents are ignored
+     * @param start    the starting position
      * @param eightWay true to choose a random orthogonal or diagonal direction; false to only choose from orthogonal
      * @return a Coord that is adjacent to start on the map, or null if start is off the map or the map is very small
      */
@@ -180,7 +180,7 @@ public class DungeonUtility {
      * '.' as their values.
      * Uses this class' rng field for pseudo-random number generation.
      *
-     * @param map a char[][] that should contain at least one floor represented by '.'
+     * @param map  a char[][] that should contain at least one floor represented by '.'
      * @param size the side length of a square that must be completely filled with floors for this to return it
      * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small.
      */
@@ -244,6 +244,7 @@ public class DungeonUtility {
     public static char[][] hashesToLines(char[][] map) {
         return hashesToLines(map, false);
     }
+
     private static final char[] wallLookup = new char[]
             {
                     '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '┤', '┬', '┼',
@@ -263,6 +264,7 @@ public class DungeonUtility {
                     '#', '│', '─', '└', '│', '│', '┌', '├', '─', '┘', '─', '┴', '┐', '│', '─', '└',
                     '#', '│', '─', '└', '│', '│', '┌', '│', '─', '┘', '─', '─', '┐', '│', '─', '\1'
             };
+
     /**
      * Takes a char[][] dungeon map that uses '#' to represent walls, and returns a new char[][] that uses unicode box
      * drawing characters to draw straight, continuous lines for walls, filling regions between walls (that were
@@ -276,7 +278,7 @@ public class DungeonUtility {
      * "correct" line-drawing characters, "incorrect" line-drawing characters, and '#' characters for walls, you can
      * reset by calling linesToHashes() and then potentially calling hashesToLines() again.
      *
-     * @param map a 2D char array indexed with x,y that uses '#' for walls
+     * @param map              a 2D char array indexed with x,y that uses '#' for walls
      * @param keepSingleHashes true if walls that are not orthogonally adjacent to other walls should stay as '#'
      * @return a copy of the map passed as an argument with box-drawing characters replacing '#' walls
      */
@@ -301,7 +303,7 @@ public class DungeonUtility {
                 if (map[x - 1][y - 1] == '#') {
                     int q = 0;
                     q |= (y <= 1 || map[x - 1][y - 2] == '#' || map[x - 1][y - 2] == '+' || map[x - 1][y - 2] == '/') ? 1 : 0;
-                    q |= (x >= width - 2 || map[x][y - 1] == '#' || map[x][y - 1] == '+' || map[x][y - 1] == '/') ? 2: 0;
+                    q |= (x >= width - 2 || map[x][y - 1] == '#' || map[x][y - 1] == '+' || map[x][y - 1] == '/') ? 2 : 0;
                     q |= (y >= height - 2 || map[x - 1][y] == '#' || map[x - 1][y] == '+' || map[x - 1][y] == '/') ? 4 : 0;
                     q |= (x <= 1 || map[x - 2][y - 1] == '#' || map[x - 2][y - 1] == '+' || map[x - 2][y - 1] == '/') ? 8 : 0;
 
@@ -309,12 +311,9 @@ public class DungeonUtility {
                     q |= (y >= height - 2 || x >= width - 2 || map[x][y] == '#' || map[x][y] == '+' || map[x][y] == '/') ? 32 : 0;
                     q |= (y >= height - 2 || x <= 1 || map[x - 2][y] == '#' || map[x - 2][y] == '+' || map[x - 2][y] == '/') ? 64 : 0;
                     q |= (y <= 1 || x <= 1 || map[x - 2][y - 2] == '#' || map[x - 2][y - 2] == '+' || map[x - 2][y - 2] == '/') ? 128 : 0;
-                    if(!keepSingleHashes && wallLookup[q] == '#')
-                    {
+                    if (!keepSingleHashes && wallLookup[q] == '#') {
                         dungeon[x][y] = '─';
-                    }
-                    else
-                    {
+                    } else {
                         dungeon[x][y] = wallLookup[q];
                     }
                 }
@@ -334,6 +333,7 @@ public class DungeonUtility {
         }
         return portion;
     }
+
     /**
      * Reverses most of the effects of hashesToLines(). The only things that will not be reversed are the placement of
      * space characters in unreachable wall-cells-behind-wall-cells, which remain as spaces. This is useful if you
@@ -694,9 +694,9 @@ public class DungeonUtility {
                         portion[i][j] = 6;
                         break;
                     default:
-                        if(map[i][j] == deepChar)
+                        if (map[i][j] == deepChar)
                             portion[i][j] = deepIndex;
-                        else if(map[i][j] == shallowChar)
+                        else if (map[i][j] == shallowChar)
                             portion[i][j] = shallowIndex;
                         else portion[i][j] = 1;
                 }
@@ -829,9 +829,9 @@ public class DungeonUtility {
                         portion[i][j] = 0;
                         break;
                     default:
-                        if(map[i][j] == deepChar)
+                        if (map[i][j] == deepChar)
                             portion[i][j] = deepIndex;
-                        else if(map[i][j] == shallowChar)
+                        else if (map[i][j] == shallowChar)
                             portion[i][j] = shallowIndex;
                         else portion[i][j] = 0;
                 }
@@ -902,7 +902,7 @@ public class DungeonUtility {
      * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
      * animation frame if rippling water and waving grass using Perlin Noise are desired.
      *
-     * @param map a char[][] that you want to be find background lightness modifiers for
+     * @param map   a char[][] that you want to be find background lightness modifiers for
      * @param frame a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
      *              water and grass move more
      * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
@@ -964,10 +964,10 @@ public class DungeonUtility {
      * animation frame if rippling water and waving grass using Perlin Noise are desired. Also allows additional chars
      * to be treated like deep and shallow water regarding the ripple animation.
      *
-     * @param map a char[][] that you want to be find background lightness modifiers for
-     * @param frame a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
-     *              water and grass move more
-     * @param deepLiquid a char that will be treated like deep water when animating ripples
+     * @param map           a char[][] that you want to be find background lightness modifiers for
+     * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
+     *                      water and grass move more
+     * @param deepLiquid    a char that will be treated like deep water when animating ripples
      * @param shallowLiquid a char that will be treated like shallow water when animating ripples
      * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
      */
@@ -1016,9 +1016,9 @@ public class DungeonUtility {
                         portion[i][j] = 40;
                         break;
                     default:
-                        if(map[i][j] == deepLiquid)
+                        if (map[i][j] == deepLiquid)
                             portion[i][j] = (int) (180 * (PerlinNoise.noise(i / 5.0, j / 5.0, frame / 21.0) / 2.5 - 0.7));
-                        else if(map[i][j] == shallowLiquid)
+                        else if (map[i][j] == shallowLiquid)
                             portion[i][j] = (int) (110 * (PerlinNoise.noise(i / 4.0, j / 4.0, frame / 30.0) / 2.5 - 0.45));
                         else portion[i][j] = 0;
                 }
@@ -1146,91 +1146,90 @@ public class DungeonUtility {
         return portion;
     }
 
-	/**
-	 * @param rng
-	 * @param map
-	 * @param acceptable
-	 * @param frustration
-	 *            The number of trials that this method can do. Usually 16 or
-	 *            32.
-	 * @return A random cell in {@code map} whose symbol is in
-	 *         {@code acceptable}. Or {@code null} if not found.
-	 */
-	public static /* @Nullable */Coord getRandomCell(RNG rng, char[][] map, Set<Character> acceptable,
-			int frustration) {
-		if (frustration < 0)
-			throw new IllegalStateException("Frustration should not be negative");
-		final int width = map.length;
-		final int height = width == 0 ? 0 : map[0].length;
-        if(width == 0 || height == 0)
+    /**
+     * @param rng
+     * @param map
+     * @param acceptable
+     * @param frustration The number of trials that this method can do. Usually 16 or
+     *                    32.
+     * @return A random cell in {@code map} whose symbol is in
+     * {@code acceptable}. Or {@code null} if not found.
+     */
+    public static /* @Nullable */Coord getRandomCell(RNG rng, char[][] map, Set<Character> acceptable,
+                                                     int frustration) {
+        if (frustration < 0)
+            throw new IllegalStateException("Frustration should not be negative");
+        final int width = map.length;
+        final int height = width == 0 ? 0 : map[0].length;
+        if (width == 0 || height == 0)
             throw new IllegalStateException("Map must be non-empty to get a cell from it");
-		int i = 0;
-		while (i < frustration) {
-			final int x = rng.nextInt(width);
-			final int y = rng.nextInt(height);
-			if (acceptable.contains(map[x][y]))
-				return Coord.get(x, y);
-			i++;
-		}
-		return null;
-	}
+        int i = 0;
+        while (i < frustration) {
+            final int x = rng.nextInt(width);
+            final int y = rng.nextInt(height);
+            if (acceptable.contains(map[x][y]))
+                return Coord.get(x, y);
+            i++;
+        }
+        return null;
+    }
 
-	/**
-	 * @param level dungeon/map level as 2D char array. x,y indexed
-	 * @param c Coord to check
-	 * @return {@code true} if {@code c} is valid in {@code level},
-	 *         {@code false} otherwise.
-	 */
-	public static boolean inLevel(char[][] level, Coord c) {
-		return inLevel(level, c.x, c.y);
-	}
+    /**
+     * @param level dungeon/map level as 2D char array. x,y indexed
+     * @param c     Coord to check
+     * @return {@code true} if {@code c} is valid in {@code level},
+     * {@code false} otherwise.
+     */
+    public static boolean inLevel(char[][] level, Coord c) {
+        return inLevel(level, c.x, c.y);
+    }
 
-	/**
-	 * @param level dungeon/map level as 2D char array. x,y indexed
-	 * @param x x coordinate to check
-     * @param y y coordinate to check
-	 * @return {@code true} if {@code c} is valid in {@code level},
-	 *         {@code false} otherwise.
-	 */
-	public static boolean inLevel(char[][] level, int x, int y) {
-		return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
-	}
+    /**
+     * @param level dungeon/map level as 2D char array. x,y indexed
+     * @param x     x coordinate to check
+     * @param y     y coordinate to check
+     * @return {@code true} if {@code c} is valid in {@code level},
+     * {@code false} otherwise.
+     */
+    public static boolean inLevel(char[][] level, int x, int y) {
+        return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
+    }
 
-	/**
-	 * @param level a dungeon/map level as 2D array. x,y indexed
-	 * @param c Coord to check
-	 * @return {@code true} if {@code c} is valid in {@code level},
-	 *         {@code false} otherwise.
-	 */
-	public static <T> boolean inLevel(T[][] level, Coord c) {
-		return inLevel(level, c.x, c.y);
-	}
+    /**
+     * @param level a dungeon/map level as 2D array. x,y indexed
+     * @param c     Coord to check
+     * @return {@code true} if {@code c} is valid in {@code level},
+     * {@code false} otherwise.
+     */
+    public static <T> boolean inLevel(T[][] level, Coord c) {
+        return inLevel(level, c.x, c.y);
+    }
 
-	/**
-	 * @param level a dungeon/map level as 2D array. x,y indexed
-	 * @param x x coordinate to check
-     * @param y y coordinate to check
-	 * @return {@code true} if {@code c} is valid in {@code level},
-	 *         {@code false} otherwise.
-	 */
-	public static <T> boolean inLevel(T[][] level, int x, int y) {
-		return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
-	}
+    /**
+     * @param level a dungeon/map level as 2D array. x,y indexed
+     * @param x     x coordinate to check
+     * @param y     y coordinate to check
+     * @return {@code true} if {@code c} is valid in {@code level},
+     * {@code false} otherwise.
+     */
+    public static <T> boolean inLevel(T[][] level, int x, int y) {
+        return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
+    }
 
     /**
      * Quickly counts the number of char elements in level that are equal to match.
+     *
      * @param level the 2D char array to count cells in
      * @param match the char to search for
      * @return the number of cells that matched
      */
-    public static int countCells(char[][] level, char match)
-    {
-        if(level == null || level.length == 0)
+    public static int countCells(char[][] level, char match) {
+        if (level == null || level.length == 0)
             return 0;
         int counter = 0;
         for (int x = 0; x < level.length; x++) {
             for (int y = 0; y < level[x].length; y++) {
-                if(level[x][y] == match) counter++;
+                if (level[x][y] == match) counter++;
             }
         }
         return counter;
@@ -1238,11 +1237,11 @@ public class DungeonUtility {
 
     /**
      * For when you want to print a 2D char array. Prints on multiple lines, with a trailing newline.
+     *
      * @param level a 2D char array to print with a trailing newline
      */
-    public static void debugPrint(char[][] level)
-    {
-        if(level == null || level.length == 0 || level[0].length == 0)
+    public static void debugPrint(char[][] level) {
+        if (level == null || level.length == 0 || level[0].length == 0)
             System.out.println("INVALID DUNGEON LEVEL");
         else {
             for (int y = 0; y < level[0].length; y++) {
@@ -1253,5 +1252,25 @@ public class DungeonUtility {
 
             }
         }
+    }
+
+    /**
+     * Changes the outer edge of a char[][] to the wall char, '#'.
+     *
+     * @param map A char[][] that stores map data; will be modified in place
+     * @return the modified-in-place map with its edge replaced with '#'
+     */
+    public static char[][] wallWrap(char[][] map) {
+        int upperY = map[0].length - 1;
+        int upperX = map.length - 1;
+        for (int i = 0; i < map.length; i++) {
+            map[i][0] = '#';
+            map[i][upperY] = '#';
+        }
+        for (int i = 0; i < map[0].length; i++) {
+            map[0][i] = '#';
+            map[upperX][i] = '#';
+        }
+        return map;
     }
 }
