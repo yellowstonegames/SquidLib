@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import squidpony.GwtCompatibility;
 import squidpony.squidai.ZOI;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
@@ -15,8 +16,8 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.PoissonDisk;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
@@ -44,23 +45,23 @@ public class ZoneDemo extends ApplicationAdapter {
     private SquidInput input;
     private static final Color bgColor = SColor.DARK_SLATE_GRAY, textColor = SColor.SLATE_GRAY;
     private Stage stage;
-    private int framesWithoutAnimation = 0;
+    private float secondsWithoutAnimation = 0f;
     private ArrayList<Coord> awaitedMoves;
     private SquidColorCenter colorCenter;
     @Override
     public void create () {
         batch = new SpriteBatch();
         width = 80;
-        height = 60;
-        cellWidth = 6;
-        cellHeight = 12;
-        display = new SquidLayers(width * 2, height, cellWidth, cellHeight, DefaultResources.narrowName);
-        display.setAnimationDuration(0.15f);
-        display.addExtraLayer();
+        height = 50;
+        cellWidth = 16;
+        cellHeight = 16;
+        TextCellFactory tcf = DefaultResources.getStretchableFont().addSwap('.', ' ');
+        display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
+        display.setAnimationDuration(0.05f);
+        display.setTextSize(cellWidth, cellHeight + 1);
         stage = new Stage(new ScreenViewport(), batch);
 
-        lrng = new LightRNG(0x7ECCBABBL);
-        rng = new RNG(lrng);
+        rng = new RNG(0x7ECCBABBL);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
 //        dungeonGen.addWater(10);
@@ -71,13 +72,18 @@ public class ZoneDemo extends ApplicationAdapter {
         serpent.putWalledRoundRoomCarvers(2);
         serpent.putCaveCarvers(4);
         bareDungeon = dungeonGen.generate(serpent.generate());
-        bareDungeon = DungeonUtility.closeDoors(bareDungeon);
-        lineDungeon = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(bareDungeon));
+        //bareDungeon = DungeonUtility.closeDoors(bareDungeon);
 
-        ArrayList<Coord> temp = PoissonDisk.sampleMap(bareDungeon, 8.0f, rng, '#', '+', '/');
-        centers = temp.toArray(new Coord[temp.size()]);
-        shiftedCenters = temp.toArray(new Coord[temp.size()]);
+        //lineDungeon = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(bareDungeon));
+        lineDungeon = DungeonUtility.hashesToLines(bareDungeon);
 
+        //ArrayList<Coord> temp = PoissonDisk.sampleMap(bareDungeon, 8.0f, rng, '#', '+', '/');
+
+        //centers = temp.toArray(new Coord[temp.size()]);
+        //shiftedCenters = temp.toArray(new Coord[temp.size()]);
+
+        centers = CoordPacker.apartPacked(CoordPacker.pack(bareDungeon, '.'), 8);
+        shiftedCenters = GwtCompatibility.cloneCoords(centers);
         colorCenter = DefaultResources.getSCC();
         influenceColors = new Color[centers.length];
         centerEntities = new AnimatedEntity[centers.length];
@@ -87,7 +93,7 @@ public class ZoneDemo extends ApplicationAdapter {
             influenceColors[i] = colorCenter.getHSV(hue, sat, val);
 
             centerEntities[i] = display.animateActor(centers[i].x, centers[i].y, '@',
-                    colorCenter.getHSV(hue, sat - 0.3f, val - 0.4f), true);
+                    colorCenter.getHSV(hue, sat - 0.3f, val - 0.4f), false); //, true);
         }
         zoi = new ZOI(centers, bareDungeon, Radius.DIAMOND);
         packedInfluences = zoi.calculate();
@@ -134,7 +140,8 @@ public class ZoneDemo extends ApplicationAdapter {
                 }
             }
         }
-        phase = Phase.MOVE_ANIM;
+        //recolorZones();
+        //phase = Phase.MOVE_ANIM;
 
     }
     public void recolorZones()
@@ -155,13 +162,19 @@ public class ZoneDemo extends ApplicationAdapter {
                 }
                 else
                 {
-                    float hue = 0f, sat = 0f, val = 0f;
-                    for (int i = 0; i < inf.length; i++) {
-                        hue += colorCenter.getHue(influenceColors[inf[i]]);
+                    float hue = colorCenter.getHue(influenceColors[inf[0]]),
+                            sat = colorCenter.getSaturation(influenceColors[inf[0]]),
+                            val = colorCenter.getValue(influenceColors[inf[0]]),
+                            tempHue;
+                    if(hue < 0.5) hue += 1f;
+                    for (int i = 1; i < inf.length; i++) {
+                        tempHue = colorCenter.getHue(influenceColors[inf[i]]);
+                        if(tempHue < 0.5) tempHue += 1f;
+                        hue += tempHue;
                         sat += colorCenter.getSaturation(influenceColors[inf[i]]);
                         val += colorCenter.getValue(influenceColors[inf[i]]);
                     }
-                    bgColors[x][y] = colorCenter.getHSV(hue / inf.length, sat / inf.length, val / inf.length);
+                    bgColors[x][y] = colorCenter.getHSV((hue / inf.length) % 1.0f, sat / inf.length, val / inf.length);
                 }
             }
         }
@@ -175,8 +188,9 @@ public class ZoneDemo extends ApplicationAdapter {
     {
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
-                display.put(i * 2, j, lineDungeon[i * 2][j], textColor, bgColors[i][j], lights[i][j]);
-                display.put(i * 2 + 1, j, lineDungeon[i * 2 + 1][j], textColor, bgColors[i][j], lights[i][j]);
+                display.put(i, j, lineDungeon[i][j], textColor, bgColors[i][j], lights[i][j]);
+                //display.put(i * 2, j, lineDungeon[i * 2][j], textColor, bgColors[i][j], lights[i][j]);
+                //display.put(i * 2 + 1, j, lineDungeon[i * 2 + 1][j], textColor, bgColors[i][j], lights[i][j]);
             }
         }
     }
@@ -196,10 +210,18 @@ public class ZoneDemo extends ApplicationAdapter {
         if(input.hasNext()) {
             input.next();
         }
+
         if(!display.hasActiveAnimations()) {
-            ++framesWithoutAnimation;
-            if (framesWithoutAnimation >= 5) {
-                framesWithoutAnimation = 0;
+            move();
+            postMove();
+            //secondsWithoutAnimation += Gdx.graphics.getDeltaTime();
+            //if (secondsWithoutAnimation >= 0.05f) {
+            //}
+        }
+/*
+            secondsWithoutAnimation += Gdx.graphics.getDeltaTime();
+            if (secondsWithoutAnimation >= 0.01f) {
+                secondsWithoutAnimation = 0f;
                 switch (phase) {
                     case WAIT_ANIM: {
                         move();
@@ -207,30 +229,31 @@ public class ZoneDemo extends ApplicationAdapter {
                     break;
                     case MOVE_ANIM: {
                         postMove();
+                        move();
                     }
                 }
             }
-        }
+        }*/
+
         // if we do have an animation running, then how many frames have passed with no animation needs resetting
+        /*
         else
         {
-            framesWithoutAnimation = 0;
+            secondsWithoutAnimation = 0;
         }
+        */
 
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.draw();
-
         // display does not draw all AnimatedEntities by default.
         batch.begin();
         for(AnimatedEntity mon : display.getAnimatedEntities(2)) {
             display.drawActor(batch, 1.0f, mon);
         }
-        /*
-        for(AnimatedEntity mon : teamBlue.keySet()) {
-                display.drawActor(batch, 1.0f, mon);
-        }*/
         // batch must end if it began.
         batch.end();
+
+
     }
 }
 

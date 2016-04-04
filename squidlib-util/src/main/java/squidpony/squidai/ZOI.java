@@ -1,9 +1,12 @@
 package squidpony.squidai;
 
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.ShortVLA;
+
+import java.util.*;
 
 /**
  * Calculates the Zone of Influence, also known as Zone of Control, for different points on a map.
@@ -17,6 +20,7 @@ public class ZOI {
     private Coord[][] influences;
     private short[][] packedGroups;
     private boolean completed = false;
+    private Radius radius;
     /**
      * Constructs a Zone of Influence map. Takes a (quite possibly jagged) array of arrays of Coord influences, where
      * the elements of the outer array represent different groups of influencing "factions" or groups that exert control
@@ -34,6 +38,7 @@ public class ZOI {
         this.influences = influences;
         packedGroups = new short[influences.length][];
         this.map = map;
+        radius = measurement;
         dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
     }
     /**
@@ -58,6 +63,7 @@ public class ZOI {
         }
         packedGroups = new short[influences.length][];
         this.map = map;
+        radius = measurement;
         dijkstra = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
     }
 
@@ -90,7 +96,8 @@ public class ZOI {
         double[][] scannedAll = dijkstra.scan(null);
 
         for (int i = 0; i < influences.length; i++) {
-            boolean[][] influenced = new boolean[map.length][map[0].length];
+
+            /*
             dijkstra.clearGoals();
             dijkstra.resetMap();
             for (int j = 0; j < influences[i].length; j++) {
@@ -102,11 +109,61 @@ public class ZOI {
                     influenced[x][y] = (scannedAll[x][y] < DijkstraMap.FLOOR) &&
                             (factionScanned[x][y] - scannedAll[x][y] <= 1);
                 }
-            }
-            packedGroups[i] = CoordPacker.pack(influenced);
+            }*/
+            packedGroups[i] = CoordPacker.pack(increasing(scannedAll, influences[i]));
         }
         completed = true;
         return packedGroups;
+    }
+    protected boolean[][] increasing(double[][] dm, Coord[] inf) {
+        LinkedHashSet<Coord> open = new LinkedHashSet<>(64), fresh = new LinkedHashSet<>(64);
+        Collections.addAll(open, inf);
+        Direction[] dirs = (radius.equals2D(Radius.DIAMOND)) ? Direction.CARDINALS : Direction.OUTWARDS;
+        boolean[][] influenced = new boolean[map.length][map[0].length];
+
+        int numAssigned = open.size();
+        double diff, h;
+        while (numAssigned > 0) {
+            numAssigned = 0;
+            for (Coord cell : open) {
+                influenced[cell.x][cell.y] = true;
+                for (int d = 0; d < dirs.length; d++) {
+                    Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
+                    if (!open.contains(adj) && dm[adj.x][adj.y] < DijkstraMap.FLOOR && !influenced[adj.x][adj.y]) {
+                        //h = heuristic(dirs[d]);
+                        diff = dm[adj.x][adj.y] - dm[cell.x][cell.y];
+                        if (diff <= 1.0 && diff >= 0) {
+                            fresh.add(adj);
+                            influenced[adj.x][adj.y] = true;
+                            ++numAssigned;
+                        }
+                    }
+                }
+            }
+
+            open = new LinkedHashSet<>(fresh);
+            fresh.clear();
+        }
+
+        return influenced;
+    }
+    private static final double root2 = Math.sqrt(2.0);
+
+    private double heuristic(Direction target) {
+        switch (radius) {
+            case CIRCLE:
+            case SPHERE:
+                switch (target) {
+                    case DOWN_LEFT:
+                    case DOWN_RIGHT:
+                    case UP_LEFT:
+                    case UP_RIGHT:
+                        return root2;
+                    default:
+                        return 1.0;
+                }
+            default: return 1.0;
+        }
     }
 
     /**
