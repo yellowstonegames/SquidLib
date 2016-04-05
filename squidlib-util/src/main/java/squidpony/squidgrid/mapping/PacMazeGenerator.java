@@ -10,6 +10,10 @@ public class PacMazeGenerator {
     public RNG rng;
     public int width, height;
     private boolean[][] map;
+    public PacMazeGenerator()
+    {
+        this(250, 250);
+    }
     public PacMazeGenerator(int width, int height)
     {
         this.height = height;
@@ -23,7 +27,7 @@ public class PacMazeGenerator {
         this.rng = rng;
     }
 
-    private static final byte[] unbiased_connections = new byte[]{3, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15},
+    private static final byte[] //unbiased_connections = new byte[]{3, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15},
             connections = new byte[]{
                     3, 5, 6, 9, 10, 12,/*
                     3, 5, 6, 9, 10, 12,
