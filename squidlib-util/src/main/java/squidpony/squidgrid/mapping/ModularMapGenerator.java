@@ -83,6 +83,7 @@ public class ModularMapGenerator {
         this.width = width;
         map = new char[width][height];
         environment = new int[width][height];
+        mazeGenerator = new PacMazeGenerator(width, height, this.rng);
     }
 
     /**
@@ -98,6 +99,7 @@ public class ModularMapGenerator {
         width = copying.width;
         map = copying.map;
         environment = copying.environment;
+        mazeGenerator = new PacMazeGenerator(width, height, rng);
     }
     /**
      * Get the most recently generated char[][] map out of this class. The
