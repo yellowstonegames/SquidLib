@@ -736,11 +736,11 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char[][] c, int[][] foregroundIndex, int[][] backgroundIndex, int[][] backgroundLightness) {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
-        for (int i = x; i < width && i < backgroundLightness.length; i++) {
-            for (int j = y; j < height && j < backgroundLightness[i].length; j++) {
-                lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
+        for (int i = x; i < width && i-x < backgroundLightness.length; i++) {
+            for (int j = y; j < height && j - y < backgroundLightness[i].length; j++) {
+                lightnesses[i][j] = 256 + clamp(backgroundLightness[i-x][j-y], -255, 255);
                 values[i][j] = true;
-                backgroundPanel.put(x, y, palette.get(backgroundIndex[i][j]), lightnesses[i][j] / 512f);
+                backgroundPanel.put(i, j, palette.get(backgroundIndex[i-x][j-y]), lightnesses[i][j] / 512f);
 
             }
         }
@@ -764,11 +764,11 @@ public class SquidLayers extends Group {
 
         if (alternatePalette == null) alternatePalette = palette;
         foregroundPanel.put(x, y, c, foregroundIndex, alternatePalette);
-        for (int i = x; i < width && i < backgroundLightness.length; i++) {
-            for (int j = y; j < height && j < backgroundLightness[i].length; j++) {
-                lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
+        for (int i = x; i < width && i - x < backgroundLightness.length; i++) {
+            for (int j = y; j < height && j - y < backgroundLightness[i].length; j++) {
+                lightnesses[i][j] = 256 + clamp(backgroundLightness[i-x][j-y], -255, 255);
                 values[i][j] = true;
-                backgroundPanel.put(x, y, alternatePalette.get(backgroundIndex[i][j]), lightnesses[i][j] / 512f);
+                backgroundPanel.put(i, j, alternatePalette.get(backgroundIndex[i-x][j-y]), lightnesses[i][j] / 512f);
 
             }
         }
@@ -789,11 +789,11 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char[][] c, Color[][] foregrounds, Color[][] backgrounds, int[][] backgroundLightness) {
 
         foregroundPanel.put(x, y, c, foregrounds);
-        for (int i = x; i < width && i < backgroundLightness.length; i++) {
-            for (int j = y; j < height && j < backgroundLightness[i].length; j++) {
-                lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
+        for (int i = x; i < width && i - x < backgroundLightness.length; i++) {
+            for (int j = y; j < height && j - y < backgroundLightness[i].length; j++) {
+                lightnesses[i][j] = 256 + clamp(backgroundLightness[i-x][j-y], -255, 255);
                 values[i][j] = true;
-                backgroundPanel.put(x, y, backgrounds[i][j], lightnesses[i][j] / 512f);
+                backgroundPanel.put(i, j, backgrounds[i-x][j-y], lightnesses[i][j] / 512f);
             }
         }
         return this;
@@ -817,11 +817,11 @@ public class SquidLayers extends Group {
         if (fgPalette == null) fgPalette = palette;
         if (bgPalette == null) bgPalette = palette;
         foregroundPanel.put(x, y, c, foregroundIndex, fgPalette);
-        for (int i = x; i < width && i < backgroundLightness.length; i++) {
-            for (int j = y; j < height && j < backgroundLightness[i].length; j++) {
-                lightnesses[i][j] = 256 + clamp(backgroundLightness[i][j], -255, 255);
+        for (int i = x; i < width && i - x < backgroundLightness.length; i++) {
+            for (int j = y; j < height && j - y < backgroundLightness[i].length; j++) {
+                lightnesses[i][j] = 256 + clamp(backgroundLightness[i-x][j-y], -255, 255);
                 values[i][j] = true;
-                backgroundPanel.put(x, y, bgPalette.get(backgroundIndex[i][j]), lightnesses[i][j] / 512f);
+                backgroundPanel.put(i, j, bgPalette.get(backgroundIndex[i-x][j-y]), lightnesses[i-x][j-y] / 512f);
 
             }
         }
@@ -829,12 +829,12 @@ public class SquidLayers extends Group {
     }
 
     /**
-     * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
+     * Place a char c into the specified layer, with a color specified by an index into alternatePalette.
      *
      * @param layer 0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x     in grid cells.
      * @param y     in grid cells.
-     * @param c     char[][] to be drawn in the foreground starting from x, y
+     * @param c     char to be drawn in the foreground at x, y
      */
     public SquidLayers putInto(int layer, int x, int y, char c) {
         SquidPanel p = backgroundPanel;
@@ -855,13 +855,13 @@ public class SquidLayers extends Group {
     }
 
     /**
-     * Place a char c[][] into the specified layer, with a color specified by an index into the default palette.
+     * Place a char c into the specified layer, with a color specified by an index into the default palette.
      *
      * @param layer      0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x          in grid cells.
      * @param y          in grid cells.
-     * @param c          char[][] to be drawn in the foreground starting from x, y
-     * @param colorIndex int[][] of indices into alternatePalette for the char being drawn
+     * @param c          char to be drawn in the foreground at x, y
+     * @param colorIndex int index into alternatePalette for the char being drawn
      */
     public SquidLayers putInto(int layer, int x, int y, char c, int colorIndex) {
         SquidPanel p = backgroundPanel;
@@ -882,14 +882,14 @@ public class SquidLayers extends Group {
     }
 
     /**
-     * Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.
+     * Place a char c into the specified layer, with a color specified by an index into alternatePalette.
      *
      * @param layer            0 or 1 for background, 2 for foreground, 3 or higher for extra layers added on.
      * @param x                in grid cells.
      * @param y                in grid cells.
-     * @param c                char[][] to be drawn in the foreground starting from x, y
+     * @param c                char to be drawn in the foreground at x, y
      * @param alternatePalette an alternate Color ArrayList for both foreground and background
-     * @param colorIndex       int[][] of indices into alternatePalette for the char being drawn
+     * @param colorIndex       int index into alternatePalette for the char being drawn
      */
     public SquidLayers putInto(int layer, int x, int y, char c, ArrayList<Color> alternatePalette, int colorIndex) {
         SquidPanel p = backgroundPanel;

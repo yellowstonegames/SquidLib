@@ -143,4 +143,11 @@ public class PacMazeGenerator {
         }
         return env;
     }
+
+    public boolean[][] getMap()
+    {
+        if(map == null)
+            return new boolean[width][height];
+        return map;
+    }
 }
