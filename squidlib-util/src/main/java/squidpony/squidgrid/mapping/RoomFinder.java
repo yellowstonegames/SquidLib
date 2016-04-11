@@ -1,10 +1,12 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.RegionMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static squidpony.squidmath.CoordPacker.*;
@@ -356,14 +358,14 @@ public class RoomFinder {
      */
     public char[][] regionAt(int x, int y)
     {
-        ArrayList<short[]> regions = rooms.regionsContaining(x, y);
+        LinkedHashSet<short[]> regions = rooms.regionsContaining(x, y);
         regions.addAll(corridors.regionsContaining(x, y));
         regions.addAll(caves.regionsContaining(x, y));
         short[] found;
         if(regions.isEmpty())
             found = ALL_WALL;
         else
-            found = regions.get(0);
+            found = GwtCompatibility.first(regions);
         return mask(map, found, '#');
     }
 
@@ -376,7 +378,7 @@ public class RoomFinder {
      */
     public char[][] regionsNear(int x, int y)
     {
-        ArrayList<short[]> regions = rooms.regionsContaining(x, y);
+        LinkedHashSet<short[]> regions = rooms.regionsContaining(x, y);
         regions.addAll(corridors.regionsContaining(x, y));
         regions.addAll(caves.regionsContaining(x, y));
         short[] found;
@@ -384,8 +386,8 @@ public class RoomFinder {
             found = ALL_WALL;
         else
         {
-            found = regions.get(0);
-            ArrayList<List<short[]>> near = rooms.allAt(x, y);
+            found = GwtCompatibility.first(regions);
+            LinkedHashSet<List<short[]>> near = rooms.allAt(x, y);
             for (List<short[]> links : near) {
                 for(short[] n : links)
                 {
@@ -419,8 +421,8 @@ public class RoomFinder {
      */
     public ArrayList<char[][]> regionsConnected(int x, int y)
     {
-        ArrayList<char[][]> regions = new ArrayList<char[][]>(10);
-        ArrayList<List<short[]>> near = rooms.allAt(x, y);
+        ArrayList<char[][]> regions = new ArrayList<>(10);
+        LinkedHashSet<List<short[]>> near = rooms.allAt(x, y);
         for (List<short[]> links : near) {
             for(short[] n : links)
             {

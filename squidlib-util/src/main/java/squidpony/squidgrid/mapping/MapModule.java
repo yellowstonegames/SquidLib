@@ -58,6 +58,19 @@ public class MapModule {
         max = tmp[1];
     }
     /**
+     * Constructs a MapModule given only a short array of packed data (as produced by CoordPacker and consumed or produced
+     * by several other classes) that when unpacked will yield the contents of this section of map. The actual MapModule
+     * will use a slightly larger 2D array than the given width and height to ensure walls can be drawn around the floors,
+     * and the valid locations for doors will be any outer wall adjacent to an "on" coordinate in packed. The max and min
+     * Coords of the bounding rectangle, including one layer of outer walls, will also be calculated. Notably, the packed
+     * data you pass to this does not need to have a gap between floors and the edge of the map to make walls.
+     * @param packed the short array, as packed data from CoordPacker, that contains the contents of this section of map
+     */
+    public MapModule(short[] packed, int width, int height)
+    {
+        this(CoordPacker.unpackChar(packed, width, height, '.', '#'));
+    }
+    /**
      * Constructs a MapModule given a 2D char array as the contents of this section of map and a 2D boolean array that
      * represents viable locations to place doors (hopefully in walls, though technically they can be anywhere). The
      * actual MapModule will use a slightly larger 2D array than map to ensure walls can be drawn around it. The max and
@@ -176,5 +189,53 @@ public class MapModule {
             default:
                 return new MapModule(map, validDoors, min, max);
         }
+    }
+
+    public MapModule flip(boolean flipLeftRight, boolean flipUpDown)
+    {
+        if(!flipLeftRight && !flipUpDown)
+            return new MapModule(map, validDoors, min, max);
+        char[][] map2 = new char[map.length][map[0].length];
+        Coord[] doors2 = new Coord[validDoors.length];
+        Coord min2, max2;
+        int xSize = map.length - 1, ySize = map[0].length - 1;
+        if(flipLeftRight && flipUpDown)
+        {
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[0].length; j++) {
+                    map2[xSize - i][ySize - j] = map[i][j];
+                }
+            }
+            for (int i = 0; i < validDoors.length; i++) {
+                doors2[i] = Coord.get(xSize - validDoors[i].x, ySize - validDoors[i].y);
+            }
+            min2 = Coord.get(xSize - max.x, ySize - max.y);
+            max2 = Coord.get(xSize - min.x, xSize - min.y);
+        }
+        else if(flipLeftRight)
+        {
+            for (int i = 0; i < map.length; i++) {
+                System.arraycopy(map[i], 0, map2[xSize - i], 0, map[0].length);
+            }
+            for (int i = 0; i < validDoors.length; i++) {
+                doors2[i] = Coord.get(xSize - validDoors[i].x, validDoors[i].y);
+            }
+            min2 = Coord.get(xSize - max.x, min.y);
+            max2 = Coord.get(xSize - min.x, max.y);
+        }
+        else
+        {
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[0].length; j++) {
+                    map2[i][ySize - j] = map[i][j];
+                }
+            }
+            for (int i = 0; i < validDoors.length; i++) {
+                doors2[i] = Coord.get(validDoors[i].x, ySize - validDoors[i].y);
+            }
+            min2 = Coord.get(min.x, ySize - max.y);
+            max2 = Coord.get(max.x, xSize - min.y);
+        }
+        return new MapModule(map2, doors2, min2, max2);
     }
 }
