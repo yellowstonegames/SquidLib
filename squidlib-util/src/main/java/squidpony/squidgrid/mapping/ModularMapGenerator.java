@@ -1,7 +1,10 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.GwtCompatibility;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.*;
+
+import java.util.Arrays;
 
 /**
  * Generator for maps of high-tech areas like space stations or starships, with repeated modules laid out in random ways.
@@ -13,43 +16,63 @@ import squidpony.squidmath.*;
 public class ModularMapGenerator {
     public DungeonUtility utility;
     protected int height, width;
-    public StatefulRNG rng = new StatefulRNG(0x1337D1CE);
+    public StatefulRNG rng;
     protected long rebuildSeed;
     protected boolean seedFixed = false;
 
     protected char[][] map = null;
     protected int[][] environment = null;
     private PacMazeGenerator mazeGenerator;
-    public static RegionMap<short[]> modules0 = new RegionMap<>(16),
-            modules1 = new RegionMap<>(16), modules2 = new RegionMap<>(16);
-
-    private static void putModule(RegionMap<short[]> modules, short[] module)
+    public RegionMap<MapModule> layout, modules, inverseModules;
+    private void putModule(short[] module)
     {
-        modules.put(CoordPacker.fringe(module, 1, 128, 128, false), module);
+        MapModule mm = new MapModule(CoordPacker.unpackChar(module, '.', '#'));
+        short[] b = CoordPacker.rectangle(1 + mm.max.x, 1 + mm.max.y);
+        modules.put(b, mm);
+        inverseModules.put(CoordPacker.negatePacked(b), mm);
+    }
+    private void putRectangle(int width, int height, float multiplier)
+    {
+        putModule(CoordPacker.rectangle(Math.round(width * multiplier), Math.round(height * multiplier)));
+    }
+    private void putCircle(int radius, float multiplier)
+    {
+        putModule(CoordPacker.circle(Coord.get(Math.round(radius * multiplier), Math.round(radius * multiplier)),
+                Math.round(radius * multiplier),
+                Math.round((radius+1)*2 * multiplier), Math.round((radius+1)*2 * multiplier)));
     }
 
-    static {
+    private void initModules()
+    {
+        layout = new RegionMap<>(64);
+        modules = new RegionMap<>(64);
+        inverseModules = new RegionMap<>(64);
+        float multiplier = (float) Math.sqrt(Math.max(1f, Math.min(width, height) / 24f));
+        putRectangle(2, 2, multiplier);
+        putRectangle(3, 3, multiplier);
+        putRectangle(4, 4, multiplier);
+        putRectangle(4, 2, multiplier);
+        putRectangle(2, 4, multiplier);
+        putRectangle(6, 6, multiplier);
+        putRectangle(6, 3, multiplier);
+        putRectangle(3, 6, multiplier);
+        putCircle(2, multiplier);
 
-        putModule(modules0, CoordPacker.rectangle(85 - 1, 85 - 1, 2, 2));
-        putModule(modules0, CoordPacker.rectangle(85 - 1, 85 - 1, 3, 3));
-        putModule(modules0, CoordPacker.rectangle(85 - 2, 85 - 2, 4, 4));
-        putModule(modules0, CoordPacker.rectangle(85 - 1, 85 - 2, 2, 4));
-        putModule(modules0, CoordPacker.rectangle(85 - 2, 85 - 1, 4, 2));
-        putModule(modules0, CoordPacker.circle(Coord.get(85, 85), 2, 128, 128));
+        putRectangle(8, 8, multiplier);
+        putRectangle(6, 12, multiplier);
+        putRectangle(12, 6, multiplier);
+        putCircle(4, multiplier);
 
-        putModule(modules1, CoordPacker.rectangle(85 - 4, 85 - 4, 8, 8));
-        putModule(modules1, CoordPacker.rectangle(85 - 3, 85 - 6, 6, 12));
-        putModule(modules1, CoordPacker.rectangle(85 - 6, 85 - 3, 12, 6));
-        putModule(modules1, CoordPacker.circle(Coord.get(85, 85), 4, 128, 128));
-
-        putModule(modules2, CoordPacker.rectangle(85 - 6, 85 - 6, 12, 12));
-        putModule(modules2, CoordPacker.rectangle(85 - 4, 85 - 8, 8, 16));
-        putModule(modules2, CoordPacker.rectangle(85 - 8, 85 - 4, 16, 8));
-        putModule(modules2, CoordPacker.circle(Coord.get(85, 85), 6, 128, 128));
+        putRectangle(14, 14, multiplier);
+        putRectangle(9, 18, multiplier);
+        putRectangle(18, 9, multiplier);
+        putRectangle(14, 18, multiplier);
+        putRectangle(18, 14, multiplier);
+        putCircle(6, multiplier);
     }
 
     /**
-     * Make a Mod with a LightRNG using a random seed, height 40, and width 40.
+     * Make a ModularMapGenerator with a StatefulRNG (backed by LightRNG) using a random seed, height 30, and width 60.
      */
     public ModularMapGenerator()
     {
@@ -57,8 +80,8 @@ public class ModularMapGenerator {
     }
 
     /**
-     * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
-     * adding features will be a LightRNG using a random seed.
+     * Make a ModularMapGenerator with the given height and width; the RNG used for generating a dungeon and
+     * adding features will be a StatefulRNG (backed by LightRNG) using a random seed.
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      */
@@ -68,7 +91,7 @@ public class ModularMapGenerator {
     }
 
     /**
-     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.
+     * Make a ModularMapGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      * @param rng The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
@@ -83,7 +106,11 @@ public class ModularMapGenerator {
         this.width = width;
         map = new char[width][height];
         environment = new int[width][height];
+        for (int x = 0; x < this.width; x++) {
+            Arrays.fill(map[x], '#');
+        }
         mazeGenerator = new PacMazeGenerator(width, height, this.rng);
+        initModules();
     }
 
     /**
@@ -100,6 +127,7 @@ public class ModularMapGenerator {
         map = copying.map;
         environment = copying.environment;
         mazeGenerator = new PacMazeGenerator(width, height, rng);
+        initModules();
     }
     /**
      * Get the most recently generated char[][] map out of this class. The
@@ -121,38 +149,33 @@ public class ModularMapGenerator {
     public char[][] generate()
     {
         int minDim = Math.min(height, width), maxDim = Math.max(height, width), numCores, numOuter;
-        RegionMap<short[]> core, outer;
-        if(minDim >= 32) {
-            core = modules2;
-            if(rng.nextBoolean())
-            {
-                outer = modules1;
-                numCores = (maxDim / 32) * (minDim / 32);
-                numOuter = 2 * numCores;
-            }
-            else
-            {
-                outer = modules0;
-                numCores = (maxDim / 32) * (minDim / 32);
-                numOuter = 3 * numCores;
-            }
+        MapModule mm;
 
-        }
-        else if(minDim >= 20)
-        {
-            core = modules1;
-            outer = modules0;
-            numCores = (maxDim / 20) * (minDim / 20);
-            numOuter = 2 * numCores;
-        }
-        else // you gave it a tiny map, what can it do?
-        {
-            short[] tmp = rng.getRandomElement(modules0.keys().toList()), inner = modules0.get(tmp);
-            Coord[] bnds = CoordPacker.bounds(tmp);
-            map = CoordPacker.unpackChar(CoordPacker.translate(inner, -bnds[0].x, -bnds[0].y, width, height),
-                    width, height, '.', '#');
+        // you gave it a tiny map, what can it do?
+        if(minDim < 16) {
+
+            mm = rng.getRandomElement(modules.values().toList());
+            map = GwtCompatibility.first(modules.allAt(rng.between(3, minDim), rng.between(3, minDim))).map;
             return DungeonUtility.wallWrap(map);
         }
+
+        int frustration = 0;
+        while ((mm = rng.getRandomElement(modules.allAt(rng.between(4, minDim), rng.between(4, minDim)))) == null
+                        && frustration++ < 50)
+        {}
+        if(frustration >= 50 || mm == null)
+        {
+            mm = rng.getRandomElement(modules.values().toList());
+            map = GwtCompatibility.first(modules.allAt(rng.between(3, minDim), rng.between(3, minDim))).map;
+            return DungeonUtility.wallWrap(map);
+        }
+        // ok, mm is valid.
+
+        int placeX = rng.nextInt(minDim - mm.max.x), placeY = rng.nextInt(minDim - mm.max.y);
+        for (int x = 0; x < mm.max.x; x++) {
+            System.arraycopy(mm.map[x], 0, map[x + placeX], placeY, mm.max.y);
+        }
+
         return map;
     }
 

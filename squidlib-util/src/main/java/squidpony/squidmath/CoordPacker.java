@@ -9,6 +9,7 @@ import squidpony.squidgrid.Radius;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 
 /**
@@ -1487,6 +1488,48 @@ public class CoordPacker {
     }
 
     /**
+     * Given a piece of packed data defining a region to use from that map, a char to use for "on" cells and a char to use
+     * for "off" cells, produces a 2D char array where all positions that are "off" in packed are filled with the char
+     * passed as f, and the cells that are "on" are filled with the char passed as t. Finds the bounding rectangle starting
+     * at the origin and extending to the highest x and highest y values encoded in packed, and uses that to determine the
+     * width and height of the returned 2D array.
+     * @param packed a packed short array, as produced by pack()
+     * @param t the char to use for "on" positions in packed
+     * @param f the char to use for "off" positions in packed
+     * @return a 2D char array, with dimensions determined by the bounds of packed, where any "on" cells equal t and anything else equals f.
+     */
+    public static char[][] unpackChar(short[] packed, char t, char f)
+    {
+        if(packed == null || packed.length <= 1)
+            throw new UnsupportedOperationException("packed has no contents in unpackChar");
+
+        Coord max = bounds(packed)[1];
+        int width = max.x+1, height = max.y+1;
+        if(width <= 0 || height <= 0)
+            throw new UnsupportedOperationException("Height and width must both be positive in unpackChar");
+
+        char[][] c = new char[width][height];
+
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(c[i], f);
+        }
+        boolean on = false;
+        int idx = 0, x, y;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++) {
+                    x = hilbertX[i];
+                    y = hilbertY[i];
+                    if(x >= width || y >= height)
+                        continue;
+                    c[x][y] = t;
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        return c;
+    }
+    /**
      * Given a piece of packed data defining a region to use from that map, a desired width and height, a char to use for
      * "on" cells and a char to use for "off" cells, produces a 2D char array where all positions that are "off" in packed
      * are filled with the char passed as f, and the cells that are "on" are filled with the char passed as t.
@@ -1495,7 +1538,7 @@ public class CoordPacker {
      * @param height the desired 2D array height
      * @param t the char to use for "on" positions in packed
      * @param f the char to use for "off" positions in packed
-     * @return a 2D char array similar to map but with any "off" positions in packed replaced with filler
+     * @return a 2D char array, width by height in dimensions, where any "on" cells equal t and anything else equals f.
      */
     public static char[][] unpackChar(short[] packed, int width, int height, char t, char f)
     {
@@ -1579,9 +1622,9 @@ public class CoordPacker {
      *               returned by packMulti(); null elements in packed will be skipped.
      * @return an ArrayList of all packed arrays that store true at the given x,y location.
      */
-    public static ArrayList<short[]> findManyPacked(int x, int y, short[] ... packed)
+    public static LinkedHashSet<short[]> findManyPacked(int x, int y, short[] ... packed)
     {
-        ArrayList<short[]> packs = new ArrayList<>(packed.length);
+        LinkedHashSet<short[]> packs = new LinkedHashSet<>(packed.length);
         int hilbertDistance = posToHilbert(x, y);
         for (int a = 0; a < packed.length; a++) {
             if(packed[a] == null) continue;

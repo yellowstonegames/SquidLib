@@ -17,11 +17,7 @@
 package squidpony.squidmath;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /** An unordered map of regions (specifically, packed data from CoordPacker or something that uses it, like FOVCache or
  * ZOI, as short arrays) to values of a generic type. Regions can overlap, and you can technically store the same set of
@@ -345,10 +341,10 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable 
      * @param y the y coordinate of the point in question
      * @return an ArrayList of all V values corresponding to regions containing the given x,y point.
      */
-    public ArrayList<V> allAt(int x, int y)
+    public LinkedHashSet<V> allAt(int x, int y)
     {
-        ArrayList<V> found = new ArrayList<>(capacity);
-        ArrayList<short[]> regions = CoordPacker.findManyPacked(x, y, keyTable);
+        LinkedHashSet<V> found = new LinkedHashSet<>(capacity);
+        LinkedHashSet<short[]> regions = CoordPacker.findManyPacked(x, y, keyTable);
         for(short[] region : regions)
         {
             found.add(get(region));
@@ -361,7 +357,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable 
      * @param y the y coordinate of the point in question
      * @return an ArrayList of all regions in this data structure containing the given x,y point.
      */
-    public ArrayList<short[]> regionsContaining(int x, int y)
+    public LinkedHashSet<short[]> regionsContaining(int x, int y)
     {
         return CoordPacker.findManyPacked(x, y, keyTable);
     }
