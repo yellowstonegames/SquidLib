@@ -1,17 +1,16 @@
 package squidpony;
 
-import squidpony.annotation.GwtIncompatible;
+import regexodus.Matcher;
+import regexodus.Pattern;
+import regexodus.Replacer;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.io.Serializable;
-import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * A text generator for producing sentences and/or words in nonsense languages that fit a theme. This does not use an
@@ -20,7 +19,7 @@ import java.util.regex.Pattern;
  * Created by Tommy Ettinger on 11/29/2015.
  * @author Tommy Ettinger
  */
-@GwtIncompatible
+
 public class FakeLanguageGen implements Serializable {
     private static final long serialVersionUID = -2396642435461186352L;
     public final String[] openingVowels, midVowels, openingConsonants, midConsonants, closingConsonants,
@@ -31,7 +30,7 @@ public class FakeLanguageGen implements Serializable {
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     protected final Pattern[] sanityChecks;
     public static final StatefulRNG srng = new StatefulRNG();
-    protected static final Pattern repeats = Pattern.compile("(.)\\1+"), diacritics = Pattern.compile("[\\u0300-\\u036F\\u1DC0-\\u1DFF]+");
+    protected static final Pattern repeats = Pattern.compile("(.)\\1+"), diacritics = Pattern.compile("[\u0300-\u036F\u1DC0-\u1DFF]+");
     public static final Pattern[]
             vulgarChecks = new Pattern[]
             {
@@ -83,6 +82,53 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("[SsZzDd]i"),
                             Pattern.compile("[Hh]u"),
                     };
+    public static final Replacer[]
+            accentFinders = new Replacer[]
+            {
+                    Pattern.compile("[àáâãäåæāăąǻǽ]").replacer("a"),
+                    Pattern.compile("[èéêëēĕėęě]").replacer("e"),
+                    Pattern.compile("[ìíîïĩīĭįı]").replacer("i"),
+                    Pattern.compile("[òóôõöøōŏőœǿ]").replacer("o"),
+                    Pattern.compile("[ùúûüũūŭůűų]").replacer("u"),
+                    Pattern.compile("[ÀÁÂÃÄÅÆĀĂĄǺǼ]").replacer("A"),
+                    Pattern.compile("[ÈÉÊËĒĔĖĘĚ]").replacer("E"),
+                    Pattern.compile("[ÌÍÎÏĨĪĬĮI]").replacer("I"),
+                    Pattern.compile("[ÒÓÔÕÖØŌŎŐŒǾ]").replacer("O"),
+                    Pattern.compile("[ÙÚÛÜŨŪŬŮŰŲ]").replacer("U"),
+
+                    Pattern.compile("[çćĉċč]").replacer("c"),
+                    Pattern.compile("[þðďđ]").replacer("d"),
+                    Pattern.compile("[ſƒ]").replacer("f"),
+                    Pattern.compile("[ĝğġģ]").replacer("g"),
+                    Pattern.compile("[ĥħ]").replacer("h"),
+                    Pattern.compile("[ĵȷ]").replacer("j"),
+                    Pattern.compile("[ķĸ]").replacer("k"),
+                    Pattern.compile("[ℓĺļľŀł]").replacer("l"),
+                    Pattern.compile("[ñńņňŉŋ]").replacer("n"),
+                    Pattern.compile("[ŕŗř]").replacer("r"),
+                    Pattern.compile("[śŝşšș]").replacer("s"),
+                    Pattern.compile("[ţťŧț]").replacer("t"),
+                    Pattern.compile("[ŵẁẃẅ]").replacer("w"),
+                    Pattern.compile("[ýÿŷỳ]").replacer("y"),
+                    Pattern.compile("[źżž]").replacer("z"),
+                    Pattern.compile("[ÇĆĈĊČ]").replacer("C"),
+                    Pattern.compile("[ÞÐĎĐ]").replacer("D"),
+                    Pattern.compile("Ƒ").replacer("F"),
+                    Pattern.compile("[ĜĞĠĢ]").replacer("G"),
+                    Pattern.compile("[ĤĦ]").replacer("H"),
+                    Pattern.compile("Ĵ").replacer("J"),
+                    Pattern.compile("Ķ").replacer("K"),
+                    Pattern.compile("[ĹĻĽĿŁ]").replacer("L"),
+                    Pattern.compile("[ÑŃŅŇŊ]").replacer("N"),
+                    Pattern.compile("[ŔŖŘ]").replacer("R"),
+                    Pattern.compile("[ŚŜŞŠȘ]").replacer("S"),
+                    Pattern.compile("[ŢŤŦȚ]").replacer("T"),
+                    Pattern.compile("[ŴẀẂẄ]").replacer("W"),
+                    Pattern.compile("[ÝŸŶỲ]").replacer("Y"),
+                    Pattern.compile("[ŹŻŽ]").replacer("Z"),
+
+            };
+
     public static final char[][] accentedVowels = new char[][]{
             new char[]{
                     'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ā', 'ă', 'ą', 'ǻ', 'ǽ'
@@ -167,7 +213,7 @@ public class FakeLanguageGen implements Serializable {
                             },
                     };
 
-    /**
+    /*
      * Removes accented characters from a string; if the "base" characters are non-English anyway then the result won't
      * be an ASCII string, but otherwise it probably will be.
      * <br>
@@ -175,7 +221,7 @@ public class FakeLanguageGen implements Serializable {
      *
      * @param str a string that may contain accented characters
      * @return a string with all accented characters replaced with their (possibly ASCII) counterparts
-     */
+     *
     public String removeAccents(String str) {
         String alteredString = Normalizer.normalize(str, Normalizer.Form.NFD);
         alteredString = diacritics.matcher(alteredString).replaceAll("");
@@ -184,7 +230,23 @@ public class FakeLanguageGen implements Serializable {
         alteredString = alteredString.replace('Æ', 'A');
         alteredString = alteredString.replace('Œ', 'O');
         return alteredString;
+    }*/
+
+    /**
+     * Removes accented Latin-script characters from a string; if the "base" characters are non-English anyway then the
+     * result won't be an ASCII string, but otherwise it probably will be.
+     *
+     * @param str a string that may contain accented Latin-script characters
+     * @return a string with all accented characters replaced with their (possibly ASCII) counterparts
+     */
+    public String removeAccents(String str) {
+        String alteredString = str;
+        for (int i = 0; i < accentFinders.length; i++) {
+            alteredString = accentFinders[i].replace(alteredString);
+        }
+        return alteredString;
     }
+
 
     /**
      * Ia! Ia! Cthulhu Rl'yeh ftaghn! Useful for generating cultist ramblings or unreadable occult texts.
@@ -1305,14 +1367,20 @@ public class FakeLanguageGen implements Serializable {
                 syllableEndFrequency, sanityChecks, clean);
         return finished;
     }
+    static String[] copyStrings(String[] start)
+    {
+        String[] next = new String[start.length];
+        System.arraycopy(start, 0, next, 0, start.length);
+        return next;
+    }
     public FakeLanguageGen removeAccents() {
 
-        String[] ov = Arrays.copyOf(openingVowels, openingVowels.length),
-                mv = Arrays.copyOf(midVowels, midVowels.length),
-                oc = Arrays.copyOf(openingConsonants, openingConsonants.length),
-                mc = Arrays.copyOf(midConsonants, midConsonants.length),
-                cc = Arrays.copyOf(closingConsonants, closingConsonants.length),
-                cs = Arrays.copyOf(closingSyllables, closingSyllables.length);
+        String[] ov = copyStrings(openingVowels),
+                mv = copyStrings(midVowels),
+                oc = copyStrings(openingConsonants),
+                mc = copyStrings(midConsonants),
+                cc = copyStrings(closingConsonants),
+                cs = copyStrings(closingSyllables);
         for (int i = 0; i < ov.length; i++) {
             ov[i] = removeAccents(openingVowels[i]);
         }

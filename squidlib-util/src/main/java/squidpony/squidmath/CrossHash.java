@@ -122,7 +122,7 @@ public class CrossHash {
             return 0;
         int h = -2128831035, len = data.length, t;
         for (int i = 0; i < len; i++) {
-            t = Float.floatToRawIntBits(data[i]);
+            t = Float.floatToIntBits(data[i]);
             h ^= t & 0xff;
             h *= 16777619;
             h ^= (t >>> 8) & 0xff;
@@ -141,7 +141,7 @@ public class CrossHash {
         int h = -2128831035, len = data.length;
         long t;
         for (int i = 0; i < len; i++) {
-            t = Double.doubleToRawLongBits(data[i]);
+            t = Double.doubleToLongBits(data[i]);
             h ^= (int)(t & 0xff);
             h *= 16777619;
             h ^= (int)((t >>> 8) & 0xff);
@@ -305,7 +305,7 @@ public class CrossHash {
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
-            t = Float.floatToRawIntBits(data[i]);
+            t = Float.floatToIntBits(data[i]);
             h ^= t & 0xff;
             h *= 1099511628211L;
             h ^= (t >>> 8) & 0xff;
@@ -323,7 +323,7 @@ public class CrossHash {
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
-            t = Double.doubleToRawLongBits(data[i]);
+            t = Double.doubleToLongBits(data[i]);
             h ^= (t & 0xff);
             h *= 1099511628211L;
             h ^= ((t >>> 8) & 0xff);

@@ -589,7 +589,7 @@ public class EverythingDemo extends ApplicationAdapter {
             /* Red */
             nbColor = Color.RED;
         cs.appendInt(nbMonsters, nbColor);
-        cs.append(String.format(" monster%s to kill", nbMonsters == 1 ? "" : "s"), null);
+        cs.append(" monster"+(nbMonsters == 1 ? "" : "s")+" to kill", null);
 
         IColoredString<Color> helping1 = new IColoredString.Impl<>("Use numpad or vi-keys (hjklyubn) to move.", Color.WHITE);
         IColoredString<Color> helping2 = new IColoredString.Impl<>("Use ? for help, f to change colors, q to quit.", Color.WHITE);

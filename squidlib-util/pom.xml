@@ -22,5 +22,10 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.tommyettinger</groupId>
+            <artifactId>RegExodus</artifactId>
+            <version>${regexodus.version}</version>
+        </dependency>
     </dependencies>
 </project>

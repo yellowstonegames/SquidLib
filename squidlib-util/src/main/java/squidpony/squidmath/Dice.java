@@ -1,14 +1,13 @@
 package squidpony.squidmath;
 
+import regexodus.Matcher;
+import regexodus.Pattern;
 import squidpony.annotation.Beta;
-import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Class for emulating various traditional RPG-style dice rolls.
@@ -19,10 +18,9 @@ import java.util.regex.Pattern;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
-@GwtIncompatible
 public class Dice implements Serializable {
 
-    private static final long serialVersionUID = -877902743486431146L;
+    private static final long serialVersionUID = -488902743486431146L;
 
     private static final Pattern guessPattern = Pattern.compile("\\s*(\\d+)?\\s*(?:([:])\\s*(\\d+))??\\s*(?:([d:])\\s*(\\d+))?\\s*(?:([+-/*])\\s*(\\d+))?\\s*");
     private RNG rng;
