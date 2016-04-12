@@ -1,6 +1,5 @@
 package squidpony;
 
-import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
@@ -543,7 +542,6 @@ public class MonsterGen {
      * power adjectives and phrases, and 5 body parts. Since this uses FakeLanguageGen, it isn't GWT-compatible.
      * @return a new Chimera with random traits
      */
-    @GwtIncompatible
     public Chimera randomize()
     {
         return randomize(srng, randomName(srng), 5);
@@ -554,7 +552,6 @@ public class MonsterGen {
      * @param rng the RNG to use for random factors
      * @return a String meant to be used as a creature name
      */
-    @GwtIncompatible
     public String randomName(RNG rng)
     {
         return FakeLanguageGen.FANTASY_NAME.word(rng, false, rng.between(2, 4));
@@ -564,7 +561,6 @@ public class MonsterGen {
      * Gets a random name as a String using FakeLanguageGen. Since this uses FakeLanguageGen, it isn't GWT-compatible.
      * @return a String meant to be used as a creature name
      */
-    @GwtIncompatible
     public String randomName()
     {
         return randomName(srng);

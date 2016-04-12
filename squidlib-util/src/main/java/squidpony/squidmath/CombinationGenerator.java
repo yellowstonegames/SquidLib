@@ -52,7 +52,7 @@ public class CombinationGenerator<T> implements Iterable<List<T>>, Serializable
     /**
      * Create a combination generator that generates all combinations of
      * a specified length from the given set.
-     * @param elements The set from which to generate combinations.
+     * @param elements The set from which to generate combinations; will be used directly (not copied)
      * @param combinationLength The length of the combinations to be generated.
      */
     public CombinationGenerator(T[] elements,
@@ -63,7 +63,7 @@ public class CombinationGenerator<T> implements Iterable<List<T>>, Serializable
             throw new IllegalArgumentException("Combination length cannot be greater than set size.");
         }
 
-        this.elements = elements.clone();
+        this.elements = elements;
         this.combinationIndices = new int[combinationLength];
 
         BigInteger sizeFactorial = MathExtras.bigFactorial(elements.length);
