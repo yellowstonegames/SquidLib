@@ -147,8 +147,10 @@ Current Features:
 - There's now a third beta!
   - Distance field fonts! These resize very smoothly and should drastically reduce the number of fonts needed to implement zooming or adapt to multiple screen sizes.
   - There's "imitation foreign language" generation in FakeLanguageGen, including the ability to mix styles of generated language or scripts.
+    - This has had multiple updates and supports more stylistic elements to add into languages, including adding or removing accented glyphs or mimicking the feature of some languages where a word may be redoubled (which would be virtually impossible to generate using FakeLanguageGen's technique without specific support for "hindsight" into syllables generated earlier).
   - There's also some early random monster description generation.
   - You can now analyze a map with RoomFinder after it's been generated to find likely rooms and corridors in it, for various uses.
+    - One of these uses in an update after beta 3 is the ability to analyze rooms to find corners, large flat walls (for weapon racks, blackboards, etc.), or the approximate centers of rooms (useful to place thrones, shrines, or other important places).
   - You can associate regions from CoordPacker with values (something that can't be done with HashMap normally), and query a point to find overlapping regions that contain that point.
   - SpatialMap provides a common convenience by allowing values to be indexed by a key or by a Coord position, and updates all 3 of these as one entry.
   - IColoredString has lots of new useful features, including justified and wrapped text, on top of its existing multi-colored text.
@@ -162,13 +164,23 @@ Current Features:
     - We now have SquidSetup to automatically handle the setup of a new project that uses SquidLib 3.0.0-b3, including fetching dependencies automatically and setting up a project that potentially targets both desktop and Android, potentially HTML, and possibly iOS as well.
     - If you already use Maven, Gradle, SBT, Leiningen, or some other dependency manager, upgrading should be easier to the 3.0.0 series
     - If you don't, you should, and SquidSetup should handle the hard parts for you.
+  - If you use SquidLib's latest version as of April 12, the assets have been moved out of the `squidlib` jar, making the download size smaller, but a freshly-updated SquidSetup has all the latest assets
+    and will put them in the correct assets folder (as before) without duplicating them.
+    - If you don't use SquidSetup, you can download any assets you need from the assets/ folder of this GitHub repo, or get all the assets in a .zip or .tar.gz file from SquidSetup's release page for the [latest SquidSetup](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST).
 
 Download
 --
 
 Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your choice of features, or simply use SquidSetup to make a new project configured the way libGDX prefers to work, and copy in any code you might already have.
 
-Ideally, if you're just starting out you should use SquidSetup. This is [the most recent beta release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b3). This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is advised if you want to target HTML (the beta 3 release, put simply, does not work with HTML unless you put serious work into compatibility) or if you want to test new features/fixes as they come in. In the snapshot from February 21, 2016 relative to beta 3, there's several new dungeon generation and room finding features/fixes, SquidColorCenter now matches or exceeds most features in the older SColorFactory, distance field fonts should be better (especially on HTML targets and/or when you use SquidLayers), and so on.
+Ideally, if you're just starting out you should use SquidSetup. This is [the most recent beta release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b3);
+that version is now discouraged since targeting HTML simply doesn't work in it, and many features have been added in the current latest code.
+This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is advised in general, but especially if you want to test new features/fixes as
+they come in. In the snapshot from April 12, 2016 relative to beta 3, there's several new dungeon generation and room finding features/fixes,
+SquidColorCenter now matches or exceeds most features in the older SColorFactory, distance field fonts should be better (especially on HTML targets, and now for all usages, not just in SquidLayers),
+there's the ability to place lakes without messing up connectivity in SectionDungeonGenerator, you can find certain areas within rooms that meet certain criteria (like corners, centers
+of rooms, floors near large flat walls, etc.) with Placement, regular expressions work when targeting HTML (which enables FakeLanguageGen to work on all platforms), there's support for
+non-monospaced fonts in message boxes and similar groups of text (you can see this in action in Dungeon Mercenary) and so on.
 
 More information is available on the wiki here on Github, at the page on [Project Setup](https://github.com/SquidPony/SquidLib/wiki/Project-Setup).
 
@@ -179,4 +191,8 @@ Blog updates: http://squidpony.com/not-games/squidlib/
 Created by Eben Howard - howard@squidpony.com  
 Currently developed by Tommy Ettinger - tommy.ettinger@gmail.com
 
-Additional work has been greatly appreciated by a team of contributors. smelC and David Becker have each done excellent work in improving and modernizing SquidLib in all sorts of ways. In particular, David Becker needs thanks for handling some very tough work with Maven configuration and encouraging more unit tests (which have caught quite a few bugs), and smelC has found all sorts of ways to give back to SquidLib as he has worked on [Dungeon Mercenary](http://www.schplaf.org/hgames/), including doing most of the work for the HTML target, cleaning up and improving the handling of colors, and emphasizing more flexible ways to work with display (such as zooming the screen on mobile). Don't be shy about posting issues! Many of SquidLib's biggest and best changes have been motivated by issues posted by users, including the port to Android!
+Additional work has been greatly appreciated by a team of contributors. smelC and David Becker have each done excellent work in improving and modernizing SquidLib in all sorts of ways.
+In particular, David Becker needs thanks for handling some very tough work with Maven configuration and encouraging more unit tests (which have caught quite a few bugs),
+and smelC has found all sorts of ways to give back to SquidLib as he has worked on [Dungeon Mercenary](http://www.schplaf.org/hgames/), including doing most of the work for the HTML target,
+cleaning up and improving the handling of colors, emphasizing more flexible ways to work with display (such as zooming the screen on mobile), and supporting non-monospaced fonts in the display.
+Don't be shy about posting issues! Many of SquidLib's biggest and best changes have been motivated by issues posted by users, including the port to Android!
