@@ -5,6 +5,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,7 +13,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -36,6 +36,8 @@ public class SquidLayersTest extends ApplicationAdapter{
     StatefulRNG rng;
     Stage stage;
     SpriteBatch batch;
+    ArrayList<Color> colors;
+    int colorIndex = 0;
     @Override
     public void create() {
         super.create();
@@ -47,7 +49,8 @@ public class SquidLayersTest extends ApplicationAdapter{
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
                 DefaultResources.getStretchableFont());
         layers.setTextSize(cellWidth, cellHeight+1);
-        layers.setLightingColor(SColor.MEDIUM_LAVENDER_MAGENTA);
+        colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
+        layers.setLightingColor(colors.get(colorIndex));
         fov = new FOV(FOV.RIPPLE_LOOSE);
         PacMazeGenerator maze = new PacMazeGenerator(gridWidth, gridHeight, rng);
         map = maze.generate();
@@ -65,7 +68,7 @@ public class SquidLayersTest extends ApplicationAdapter{
             for (int x = 0; x < gridWidth; x++) {
                 for (int y = 0; y < gridHeight; y++) {
                     if(lit[x][y] > 0.0)
-                        lightness[x][y] += (int)(lit[x][y] * 160);
+                        lightness[x][y] += (int)(lit[x][y] * 200);
                 }
             }
         }
@@ -89,6 +92,7 @@ public class SquidLayersTest extends ApplicationAdapter{
         super.render();
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));
         layers.put(0, 0, displayedMap, indicesFG, indicesBG, lightness);
         stage.draw();
 
@@ -99,9 +103,9 @@ public class SquidLayersTest extends ApplicationAdapter{
         config.title = "SquidLib Test: SquidLayers";
         config.width = 70 * 12;
         config.height = 35 * 19;
-        config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
-        config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
-        config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-16.png", Files.FileType.Internal);
+        config.addIcon("Tentacle-32.png", Files.FileType.Internal);
+        config.addIcon("Tentacle-128.png", Files.FileType.Internal);
         new LwjglApplication(new SquidLayersTest(), config);
     }
 }
