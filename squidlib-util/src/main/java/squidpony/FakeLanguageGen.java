@@ -8,9 +8,7 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A text generator for producing sentences and/or words in nonsense languages that fit a theme. This does not use an
@@ -29,6 +27,7 @@ public class FakeLanguageGen implements Serializable {
     protected double totalSyllableFrequency = 0.0;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     protected final Pattern[] sanityChecks;
+    public ArrayList<Replacer> modifiers;
     public static final StatefulRNG srng = new StatefulRNG();
     protected static final Pattern repeats = Pattern.compile("(.)\\1+"), diacritics = Pattern.compile("[\u0300-\u036F\u1DC0-\u1DFF]+");
     public static final Pattern[]
@@ -754,6 +753,35 @@ public class FakeLanguageGen implements Serializable {
             this.syllableEndFrequency = syllableEndFrequency;
         this.clean = clean;
         this.sanityChecks = sane;
+        modifiers = new ArrayList<>(16);
+    }
+
+    private FakeLanguageGen(String[] openingVowels, String[] midVowels, String[] openingConsonants,
+                            String[] midConsonants, String[] closingConsonants, String[] closingSyllables,
+                            String[] vowelSplitters, LinkedHashMap<Integer, Double> syllableFrequencies,
+                            double vowelStartFrequency, double vowelEndFrequency, double vowelSplitFrequency,
+                            double syllableEndFrequency, Pattern[] sanityChecks, boolean clean,
+                            List<Replacer> modifiers) {
+        this.openingVowels = copyStrings(openingVowels);
+        this.midVowels = copyStrings(midVowels);
+        this.openingConsonants = copyStrings(openingConsonants);
+        this.midConsonants = copyStrings(midConsonants);
+        this.closingConsonants = copyStrings(closingConsonants);
+        this.closingSyllables = copyStrings(closingSyllables);
+        this.vowelSplitters = copyStrings(vowelSplitters);
+        this.syllableFrequencies = new LinkedHashMap<>(syllableFrequencies);
+        this.vowelStartFrequency = vowelStartFrequency;
+        this.vowelEndFrequency = vowelEndFrequency;
+        this.vowelSplitFrequency = vowelSplitFrequency;
+        this.syllableEndFrequency = syllableEndFrequency;
+        if (sanityChecks == null)
+            this.sanityChecks = null;
+        else {
+            this.sanityChecks = new Pattern[sanityChecks.length];
+            System.arraycopy(sanityChecks, 0, this.sanityChecks, 0, sanityChecks.length);
+        }
+        this.clean = clean;
+        this.modifiers = new ArrayList<>(modifiers);
     }
 
     protected boolean checkAll(String testing, Pattern[] checks)
@@ -848,8 +876,16 @@ public class FakeLanguageGen implements Serializable {
                     }
                 }
             }
+            StringBuilder sb2 = new StringBuilder(sb.length());
+            for(Replacer rep : modifiers)
+            {
+                if(rep.replace(sb, sb2) > 0)
+                    sb = sb2;
+            }
+
             if (capitalize)
                 sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+
             finished = sb.toString();
             if(sanityChecks != null && !checkAll(finished, sanityChecks))
                 continue;
@@ -930,9 +966,17 @@ public class FakeLanguageGen implements Serializable {
                     }
                 }
             }
+
+            StringBuilder sb2 = new StringBuilder(sb.length());
+            for(Replacer rep : modifiers)
+            {
+                if(rep.replace(sb, sb2) > 0)
+                    sb = sb2;
+            }
             if (capitalize)
                 sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
             finished = sb.toString();
+
             if(sanityChecks != null && !checkAll(finished, sanityChecks))
                 continue;
             else if(clean && !checkAll(finished, vulgarChecks))
@@ -1325,19 +1369,16 @@ public class FakeLanguageGen implements Serializable {
             else
                 freqs.put(kv.getKey(), kv.getValue());
         }
-        int[] lens = new int[freqs.size()];
-        double[] odds = new double[freqs.size()];
-        int i = 0;
-        for (Map.Entry<Integer, Double> kv : freqs.entrySet()) {
-            lens[i] = kv.getKey();
-            odds[i++] = kv.getValue();
-        }
-        FakeLanguageGen finished = new FakeLanguageGen(ov, mv, oc, mc, cc, cs, splitters, lens, odds,
+        List<Replacer> mods = new ArrayList<>((int)(Math.ceil(modifiers.size() * myInfluence) +
+                Math.ceil(other.modifiers.size() * otherInfluence)));
+        mods.addAll(rng.randomPortion(modifiers, (int)Math.ceil(modifiers.size() * myInfluence)));
+        mods.addAll(rng.randomPortion(other.modifiers, (int)Math.ceil(other.modifiers.size() * otherInfluence)));
+        FakeLanguageGen finished = new FakeLanguageGen(ov, mv, oc, mc, cc, cs, splitters, freqs,
                 vowelStartFrequency * myInfluence + other.vowelStartFrequency * otherInfluence,
                 vowelEndFrequency * myInfluence + other.vowelEndFrequency * otherInfluence,
                 vowelSplitFrequency * myInfluence + other.vowelSplitFrequency * otherInfluence,
                 syllableEndFrequency * myInfluence + other.syllableEndFrequency * otherInfluence,
-                (sanityChecks == null) ? other.sanityChecks : sanityChecks, true);
+                (sanityChecks == null) ? other.sanityChecks : sanityChecks, true, mods);
         return finished;
     }
 
@@ -1353,18 +1394,13 @@ public class FakeLanguageGen implements Serializable {
                 mc = accentConsonants(rng, midConsonants, consonantInfluence),
                 cc = accentConsonants(rng, closingConsonants, consonantInfluence),
                 cs = accentBoth(rng, closingSyllables, vowelInfluence, consonantInfluence);
-        int[] lens = new int[syllableFrequencies.size()];
-        double[] odds = new double[syllableFrequencies.size()];
-        int i = 0;
-        for (Map.Entry<Integer, Double> kv : syllableFrequencies.entrySet()) {
-            lens[i] = kv.getKey();
-            odds[i++] = kv.getValue();
-        }
-        FakeLanguageGen finished = new FakeLanguageGen(ov, mv, oc, mc, cc, cs, vowelSplitters, lens, odds,
+
+
+        FakeLanguageGen finished = new FakeLanguageGen(ov, mv, oc, mc, cc, cs, vowelSplitters, syllableFrequencies,
                 vowelStartFrequency,
                 vowelEndFrequency,
                 vowelSplitFrequency,
-                syllableEndFrequency, sanityChecks, clean);
+                syllableEndFrequency, sanityChecks, clean, modifiers);
         return finished;
     }
     static String[] copyStrings(String[] start)
@@ -1399,19 +1435,30 @@ public class FakeLanguageGen implements Serializable {
         for (int i = 0; i < cs.length; i++) {
             cs[i] = removeAccents(closingSyllables[i]);
         }
-        int[] lens = new int[syllableFrequencies.size()];
-        double[] odds = new double[syllableFrequencies.size()];
-        int i = 0;
-        for (Map.Entry<Integer, Double> kv : syllableFrequencies.entrySet()) {
-            lens[i] = kv.getKey();
-            odds[i++] = kv.getValue();
-        }
-        FakeLanguageGen finished =  new FakeLanguageGen(ov, mv, oc, mc, cc, cs, vowelSplitters, lens, odds,
+
+        return new FakeLanguageGen(ov, mv, oc, mc, cc, cs, vowelSplitters, syllableFrequencies,
                 vowelStartFrequency,
                 vowelEndFrequency,
                 vowelSplitFrequency,
-                syllableEndFrequency, sanityChecks, clean);
-        return finished;
+                syllableEndFrequency, sanityChecks, clean, modifiers);
+    }
+
+    public FakeLanguageGen addModifiers(Collection<Replacer> mods)
+    {
+        FakeLanguageGen next = copy();
+        next.modifiers.addAll(mods);
+        return next;
+    }
+    public FakeLanguageGen addModifiers(Replacer... mods)
+    {
+        FakeLanguageGen next = copy();
+        Collections.addAll(next.modifiers, mods);
+        return next;
+    }
+
+    public static Replacer modifier(String pattern, String replacement)
+    {
+        return Pattern.compile(pattern).replacer(replacement);
     }
 
     @Override
@@ -1441,10 +1488,10 @@ public class FakeLanguageGen implements Serializable {
         if (!Arrays.equals(vowelSplitters, that.vowelSplitters)) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
         if (!Arrays.equals(closingSyllables, that.closingSyllables)) return false;
-        if (syllableFrequencies != null ? !syllableFrequencies.equals(that.syllableFrequencies) : that.syllableFrequencies != null)
-            return false;
+        if (!syllableFrequencies.equals(that.syllableFrequencies)) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(sanityChecks, that.sanityChecks);
+        if (!Arrays.equals(sanityChecks, that.sanityChecks)) return false;
+        return modifiers != null ? modifiers.equals(that.modifiers) : that.modifiers == null;
     }
 
     @Override
@@ -1459,7 +1506,7 @@ public class FakeLanguageGen implements Serializable {
         result = 31 * result + CrossHash.hash(vowelSplitters);
         result = 31 * result + CrossHash.hash(closingSyllables);
         result = 31 * result + (clean ? 1 : 0);
-        result = 31 * result + (syllableFrequencies != null ? syllableFrequencies.hashCode() : 0);
+        result = 31 * result + syllableFrequencies.hashCode();
         temp = Double.doubleToLongBits(totalSyllableFrequency);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(vowelStartFrequency);
@@ -1471,6 +1518,7 @@ public class FakeLanguageGen implements Serializable {
         temp = Double.doubleToLongBits(syllableEndFrequency);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (sanityChecks != null ? sanityChecks.length + 1 : 0);
+        result = 31 * result + (modifiers != null ? modifiers.hashCode() : 0);
         return result;
     }
 
@@ -1484,14 +1532,23 @@ public class FakeLanguageGen implements Serializable {
                 ", closingConsonants=" + Arrays.toString(closingConsonants) +
                 ", vowelSplitters=" + Arrays.toString(vowelSplitters) +
                 ", closingSyllables=" + Arrays.toString(closingSyllables) +
+                ", clean=" + clean +
                 ", syllableFrequencies=" + syllableFrequencies +
                 ", totalSyllableFrequency=" + totalSyllableFrequency +
                 ", vowelStartFrequency=" + vowelStartFrequency +
                 ", vowelEndFrequency=" + vowelEndFrequency +
                 ", vowelSplitFrequency=" + vowelSplitFrequency +
                 ", syllableEndFrequency=" + syllableEndFrequency +
-                ", sane=" + Arrays.toString(sanityChecks) +
-                ", clean=" + clean +
+                ", sanityChecks=" + Arrays.toString(sanityChecks) +
+                ", modifiers=" + modifiers +
                 '}';
     }
+
+    public FakeLanguageGen copy()
+    {
+        return new FakeLanguageGen(openingVowels, midVowels, openingConsonants, midConsonants,
+                closingConsonants, closingSyllables, vowelSplitters, syllableFrequencies, vowelStartFrequency,
+                vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency, sanityChecks, clean, modifiers);
+    }
+
 }

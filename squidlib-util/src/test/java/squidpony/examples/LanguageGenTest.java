@@ -3,6 +3,8 @@ package squidpony.examples;
 import squidpony.FakeLanguageGen;
 import squidpony.squidmath.StatefulRNG;
 
+import static squidpony.FakeLanguageGen.modifier;
+
 /**
  * Created by Tommy Ettinger on 11/29/2015.
  */
@@ -111,6 +113,20 @@ public class LanguageGenTest {
         for (int i = 0; i < 40; i++) {
             System.out.println(flg.sentence(rng, 6, 12, new String[]{",", ",", ",", ";", " -"},
                     new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.2));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.ENGLISH.addModifiers(modifier("(.)\\1", "$1"));
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.18));
+        }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.ENGLISH.addModifiers(modifier("sh?", "th"));
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.18));
         }
 
         rng.setState(0xf00df00L);
