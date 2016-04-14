@@ -3,8 +3,6 @@ package squidpony.examples;
 import squidpony.FakeLanguageGen;
 import squidpony.squidmath.StatefulRNG;
 
-import static squidpony.FakeLanguageGen.modifier;
-
 /**
  * Created by Tommy Ettinger on 11/29/2015.
  */
@@ -55,6 +53,12 @@ public class LanguageGenTest {
                     new String[]{".", ".", ".", "!", "?", "..."}, 0.25));
         }
         rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.JAPANESE_ROMANIZED;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 13, new String[]{",", ",", ",", ",", ";"},
+                    new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.12));
+        }
+        rng.setState(0xf00df00L);
         flg = FakeLanguageGen.SWAHILI;
         for (int i = 0; i < 40; i++) {
             System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
@@ -93,14 +97,6 @@ public class LanguageGenTest {
                     new String[]{".", ".", "!", "?", "..."}, 0.18));
         }
 
-
-        rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.JAPANESE_ROMANIZED;
-        for (int i = 0; i < 40; i++) {
-            System.out.println(flg.sentence(rng, 5, 13, new String[]{",", ",", ",", ",", ";"},
-                    new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.12));
-        }
-
         rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FRENCH.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.65);
         for (int i = 0; i < 40; i++) {
@@ -116,14 +112,14 @@ public class LanguageGenTest {
         }
 
         rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.ENGLISH.addModifiers(modifier("(.)\\1", "$1"));
+        flg = FakeLanguageGen.ENGLISH.addModifiers(FakeLanguageGen.Modifier.NO_DOUBLES);
         for (int i = 0; i < 40; i++) {
             System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
                     new String[]{".", ".", "!", "?", "..."}, 0.18));
         }
 
         rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.ENGLISH.addModifiers(modifier("sh?", "th"));
+        flg = FakeLanguageGen.JAPANESE_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.DOUBLE_CONSONANTS);
         for (int i = 0; i < 40; i++) {
             System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
                     new String[]{".", ".", "!", "?", "..."}, 0.18));
