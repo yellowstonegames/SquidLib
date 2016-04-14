@@ -7,8 +7,6 @@ target/
 *.iml
 .idea/
 .settings/
-.classpath
-.project
 
 *.jar
 

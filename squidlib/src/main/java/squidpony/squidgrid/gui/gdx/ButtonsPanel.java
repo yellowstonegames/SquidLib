@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -310,12 +311,11 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 * @throws IllegalStateException
 	 *             In various cases of errors regarding sizes of panels.
 	 */
-	public ButtonsPanel(ISquidPanel<T> bg, ISquidPanel<T> fg, List<IColoredString<T>> buttonTexts) {
+	public ButtonsPanel(ISquidPanel<T> bg, ISquidPanel<T> fg,
+			/* @Nullable */List<IColoredString<T>> buttonTexts) {
 		super(bg, fg);
-		if (buttonTexts != null) {
-			this.buttonsTexts = new ArrayList<>(buttonTexts.size());
-			this.buttonsTexts.addAll(buttonTexts);
-		}
+		if (buttonTexts != null)
+			init(buttonTexts);
 	}
 
 	/**
@@ -338,7 +338,8 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 
 	/**
 	 * Sets the buttons' text. Use this method if you gave {@code null} at
-	 * creation time.
+	 * creation time. Beware that this method can be called from the
+	 * constructor.
 	 * 
 	 * @param buttonTexts
 	 * @return {@code this}
@@ -346,6 +347,18 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	public ButtonsPanel<T> init(List<IColoredString<T>> buttonTexts) {
 		this.buttonsTexts = new ArrayList<>(buttonTexts);
 		return this;
+	}
+
+	/**
+	 * Adds {@code i} to the set of button indexes that should not be bound to
+	 * user input.
+	 * 
+	 * @param i
+	 */
+	public void addDoNotBind(int i) {
+		if (this.doNotBind == null)
+			this.doNotBind = new HashSet<>(4);
+		doNotBind.add(i);
 	}
 
 	/**
@@ -898,7 +911,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 						/* To avoid coming here in next rolls */
 						set = true;
 					} else if (set || shortcuts.containsKey(Character.toLowerCase(c))
-							|| !Character.isLetter(c) || (unbindable != null && unbindable.contains(c))
+							|| !canBeShortcut(c) || (unbindable != null && unbindable.contains(c))
 							|| (enableScrolling && (c == 'j' || c == 'k'))) {
 						/*
 						 * Shortcut already used or we went into the 'else'
@@ -1021,6 +1034,10 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 			return firstLastButtonIndexes.last < buttonsTexts.size();
 		} else
 			return false;
+	}
+
+	protected boolean canBeShortcut(char c) {
+		return Character.isLetter(c);
 	}
 
 	/**

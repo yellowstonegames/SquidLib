@@ -17,6 +17,8 @@ import static squidpony.squidmath.CoordPacker.*;
  * methods of this class return 2D char arrays or Lists thereof, with the subset of the map that is in a specific region
  * kept the same, but everything else replaced with '#'.
  * Created by Tommy Ettinger on 2/3/2016.
+ * 
+ * @see RectangleRoomsFinder A simpler but faster alternative
  */
 public class RoomFinder {
     /**
@@ -48,11 +50,6 @@ public class RoomFinder {
      */
     public Coord[] connections;
     public int width, height;
-
-    private RoomFinder()
-    {
-
-    }
 
     /**
      * Constructs a RoomFinder given a dungeon map, and finds rooms, corridors, and their connections on the map. Does
@@ -184,8 +181,7 @@ public class RoomFinder {
         caves = new RegionMap<>(32);
 
         basic = DungeonUtility.simplifyDungeon(map);
-        short[] floors = pack(basic, '.'),
-                r = pack(environment, MixedGenerator.ROOM_FLOOR),
+        short[] r = pack(environment, MixedGenerator.ROOM_FLOOR),
                 c = pack(environment, MixedGenerator.CORRIDOR_FLOOR),
                 v = pack(environment, MixedGenerator.CAVE_FLOOR),
                 rc = unionPacked(r, c),
