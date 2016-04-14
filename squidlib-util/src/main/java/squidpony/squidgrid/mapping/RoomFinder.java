@@ -18,7 +18,7 @@ import static squidpony.squidmath.CoordPacker.*;
  * kept the same, but everything else replaced with '#'.
  * Created by Tommy Ettinger on 2/3/2016.
  * 
- * @see RectangleRoomsFinder A simpler but faster alternative
+ * @see RectangleRoomFinder A simpler but faster alternative
  */
 public class RoomFinder {
     /**
