@@ -1,30 +1,29 @@
 package squidpony.examples;
 
-import java.util.Collection;
-import java.util.Iterator;
-
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.Rectangle;
-import squidpony.squidgrid.mapping.RectangleRoomsFinder;
+import squidpony.squidgrid.mapping.RectangleRoomFinder;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 /**
- * Test of {@link SimpleRoomFinder}. Different rooms are printed with digits
+ * Test of {@link RectangleRoomFinder}. Different rooms are printed with digits
  * from 1 to 9. Digits are reused. So there can be multiple rooms with the same
  * digit.
  * 
  * @author smelC
  * 
- * @see RectangleRoomsFinder
+ * @see RectangleRoomFinder
  */
-public class RectangleRoomsFinderTest {
+public class RectangleRoomFinderTest {
 
 	public static void main(String[] args) {
-		DungeonBoneGen bg = new DungeonBoneGen(new RNG(new LightRNG(0x1337deadbeef48aaL)));
+		DungeonBoneGen bg = new DungeonBoneGen(new RNG(0x1337deadbeef48aaL));
 		for (TilesetType tt : TilesetType.values()) {
 			System.out.println(tt);
 			final char[][] dungeon = bg.generate(tt, 80, 40);
@@ -32,7 +31,7 @@ public class RectangleRoomsFinderTest {
 
 			// DungeonUtility.debugPrint(dungeon);
 
-			final RectangleRoomsFinder srf = new RectangleRoomsFinder(dungeon);
+			final RectangleRoomFinder srf = new RectangleRoomFinder(dungeon);
 			final Collection<? extends Rectangle> rooms = srf.findRectangles();
 
 			int nextRoomIndex = 1;

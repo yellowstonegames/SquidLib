@@ -1,14 +1,10 @@
 package squidpony.squidgrid.mapping;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.iterator.SquidIterators;
 import squidpony.squidmath.Coord;
+
+import java.util.*;
 
 /**
  * An algorithm to find rectangle areas in dungeons. It is a simpler and faster
@@ -19,7 +15,7 @@ import squidpony.squidmath.Coord;
  * 
  * @see RoomFinder A fancier room finder
  */
-public class RectangleRoomsFinder {
+public class RectangleRoomFinder {
 
 	protected final char[][] dungeon;
 	protected final int dungeonWidth;
@@ -36,7 +32,7 @@ public class RectangleRoomsFinder {
 	/** {@code true} to restrict {@code this} to find square rooms */
 	public boolean onlySquareRooms = false;
 
-	public RectangleRoomsFinder(char[][] dungeon) {
+	public RectangleRoomFinder(char[][] dungeon) {
 		this.dungeon = dungeon;
 		this.dungeonWidth = dungeon.length;
 		this.dungeonHeight = dungeonWidth == 0 ? 0 : dungeon[0].length;

@@ -12,7 +12,7 @@ import squidpony.squidmath.Coord;
  * 
  * @author smelC
  * 
- * @see RectangleRoomsFinder How to find rectangles in a dungeon
+ * @see RectangleRoomFinder How to find rectangles in a dungeon
  */
 public interface Rectangle {
 
