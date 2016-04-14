@@ -170,6 +170,44 @@ public class UIUtil {
 	/**
 	 * Draws a rectangle using a {@link ShapeRenderer}.
 	 * 
+	 * @parem sRender_ The renderer to use. If {@code null} a new one will be
+	 *        allocated.
+	 * @param botLeftX
+	 *            The bottom left x of the rectangle.
+	 * @param botLeftY
+	 *            The bottom left y of the rectangle.
+	 * @param width
+	 *            The rectangle's width
+	 * @param height
+	 *            The rectangle's height
+	 * @param st
+	 *            The style to use
+	 * @param color
+	 *            The rectangle's color
+	 */
+	public static void drawRectangle(/* @Nullable */ShapeRenderer sRender_, float botLeftX, float botLeftY,
+			float width, float height, ShapeType st, Color color) {
+		final ShapeRenderer sRender = sRender_ == null ? new ShapeRenderer() : sRender_;
+		final boolean reset;
+		/* No matter the state of the given ShapeRenderer, we'll be fine, thanks to this: */
+		if (!sRender.isDrawing()) {
+			reset = true;
+			sRender.begin(st);
+		} else
+			reset = false;
+		sRender.setColor(color);
+		sRender.rect(botLeftX, botLeftY, width, height);
+		if (reset)
+			sRender.end();
+		if (sRender != sRender_)
+			/* I allocated it */
+			sRender.dispose();
+	}
+
+	/**
+	 * Draws a rectangle using a {@link ShapeRenderer}, allocating a new one for
+	 * the occasion.
+	 * 
 	 * @param botLeftX
 	 *            The bottom left x of the rectangle.
 	 * @param botLeftY
@@ -185,12 +223,7 @@ public class UIUtil {
 	 */
 	public static void drawRectangle(float botLeftX, float botLeftY, float width, float height, ShapeType st,
 			Color color) {
-		final ShapeRenderer sRender = new ShapeRenderer();
-		sRender.begin(st);
-		sRender.setColor(color);
-		sRender.rect(botLeftX, botLeftY, width, height);
-		sRender.end();
-		sRender.dispose();
+		drawRectangle(null, botLeftX, botLeftY, width, height, st, color);
 	}
 
 	/**
