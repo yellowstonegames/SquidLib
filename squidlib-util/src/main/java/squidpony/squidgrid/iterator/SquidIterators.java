@@ -134,7 +134,7 @@ public class SquidIterators {
 	 * 
 	 * @author smelC
 	 */
-	public static class Square implements SquidIterator {
+	public static class CenteredSquare implements SquidIterator {
 
 		protected final int width;
 		protected final int height;
@@ -165,13 +165,13 @@ public class SquidIterators {
 		 * @throws IllegalStateException
 		 *             If {@code width <= 0 || height <= 0 || size < 0}.
 		 */
-		public Square(int width, int height, int x, int y, int size) {
+		public CenteredSquare(int width, int height, int x, int y, int size) {
 			this.width = width;
 			if (width <= 0)
-				throw new IllegalStateException("Cannot build a square iterator over an empty grid");
+				throw new IllegalStateException("Cannot build a centered square iterator over an empty grid");
 			this.height = height;
 			if (height <= 0)
-				throw new IllegalStateException("Cannot build a square iterator over an empty grid");
+				throw new IllegalStateException("Cannot build a centered square iterator over an empty grid");
 
 			this.xstart = x;
 			this.ystart = y;
@@ -193,7 +193,7 @@ public class SquidIterators {
 		 * @param start
 		 *            The starting coordinate.
 		 */
-		public Square(int width, int height, Coord start, int size) {
+		public CenteredSquare(int width, int height, Coord start, int size) {
 			this(width, height, start.x, start.y, size);
 		}
 
@@ -264,6 +264,92 @@ public class SquidIterators {
 
 		protected boolean isInGrid(int x, int y) {
 			return 0 <= x && x < width && 0 <= y && y < height;
+		}
+	}
+
+	/**
+	 * An iterator that starts from a cell and iterates from the bottom left to
+	 * the top right, in the rectangle defined by the given width and height. Widths
+	 * and heights are like list-sizes w.r.t indexes. So a rectangle of width or height 0
+	 * is empty, a rectangle of width and height 1 has one cell, a rectangle
+	 * of width and height 2 has four cells, etc.
+	 * 
+	 * <p>
+	 * Put differently, the rectangle whose bottom left is (x, y) and has width
+	 * and height 2, contains the cells (x, y), (x + 1, y),
+	 * (x, y - 1), and (x + 1, y - 1); but it does NOT contain (x + 2, y), nor
+	 * (x + 2, y - 1), nor (x + 2, y - 2).
+	 * </p>
+	 * 
+	 * @author smelC
+	 */
+	public static class RectangleFromBottomLeftToTopRight implements SquidIterator {
+
+		protected final int xstart;
+		protected final int ystart;
+
+		protected final int width;
+		protected final int height;
+
+		/** The last cell returned */
+		protected Coord previous = null;
+
+		public RectangleFromBottomLeftToTopRight(Coord start, int width, int height) {
+			this.xstart = start.x;
+			this.ystart = start.y;
+
+			if (width < 0)
+				throw new IllegalStateException(
+						"Width of " + getClass().getSimpleName() + " shouldn't be negative");
+			this.width = width;
+			if (height < 0)
+				throw new IllegalStateException(
+						"Height of " + getClass().getSimpleName() + " shouldn't be negative");
+			this.height = height;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return next0() != null;
+		}
+
+		@Override
+		public Coord next() {
+			final Coord result = next0();
+			if (result == null)
+				throw new NoSuchElementException();
+			previous = result;
+			return result;
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
+		protected /*@Nullable*/ Coord next0() {
+			if (previous == null) {
+				/* Initialization */
+				return width == 0 || height == 0 ? null : Coord.get(xstart, ystart);
+			}
+			else {
+				/* We're in SquidLib coordinates: (0,0) is top left */
+				assert xstart <= previous.x && previous.x < xstart + width;
+				assert previous.y <= ystart && ystart - height < previous.y;
+
+				if (previous.x == xstart + width - 1) {
+					/* Need to go up and left (one column up, go left) */
+					if (previous.y == ystart - (height - 1) || previous.y == 0) {
+						/* We're done */
+						return null;
+					} else
+						/* One line above */
+						return Coord.get(xstart, previous.y - 1);
+				} else {
+					/* Can go right in the same line */
+					return Coord.get(previous.x + 1, previous.y);
+				}
+			}
 		}
 	}
 
