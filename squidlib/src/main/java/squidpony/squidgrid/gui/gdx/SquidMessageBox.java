@@ -21,7 +21,7 @@ import java.util.List;
  * Created by Tommy Ettinger on 12/10/2015.
  * 
  * @see LinesPanel An alternative, which is also designed to write messages (not
- *      in a scrolling pane though), but which is backed up by {@link Actor}
+ *      in a scrolling pane though), but which is backed up by {@link com.badlogic.gdx.scenes.scene2d.Actor}
  *      instead of {@link SquidPanel} (hence better supports tight serif fonts)
  */
 public class SquidMessageBox extends SquidPanel {

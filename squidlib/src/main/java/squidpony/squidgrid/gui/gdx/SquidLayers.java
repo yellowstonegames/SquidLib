@@ -11,7 +11,8 @@ import squidpony.squidgrid.Direction;
 import java.util.*;
 
 /**
- * A helper class to make using multiple HDRPanels easier.
+ * A helper class to make using multiple SquidPanels easier.
+ * <br>
  * There is some useful documentation in this class' getPalette method (honestly, I don't know where else to put
  * documentation specifically about this class' default palette)..
  * Created by Tommy Ettinger on 7/6/2015.
@@ -288,8 +289,8 @@ public class SquidLayers extends Group {
             textFactory = textFactory.defaultNarrowFont();
         }
         textFactory = textFactory.width(cellWidth).height(cellHeight).initBySize();
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory.copy(), bgColorCenter);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory.copy(), fgColorCenter);
+        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
+        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
 
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
@@ -367,8 +368,8 @@ public class SquidLayers extends Group {
 
         textFactory = tcf.width(cellWidth).height(cellHeight).initBySize();
 
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory.copy(), bgColorCenter);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory.copy(), fgColorCenter);
+        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
+        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
 
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
@@ -446,7 +447,7 @@ public class SquidLayers extends Group {
      * @return this for chaining
      */
     public SquidLayers addExtraLayer() {
-        SquidPanel sp = new SquidPanel(width, height, textFactory.copy());
+        SquidPanel sp = new SquidPanel(width, height, textFactory);
         addActor(sp);
         extraPanels.add(sp);
         return this;
