@@ -1,5 +1,6 @@
 package squidpony.gdx.examples;
 
+import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.panel.ICombinedPanel;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -88,7 +89,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private int cellWidth;
     /** The pixel height of a cell */
     private int cellHeight;
-    private SquidInput input;
+    private VisualInput input;
     private double counter;
     private boolean[][] seen;
     private int health = 7;
@@ -107,6 +108,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private boolean changingColors = false;
     private TextCellFactory textFactory;
     public static final int INTERNAL_ZOOM = 1;
+    private Viewport viewport;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
     @Override
     public void create () {
@@ -198,7 +200,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //objects or Actors, then rendered separately like the monsters are (see render() below). It is called subCell
         //because its text will be made smaller than a full cell, and appears in the upper left corner for things like
         //the current health of the player and an '!' for alerted monsters.
-        subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
+        subCell = new SquidPanel(width, height, textFactory, fgCenter);
 
         display.setAnimationDuration(0.1f);
         messages = new SquidMessageBox(width, 4, textFactory);
@@ -210,7 +212,8 @@ public class EverythingDemo extends ApplicationAdapter {
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
-        stage = new Stage(new StretchViewport(width * cellWidth, (height + 4) * cellHeight), batch);
+        viewport = new StretchViewport(width * cellWidth, (height + 4) * cellHeight);
+        stage = new Stage(viewport, batch);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
         messages.setBounds(0, 0, cellWidth * width, cellHeight * 4);
@@ -293,7 +296,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // You can also set up a series of future moves by clicking within FOV range, using mouseMoved to determine the
         // path to the mouse position with a DijkstraMap (called playerToCursor), and using touchUp to actually trigger
         // the event when someone clicks.
-        input = new SquidInput(new SquidInput.KeyHandler() {
+        input = new VisualInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key)
@@ -428,6 +431,8 @@ public class EverythingDemo extends ApplicationAdapter {
                 return false;
             }
         }));
+        input.forceButtons = true;
+        input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
         subCell.setOffsetY(messages.getGridHeight() * cellHeight);
@@ -435,6 +440,7 @@ public class EverythingDemo extends ApplicationAdapter {
         stage.addActor(display);
         // stage.addActor(subCell); // this is not added since it is manually drawn after other steps
         stage.addActor(messages);
+        viewport = input.resizeInnerStage(stage);
 
     }
     /**
@@ -820,9 +826,15 @@ public class EverythingDemo extends ApplicationAdapter {
             framesWithoutAnimation = 0;
         }
 
+        input.stage.getViewport().apply(true);
+        input.stage.draw();
+        input.stage.act();
+
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
+        stage.getViewport().apply(true);
         stage.draw();
         stage.act();
+
         subCell.erase();
         if(help == null) {
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
@@ -863,16 +875,19 @@ public class EverythingDemo extends ApplicationAdapter {
     @Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
+
         // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
-        stage.getViewport().update(width, height);
         currentZoomX = width * 1f / this.width;
         // total new screen height in pixels divided by total number of rows on the screen
         currentZoomY = height * 1f / (this.height + messages.getGridHeight());
         // message box should be given updated bounds since I don't think it will do this automatically
         messages.setBounds(0, 0, width, currentZoomY * messages.getGridHeight());
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
-		input.getMouse().reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0);
+		input.reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0, width, height);
         currentZoomX = cellWidth / currentZoomX;
         currentZoomY = cellHeight / currentZoomY;
+        input.stage.getViewport().update(width, height, true);
+        stage.getViewport().update(width, height, true);
+
 	}
 }

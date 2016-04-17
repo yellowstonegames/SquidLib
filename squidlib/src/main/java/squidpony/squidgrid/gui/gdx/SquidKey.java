@@ -91,15 +91,14 @@ public class SquidKey implements InputProcessor {
      */
     public void drain () {
         IntArray q = processingQueue;
-        synchronized (this) {
-            if (processor == null) {
-                queue.clear();
-                return;
-            }
-            q.addAll(queue);
+        if (processor == null) {
             queue.clear();
+            return;
         }
-        for (int i = 0, n = q.size; i < n;) {
+        q.addAll(queue);
+        queue.clear();
+
+        for (int i = 0, n = q.size; i < n; ) {
             switch (q.get(i++)) {
                 case KEY_DOWN:
                     processor.keyDown(q.get(i++));
@@ -108,7 +107,7 @@ public class SquidKey implements InputProcessor {
                     processor.keyUp(q.get(i++));
                     break;
                 case KEY_TYPED:
-                    processor.keyTyped((char)q.get(i++));
+                    processor.keyTyped((char) q.get(i++));
                     break;
             }
         }
@@ -127,19 +126,16 @@ public class SquidKey implements InputProcessor {
     /**
      * Processes the first event queued up, passing it to this object's InputProcessor.
      */
-    public void next()
-    {
+    public void next() {
         IntArray q = processingQueue;
-        synchronized (this) {
-            if (processor == null || queue.size < 2) {
-                queue.clear();
-                return;
-            }
-            q.addAll(queue, 0, 2);
-            queue.removeRange(0, 1);
+        if (processor == null || queue.size < 2) {
+            queue.clear();
+            return;
         }
-        if(q.size >= 2)
-        {
+        q.addAll(queue, 0, 2);
+        queue.removeRange(0, 1);
+
+        if (q.size >= 2) {
             int e = q.get(0), n = q.get(1);
             switch (e) {
                 case KEY_DOWN:
@@ -149,7 +145,7 @@ public class SquidKey implements InputProcessor {
                     processor.keyUp(n);
                     break;
                 case KEY_TYPED:
-                    processor.keyTyped((char)n);
+                    processor.keyTyped((char) n);
                     break;
             }
         }
@@ -165,7 +161,7 @@ public class SquidKey implements InputProcessor {
     }
 
     @Override
-	public synchronized boolean keyDown (int keycode) {
+	public boolean keyDown (int keycode) {
         if(ignoreInput) return false;
         queue.add(KEY_DOWN);
         queue.add(keycode);
@@ -173,7 +169,7 @@ public class SquidKey implements InputProcessor {
     }
 
     @Override
-	public synchronized boolean keyUp (int keycode) {
+	public boolean keyUp (int keycode) {
         if(ignoreInput) return false;
         queue.add(KEY_UP);
         queue.add(keycode);
@@ -181,7 +177,7 @@ public class SquidKey implements InputProcessor {
     }
 
     @Override
-	public synchronized boolean keyTyped (char character) {
+	public boolean keyTyped (char character) {
         if(ignoreInput) return false;
         queue.add(KEY_TYPED);
         queue.add(character);
@@ -189,27 +185,27 @@ public class SquidKey implements InputProcessor {
     }
 
     @Override
-	public synchronized boolean touchDown (int screenX, int screenY, int pointer, int button) {
+	public boolean touchDown (int screenX, int screenY, int pointer, int button) {
         return false;
     }
 
     @Override
-	public synchronized boolean touchUp (int screenX, int screenY, int pointer, int button) {
+	public boolean touchUp (int screenX, int screenY, int pointer, int button) {
         return false;
     }
 
     @Override
-	public synchronized boolean touchDragged (int screenX, int screenY, int pointer) {
+	public boolean touchDragged (int screenX, int screenY, int pointer) {
         return false;
     }
 
     @Override
-	public synchronized boolean mouseMoved (int screenX, int screenY) {
+	public boolean mouseMoved (int screenX, int screenY) {
         return false;
     }
 
     @Override
-	public synchronized boolean scrolled (int amount) {
+	public boolean scrolled (int amount) {
         return false;
     }
 

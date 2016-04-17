@@ -41,7 +41,7 @@ public class SquidInput extends InputAdapter {
          * letters will be capitalized when they are passed to this, but they may or may not have the shift argument as
          * true depending on how this method was called. Symbols that may be produced by holding Shift and pressing a
          * number or a symbol key can vary between keyboards (some may require Shift to be held down, others may not).
-         *
+         * <br>
          * This can react to the input in whatever way you find appropriate for your game.
          * @param key a char of the "typed" representation of the key, such as 'a' or 'E', or if there is no Unicode
          *            character for the key, an appropriate alternate character as documented in SquidInput.fromKey()
@@ -195,24 +195,23 @@ public class SquidInput extends InputAdapter {
      */
     public void drain () {
         CharArray q = processingQueue;
-        synchronized (this) {
-            if (keyAction == null || queue.size < 2) {
-                queue.clear();
-                return;
-            }
-            q.addAll(queue);
+
+        if (keyAction == null || queue.size < 2) {
             queue.clear();
+            return;
         }
-        for (int i = 0, n = q.size; i < n;)
-        {
+        q.addAll(queue);
+        queue.clear();
+
+        for (int i = 0, n = q.size; i < n; ) {
             char c = q.get(i++), mods = q.get(i++);
             keyAction.handle(c, (mods & 1) != 0, (mods & 2) != 0, (mods & 4) != 0);
         }
-            /**
-             case KEY_UP:
-             keyProcessor.keyUp(q.get(i++));
-             break;
-             */
+        /**
+         case KEY_UP:
+         keyProcessor.keyUp(q.get(i++));
+         break;
+         */
 
         q.clear();
     }
@@ -230,19 +229,16 @@ public class SquidInput extends InputAdapter {
      * Processes the first key event queued up, passing it to this object's InputProcessor. Mouse events are not
      * queued and are processed when they come in.
      */
-    public void next()
-    {
+    public void next() {
         CharArray q = processingQueue;
-        synchronized (this) {
-            if (keyAction == null || queue.size < 2) {
-                queue.clear();
-                return;
-            }
-            q.addAll(queue, 0, 2);
-            queue.removeRange(0, 1);
+        if (keyAction == null || queue.size < 2) {
+            queue.clear();
+            return;
         }
-        if(q.size >= 2)
-        {
+        q.addAll(queue, 0, 2);
+        queue.removeRange(0, 1);
+
+        if (q.size >= 2) {
             char c = q.get(0), mods = q.get(1);
             keyAction.handle(c, (mods & 1) != 0, (mods & 2) != 0, (mods & 4) != 0);
         }
@@ -258,7 +254,7 @@ public class SquidInput extends InputAdapter {
     }
 
     @Override
-	public synchronized boolean keyDown (int keycode) {
+	public boolean keyDown (int keycode) {
         if(ignoreInput) return false;
         boolean alt =  Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT),
                 ctrl =  Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT),
@@ -276,43 +272,43 @@ public class SquidInput extends InputAdapter {
     }
 
     @Override
-	public synchronized boolean keyUp (int keycode) {
+	public boolean keyUp (int keycode) {
 //        queue.add(KEY_UP);
 //        queue.add(keycode);
         return false;
     }
 
     @Override
-	public synchronized boolean keyTyped (char character) {
+	public boolean keyTyped (char character) {
         return false;
     }
 
     @Override
-	public synchronized boolean touchDown (int screenX, int screenY, int pointer, int button) {
+	public boolean touchDown (int screenX, int screenY, int pointer, int button) {
         if(ignoreInput) return false;
         return mouse.touchDown(screenX, screenY, pointer, button);
     }
 
     @Override
-	public synchronized boolean touchUp (int screenX, int screenY, int pointer, int button) {
+	public boolean touchUp (int screenX, int screenY, int pointer, int button) {
         if(ignoreInput) return false;
         return mouse.touchUp(screenX, screenY, pointer, button);
     }
 
     @Override
-	public synchronized boolean touchDragged (int screenX, int screenY, int pointer) {
+	public boolean touchDragged (int screenX, int screenY, int pointer) {
         if(ignoreInput) return false;
         return mouse.touchDragged(screenX, screenY, pointer);
     }
 
     @Override
-	public synchronized boolean mouseMoved (int screenX, int screenY) {
+	public boolean mouseMoved (int screenX, int screenY) {
         if(ignoreInput) return false;
         return mouse.mouseMoved(screenX, screenY);
     }
 
     @Override
-	public synchronized boolean scrolled (int amount) {
+	public boolean scrolled (int amount) {
         if(ignoreInput) return false;
         return mouse.scrolled(amount);
     }

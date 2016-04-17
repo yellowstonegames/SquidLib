@@ -118,19 +118,22 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                       float xOffset, float yOffset) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
-        this.textFactory = factory;
-        this.scc = center;
+        if(center == null)
+            scc = DefaultResources.getSCC();
+        else
+            scc = center;
 
         if (factory == null) {
-            factory = new TextCellFactory();
+            textFactory = new TextCellFactory();
+        }
+        else
+            textFactory = factory.copy();
+        if (!textFactory.initialized()) {
+            textFactory.initByFont();
         }
 
-        if (!factory.initialized()) {
-            factory.initByFont();
-        }
-
-        cellWidth = MathUtils.round(factory.actualCellWidth);
-        cellHeight = MathUtils.round(factory.actualCellHeight);
+        cellWidth = MathUtils.round(textFactory.actualCellWidth);
+        cellHeight = MathUtils.round(textFactory.actualCellHeight);
 
         contents = new String[gridWidth][gridHeight];
         colors = new Color[gridWidth][gridHeight];
@@ -914,6 +917,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     {
         int x = Math.round((a.getX() - getX()) / cellWidth),
              y = gridHeight - Math.round((a.getY() - getY()) / cellHeight) - 1;
+        if(x < 0 || y < 0 || x >= contents.length || y >= contents[x].length)
+            return;
         contents[x][y] = a.getName();
         animationCount--;
         removeActor(a);

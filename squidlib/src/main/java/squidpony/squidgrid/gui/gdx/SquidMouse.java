@@ -168,6 +168,15 @@ public class SquidMouse extends InputAdapter {
 		return MathUtils.clamp(MathUtils.floor((screenY + offsetY) / cellHeight), 0, (int)(gridHeight - 1)); //MathUtils.floor((offsetY * 0f) / cellHeight)
 	}
 
+    public boolean onGrid(int screenX, int screenY)
+    {
+        int tmp = MathUtils.floor((screenX + offsetX) / cellWidth);
+        if(tmp < 0 || tmp >= gridWidth)
+            return false;
+        tmp = MathUtils.floor((screenY + offsetY) / cellHeight);
+        return tmp >= 0 && tmp < gridHeight;
+    }
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         return processor.touchDown(translateX(screenX), translateY(screenY), pointer, button);
