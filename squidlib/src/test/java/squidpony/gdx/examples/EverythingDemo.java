@@ -431,7 +431,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 return false;
             }
         }));
-        input.forceButtons = true;
+        input.forceButtons = false;
         input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
@@ -826,10 +826,7 @@ public class EverythingDemo extends ApplicationAdapter {
             framesWithoutAnimation = 0;
         }
 
-        input.stage.getViewport().apply(true);
-        input.stage.draw();
-        input.stage.act();
-
+        input.show();
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.getViewport().apply(true);
         stage.draw();
@@ -886,7 +883,7 @@ public class EverythingDemo extends ApplicationAdapter {
 		input.reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0, width, height);
         currentZoomX = cellWidth / currentZoomX;
         currentZoomY = cellHeight / currentZoomY;
-        input.stage.getViewport().update(width, height, true);
+        input.update(width, height, true);
         stage.getViewport().update(width, height, true);
 
 	}
