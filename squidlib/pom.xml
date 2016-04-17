@@ -19,7 +19,7 @@
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
-        <testOutputDirectory>target/classes</testOutputDirectory>
+        <testOutputDirectory>target/test-classes</testOutputDirectory>
     </build>
 
     <dependencies>
