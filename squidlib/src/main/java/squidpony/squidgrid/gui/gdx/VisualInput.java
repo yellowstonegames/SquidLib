@@ -39,7 +39,7 @@ public class VisualInput extends SquidInput {
         sectionHeight = Gdx.graphics.getHeight();
 
         tcfLeft = DefaultResources.getStretchableFont().copy().width(sectionWidth / 4).height(sectionHeight / 16).initBySize();
-        tcfRight = DefaultResources.getStretchableFont().copy().width(sectionWidth / 12).height(sectionHeight / 32).initBySize();
+        tcfRight = DefaultResources.getStretchableFont().copy().width(sectionWidth / 12).height(sectionHeight / 24).initBySize();
 
         left = new SquidPanel(4, 16, tcfLeft);
         if(eightWay) {
@@ -52,20 +52,21 @@ public class VisualInput extends SquidInput {
         else
         {
             left.put(0, 7, new char[][]{
-                    new char[]{' ', SquidInput.RIGHT_ARROW, ' '},
-                    new char[]{SquidInput.UP_ARROW, 'O', SquidInput.DOWN_ARROW},
                     new char[]{' ', SquidInput.LEFT_ARROW, ' '},
+                    new char[]{SquidInput.UP_ARROW, 'O', SquidInput.DOWN_ARROW},
+                    new char[]{' ', SquidInput.RIGHT_ARROW, ' '},
             }, color);        }
-        right = new SquidPanel(12, 32, tcfRight, null, Gdx.graphics.getWidth() - sectionWidth, 0);
+        right = new SquidPanel(12, 24, tcfRight, null, Gdx.graphics.getWidth() - sectionWidth, 0);
 
         mouseLeft = new SquidMouse(left.cellWidth(), left.cellHeight(), left.gridWidth, left.gridHeight,
-                0, Math.round(sectionHeight - left.getHeight()), new InputAdapter()
+                0, 0, new InputAdapter()
         {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                if(screenX < 3 && screenY >= 7 && screenY <= 9 && !left.contents[screenX][screenY].equals(" "))
+                if(screenX < 3 && screenY >= 5 && screenY <= 7 && left.contents[screenX][screenY + 2] != null &&
+                        !left.contents[screenX][screenY + 2].equals(" "))
                 {
-                    switch ((screenY - 7) * 3 + screenX)
+                    switch ((screenY - 5) * 3 + screenX)
                     {
                         case 0: queue.add(SquidInput.UP_LEFT_ARROW);
                             break;
@@ -85,7 +86,8 @@ public class VisualInput extends SquidInput {
                             break;
                         case 8: queue.add(SquidInput.DOWN_RIGHT_ARROW);
                             break;
-                        default: return false;
+                        default:
+                            return false;
                     }
                     queue.add('\u0000');
                     return true;
@@ -276,11 +278,11 @@ public class VisualInput extends SquidInput {
             sectionHeight *= screenHeight / Gdx.graphics.getHeight();
         cellWidth /= screenWidth  / (screenWidth - sectionWidth);
         float leftWidth = screenWidth / 8f / 4f, rightWidth = screenWidth / 8f / 12f,
-                leftHeight = screenHeight / 16f, rightHeight = screenHeight / 32f;
+                leftHeight = screenHeight / 12f, rightHeight = screenHeight / 24f;
         mouse.reinitialize(cellWidth, cellHeight, gridWidth, gridHeight,
                 offsetX - MathUtils.round((screenWidth / 8f) * (screenWidth / (screenWidth - sectionWidth)) + cellWidth /2f), offsetY);
         mouseLeft.reinitialize(leftWidth, leftHeight, 4, 16, offsetX, offsetY);
-        mouseRight.reinitialize(rightWidth, rightHeight, 16, 32,
+        mouseRight.reinitialize(rightWidth, rightHeight, 12, 24,
                 MathUtils.ceil(offsetX - (screenWidth - sectionWidth)),
                 MathUtils.round(offsetY - rightHeight / 2f + (right.getGridHeight() * rightHeight - screenHeight)));
         this.screenWidth = screenWidth;
