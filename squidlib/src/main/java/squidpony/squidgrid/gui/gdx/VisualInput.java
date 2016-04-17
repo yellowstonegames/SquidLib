@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.CharArray;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -33,9 +32,9 @@ public class VisualInput extends SquidInput {
     public boolean eightWay = true, forceButtons = false;
     public Stage stage;
     protected ShrinkPartViewport spv;
-    private Vector2 tempInput = new Vector2(0, 0);
     private void init()
     {
+        initialized = true;
         sectionWidth = Gdx.graphics.getWidth() / 8;
         sectionHeight = Gdx.graphics.getHeight();
 
@@ -160,7 +159,6 @@ public class VisualInput extends SquidInput {
      */
     public void init(String... enabled)
     {
-        initialized = true;
         if(!forceButtons && Gdx.input.isPeripheralAvailable(Input.Peripheral.HardwareKeyboard))
             return;
         init();
@@ -186,7 +184,6 @@ public class VisualInput extends SquidInput {
      */
     public void init(Map<Character, String> available)
     {
-        initialized = true;
         if(!forceButtons && Gdx.input.isPeripheralAvailable(Input.Peripheral.HardwareKeyboard))
             return;
         init();
@@ -264,6 +261,11 @@ public class VisualInput extends SquidInput {
     public void reinitialize(float cellWidth, float cellHeight, float gridWidth, float gridHeight,
                              int offsetX, int offsetY, float screenWidth, float screenHeight)
     {
+        if(!initialized)
+        {
+            mouse.reinitialize(cellWidth, cellHeight, gridWidth, gridHeight, offsetX, offsetY);
+            return;
+        }
         if(this.screenWidth > 0)
             sectionWidth *= screenWidth / this.screenWidth;
         else
@@ -306,5 +308,20 @@ public class VisualInput extends SquidInput {
 
     public int getSectionHeight() {
         return sectionHeight;
+    }
+
+    public void update(int width, int height, boolean centerCamera) {
+        if(initialized)
+        {
+            stage.getViewport().update(width, height, centerCamera);
+        }
+    }
+
+    public void show() {
+        if(initialized) {
+            stage.getViewport().apply(true);
+            stage.draw();
+            stage.act();
+        }
     }
 }
