@@ -441,7 +441,6 @@ public class EverythingDemo extends ApplicationAdapter {
         // stage.addActor(subCell); // this is not added since it is manually drawn after other steps
         stage.addActor(messages);
         viewport = input.resizeInnerStage(stage);
-
     }
     /**
      * Move the player or open closed doors, remove any monsters the player bumped, then update the DijkstraMap and
