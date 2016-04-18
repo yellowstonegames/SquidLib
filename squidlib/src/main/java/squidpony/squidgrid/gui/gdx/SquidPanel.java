@@ -127,7 +127,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             textFactory = new TextCellFactory();
         }
         else
-            textFactory = factory.copy();
+            textFactory = factory;
         if (!textFactory.initialized()) {
             textFactory.initByFont();
         }

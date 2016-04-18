@@ -189,21 +189,23 @@ public class EverythingDemo extends ApplicationAdapter {
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
-        textFactory = DefaultResources.getStretchableFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f));
+        textFactory = DefaultResources.getStretchableFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+                .width(cellWidth).height(cellHeight).initBySize();
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
-                textFactory, bgCenter, fgCenter);
+                textFactory.copy(), bgCenter, fgCenter);
         //subCell is a SquidPanel, the same class that SquidLayers has for each of its layers, but we want to render
         //certain effects on top of all other panels, which can't be done in the all-in-one-pass rendering of the grids
         //in SquidLayers, though it could be done with a slight hassle if the effects are made into AnimatedEntity
         //objects or Actors, then rendered separately like the monsters are (see render() below). It is called subCell
         //because its text will be made smaller than a full cell, and appears in the upper left corner for things like
         //the current health of the player and an '!' for alerted monsters.
-        subCell = new SquidPanel(width, height, textFactory, fgCenter);
+        subCell = new SquidPanel(width, height, textFactory.copy(), fgCenter);
 
         display.setAnimationDuration(0.1f);
-        messages = new SquidMessageBox(width, 4, textFactory);
+        messages = new SquidMessageBox(width, 4,
+                textFactory.copy());
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
@@ -431,7 +433,9 @@ public class EverythingDemo extends ApplicationAdapter {
                 return false;
             }
         }));
+        //set this to true to test visual input on desktop
         input.forceButtons = false;
+        //actions to give names to in the visual input menu
         input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));

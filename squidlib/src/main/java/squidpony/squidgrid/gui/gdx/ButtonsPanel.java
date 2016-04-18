@@ -1,27 +1,21 @@
 package squidpony.squidgrid.gui.gdx;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import squidpony.SquidTags;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ICombinedPanel;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
+
+import java.util.*;
 
 /**
  * A panel that layouts buttons vertically. It offers various features:
