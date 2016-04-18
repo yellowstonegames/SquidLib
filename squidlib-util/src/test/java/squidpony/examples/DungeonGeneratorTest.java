@@ -340,7 +340,14 @@ public class DungeonGeneratorTest {
         }
 */
     }
-    public static void mainAlt( String[] args ) {
+    // Generates a preview webpage when given the right images.
+    // See the following for generated images with different parameters (scroll down and right to see the map)
+    // http://tommyettinger.github.io/home/PixVoxel/dungeon/dungeon.html   (DungeonGenerator)
+    // http://tommyettinger.github.io/home/PixVoxel/dungeon/serpent.html   (SerpentMapGenerator)
+    // http://tommyettinger.github.io/home/PixVoxel/dungeon/occupied.html  (SectionDungeonGenerator with people)
+    // The assets are CC0 licensed (effectively public domain), made by me (Tommy Ettinger). If you intend to use
+    // them in a project, maybe ask to see if there's a newer version already made or in progress.
+    public static void mainAlt(String[] args ) {
         RNG rng = new RNG(2252637788195L);
         SectionDungeonGenerator dungeonGenerator = new SectionDungeonGenerator(120, 120, rng);
         dungeonGenerator.addDoors(15, true);
@@ -352,7 +359,8 @@ public class DungeonGeneratorTest {
         serpent.putWalledBoxRoomCarvers(3);
         serpent.putWalledRoundRoomCarvers(1);
         serpent.putCaveCarvers(6);
-        dungeonGenerator.generate(serpent.generate(), serpent.getEnvironment());
+        //dungeonGenerator.generate(serpent.generate(), serpent.getEnvironment());
+        dungeonGenerator.generate();
 
         dungeonGenerator.setDungeon(
                 DungeonUtility.hashesToLines(dungeonGenerator.getDungeon(), true));
@@ -367,6 +375,28 @@ public class DungeonGeneratorTest {
         }
         boolean even = true;
         StringBuilder sb = new StringBuilder(64000);
+        String[] people = new String[]{
+                "palette0_Hero_Chain_Bow_Iso.gif",
+                "palette0_Hero_Chain_Dagger_Iso.gif",
+                "palette0_Hero_Chain_Mace_Iso.gif",
+                "palette0_Hero_Chain_Staff_Iso.gif",
+                "palette0_Hero_Chain_Sword_Iso.gif",
+                "palette0_Hero_Leather_Bow_Iso.gif",
+                "palette0_Hero_Leather_Dagger_Iso.gif",
+                "palette0_Hero_Leather_Mace_Iso.gif",
+                "palette0_Hero_Leather_Staff_Iso.gif",
+                "palette0_Hero_Leather_Sword_Iso.gif",
+                "palette0_Hero_Plate_Bow_Iso.gif",
+                "palette0_Hero_Plate_Dagger_Iso.gif",
+                "palette0_Hero_Plate_Mace_Iso.gif",
+                "palette0_Hero_Plate_Robe_Iso.gif",
+                "palette0_Hero_Plate_Staff_Iso.gif",
+                "palette0_Hero_Plate_Sword_Iso.gif",
+                "palette0_Hero_Robe_Bow_Iso.gif",
+                "palette0_Hero_Robe_Dagger_Iso.gif",
+                "palette0_Hero_Robe_Staff_Iso.gif",
+                "palette0_Hero_Robe_Sword_Iso.gif"
+        };
         for(int row = 0, sx = -59, sy = 59; row < 240; ++row, even = (row % 2 == 0), sx += (even) ? 1 : 0, sy += (!even) ? 1 : 0)
         {
             sb.append("<div class=\"row\">\n");
@@ -383,7 +413,13 @@ public class DungeonGeneratorTest {
                     switch (iso[x][y])
                     {
                         case '.':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" />");
+                            if(rng.nextInt(120) == 0) {
+                                sb.append("<img class=\"ppl\" src=\"dungeon/");
+                                sb.append(rng.getRandomElement(people));
+                                sb.append("\" />");
+                            }
+                            sb.append("</div>\n");
                             break;
                         case '"':
                         case ':':
@@ -454,7 +490,6 @@ public class DungeonGeneratorTest {
                     }
                 }
             }
-
             sb.append("</div>\n");
         }
         try {

@@ -852,6 +852,8 @@ public class SectionDungeonGenerator {
                     dungeon[x][y] = ':';
                 else if(doorMap[x][y] == '+' || doorMap[x][y] == '/')
                     dungeon[x][y] = doorMap[x][y];
+                else if(doorMap[x][y] == '*')
+                    dungeon[x][y] = '#';
                 else if(roomMap[x][y] != '#')
                     dungeon[x][y] = roomMap[x][y];
                 else if(lakesAndMazes[1][x][y] != '#')
@@ -898,7 +900,8 @@ public class SectionDungeonGenerator {
             Coord entry = rng.getRandomElement(doorways);
             if (map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '>')
                 continue;
-            if (map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#') {
+            if (map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#' &&
+                    map[entry.x - 1][entry.y] != '*' && map[entry.x + 1][entry.y] != '*') {
                 map[entry.x][entry.y] = '+';
             } else {
                 map[entry.x][entry.y] = '/';
@@ -907,7 +910,7 @@ public class SectionDungeonGenerator {
                     Coord.get(entry.x, entry.y + 1), Coord.get(entry.x, entry.y - 1)};
             for (Coord near : adj) {
                 if (doorways.contains(near)) {
-                    map[near.x][near.y] = '#';
+                    map[near.x][near.y] = '*';
                     doorways.remove(near);
                     i++;
                     doorways.remove(entry);
