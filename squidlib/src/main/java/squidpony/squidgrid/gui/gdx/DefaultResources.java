@@ -325,7 +325,9 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.distanceSquare;
+        if(instance.distanceSquare != null)
+            return instance.distanceSquare.copy();
+        return null;
     }
     /**
      * Returns a TextCellFactory already configured to use a narrow font (twice as tall as it is wide) that should scale
@@ -346,7 +348,10 @@ public class DefaultResources implements LifecycleListener {
                 e.printStackTrace();
             }
         }
-        return instance.distanceNarrow;
+        if(instance.distanceNarrow != null)
+            return instance.distanceNarrow.copy();
+        return null;
+
     }
 
     /**
@@ -369,7 +374,9 @@ public class DefaultResources implements LifecycleListener {
                 e.printStackTrace();
             }
         }
-        return instance.typewriterDistanceNarrow;
+        if(instance.typewriterDistanceNarrow != null)
+            return instance.typewriterDistanceNarrow.copy();
+        return null;
     }
 
     /**

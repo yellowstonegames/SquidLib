@@ -38,8 +38,8 @@ public class VisualInput extends SquidInput {
         sectionWidth = Gdx.graphics.getWidth() / 8;
         sectionHeight = Gdx.graphics.getHeight();
 
-        tcfLeft = DefaultResources.getStretchableFont().copy().width(sectionWidth / 4).height(sectionHeight / 16).initBySize();
-        tcfRight = DefaultResources.getStretchableFont().copy().width(sectionWidth / 12).height(sectionHeight / 24).initBySize();
+        tcfLeft = DefaultResources.getStretchableFont().width(sectionWidth / 4).height(sectionHeight / 16).initBySize();
+        tcfRight = DefaultResources.getStretchableFont().width(sectionWidth / 12).height(sectionHeight / 24).initBySize();
 
         left = new SquidPanel(4, 16, tcfLeft);
         if(eightWay) {
