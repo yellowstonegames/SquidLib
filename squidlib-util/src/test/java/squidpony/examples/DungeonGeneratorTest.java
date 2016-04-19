@@ -235,6 +235,30 @@ public class DungeonGeneratorTest {
         System.out.println("------------------------------------------------------------");
 */
 
+        System.out.println("------------------------------------------------------------");
+        rng.setState(2252637788195L);
+        sdg = new SectionDungeonGenerator(width, height, rng);
+        //sdg.addDoors(12, false);
+        //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
+        //sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
+        //sdg.addWater(SectionDungeonGenerator.CAVE, 9);
+        //sdg.addMaze(30);
+        //sdg.addLake(10, '£', '¢');
+        rng.setState(0xFEEEEEEEEEL);
+        OrganicMapGenerator organic = new OrganicMapGenerator(0.0, 0.25, width, height, rng);
+        map = organic.generate();
+        env = organic.getEnvironment();
+        sdg.generate(map, env);
+        //RNG rand = new RNG();
+        //sdg.generate(rand.getRandomElement(TilesetType.values()));
+        sdungeon = sdg.getDungeon();
+        sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
+        sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdungeon, true)));
+        System.out.println(dungeonGenerator);
+
         /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(15, false);
