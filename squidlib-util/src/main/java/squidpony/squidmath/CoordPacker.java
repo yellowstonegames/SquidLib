@@ -3922,6 +3922,15 @@ public class CoordPacker {
     }
 
     /**
+     * Checks if any cells are encoded as "on" in packed.
+     * @param packed a packed array such as one produced by pack()
+     * @return true if there is at least one "on" cell in packed
+     */
+    public static boolean isEmpty(short[] packed)
+    {
+        return packed.length <= 1;
+    }
+    /**
      * Given two packed short arrays, left and right, this returns true if they encode any overlapping area (their areas
      * intersect), or false if they do not overlap at all (they don't intersect). This is more efficient than calculating
      * the intersection with intersectPacked() just to check if it is non-empty, since this method can short-circuit and
@@ -4001,8 +4010,9 @@ public class CoordPacker {
             return ALL_ON;
         }
         if (original[0] == 0) {
-            short[] copy = new short[original.length - 2];
-            System.arraycopy(original, 1, copy, 0, original.length - 2);
+            short[] copy = new short[original.length];
+            System.arraycopy(original, 1, copy, 0, original.length - 1);
+            copy[original.length - 1] = (short) (0xFFFF - covered(copy));
             return copy;
         }
         short[] copy = new short[original.length + 2];
