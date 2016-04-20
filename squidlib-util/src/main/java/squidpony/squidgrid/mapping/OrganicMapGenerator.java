@@ -17,15 +17,15 @@ public class OrganicMapGenerator {
     protected double noiseMin, noiseMax;
     public OrganicMapGenerator()
     {
-        this(0.3, 0.6, 80, 30, new RNG());
+        this(0.55, 0.65, 80, 30, new RNG());
     }
     public OrganicMapGenerator(int width, int height)
     {
-        this(0.3, 0.6, width, height, new RNG());
+        this(0.55, 0.65, width, height, new RNG());
     }
     public OrganicMapGenerator(int width, int height, RNG rng)
     {
-        this(0.3, 0.6, width, height, rng);
+        this(0.55, 0.65, width, height, rng);
     }
     public OrganicMapGenerator(double noiseMin, double noiseMax, int width, int height, RNG rng)
     {
@@ -45,20 +45,42 @@ public class OrganicMapGenerator {
      */
     public char[][] generate()
     {
-        double layer = rng.nextDouble(1024), temp;
-        boolean[][] working = new boolean[width][height];
-        int ctr = 0;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                map[x][y] = '#';
-                temp = PerlinNoise.noise(x / 2.5, y / 2.5, layer);
-                if (temp >= noiseMin && temp <= noiseMax) {
-                    working[x][y] = true;
-                    ctr++;
+        double shift, shift2, temp;
+        boolean[][] working = new boolean[width][height], blocks = new boolean[8][8];
+        int ctr = 0, frustration = 0;
+        REDO:
+        while (frustration < 10) {
+            shift = rng.nextDouble(2048);
+            shift2 = rng.between(4096, 8192);
+            ctr = 0;
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    map[x][y] = '#';
+                    temp = (PerlinNoise.noise(x / 1.8 + shift, y / 1.8 + shift) * 5
+                            + PerlinNoise.noise(x / 0.7 + shift2, y / 0.7 + shift2) * 3) / 8.0;
+                    if (temp >= noiseMin && temp <= noiseMax) {
+                        working[x][y] = true;
+                        ctr++;
+                        blocks[x * 8 / width][y * 8 / height] = true;
+                    }
+                    else
+                    {
+                        working[x][y] = false;
+                    }
                 }
             }
+            for (int x = 0; x < 8; x++) {
+                for (int y = 0; y < 8; y++) {
+                    if (!blocks[x][y]) {
+                        frustration++;
+                        ctr = 0;
+                        continue REDO;
+                    }
+                }
+            }
+            break;
         }
-        if(ctr < (width + height) * 3) {
+        if(ctr < (width + height) * 3 || frustration >= 10) {
             noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.05));
             noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.05));
             return generate();
@@ -66,8 +88,8 @@ public class OrganicMapGenerator {
         ctr = 0;
         ArrayList<short[]> allRegions = CoordPacker.split(CoordPacker.pack(working)),
                 regions = new ArrayList<>(allRegions.size());
-        short[] region, linking, r2;
-        List<Coord> path;
+        short[] region, linking, tempPacked;
+        List<Coord> path, path2;
         Coord start, end;
         char[][] t;
         for (short[] r : allRegions) {
@@ -77,39 +99,64 @@ public class OrganicMapGenerator {
                     continue;
                 regions.add(region);
                 ctr += CoordPacker.count(region);
-                r2 = CoordPacker.negatePacked(region);
-                map = CoordPacker.mask(map, r2, '.');
+                tempPacked = CoordPacker.negatePacked(region);
+                map = CoordPacker.mask(map, tempPacked, '.');
             }
         }
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                environment[x][y] = (map[x][y] == '.') ? MixedGenerator.CAVE_FLOOR : MixedGenerator.CAVE_WALL;
-            }
-        }
-        double oldSize = regions.size();
+        int oldSize = regions.size();
         if(oldSize < 4 || ctr < (width + height) * 3) {
             noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.05));
             noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.05));
             return generate();
         }
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                environment[x][y] = (map[x][y] == '.') ? MixedGenerator.CAVE_FLOOR : MixedGenerator.CAVE_WALL;
+            }
+        }
+        tempPacked = CoordPacker.pack(map, '.');
+        int tick = 1;
+        regions = rng.shuffle(regions);
         while (regions.size() > 1)
         {
-            region = regions.remove(rng.nextInt(regions.size()));
-            linking = regions.get(rng.nextInt(regions.size()));
-            if(rng.nextDouble(0.7) > regions.size() / oldSize) {
+
+            region = regions.remove(0);
+            /*
+            tick = (tick + 1) % 5;
+            if(tick == 0) {
                 ctr -= CoordPacker.count(region);
                 continue;
-            }
+            }*/
+            linking = regions.get(0);
             start = CoordPacker.singleRandom(region, rng);
             end = CoordPacker.singleRandom(linking, rng);
             path = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.7, rng);
             for(Coord elem : path)
             {
-                if(elem.x < width && elem.y < height && map[elem.x][elem.y] == '#')
-                {
-                    map[elem.x][elem.y] = '.';
-                    environment[elem.x][elem.y] = MixedGenerator.CORRIDOR_FLOOR;
-                    ctr++;
+                if(elem.x < width && elem.y < height) {
+                    if (map[elem.x][elem.y] == '#') {
+                        map[elem.x][elem.y] = '.';
+                        environment[elem.x][elem.y] = MixedGenerator.CORRIDOR_FLOOR;
+                        ctr++;
+                    } else if (rng.nextBoolean() &&
+                            CoordPacker.queryPacked(CoordPacker.differencePacked(tempPacked, region), elem.x, elem.y)) {
+                        linking = regions.get(rng.nextInt(regions.size()));
+                        start = elem;
+                        end = CoordPacker.singleRandom(linking, rng);
+                        path2 = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.7, rng);
+                        for(Coord elem2 : path)
+                        {
+                            if(elem2.x < width && elem2.y < height) {
+                                if (map[elem2.x][elem2.y] == '#') {
+                                    map[elem2.x][elem2.y] = '.';
+                                    environment[elem2.x][elem2.y] = MixedGenerator.CORRIDOR_FLOOR;
+                                    ctr++;
+                                }
+                            }
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -127,6 +174,7 @@ public class OrganicMapGenerator {
             environment[0][i] = MixedGenerator.UNTOUCHED;
             environment[upperX][i] = MixedGenerator.UNTOUCHED;
         }
+
         if(ctr < (width + height) * 3) {
             noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.05));
             noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.05));
