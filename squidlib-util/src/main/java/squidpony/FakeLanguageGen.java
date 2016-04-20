@@ -562,6 +562,57 @@ public class FakeLanguageGen implements Serializable {
             new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{1, 7, 6, 4, 2}, 0.2, 1.0, 0.0, 0.25, null, true);
 
     /**
+     * Imitation Somali, using the Latin alphabet. Due to uncommon word structure, unusual allowed combinations of
+     * letters, and no common word roots with most familiar languages, this may seem like an unidentifiable or "alien"
+     * language to most readers. However, it's based on the Latin writing system for the Somali language (probably
+     * closest to the northern dialect), which due to the previously mentioned properties, makes it especially good for
+     * mixing with other languages to make letter combinations that seem strange to appear. It is unlikely that this
+     * particular generated language style will be familiar to readers, so it probably won't have existing stereotypes
+     * associated with the text. One early comment this received was, "it looks like a bunch of letters semi-randomly
+     * thrown together", which is probably a typical response (the comment was made by someone fluent in German and
+     * English, and most Western European languages are about as far as you can get from Somali).
+     * <br>
+     * Ja jubeeqasaax aboqokhag kaddotuufdis.
+     */
+    public static final FakeLanguageGen SOMALI = new FakeLanguageGen(
+            new String[]{"a", "a", "a", "a", "a", "a", "a", "aa", "aa", "aa",
+                    "e", "e", "ee",
+                    "i", "i", "i", "i", "ii",
+                    "o", "o", "o", "oo",
+                    "u", "u", "u", "uu", "uu",
+                    },
+            new String[]{},
+            new String[]{"b", "t", "j", "x", "kh", "d", "r", "s", "sh", "dh", "c", "g", "f", "q", "k", "l", "m",
+                    "n", "w", "h", "y",
+                    "x", "g", "b", "d", "s", "m", "dh", "n", "r",
+                    "g", "b", "s", "dh",
+            },
+            new String[]{
+                    "bb", "gg", "dd", "bb", "dd", "rr", "ddh", "cc", "gg", "ff", "ll", "mm", "nn",
+                    "bb", "gg", "dd", "bb", "dd", "gg",
+                    "bb", "gg", "dd", "bb", "dd", "gg",
+                    "cy", "fk", "ft", "nt", "rt", "lt", "qm", "rdh", "rsh", "lq",
+                    "my", "gy", "by", "lkh", "rx", "md", "bd", "dg", "fd", "mf",
+                    "dh", "dh", "dh", "dh",
+            },
+            new String[]{
+                    "b", "t", "j", "x", "kh", "d", "r", "s", "sh", "c", "g", "f", "q", "k", "l", "m", "n", "h",
+                    "x", "g", "b", "d", "s", "m", "q", "n", "r",
+                    "b", "t", "j", "x", "kh", "d", "r", "s", "sh", "c", "g", "f", "q", "k", "l", "m", "n", "h",
+                    "x", "g", "b", "d", "s", "m", "q", "n", "r",
+                    "b", "t", "j", "x", "kh", "d", "r", "s", "sh", "c", "g", "f", "q", "k", "l", "m", "n",
+                    "g", "b", "d", "s", "q", "n", "r",
+                    "b", "t", "x", "kh", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
+                    "g", "b", "d", "s", "r", "n",
+                    "b", "t", "kh", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
+                    "g", "b", "d", "s", "r", "n",
+                    "b", "t", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
+                    "g", "b", "d", "s", "r", "n",
+            },
+            new String[]{"aw", "ow", "ay", "ey", "oy"},
+            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 4, 5, 4, 1}, 0.25, 0.3, 0.0, 0.07, null, true);
+
+    /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
      * creature or place names in fantasy settings.
      * <br>
