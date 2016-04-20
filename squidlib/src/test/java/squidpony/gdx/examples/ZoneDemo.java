@@ -14,6 +14,7 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.OrganicMapGenerator;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
@@ -57,11 +58,11 @@ public class ZoneDemo extends ApplicationAdapter {
         cellHeight = 16;
         TextCellFactory tcf = DefaultResources.getStretchableFont().addSwap('.', ' ');
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
-        display.setAnimationDuration(0.05f);
+        display.setAnimationDuration(0.2f);
         display.setTextSize(cellWidth, cellHeight + 1);
         stage = new Stage(new ScreenViewport(), batch);
 
-        rng = new RNG(0x7ECCBABBL);
+        rng = new RNG(0xBABABADAL);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
 //        dungeonGen.addWater(10);
@@ -71,7 +72,8 @@ public class ZoneDemo extends ApplicationAdapter {
         serpent.putWalledBoxRoomCarvers(2);
         serpent.putWalledRoundRoomCarvers(2);
         serpent.putCaveCarvers(4);
-        bareDungeon = dungeonGen.generate(serpent.generate());
+        OrganicMapGenerator organic = new OrganicMapGenerator(0.55, 0.65, width, height, rng);
+        bareDungeon = dungeonGen.generate(organic.generate());
         //bareDungeon = DungeonUtility.closeDoors(bareDungeon);
 
         //lineDungeon = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(bareDungeon));
@@ -162,14 +164,14 @@ public class ZoneDemo extends ApplicationAdapter {
                 }
                 else
                 {
-                    float hue = colorCenter.getHue(influenceColors[inf[0]]),
+                    float hue = colorCenter.getHue(influenceColors[inf[0]]) + 1f,
                             sat = colorCenter.getSaturation(influenceColors[inf[0]]),
                             val = colorCenter.getValue(influenceColors[inf[0]]),
                             tempHue;
-                    if(hue < 0.5) hue += 1f;
+                    //if(hue < 0.5) hue += 1f;
                     for (int i = 1; i < inf.length; i++) {
-                        tempHue = colorCenter.getHue(influenceColors[inf[i]]);
-                        if(tempHue < 0.5) tempHue += 1f;
+                        tempHue = colorCenter.getHue(influenceColors[inf[i]]) + 1f;
+                        //if(tempHue < 0.5) tempHue += 1f;
                         hue += tempHue;
                         sat += colorCenter.getSaturation(influenceColors[inf[i]]);
                         val += colorCenter.getValue(influenceColors[inf[i]]);
@@ -193,6 +195,7 @@ public class ZoneDemo extends ApplicationAdapter {
                 //display.put(i * 2 + 1, j, lineDungeon[i * 2 + 1][j], textColor, bgColors[i][j], lights[i][j]);
             }
         }
+        display.putString(2, 0, String.valueOf(Gdx.graphics.getFramesPerSecond()));
     }
     @Override
     public void render () {
@@ -218,6 +221,7 @@ public class ZoneDemo extends ApplicationAdapter {
             //if (secondsWithoutAnimation >= 0.05f) {
             //}
         }
+
 /*
             secondsWithoutAnimation += Gdx.graphics.getDeltaTime();
             if (secondsWithoutAnimation >= 0.01f) {

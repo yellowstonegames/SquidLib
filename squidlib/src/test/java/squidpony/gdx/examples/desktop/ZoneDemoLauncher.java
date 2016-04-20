@@ -14,6 +14,8 @@ public class ZoneDemoLauncher {
 		config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
 		config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
 		config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
+		config.vSyncEnabled = false;
+        config.foregroundFPS = 0;
 		new LwjglApplication(new ZoneDemo(), config);
 	}
 }
