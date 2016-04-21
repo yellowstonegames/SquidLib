@@ -572,7 +572,7 @@ public class FakeLanguageGen implements Serializable {
      * thrown together", which is probably a typical response (the comment was made by someone fluent in German and
      * English, and most Western European languages are about as far as you can get from Somali).
      * <br>
-     * Ja jubeeqasaax aboqokhag kaddotuufdis.
+     * Libor cat naqoxekh dhuugad gisiqir?
      */
     public static final FakeLanguageGen SOMALI = new FakeLanguageGen(
             new String[]{"a", "a", "a", "a", "a", "a", "a", "aa", "aa", "aa",
@@ -609,8 +609,8 @@ public class FakeLanguageGen implements Serializable {
                     "b", "t", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
                     "g", "b", "d", "s", "r", "n",
             },
-            new String[]{"aw", "ow", "ay", "ey", "oy"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 4, 5, 4, 1}, 0.25, 0.3, 0.0, 0.07, null, true);
+            new String[]{"aw", "ow", "ay", "ey", "oy", "ay", "ay"},
+            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 4, 5, 4, 1}, 0.25, 0.3, 0.0, 0.08, null, true);
 
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for

@@ -29,7 +29,7 @@ public class GwtCompatibility {
 	 */
 	/* smelC: because Math.IEEEremainder isn't GWT compatible */
 	public static double IEEEremainder(double op, double d) {
-		final double div = op / d;
+		final double div = Math.round(op / d);
 		return op - (div * d);
 	}
 

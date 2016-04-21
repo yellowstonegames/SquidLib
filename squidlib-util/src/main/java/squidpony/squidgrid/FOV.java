@@ -319,7 +319,7 @@ public class FOV {
                     continue;
                 }
                 double newAngle = Math.atan2(y2 - starty, x2 - startx) + Math.PI * 2;
-				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0)
+				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle + Math.PI * 8, Math.PI * 2)) > span / 2.0)
 					continue;
 
                 double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy );
@@ -472,7 +472,7 @@ public class FOV {
                     break;
                 }
                 double newAngle = Math.atan2(currentY - starty, currentX - startx) + Math.PI * 2;
-				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle, Math.PI * 2)) > span / 2.0)
+				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle + Math.PI * 8, Math.PI * 2)) > span / 2.0)
 					continue;
 
                 double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
