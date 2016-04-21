@@ -51,4 +51,76 @@ public class GwtCompatibility {
         return null;
     }
 
+    /**
+     * Gets a copy of the 2D char array, source, that has the same data but shares no references with source.
+     * @param source a 2D char array
+     * @return a copy of source, or null if source is null
+     */
+	public static char[][] copy2D(char[][] source)
+	{
+		if(source == null)
+			return null;
+		if(source.length < 1)
+			return new char[0][0];
+		char[][] target = new char[source.length][source[0].length];
+		for (int i = 0; i < source.length && i < target.length; i++) {
+			System.arraycopy(source[i], 0, target[i], 0, source[i].length);
+		}
+		return target;
+	}
+
+    /**
+     * Gets a copy of the 2D double array, source, that has the same data but shares no references with source.
+     * @param source a 2D double array
+     * @return a copy of source, or null if source is null
+     */
+	public static double[][] copy2D(double[][] source)
+	{
+		if(source == null)
+			return null;
+		if(source.length < 1)
+			return new double[0][0];
+		double[][] target = new double[source.length][source[0].length];
+		for (int i = 0; i < source.length && i < target.length; i++) {
+			System.arraycopy(source[i], 0, target[i], 0, source[i].length);
+		}
+		return target;
+	}
+
+    /**
+     * Gets a copy of the 2D int array, source, that has the same data but shares no references with source.
+     * @param source a 2D int array
+     * @return a copy of source, or null if source is null
+     */
+    public static int[][] copy2D(int[][] source)
+    {
+        if(source == null)
+            return null;
+        if(source.length < 1)
+            return new int[0][0];
+        int[][] target = new int[source.length][source[0].length];
+        for (int i = 0; i < source.length && i < target.length; i++) {
+            System.arraycopy(source[i], 0, target[i], 0, source[i].length);
+        }
+        return target;
+    }
+
+    /**
+     * Gets a copy of the 2D boolean array, source, that has the same data but shares no references with source.
+     * @param source a 2D boolean array
+     * @return a copy of source, or null if source is null
+     */
+    public static boolean[][] copy2D(boolean[][] source)
+    {
+        if(source == null)
+            return null;
+        if(source.length < 1)
+            return new boolean[0][0];
+        boolean[][] target = new boolean[source.length][source[0].length];
+        for (int i = 0; i < source.length && i < target.length; i++) {
+            System.arraycopy(source[i], 0, target[i], 0, source[i].length);
+        }
+        return target;
+    }
+
 }
