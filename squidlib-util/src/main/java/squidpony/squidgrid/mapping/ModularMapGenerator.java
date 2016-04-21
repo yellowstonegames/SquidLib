@@ -68,7 +68,7 @@ public class ModularMapGenerator {
         putRectangle(18, 9, multiplier);
         putRectangle(14, 18, multiplier);
         putRectangle(18, 14, multiplier);
-        putCircle(6, multiplier);
+        putCircle(7, multiplier);
     }
 
     /**
@@ -124,8 +124,8 @@ public class ModularMapGenerator {
         rebuildSeed = rng.getState();
         height = copying.height;
         width = copying.width;
-        map = copying.map;
-        environment = copying.environment;
+        map = GwtCompatibility.copy2D(copying.map);
+        environment = GwtCompatibility.copy2D(copying.environment);
         mazeGenerator = new PacMazeGenerator(width, height, rng);
         initModules();
     }
@@ -148,32 +148,61 @@ public class ModularMapGenerator {
 
     public char[][] generate()
     {
-        int minDim = Math.min(height, width), maxDim = Math.max(height, width), numCores, numOuter;
+        int minDim = Math.min(height, width), adjMin = Math.min(minDim, 20),
+                maxDim = Math.max(height, width), adjMax = Math.min(maxDim, 25);
         MapModule mm;
 
         // you gave it a tiny map, what can it do?
         if(minDim < 16) {
 
             mm = rng.getRandomElement(modules.values().toList());
-            map = GwtCompatibility.first(modules.allAt(rng.between(3, minDim), rng.between(3, minDim))).map;
+            map = GwtCompatibility.first(modules.allAt(rng.between(3, adjMin), rng.between(3, adjMin))).map;
             return DungeonUtility.wallWrap(map);
         }
 
-        int frustration = 0;
-        while ((mm = rng.getRandomElement(modules.allAt(rng.between(4, minDim), rng.between(4, minDim)))) == null
+        int frustration = 0, wrath = 0, count = 0;
+        while ((mm = rng.getRandomElement(modules.allAt(rng.between(adjMin / 3, adjMin), rng.between(adjMin / 3, adjMin)))) == null
                         && frustration++ < 50)
-        {}
+        {} // intentionally empty, assigns in check for loop termination
         if(frustration >= 50 || mm == null)
         {
             mm = rng.getRandomElement(modules.values().toList());
-            map = GwtCompatibility.first(modules.allAt(rng.between(3, minDim), rng.between(3, minDim))).map;
+            map = GwtCompatibility.first(modules.allAt(rng.between(3, adjMin), rng.between(3, adjMin))).map;
             return DungeonUtility.wallWrap(map);
         }
         // ok, mm is valid.
+        frustration = 0;
 
-        int placeX = rng.nextInt(minDim - mm.max.x), placeY = rng.nextInt(minDim - mm.max.y);
+        int placeX = rng.nextInt(minDim - mm.max.x - 4) + 4, placeY = rng.nextInt(minDim - mm.max.y - 4) + 4;
         for (int x = 0; x < mm.max.x; x++) {
             System.arraycopy(mm.map[x], 0, map[x + placeX], placeY, mm.max.y);
+            count += mm.max.y;
+        }
+        int coreMinX = placeX, coreMinY = placeY,
+                coreMaxX = placeX + mm.max.x, coreMaxY = placeY + mm.max.y,
+                nodeWidth = Math.min(coreMinX, width - coreMaxX + 1),
+                nodeHeight = Math.min(coreMinY, height - coreMaxY + 1);
+        while (count < width * height * 0.3 && wrath < 50)
+        {
+            while ((mm = rng.getRandomElement(inverseModules.allAt(rng.nextInt(nodeWidth), rng.nextInt(nodeHeight)))) == null
+                    && frustration++ < 50)
+            {} // intentionally empty, assigns in check for loop termination
+            if(frustration >= 50 || mm == null)
+                break;
+            frustration = 0;
+            placeY = rng.nextInt(coreMinY);
+            do {
+
+
+                placeX = coreMinX; //rng.between(coreMinX, coreMaxX)
+                for (int x = 0; x < mm.max.x; x++) {
+                    System.arraycopy(mm.map[x], 0, map[x + placeX], placeY, mm.max.y);
+                    count += mm.max.y;
+                }
+                placeX += mm.max.x + 1;
+            }while (placeX < coreMaxX);
+
+            wrath++;
         }
 
         return map;
