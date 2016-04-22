@@ -83,7 +83,14 @@ public class RandomBias implements Serializable {
      * contributing half of the correction needed to match the expected average. An expected average of 5/6 will produce
      * an approximate average with this of 3/4, as opposed to 2/3 (for pure TRIANGULAR) or 5/6 (for EXPONENTIAL).
      */
-    EXP_TRI = 4;
+    EXP_TRI = 4,
+    /**
+     * "Bathtub-shaped" or "U-shaped" distribution (technically the arcsine distribution) that is significantly more
+     * likely to produce results at either extreme than it is to generate them in the center. The extremes in this case
+     * are the same as the truncated distribution, so not all values are possible unless the expected average is 0.5.
+     */
+    BATHTUB_TRUNCATED = 5;
+
     private static final int softRange = 1 << 24;
 
     private static final long serialVersionUID = 4245874924013134958L;
@@ -160,6 +167,7 @@ public class RandomBias implements Serializable {
             case TRUNCATED: return truncatedQuantile(d);
             case TRIANGULAR: return triangularQuantile(d);
             case SOFT_TRIANGULAR: return softQuantile(d);
+            case BATHTUB_TRUNCATED: return bathtubTruncatedQuantile(d);
             default: return mixQuantile(d);
         }
     }
@@ -179,6 +187,16 @@ public class RandomBias implements Serializable {
         if(d >= 0.5)
             return rng.nextDouble() * (1.0 - d) * 2 + d - (1.0 - d);
         return rng.nextDouble() * d * 2;
+    }
+    private double bathtubQuantile(double d)
+    {
+        return Math.asin(d * 2 - 1) / Math.PI + 0.5;
+    }
+    private double bathtubTruncatedQuantile(double d)
+    {
+        if(d >= 0.5)
+            return bathtubQuantile(rng.nextDouble()) * (1.0 - d) * 2 + d - (1.0 - d);
+        return bathtubQuantile(rng.nextDouble()) * d * 2;
     }
     private double exponentialQuantile(double d)
     {
