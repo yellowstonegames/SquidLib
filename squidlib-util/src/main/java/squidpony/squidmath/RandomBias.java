@@ -190,7 +190,8 @@ public class RandomBias implements Serializable {
     }
     private double bathtubQuantile(double d)
     {
-        return Math.asin(d * 2 - 1) / Math.PI + 0.5;
+        d = Math.sin(d * Math.PI * 0.5);
+        return d * d;
     }
     private double bathtubTruncatedQuantile(double d)
     {
