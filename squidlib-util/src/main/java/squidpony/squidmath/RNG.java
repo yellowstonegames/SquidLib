@@ -560,7 +560,6 @@ public class RNG implements Serializable {
     /**
      * @return a value from the gaussian distribution
      */
-    @GwtIncompatible /* because of StrictMath.log() */
     public synchronized double nextGaussian() {
         if (haveNextNextGaussian) {
             haveNextNextGaussian = false;
@@ -572,7 +571,7 @@ public class RNG implements Serializable {
                 v2 = 2 * nextDouble() - 1; // between -1 and 1
                 s = v1 * v1 + v2 * v2;
             } while (s >= 1 || s == 0);
-            double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
+            double multiplier = Math.sqrt(-2 * Math.log(s) / s);
             nextNextGaussian = v2 * multiplier;
             haveNextNextGaussian = true;
             return v1 * multiplier;

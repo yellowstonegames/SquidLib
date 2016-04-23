@@ -131,7 +131,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public double nextDouble(double max) {
-        return nextDouble() * max;
+        return super.nextDouble(max);
     }
 
     /**
@@ -144,7 +144,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public double between(double min, double max) {
-        return min + (max - min) * nextDouble();
+        return super.between(min, max);
     }
 
     /**
@@ -158,8 +158,9 @@ public class DharmaRNG extends RNG {
      * @return the found value
      */
     @Override
-    public int between(int min, int max) {
-        return nextInt(max - min) + min;
+    public int between(int min, int max)
+    {
+        return super.between(min, max);
     }
 
     /**
@@ -179,13 +180,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public int betweenWeighted(int min, int max, int samples) {
-        int sum = 0;
-        for (int i = 0; i < samples; i++) {
-            sum += between(min, max);
-        }
-
-        int answer = Math.round((float) sum / samples);
-        return answer;
+        return super.betweenWeighted(min, max, samples);
     }
 
     /**
@@ -198,10 +193,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public <T> T getRandomElement(T[] array) {
-        if (array.length < 1) {
-            return null;
-        }
-        return array[nextInt(array.length)];
+        return super.getRandomElement(array);
     }
 
     /**
@@ -214,10 +206,7 @@ public class DharmaRNG extends RNG {
      */
     @Override
     public <T> T getRandomElement(List<T> list) {
-        if (list.size() <= 0) {
-            return null;
-        }
-        return list.get(nextInt(list.size()));
+        return super.getRandomElement(list);
     }
 
     /**
@@ -232,16 +221,7 @@ public class DharmaRNG extends RNG {
      * @return the randomly selected element
      */
     public short getRandomElement(ShortSet set) {
-        if (set.size <= 0) {
-            throw new UnsupportedOperationException("ShortSet cannot be empty when getting a random element");
-        }
-        int n = nextInt(set.size);
-        short s = 0;
-        ShortSet.ShortSetIterator ssi = set.iterator();
-        while (n-- >= 0 && ssi.hasNext)
-            s = ssi.next();
-        ssi.reset();
-        return s;
+        return super.getRandomElement(set);
     }
 
     /**
@@ -262,38 +242,15 @@ public class DharmaRNG extends RNG {
      * @return the randomly selected element
      */
     public <T> T getRandomElement(Collection<T> coll) {
-        if (coll.size() <= 0) {
-            return null;
-        }
-        int n = nextInt(coll.size());
-        T t = null;
-        Iterator<T> it = coll.iterator();
-        while (n-- >= 0 && it.hasNext())
-            t = it.next();
-        return t;
+        return super.getRandomElement(coll);
     }
 
     /**
      * @return a value from the gaussian distribution
      */
     @Override
-    @GwtIncompatible
     public synchronized double nextGaussian() {
-        if (haveNextNextGaussian) {
-            haveNextNextGaussian = false;
-            return nextNextGaussian;
-        } else {
-            double v1, v2, s;
-            do {
-                v1 = 2 * nextDouble() - 1; // between -1 and 1
-                v2 = 2 * nextDouble() - 1; // between -1 and 1
-                s = v1 * v1 + v2 * v2;
-            } while (s >= 1 || s == 0);
-            double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
-            nextNextGaussian = v2 * multiplier;
-            haveNextNextGaussian = true;
-            return v1 * multiplier;
-        }
+        return super.nextGaussian();
     }
     /**
      * Returns a random integer below the given bound, or 0 if the bound is 0 or
