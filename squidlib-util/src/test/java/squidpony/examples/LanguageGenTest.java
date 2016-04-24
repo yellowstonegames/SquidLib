@@ -183,6 +183,12 @@ public class LanguageGenTest {
         System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
 
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.HINDI_ROMANIZED;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
+                    new String[]{".", ".", ".", "!", "?"}, 0.12));
+        }
 
         //For generating the random guard interjections in some demos
         /*
