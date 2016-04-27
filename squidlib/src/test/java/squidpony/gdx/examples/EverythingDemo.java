@@ -647,7 +647,7 @@ public class EverythingDemo extends ApplicationAdapter {
         	gcp.putFG(0, 4, helping3);
 		} else {
 			/*
-			 * Use TextPanel. There's less job to do than with
+			 * Use SquidTextPanel. There's less job to do than with
 			 * GroupCombinedPanel. It doesn't seem like it when reading this
 			 * code, but this actually does much more than GroupCombinedPanel,
 			 * because we do line wrapping and justifying, without having to
@@ -657,7 +657,7 @@ public class EverythingDemo extends ApplicationAdapter {
 			 * It actually looks worse than the GroupCombinedPanel business, but
 			 * hey that's to show you an example!
 			 */
-			final TextPanel<Color> tp = new TextPanel<Color>() {
+			final SquidTextPanel<Color> tp = new SquidTextPanel<Color>() {
 				@Override
 				protected ISquidPanel<Color> buildPanel(int width, int height) {
 					return new SquidPanel(width, height, display.getTextFactory());
@@ -860,8 +860,8 @@ public class EverythingDemo extends ApplicationAdapter {
             fgCenter.clearCache();
             bgCenter.clearCache();
         }
-		if (help instanceof TextPanel) {
-			final TextPanel<?> tp = (TextPanel<?>) help;
+		if (help instanceof SquidTextPanel) {
+			final SquidTextPanel<?> tp = (SquidTextPanel<?>) help;
 			/*
 			 * Needed because drawing the stage erased them. No big deal,
 			 * ShapeRenderer is super fast.

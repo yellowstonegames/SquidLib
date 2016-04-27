@@ -120,6 +120,12 @@ public interface ISquidPanel<T> {
 	int cellHeight();
 
 	/**
+	 * @return Returns true if there are animations running when this method is
+	 *         called.
+	 */
+	boolean hasActiveAnimations();
+
+	/**
 	 * Sets the default foreground color.
 	 * 
 	 * @param color
