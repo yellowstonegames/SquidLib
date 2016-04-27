@@ -10,6 +10,8 @@ import java.util.*;
  * Generator for maps of high-tech areas like space stations or starships, with repeated modules laid out in random ways.
  * Different from traditional fantasy dungeon generation in that it should seem generally less chaotic in how it's laid
  * out, and repeated elements with minor tweaks should be especially common.
+ * <br>
+ * Preview: https://gist.github.com/tommyettinger/c711f8fc83fa9919245d88092444bf7f
  * Created by Tommy Ettinger on 4/2/2016.
  */
 @Beta
@@ -22,14 +24,15 @@ public class ModularMapGenerator {
 
     protected char[][] map = null;
     protected int[][] environment = null;
-    private PacMazeGenerator mazeGenerator;
     //public RegionMap<MapModule> layout, modules, inverseModules;
     public RegionMap<MapModule> layout;
     public LinkedHashMap<Integer, ArrayList<MapModule>> modules;
     public LinkedHashMap<Coord, MapModule> displacement;
     private void putModule(short[] module)
     {
-        MapModule mm = new MapModule(CoordPacker.unpackChar(module, '.', '#'));
+        char[][] unp = CoordPacker.unpackChar(module, '.', '#');
+        MapModule mm = new MapModule(GwtCompatibility.insert2D(unp,
+                GwtCompatibility.fill2D('#', unp.length + 2, unp[0].length + 2), 1, 1));
         //short[] b = CoordPacker.rectangle(1 + mm.max.x, 1 + mm.max.y);
         //modules.put(b, mm);
         //inverseModules.put(CoordPacker.negatePacked(b), mm);
@@ -48,9 +51,9 @@ public class ModularMapGenerator {
     }
     private void putCircle(int radius, float multiplier)
     {
-        putModule(CoordPacker.circle(Coord.get(Math.round(radius * multiplier), Math.round(radius * multiplier)),
+        putModule(CoordPacker.circle(Coord.get(Math.round(radius * multiplier + 1), Math.round(radius * multiplier + 1)),
                 Math.round(radius * multiplier),
-                Math.round((radius+1)*2 * multiplier), Math.round((radius+1)*2 * multiplier)));
+                Math.round((radius+1)*2 * multiplier + 1), Math.round((radius+1)*2 * multiplier + 1)));
     }
 
     private void initModules()
@@ -59,8 +62,12 @@ public class ModularMapGenerator {
         //modules = new RegionMap<>(64);
         //inverseModules = new RegionMap<>(64);
         modules = new LinkedHashMap<>(64);
+        for (int i = 1; i <= 64; i <<= 1) {
+            ArrayList<MapModule> mms = new ArrayList<>(16);
+            modules.put(i, mms);
+        }
         displacement = new LinkedHashMap<>(64);
-        float multiplier = (float) Math.sqrt(Math.max(1f, Math.min(width, height) / 24f));
+        float multiplier = 1;//(float) Math.sqrt(Math.max(1f, Math.min(width, height) / 24f));
         putRectangle(2, 2, multiplier);
         putRectangle(3, 3, multiplier);
         putRectangle(4, 4, multiplier);
@@ -122,7 +129,6 @@ public class ModularMapGenerator {
         for (int x = 0; x < this.width; x++) {
             Arrays.fill(map[x], '#');
         }
-        mazeGenerator = new PacMazeGenerator(width, height, this.rng);
         initModules();
     }
 
@@ -139,7 +145,6 @@ public class ModularMapGenerator {
         width = copying.width;
         map = GwtCompatibility.copy2D(copying.map);
         environment = GwtCompatibility.copy2D(copying.environment);
-        mazeGenerator = new PacMazeGenerator(width, height, rng);
         layout = new RegionMap<>(copying.layout);
         modules = new LinkedHashMap<>(copying.modules);
     }
@@ -160,69 +165,6 @@ public class ModularMapGenerator {
         return DungeonUtility.simplifyDungeon(map);
     }
 
-    /*
-    public char[][] generate()
-    {
-        int minDim = Math.min(height, width), adjMin = Math.min(minDim, 20),
-                maxDim = Math.max(height, width), adjMax = Math.min(maxDim, 25);
-        MapModule mm;
-
-        // you gave it a tiny map, what can it do?
-        if(minDim < 16) {
-
-            mm = rng.getRandomElement(modules.values().toList());
-            map = GwtCompatibility.first(modules.allAt(rng.between(3, adjMin), rng.between(3, adjMin))).map;
-            return DungeonUtility.wallWrap(map);
-        }
-
-        int frustration = 0, wrath = 0, count = 0;
-        while ((mm = rng.getRandomElement(modules.allAt(rng.between(adjMin / 3, adjMin), rng.between(adjMin / 3, adjMin)))) == null
-                        && frustration++ < 50)
-        {} // intentionally empty, assigns in check for loop termination
-        if(frustration >= 50 || mm == null)
-        {
-            mm = rng.getRandomElement(modules.values().toList());
-            map = GwtCompatibility.first(modules.allAt(rng.between(3, adjMin), rng.between(3, adjMin))).map;
-            return DungeonUtility.wallWrap(map);
-        }
-        // ok, mm is valid.
-        frustration = 0;
-
-        int placeX = rng.nextInt(minDim - mm.max.x - 4) + 4, placeY = rng.nextInt(minDim - mm.max.y - 4) + 4;
-        for (int x = 0; x < mm.max.x; x++) {
-            System.arraycopy(mm.map[x], 0, map[x + placeX], placeY, mm.max.y);
-            count += mm.max.y;
-        }
-        int coreMinX = placeX, coreMinY = placeY,
-                coreMaxX = placeX + mm.max.x, coreMaxY = placeY + mm.max.y,
-                nodeWidth = Math.min(coreMinX, width - coreMaxX + 1),
-                nodeHeight = Math.min(coreMinY, height - coreMaxY + 1);
-        while (count < width * height * 0.3 && wrath < 50)
-        {
-            while ((mm = rng.getRandomElement(inverseModules.allAt(rng.nextInt(nodeWidth), rng.nextInt(nodeHeight)))) == null
-                    && frustration++ < 50)
-            {} // intentionally empty, assigns in check for loop termination
-            if(frustration >= 50 || mm == null)
-                break;
-            frustration = 0;
-            placeY = rng.nextInt(coreMinY);
-            do {
-
-
-                placeX = coreMinX; //rng.between(coreMinX, coreMaxX)
-                for (int x = 0; x < mm.max.x; x++) {
-                    System.arraycopy(mm.map[x], 0, map[x + placeX], placeY, mm.max.y);
-                    count += mm.max.y;
-                }
-                placeX += mm.max.x + 1;
-            }while (placeX < coreMaxX);
-
-            wrath++;
-        }
-
-        return map;
-    }
-    */
     public char[][] generate()
     {
         MapModule mm, mm2;
@@ -233,15 +175,17 @@ public class ModularMapGenerator {
             if(width / alteredSize <= 0 || height / alteredSize <= 0)
                 continue;
             grid = new Coord[width / alteredSize][height / alteredSize];
-            for (int xLimit = alteredSize, x = 0; xLimit <= width; xLimit += alteredSize, x += alteredSize) {
-                for (int yLimit = alteredSize, y = 0; yLimit <= height; yLimit += alteredSize, y += alteredSize) {
-                    if (layout.allAt(x, y).isEmpty() && (bits <= 3 || rng.nextInt(6) < bits)) {
-                        mm = rng.getRandomElement(modules.get(categorySize)).rotate(rng.nextInt(4));
+            for (int xLimit = alteredSize - 1, x = 0; xLimit < width; xLimit += alteredSize, x += alteredSize) {
+                for (int yLimit = alteredSize - 1, y = 0; yLimit < height; yLimit += alteredSize, y += alteredSize) {
+                    if (layout.allAt(x + alteredSize / 2, y + alteredSize / 2).isEmpty()) // && (bits <= 3 || rng.nextInt(5) < bits)
+                    {
+                        mm = rng.getRandomElement(modules.get(categorySize));
                         if (mm == null) break;
+                        mm = mm.rotate(rng.nextInt(4));
                         xPos = rng.nextInt(3) << (bits - 2);
                         yPos = rng.nextInt(3) << (bits - 2);
-                        for (int px = 0; px < mm.max.x; px++) {
-                            System.arraycopy(mm.map[px], 0, map[px + x + xPos], y + yPos, mm.max.y);
+                        for (int px = 0; px <= mm.max.x; px++) {
+                            System.arraycopy(mm.map[px], 0, map[px + x + xPos], y + yPos, mm.max.y+1);
                         }
                         layout.put(CoordPacker.rectangle(x + xPos, y + yPos, categorySize, categorySize), mm);
                         displacement.put(Coord.get(x + xPos, y + yPos), mm);
@@ -253,35 +197,36 @@ public class ModularMapGenerator {
                 break;
         }
         Coord a, b;
-        for (int w = 0; w < grid.length; w++) {
-            for (int h = 0; h < grid[w].length; h++) {
-                a = grid[w][h];
-                if(a == null)
-                    continue;
-                int connectors = rng.nextInt(16);
-                if((connectors & 1) == 1 && w > 0 && grid[w-1][h] != null)
-                {
-                    b = grid[w-1][h];
-                    connectLeftRight(displacement.get(b), b.x, b.y, displacement.get(a), a.x, a.y);
-                }
-                if((connectors & 2) == 2 && w < width - 1 && grid[w+1][h] != null)
-                {
-                    b = grid[w+1][h];
-                    connectLeftRight(displacement.get(a), a.x, a.y, displacement.get(b), b.x, b.y);
-                }
-                if((connectors & 4) == 4 && h > 0 && grid[w][h-1] != null)
-                {
-                    b = grid[w][h-1];
-                    connectLeftRight(displacement.get(b), b.x, b.y, displacement.get(a), a.x, a.y);
-                }
-                if((connectors & 8) == 8 && h < height - 1 && grid[w][h+1] != null)
-                {
-                    b = grid[w][h+1];
-                    connectLeftRight(displacement.get(a), a.x, a.y, displacement.get(b), b.x, b.y);
+        int gw = grid.length;
+        if(gw > 0) {
+            int gh = grid[0].length;
+            for (int w = 0; w < gw; w++) {
+                for (int h = 0; h < gh; h++) {
+                    a = grid[w][h];
+                    if (a == null)
+                        continue;
+                    int connectors = rng.nextInt(16) | rng.nextInt(16);
+                    if ((connectors & 1) == 1 && w > 0 && grid[w - 1][h] != null) {
+                        b = grid[w - 1][h];
+                        connectLeftRight(displacement.get(b), b.x, b.y, displacement.get(a), a.x, a.y);
+                    }
+                    if ((connectors & 2) == 2 && w < gw - 1 && grid[w + 1][h] != null) {
+                        b = grid[w + 1][h];
+                        connectLeftRight(displacement.get(a), a.x, a.y, displacement.get(b), b.x, b.y);
+                    }
+                    if ((connectors & 4) == 4 && h > 0 && grid[w][h - 1] != null) {
+                        b = grid[w][h - 1];
+                        connectTopBottom(displacement.get(b), b.x, b.y, displacement.get(a), a.x, a.y);
+                    }
+                    if ((connectors & 8) == 8 && h < gh - 1 && grid[w][h + 1] != null) {
+                        b = grid[w][h + 1];
+                        connectTopBottom(displacement.get(a), a.x, a.y, displacement.get(b), b.x, b.y);
+                    }
                 }
             }
         }
         Coord begin;
+        short[] packed;
         for(Map.Entry<Coord, MapModule> dmm : displacement.entrySet())
         {
             begin = dmm.getKey();
@@ -290,8 +235,8 @@ public class ModularMapGenerator {
             //if(newCat >= 16) newCat >>>= 1;
             //if(newCat >= 8) newCat >>>= 1;
             //mm2 = rng.getRandomElement(modules.get(newCat));
-            int shiftsX = (mm.category * 3 / 2) * ((begin.x * 2) / (3 * mm.category)) - begin.x,
-                    shiftsY = (mm.category * 3 / 2) * ((begin.y * 2) / (3 * mm.category)) - begin.y,
+            int shiftsX = begin.x - (mm.category * 3 / 2) * ((begin.x * 2) / (3 * mm.category)),
+                    shiftsY = begin.y - (mm.category * 3 / 2) * ((begin.y * 2) / (3 * mm.category)),
                     leftSize = Integer.highestOneBit(shiftsX),
                     rightSize = Integer.highestOneBit((mm.category >>> 1) - shiftsX),
                     topSize = Integer.highestOneBit(shiftsY),
@@ -303,18 +248,21 @@ public class ModularMapGenerator {
                 if(mm2.rightDoors.isEmpty())
                 {
                     if(!mm2.topDoors.isEmpty())
-                        mm2 = mm2.rotate(3);
+                        mm2 = mm2.rotate(1);
                     else if(!mm2.leftDoors.isEmpty())
                         mm2 = mm2.flip(true, false);
                     else if(!mm2.bottomDoors.isEmpty())
-                        mm2 = mm2.rotate(1);
+                        mm2 = mm2.rotate(3);
                     else continue;
                 }
                 for (int i = 0; i < 4; i++) {
-                    for (int px = 0; px < mm2.max.x; px++) {
-                        System.arraycopy(mm2.map[px], 0, map[px + begin.x - shiftsX], begin.y + i * mm.category / 4, mm2.max.y);
+                    packed = CoordPacker.rectangle(begin.x - shiftsX, begin.y + i * mm.category / 4, leftSize, leftSize);
+                    if(layout.containsRegion(packed))
+                        continue;
+                    for (int px = 0; px <= mm2.max.x; px++) {
+                        System.arraycopy(mm2.map[px], 0, map[px + begin.x - shiftsX], begin.y + i * mm.category / 4, mm2.max.y + 1);
                     }
-                    layout.put(CoordPacker.rectangle(begin.x - shiftsX, begin.y + i * mm.category / 4, leftSize, leftSize), mm2);
+                    layout.put(packed, mm2);
                     connectLeftRight(mm2, begin.x - shiftsX, begin.y + i * mm.category / 4, mm, begin.x, begin.y);
                 }
             }
@@ -324,19 +272,22 @@ public class ModularMapGenerator {
                 if (mm2 == null) continue;
                 if(mm2.leftDoors.isEmpty())
                 {
-                    if(!mm2.topDoors.isEmpty())
+                    if(!mm2.bottomDoors.isEmpty())
                         mm2 = mm2.rotate(1);
                     else if(!mm2.rightDoors.isEmpty())
                         mm2 = mm2.flip(true, false);
-                    else if(!mm2.bottomDoors.isEmpty())
+                    else if(!mm2.topDoors.isEmpty())
                         mm2 = mm2.rotate(3);
                     else continue;
                 }
                 for (int i = 0; i < 4; i++) {
-                    for (int px = 0; px < mm2.max.x; px++) {
-                        System.arraycopy(mm2.map[px], 0, map[px + begin.x + mm.category], begin.y + i * mm.category / 4, mm2.max.y);
+                    packed = CoordPacker.rectangle(begin.x + mm.category, begin.y + i * mm.category / 4, rightSize, rightSize);
+                    if(layout.containsRegion(packed))
+                        continue;
+                    for (int px = 0; px <= mm2.max.x; px++) {
+                        System.arraycopy(mm2.map[px], 0, map[px + begin.x + mm.category], begin.y + i * mm.category / 4, mm2.max.y+1);
                     }
-                    layout.put(CoordPacker.rectangle(begin.x + mm.category, begin.y + i * mm.category / 4, rightSize, rightSize), mm2);
+                    layout.put(packed, mm2);
                     connectLeftRight(mm, begin.x, begin.y, mm2, begin.x + mm.category, begin.y + i * mm.category / 4);
                 }
             }
@@ -347,22 +298,25 @@ public class ModularMapGenerator {
                 if(mm2.bottomDoors.isEmpty())
                 {
                     if(!mm2.leftDoors.isEmpty())
-                        mm2 = mm2.rotate(1);
+                        mm2 = mm2.rotate(3);
                     else if(!mm2.topDoors.isEmpty())
                         mm2 = mm2.flip(false, true);
                     else if(!mm2.rightDoors.isEmpty())
-                        mm2 = mm2.rotate(3);
+                        mm2 = mm2.rotate(1);
                     else continue;
                 }
                 for (int i = 0; i < 4; i++) {
-                    for (int px = 0; px < mm2.max.x; px++) {
-                        System.arraycopy(mm2.map[px], 0, map[px + begin.x - shiftsX + i * mm.category / 4], begin.y, mm2.max.y);
+                    packed = CoordPacker.rectangle(begin.x + i * mm.category / 4, begin.y - shiftsY, topSize, topSize);
+                    if(layout.containsRegion(packed))
+                        continue;
+                    for (int px = 0; px <= mm2.max.x; px++) {
+                        System.arraycopy(mm2.map[px], 0, map[px + begin.x + i * mm.category / 4], begin.y - shiftsY, mm2.max.y+1);
                     }
-                    layout.put(CoordPacker.rectangle(begin.x - shiftsX + i * mm.category / 4, begin.y, topSize, topSize), mm2);
-                    connectTopBottom(mm2, begin.x - shiftsX + i * mm.category / 4, begin.y, mm, begin.x, begin.y);
+                    layout.put(packed, mm2);
+                    connectTopBottom(mm2, begin.x + i * mm.category / 4, begin.y - shiftsY, mm, begin.x, begin.y);
                 }
             }
-            if(topSize >= 4 && !mm.bottomDoors.isEmpty())
+            if(bottomSize >= 4 && !mm.bottomDoors.isEmpty())
             {
                 mm2 = rng.getRandomElement(modules.get(bottomSize));
                 if (mm2 == null) continue;
@@ -377,11 +331,14 @@ public class ModularMapGenerator {
                     else continue;
                 }
                 for (int i = 0; i < 4; i++) {
-                    for (int px = 0; px < mm2.max.x; px++) {
-                        System.arraycopy(mm2.map[px], 0, map[px + begin.x - shiftsX + i * mm.category / 4], begin.y, mm2.max.y);
+                    packed = CoordPacker.rectangle(begin.x + i * mm.category / 4, begin.y + mm.category, bottomSize, bottomSize);
+                    if(layout.containsRegion(packed))
+                        continue;
+                    for (int px = 0; px <= mm2.max.x; px++) {
+                        System.arraycopy(mm2.map[px], 0, map[px + begin.x + i * mm.category / 4], begin.y + mm.category, mm2.max.y+1);
                     }
-                    layout.put(CoordPacker.rectangle(begin.x - shiftsX + i * mm.category / 4, begin.y, bottomSize, bottomSize), mm2);
-                    connectTopBottom(mm, begin.x, begin.y, mm2, begin.x - shiftsX + i * mm.category / 4, begin.y);
+                    layout.put(packed, mm2);
+                    connectTopBottom(mm, begin.x, begin.y, mm2, begin.x + i * mm.category / 4, begin.y + mm.category);
                 }
             }
         }
@@ -444,17 +401,38 @@ public class ModularMapGenerator {
             return;
         List<Coord> line = new ArrayList<>(1), temp;
         int best = 1024;
-        Coord tl;
-        for(Coord l : left.rightDoors)
-        {
-            tl = l.translate(leftX, leftY);
-            for(Coord r : right.leftDoors)
-            {
-                temp = OrthoLine.line(tl, r.translate(rightX, rightY));
-                if(temp.size() < best)
-                {
+        Coord tl, tr, twl, twr, wl = null, wr = null;
+        for(Coord l : left.rightDoors) {
+            tl = twl = l.translate(leftX, leftY);
+            if (tl.x > 0 && tl.x < width - 1 && map[tl.x - 1][tl.y] != '#')
+                tl = Coord.get(tl.x + 1, tl.y);
+            else if (tl.x > 0 && tl.x < width - 1 && map[tl.x + 1][tl.y] != '#')
+                tl = Coord.get(tl.x - 1, tl.y);
+            else if(tl.y > 0 && tl.y < height - 1 && map[tl.x][tl.y - 1] != '#')
+                tl = Coord.get(tl.x, tl.y + 1);
+            else if(tl.y > 0 && tl.y < height - 1 && map[tl.x][tl.y + 1] != '#')
+                tl = Coord.get(tl.x, tl.y - 1);
+            else
+                continue;
+
+            for (Coord r : right.leftDoors) {
+                tr = twr = r.translate(rightX, rightY);
+                if (tr.x > 0 && tr.x < width - 1 && map[tr.x - 1][tr.y] != '#')
+                    tr = Coord.get(tr.x + 1, tr.y);
+                else if (tr.x > 0 && tr.x < width - 1 && map[tr.x + 1][tr.y] != '#')
+                    tr = Coord.get(tr.x - 1, tr.y);
+                else if(tr.y > 0 && tr.y < height - 1 && map[tr.x][tr.y - 1] != '#')
+                    tr = Coord.get(tr.x, tr.y + 1);
+                else if(tr.y > 0 && tr.y < height - 1 && map[tr.x][tr.y + 1] != '#')
+                    tr = Coord.get(tr.x, tr.y - 1);
+                else
+                    continue;
+                temp = OrthoLine.line(tl, tr);
+                if (temp.size() < best) {
                     line = temp;
                     best = line.size();
+                    wl = twl;
+                    wr = twr;
                 }
             }
         }
@@ -466,6 +444,18 @@ public class ModularMapGenerator {
                 map[c.x][c.y] = '.';
                 temp.add(c);
             }
+        }
+        if(wl != null && map[wl.x][wl.y] == '#') {
+            if(line.isEmpty())
+                map[wl.x][wl.y] = '.';
+            else
+                map[wl.x][wl.y] = '+';
+        }
+        if(wr != null && map[wr.x][wr.y] == '#') {
+            if(line.isEmpty())
+                map[wr.x][wr.y] = '.';
+            else
+                map[wr.x][wr.y] = '+';
         }
         layout.put(CoordPacker.packSeveral(temp), null);
 
@@ -477,17 +467,39 @@ public class ModularMapGenerator {
             return;
         List<Coord> line = new ArrayList<>(1), temp;
         int best = 1024;
-        Coord tt;
-        for(Coord t : top.bottomDoors)
-        {
-            tt = t.translate(topX, topY);
-            for(Coord b : bottom.topDoors)
-            {
-                temp = OrthoLine.line(tt, b.translate(bottomX, bottomY));
+        Coord tt, tb, twt, twb, wt = null, wb = null;
+        for(Coord l : top.bottomDoors) {
+            tt = twt = l.translate(topX, topY);
+            if(tt.y > 0 && tt.y < height - 1 && map[tt.x][tt.y - 1] != '#')
+                tt = Coord.get(tt.x, tt.y + 1);
+            else if(tt.y > 0 && tt.y < height - 1 && map[tt.x][tt.y + 1] != '#')
+                tt = Coord.get(tt.x, tt.y - 1);
+            else if (tt.x > 0 && tt.x < width - 1 && map[tt.x - 1][tt.y] != '#')
+                tt = Coord.get(tt.x + 1, tt.y);
+            else if (tt.x > 0 && tt.x < width - 1 && map[tt.x + 1][tt.y] != '#')
+                tt = Coord.get(tt.x - 1, tt.y);
+            else
+                continue;
+
+            for (Coord r : bottom.topDoors) {
+                tb = twb = r.translate(bottomX, bottomY);
+                if(tb.y > 0 && tb.y < height - 1 && map[tb.x][tb.y - 1] != '#')
+                    tb = Coord.get(tb.x, tb.y + 1);
+                else if(tb.y > 0 && tb.y < height - 1 && map[tb.x][tb.y + 1] != '#')
+                    tb = Coord.get(tb.x, tb.y - 1);
+                else if (tb.x > 0 && tb.x < width - 1 && map[tb.x - 1][tb.y] != '#')
+                    tb = Coord.get(tb.x + 1, tb.y);
+                else if (tb.x > 0 && tb.x < width - 1 && map[tb.x + 1][tb.y] != '#')
+                    tb = Coord.get(tb.x - 1, tb.y);
+                else
+                    continue;
+                temp = OrthoLine.line(tt, tb);
                 if(temp.size() < best)
                 {
                     line = temp;
                     best = line.size();
+                    wt = twt;
+                    wb = twb;
                 }
             }
         }
@@ -499,6 +511,18 @@ public class ModularMapGenerator {
                 map[c.x][c.y] = '.';
                 temp.add(c);
             }
+        }
+        if(wt != null && map[wt.x][wt.y] == '#') {
+            if(line.isEmpty())
+                map[wt.x][wt.y] = '.';
+            else
+                map[wt.x][wt.y] = '+';
+        }
+        if(wb != null && map[wb.x][wb.y] == '#') {
+            if(line.isEmpty())
+                map[wb.x][wb.y] = '.';
+            else
+                map[wb.x][wb.y] = '+';
         }
         layout.put(CoordPacker.packSeveral(temp), null);
     }

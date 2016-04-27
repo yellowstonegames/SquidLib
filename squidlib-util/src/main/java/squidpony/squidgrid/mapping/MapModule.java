@@ -66,8 +66,11 @@ public class MapModule implements Comparable<MapModule>, Serializable {
         short[] drs = CoordPacker.pack(this.map, doors);
         if(drs.length >= 2)
             validDoors = CoordPacker.allPacked(drs);
-        else
-            validDoors = CoordPacker.fractionPacked(pk, category / 3);//CoordPacker.allPacked(pk);
+        else {
+            validDoors = CoordPacker.fractionPacked(pk, 5);//CoordPacker.allPacked(pk);
+            //for(Coord dr : validDoors)
+            //    this.map[dr.x][dr.y] = '+';
+        }
         initSides();
     }
     /**
@@ -99,6 +102,14 @@ public class MapModule implements Comparable<MapModule>, Serializable {
         this.min = min;
         this.max = max;
         category = categorize(Math.max(max.x, max.y));
+        ArrayList<Coord> doors2 = new ArrayList<>(16);
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[x].length; y++) {
+                if(map[x][y] == '+' || map[x][y] == '/')
+                    doors2.add(Coord.get(x, y));
+            }
+        }
+        if(!doors2.isEmpty()) this.validDoors = doors2.toArray(new Coord[doors2.size()]);
         initSides();
     }
 
@@ -143,7 +154,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                 max2 = Coord.get(ySize - min.y, max.x);
                 return new MapModule(map2, doors2, min2, max2);
             case 2:
-                map2 = new char[map[0].length][map.length];
+                map2 = new char[map.length][map[0].length];
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
                         map2[xSize - i][ySize - j] = map[i][j];
@@ -153,8 +164,8 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                 for (int i = 0; i < validDoors.length; i++) {
                     doors2[i] = Coord.get(xSize - validDoors[i].x, ySize - validDoors[i].y);
                 }
-                min2 = Coord.get(xSize - min.x, ySize - max.y);
-                max2 = Coord.get(xSize - max.x, ySize - min.y);
+                min2 = Coord.get(xSize - max.x, ySize - max.y);
+                max2 = Coord.get(xSize - min.x, ySize - min.y);
                 return new MapModule(map2, doors2, min2, max2);
             case 3:
                 map2 = new char[map[0].length][map.length];
@@ -236,13 +247,13 @@ public class MapModule implements Comparable<MapModule>, Serializable {
         bottomDoors = new ArrayList<>(8);
         for(Coord dr : validDoors)
         {
-            if(dr.x < dr.y && dr.y < category - 1 - dr.x)
+            if(dr.x * max.y < dr.y * max.x && dr.y * max.x < (max.x - dr.x) * max.y)
                 leftDoors.add(dr);
-            else if(dr.x > dr.y && dr.y > category - 1 - dr.x)
+            else if(dr.x * max.y> dr.y * max.x && dr.y * max.x > (max.x - dr.x) * max.y)
                 rightDoors.add(dr);
-            else if(dr.x > dr.y && dr.y < category - 1 - dr.x)
+            else if(dr.x * max.y > dr.y * max.x && dr.y * max.x < (max.x - dr.x) * max.y)
                 topDoors.add(dr);
-            else if(dr.x < dr.y && dr.y > category - 1 - dr.x)
+            else if(dr.x * max.y < dr.y * max.x && dr.y * max.x > (max.x - dr.x) * max.y)
                 bottomDoors.add(dr);
         }
     }
