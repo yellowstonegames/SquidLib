@@ -118,6 +118,12 @@ public interface ICombinedPanel<T> {
 	void fill(What what, T color);
 
 	/**
+	 * @return Returns true if there are animations running when this method is
+	 *         called.
+	 */
+	public boolean hasActiveAnimations();
+
+	/**
 	 * Changes the underlying {@link IColorCenter}.
 	 * 
 	 * @param icc
@@ -274,6 +280,11 @@ public interface ICombinedPanel<T> {
 						putBG(x, y, color);
 				}
 			}
+		}
+
+		@Override
+		public boolean hasActiveAnimations() {
+			return bg.hasActiveAnimations() || fg.hasActiveAnimations();
 		}
 
 		@Override

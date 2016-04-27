@@ -34,6 +34,21 @@ public class Coord implements Serializable {
         else return new Coord(x, y);
     }
 
+	/**
+	 * @param from
+	 * @param to
+	 * @return The degree from {@code from} to {@code to}.
+	 */
+	public static double degrees(Coord from, Coord to) {
+		final int x = to.x - from.x;
+		final int y = to.y - from.y;
+		double angle = Math.atan2(y, x);
+		double degree = Math.toDegrees(angle);
+		degree += 450;// rotate to all positive and 0 is up
+		degree %= 360;// normalize
+		return degree;
+	}
+
     /**
      * Provided for compatibility with earlier code that used the AWT Point API.
      * @return this Coord, without changes

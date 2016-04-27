@@ -1,38 +1,45 @@
 package squidpony.gdx.examples;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import squidpony.GwtCompatibility;
+import squidpony.panel.IColoredString;
 import squidpony.squidai.ZOI;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.AnimatedEntity;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.GDXMarkup;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SquidColorCenter;
+import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.TextPanel;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
-import java.util.ArrayList;
-
 public class ZoneDemo extends ApplicationAdapter {
-    private enum Phase {MOVE_ANIM, WAIT_ANIM}
     SpriteBatch batch;
 
-    private Phase phase = Phase.WAIT_ANIM;
     private RNG rng;
-    private LightRNG lrng;
     private SquidLayers display;
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
-    private double[][] res;
     private int[][] lights;
     private Color[][] bgColors;
     private Color[] influenceColors;
@@ -45,8 +52,6 @@ public class ZoneDemo extends ApplicationAdapter {
     private SquidInput input;
     private static final Color bgColor = SColor.DARK_SLATE_GRAY, textColor = SColor.SLATE_GRAY;
     private Stage stage;
-    private float secondsWithoutAnimation = 0f;
-    private ArrayList<Coord> awaitedMoves;
     private SquidColorCenter colorCenter;
     @Override
     public void create () {
@@ -104,6 +109,9 @@ public class ZoneDemo extends ApplicationAdapter {
 
         // just quit if we get a Q.
         input = new SquidInput(new SquidInput.KeyHandler() {
+
+        	private TextPanel<Color> current;
+
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key)
@@ -113,7 +121,49 @@ public class ZoneDemo extends ApplicationAdapter {
                     case SquidInput.ESCAPE:
                     {
                         Gdx.app.exit();
+					    break;
                     }
+				case 'M': /* Convenient when switching US/French layouts as I do (smelC) */
+				case '?': {
+					if (current == null) {
+						current = new TextPanel<Color>(new GDXMarkup(), DefaultResources.getLargeFont());
+						current.backgroundColor = colorCenter.get(30, 30, 30);
+						final List<IColoredString<Color>> text = new ArrayList<>();
+						IColoredString<Color> buf = IColoredString.Impl.create();
+						buf.append("SquidLib ", colorCenter.get(255, 0, 0));
+						buf.append("is brought to you by Tommy Ettinger, Eben Howard, smelC, and others",
+								null);
+						text.add(buf);
+						/* Jump line */
+						text.add(IColoredString.Impl.<Color> create());
+						buf = IColoredString.Impl.create();
+						buf.append("If you wanna contribute, visit ", null);
+						buf.append("https://github.com/SquidPony/SquidLib", colorCenter.get(29, 0, 253));
+						text.add(buf);
+						final float screenWidth = Gdx.graphics.getWidth();
+						final float screenHeight = Gdx.graphics.getHeight();
+						/*
+						 * To have scrollbars, we would need to provide textures
+						 */
+						final float panelWidth = screenWidth / 2;
+						final float panelHeight = screenHeight / 2;
+						final ScrollPane sp = current.getScrollPane();
+						current.init(panelWidth, panelHeight, text);
+						final float x = (screenWidth - panelWidth) / 2;
+						final float y = (screenHeight - panelHeight) / 2;
+						sp.setPosition(x, y);
+						stage.setKeyboardFocus(sp);
+						stage.setScrollFocus(sp);
+						stage.addActor(sp);
+					} else {
+						current.dispose();
+						stage.getActors().removeValue(current.getScrollPane(), true);
+						stage.setKeyboardFocus(null);
+						stage.setScrollFocus(null);
+						current = null;
+					}
+					break;
+				}
                 }
             }
         });
@@ -182,7 +232,6 @@ public class ZoneDemo extends ApplicationAdapter {
 
     private void postMove() {
         recolorZones();
-        phase = Phase.WAIT_ANIM;
     }
     public void putMap()
     {
