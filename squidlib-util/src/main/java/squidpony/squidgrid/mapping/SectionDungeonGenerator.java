@@ -750,9 +750,11 @@ public class SectionDungeonGenerator {
             System.arraycopy(environment[x], 0, env2[x], 0, height);
         }
 
-        DijkstraMap dijkstra = new DijkstraMap(map);
+        DijkstraMap dijkstra = new DijkstraMap();
+        dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
         int frustrated = 0;
         do {
+            dijkstra.initialize(map);
             dijkstra.clearGoals();
             stairsUp = utility.randomFloor(map);
             dijkstra.setGoal(stairsUp);
@@ -845,7 +847,6 @@ public class SectionDungeonGenerator {
                 caveMap = innerGenerate(allCaves, caveFX),
                 doorMap = makeDoors(rm, cr, allCaves);
         char[][][] lakesAndMazes = makeLake(rm, cv);
-
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if(corridorMap[x][y] != '#' && lakesAndMazes[0][x][y] != '#')

@@ -4,11 +4,16 @@ import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  * A subsection of a (typically modern-day or sci-fi) area map that can be placed by ModularMapGenerator.
  * Created by Tommy Ettinger on 4/4/2016.
  */
-public class MapModule {
+public class MapModule implements Comparable<MapModule>, Serializable {
+    private static final long serialVersionUID = -1273406898212937188L;
+
     /**
      * The contents of this section of map.
      */
@@ -26,36 +31,47 @@ public class MapModule {
      * The maximum point on the bounding rectangle of the room, including walls.
      */
     public Coord max;
-    private static final char[] validPacking = new char[]{'.', ',', '"', '^', '<', '>'};
+
+    public ArrayList<Coord> leftDoors, rightDoors, topDoors, bottomDoors;
+
+    public int category;
+
+    private static final char[] validPacking = new char[]{'.', ',', '"', '^', '<', '>'},
+            doors = new char[]{'+', '/'};
     public MapModule()
     {
-        this(CoordPacker.unpackChar(CoordPacker.rectangle(8, 8), 8, 8, '.', '#'));
+        this(CoordPacker.unpackChar(CoordPacker.rectangle(1, 1, 6, 6), 8, 8, '.', '#'));
     }
 
     /**
-     * Constructs a MapModule given only a 2D char array as the contents of this section of map. The actual MapModule will
-     * use a slightly larger 2D array to ensure walls can be drawn around it, and the valid locations for doors will be
+     * Constructs a MapModule given only a 2D char array as the contents of this section of map. The actual MapModule
+     * will use doors in the 2D char array as '+' or '/' if present. Otherwise, the valid locations for doors will be
      * any outer wall adjacent to a floor ('.'), shallow water (','), grass ('"'), trap  ('^'), or staircase (less than
-     * or greater than signs). The max and min Coords of the bounding rectangle, including one layer of outer walls, will
-     * also be calculated. Notably, the map you pass to this does not need to have outer walls present in it already.
+     * or greater than signs). The max and min Coords of the bounding rectangle, including one layer of outer walls,
+     * will also be calculated. The map you pass to this does need to have outer walls present in it already.
      * @param map the 2D char array that contains the contents of this section of map
      */
     public MapModule(char[][] map)
     {
         if(map == null || map.length <= 0)
             throw new UnsupportedOperationException("Given map cannot be empty in MapModule");
-        this.map = new char[map.length + 2][map[0].length + 2];
-        for (int i = 0; i < map.length; i++) {
-            System.arraycopy(map[i], 0, this.map[i+1], 1, map[i].length);
-        }
-        DungeonUtility.wallWrap(this.map);
+        this.map = GwtCompatibility.copy2D(map);
         short[] pk = CoordPacker.fringe(
                 CoordPacker.pack(this.map, validPacking),
-                1, this.map.length, this.map[0].length, false);
-        validDoors = CoordPacker.allPacked(pk);
+                1, this.map.length, this.map[0].length, false, true);
         Coord[] tmp = CoordPacker.bounds(pk);
         min = tmp[0];
         max = tmp[1];
+        category = categorize(Math.max(max.x, max.y));
+        short[] drs = CoordPacker.pack(this.map, doors);
+        if(drs.length >= 2)
+            validDoors = CoordPacker.allPacked(drs);
+        else {
+            validDoors = CoordPacker.fractionPacked(pk, 5);//CoordPacker.allPacked(pk);
+            //for(Coord dr : validDoors)
+            //    this.map[dr.x][dr.y] = '+';
+        }
+        initSides();
     }
     /**
      * Constructs a MapModule given only a short array of packed data (as produced by CoordPacker and consumed or produced
@@ -70,34 +86,6 @@ public class MapModule {
     {
         this(CoordPacker.unpackChar(packed, width, height, '.', '#'));
     }
-    /**
-     * Constructs a MapModule given a 2D char array as the contents of this section of map and a 2D boolean array that
-     * represents viable locations to place doors (hopefully in walls, though technically they can be anywhere). The
-     * actual MapModule will use a slightly larger 2D array than map to ensure walls can be drawn around it. The max and
-     * min Coords of the bounding rectangle, including one layer of outer walls, will also be calculated. Notably, the
-     * map you pass to this does not need to have outer walls present in it already, but unlike the constructor that takes
-     * only a 2D char array, there should be some.
-     * @param map the 2D char array that contains the contents of this section of map
-     * @param possibleDoors a 2D boolean array that should match map's dimensions, where true means a possible door
-     */
-    public MapModule(char[][] map, boolean[][] possibleDoors)
-    {
-
-        if(map == null || map.length <= 0 || possibleDoors == null || possibleDoors.length <= 0)
-            throw new UnsupportedOperationException("Given map and possibleDoors cannot be empty in MapModule");
-        this.map = new char[map.length + 2][map[0].length + 2];
-        for (int i = 0; i < map.length; i++) {
-            System.arraycopy(map[i], 0, this.map[i+1], 1, map[i].length);
-        }
-        DungeonUtility.wallWrap(this.map);
-        short[] pk = CoordPacker.translate(CoordPacker.pack(possibleDoors), 1, 1, this.map.length, this.map[0].length);
-        validDoors = CoordPacker.allPacked(pk);
-        Coord[] tmp = CoordPacker.bounds(pk);
-        if(tmp[0].x < 0) // negative coordinates from bounds mean there were no possible doors
-            throw new UnsupportedOperationException("No possible doors; MapModule is probably invalid");
-        min = tmp[0];
-        max = tmp[1];
-    }
 
     /**
      * Constructs a MapModule from the given arguments without modifying them, copying map without changing its size,
@@ -109,13 +97,20 @@ public class MapModule {
      */
     public MapModule(char[][] map, Coord[] validDoors, Coord min, Coord max)
     {
-        this.map = new char[map.length][map[0].length];
-        for (int i = 0; i < map.length; i++) {
-            System.arraycopy(map[i], 0, this.map[i], 0, map[i].length);
-        }
+        this.map = GwtCompatibility.copy2D(map);
         this.validDoors = GwtCompatibility.cloneCoords(validDoors);
         this.min = min;
         this.max = max;
+        category = categorize(Math.max(max.x, max.y));
+        ArrayList<Coord> doors2 = new ArrayList<>(16);
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[x].length; y++) {
+                if(map[x][y] == '+' || map[x][y] == '/')
+                    doors2.add(Coord.get(x, y));
+            }
+        }
+        if(!doors2.isEmpty()) this.validDoors = doors2.toArray(new Coord[doors2.size()]);
+        initSides();
     }
 
     /**
@@ -159,7 +154,7 @@ public class MapModule {
                 max2 = Coord.get(ySize - min.y, max.x);
                 return new MapModule(map2, doors2, min2, max2);
             case 2:
-                map2 = new char[map[0].length][map.length];
+                map2 = new char[map.length][map[0].length];
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[0].length; j++) {
                         map2[xSize - i][ySize - j] = map[i][j];
@@ -169,8 +164,8 @@ public class MapModule {
                 for (int i = 0; i < validDoors.length; i++) {
                     doors2[i] = Coord.get(xSize - validDoors[i].x, ySize - validDoors[i].y);
                 }
-                min2 = Coord.get(xSize - min.x, ySize - max.y);
-                max2 = Coord.get(xSize - max.x, ySize - min.y);
+                min2 = Coord.get(xSize - max.x, ySize - max.y);
+                max2 = Coord.get(xSize - min.x, ySize - min.y);
                 return new MapModule(map2, doors2, min2, max2);
             case 3:
                 map2 = new char[map[0].length][map.length];
@@ -237,5 +232,35 @@ public class MapModule {
             max2 = Coord.get(max.x, xSize - min.y);
         }
         return new MapModule(map2, doors2, min2, max2);
+    }
+
+    static int categorize(int n)
+    {
+        int highest = Integer.highestOneBit(n);
+        return Math.max(4, (highest == Integer.lowestOneBit(n)) ? highest : highest << 1);
+    }
+    private void initSides()
+    {
+        leftDoors = new ArrayList<>(8);
+        rightDoors = new ArrayList<>(8);
+        topDoors = new ArrayList<>(8);
+        bottomDoors = new ArrayList<>(8);
+        for(Coord dr : validDoors)
+        {
+            if(dr.x * max.y < dr.y * max.x && dr.y * max.x < (max.x - dr.x) * max.y)
+                leftDoors.add(dr);
+            else if(dr.x * max.y> dr.y * max.x && dr.y * max.x > (max.x - dr.x) * max.y)
+                rightDoors.add(dr);
+            else if(dr.x * max.y > dr.y * max.x && dr.y * max.x < (max.x - dr.x) * max.y)
+                topDoors.add(dr);
+            else if(dr.x * max.y < dr.y * max.x && dr.y * max.x > (max.x - dr.x) * max.y)
+                bottomDoors.add(dr);
+        }
+    }
+
+    @Override
+    public int compareTo(MapModule o) {
+        if(o == null) return 1;
+        return category - o.category;
     }
 }

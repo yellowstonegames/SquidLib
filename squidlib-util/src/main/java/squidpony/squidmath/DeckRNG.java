@@ -57,7 +57,7 @@ public class DeckRNG extends StatefulRNG {
      * @param random will be used to generate a new seed, but will not be assigned as this object's RandomnessSource
      */
     public DeckRNG(RandomnessSource random) {
-        this(((long)random.next(32) << 32) | random.next(32));
+        this(random.nextLong());
 
     }
 
@@ -229,7 +229,6 @@ public class DeckRNG extends StatefulRNG {
      * @return a value from the gaussian distribution
      */
     @Override
-    @GwtIncompatible
     public synchronized double nextGaussian() {
         if (haveNextNextGaussian) {
             haveNextNextGaussian = false;
@@ -241,7 +240,7 @@ public class DeckRNG extends StatefulRNG {
                 v2 = 2 * nextDouble() - 1; // between -1 and 1
                 s = v1 * v1 + v2 * v2;
             } while (s >= 1 || s == 0);
-            double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
+            double multiplier = Math.sqrt(-2 * Math.log(s) / s);
             nextNextGaussian = v2 * multiplier;
             haveNextNextGaussian = true;
             return v1 * multiplier;
@@ -269,7 +268,7 @@ public class DeckRNG extends StatefulRNG {
      */
     @Override
     public int nextInt() {
-        return (int)((nextDouble() - 0.5) * 2.0 * 0x7FFFFFFF);
+        return (int)((nextDouble() * 2.0 - 1.0) * 0x7FFFFFFF);
     }
 
     /**
@@ -279,7 +278,7 @@ public class DeckRNG extends StatefulRNG {
     @Override
     public long nextLong() {
         double nx = nextDouble();
-        return (long)((nx * 2.0 - 1.0) * 0x7FFFFFFFFFFFFFFFL) ^ (long)(nx * 0xFFFFFL) ^ (long)(nx * 0xFFFFF00000L);
+        return (long)((nx * 2.0 - 1.0) * 0x7FFFFFFFFFFFFFFFL);
     }
 
     /**
@@ -295,7 +294,8 @@ public class DeckRNG extends StatefulRNG {
             return 0;
         }
         double nx = nextDouble();
-        return (long)((nx * bound)) ^ (long)((nx * 0xFFFFFL) % bound) ^ (long)((nx * 0xFFFFF00000L) % bound);
+        return (long)(nx * bound);
+        //return ((long)(nx * bound)) ^ (long)((nx * 0xFFFFFL) % bound) ^ (long)((nx * 0xFFFFF00000L) % bound);
     }
     /**
      *
@@ -485,7 +485,8 @@ public class DeckRNG extends StatefulRNG {
      */
     @Override
     public void setState(long state) {
-        random = new LightRNG(state);
+        ((LightRNG)random).setState(state);
+        shuffleInPlace(deck);
         step = 0;
 
     }

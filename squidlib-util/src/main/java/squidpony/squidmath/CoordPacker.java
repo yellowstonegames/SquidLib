@@ -1252,7 +1252,7 @@ public class CoordPacker {
                     if(x >= width || y >= height)
                         continue;
                     double newAngle = Math.atan2(y - centerY, x - centerX) + Math.PI * 2;
-                    if(Math.abs(GwtCompatibility.IEEEremainder(angle2 - newAngle, Math.PI * 2)) > span2 / 2.0)
+                    if(Math.abs(GwtCompatibility.IEEEremainder(angle2 - newAngle + Math.PI * 8, Math.PI * 2)) > span2 / 2.0)
                         unpacked[x][y] = 0.0;
                     else
                         unpacked[x][y] = 1.0;
@@ -1434,7 +1434,7 @@ public class CoordPacker {
                         if(x >= width || y >= height)
                             continue;
                         double newAngle = Math.atan2(y - centerY, x - centerX) + Math.PI * 2;
-                        if(Math.abs(GwtCompatibility.IEEEremainder(angle2 - newAngle, Math.PI * 2)) > span2 / 2.0)
+                        if(Math.abs(GwtCompatibility.IEEEremainder(angle2 - newAngle + Math.PI * 8, Math.PI * 2)) > span2 / 2.0)
                             unpacked[x][y] = 0.0;
                         else
                             unpacked[x][y] = levels[l];
@@ -1641,6 +1641,26 @@ public class CoordPacker {
             }
         }
         return packs;
+    }
+
+    /**
+     * Quickly determines if a region is contained in one of the given packed arrays, without unpacking them, and
+     * returns true if the region checking has some overlap with any of the packed arrays, or false otherwise.
+     * @param checking the packed data to check for overlap with the other regions
+     * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
+     *               returned by packMulti(); null elements in packed will be skipped.
+     * @return an ArrayList of all packed arrays that store true at the given x,y location.
+     */
+    public static boolean regionsContain(short[] checking, short[] ... packed)
+    {
+        LinkedHashSet<short[]> packs = new LinkedHashSet<>(packed.length);
+        for (int a = 0; a < packed.length; a++) {
+            if(packed[a] == null) continue;
+            int total = 0;
+            if(intersects(checking, packed[a]))
+                return true;
+        }
+        return false;
     }
     /**
      * Quickly determines if a Hilbert Curve index corresponds to true or false in one of the given packed arrays,
@@ -3922,6 +3942,15 @@ public class CoordPacker {
     }
 
     /**
+     * Checks if any cells are encoded as "on" in packed.
+     * @param packed a packed array such as one produced by pack()
+     * @return true if there is at least one "on" cell in packed
+     */
+    public static boolean isEmpty(short[] packed)
+    {
+        return packed.length <= 1;
+    }
+    /**
      * Given two packed short arrays, left and right, this returns true if they encode any overlapping area (their areas
      * intersect), or false if they do not overlap at all (they don't intersect). This is more efficient than calculating
      * the intersection with intersectPacked() just to check if it is non-empty, since this method can short-circuit and
@@ -4001,8 +4030,9 @@ public class CoordPacker {
             return ALL_ON;
         }
         if (original[0] == 0) {
-            short[] copy = new short[original.length - 2];
-            System.arraycopy(original, 1, copy, 0, original.length - 2);
+            short[] copy = new short[original.length];
+            System.arraycopy(original, 1, copy, 0, original.length - 1);
+            copy[original.length - 1] = (short) (0xFFFF - covered(copy));
             return copy;
         }
         short[] copy = new short[original.length + 2];

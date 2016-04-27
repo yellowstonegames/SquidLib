@@ -64,6 +64,12 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
                     new String[]{".", ".", ".", "!", "?"}, 0.12));
         }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.SOMALI;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
+                    new String[]{".", ".", ".", "!", "?"}, 0.12));
+        }
 
 
         rng.setState(0xf00df00L);
@@ -124,6 +130,12 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
                     new String[]{".", ".", "!", "?", "..."}, 0.18));
         }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.SOMALI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.3).mix(FakeLanguageGen.SWAHILI, 0.1);
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 12, new String[]{",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "..."}, 0.15));
+        }
 
         rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FANTASY_NAME;
@@ -167,7 +179,16 @@ public class LanguageGenTest {
         flg = FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.32).mix(FakeLanguageGen.FANCY_FANTASY_NAME, 0.25);
         System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.12) + "\",");
+        flg = FakeLanguageGen.SOMALI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.3).mix(FakeLanguageGen.SWAHILI, 0.15);
+        System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
+                new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
 
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.HINDI_ROMANIZED;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
+                    new String[]{".", ".", ".", "!", "?"}, 0.12));
+        }
 
         //For generating the random guard interjections in some demos
         /*

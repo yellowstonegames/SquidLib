@@ -63,7 +63,7 @@ public class ClassicRogueMapGenerator {
         }
     }
 
-    private RNG rng = new RNG();
+    private RNG rng;
 
     private int horizontalRooms, verticalRooms, dungeonWidth, dungeonHeight,
             minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight;
@@ -86,7 +86,31 @@ public class ClassicRogueMapGenerator {
      * @param minRoomHeight The minimum height a room can be
      * @param maxRoomHeight The maximum height a room can be
      */
-    public ClassicRogueMapGenerator(int horizontalRooms, int verticalRooms, int dungeonWidth, int dungeonHeight, int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight) {
+    public ClassicRogueMapGenerator(int horizontalRooms, int verticalRooms, int dungeonWidth, int dungeonHeight,
+                                    int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight) {
+        this(horizontalRooms, verticalRooms, dungeonWidth, dungeonHeight, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, new RNG());
+    }
+
+    /**
+     * Initializes the generator to turn out random dungeons within the specific
+     * parameters.
+     *
+     * Will size down the room width and height parameters if needed to ensure
+     * the desired number of rooms will fit both horizontally and vertically.
+     *
+     * @param horizontalRooms How many rooms will be made horizontally
+     * @param verticalRooms How many rooms will be made vertically
+     * @param dungeonWidth How wide the total dungeon will be
+     * @param dungeonHeight How high the total dungeon will be
+     * @param minRoomWidth The minimum width a room can be
+     * @param maxRoomWidth The maximum width a room can be
+     * @param minRoomHeight The minimum height a room can be
+     * @param maxRoomHeight The maximum height a room can be
+     */
+    public ClassicRogueMapGenerator(int horizontalRooms, int verticalRooms, int dungeonWidth, int dungeonHeight,
+                                    int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, RNG rng)
+    {
+        this.rng = rng;
         this.horizontalRooms = horizontalRooms;
         this.verticalRooms = verticalRooms;
         this.dungeonWidth = dungeonWidth;
@@ -113,10 +137,11 @@ public class ClassicRogueMapGenerator {
 
     /**
      * Builds and returns a map in the Classic Rogue style.
-     *
+     * <br>
      * Only includes rooms, corridors and doors.
-     *
-     * @return
+     * <br>
+     * There is also a generate method that produces a 2D char array, which may be more suitable.
+     * @return a 2D array of Terrain objects
      */
     public Terrain[][] create() {
         initRooms();
@@ -126,6 +151,29 @@ public class ClassicRogueMapGenerator {
         createRooms();
         createCorridors();
         return map;
+    }
+    /**
+     * Builds and returns a map in the Classic Rogue style, returned as a 2D char array.
+     *
+     * Only includes rooms ('.' for floor and '#' for walls), corridors (using the same chars as rooms) and doors ('+'
+     * for closed doors, does not generate open doors).
+     * <br>
+     * There is also a create method that produces a 2D array of Terrain objects, which could (maybe) be what you want.
+     * More methods in SquidLib expect char 2D arrays than Terrain anything, particularly in DungeonUtility.
+     * @return a 2D char array version of the map
+     */
+    public char[][] generate()
+    {
+        create();
+        if(map.length <= 0)
+            return new char[0][0];
+        char[][] gen = new char[map.length][map[0].length];
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[x].length; y++) {
+                gen[x][y] = map[x][y].symbol();
+            }
+        }
+        return gen;
     }
 
     private void initRooms() {
