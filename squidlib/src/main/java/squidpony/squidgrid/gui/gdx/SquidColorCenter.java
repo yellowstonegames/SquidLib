@@ -1,6 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Interpolation;
 import squidpony.IColorCenter;
 import squidpony.IFilter;
 import squidpony.squidmath.StatefulRNG;
@@ -306,14 +307,7 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      */
     public ArrayList<Color> gradient(Color fromColor, Color toColor, int steps)
     {
-        ArrayList<Color> colors = new ArrayList<>((steps > 1) ? steps : 1);
-        colors.add(filter(fromColor));
-        if(steps < 2)
-            return colors;
-        for (float i = 1; i < steps; i++) {
-            colors.add(lerp(fromColor, toColor, i / (steps - 1)));
-        }
-        return colors;
+        return gradient(fromColor, toColor, steps, Interpolation.linear);
     }
 
 
@@ -327,13 +321,54 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      */
     public ArrayList<Color> loopingGradient(Color fromColor, Color midColor, int steps)
     {
+        return loopingGradient(fromColor, midColor, steps, Interpolation.linear);
+    }
+
+
+    /**
+     * Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the
+     * gradient. The interpolation argument can be used to make the color stay close to fromColor and/or toColor longer
+     * than it would normally, or shorter if the middle colors are desirable.
+     * @param fromColor the color to start with, included in the gradient
+     * @param toColor the color to end on, included in the gradient
+     * @param steps the number of elements to use in the gradient
+     * @param interpolation a libGDX Interpolation that defines how quickly the color changes during the transition
+     * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps
+     */
+    public ArrayList<Color> gradient(Color fromColor, Color toColor, int steps, Interpolation interpolation)
+    {
+        ArrayList<Color> colors = new ArrayList<>((steps > 1) ? steps : 1);
+        colors.add(filter(fromColor));
+        if(steps < 2)
+            return colors;
+        for (float i = 1; i < steps; i++) {
+            colors.add(lerp(fromColor, toColor, interpolation.apply(i / (steps - 1))));
+        }
+        return colors;
+    }
+
+
+    /**
+     * Finds a gradient with the specified number of steps going from fromColor to midColor, then midColor to (possibly)
+     * fromColor, with both included in the gradient but fromColor only repeated at the end if the number of steps is
+     * odd. The interpolation argument can be used to make the color linger for a while with colors close to fromColor
+     * or midColor, or to do the opposite and quickly change from one and spend more time in the middle.
+     * @param fromColor the color to start with (and end with, if steps is an odd number), included in the gradient
+     * @param midColor the color to use in the middle of the loop, included in the gradient
+     * @param steps the number of elements to use in the gradient, will be at least 3
+     * @param interpolation a libGDX Interpolation that defines how quickly the color changes at the start and end of
+     *                      each transition, both from fromColor to midColor as well as back to fromColor
+     * @return an ArrayList composed of the blending steps from fromColor to midColor to fromColor again, with length equal to steps
+     */
+    public ArrayList<Color> loopingGradient(Color fromColor, Color midColor, int steps, Interpolation interpolation)
+    {
         ArrayList<Color> colors = new ArrayList<>((steps > 3) ? steps : 3);
         colors.add(filter(fromColor));
         for (float i = 1; i < steps / 2; i++) {
-            colors.add(lerp(fromColor, midColor, i / (steps / 2)));
+            colors.add(lerp(fromColor, midColor, interpolation.apply(i / (steps / 2))));
         }
         for (float i = 0, c = steps / 2; c < steps; i++, c++) {
-            colors.add(lerp(midColor, fromColor, i / (steps / 2)));
+            colors.add(lerp(midColor, fromColor, interpolation.apply(i / (steps / 2))));
         }
         return colors;
     }

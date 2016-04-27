@@ -83,7 +83,14 @@ public class RandomBias implements Serializable {
      * contributing half of the correction needed to match the expected average. An expected average of 5/6 will produce
      * an approximate average with this of 3/4, as opposed to 2/3 (for pure TRIANGULAR) or 5/6 (for EXPONENTIAL).
      */
-    EXP_TRI = 4;
+    EXP_TRI = 4,
+    /**
+     * "Bathtub-shaped" or "U-shaped" distribution (technically the arcsine distribution) that is significantly more
+     * likely to produce results at either extreme than it is to generate them in the center. The extremes in this case
+     * are the same as the truncated distribution, so not all values are possible unless the expected average is 0.5.
+     */
+    BATHTUB_TRUNCATED = 5;
+
     private static final int softRange = 1 << 24;
 
     private static final long serialVersionUID = 4245874924013134958L;
@@ -152,66 +159,78 @@ public class RandomBias implements Serializable {
         return this;
     }
 
-    private double quantile(double d)
+    private double quantile(double expected)
     {
         switch (distribution)
         {
-            case EXPONENTIAL: return exponentialQuantile(d);
-            case TRUNCATED: return truncatedQuantile(d);
-            case TRIANGULAR: return triangularQuantile(d);
-            case SOFT_TRIANGULAR: return softQuantile(d);
-            default: return mixQuantile(d);
+            case EXPONENTIAL: return exponentialQuantile(expected);
+            case TRUNCATED: return truncatedQuantile(expected);
+            case TRIANGULAR: return triangularQuantile(expected);
+            case SOFT_TRIANGULAR: return softQuantile(expected);
+            case BATHTUB_TRUNCATED: return bathtubTruncatedQuantile(expected);
+            default: return mixQuantile(expected);
         }
     }
 
-    private double triangularQuantile(double d)
+    private double triangularQuantile(double expected)
     {
-        d = Math.max(0.001, Math.min(0.999, d * 3.0 - 1.0));
+        expected = Math.max(0.001, Math.min(0.999, expected * 3.0 - 1.0));
         double p = rng.nextDouble();
-        if(p < d)
-            return Math.sqrt(d * p);
-        if(p > d)
-            return 1 - Math.sqrt((1 - d) * (1 - p));
-        return d;
+        if(p < expected)
+            return Math.sqrt(expected * p);
+        if(p > expected)
+            return 1 - Math.sqrt((1 - expected) * (1 - p));
+        return expected;
     }
-    private double truncatedQuantile(double d)
+    private double truncatedQuantile(double expected)
     {
-        if(d >= 0.5)
-            return rng.nextDouble() * (1.0 - d) * 2 + d - (1.0 - d);
-        return rng.nextDouble() * d * 2;
+        if(expected >= 0.5)
+            return rng.nextDouble() * (1.0 - expected) * 2 + expected - (1.0 - expected);
+        return rng.nextDouble() * expected * 2;
     }
-    private double exponentialQuantile(double d)
+    private double bathtubQuantile(double expected)
     {
-        return Math.pow( rng.nextDouble(), 1.0 / d - 1.0);
+        expected = Math.sin(expected * Math.PI * 0.5);
+        return expected * expected;
+    }
+    private double bathtubTruncatedQuantile(double expected)
+    {
+        if(expected >= 0.5)
+            return bathtubQuantile(rng.nextDouble()) * (1.0 - expected) * 2 + expected - (1.0 - expected);
+        return bathtubQuantile(rng.nextDouble()) * expected * 2;
+    }
+    private double exponentialQuantile(double expected)
+    {
+        return 1.0 - Math.pow( rng.nextDouble(), 1.0 / (1.0 - expected) - 1.0);
     }
     private static float longToFloat(long n)
     {
         return n * 1.0f / softRange;
     }
-    private double softQuantile(double d)
+    private double softQuantile(double expected)
     {
-        d = Math.max(0.001, Math.min(0.999, d * 3.0 - 1.0));
+        expected = Math.max(0.001, Math.min(0.999, expected * 3.0 - 1.0));
         long pair = rng.nextLong();
-        float left = longToFloat(pair >>> 40), right = longToFloat(pair & 0xFFFFFFL);
+        float left = longToFloat(pair >>> 40), right = longToFloat((pair >>> 16) & 0xFFFFFFL);
         double v;
 
-        if(left < d)
-            v = Math.sqrt(d * left);
-        else if(left > d)
-            v = 1 - Math.sqrt((1 - d) * (1 - left));
+        if(left < expected)
+            v = Math.sqrt(expected * left);
+        else if(left > expected)
+            v = 1 - Math.sqrt((1 - expected) * (1 - left));
         else
-            v = d;
-        if(right < d)
-            return (v + Math.sqrt(d * right)) * 0.5;
-        if(right > d)
-            return (v + 1 - Math.sqrt((1 - d) * (1 - right))) * 0.5;
-        return d;
+            v = expected;
+        if(right < expected)
+            return (v + Math.sqrt(expected * right)) * 0.5;
+        if(right > expected)
+            return (v + 1 - Math.sqrt((1 - expected) * (1 - right))) * 0.5;
+        return expected;
     }
-    private double mixQuantile(double d)
+    private double mixQuantile(double expected)
     {
-        double d2 = Math.max(0.001, Math.min(0.999, d * 3.0 - 1.0)), v;
+        double d2 = Math.max(0.001, Math.min(0.999, expected * 3.0 - 1.0)), v;
         long pair = rng.nextLong();
-        float left = longToFloat(pair >>> 40), right = longToFloat(pair & 0xFFFFFFL);
+        float left = longToFloat(pair >>> 40), right = longToFloat((pair >>> 16) & 0xFFFFFFL);
 
         if(left < d2)
             v = Math.sqrt(d2 * left);
@@ -219,7 +238,7 @@ public class RandomBias implements Serializable {
             v = 1 - Math.sqrt((1 - d2) * (1 - left));
         else
             v = d2;
-        return (Math.pow( right, 1.0 / d - 1.0) + v) * 0.5;
+        return (Math.pow( right, 1.0 / expected - 1.0) + v) * 0.5;
     }
     /**
      * Looks up the given kind in the Map of biases this stores, and generates a random number using this object's RNG.
@@ -614,4 +633,5 @@ public class RandomBias implements Serializable {
                 ", distribution=" + distribution +
                 '}';
     }
+
 }

@@ -483,7 +483,7 @@ public enum Radius {
                 {
                     high = (int)Math.floor(Math.sqrt(radiusLength * radiusLength - dx * dx));
                     for (int dy = -high; dy <= high; ++dy)
-                        contents.add(Coord.get(dx, dy));
+                        contents.add(Coord.get(center.x + dx, center.y + dy));
                 }
             }
         }

@@ -297,7 +297,7 @@ public class SerpentMapGenerator {
 
     /**
      * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
-     * MixedGenerator. This array will have the same size as the last char 2D array prduced by generate(), and the value
+     * MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value
      * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).
      * <ul>
      *     <li>MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.</li>

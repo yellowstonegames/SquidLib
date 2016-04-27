@@ -97,6 +97,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory copy()
     {
         TextCellFactory next = new TextCellFactory(assetManager);
+        //next.bmpFont = bmpFont;
         next.bmpFont = new BitmapFont(new BitmapFont.BitmapFontData(bmpFont.getData().getFontFile(), false),
                 bmpFont.getRegions(), bmpFont.usesIntegerPositions());
         next.block = block;
@@ -743,10 +744,13 @@ public class TextCellFactory implements Disposable {
 
         //height - lineTweak * 2f
         if (s == null) {
+            batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
+            batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
         } else {
+            bmpFont.setColor(1f,1f,1f,1f);
             if(swap.containsKey(s))
                 bmpFont.draw(batch, swap.get(s), x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width * s.length(), Align.center, false);
             else

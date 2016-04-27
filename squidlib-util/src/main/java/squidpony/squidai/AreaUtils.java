@@ -139,7 +139,6 @@ public class AreaUtils {
                     }
                     break;
                 case FREE: return true;
-
             }
             return false;
         }

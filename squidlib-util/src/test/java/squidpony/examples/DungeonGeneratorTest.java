@@ -77,7 +77,7 @@ import java.io.IOException;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 81, height = 81, depth = 16;
+    public static int width = 150, height = 100, depth = 16;
     public static void main( String[] args )
     {
         //seed is, in base 36, the number SQUIDLIB
@@ -234,6 +234,38 @@ public class DungeonGeneratorTest {
 
         System.out.println("------------------------------------------------------------");
 */
+
+        System.out.println("------------------------------------------------------------");
+        rng.setState(2252637788195L);
+        sdg = new SectionDungeonGenerator(width, height, rng);
+        //sdg.addDoors(12, false);
+        //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
+        //sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
+        //sdg.addWater(SectionDungeonGenerator.CAVE, 9);
+        //sdg.addMaze(30);
+        //sdg.addLake(10, '£', '¢');
+        rng.setState(0xFEEEEEEEEEL);
+        OrganicMapGenerator organic = new OrganicMapGenerator(0.0, 0.25, width, height, rng);
+        map = organic.generate();
+        env = organic.getEnvironment();
+        sdg.generate(map, env);
+        //RNG rand = new RNG();
+        //sdg.generate(rand.getRandomElement(TilesetType.values()));
+        sdungeon = sdg.getDungeon();
+        sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
+        sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdungeon, true)));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+
+        rng.setState(2252637788195L);
+        ModularMapGenerator mmg = new ModularMapGenerator(width, height, rng);
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(mmg.generate(), true)));
+        System.out.println(dungeonGenerator);
+
 
         /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
