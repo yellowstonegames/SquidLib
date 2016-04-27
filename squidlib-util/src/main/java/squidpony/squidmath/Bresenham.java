@@ -40,10 +40,11 @@ public class Bresenham {
     public static Queue<Coord> line2D(int startX, int startY, int endX, int endY) {
         Queue<Coord> line = new LinkedList<>();
         Queue<Coord3D> found = line3D(startX, startY, 0, endX, endY, 0);
-        while (!found.isEmpty()) {
-            line.offer(found.poll());
-        }
-        return line;
+		while (!found.isEmpty()) {
+			final Coord3D c3d = found.poll();
+			line.offer(/* translate to 2D */ Coord.get(c3d.x, c3d.y));
+		}
+		return line;
     }
 
     /**

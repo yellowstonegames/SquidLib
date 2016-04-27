@@ -1296,11 +1296,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 		})));
 	}
 
-    /**
-     * Returns true if there are animations running when this method is called.
-     *
-     * @return
-     */
+	@Override
     public boolean hasActiveAnimations() {
         return animationCount != 0;
     }

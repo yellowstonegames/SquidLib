@@ -1,5 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -22,7 +23,7 @@ public class UIUtil {
 	 * @param c
 	 *            The margins' colors.
 	 */
-	public static void drawMarginsAround(ShapeRenderer renderer_, Actor a, int margin, Color color,
+	public static void drawMarginsAround(ShapeRenderer renderer_, Actor a, float margin, Color color,
 			CornerStyle cornerStyle) {
 		drawMarginsAround(renderer_, a.getX(), a.getY(), a.getWidth(), a.getHeight(), margin, color,
 				cornerStyle, 1f, 1f);
@@ -126,10 +127,20 @@ public class UIUtil {
 		if (margin == 0 || color == null)
 			/* Nothing to do */
 			return;
+
 		botLeftY += 1;
 
+		final boolean reset;
 		final ShapeRenderer renderer = renderer_ == null ? new ShapeRenderer() : renderer_;
-		renderer.begin(ShapeType.Filled);
+		/*
+		 * No matter the state of the given ShapeRenderer, we'll be fine, thanks
+		 * to this:
+		 */
+		if (!renderer.isDrawing()) {
+			reset = true;
+			renderer.begin(ShapeType.Filled);
+		} else
+			reset = false;
 		renderer.scale(1f / zoomX, 1f / zoomY, 1f);
 		renderer.setColor(color);
 
@@ -160,7 +171,8 @@ public class UIUtil {
 			renderer.arc(botLeftX + width, botLeftY, margin, 270, 90);
 		}
 
-		renderer.end();
+		if (reset)
+			renderer.end();
 
 		if (renderer_ == null)
 			/* I allocated it, I must dispose it */
@@ -189,7 +201,10 @@ public class UIUtil {
 			float width, float height, ShapeType st, Color color) {
 		final ShapeRenderer sRender = sRender_ == null ? new ShapeRenderer() : sRender_;
 		final boolean reset;
-		/* No matter the state of the given ShapeRenderer, we'll be fine, thanks to this: */
+		/*
+		 * No matter the state of the given ShapeRenderer, we'll be fine, thanks
+		 * to this:
+		 */
 		if (!sRender.isDrawing()) {
 			reset = true;
 			sRender.begin(st);
@@ -248,6 +263,64 @@ public class UIUtil {
 		 * <img src="http://i.imgur.com/PQSvT0t.png"/>
 		 */
 		MISSING,
+	}
+
+	/**
+	 * A vertical move triggered by keyboard keys.
+	 * 
+	 * @author smelC
+	 */
+	public static enum YMoveKind {
+		/** The kind corresponding to arrow up */
+		UP,
+		/** The kind corresponding to arrow down */
+		DOWN,
+		/** The kind corresponding to page down */
+		PAGE_DOWN,
+		/** The kind corresponding to page up */
+		PAGE_UP;
+
+		/**
+		 * @return {@code true} if {@code this} is downward.
+		 */
+		public boolean isDown() {
+			switch (this) {
+			case DOWN:
+			case PAGE_DOWN:
+				return true;
+			case PAGE_UP:
+			case UP:
+				return false;
+			}
+			throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
+		}
+
+		/**
+		 * @param keycode
+		 * @param vim
+		 *            Whether to recognize vim shortcuts (j/k).
+		 * @return The move kind corresponding to {@code keycode}, or
+		 *         {@code null} if none.
+		 */
+		public static YMoveKind of(int keycode, boolean vim) {
+			if (keycode == Keys.UP || keycode == Keys.DPAD_UP || keycode == Keys.NUMPAD_8)
+				return UP;
+			else if (keycode == Keys.DOWN || keycode == Keys.DPAD_DOWN || keycode == Keys.NUMPAD_2)
+				return DOWN;
+			else if (keycode == Keys.PAGE_UP)
+				return PAGE_UP;
+			else if (keycode == Keys.PAGE_DOWN)
+				return PAGE_DOWN;
+			else if (vim) {
+				if (keycode == Keys.J)
+					return DOWN;
+				else if (keycode == Keys.K)
+					return UP;
+				else
+					return null;
+			} else
+				return null;
+		}
 	}
 
 }
