@@ -56,7 +56,7 @@ public class OrganicMapGenerator {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     map[x][y] = '#';
-                    temp = (PerlinNoise.noise(x / 1.8 + shift, y / 1.8 + shift) * 5
+                    temp = (PerlinNoise.noise(x / 1.7 + shift, y / 1.7 + shift) * 5
                             + PerlinNoise.noise(x / 0.7 + shift2, y / 0.7 + shift2) * 3) / 8.0;
                     if (temp >= noiseMin && temp <= noiseMax) {
                         working[x][y] = true;
@@ -131,7 +131,7 @@ public class OrganicMapGenerator {
             linking = regions.get(0);
             start = CoordPacker.singleRandom(region, rng);
             end = CoordPacker.singleRandom(linking, rng);
-            path = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.7, rng);
+            path = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.75, rng);
             for(Coord elem : path)
             {
                 if(elem.x < width && elem.y < height) {
@@ -144,7 +144,7 @@ public class OrganicMapGenerator {
                         linking = regions.get(rng.nextInt(regions.size()));
                         start = elem;
                         end = CoordPacker.singleRandom(linking, rng);
-                        path2 = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.7, rng);
+                        path2 = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.75, rng);
                         for(Coord elem2 : path)
                         {
                             if(elem2.x < width && elem2.y < height) {
