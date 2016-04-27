@@ -197,6 +197,11 @@ public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 	}
 
 	@Override
+	public boolean hasActiveAnimations() {
+		return (bg != null && bg.hasActiveAnimations()) || (fg != null && fg.hasActiveAnimations());
+	}
+
+	@Override
 	public void setColorCenter(IColorCenter<T> icc) {
 		bg.setColorCenter(icc);
 		fg.setColorCenter(icc);
