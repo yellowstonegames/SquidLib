@@ -77,7 +77,7 @@ import java.io.IOException;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 81, height = 81, depth = 16;
+    public static int width = 150, height = 100, depth = 16;
     public static void main( String[] args )
     {
         //seed is, in base 36, the number SQUIDLIB
@@ -258,6 +258,14 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon, true)));
         System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+
+        rng.setState(2252637788195L);
+        ModularMapGenerator mmg = new ModularMapGenerator(width, height, rng);
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(mmg.generate(), true)));
+        System.out.println(dungeonGenerator);
+
 
         /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);

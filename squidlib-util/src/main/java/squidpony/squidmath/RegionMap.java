@@ -351,6 +351,17 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable 
         }
         return found;
     }
+
+    /**
+     * Checks if a region, stored as packed data (possibly from CoordPacker or this class) overlaps with regions stored
+     * in this object as keys. Returns true if there is any overlap, false otherwise
+     * @param region the packed region to check for overlap with regions this stores values for
+     * @return true if the region overlaps at all, false otherwise
+     */
+    public boolean containsRegion(short[] region)
+    {
+        return CoordPacker.regionsContain(region, keyTable);
+    }
     /**
      * Gets a List of all regions containing a given x,y point.
      * @param x the x coordinate of the point in question

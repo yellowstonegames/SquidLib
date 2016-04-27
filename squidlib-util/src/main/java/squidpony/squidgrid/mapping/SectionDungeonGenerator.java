@@ -750,9 +750,11 @@ public class SectionDungeonGenerator {
             System.arraycopy(environment[x], 0, env2[x], 0, height);
         }
 
-        DijkstraMap dijkstra = new DijkstraMap(map, DijkstraMap.Measurement.MANHATTAN);
+        DijkstraMap dijkstra = new DijkstraMap();
+        dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
         int frustrated = 0;
         do {
+            dijkstra.initialize(map);
             dijkstra.clearGoals();
             stairsUp = utility.randomFloor(map);
             dijkstra.setGoal(stairsUp);

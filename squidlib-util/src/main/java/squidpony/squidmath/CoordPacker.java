@@ -1642,6 +1642,26 @@ public class CoordPacker {
         }
         return packs;
     }
+
+    /**
+     * Quickly determines if a region is contained in one of the given packed arrays, without unpacking them, and
+     * returns true if the region checking has some overlap with any of the packed arrays, or false otherwise.
+     * @param checking the packed data to check for overlap with the other regions
+     * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
+     *               returned by packMulti(); null elements in packed will be skipped.
+     * @return an ArrayList of all packed arrays that store true at the given x,y location.
+     */
+    public static boolean regionsContain(short[] checking, short[] ... packed)
+    {
+        LinkedHashSet<short[]> packs = new LinkedHashSet<>(packed.length);
+        for (int a = 0; a < packed.length; a++) {
+            if(packed[a] == null) continue;
+            int total = 0;
+            if(intersects(checking, packed[a]))
+                return true;
+        }
+        return false;
+    }
     /**
      * Quickly determines if a Hilbert Curve index corresponds to true or false in one of the given packed arrays,
      * without unpacking them, and returns a List of all packed arrays that contain the position.
