@@ -128,7 +128,7 @@ public class SpatialMap<I, E> implements Iterable<E> {
 
     /**
      * Adds a new element with the given identity and Coord position. If the position is already occupied by an element
-     * in this data structure, returns null. If the identity is already used, this also returns null. If the identity
+     * in this data structure, does nothing. If the identity is already used, this also does nothing. If the identity
      * and position are both unused, this adds element to the data structure.
      * <br>
      * You should strongly avoid calling remove() and add() to change an element; prefer modify() and move().
@@ -140,7 +140,7 @@ public class SpatialMap<I, E> implements Iterable<E> {
     {
         if(itemMapping.containsKey(id))
             return;
-        if(positionMapping.get(coord) == null)
+        if(!positionMapping.containsKey(coord))
         {
             SpatialTriple<I, E> triple = new SpatialTriple<>(coord, id, element);
             itemMapping.put(id, triple);
@@ -163,6 +163,22 @@ public class SpatialMap<I, E> implements Iterable<E> {
         positionMapping.remove(coord);
         itemMapping.put(id, triple);
         positionMapping.put(coord, triple);
+    }
+
+    /**
+     * Inserts a SpatialTriple into this SpatialMap without changing it, potentially overwriting an existing element.
+     * SpatialTriple objects can be obtained by the triples() or tripleIterator() methods, and can also be constructed
+     * on their own.
+     * <br>
+     * If you want to alter an existing element, use modify() or move().
+     * @param triple a SpatialTriple (an inner class of SpatialMap) with the same type parameters as this class
+     */
+    public void put(SpatialTriple<I, E> triple)
+    {
+        itemMapping.remove(triple.id);
+        positionMapping.remove(triple.position);
+        itemMapping.put(triple.id, triple);
+        positionMapping.put(triple.position, triple);
     }
 
     /**
@@ -393,6 +409,140 @@ public class SpatialMap<I, E> implements Iterable<E> {
     public Collection<SpatialTriple<I, E>> triples()
     {
         return itemMapping.values();
+    }
+
+    /**
+     * Given an Iterable (such as a List, Set, or other Collection) of Coord, gets all elements in this SpatialMap that
+     * share a position with one of the Coord objects in positions and returns them as an ArrayList of elements.
+     * @param positions an Iterable (such as a List or Set) of Coord
+     * @return an ArrayList, possibly empty, of elements that share a position with a Coord in positions
+     */
+    public ArrayList<E> getManyPositions(Iterable<Coord> positions)
+    {
+        ArrayList<E> gotten = new ArrayList<>();
+        SpatialTriple<I, E> ie;
+        for(Coord p : positions)
+        {
+            if((ie = positionMapping.get(p)) != null)
+                gotten.add(ie.element);
+        }
+        return gotten;
+    }
+
+    /**
+     * Given an Iterable (such as a List, Set, or other Collection) of I, gets all elements in this SpatialMap that
+     * share an identity with one of the I objects in identities and returns them as an ArrayList of elements.
+     * @param identities an Iterable (such as a List or Set) of I
+     * @return an ArrayList, possibly empty, of elements that share an Identity with an I in identities
+     */
+    public ArrayList<E> getManyIdentities(Iterable<I> identities)
+    {
+        ArrayList<E> gotten = new ArrayList<>();
+        SpatialTriple<I, E> ie;
+        for(I i : identities)
+        {
+            if((ie = itemMapping.get(i)) != null)
+                gotten.add(ie.element);
+        }
+        return gotten;
+    }
+
+    /**
+     * Given an array of Coord, gets all elements in this SpatialMap that share a position with one of the Coord objects
+     * in positions and returns them as an ArrayList of elements.
+     * @param positions an array of Coord
+     * @return an ArrayList, possibly empty, of elements that share a position with a Coord in positions
+     */
+    public ArrayList<E> getManyPositions(Coord[] positions)
+    {
+        ArrayList<E> gotten = new ArrayList<>(positions.length);
+        SpatialTriple<I, E> ie;
+        for(Coord p : positions)
+        {
+            if((ie = positionMapping.get(p)) != null)
+                gotten.add(ie.element);
+        }
+        return gotten;
+    }
+    /**
+     * Given an array of I, gets all elements in this SpatialMap that share an identity with one of the I objects in
+     * identities and returns them as an ArrayList of elements.
+     * @param identities an array of I
+     * @return an ArrayList, possibly empty, of elements that share an Identity with an I in identities
+     */
+    public ArrayList<E> getManyIdentities(I[] identities)
+    {
+        ArrayList<E> gotten = new ArrayList<>(identities.length);
+        SpatialTriple<I, E> ie;
+        for(I i : identities)
+        {
+            if((ie = itemMapping.get(i)) != null)
+                gotten.add(ie.element);
+        }
+        return gotten;
+    }
+
+    /**
+     * Given the size and position of a rectangular area, creates a new SpatialMap from this one that refers only to the
+     * subsection of this SpatialMap shared with the rectangular area. Will not include any elements from this
+     * SpatialMap with positions beyond the bounds of the given rectangular area, and will include all elements from
+     * this that are in the area.
+     * @param x the minimum x-coordinate of the rectangular area
+     * @param y the minimum y-coordinate of the rectangular area
+     * @param width the total width of the rectangular area
+     * @param height the total height of the rectangular area
+     * @return a new SpatialMap that refers to a subsection of this one
+     */
+    public SpatialMap<I, E> rectangleSection(int x, int y, int width, int height)
+    {
+        SpatialMap<I, E> next = new SpatialMap<>(positionMapping.size());
+        Coord tmp;
+        for(SpatialTriple<I, E> ie : positionMapping.values())
+        {
+            tmp = ie.position;
+            if(tmp.x >= x && tmp.y >= y && tmp.x + width > x && tmp.y + height > y)
+                next.put(ie);
+        }
+        return next;
+    }
+
+    /**
+     * Given the center position, Radius to determine measurement, and maximum distance from the center, creates a new
+     * SpatialMap from this one that refers only to the subsection of this SpatialMap shared with the area within the
+     * given distance from the center as measured by measurement. Will not include any elements from this SpatialMap
+     * with positions beyond the bounds of the given area, and will include all elements from this that are in the area.
+     * @param x the center x-coordinate of the area
+     * @param y the center y-coordinate of the area
+     * @param measurement a Radius enum, such as Radius.CIRCLE or Radius.DIAMOND, that calculates distance
+     * @param distance the maximum distance from the center to include in the area
+     * @return a new SpatialMap that refers to a subsection of this one
+     */
+    public SpatialMap<I, E> radiusSection(int x, int y, Radius measurement, int distance)
+    {
+        SpatialMap<I, E> next = new SpatialMap<>(positionMapping.size());
+        Coord tmp;
+        for(SpatialTriple<I, E> ie : positionMapping.values())
+        {
+            tmp = ie.position;
+            if(measurement.inRange(x, y, tmp.x, tmp.y, 0, distance))
+                next.put(ie);
+        }
+        return next;
+    }
+
+    /**
+     * Given the center position and maximum distance from the center, creates a new SpatialMap from this one that
+     * refers only to the subsection of this SpatialMap shared with the area within the given distance from the center,
+     * measured with Euclidean distance to produce a circle shape. Will not include any elements from this SpatialMap
+     * with positions beyond the bounds of the given area, and will include all elements from this that are in the area.
+     * @param x the center x-coordinate of the area
+     * @param y the center y-coordinate of the area
+     * @param radius the maximum distance from the center to include in the area, using Euclidean distance
+     * @return a new SpatialMap that refers to a subsection of this one
+     */
+    public SpatialMap<I, E> circleSection(int x, int y, int radius)
+    {
+        return radiusSection(x, y, Radius.CIRCLE, radius);
     }
 
     public void clear()
