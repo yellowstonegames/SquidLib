@@ -1,8 +1,5 @@
 package squidpony.gdx.examples;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -11,21 +8,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import squidpony.GwtCompatibility;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.ZOI;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.AnimatedEntity;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.GDXMarkup;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidColorCenter;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
-import squidpony.squidgrid.gui.gdx.TextPanel;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.OrganicMapGenerator;
@@ -33,6 +21,9 @@ import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.RNG;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ZoneDemo extends ApplicationAdapter {
     SpriteBatch batch;
@@ -54,6 +45,7 @@ public class ZoneDemo extends ApplicationAdapter {
     private static final Color bgColor = SColor.DARK_SLATE_GRAY, textColor = SColor.SLATE_GRAY;
     private Stage stage;
     private SquidColorCenter colorCenter;
+    private TextPanel<Color> current;
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -112,8 +104,6 @@ public class ZoneDemo extends ApplicationAdapter {
         // just quit if we get a Q.
         input = new SquidInput(new SquidInput.KeyHandler() {
 
-        	private TextPanel<Color> current;
-
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key)
@@ -129,6 +119,8 @@ public class ZoneDemo extends ApplicationAdapter {
 				case '?': {
 					if (current == null) {
 						current = new TextPanel<Color>(new GDXMarkup(), DefaultResources.getLargeFont());
+                                //new TextCellFactory().fontDistanceField("Gentium-distance.fnt", "Gentium-distance.png")
+                                //        .setSmoothingMultiplier(0.4f).height(32).width(8));
 						current.backgroundColor = colorCenter.get(30, 30, 30);
 						final List<IColoredString<Color>> text = new ArrayList<>();
 						IColoredString<Color> buf = IColoredString.Impl.create();
@@ -305,8 +297,24 @@ public class ZoneDemo extends ApplicationAdapter {
         }
         // batch must end if it began.
         batch.end();
+    }
 
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
 
+        // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
+        //float currentZoomX = width * 1f / this.width;
+        // total new screen height in pixels divided by total number of rows on the screen
+        //float currentZoomY = height * 1f / this.height;
+        if(current != null)
+        {
+
+            //current.resize(width / 2f, height / 2f);
+            current.getScrollPane().setPosition(width / 4f, height / 4f);
+
+        }
+        //stage.getViewport().update(width, height, true);
     }
 }
 

@@ -165,7 +165,7 @@ public class TextCellFactory implements Disposable {
      * @return this for method chaining
      */
     public TextCellFactory initBySize() {
-        bmpFont.setFixedWidthGlyphs(fitting);
+        //bmpFont.setFixedWidthGlyphs(fitting);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(Color.WHITE);
         temp.fill();
@@ -174,12 +174,9 @@ public class TextCellFactory implements Disposable {
         temp.dispose();
         if(distanceField)
         {
-            //actualCellHeight++;
-
             bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
 
             shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.fragmentShader);
-            // Gdx.files.internal("distance.vertex.glsl"), Gdx.files.internal("distance.fragment.glsl")
             if (!shader.isCompiled()) {
                 Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + shader.getLog());
             }

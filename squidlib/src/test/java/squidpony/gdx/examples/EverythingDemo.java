@@ -888,6 +888,5 @@ public class EverythingDemo extends ApplicationAdapter {
         currentZoomY = cellHeight / currentZoomY;
         input.update(width, height, true);
         stage.getViewport().update(width, height, true);
-
 	}
 }
