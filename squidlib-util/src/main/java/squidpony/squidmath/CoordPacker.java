@@ -4030,9 +4030,9 @@ public class CoordPacker {
             return ALL_ON;
         }
         if (original[0] == 0) {
-            short[] copy = new short[original.length];
-            System.arraycopy(original, 1, copy, 0, original.length - 1);
-            copy[original.length - 1] = (short) (0xFFFF - covered(copy));
+            short[] copy = new short[original.length - 2];
+            System.arraycopy(original, 1, copy, 0, original.length - 2);
+            //copy[original.length - 3] = (short) (0xFFFF - covered(copy));
             return copy;
         }
         short[] copy = new short[original.length + 2];
