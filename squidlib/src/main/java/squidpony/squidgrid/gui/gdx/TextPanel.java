@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -94,9 +95,12 @@ public class TextPanel<T extends Color> {
 	protected /* @Nullable */ IMarkup<T> markup;
 
 	protected BitmapFont font;
-	protected TextCellFactory distanceField;
+    protected boolean distanceField;
+    protected TextCellFactory tcf;
 	/** The text to display */
 	protected List<IColoredString<T>> text;
+
+    protected StringBuilder builder;
 
 	protected final ScrollPane scrollPane;
 
@@ -125,49 +129,9 @@ public class TextPanel<T extends Color> {
             setMarkup(markup);
         if (font != null)
             setFont(font);
-        this.textActor = new Actor() {
-            @Override
-            public void draw(Batch batch, float parentAlpha) {
-                final float tx = textActor.getX();
-                final float ty = textActor.getY();
-                final float twidth = textActor.getWidth();
-                final float theight = textActor.getHeight();
+        builder = new StringBuilder(512);
+        textActor = new TextActor();
 
-                final float height = scrollPane.getHeight();
-
-                if (backgroundColor != null) {
-                    batch.end();
-
-                    final Matrix4 m = batch.getTransformMatrix();
-                    final ShapeRenderer sr = getRenderer();
-                    sr.setTransformMatrix(m);
-                    sr.begin(ShapeType.Filled);
-                    sr.setColor(backgroundColor);
-                    UIUtil.drawRectangle(renderer, tx, ty, twidth, theight, ShapeType.Filled,
-                            backgroundColor);
-                    sr.end();
-
-                    batch.begin();
-                }
-
-                if (TextPanel.this.font == null)
-                    throw new NullPointerException(
-                            "The font should be set when drawing a " + getClass().getSimpleName());
-                if (TextPanel.this.text == null)
-                    throw new NullPointerException(
-                            "The text should be set when drawing a " + getClass().getSimpleName());
-
-                float yscroll = scrollPane.getScrollY();
-
-                float hauteur = height;
-                final float destx = tx;
-                for (String toDisplay : getTypesetText()) {
-                    final GlyphLayout glyph = TextPanel.this.font.draw(batch, toDisplay, destx,
-                            hauteur + yscroll, 0, toDisplay.length(), twidth, Align.left, /* wrap */ true);
-                    hauteur -= glyph.height;
-                }
-            }
-        };
         this.scrollPane = new ScrollPane(textActor);
 
         this.scrollPane.addListener(new InputListener() {
@@ -232,56 +196,16 @@ public class TextPanel<T extends Color> {
             setMarkup(markup);
         if (distanceFieldFont != null)
         {
-            distanceField = distanceFieldFont;
-            distanceField.initBySize();
-            setFont(distanceField.font());
+            tcf = distanceFieldFont;
+            distanceField = distanceFieldFont.distanceField;
+            tcf.initBySize();
+            font = tcf.font();
+            if (markup != null)
+                font.getData().markupEnabled = true;
         }
-        this.textActor = new Actor() {
-            @Override
-            public void draw(Batch batch, float parentAlpha) {
-                final float tx = textActor.getX();
-                final float ty = textActor.getY();
-                final float twidth = textActor.getWidth();
-                final float theight = textActor.getHeight();
-
-                final float height = scrollPane.getHeight();
-
-                if (backgroundColor != null) {
-                    batch.end();
-
-                    final Matrix4 m = batch.getTransformMatrix();
-                    final ShapeRenderer sr = getRenderer();
-                    sr.setTransformMatrix(m);
-                    sr.begin(ShapeType.Filled);
-                    sr.setColor(backgroundColor);
-                    UIUtil.drawRectangle(renderer, tx, ty, twidth, theight, ShapeType.Filled,
-                            backgroundColor);
-                    sr.end();
-
-                    batch.begin();
-                }
-
-                if (TextPanel.this.font == null)
-                    throw new NullPointerException(
-                            "The font should be set when drawing a " + getClass().getSimpleName());
-                if (TextPanel.this.text == null)
-                    throw new NullPointerException(
-                            "The text should be set when drawing a " + getClass().getSimpleName());
-                if (distanceField != null) {
-                    distanceField.configureShader(batch);
-                }
-                float yscroll = scrollPane.getScrollY();
-
-                float hauteur = height;
-                final float destx = tx, offY = (distanceField != null) ? distanceField.height / 2f : 0;
-                for (String toDisplay : getTypesetText()) {
-                    final GlyphLayout glyph = font.draw(batch, toDisplay, destx,
-                            hauteur + yscroll - offY, 0, toDisplay.length(), twidth, Align.left, /* wrap */ true);
-                    hauteur -= glyph.height;
-                }
-            }
-        };
-        this.scrollPane = new ScrollPane(textActor);
+        builder = new StringBuilder(512);
+        textActor = new TextActor();
+        scrollPane = new ScrollPane(textActor);
 
         this.scrollPane.addListener(new InputListener() {
             @Override
@@ -350,6 +274,8 @@ public class TextPanel<T extends Color> {
 	 */
 	public void setFont(BitmapFont font) {
 		this.font = font;
+        tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))
+                .width(MathUtils.round(font.getSpaceWidth()));
 		if (markup != null)
 			font.getData().markupEnabled |= true;
 	}
@@ -366,40 +292,30 @@ public class TextPanel<T extends Color> {
 	 * @param text
 	 */
 	public void init(float width, float maxHeight, Collection<? extends IColoredString<T>> text) {
-		this.text = new ArrayList<>(text);
+        this.text = new ArrayList<>(text);
 
-		scrollPane.setWidth(width);
-		textActor.setWidth(width);
+        scrollPane.setWidth(width);
+        textActor.setWidth(width);
 
-		if (font == null)
-			throw new NullPointerException(
-					"The font should be set before calling " + TextPanel.class.getSimpleName() + "::init");
+        if (tcf == null)
+            throw new NullPointerException(
+                    "The font should be set before calling " + TextPanel.class.getSimpleName() + "::init");
 
-		final BitmapFontCache cache = font.getCache();
-		final List<String> toDisplay = getTypesetText();
-		float totalTextHeight = -font.getDescent();
-        if(distanceField != null)
-            totalTextHeight = distanceField.height;
-		//assert 0 <= totalTextHeight;
-		for (String s : toDisplay) {
-			cache.clear();
-			/*
-			 * This doesn't draw to screen, but does the typesetting computation
-			 */
-			final GlyphLayout layout = cache.addText(s, 0, 0, 0, s.length(), width, Align.left, true);
-			totalTextHeight += layout.height;
-		}
-		cache.clear();
+        final BitmapFontCache cache = font.getCache();
+        final List<String> toDisplay = getTypesetText();
+        float totalTextHeight = tcf.height();
+        GlyphLayout layout = cache.addText(builder, 0, 0, 0, builder.length(), width, Align.left, true);
+        totalTextHeight += layout.height;
         if(totalTextHeight < 0)
             totalTextHeight = 0;
 		textActor.setHeight(/* Entire height */ totalTextHeight);
 		final boolean yscroll = maxHeight < totalTextHeight;
 		scrollPane.setHeight(/* Maybe not the entire height */ Math.min(totalTextHeight, maxHeight));
-
+        scrollPane.setWidget(new TextActor());
 		yScrollingCallback(yscroll);
 	}
 
-    public void resize(float width, float height)
+    public void re_size(float width, float height)
     {
         init(width, height, text);
     }
@@ -437,13 +353,18 @@ public class TextPanel<T extends Color> {
 	public /* @Nullable */ List<String> getTypesetText() {
 		if (text == null)
 			return null;
+        builder.delete(0, builder.length());
 		final List<String> result = new ArrayList<>();
 		for (IColoredString<T> line : text) {
 			/* This code must be consistent with #draw in the custom Actor */
 			final IColoredString<T> tmp = present(line);
-			result.add(applyMarkup(tmp));
+            final String marked = applyMarkup(tmp);
+			result.add(marked);
+            builder.append(marked);
+            builder.append('\n');
 		}
-
+        if(builder.length() > 0)
+            builder.deleteCharAt(builder.length() - 1);
 		return result;
 	}
 
@@ -523,5 +444,60 @@ public class TextPanel<T extends Color> {
 			renderer = buildRenderer();
 		return renderer;
 	}
+
+    private class TextActor extends Actor
+    {
+        TextActor()
+        {
+
+        }
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+
+            final float tx = 0;//getX();
+            final float ty = 0;//getY();
+            final float twidth = getWidth();
+            final float theight = getHeight();
+
+            final float height = scrollPane.getHeight();
+
+            if (backgroundColor != null) {
+                batch.setColor(backgroundColor);
+                batch.draw(tcf.getSolid(), tx, ty, twidth, theight);
+                batch.setColor(Color.WHITE);
+                /*
+                batch.end();
+
+                final Matrix4 m = batch.getTransformMatrix();
+                final ShapeRenderer sr = getRenderer();
+                sr.setTransformMatrix(m);
+                sr.begin(ShapeType.Filled);
+                sr.setColor(backgroundColor);
+                UIUtil.drawRectangle(renderer, tx, ty, twidth, theight, ShapeType.Filled,
+                        backgroundColor);
+                sr.end();
+
+                batch.begin();
+                */
+            }
+
+            if (font == null)
+                throw new NullPointerException(
+                        "The font should be set when drawing a " + getClass().getSimpleName());
+            if (text == null)
+                throw new NullPointerException(
+                        "The text should be set when drawing a " + getClass().getSimpleName());
+            if (tcf != null) {
+                tcf.configureShader(batch);
+            }
+            float yscroll = scrollPane.getScrollY();
+
+            final float destx = tx, offY = (tcf != null) ? tcf.height * 0.5f : 0;
+            getTypesetText();
+            font.draw(batch, builder, destx, theight + yscroll - offY,
+                    0, builder.length(), twidth, Align.left, true);
+
+        }
+    }
 
 }

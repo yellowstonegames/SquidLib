@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.GwtCompatibility;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.ZOI;
@@ -37,7 +37,7 @@ public class ZoneDemo extends ApplicationAdapter {
     private Color[] influenceColors;
     private ZOI zoi;
     private short[][] packedInfluences;
-    private int width, height;
+    private int width, height, screenWidth, screenHeight;
     private int cellWidth, cellHeight;
     private Coord[] centers, shiftedCenters;
     private AnimatedEntity[] centerEntities;
@@ -55,9 +55,11 @@ public class ZoneDemo extends ApplicationAdapter {
         cellHeight = 16;
         TextCellFactory tcf = DefaultResources.getStretchableFont().addSwap('.', ' ');
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
+        screenWidth = width * cellWidth;
+        screenHeight = height * cellHeight;
         display.setAnimationDuration(0.2f);
         display.setTextSize(cellWidth, cellHeight + 1);
-        stage = new Stage(new ScreenViewport(), batch);
+        stage = new Stage(new StretchViewport(screenWidth, screenHeight), batch);
 
         rng = new RNG(0xBABABADAL);
 
@@ -117,45 +119,10 @@ public class ZoneDemo extends ApplicationAdapter {
                     }
 				case 'M': /* Convenient when switching US/French layouts as I do (smelC) */
 				case '?': {
-					if (current == null) {
-						current = new TextPanel<Color>(new GDXMarkup(), DefaultResources.getLargeFont());
-                                //new TextCellFactory().fontDistanceField("Gentium-distance.fnt", "Gentium-distance.png")
-                                //        .setSmoothingMultiplier(0.4f).height(32).width(8));
-						current.backgroundColor = colorCenter.get(30, 30, 30);
-						final List<IColoredString<Color>> text = new ArrayList<>();
-						IColoredString<Color> buf = IColoredString.Impl.create();
-						buf.append("SquidLib ", colorCenter.get(255, 0, 0));
-						buf.append("is brought to you by Tommy Ettinger, Eben Howard, smelC, and others",
-								null);
-						text.add(buf);
-						/* Jump line */
-						text.add(IColoredString.Impl.<Color> create());
-						buf = IColoredString.Impl.create();
-						buf.append("If you wanna contribute, visit ", null);
-						buf.append("https://github.com/SquidPony/SquidLib", colorCenter.get(29, 0, 253));
-						text.add(buf);
-						final float screenWidth = Gdx.graphics.getWidth();
-						final float screenHeight = Gdx.graphics.getHeight();
-						/*
-						 * To have scrollbars, we would need to provide textures
-						 */
-						final float panelWidth = screenWidth / 2;
-						final float panelHeight = screenHeight / 2;
-						final ScrollPane sp = current.getScrollPane();
-						current.init(panelWidth, panelHeight, text);
-						final float x = (screenWidth - panelWidth) / 2;
-						final float y = (screenHeight - panelHeight) / 2;
-						sp.setPosition(x, y);
-						stage.setKeyboardFocus(sp);
-						stage.setScrollFocus(sp);
-						stage.addActor(sp);
-					} else {
-						current.dispose();
-						stage.getActors().removeValue(current.getScrollPane(), true);
-						stage.setKeyboardFocus(null);
-						stage.setScrollFocus(null);
-						current = null;
-					}
+                    if (current == null)
+                        buildCurrentTextPanel(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                    else
+                        disposeCurrentTextPanel();
 					break;
 				}
                 }
@@ -258,38 +225,12 @@ public class ZoneDemo extends ApplicationAdapter {
         if(!display.hasActiveAnimations()) {
             move();
             postMove();
-            //secondsWithoutAnimation += Gdx.graphics.getDeltaTime();
-            //if (secondsWithoutAnimation >= 0.05f) {
-            //}
         }
-
-/*
-            secondsWithoutAnimation += Gdx.graphics.getDeltaTime();
-            if (secondsWithoutAnimation >= 0.01f) {
-                secondsWithoutAnimation = 0f;
-                switch (phase) {
-                    case WAIT_ANIM: {
-                        move();
-                    }
-                    break;
-                    case MOVE_ANIM: {
-                        postMove();
-                        move();
-                    }
-                }
-            }
-        }*/
-
-        // if we do have an animation running, then how many frames have passed with no animation needs resetting
-        /*
-        else
-        {
-            secondsWithoutAnimation = 0;
-        }
-        */
 
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
+        stage.getViewport().apply(true);
         stage.draw();
+        stage.act();
         // display does not draw all AnimatedEntities by default.
         batch.begin();
         for(AnimatedEntity mon : display.getAnimatedEntities(2)) {
@@ -302,19 +243,59 @@ public class ZoneDemo extends ApplicationAdapter {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+        stage.getViewport().update(width, height, true);
+    }
 
-        // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
-        //float currentZoomX = width * 1f / this.width;
-        // total new screen height in pixels divided by total number of rows on the screen
-        //float currentZoomY = height * 1f / this.height;
-        if(current != null)
-        {
+    private void buildCurrentTextPanel(int newWidth, int newHeight) {
+        current = new TextPanel<Color>(new GDXMarkup(), //DefaultResources.getLargeFont());
+                //new TextCellFactory().fontDistanceField("Gentium-distance.fnt", "Gentium-distance.png")
+                new TextCellFactory().fontDistanceField("Noto-Sans-distance.fnt", "Noto-Sans-distance.png")
+                        .setSmoothingMultiplier(0.4f).height(30).width(7));
+        current.backgroundColor = colorCenter.get(30, 30, 30);
+        final List<IColoredString<Color>> text = new ArrayList<>();
+        IColoredString<Color> buf = IColoredString.Impl.create();
+        buf.append("SquidLib ", colorCenter.get(255, 0, 0));
+        buf.append("is brought to you by Tommy Ettinger, Eben Howard, smelC, and others", null);
+        text.add(buf);
+    	/* Jump line */
+        text.add(IColoredString.Impl.<Color> create());
+        buf = IColoredString.Impl.create();
+        buf.append("If you wanna contribute, visit ", null);
+        buf.append("https://github.com/SquidPony/SquidLib", colorCenter.get(29, 0, 253));
+        text.add(buf);
+        /* // useful during debugging
+        char[] big = new char[50];
+        Arrays.fill(big, 'A');
+        buf.append(new String(big), Color.RED);
+        text.add(buf);
+        Arrays.fill(big, 'B');
+        text.add(IColoredString.Impl.<Color> create(new String(big), Color.GREEN));
+        Arrays.fill(big, 'C');
+        text.add(IColoredString.Impl.<Color> create(new String(big), Color.BLUE));
+        Arrays.fill(big, 'D');
+        text.add(IColoredString.Impl.<Color> create(new String(big), Color.YELLOW));
+        */
+        /*
+    	 * To have scrollbars, we would need to provide textures
+    	 */
+        final float panelWidth = screenWidth / 2f;
+        final float panelHeight = screenHeight / 2f;
+        final ScrollPane sp = current.getScrollPane();
+        current.init(panelWidth, panelHeight, text);
+        final float x = (screenWidth - panelWidth) / 2f;
+        final float y = (screenHeight - panelHeight) / 2f;
+        sp.setPosition(x, y);
+        stage.setKeyboardFocus(sp);
+        stage.setScrollFocus(sp);
+        stage.addActor(sp);
+    }
 
-            //current.resize(width / 2f, height / 2f);
-            current.getScrollPane().setPosition(width / 4f, height / 4f);
-
-        }
-        //stage.getViewport().update(width, height, true);
+    private void disposeCurrentTextPanel() {
+        current.dispose();
+        stage.getActors().removeValue(current.getScrollPane(), true);
+        stage.setKeyboardFocus(null);
+        stage.setScrollFocus(null);
+        current = null;
     }
 }
 
