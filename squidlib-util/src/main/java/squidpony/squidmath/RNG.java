@@ -34,11 +34,13 @@ public class RNG implements Serializable {
      * Compatibility note: previous versions of SquidLib used Mersenne Twister by default. Due to the incompatibility
      * of the threads used by this Mersenne Twister implementation with GWT and HTML5 applications, the randomness
      * algorithm has been changed to a faster, more compatible algorithm, though it does suffer from a much lower
-     * period. If you need drastically larger periods than 2^64, you can pass a MersenneTwister or LongPeriodRNG object
-     * to the constructor that takes a RandomnessSource. If you don't know what the period of a PRNG is, you probably
-     * don't need to worry about it; it's mainly relevant to heavily multi-threaded applications anyway. The addition of
-     * LongPeriodRNG on March 21, 2016 should help to take the part of a fast, large-period RNG, which MersenneTwister
-     * is unable to act as on GWT.
+     * period. If you need drastically larger periods than 2^64, you can pass a LongPeriodRNG (or MersenneTwister on
+     * targets other than HTML) object to the constructor that takes a RandomnessSource. If you don't know what the
+     * period of a PRNG is, you probably don't need to worry about it; it's mainly relevant to heavily multi-threaded
+     * applications anyway. The addition of LongPeriodRNG on March 21, 2016 should help to take the part of a fast,
+     * large-period RNG, which MersenneTwister is unable to act as on GWT. The default may change again some time after
+     * May 1, 2016, now that we have XoRoRNG, which is approximately as fast as LightRNG and has a substantially better
+     * period (pow(2, 128) - 1).
      */
     public RNG() {
         this(new LightRNG());

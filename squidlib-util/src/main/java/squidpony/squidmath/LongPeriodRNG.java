@@ -44,18 +44,7 @@ public class LongPeriodRNG implements RandomnessSource {
      * numbers, which is a recommended technique to generate seeds.
      */
     public LongPeriodRNG() {
-        long ts = (Double.doubleToLongBits(Math.random()) << 32) ^
-                (Double.doubleToLongBits(Math.random()) << 16) ^
-                (Double.doubleToLongBits(Math.random()));
-        if (ts == 0)
-            ts++;
-        choice = (int) (ts & 15);
-        for (int i = 0; i < 16; i++) {
-            long z = (ts += 0x9E3779B97F4A7C15L);
-            z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-            z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-            state[i] = z ^ (z >>> 31);
-        }
+        reseed();
     }
 
     /**
@@ -69,6 +58,21 @@ public class LongPeriodRNG implements RandomnessSource {
         reseed(seed);
     }
 
+    public void reseed()
+    {
+        long ts = (Double.doubleToLongBits(Math.random()) << 32) ^
+                (Double.doubleToLongBits(Math.random()) << 16) ^
+                (Double.doubleToLongBits(Math.random()));
+        if (ts == 0)
+            ts++;
+        choice = (int) (ts & 15);
+        for (int i = 0; i < 16; i++) {
+            long z = (ts += 0x9E3779B97F4A7C15L);
+            z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+            z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+            state[i] = z ^ (z >>> 31);
+        }
+    }
     /**
      * Reinitializes this class' 1024 bits of state with the given seed passed into SplitMix64, the algorithm also used by
      * LightRNG. A different algorithm is used in actual number generating code, which is a recommended technique to
@@ -292,6 +296,53 @@ public class LongPeriodRNG implements RandomnessSource {
         }
         return values;
     }
+
+    /**
+     * Creates many LongPeriodRNG objects in an array, where each will generate a sequence of pow(2, 512) numbers that
+     * will not overlap with other sequences in the array. The number of items in the array is specified by count. A
+     * seed can be given that will affect all items in the array, but with each item using a different section of the
+     * massive period this class supports. Essentially, each LongPeriodRNG in the array will generate a different random
+     * sequence relative to any other element of the array, but the sequences are reproducible if the same seed is given
+     * to this method a different time (useful for testing).
+     * @param count the number of LongPeriodRNG objects to generate in the array.
+     * @param seed the RNG seed that will determine the different sequences the returned LongPeriodRNG objects produce
+     * @return an array of LongPeriodRNG where none of the RNGs will generate overlapping sequences.
+     */
+    public static LongPeriodRNG[] createMany(int count, String seed)
+    {
+        if(count < 1) count = 1;
+        LongPeriodRNG origin = new LongPeriodRNG(seed);
+        LongPeriodRNG[] values = new LongPeriodRNG[count];
+        for (int i = 0; i < count; i++) {
+            values[i] = new LongPeriodRNG(origin);
+            origin.jump();
+        }
+        return values;
+    }
+
+    /**
+     * Creates many LongPeriodRNG objects in an array, where each will generate a sequence of pow(2, 512) numbers that
+     * will not overlap with other sequences in the array. The number of items in the array is specified by count. A
+     * seed can be given that will affect all items in the array, but with each item using a different section of the
+     * massive period this class supports. Essentially, each LongPeriodRNG in the array will generate a different random
+     * sequence relative to any other element of the array, but the sequences are reproducible if the same seed is given
+     * to this method a different time (useful for testing).
+     * @param count the number of LongPeriodRNG objects to generate in the array.
+     * @param seed the RNG seed that will determine the different sequences the returned LongPeriodRNG objects produce
+     * @return an array of LongPeriodRNG where none of the RNGs will generate overlapping sequences.
+     */
+    public static LongPeriodRNG[] createMany(int count, long[] seed)
+    {
+        if(count < 1) count = 1;
+        LongPeriodRNG origin = new LongPeriodRNG(seed);
+        LongPeriodRNG[] values = new LongPeriodRNG[count];
+        for (int i = 0; i < count; i++) {
+            values[i] = new LongPeriodRNG(origin);
+            origin.jump();
+        }
+        return values;
+    }
+
 
     @Override
     public String toString() {

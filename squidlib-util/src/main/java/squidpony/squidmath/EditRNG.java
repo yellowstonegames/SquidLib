@@ -59,7 +59,16 @@ public class EditRNG extends StatefulRNG {
      * they go much higher than 200.
      */
     private double centrality = 0.0;
-
+    /**
+     * The latest generated double, between 0.0 and 1.0, before changes for centrality and expected average.
+     * Doubles are used to generate all random numbers this class produces, so be aware that calling getRandomElement()
+     * will change this just as much as nextDouble(), nextInt(), or between() will. Primarily useful to obtain
+     * uniformly-distributed random numbers that are related to the biased random numbers this returns as a main result,
+     * such as to find when the last number generated was in the bottom 5% (less than 0.05, which could represent some
+     * kind of critical failure or fumble) or top 10% (greater than or equal to 0.9, which could grant a critical
+     * success or luck-based reward of some kind).
+     */
+    public double rawLatest = 0.5;
 	private static final long serialVersionUID = -2458726316853811777L;
 
     /**
@@ -173,6 +182,7 @@ public class EditRNG extends StatefulRNG {
     public double nextDouble() {
         long l = random.nextLong();
         double gen = (l & 0x1fffffffffffffL) * DOUBLE_UNIT, scatter = (l & 0xffffffL) * FLOAT_UNIT;
+        rawLatest = 0.9999999999999999 - gen;
         gen = 0.9999999999999999 - Math.pow(gen, 1.0 / (1.0 - expected) - 1.0);
         if(centrality > 0) {
             scatter = 0.9999999999999999 - Math.pow(scatter, 1.0 / (1.0 - expected) - 1.0);
@@ -530,5 +540,13 @@ public class EditRNG extends StatefulRNG {
         return super.randomRange(start, end, count);
     }
 
-
+    /**
+     * Gets the latest "un-biased" random double used to produce the most recent (potentially) biased random number
+     * generated for another method in this class, such as nextDouble(), between(), or getRandomElement(). This is a
+     * double between 0.0 (inclusive) and 1.0 (exclusive).
+     * @return the latest uniformly-distributed double before bias is added; between 0.0 and 1.0 (exclusive upper)
+     */
+    public double getRawLatest() {
+        return rawLatest;
+    }
 }
