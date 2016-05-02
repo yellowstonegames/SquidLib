@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class SquidID implements Serializable, Comparable<SquidID> {
     private static final long serialVersionUID = 8946534790126874460L;
     private static LongPeriodRNG rng = new LongPeriodRNG();
-    public long low, high;
+    public final long low, high;
 
     /**
      * Constructs a new random SquidID. If you want different random IDs with every run, the defaults should be fine.
@@ -46,6 +46,7 @@ public class SquidID implements Serializable, Comparable<SquidID> {
     }
 
     /**
+     * Makes the IDs generated after calling this repeatable, with the same IDs generated in order after this is called.
      * This class uses a random number generator with a random seed by default to produce IDs, and properties of the
      * LongPeriodRNG this uses make it incredibly unlikely that IDs will repeat even if the game was run for the rest
      * of your natural lifespan. For the purposes of tests, you may want stable SquidID values to be generated, the same
@@ -56,6 +57,8 @@ public class SquidID implements Serializable, Comparable<SquidID> {
      * may be reasons you want this during testing, so there isn't any check for multiple calls to this method. If IDs
      * can persist between runs of the game (i.e. saved in a file), using this is generally a bad idea, and the default
      * random IDs should more than suffice.
+     * <br>
+     * You can "undo" the effects of this method with randomize(), changing the seed to a new random value.
      * <br>
      * Because IDs aren't likely to have gameplay significance, this uses one seed, the opening paragraph of The
      * Wonderful Wizard of Oz, by Frank L. Baum, which is in the public domain. Changing the seed is unlikely to change
@@ -76,6 +79,21 @@ public class SquidID implements Serializable, Comparable<SquidID> {
                         "those great whirlwinds arose, mighty enough to crush any building in its path. It "+
                         "was reached by a trap door in the middle of the floor, from which a ladder led "+
                         "down into the small, dark hole.");
+    }
+
+    /**
+     * Makes the IDs generated after calling this non-repeatable, with a random 1024-bit seed.
+     * This class uses a random number generator with a random seed by default to produce IDs, and properties of the
+     * LongPeriodRNG this uses make it incredibly unlikely that IDs will repeat even if the game was run for the rest
+     * of your natural lifespan. However, if you call stabilize(), generate some IDs, call stabilize() again, and
+     * generate some more IDs, the first, second, third, etc. IDs generated after each call will be identical -- hardly
+     * the unique ID you usually want. You can "undo" the effects of stabilize by calling this method, making the seed
+     * a new random value. This does not affect the constructor that takes two longs to produce an exact ID, nor will
+     * it change any IDs.
+     */
+    public static void randomize()
+    {
+        rng.reseed();
     }
 
     /**

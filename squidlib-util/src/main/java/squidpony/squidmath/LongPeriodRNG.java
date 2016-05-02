@@ -48,10 +48,9 @@ public class LongPeriodRNG implements RandomnessSource {
     }
 
     /**
-     * Builds a LongPeriodRNG and initializes this class' 1024 bits of state with the given seed passed into SplitMix64,
-     * the algorithm also used by LightRNG. A different algorithm is used in non-constructor code to generate random
-     * numbers, which is a recommended technique to generate seeds.
-     *
+     * Builds a LongPeriodRNG and initializes this class' 1024 bits of state with many calls to a SplitMix64-based RNG
+     * with a random seed influenced by Math.random() and also the time (in milliseconds to keep GWT compatibility),
+     * mixing Math.random() calls in to alter the SplitMix64 state at uneven intervals.
      * @param seed a 64-bit seed; can be any value.
      */
     public LongPeriodRNG(long seed) {
@@ -60,17 +59,22 @@ public class LongPeriodRNG implements RandomnessSource {
 
     public void reseed()
     {
-        long ts = (Double.doubleToLongBits(Math.random()) << 32) ^
-                (Double.doubleToLongBits(Math.random()) << 16) ^
-                (Double.doubleToLongBits(Math.random()));
+        LightRNG lr = new LightRNG(System.currentTimeMillis() ^
+                (Double.doubleToLongBits(Math.random()) << 32) |
+                (Double.doubleToLongBits(Math.random()) & 0xffffffffL));
+        long ts = lr.nextLong() ^ lr.nextLong() ^ lr.nextLong();
         if (ts == 0)
             ts++;
         choice = (int) (ts & 15);
-        for (int i = 0; i < 16; i++) {
-            long z = (ts += 0x9E3779B97F4A7C15L);
-            z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-            z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-            state[i] = z ^ (z >>> 31);
+        state[0] = ts;
+        for (int i = 1; i < 16; i++) {
+            //Chosen by trial and error to unevenly reseed 4 times, where i is 2, 5, 10, or 13
+            if((6 & (i * 1281783497376652987L)) == 6)
+                lr.state ^= (Double.doubleToLongBits(Math.random()) << 32) |
+                    (Double.doubleToLongBits(Math.random()) & 0xffffffffL);
+            state[i] = lr.nextLong() ^ lr.nextLong() ^ lr.nextLong();
+            state[i - 1] ^= state[i];
+            if(state[i - 1] == 0) state[i - 1]++;
         }
     }
     /**
@@ -198,13 +202,13 @@ public class LongPeriodRNG implements RandomnessSource {
     }
     private static long[] init(long seed)
     {
-        if(seed == 0) seed = 1;
         long[] state = new long[16];
         for (int i = 0; i < 16; i++) {
             long z = ( seed += 0x9E3779B97F4A7C15L );
             z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
             z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
             state[i] = z ^ (z >>> 31);
+            if(state[i] == 0) state[i]++;
         }
         return state;
     }
