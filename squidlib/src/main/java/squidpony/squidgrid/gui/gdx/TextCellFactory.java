@@ -355,9 +355,9 @@ public class TextCellFactory implements Disposable {
             tex = new Texture(Gdx.files.classpath(texturePath), true);
             tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
         } else {
-            bmpFont = DefaultResources.getDefaultFont();
-            Gdx.app.error("TextCellFactory", "Could not find font files, using defaults");
-            return this;
+			bmpFont = DefaultResources.getDefaultFont();
+			Gdx.app.error("TextCellFactory", "Could not find font file: " + texturePath + ", using defaults");
+			return this;
         }
         if (Gdx.files.internal(fontPath).exists()) {
             Gdx.app.debug("font", "Using internal font at " + fontPath);
@@ -369,8 +369,8 @@ public class TextCellFactory implements Disposable {
             distanceField = true;
         } else {
             bmpFont = DefaultResources.getDefaultFont();
-            Gdx.app.error("TextCellFactory", "Could not find font files, using defaults");
-        }
+			Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");
+		}
         //bmpFont.getData().padBottom = bmpFont.getDescent();
         distanceFieldScaleX = bmpFont.getData().getGlyph(' ').xadvance - 1f;
         distanceFieldScaleY = bmpFont.getLineHeight() - 1f;

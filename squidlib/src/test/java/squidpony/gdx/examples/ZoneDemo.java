@@ -127,6 +127,7 @@ public class ZoneDemo extends ApplicationAdapter {
 				}
                 }
             }
+
         });
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         // and then add display, our one visual component, to the list of things that act in Stage.
@@ -297,5 +298,5 @@ public class ZoneDemo extends ApplicationAdapter {
         stage.setScrollFocus(null);
         current = null;
     }
-}
 
+}
