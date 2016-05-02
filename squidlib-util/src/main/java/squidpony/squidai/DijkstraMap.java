@@ -776,6 +776,9 @@ public class DijkstraMap {
             for (Map.Entry<Coord, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
                     Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
+                    if (adj.x < 0 || adj.y < 0 || width <= adj.x || height <= adj.y)
+                    	/* Outside the map */
+                    	continue;
                     double h = heuristic(dirs[d]);
                     if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);

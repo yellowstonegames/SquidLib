@@ -121,14 +121,20 @@ public class ZOI {
         Direction[] dirs = (radius.equals2D(Radius.DIAMOND)) ? Direction.CARDINALS : Direction.OUTWARDS;
         boolean[][] influenced = new boolean[map.length][map[0].length];
 
+        final int width = dm.length;
+        final int height = width == 0 ? 0 : dm[0].length;
+
         int numAssigned = open.size();
-        double diff, h;
+        double diff;
         while (numAssigned > 0) {
             numAssigned = 0;
             for (Coord cell : open) {
                 influenced[cell.x][cell.y] = true;
                 for (int d = 0; d < dirs.length; d++) {
                     Coord adj = cell.translate(dirs[d].deltaX, dirs[d].deltaY);
+                    if (adj.x < 0 || adj.y < 0 || width <= adj.x || height <= adj.y)
+                    	/* Outside the map */
+                    	continue;
                     if (!open.contains(adj) && dm[adj.x][adj.y] < DijkstraMap.FLOOR && !influenced[adj.x][adj.y]) {
                         //h = heuristic(dirs[d]);
                         diff = dm[adj.x][adj.y] - dm[cell.x][cell.y];
@@ -146,24 +152,6 @@ public class ZOI {
         }
 
         return influenced;
-    }
-    private static final double root2 = Math.sqrt(2.0);
-
-    private double heuristic(Direction target) {
-        switch (radius) {
-            case CIRCLE:
-            case SPHERE:
-                switch (target) {
-                    case DOWN_LEFT:
-                    case DOWN_RIGHT:
-                    case UP_LEFT:
-                    case UP_RIGHT:
-                        return root2;
-                    default:
-                        return 1.0;
-                }
-            default: return 1.0;
-        }
     }
 
     /**
