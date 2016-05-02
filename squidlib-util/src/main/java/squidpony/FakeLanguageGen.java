@@ -1965,8 +1965,9 @@ public class FakeLanguageGen implements Serializable {
                 vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency, sanityChecks, clean, modifiers);
     }
 
-    public static class Modifier
+    public static class Modifier implements Serializable
     {
+        private static final long serialVersionUID = -1325993678490422370L;
         public Replacer replacer;
         public double chance;
         public Modifier()
