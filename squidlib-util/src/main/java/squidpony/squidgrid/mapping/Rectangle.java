@@ -1,7 +1,10 @@
 package squidpony.squidgrid.mapping;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.iterator.SquidIterators;
@@ -22,14 +25,14 @@ public interface Rectangle {
 	public Coord getBottomLeft();
 
 	/**
-	 * @return The room's width (from {@link #getBottomLeft()). It is greater
-	 *         than 0.
+	 * @return The room's width (from {@link #getBottomLeft()). It is greater or
+	 *         equal than 0.
 	 */
 	public int getWidth();
 
 	/**
 	 * @return The room's height (from {@link #getBottomLeft()). It is greater
-	 *         than 0.
+	 *         or equal than 0.
 	 */
 	public int getHeight();
 
@@ -63,13 +66,26 @@ public interface Rectangle {
 			if (bottomLeft.x + width < c.x)
 				/* Too much to the right */
 				return false;
-			if (c.y < bottomLeft.y)
+			if (bottomLeft.y < c.y)
 				/* Too low */
 				return false;
-			if (bottomLeft.y + height < c.y)
+			if (c.y < bottomLeft.y - height)
 				/* Too high */
 				return false;
 			return true;
+		}
+
+		/**
+		 * @param r
+		 * @param c
+		 * @return {@code true} if {@code r} contains a member of {@code cs}.
+		 */
+		public static boolean containsAny(Rectangle r, Collection<Coord> cs) {
+			for (Coord c : cs) {
+				if (contains(r, c))
+					return true;
+			}
+			return false;
 		}
 
 		/**
@@ -108,13 +124,80 @@ public interface Rectangle {
 		}
 
 		/**
+		 * Use {@link #cellsList(Rectangle)} if you want them all.
+		 * 
 		 * @param r
 		 * @return The cells that {@code r} contains, from bottom left to top
-		 *         right.
+		 *         right; lazily computed.
 		 */
 		public static Iterator<Coord> cells(Rectangle r) {
 			return new SquidIterators.RectangleFromBottomLeftToTopRight(r.getBottomLeft(), r.getWidth(),
 					r.getHeight());
+		}
+
+		/**
+		 * Use {@link #cellsList(Rectangle)} if you may stop before the end of
+		 * the list, you'll save some memory.
+		 * 
+		 * @param r
+		 * @return The cells that {@code r} contains, from bottom left to top
+		 *         right.
+		 */
+		public static List<Coord> cellsList(Rectangle r) {
+			/* Allocate it with the right size, to avoid internal resizings */
+			final List<Coord> result = new ArrayList<Coord>(size(r));
+			final Iterator<Coord> it = cells(r);
+			while (it.hasNext())
+				result.add(it.next());
+			return result;
+		}
+
+		public static List<Coord> column(Rectangle r, boolean leftOrRight) {
+			final Coord bl = r.getBottomLeft();
+			final int height = r.getHeight();
+			final int width = r.getWidth();
+			final List<Coord> result = new ArrayList<Coord>(height);
+			Coord current = leftOrRight ? bl : bl.translate(width, 0);
+			for (int i = 0; i < height; i++) {
+				result.add(current);
+				current = current.translate(0, 1);
+			}
+			return result;
+		}
+
+		public static List<Coord> line(Rectangle r, boolean botOrTop) {
+			final Coord bl = r.getBottomLeft();
+			final int height = r.getHeight();
+			final int width = r.getWidth();
+			final List<Coord> result = new ArrayList<Coord>(width);
+			/* In SquidLib, (0,0) is top left so bl has a big 'y' */
+			Coord current = botOrTop ? bl : bl.translate(0, -height);
+			for (int i = 0; i < width; i++) {
+				result.add(current);
+				current = current.translate(1, 0);
+			}
+			return result;
+		}
+
+		public static List<Coord> getBorder(Rectangle r) {
+			final List<Coord> result = new ArrayList<Coord>((r.getHeight() + r.getWidth()) * 2);
+			/* bottom line */
+			result.addAll(line(r, true));
+			/* right colum */
+			result.addAll(column(r, false));
+			/* top line */
+			result.addAll(line(r, false));
+			/* left colum */
+			result.addAll(column(r, true));
+			return result;
+		}
+
+		public static List<Coord> getOutsideBorder(Rectangle r) {
+			Rectangle extension = extend(r, Direction.DOWN);
+			extension = extend(extension, Direction.RIGHT);
+			extension = extend(extension, Direction.UP);
+			extension = extend(extension, Direction.LEFT);
+			return getBorder(extension);
 		}
 
 		/**
