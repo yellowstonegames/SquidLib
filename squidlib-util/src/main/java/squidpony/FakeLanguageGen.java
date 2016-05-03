@@ -970,7 +970,8 @@ public class FakeLanguageGen implements Serializable {
             },
             new String[]{"t", "d", "m", "r", "dh", "b", "t", "d", "m", "r", "dh", "bh", "nt", "nt", "nk", "ṣ"},
             new String[]{"it", "it", "ati", "adva", "aṣ", "arma", "ardha", "abi", "ab", "aya"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 5, 5, 4, 3, 1}, 0.15, 0.75, 0.0, 0.12, null, true);
+            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 5, 5, 4, 3, 1}, 0.15, 0.75, 0.0, 0.12, null, true)
+            .addModifiers(Modifier.replacementTable("ṛṝḷḹḍṅṇṣṃ", "ŗŕļĺđńņşĕ"));
 
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
@@ -1292,11 +1293,10 @@ public class FakeLanguageGen implements Serializable {
             }
             if(sanityChecks != null && !checkAll(sb, sanityChecks))
                 continue;
-            StringBuilder sb2 = new StringBuilder(sb.length());
+
             for(Modifier mod : modifiers)
             {
-                if(rng.nextDouble() < mod.chance && mod.replacer.replace(sb, sb2) > 0)
-                    sb = sb2;
+                sb = mod.modify(rng, sb);
             }
 
             if (capitalize)
@@ -1380,11 +1380,10 @@ public class FakeLanguageGen implements Serializable {
 
             if(sanityChecks != null && !checkAll(sb, sanityChecks))
                 continue;
-            StringBuilder sb2 = new StringBuilder(sb.length());
+
             for(Modifier mod : modifiers)
             {
-                if(rng.nextDouble() < mod.chance && mod.replacer.replace(sb, sb2) > 0)
-                    sb = sb2;
+                sb = mod.modify(rng, sb);
             }
 
             if (capitalize)
@@ -1967,23 +1966,37 @@ public class FakeLanguageGen implements Serializable {
 
     public static class Modifier implements Serializable
     {
-        private static final long serialVersionUID = -1325993678490422370L;
-        public Replacer replacer;
-        public double chance;
+        private static final long serialVersionUID = 1734863678490422371L;
+        public final Alteration[] alterations;
         public Modifier()
         {
             this("sh?", "th");
         }
         public Modifier(String pattern, String replacement)
         {
-            replacer = Pattern.compile(pattern).replacer(replacement);
-            chance = 1.0;
+            alterations = new Alteration[]{new Alteration(pattern, replacement)};
         }
 
         public Modifier(String pattern, String replacement, double chance)
         {
-            replacer = Pattern.compile(pattern).replacer(replacement);
-            this.chance = chance;
+            alterations = new Alteration[]{new Alteration(pattern, replacement, chance)};
+        }
+
+        public Modifier(Alteration... alts)
+        {
+            alterations = (alts == null) ? new Alteration[0] : alts;
+        }
+
+        public StringBuilder modify(RNG rng, StringBuilder sb)
+        {
+            StringBuilder sb2;
+            for(Alteration alt : alterations)
+            {
+                sb2 = new StringBuilder(sb.length());
+                if(rng.nextDouble() < alt.chance && alt.replacer.replace(sb, sb2) > 0)
+                    sb = sb2;
+            }
+            return sb;
         }
 
         /**
@@ -1997,9 +2010,11 @@ public class FakeLanguageGen implements Serializable {
         public static final Modifier HISS = new Modifier("(.)([sz])+", "$1$2$2$2");
 
         /**
-         * For a character who has a 20% chance to repeat a starting consonant.
+         * For a character who has a 20% chance to repeat a starting consonant or vowel.
          */
-        public static final Modifier STUTTER = new Modifier("^([^aeiouy]+)", "$1-$1", 0.2);
+        public static final Modifier STUTTER = new Modifier(
+                new Alteration("^([^aeiouy]+)", "$1-$1", 0.2),
+                new Alteration("^([aeiou]+)", "$1-$1", 0.2));
 
         /**
          * For a language that has a 40% chance to repeat a single vowel.
@@ -2017,10 +2032,97 @@ public class FakeLanguageGen implements Serializable {
          */
         public static final Modifier NO_DOUBLES = new Modifier("(.)\\1", "$1");
 
+        /**
+         * Creates a Modifier that will replace the nth char in initial with the nth char in change. Expects initial and
+         * change to be the same length, but will use the lesser length if they are not equal-length. Because of the
+         * state of the text at the time modifiers are run, only lower-case letters need to be searched for.
+         * @param initial a String containing lower-case letters or other symbols to be swapped out of a text
+         * @param change a String containing characters that will replace occurrences of characters in initial
+         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
+         */
+        public static Modifier replacementTable(String initial, String change)
+        {
+            Alteration[] alts = new Alteration[Math.min(initial.length(), change.length())];
+            for (int i = 0; i < alts.length; i++) {
+                //literal string syntax; avoids sensitive escaping issues and also doesn't need a character class,
+                // which is slightly slower and has some odd escaping cases.
+                alts[i] = new Alteration("\\Q" + initial.charAt(i), change.substring(i, i+1));
+            }
+            return new Modifier(alts);
+        }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
 
+            Modifier modifier = (Modifier) o;
 
+            // Probably incorrect - comparing Object[] arrays with Arrays.equals
+            return Arrays.equals(alterations, modifier.alterations);
+        }
 
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode(alterations);
+        }
+
+        @Override
+        public String toString() {
+            return "Modifier{" +
+                    "alterations=" + Arrays.toString(alterations) +
+                    '}';
+        }
+    }
+
+    public static class Alteration implements Serializable
+    {
+        public Replacer replacer;
+        public double chance;
+        public Alteration()
+        {
+            this("sh?", "th");
+        }
+        public Alteration(String pattern, String replacement)
+        {
+            replacer = Pattern.compile(pattern).replacer(replacement);
+            chance = 1.0;
+        }
+        public Alteration(String pattern, String replacement, double chance)
+        {
+            replacer = Pattern.compile(pattern).replacer(replacement);
+            this.chance = chance;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Alteration that = (Alteration) o;
+
+            if (Double.compare(that.chance, chance) != 0) return false;
+            return replacer.equals(that.replacer);
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result;
+            long temp;
+            result = replacer.hashCode();
+            temp = Double.doubleToLongBits(chance);
+            result = 31 * result + (int) (temp ^ (temp >>> 32));
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "Alteration{" +
+                    "replacer=" + replacer +
+                    ", chance=" + chance +
+                    '}';
+        }
     }
 
 }
