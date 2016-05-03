@@ -33,7 +33,8 @@ public class DefaultResources implements LifecycleListener {
             smooth1 = null, smooth2 = null, smoothSquare = null, smoothSquareOld = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null;
-    private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null;
+    private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
+            distancePrint = null, distanceClean = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
             unicodeName = "Mandrill-6x16.fnt",
@@ -47,6 +48,10 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldSquareTexture = "Inconsolata-LGC-Square-distance.png",
             distanceFieldNarrow = "Inconsolata-LGC-Custom-distance.fnt",
             distanceFieldNarrowTexture = "Inconsolata-LGC-Custom-distance.png",
+            distanceFieldPrint = "Gentium-distance.fnt",
+            distanceFieldPrintTexture = "Gentium-distance.png",
+            distanceFieldClean = "Noto-Sans-distance.fnt",
+            distanceFieldCleanTexture = "Noto-Sans-distance.png",
             distanceFieldTypewriterNarrow = "CM-Custom-distance.fnt",
             distanceFieldTypewriterNarrowTexture = "CM-Custom-distance.png";
     public static String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
@@ -105,7 +110,7 @@ public class DefaultResources implements LifecycleListener {
 
     /**
      * Returns a 12x12px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
-     * @return the BitmapFont object representing Zodiac-Square.ttf at size 16 pt.
+     * @return the BitmapFont object representing Zodiac-Square.ttf at size 16 pt
      */
     public static BitmapFont getDefaultFont()
     {
@@ -122,7 +127,7 @@ public class DefaultResources implements LifecycleListener {
     }
     /**
      * Returns a 24x24px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
-     * @return the BitmapFont object representing Zodiac-Square.ttf at size 32 pt.
+     * @return the BitmapFont object representing Zodiac-Square.ttf at size 32 pt
      */
     public static BitmapFont getLargeFont()
     {
@@ -139,7 +144,7 @@ public class DefaultResources implements LifecycleListener {
     }
     /**
      * Returns a 6x12px, narrow and curving font as an embedded resource. Caches it for later calls.
-     * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 16 pt.
+     * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 16 pt
      */
     public static BitmapFont getDefaultNarrowFont()
     {
@@ -157,7 +162,7 @@ public class DefaultResources implements LifecycleListener {
 
     /**
      * Returns a 12x24px, narrow and curving font as an embedded resource. Caches it for later calls.
-     * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 32 pt.
+     * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 32 pt
      */
     public static BitmapFont getLargeNarrowFont()
     {
@@ -174,7 +179,7 @@ public class DefaultResources implements LifecycleListener {
     }
     /**
      * Returns a 12x24px, narrow and curving font as an embedded resource. Caches it for later calls.
-     * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 32 pt.
+     * @return the BitmapFont object representing Rogue-Zodiac.ttf at size 32 pt
      */
     public static BitmapFont getExtraLargeNarrowFont()
     {
@@ -213,7 +218,7 @@ public class DefaultResources implements LifecycleListener {
      * Returns a 12x24px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * Caches the font for later calls.
-     * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... not actually sure, 12x24 pixels.
+     * @return the BitmapFont object representing Inconsolata-LGC.ttf at size... not actually sure, 12x24 pixels
      */
     public static BitmapFont getLargeSmoothFont()
     {
@@ -230,7 +235,7 @@ public class DefaultResources implements LifecycleListener {
     }
     /**
      * Returns a 6x16px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
-     * @return the BitmapFont object representing Mandrill.ttf at size 16 pt.
+     * @return the BitmapFont object representing Mandrill.ttf at size 16 pt
      */
     public static BitmapFont getDefaultUnicodeFont()
     {
@@ -248,7 +253,7 @@ public class DefaultResources implements LifecycleListener {
 
     /**
      * Returns a 12x32px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
-     * @return the BitmapFont object representing Mandrill.ttf at size 32 pt.
+     * @return the BitmapFont object representing Mandrill.ttf at size 32 pt
      */
     public static BitmapFont getLargeUnicodeFont()
     {
@@ -268,7 +273,7 @@ public class DefaultResources implements LifecycleListener {
      * This font fully supports Latin, Greek, Cyrillic, and of particular interest to SquidLib, Box Drawing characters.
      * This variant is (almost) perfectly square, and box drawing characters should line up at size 25x25 px, but other
      * glyphs will have much more horizontal spacing than in other fonts. Caches the font for later calls.
-     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 25x25 pixels.
+     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 25x25 pixels
      */
     public static BitmapFont getSquareSmoothFont()
     {
@@ -291,7 +296,7 @@ public class DefaultResources implements LifecycleListener {
      * Cyrillic, and of particular interest to SquidLib, Box Drawing characters. This variant is (almost) perfectly
      * square, and box drawing characters should line up at size 20x20 px, but other glyphs will have much more
      * horizontal spacing than in other fonts. Caches the font for later calls.
-     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 20x20 pixels.
+     * @return the BitmapFont object representing Inconsolata-LGC-Square at size 20x20 pixels
      */
     public static BitmapFont getSquareSmoothMediumFont()
     {
@@ -313,7 +318,7 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
-     * @return the TextCellFactory object that can represent many sizes of the square font Inconsolata-LGC-Square.ttf.
+     * @return the TextCellFactory object that can represent many sizes of the square font Inconsolata-LGC-Square.ttf
      */
     public static TextCellFactory getStretchableSquareFont()
     {
@@ -335,7 +340,7 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
-     * @return the TextCellFactory object that can represent many sizes of the font Inconsolata-LGC-Custom.ttf.
+     * @return the TextCellFactory object that can represent many sizes of the font Inconsolata-LGC-Custom.ttf
      */
     public static TextCellFactory getStretchableFont()
     {
@@ -360,7 +365,7 @@ public class DefaultResources implements LifecycleListener {
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * distance field font technique this uses can work.
-     * @return the TextCellFactory object that can represent many sizes of the font CM-Custom.ttf.
+     * @return the TextCellFactory object that can represent many sizes of the font CM-Custom.ttf
      */
     public static TextCellFactory getStretchableTypewriterFont()
     {
@@ -376,6 +381,54 @@ public class DefaultResources implements LifecycleListener {
         }
         if(instance.typewriterDistanceNarrow != null)
             return instance.typewriterDistanceNarrow.copy();
+        return null;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use a variable-width serif font that should look like the serif
+     * fonts used in many novels' main texts, and that should scale cleanly to many sizes. Meant to be used in variable-
+     * width displays like TextPanel. Caches the result for later calls.
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * @return the TextCellFactory object that can represent many sizes of the font Gentium, by SIL
+     */
+    public static TextCellFactory getStretchablePrintFont() {
+        initialize();
+        if (instance.distancePrint == null) {
+            try {
+                instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
+                        .setSmoothingMultiplier(0.4f).height(30).width(7);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distancePrint != null)
+            return instance.distancePrint.copy();
+        return null;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use a variable-width sans-serif font that currently looks
+     * slightly jumbled without certain layout features. Meant to be used in variable-width displays like TextPanel, but
+     * currently you should prefer getStretchablePrintFont() for legibility. Caches the result for later calls.
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * @return the TextCellFactory object that can represent many sizes of the font Noto Sans, by Google
+     */
+    public static TextCellFactory getStretchableCleanFont() {
+        initialize();
+        if (instance.distanceClean == null) {
+            try {
+                instance.distanceClean = new TextCellFactory().fontDistanceField(distanceFieldClean, distanceFieldCleanTexture)
+                        .setSmoothingMultiplier(0.4f).height(30).width(7);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceClean != null)
+            return instance.distanceClean.copy();
         return null;
     }
 
@@ -506,6 +559,14 @@ public class DefaultResources implements LifecycleListener {
         if(typewriterDistanceNarrow != null) {
             typewriterDistanceNarrow.dispose();
             typewriterDistanceNarrow = null;
+        }
+        if(distanceClean != null) {
+            distanceClean.dispose();
+            distanceClean = null;
+        }
+        if(distancePrint != null) {
+            distancePrint.dispose();
+            distancePrint = null;
         }
         if (unicode1 != null) {
             unicode1.dispose();
