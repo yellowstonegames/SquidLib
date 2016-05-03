@@ -1,7 +1,5 @@
 package squidpony.gdx.examples;
 
-import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.panel.ICombinedPanel;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -12,9 +10,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
-import squidpony.panel.ISquidPanel;
+import squidpony.panel.ICombinedPanel;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
@@ -647,64 +646,32 @@ public class EverythingDemo extends ApplicationAdapter {
         	gcp.putFG(0, 4, helping3);
 		} else {
 			/*
-			 * Use SquidTextPanel. There's less job to do than with
-			 * GroupCombinedPanel. It doesn't seem like it when reading this
-			 * code, but this actually does much more than GroupCombinedPanel,
-			 * because we do line wrapping and justifying, without having to
-			 * worry about sizes since TextPanel layouts on its own (see how 'w'
-			 * and 'h' aren't hard-coded below ?)
-			 * 
-			 * It actually looks worse than the GroupCombinedPanel business, but
-			 * hey that's to show you an example!
+			 * Use TextPanel. There's less work to do than with
+			 * GroupCombinedPanel, and we can use a more legible variable-width font.
+			 * It doesn't seem like it when reading this code, but this actually does
+			 * much more than GroupCombinedPanel,  because we do line wrapping and
+			 * justifying, without having to worry about sizes since TextPanel lays
+			 * itself out.
 			 */
-			final SquidTextPanel<Color> tp = new SquidTextPanel<Color>() {
-				@Override
-				protected ISquidPanel<Color> buildPanel(int width, int height) {
-					return new SquidPanel(width, height, display.getTextFactory());
-				}
-			};
-			a = tp;
-			tp.maxWidth = /*
-							 * for wrapping to do something, but it could simply
-							 * be bareDungeon.length
-							 */ helping3.length() / 2;
-			tp.maxHeight = bareDungeon[0].length;
-            tp.zoomMultiplierX = currentZoomX;
-            tp.zoomMultiplierY = currentZoomY;
-			tp.backgroundColor = bgColor;
-			tp.borderSize = display.getCellHeight() / 4;
-			tp.borderColor = new Color(0.9f, 0.1f, 0.0f, 0.5f);
-			tp.justifyText = true;
+			final TextPanel<Color> tp = new TextPanel<Color>(new GDXMarkup(), DefaultResources.getStretchablePrintFont());
+            tp.backgroundColor = SColor.DARK_SLATE_GRAY;
 
 			final List<IColoredString<Color>> text = new ArrayList<>();
 			text.add(cs);
-			/* Jump line */
-			text.add(IColoredString.Impl.<Color> create());
 			/* No need to call IColoredString::wrap, TextPanel does it on its own */
 			text.add(helping1);
-			text.add(IColoredString.Impl.<Color> create());
 			text.add(helping2);
-			text.add(IColoredString.Impl.<Color> create());
 			text.add(helping3);
 
-			tp.init(text);
-
-			/*
-			 * Call these after 'init', because it computes the actual size of
-			 * 'tp'
-			 */
-			final int w = tp.getGridWidth();
-			final int h = tp.getGridHeight();
-
-			a.setPosition(((width / 2) - (w / 2)) * cellWidth,
-                    ((height / 2) - (h / 2)) * cellHeight);
-
-			/*
-			 * The panel's text is set, as well as its position. We're ready to
-			 * put it:
-			 */
-			tp.put(true);
-		}
+            final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f * INTERNAL_ZOOM;
+            final float h = height * cellHeight, ah = cellHeight * 9f * INTERNAL_ZOOM;
+            tp.init(aw, ah, text);
+            a = tp.getScrollPane();
+            final float x = (w - aw) / 2f;
+            final float y = (h - ah) / 2f;
+            a.setPosition(x, y);
+            stage.setScrollFocus(a);
+        }
 
         help = a;
 
@@ -860,16 +827,6 @@ public class EverythingDemo extends ApplicationAdapter {
             fgCenter.clearCache();
             bgCenter.clearCache();
         }
-		if (help instanceof SquidTextPanel) {
-			final SquidTextPanel<?> tp = (SquidTextPanel<?>) help;
-			/*
-			 * Needed because drawing the stage erased them. No big deal,
-			 * ShapeRenderer is super fast.
-			 */
-            tp.zoomMultiplierX = currentZoomX;
-            tp.zoomMultiplierY = currentZoomY;
-			tp.putBorder();
-		}
     }
 
     @Override

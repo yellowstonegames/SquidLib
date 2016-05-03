@@ -315,10 +315,16 @@ public class TextPanel<T extends Color> {
 		yScrollingCallback(yscroll);
 	}
 
-    public void re_size(float width, float height)
+    public void init(float width, float maxHeight, T color, String... text)
     {
-        init(width, height, text);
+        ArrayList<IColoredString.Impl<T>> coll = new ArrayList<>(text.length);
+        for(String t : text)
+        {
+            coll.add(new IColoredString.Impl<T>(t, color));
+        }
+        init(width, maxHeight, coll);
     }
+
 	/**
 	 * Draws the border. You have to call this method manually, because the
 	 * border is outside the actor and hence should be drawn at the very end,
