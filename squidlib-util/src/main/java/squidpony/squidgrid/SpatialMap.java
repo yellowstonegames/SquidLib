@@ -642,6 +642,197 @@ public class SpatialMap<I, E> implements Iterable<E> {
         return itemMapping.keySet().iterator();
     }
 
+    /**
+     * Iterates through positions in a rectangular region (starting at a minimum of x, y and extending to the specified
+     * width and height) in left-to-right, then top-to-bottom order (the same as reading a page of text).
+     * Any Coords this returns should be viable arguments to get() if you want a corresponding element.
+     * @return an Iterator of Coord
+     */
+    public Iterator<Coord> rectanglePositionIterator(int x, int y, int width, int height)
+    {
+        return new RectangularIterator(x, y, width, height);
+    }
+
+    /**
+     * Iterates through positions in a region defined by a Radius (starting at a minimum of x - distance, y - distance
+     * and extending to x + distance, y + distance but skipping any positions where the Radius considers a position
+     * further from x, y than distance) in left-to-right, then top-to-bottom order (the same as reading a page of text).
+     * You can use Radius.SQUARE to make a square region (which could also be made with rectanglePositionIterator()),
+     * Radius.DIAMOND to make a, well, diamond-shaped region, or Radius.CIRCLE to make a circle (which could also be
+     * made with circlePositionIterator).
+     * Any Coords this returns should be viable arguments to get() if you want a corresponding element.
+     * @return an Iterator of Coord
+     */
+    public Iterator<Coord> radiusPositionIterator(int x, int y, Radius measurement, int distance)
+    {
+        return new RadiusIterator(x, y, measurement, distance);
+    }
+    /**
+     * Iterates through positions in a circular region (starting at a minimum of x - distance, y - distance and
+     * extending to x + distance, y + distance but skipping any positions where the Euclidean distance from x,y to the
+     * position is more than distance) in left-to-right, then top-to-bottom order (the same as reading a page of text).
+     * Any Coords this returns should be viable arguments to get() if you want a corresponding element.
+     * @return an Iterator of Coord
+     */
+    public Iterator<Coord> circlePositionIterator(int x, int y, int distance)
+    {
+        return new RadiusIterator(x, y, Radius.CIRCLE, distance);
+    }
+
+    private class RectangularIterator implements Iterator<Coord>
+    {
+        int x, y, width, height, idx,
+                poolWidth = Coord.getCacheWidth(), poolHeight = Coord.getCacheHeight();
+        Set<Coord> positions;
+        Coord temp;
+        RectangularIterator(int x, int y, int width, int height)
+        {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            idx = -1;
+            positions = positionMapping.keySet();
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (idx < width * height - 1) {
+                Coord t2;
+                int n = idx;
+                do {
+                    n = findNext(n);
+                    if (idx < 0)
+                        return n >= 0;
+                    else {
+                        if(x + n % width >= 0 && x + n % width < poolWidth
+                                && y + n / width >= 0 && y + n / width < poolHeight)
+                            t2 = Coord.get(x + n % width, y + n / width);
+                        else t2 = Coord.get(-1, -1);
+                    }
+                } while (!positions.contains(t2));
+				/* Not done && has next */
+                return n >= 0;
+            }
+            return false;
+        }
+
+
+        @Override
+        public Coord next() {
+            do {
+                idx = findNext(idx);
+                if (idx < 0)
+                    throw new NoSuchElementException();
+                if(x + idx % width >= 0 && x + idx % width < poolWidth
+                        && y + idx / width >= 0 && y + idx / width < poolHeight)
+                    temp = Coord.get(x + idx % width, y + idx / width);
+                else temp = Coord.get(-1, -1);
+            } while (!positions.contains(temp));
+            return temp;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        private int findNext(final int idx) {
+            if (idx < 0) {
+				/* First iteration */
+                return 0;
+            } else {
+                if (idx >= width * height - 1)
+                {
+					/* Done iterating */
+                    return -1;
+                } else {
+                    return idx + 1;
+                }
+            }
+        }
+    }
+
+    private class RadiusIterator implements Iterator<Coord>
+    {
+        int x, y, width, height, distance, idx,
+                poolWidth = Coord.getCacheWidth(), poolHeight = Coord.getCacheHeight();
+        Set<Coord> positions;
+        Coord temp;
+        Radius measurement;
+        RadiusIterator(int x, int y, Radius measurement, int distance)
+        {
+            this.x = x;
+            this.y = y;
+            width = 1 + distance * 2;
+            height = 1 + distance * 2;
+            this.distance = distance;
+            this.measurement = measurement;
+            idx = -1;
+            positions = positionMapping.keySet();
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (idx < width * height - 1) {
+                Coord t2;
+                int n = idx;
+                do {
+                    n = findNext(n);
+                    if (idx < 0)
+                        return n >= 0;
+                    else {
+                        if(x - distance + n % width >= 0 && x - distance + n % width < poolWidth
+                                && y - distance + n / width >= 0 && y - distance + n / width < poolHeight &&
+                                measurement.radius(x, y,
+                                        x - distance + n % width, y - distance + n / width) <= distance)
+                            t2 = Coord.get(x - distance + n % width, y - distance + n / width);
+                        else t2 = Coord.get(-1, -1);
+                    }
+                } while (!positions.contains(t2));
+				/* Not done && has next */
+                return n >= 0;
+            }
+            return false;
+        }
+
+
+        @Override
+        public Coord next() {
+            do {
+                idx = findNext(idx);
+                if (idx < 0)
+                    throw new NoSuchElementException();
+                if(x - distance + idx % width >= 0 && x - distance + idx % width < poolWidth
+                        && y - distance + idx / width >= 0 && y - distance + idx / width < poolHeight &&
+                        measurement.radius(x, y,
+                                x - distance + idx % width, y - distance + idx / width) <= distance)
+                    temp = Coord.get(x - distance + idx % width, y - distance + idx / width);
+                else temp = Coord.get(-1, -1);
+            } while (!positions.contains(temp));
+            return temp;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        private int findNext(final int idx) {
+            if (idx < 0) {
+				/* First iteration */
+                return 0;
+            } else {
+                if (idx >= width * height - 1)
+                {
+					/* Done iterating */
+                    return -1;
+                } else {
+                    return idx + 1;
+                }
+            }
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

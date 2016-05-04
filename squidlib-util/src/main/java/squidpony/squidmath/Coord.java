@@ -393,6 +393,34 @@ public class Coord implements Serializable {
         }
     }
 
+    /**
+     * Gets the width of the pool used as a cache for Coords, not including negative Coords.
+     * Unless expandPool() has been called, this should be 256.
+     * Useful for finding the upper (exclusive) bound for x values that can be used efficiently in Coords.
+     * Requesting a Coord with a x greater than or equal to this value will result in a new Coord being allocated and
+     * not cached, which may cause problems with code that expects the normal reference equality of Coords to be upheld
+     * and in extreme cases may require more time garbage collecting than is normally necessary.
+     * @return the width of the Coord cache, disregarding negative Coords
+     */
+    public static int getCacheWidth()
+    {
+        return POOL.length - 3;
+    }
+
+    /**
+     * Gets the height of the pool used as a cache for Coords, not including negative Coords.
+     * Unless expandPool() has been called, this should be 256.
+     * Useful for finding the upper (exclusive) bound for y values that can be used efficiently in Coords.
+     * Requesting a Coord with a y greater than or equal to this value will result in a new Coord being allocated and
+     * not cached, which may cause problems with code that expects the normal reference equality of Coords to be upheld
+     * and in extreme cases may require more time garbage collecting than is normally necessary.
+     * @return the height of the Coord cache, disregarding negative Coords
+     */
+    public static int getCacheHeight()
+    {
+        return POOL[0].length - 3;
+    }
+
     public static void expandPool(int xIncrease, int yIncrease)
     {
         if(xIncrease < 0 || yIncrease < 0)
