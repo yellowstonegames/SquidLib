@@ -1,9 +1,9 @@
 package squidpony.squidgrid.iterator;
 
-import java.util.NoSuchElementException;
-
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
+
+import java.util.NoSuchElementException;
 
 /**
  * Instances of {@link SquidIterator}.
@@ -49,7 +49,7 @@ public class SquidIterators {
 			else {
 				/*
 				 * Previous element is not on leftmost column or not on the
-				 * leftmost colum's highest cell.
+				 * leftmost column's highest cell.
 				 */
 				return previous.x < width - 1 || 0 < previous.y;
 			}
