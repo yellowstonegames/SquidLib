@@ -245,26 +245,72 @@ public class DungeonGeneratorTest {
         //sdg.addMaze(30);
         //sdg.addLake(10, '£', '¢');
         rng.setState(0xFEEEEEEEEEL);
-        OrganicMapGenerator organic = new OrganicMapGenerator(0.0, 0.25, width, height, rng);
+        OrganicMapGenerator organic = new OrganicMapGenerator(0.57, 0.65, width, height, rng);
         map = organic.generate();
         env = organic.getEnvironment();
         sdg.generate(map, env);
         //RNG rand = new RNG();
         //sdg.generate(rand.getRandomElement(TilesetType.values()));
         sdungeon = sdg.getDungeon();
-        sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
-        sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+        //sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
+        //sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(sdungeon, true)));
+                DungeonUtility.hashesToLines(sdungeon, false)));
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
+
+        /*
+        rng.setState(2252637788195L);
+        RectangleRoomFinder rrf = new RectangleRoomFinder(sdungeon);
+        rrf.minimumDiagonal = 3;
+        rrf.onlySquareRooms = true;
+        List<Rectangle> rectangles = rng.shuffle(rrf.findRectangles());
+        int nh, nw, nx, ny;
+        Coord center;
+        char[][] dungeon2 = GwtCompatibility.fill2D('#', width, height);
+        for(Rectangle rect : rectangles)
+        {
+            if(rng.nextDouble() < 0.1) continue;
+            center = Rectangle.Utils.center(rect);
+            nh = (int)(rect.getHeight() * (rng.nextDouble(1.5) + 1.3));
+            nw = (int)(rect.getWidth() * (rng.nextDouble(1.5) + 1.3));
+            nx = Math.max(1, Math.min(width - 2, center.x - nw/2));
+            ny = Math.max(1, Math.min(height - 2, center.y - nh/2));
+            GwtCompatibility.insert2D(DungeonUtility.wallWrap(GwtCompatibility.fill2D('.', nw, nh)),
+                    dungeon2, nx, ny);
+        }
+        DungeonUtility.wallWrap(dungeon2);
+
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(dungeon2, true)));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+        */
+        rng.setState(0xFEEEEEEEEEL);
+        DenseRoomMapGenerator dense = new DenseRoomMapGenerator(width, height, rng);
+        map = dense.generate();
+        env = dense.getEnvironment();
+        sdg.addDoors(80, false);
+        sdg.generate(map, env);
+        //RNG rand = new RNG();
+        //sdg.generate(rand.getRandomElement(TilesetType.values()));
+        sdungeon = sdg.getDungeon();
+        //sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
+        //sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdungeon, false)));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+
 
         rng.setState(2252637788195L);
         ModularMapGenerator mmg = new ModularMapGenerator(width, height, rng);
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(mmg.generate(), true)));
         System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
 
 
         /*
