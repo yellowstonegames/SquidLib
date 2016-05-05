@@ -138,10 +138,10 @@ public class GwtCompatibility {
     {
         if(source == null || target == null)
             return target;
-        if(source.length < 1)
+        if(source.length < 1 || source[0].length < 1)
             return copy2D(target);
         for (int i = 0; i < source.length && x + i < target.length; i++) {
-            System.arraycopy(source[i], 0, target[x + i], y, Math.min(source[i].length, target[i].length - y));
+            System.arraycopy(source[i], 0, target[x + i], y, Math.min(source[i].length, target[x+i].length - y));
         }
         return target;
     }
@@ -159,10 +159,10 @@ public class GwtCompatibility {
     {
         if(source == null || target == null)
             return target;
-        if(source.length < 1)
+        if(source.length < 1 || source[0].length < 1)
             return copy2D(target);
         for (int i = 0; i < source.length && x + i < target.length; i++) {
-            System.arraycopy(source[i], 0, target[x + i], y, Math.min(source[i].length, target[i].length - y));
+            System.arraycopy(source[i], 0, target[x + i], y, Math.min(source[i].length, target[x+i].length - y));
         }
         return target;
     }
@@ -180,10 +180,10 @@ public class GwtCompatibility {
     {
         if(source == null || target == null)
             return target;
-        if(source.length < 1)
+        if(source.length < 1 || source[0].length < 1)
             return copy2D(target);
         for (int i = 0; i < source.length && x + i < target.length; i++) {
-            System.arraycopy(source[i], 0, target[x + i], y, Math.min(source[i].length, target[i].length - y));
+            System.arraycopy(source[i], 0, target[x + i], y, Math.min(source[i].length, target[x+i].length - y));
         }
         return target;
     }
@@ -201,10 +201,10 @@ public class GwtCompatibility {
     {
         if(source == null || target == null)
             return target;
-        if(source.length < 1)
+        if(source.length < 1 || source[0].length < 1)
             return copy2D(target);
         for (int i = 0; i < source.length && x + i < target.length; i++) {
-            System.arraycopy(source[i], 0, target[x + i], y, Math.min(source[i].length, target[i].length - y));
+            System.arraycopy(source[i], 0, target[x + i], y, Math.min(source[i].length, target[x+i].length - y));
         }
         return target;
     }

@@ -14,7 +14,7 @@ public class OrganicMapGenerator {
     public int[][] environment;
     public RNG rng;
     protected int width, height;
-    protected double noiseMin, noiseMax;
+    public double noiseMin, noiseMax;
     public OrganicMapGenerator()
     {
         this(0.55, 0.65, 80, 30, new RNG());
@@ -139,13 +139,13 @@ public class OrganicMapGenerator {
                         map[elem.x][elem.y] = '.';
                         environment[elem.x][elem.y] = MixedGenerator.CORRIDOR_FLOOR;
                         ctr++;
-                    } else if (rng.nextBoolean() &&
+                    } /*else if (rng.nextBoolean() &&
                             CoordPacker.queryPacked(CoordPacker.differencePacked(tempPacked, region), elem.x, elem.y)) {
                         linking = regions.get(rng.nextInt(regions.size()));
                         start = elem;
                         end = CoordPacker.singleRandom(linking, rng);
                         path2 = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.75, rng);
-                        for(Coord elem2 : path)
+                        for(Coord elem2 : path2)
                         {
                             if(elem2.x < width && elem2.y < height) {
                                 if (map[elem2.x][elem2.y] == '#') {
@@ -156,7 +156,7 @@ public class OrganicMapGenerator {
                             }
                         }
                         break;
-                    }
+                    }*/
                 }
             }
         }
