@@ -116,32 +116,47 @@ public class LanguageCipher implements Serializable{
      * @param vocabulary a Map of Strings in the fake language to Strings in the source language
      * @return a deciphered version of text that has any words as keys in vocabulary translated to the source language
      */
-    public String decipher(String text, Map<String, String> vocabulary)
+    public String decipher(String text, final Map<String, String> vocabulary)
     {
         Pattern pat;
         Replacer rep;
-        String working = text;
-        for(final Map.Entry<String, String> kv : vocabulary.entrySet())
+        StringBuilder sb = new StringBuilder(128);
+        sb.append("\\b(?:");
+        for(String k : vocabulary.keySet())
         {
-            pat = Pattern.compile("\\b" + kv.getKey() + "\\b", "ui");
-
-            rep = pat.replacer(new Substitution() {
-                @Override
-                public void appendSubstitution(MatchResult match, TextBuffer dest) {
-                    char[] chars = kv.getValue().toCharArray();
-                    if(Category.Lu.contains(match.charAt(0)))
-                        chars[0] = Character.toUpperCase(chars[0]);
-                    if(match.length() > 1 && Category.Lu.contains(match.charAt(1))) {
-                        for (int i = 1; i < chars.length; i++) {
-                            chars[i] = Character.toUpperCase(chars[i]);
-                        }
-                    }
-                    dest.append(chars, 0, chars.length);
-                }
-            });
-
-            working = rep.replace(working);
+            sb.append("(?:\\Q");
+            sb.append(k);
+            sb.append("\\E)|");
         }
-        return working;
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(")\\b");
+
+        pat = Pattern.compile("\\b" + sb + "\\b", "ui");
+
+        rep = pat.replacer(new Substitution() {
+            @Override
+            public void appendSubstitution(MatchResult match, TextBuffer dest) {
+                String translated = match.group(0);
+                if(translated == null) {
+                    return;
+                }
+                translated = translated.toLowerCase();
+                translated = vocabulary.get(translated);
+                if(translated == null) {
+                    dest.append(match.group(0));
+                    return;
+                }
+                char[] chars = translated.toCharArray();
+                if(Category.Lu.contains(match.charAt(0)))
+                    chars[0] = Character.toUpperCase(chars[0]);
+                if(match.length() > 1 && Category.Lu.contains(match.charAt(1))) {
+                    for (int i = 1; i < chars.length; i++) {
+                        chars[i] = Character.toUpperCase(chars[i]);
+                    }
+                }
+                dest.append(chars, 0, chars.length);
+            }
+        });
+        return rep.replace(text);
     }
 }

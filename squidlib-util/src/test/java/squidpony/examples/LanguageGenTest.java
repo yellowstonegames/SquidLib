@@ -4,7 +4,7 @@ import squidpony.FakeLanguageGen;
 import squidpony.LanguageCipher;
 import squidpony.squidmath.StatefulRNG;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 /**
  * Created by Tommy Ettinger on 11/29/2015.
@@ -193,7 +193,7 @@ public class LanguageGenTest {
                     new String[]{".", ".", ".", "!", "?"}, 0.12));
         }
         System.out.println();
-        LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.JAPANESE_ROMANIZED);
+        LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.FRENCH, 0.3));
         String[] oz = new String[]{
                 "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",
                         "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the ",
@@ -205,17 +205,21 @@ public class LanguageGenTest {
                         "in the ground, called a cyclone cellar, where the family could go in case one of ",
                         "those great whirlwinds arose, mighty enough to crush any building in its path. It ",
                         "was reached by a trap door in the middle of the floor, from which a ladder led ",
-                        "down into the small, dark hole."
+                        "down into the small, dark hole. Toto fell in the hole once and Dorothy had to ",
+                        "slay the Black Duke of the Goblin Realms to get him back. Good times."
         }, oz2 = new String[oz.length];
         int ctr = 0;
         for(String s : oz) {
             oz2[ctr] = cipher.cipher(s);
             System.out.println(oz2[ctr++]);
         }
-        LinkedHashMap<String, String> vocabulary = new LinkedHashMap<>(16);
+        HashMap<String, String> vocabulary = new HashMap<>(16);
         vocabulary.put(cipher.lookup("Dorothy"), "Dorothy");
         vocabulary.put(cipher.lookup("farmer"), "farmer");
         vocabulary.put(cipher.lookup("the"), "the");
+        vocabulary.put(cipher.lookup("fell"), "fell");
+        vocabulary.put(cipher.lookup("one"), "one");
+        vocabulary.put(cipher.lookup("uncle"), "uncle");
         for(String s : oz2)
         {
             System.out.println(cipher.decipher(s, vocabulary));
