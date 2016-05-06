@@ -4,6 +4,8 @@ import squidpony.FakeLanguageGen;
 import squidpony.LanguageCipher;
 import squidpony.squidmath.StatefulRNG;
 
+import java.util.LinkedHashMap;
+
 /**
  * Created by Tommy Ettinger on 11/29/2015.
  */
@@ -197,15 +199,27 @@ public class LanguageGenTest {
                         "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the ",
                         "lumber to build it had to be carried by wagon many miles. There were four walls, ",
                         "a floor and a roof, which made one room; and this room contained a rusty looking ",
-                        "cookstove, a cupboard for the dishes, a table, three or four chairs, and the beds.",
-                        " Uncle Henry and Aunt Em had a big bed in one corner, and Dorothy a little bed in ",
+                        "cookstove, a cupboard for the dishes, a table, three or four chairs, and the beds. ",
+                        "Uncle Henry and Aunt Em had a big bed in one corner, and Dorothy a little bed in ",
                         "another corner. There was no garret at all, and no cellar—except a small hole dug ",
                         "in the ground, called a cyclone cellar, where the family could go in case one of ",
                         "those great whirlwinds arose, mighty enough to crush any building in its path. It ",
                         "was reached by a trap door in the middle of the floor, from which a ladder led ",
                         "down into the small, dark hole."
-        };
-        for(String s : oz)
-            System.out.println(cipher.cipher(s));
+        }, oz2 = new String[oz.length];
+        int ctr = 0;
+        for(String s : oz) {
+            oz2[ctr] = cipher.cipher(s);
+            System.out.println(oz2[ctr++]);
+        }
+        LinkedHashMap<String, String> vocabulary = new LinkedHashMap<>(16);
+        vocabulary.put(cipher.lookup("Dorothy"), "Dorothy");
+        vocabulary.put(cipher.lookup("farmer"), "farmer");
+        vocabulary.put(cipher.lookup("the"), "the");
+        for(String s : oz2)
+        {
+            System.out.println(cipher.decipher(s, vocabulary));
+        }
+
     }
 }

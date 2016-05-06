@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.squidai.DijkstraMap;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.LightRNG;
@@ -1144,6 +1145,106 @@ public class DungeonUtility {
             }
         }
         return portion;
+    }
+
+    /**
+     * Given a char[][] for the map, a Map of Character keys to Double values that will be used to determine costs, and
+     * a double value for unhandled characters, produces a double[][] that can be used as a map by AStarSearch. It
+     * expects any doors to be represented by '+' if closed or '/' if open (which can be caused by calling
+     * DungeonUtility.closeDoors() ) and any walls to be '#' or line drawing characters. In the parameter costs, there
+     * does not need to be an entry for '#' or any box drawing characters, but if one is present for '#' it will apply
+     * that cost to both '#' and all box drawing characters, and if one is not present it will default to a negative
+     * number, meaning it is impassable for AStarSearch. For any other entry in costs, a char in the 2D char array that
+     * matches the key will correspond (at the same x,y position in the returned 2D double array) to that key's value in
+     * costs. If a char is used in the map but does not have a corresponding key in costs, it will be given the value of
+     * the parameter defaultValue, which is typically 0 unless a creature is limited to only moving in some terrain.
+     * <p/>
+     * The values in costs are different from those expected for DijkstraMap; negative numbers are impassable, 0 is the
+     * cost for a normal walkable tile, and higher numbers are harder to enter.
+     * <p/>
+     * An example use for this would be to make a creature unable to enter any non-water cell (like a fish),
+     * unable to enter doorways (like some mythological versions of vampires), or to make a wheeled vehicle take more
+     * time to move across rubble or rough terrain.
+     * <p/>
+     * A potentially common case that needs to be addressed is NPC movement onto staircases in games that have them;
+     * some games may find it desirable for NPCs to block staircases and others may not, but in either case you should
+     * give both '&gt;' and '&lt;', the standard characters for staircases, the same value in costs.
+     *
+     * @param map          a dungeon, width by height, with any closed doors as '+' and open doors as '/' as per closeDoors() .
+     * @param costs        a Map of Character keys representing possible elements in map, and Double values for their cost.
+     * @param defaultValue a double that will be used as the cost for any characters that don't have a key in costs.
+     * @return a cost map suitable for use with AStarSearch
+     */
+    public static double[][] generateAStarCostMap(char[][] map, Map<Character, Double> costs, double defaultValue) {
+        int width = map.length;
+        int height = map[0].length;
+        double[][] portion = new double[width][height];
+        char current;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                current = map[i][j];
+                if (costs.containsKey(current)) {
+                    portion[i][j] = costs.get(current);
+                } else {
+                    switch (current) {
+                        case '\1':
+                        case '├':
+                        case '┤':
+                        case '┴':
+                        case '┬':
+                        case '┌':
+                        case '┐':
+                        case '└':
+                        case '┘':
+                        case '│':
+                        case '─':
+                        case '┼':
+                        case '#':
+                            portion[i][j] = (costs.containsKey('#'))
+                                    ? costs.get('#')
+                                    : squidpony.squidai.DijkstraMap.WALL;
+                            break;
+                        default:
+                            portion[i][j] = defaultValue;
+                    }
+                }
+            }
+        }
+        return portion;
+    }
+
+    public static double[][] translateAStarToDijkstra(double[][] astar)
+    {
+        if(astar == null) return null;
+        if(astar.length <= 0 || astar[0].length <= 0)
+            return new double[0][0];
+        double[][] dijkstra = new double[astar.length][astar[0].length];
+        for (int x = 0; x < astar.length; x++) {
+            for (int y = 0; y < astar[x].length; y++) {
+                if(astar[x][y] < 0)
+                    dijkstra[x][y] = DijkstraMap.WALL;
+                else
+                    dijkstra[x][y] = DijkstraMap.FLOOR;
+            }
+        }
+        return dijkstra;
+    }
+
+    public static double[][] translateDijkstraToAStar(double[][] dijkstra)
+    {
+        if(dijkstra == null) return null;
+        if(dijkstra.length <= 0 || dijkstra[0].length <= 0)
+            return new double[0][0];
+        double[][] astar = new double[dijkstra.length][dijkstra[0].length];
+        for (int x = 0; x < dijkstra.length; x++) {
+            for (int y = 0; y < dijkstra[x].length; y++) {
+                if(dijkstra[x][y] > DijkstraMap.FLOOR)
+                    astar[x][y] = -1;
+                else
+                    astar[x][y] = 1;
+            }
+        }
+        return astar;
     }
 
     /**
