@@ -14,7 +14,10 @@ import java.util.Queue;
  * A* is a best-first search algorithm for pathfinding. It uses a heuristic
  * value to reduce the total search space. If the heuristic is too large then
  * the optimal path is not guaranteed to be returned.
- *
+ * <br>
+ * NOTE: Due to implementation problems, this class is atypically slow for A* and 34x slower than DijkstraMap on the
+ * same inputs. It may be improved in future versions, but for now you should strongly prefer DijkstraMap.
+ * @see squidpony.squidai.DijkstraMap a faster pathfinding algorithm with more features.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 public class AStarSearch implements Serializable{
@@ -45,14 +48,20 @@ public class AStarSearch implements Serializable{
         DIJKSTRA
     }
 
-    private final double[][] map;
-    private final HashSet<Coord> open = new HashSet<>();
-    private final int width, height;
-    private boolean[][] finished;
-    private Coord[][] parent;
-    private Coord start, target;
-    private final SearchType type;
+    protected final double[][] map;
+    protected final HashSet<Coord> open = new HashSet<>();
+    protected final int width, height;
+    protected Coord[][] parent;
+    protected Coord start, target;
+    protected final SearchType type;
 
+    protected AStarSearch()
+    {
+        width = 0;
+        height = 0;
+        type = SearchType.MANHATTAN;
+        map = new double[width][height];
+    }
     /**
      * Builds a pathing object to run searches on.
      *
@@ -91,10 +100,21 @@ public class AStarSearch implements Serializable{
      * @return the shortest path, or null
      */
     public Queue<Coord> path(int startx, int starty, int targetx, int targety) {
-        start = Coord.get(startx, starty);
-        target = Coord.get(targetx, targety);
+        return path(Coord.get(startx, starty), Coord.get(targetx, targety));
+    }
+    /**
+     * Finds an A* path to the target from the start. If no path is possible,
+     * returns null.
+     *
+     * @param start the start location
+     * @param target the target location
+     * @return the shortest path, or null
+     */
+    public Queue<Coord> path(Coord start, Coord target) {
+        this.start = start;
+        this.target = target;
         open.clear();
-        finished = new boolean[width][height];
+        boolean[][] finished = new boolean[width][height];
         parent = new Coord[width][height];
 
         Direction[] dirs;
@@ -154,7 +174,7 @@ public class AStarSearch implements Serializable{
             }
         }
 
-        /* Not using Deque nor ArrayDeqye, they aren't Gwt compatible */
+        /* Not using Deque nor ArrayDeque, they aren't Gwt compatible */
         final LinkedList<Coord> deq = new LinkedList<>();
         while (!p.equals(start)) {
             deq.addFirst(p);
@@ -164,7 +184,7 @@ public class AStarSearch implements Serializable{
     }
 
     /**
-     * Finds the g value for the given location.
+     * Finds the g value (start to current) for the given location.
      *
      * If the given location is not valid or not attached to the pathfinding
      * then -1 is returned.
@@ -172,7 +192,7 @@ public class AStarSearch implements Serializable{
      * @param x coordinate
      * @param y coordinate
      */
-    private double g(int x, int y) {
+    protected double g(int x, int y) {
         if (x == start.x && y == start.y) {
             return 0;
         }
@@ -189,14 +209,14 @@ public class AStarSearch implements Serializable{
     }
 
     /**
-     * Returns the heuristic distance to the goal location using the current
-     * calculation type.
+     * Returns the heuristic distance from the current cell to the goal location\
+     * using the current calculation type.
      *
      * @param x coordinate
      * @param y coordinate
      * @return distance
      */
-    private double h(int x, int y) {
+    protected double h(int x, int y) {
         switch (type) {
             case MANHATTAN:
                 return Math.abs(x - target.x) + Math.abs(y - target.y);
@@ -216,13 +236,14 @@ public class AStarSearch implements Serializable{
     }
 
     /**
-	 * @param x
-	 * @param y
+     * Combines g and h to get the estimated distance from start to goal going on the current route.
+	 * @param x coordinate
+	 * @param y coordinate
 	 * @return The current known shortest distance to the start position from
 	 *         the given position. If the current position cannot reach the
 	 *         start position or is invalid, -1 is returned.
 	 */
-    private double f(int x, int y) {
+    protected double f(int x, int y) {
         double foundG = g(x, y);
         if (foundG < 0) {
             return -1;
@@ -233,7 +254,7 @@ public class AStarSearch implements Serializable{
     /**
      * @return the current open point with the smallest F
      */
-    private Coord smallestF() {
+    protected Coord smallestF() {
         Coord smallest = null;
         double smallF = Double.POSITIVE_INFINITY;
         double f;

@@ -42,23 +42,22 @@ import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import static squidpony.squidmath.CoordPacker.*;
+import static squidpony.squidmath.CoordPacker.count;
 
 public class DijkstraBenchmark {
 
-    public static final int DIMENSION = 100, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 40, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
             new StatefulRNG(0x1337BEEFDEAL));
     public static char[][] map;
+    public static double[][] astarMap;
     public static short[] floors;
     static {
         serpent.putWalledBoxRoomCarvers(1);
@@ -66,6 +65,7 @@ public class DijkstraBenchmark {
         floors = CoordPacker.pack(map, '.');
         System.out.println("Floors: " + count(floors));
         System.out.println("Percentage walkable: " + count(floors) * 100.0 / (DIMENSION * DIMENSION) + "%");
+        astarMap = DungeonUtility.generateAStarCostMap(map, Collections.<Character, Double>emptyMap(), 1);
     }
     public long doScan()
     {
@@ -132,11 +132,62 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
-    //@Benchmark
-    //@BenchmarkMode(Mode.AverageTime)
-    //@OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePath() throws InterruptedException {
         System.out.println(doPath());
+    }
+
+    public long doPathAStar()
+    {
+        AStarSearch astar = new AStarSearch(astarMap, AStarSearch.SearchType.CHEBYSHEV);
+        Coord r;
+        long scanned = 0;
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                utility.rng.setState((x << 22) | (y << 16) | (x * y));
+                r = utility.randomCell(floors);
+                astar.path(r, Coord.get(x, y));
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measurePathAStar() throws InterruptedException {
+        System.out.println(doPathAStar());
+    }
+    public long doPathPlannedAStar()
+    {
+        PlannedAStar astar = new PlannedAStar(astarMap, AStarSearch.SearchType.CHEBYSHEV);
+        Coord r;
+        long scanned = 0;
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                utility.rng.setState((x << 22) | (y << 16) | (x * y));
+                r = utility.randomCell(floors);
+                astar.path(r, Coord.get(x, y));
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measurePathPlannedAStar() throws InterruptedException {
+        System.out.println(doPathPlannedAStar());
     }
 
     /*
