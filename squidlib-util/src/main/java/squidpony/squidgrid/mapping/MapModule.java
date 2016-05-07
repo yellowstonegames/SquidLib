@@ -19,6 +19,10 @@ public class MapModule implements Comparable<MapModule>, Serializable {
      */
     public char[][] map;
     /**
+     * The room/cave/corridor/wall status for each cell of this section of map.
+     */
+    public int[][] environment;
+    /**
      * Stores Coords just outside the contents of the MapModule, where doors are allowed to connect into this.
      * Uses Coord positions that are relative to this MapModule's map field, not whatever this is being placed into.
      */
@@ -56,6 +60,13 @@ public class MapModule implements Comparable<MapModule>, Serializable {
         if(map == null || map.length <= 0)
             throw new UnsupportedOperationException("Given map cannot be empty in MapModule");
         this.map = GwtCompatibility.copy2D(map);
+        environment = GwtCompatibility.fill2D(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[0].length; y++) {
+                if(this.map[x][y] == '#')
+                    environment[x][y] = MixedGenerator.ROOM_WALL;
+            }
+        }
         short[] pk = CoordPacker.fringe(
                 CoordPacker.pack(this.map, validPacking),
                 1, this.map.length, this.map[0].length, false, true);
@@ -98,6 +109,13 @@ public class MapModule implements Comparable<MapModule>, Serializable {
     public MapModule(char[][] map, Coord[] validDoors, Coord min, Coord max)
     {
         this.map = GwtCompatibility.copy2D(map);
+        environment = GwtCompatibility.fill2D(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[0].length; y++) {
+                if(this.map[x][y] == '#')
+                    environment[x][y] = MixedGenerator.ROOM_WALL;
+            }
+        }
         this.validDoors = GwtCompatibility.cloneCoords(validDoors);
         this.min = min;
         this.max = max;

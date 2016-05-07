@@ -48,7 +48,15 @@ public class RoomFinder {
     /**
      * When a RoomFinder is constructed, it stores all points of rooms that are adjacent to another region here.
      */
-    public Coord[] connections;
+    public Coord[] connections,
+    /**
+     * Potential doorways, where a room is adjacent to a corridor.
+     */
+    doorways,
+    /**
+     * Cave mouths, where a cave is adjacent to another type of terrain.
+     */
+    mouths;
     public int width, height;
 
     /**
@@ -74,7 +82,8 @@ public class RoomFinder {
                 r = flood(floors, retract(floors, 1, width, height, true), 2, false),
                 c = differencePacked(floors, r),
                 d = intersectPacked(r, fringe(c, 1, width, height, false));
-        connections = allPacked(d);
+        connections = doorways = allPacked(d);
+        mouths = new Coord[0];
         List<short[]> rs = split(r), cs = split(c);
 
         short[][] ra = rs.toArray(new short[rs.size()][]),
@@ -121,7 +130,8 @@ public class RoomFinder {
                     r = flood(floors, retract(floors, 1, width, height, true), 2, false),
                     c = differencePacked(floors, r),
                     d = intersectPacked(r, fringe(c, 1, width, height, false));
-            connections = allPacked(d);
+            connections = doorways = allPacked(d);
+            mouths = new Coord[0];
             List<short[]> rs = split(r), cs = split(c);
 
             short[][] ra = rs.toArray(new short[rs.size()][]),
@@ -151,9 +161,10 @@ public class RoomFinder {
         {
             short[] floors = pack(basic, '.');
             caves.put(floors, new ArrayList<short[]>());
-            connections = allPacked(retract(
+            connections = mouths = allPacked(retract(
                     differencePacked(floors, retract(floors, 1, width, height, true)),
                     1, width, height, false));
+            doorways = new Coord[0];
         }
     }
 
@@ -187,7 +198,12 @@ public class RoomFinder {
                 rc = unionPacked(r, c),
                 d = intersectPacked(r, fringe(c, 1, width, height, false)),
                 m = intersectPacked(rc, fringe(v, 1, width, height, false));
-        connections = allPacked(unionPacked(d, m));
+        doorways = allPacked(d);
+        mouths = allPacked(m);
+        connections = new Coord[doorways.length + mouths.length];
+        System.arraycopy(doorways, 0, connections, 0, doorways.length);
+        System.arraycopy(mouths, 0, connections, doorways.length, mouths.length);
+
         List<short[]> rs = split(r), cs = split(c), vs = split(v);
         short[][] ra = rs.toArray(new short[rs.size()][]),
                 ca = cs.toArray(new short[cs.size()][]),
@@ -226,14 +242,14 @@ public class RoomFinder {
         for (short[] sep : vs) {
             List<short[]> near = new ArrayList<short[]>(48);
             short[] aroundMouths = intersectPacked(c, fringe(sep, 1, width, height, false));
-            short[] mouths = allPackedHilbert(aroundMouths);
-            for (int j = 0; j < mouths.length; j++) {
-                near.addAll(findManyPackedHilbert(mouths[j], ca));
+            short[] maws = allPackedHilbert(aroundMouths);
+            for (int j = 0; j < maws.length; j++) {
+                near.addAll(findManyPackedHilbert(maws[j], ca));
             }
             aroundMouths = intersectPacked(r, fringe(sep, 1, width, height, false));
-            mouths = allPackedHilbert(aroundMouths);
-            for (int j = 0; j < mouths.length; j++) {
-                near.addAll(findManyPackedHilbert(mouths[j], ra));
+            maws = allPackedHilbert(aroundMouths);
+            for (int j = 0; j < maws.length; j++) {
+                near.addAll(findManyPackedHilbert(maws[j], ra));
             }
             caves.put(sep, near);
         }

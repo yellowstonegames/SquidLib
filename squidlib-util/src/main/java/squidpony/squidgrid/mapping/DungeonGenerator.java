@@ -455,6 +455,8 @@ public class DungeonGenerator {
         }
         seedFixed = false;
         char[][] map = DungeonUtility.wallWrap(baseDungeon);
+        width = map.length;
+        height = map[0].length;
         DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {

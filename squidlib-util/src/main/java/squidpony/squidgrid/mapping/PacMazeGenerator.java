@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidmath.RNG;
 
 /**
@@ -10,6 +11,8 @@ public class PacMazeGenerator {
     public RNG rng;
     public int width, height;
     private boolean[][] map;
+    private int[][] env;
+    private char[][] maze;
     public PacMazeGenerator()
     {
         this(250, 250);
@@ -124,30 +127,43 @@ public class PacMazeGenerator {
     public char[][] generate()
     {
         create();
-        char[][] maze = new char[width][height];
+        maze = new char[width][height];
+        env = new int[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 maze[x][y] = map[x][y] ? '.' : '#';
+                env[x][y] = map[x][y] ? MixedGenerator.CORRIDOR_FLOOR : MixedGenerator.CORRIDOR_WALL;
             }
         }
+
         return maze;
     }
 
     public int[][] getEnvironment()
     {
-        int[][] env = new int[width][height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                env[x][y] = map[x][y] ? MixedGenerator.CORRIDOR_FLOOR : MixedGenerator.CORRIDOR_WALL;
-            }
-        }
+        if(env == null)
+            return GwtCompatibility.fill2D(MixedGenerator.CORRIDOR_WALL, width, height);
         return env;
     }
 
+    /**
+     * Gets the maze as a 2D array of true for passable or false for blocked.
+     * @return a 2D boolean array; true is passable and false is not.
+     */
     public boolean[][] getMap()
     {
         if(map == null)
             return new boolean[width][height];
         return map;
+    }
+
+    /**
+     * Gets the maze as a 2D array of ',' for passable or '#' for blocked.
+     * @return a 2D boolean array; '.' is passable and '#' is not.
+     */
+    public char[][] getMaze() {
+        if(maze == null)
+            return GwtCompatibility.fill2D('#', width, height);
+        return maze;
     }
 }

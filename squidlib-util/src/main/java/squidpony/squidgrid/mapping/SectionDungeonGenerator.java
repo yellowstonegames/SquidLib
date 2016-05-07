@@ -612,12 +612,13 @@ public class SectionDungeonGenerator {
     }
 
 
-    protected LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map, char[][] allCaves)
+    protected LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map, char[][] allCaves,
+                                                  char[][] allCorridors)
     {
         LinkedHashSet<Coord> doors = new LinkedHashSet<>();
         for(int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map[x].length - 1; y++) {
-                if(map[x][y] == '#')
+                if(map[x][y] == '#' || allCorridors[x][y] != '#')
                     continue;
                 if (doubleDoors) {
                     if (x >= map.length - 2 || y >= map[x].length - 2)
@@ -745,6 +746,8 @@ public class SectionDungeonGenerator {
         }
         seedFixed = false;
         char[][] map = DungeonUtility.wallWrap(baseDungeon);
+        width = map.length;
+        height = map[0].length;
         int[][] env2 = new int[width][height];
         for (int x = 0; x < width; x++) {
             System.arraycopy(environment[x], 0, env2[x], 0, height);
@@ -845,7 +848,7 @@ public class SectionDungeonGenerator {
                 corridorMap = innerGenerate(allCorridors, corridorFX),
                 allCaves = RoomFinder.merge(cv, width, height),
                 caveMap = innerGenerate(allCaves, caveFX),
-                doorMap = makeDoors(rm, cr, allCaves);
+                doorMap = makeDoors(rm, cr, allCaves, allCorridors);
         char[][][] lakesAndMazes = makeLake(rm, cv);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -871,7 +874,8 @@ public class SectionDungeonGenerator {
         return dungeon;
 
     }
-    private char[][] makeDoors(ArrayList<char[][]> rooms, ArrayList<char[][]> corridors, char[][] allCaves)
+    private char[][] makeDoors(ArrayList<char[][]> rooms, ArrayList<char[][]> corridors, char[][] allCaves,
+                               char[][] allCorridors)
     {
         char[][] map = new char[width][height];
         for (int x = 0; x < width; x++) {
@@ -892,7 +896,8 @@ public class SectionDungeonGenerator {
 
         map = RoomFinder.merge(fused, width, height);
 
-        LinkedHashSet<Coord> doorways = viableDoorways(doubleDoors, map, allCaves);
+        LinkedHashSet<Coord> doorways = viableDoorways(doubleDoors, map, allCaves, allCorridors);
+
 
         int total = doorways.size() * doorFill / 100;
 

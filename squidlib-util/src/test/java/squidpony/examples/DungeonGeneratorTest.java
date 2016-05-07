@@ -235,7 +235,6 @@ public class DungeonGeneratorTest {
         System.out.println("------------------------------------------------------------");
 */
 
-        System.out.println("------------------------------------------------------------");
         rng.setState(2252637788195L);
         sdg = new SectionDungeonGenerator(width, height, rng);
         //sdg.addDoors(12, false);
@@ -307,9 +306,14 @@ public class DungeonGeneratorTest {
 
         rng.setState(2252637788195L);
         ModularMapGenerator mmg = new ModularMapGenerator(width, height, rng);
-        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(mmg.generate(), true)));
-        System.out.println(dungeonGenerator);
+        sdg.clearEffects();
+        sdg.addDoors(70, false);
+        sdg.addBoulders(SectionDungeonGenerator.ROOM, 15);
+        dungeon = mmg.generate();
+        dungeon = sdg.generate(dungeon, mmg.getEnvironment());
+        sdg.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(dungeon, false)));
+        System.out.println(sdg);
         System.out.println("------------------------------------------------------------");
 
 
