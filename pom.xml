@@ -36,7 +36,7 @@
 	</licenses>
 
 	<inceptionYear>2012</inceptionYear>
-    <!--
+
     <distributionManagement>
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
@@ -49,14 +49,13 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-    -->
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.version>3.3</maven.compiler.version>
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
 		<maven.resources.version>2.7</maven.resources.version>
 		<maven.source.version>2.4</maven.source.version>
-		<!--<maven.gpg.version>1.6</maven.gpg.version>-->
+		<maven.gpg.version>1.6</maven.gpg.version>
 		<maven.jxr.version>2.5</maven.jxr.version>
 		<maven.pmd.version>3.5</maven.pmd.version>
 		<findbugs.version>3.0.2</findbugs.version>
@@ -81,12 +80,6 @@
 		<developerConnection>scm:git:git@github.com:SquidPony/SquidLib.git</developerConnection>
 		<url>git@github.com:SquidPony/SquidLib.git</url>
 	</scm>
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
 	<modules>
 		<module>squidlib-util</module>
 		<module>squidlib</module>
@@ -123,7 +116,6 @@
 					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
-			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
@@ -137,7 +129,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>-->
+			</plugin>
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
 				<version>${maven.source.version}</version>

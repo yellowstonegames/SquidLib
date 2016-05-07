@@ -159,4 +159,69 @@ public class LanguageCipher implements Serializable{
         });
         return rep.replace(text);
     }
+
+    /**
+     * Adds a translation pair to vocabulary so it can be used in decipher, giving a correct translation for sourceWord.
+     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct a mismatched
+     * translation added to vocabulary with mismatchTranslation.
+     * @param vocabulary a Map of String keys to String values that will be modified in-place
+     * @param sourceWord a word in the source language, typically English; the meaning will be "learned" for decipher
+     * @return this, for chaining
+     */
+    public LanguageCipher learnTranslation(Map<String, String> vocabulary, String sourceWord)
+    {
+        vocabulary.put(lookup(sourceWord.toLowerCase()), sourceWord);
+        return this;
+    }
+
+    /**
+     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.
+     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct mismatched
+     * translations added to vocabulary with mismatchTranslation.
+     * @param vocabulary a Map of String keys to String values that will be modified in-place
+     * @param sourceWords an array or vararg of words in the source language, typically English; their meanings will
+     *                    be "learned" for decipher
+     * @return this, for chaining
+     */
+    public LanguageCipher learnTranslations(Map<String, String> vocabulary, String... sourceWords)
+    {
+        for (int i = 0; i < sourceWords.length; i++) {
+            learnTranslation(vocabulary, sourceWords[i]);
+        }
+        return this;
+    }
+
+    /**
+     * Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.
+     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct mismatched
+     * translations added to vocabulary with mismatchTranslation.
+     * @param vocabulary a Map of String keys to String values that will be modified in-place
+     * @param sourceWords an Iterable of words in the source language, typically English; their meanings will be
+     *                   "learned" for decipher
+     * @return this, for chaining
+     */
+    public LanguageCipher learnTranslations(Map<String, String> vocabulary, Iterable<String> sourceWords)
+    {
+        for (String s : sourceWords) {
+            learnTranslation(vocabulary, s);
+        }
+        return this;
+    }
+
+    /**
+     * Adds a translation pair to vocabulary so it can be used in decipher, giving a typically-incorrect translation for
+     * correctWord where it provides mismatchWord instead when the ciphered version of correctWord appears.
+     * Modifies vocabulary in-place and returns this LanguageCipher for chaining. You can use learnTranslation() to
+     * correct a mismatched vocabulary word, or mismatchTranslation() again to change the mismatched word.
+     * @param vocabulary a Map of String keys to String values that will be modified in-place
+     * @param correctWord a word in the source language, typically English; where the ciphered version of this
+     *                    appears and the text is deciphered, mismatchWord will be used instead
+     * @param mismatchWord a String that will be used for deciphering in place of the translation of correctWord.
+     * @return this, for chaining
+     */
+    public LanguageCipher mismatchTranslation(Map<String, String> vocabulary, String correctWord, String mismatchWord)
+    {
+        vocabulary.put(lookup(correctWord.toLowerCase()), mismatchWord);
+        return this;
+    }
 }

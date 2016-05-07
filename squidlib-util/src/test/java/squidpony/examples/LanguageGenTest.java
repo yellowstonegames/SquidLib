@@ -214,12 +214,7 @@ public class LanguageGenTest {
             System.out.println(oz2[ctr++]);
         }
         HashMap<String, String> vocabulary = new HashMap<>(16);
-        vocabulary.put(cipher.lookup("Dorothy"), "Dorothy");
-        vocabulary.put(cipher.lookup("farmer"), "farmer");
-        vocabulary.put(cipher.lookup("the"), "the");
-        vocabulary.put(cipher.lookup("fell"), "fell");
-        vocabulary.put(cipher.lookup("one"), "one");
-        vocabulary.put(cipher.lookup("uncle"), "uncle");
+        cipher.learnTranslations(vocabulary, "Dorothy", "farmer", "the", "fell", "one", "uncle", "aunt");
         for(String s : oz2)
         {
             System.out.println(cipher.decipher(s, vocabulary));
