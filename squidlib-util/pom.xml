@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger</groupId>
-            <artifactId>RegExodus</artifactId>
+            <artifactId>regexodus</artifactId>
             <version>${regexodus.version}</version>
         </dependency>
     </dependencies>

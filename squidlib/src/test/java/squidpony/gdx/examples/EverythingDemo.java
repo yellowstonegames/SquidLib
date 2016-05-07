@@ -717,7 +717,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // not sure if this is always needed...
-        Gdx.gl.glEnable(GL20.GL_BLEND);
+        //Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // used as the z-axis when generating Simplex noise to make water seem to "move"
         counter += Gdx.graphics.getDeltaTime() * 15;
