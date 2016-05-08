@@ -38,6 +38,14 @@ import java.util.Random;
  * stretch of extreme results by enemies that work against the favor of a player character generally result in a dead
  * player character, and RNGs that make extreme results more common may seem particularly cruel to players.
  * <br>
+ * This generator sets a field, rawLatest, every time a random number is produced. This stores a pseudo-random double
+ * between 0.0 (inclusive) and 1.0 (exclusive) that is not subject to the bias an expected average introduces, and is
+ * close to uniformly distributed. You should expect rawLatest to be higher when higher numbers are returned from a
+ * method like nextInt(), and lower when lower numbers are returned. This can be useful for rare effects that should not
+ * be drastically more or less likely when slight changes are made to the expected average; if the expected average is
+ * 0.65, many more random doubles from nextDouble() will be between 0.95 and 1.0 (probably more than 10% of random
+ * numbers), but rawLatest will only be between 0.95 and 1.0 for close to 5% of all generations.
+ * <br>
  * You can get and set the state this uses internally, and this is stored as a 64-bit long.
  * <br>
  * The choice of RandomnessSource doesn't really matter since this will always use a LightRNG internally. LightRNG is
