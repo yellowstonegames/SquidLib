@@ -24,12 +24,14 @@ Current Features:
 -   Font size and style can be changed on the fly
 -   Several fonts provided as resources, some narrow, some square, for unicode line drawing to work out-of-the-box
 -   Multiple grids of different configurations can be used simultaneously in the same display
--   Multiple grids of different configurations can be overlayed allowing for transparency effects
+-   Multiple grids of different configurations can be overlaid allowing for transparency effects
   -   A convenience class, SquidLayers provides foreground and background setting with this
   -   SquidLayers also allows background brightness changes (such as from torchlight) with just an int argument
     -   This works by keeping a partly-transparent layer of black or white for darkening or lightening
 -   Basic Swing animation support
 -   More robust libGDX animation support, with much better performance than Swing animations
+-   Starting with 3.0.0 beta 4, there is support for variable-width fonts in message boxes, which can be much more legible
+  -   More UI controls may be able to support variable-width fonts in the future
 
 ###Highly Flexible
 -   Can create multiple overlapping layers
@@ -50,7 +52,8 @@ Current Features:
 -   Can perform LIBTCOD style "dark", "light", and "desaturate" commands on any color
 -   Can get an arbitrary amount of blend between two colors
 -   Colors are also available as standard java.awt.Color constants in the Colors class
--   Starting with 3.0.0 beta 2, you can alter colors automatically using Filters.
+-   Starting with 3.0.0 beta 2, you can alter colors automatically using Filters
+-   Starting with 3.0.0 beta 4, lots of options are available for generating gradients, including with Filters, and gradients that wrap around like a rainbow
 
 ###Roguelike Specific Toolkit
 -   Robust Field of View and Line of Sight system
@@ -72,6 +75,12 @@ Current Features:
   -   FOV resistance maps can be generated automatically by DungeonUtility given a `char[][]`
 - MixedGenerator can produce maps that combine cave areas with artificial areas, starting in 3.0.0 beta 2.
   - A winding, snake-like path can be produced by SerpentMapGenerator, and has been adapted to generate multi-level dungeons with SerpentDeepMapGenerator. Both of these use MixedGenerator, and so can mix natural rock with worked stone.
+-   Big improvements in 3.0.0 beta 4, including...
+  -   SectionDungeonGenerator, which can put different dungeon features in different areas (grass or moss may grow in caves but not rooms, for instance)
+  -   More maze generators and improvements to existing ones, including an arcade-reminiscent PacMazeGenerator
+  -   ModularMapGenerator can produce repeated sections of map, like one common style of room, for military or sci-fi themed areas
+  -   DenseRoomMapGenerator produces a cramped, over-filled section of purely rectangular rooms, with periodic breaks for doors.
+  -   OrganicMapGenerator makes nice caves using properties of Perlin noise to produce open cave areas and the WobblyLine line drawing class to connect them.
 
 ###SquidAI Pathfinding code
 -   Dijkstra Maps and A* can be used for pathfinding and other purposes.
@@ -81,6 +90,8 @@ Current Features:
     -   There are many kinds of Area of Effect (AOE) provided, and given the right information, they can calculate the best place to position that AOE to hit as many targets as possible (not an easy task, but it gets calculated quickly).
   -   DijkstraMap can partially scan an area, stopping once it reaches a given distance.
   -   Several classes support multi-cell creatures, including DijkstraMap
+  -   DijkstraMap is currently recommended for pathfinding because it has been optimized much more heavily than AStarSearch
+    -   AStarSearch is expected to receive some optimization in the near future, but this isn't in beta 4.
    
 ###Fully Documented API
 -   Each named color has a sample of its appearance in the Javadoc against multiple backgrounds
@@ -90,21 +101,32 @@ Current Features:
 -   Demos of all functionality included
 -   EverythingDemo shows off lots of features and is fully documented; a good place to start
 -   SquidAIDemo has two AI teams fight each other with large area-of-effect attacks.
+-   Several other demos are smaller and meant to test individual features, like CoveredPathDemo to test DijkstraMap's pathfinding while avoiding ranged attackers.
 -   SquidSetup produces a sample project with a heavily-documented basic example to get started.
 
 ###Math Toolkit
 -   Custom extension(s) of Random allows drop-in replacement with added features
-  -   In addition to the usual Mersenne Twister, there's a XorShift128+ RNG and a SplitMix64 RNG (called LightRNG)
-    -   LightRNG can skip ahead or behind in its generated sequence, and it's the fastest of all the RNGs here.
+  -   In addition to the common Mersenne Twister (now deprecated), there's...
+    -   XorRNG, which is a XorShift128+ RNG
+    -   XoRoRNG, which is a xoroshiro128+ RNG using a very recently-published algorithm
+      -   XoRoRNG is very fast and has good properties for heavy usage
+    -   LightRNG, which is a SplitMix64 RNG
+      -   LightRNG can skip ahead or behind in its generated sequence, and it's the fastest of all the RNGs here, in a virtual tie with XoRoRNG
+    -   LongPeriodRNG, which is a XorShift1024* RNG (it preferred to replace MersenneTwister for applications like shuffling large sequences, and is much faster)
+    -   PermutedRNG is fairly fast (not quite as fast as LightRNG), but has potential statistical advantages.
   -   DharmaRNG can be used to make more or less "lucky" RNGs that skew towards high or low results
+  -   So can EditRNG, but EditRNG also allows tweaking the "centrality" of the numbers it generates, and has an easier-to-understand expected average (recommended for luck alteration in RNGs)
   -   SobolQRNG produces deterministic results that may seem random, but tend to be more evenly distributed
   -   DeckRNG should be less random during any particular span of random numbers, since it "shuffles" 16 numbers, from low to high, and draws them in a random order.
-  -   PermutedRNG is fairly fast (not quite as fast as LightRNG), but has potential statistical advantages.
 -   Able to find Bresenham Lines for 2D and 3D coordinates.
   -   Also can use Wu or Elias Lines (antialiased Bresenham Lines)
+  -   Also several other line drawing algorithms, including one that only makes orthogonal movements, another with options to make wider lines, and another that wiggles in random directions and makes a randomized line toward a goal.
 -   Perlin noise implementation
   -   Used to make Brogue-style "moving" water that works by altering the background lightness
   -   Also used for a world map generator in MetsaMapFactory
+-   Lots of code for dealing with oddly-shaped or non-contiguous regions in CoordPacker and some other classes
+  -   RegionMap can use such regions as keys in a Map-like data structure, and find all regions that overlap with a point
+  -   CoordPacker is heavily used internally, but shouldn't need to be used in most code that uses SquidLib
 
 ###Actively Developed
 - Started in 2011 by SquidPony (Eben Howard), SquidLib has since picked up contributions from a number of developers around the world
@@ -118,12 +140,7 @@ Current Features:
   - Better pathfinding for unusual monsters (you can tell it that a fish won't choose to leave water, a fire elemental will never choose to enter water, and an eccentric mystic won't enter doorways, for example)
     - The types of terrain are fully extensible to meet most games' pathfinding needs
   - FOV precomputation/caching/compression to make even large maps (up to 256x256) able to avoid overhead on numerous FOV calls (as well as some AOE calculations that use FOV)
-    - Uncompressed FOV maps are extremely memory-hungry; a 256x256 dungeon with a simple 2D boolean array per cell, to track what cells each cell can see... uses more than 4GB of RAM
-      - Yes, that's more RAM than any Java program can use with a 32-bit Java version; there *is* a better way
-    - With the right compression techniques, memory usage can be reduced tremendously; preliminary testing predicts 20-50 MB for a full map with multiple FOV radii, and some games can expect even less.
-    - Full FOV can be precomputed on multiple threads without users of the library needing to delve deep into concurrent code. The API is simple: generate a map before you use it, create an FOVCache for the unreached map, call `cacheAll()` on the FOVCache, and call `awaitCache()` later when the map needs to be used. No `java.lang.Thread` needed in your code!
-    - You can even get information from compressed FOV maps without having to decompress them
-      - The technique this uses is similar to that used by [JavaEWAH](https://github.com/lemire/javaewah), but ours is modified for data that is typically in a contiguous area of 2D space. JavaEWAH has gone through much more rigorous tests than SquidLib, and the RLE-like compression scheme has shown itself to be "best-in-class" for encoding large binary sequences (which is how we treat a compressed FOV map).
+    - This turns out to be mostly unneeded on its own, since SquidLib's FOV performs well enough to recompute FOV maps quickly, but led to development of more useful techniques for dungeon generation via CoordPacker
   - More attention paid to performance
     - Still, users of SquidLib shouldn't have to give up clear or safe code to benefit from what the library does internally
     - A major refactoring of code that used java.awt.Point produced the Coord class, which is immutable, never needs to be constructed more than once (each is cached, except in very rare cases), and should never need garbage collection either
@@ -147,14 +164,32 @@ Current Features:
 - There's now a third beta!
   - Distance field fonts! These resize very smoothly and should drastically reduce the number of fonts needed to implement zooming or adapt to multiple screen sizes.
   - There's "imitation foreign language" generation in FakeLanguageGen, including the ability to mix styles of generated language or scripts.
-    - This has had multiple updates and supports more stylistic elements to add into languages, including adding or removing accented glyphs or mimicking the feature of some languages where a word may be redoubled (which would be virtually impossible to generate using FakeLanguageGen's technique without specific support for "hindsight" into syllables generated earlier).
   - There's also some early random monster description generation.
   - You can now analyze a map with RoomFinder after it's been generated to find likely rooms and corridors in it, for various uses.
-    - One of these uses in an update after beta 3 is the ability to analyze rooms to find corners, large flat walls (for weapon racks, blackboards, etc.), or the approximate centers of rooms (useful to place thrones, shrines, or other important places).
   - You can associate regions from CoordPacker with values (something that can't be done with HashMap normally), and query a point to find overlapping regions that contain that point.
   - SpatialMap provides a common convenience by allowing values to be indexed by a key or by a Coord position, and updates all 3 of these as one entry.
   - IColoredString has lots of new useful features, including justified and wrapped text, on top of its existing multi-colored text.
   - SquidMessageBox provides a simple scrolling message box that be used as a scene2d.ui widget, and can display IColoredString data.
+- And a fourth beta!
+  - HTML works for sure as a target
+    - Lots of things needed changing to get this in a solid state, but now we can be confident SquidLib works with GWT to generate HTML pages
+  - Things are split up more now and the dependencies on SquidLib should add less to application size
+    - You can download pre-made assets, like fonts, separately [from here](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST) and delete them from your project if unused
+  - Advancements on the UI front
+    - VisualInput allows on-screen commands to take the place of a keyboard on Android (and iOS, once libGDX is able to compile to it again)
+    - TextPanel allows a variable-width font to be used in a message screen, not limited to the grid; this can be much nicer to read
+      - LinesPanel does this too
+    - ColorChangeLabel can be useful for creatures that have an uncertain color or have multiple colors in games where color is related to other gameplay elements
+      - It doesn't count as an animation, but continues to change color on its own without interrupting existing animations
+  - Multiple new dungeon generation tools
+    - The Placement class gives the ability to analyze rooms to find corners, large flat walls (for weapon racks, blackboards, etc.), or the approximate centers of rooms (useful to place thrones, shrines, or other important places)
+    - For places where RoomFinder is too slow for a large map, there's RectangleRoomFinder, which can find many of the needed features to place some things without doing as detailed of an analysis of the dungeon
+    - New dungeon generators mentioned earlier, including SectionDungeonGenerator, ModularMapGenerator, PacMazeGenerator, OrganicMapGenerator, DenseRoomMapGenerator, LanesMapGenerator, etc.
+  - Code ported from Uncommon Maths (and expanded) allows iterating through permutations or combinations of a small collection, and random access of a permutation when given a number index
+  - FakeLanguageGen has had multiple updates and supports more stylistic elements to add into languages, including adding or removing accented glyphs or mimicking the feature of some languages where a word may be redoubled (which would be virtually impossible to generate using FakeLanguageGen's technique without specific support for "hindsight" into syllables generated earlier).
+    - LanguageCipher can use FakeLanguageGen to produce deterministic "translations" of a source text into a fake language, and then allows deciphering with a vocabulary that the player character might learn over time
+  - Only a few places in SquidLib make heavy use of regular expressions, but there's no support for the standard library's regex package on GWT for targeting HTML
+    - This is why the RegExodus project was formed, and SquidLib depends on this small lib to allow FakeLanguageGen, LanguageCipher, and Dice to work on HTML
 - But, 3.0.0's final release will be major, and so should be expected to *break* API backwards compatibility
   - Any minor releases after 3.0.0 and before 4.0.0 should be expected to *keep* API backwards compatibility, unless a feature is broken or unusable
   - The most significant change in 3.0.0 will be the removal of the Swing-based rendering and full transition to the similar, but much faster and more responsive, libGDX renderer
@@ -173,14 +208,19 @@ Download
 
 Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your choice of features, or simply use SquidSetup to make a new project configured the way libGDX prefers to work, and copy in any code you might already have.
 
-Ideally, if you're just starting out you should use SquidSetup. This is [the most recent beta release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b3);
+Ideally, if you're just starting out you should use SquidSetup. Beta 4 is currently being added to SquidSetup; in the meanwhile there's the beta 3 setup and the snapshot setup.
+This is [the most beta 3 release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b3);
 that version is now discouraged since targeting HTML simply doesn't work in it, and many features have been added in the current latest code.
-This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is advised in general, but especially if you want to test new features/fixes as
-they come in. In the snapshot from April 12, 2016 relative to beta 3, there's several new dungeon generation and room finding features/fixes,
-SquidColorCenter now matches or exceeds most features in the older SColorFactory, distance field fonts should be better (especially on HTML targets, and now for all usages, not just in SquidLayers),
-there's the ability to place lakes without messing up connectivity in SectionDungeonGenerator, you can find certain areas within rooms that meet certain criteria (like corners, centers
-of rooms, floors near large flat walls, etc.) with Placement, regular expressions work when targeting HTML (which enables FakeLanguageGen to work on all platforms), there's support for
-non-monospaced fonts in message boxes and similar groups of text (you can see this in action in Dungeon Mercenary) and so on.
+This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is
+advised in general, but especially if you want to test new features/fixes as
+they come in. In the snapshot from April 12, 2016 relative to beta 3, there's several new dungeon generation and room
+finding features/fixes, SquidColorCenter now matches or exceeds most features in the older SColorFactory, distance field
+fonts should be better (especially on HTML targets, and now for all usages, not just in SquidLayers), there's the
+ability to place lakes without messing up connectivity in SectionDungeonGenerator, you can find certain areas within
+rooms that meet certain criteria (like corners, centers of rooms, floors near large flat walls, etc.) with Placement,
+regular expressions work when targeting HTML (which enables FakeLanguageGen to work on all platforms), there's support
+for non-monospaced fonts in message boxes and similar groups of text (you can see this in action in Dungeon Mercenary)
+and so on. Those features will all be present in the beta 4 release once it's finished.
 
 More information is available on the wiki here on Github, at the page on [Project Setup](https://github.com/SquidPony/SquidLib/wiki/Project-Setup).
 
