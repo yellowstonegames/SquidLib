@@ -5,7 +5,7 @@
 
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-parent</artifactId>
-    <version>3.0.0-b4</version>
+    <version>3.0.0-b5</version>
     <packaging>pom</packaging>
 
     <name>squidlib-parent</name>
@@ -66,7 +66,7 @@
         <jdk.version>1.7</jdk.version>
         <gdx.version>1.9.2</gdx.version>
         <junit.version>4.11</junit.version>
-        <regexodus.version>v0.1.3</regexodus.version>
+        <regexodus.version>0.1.3</regexodus.version>
     </properties>
 
     <prerequisites>

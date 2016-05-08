@@ -30,7 +30,7 @@ Current Features:
     -   This works by keeping a partly-transparent layer of black or white for darkening or lightening
 -   Basic Swing animation support
 -   More robust libGDX animation support, with much better performance than Swing animations
--   Starting with 3.0.0 beta 4, there is support for variable-width fonts in message boxes, which can be much more legible
+-   Starting with 3.0.0 beta 5, there is support for variable-width fonts in message boxes, which can be much more legible
   -   More UI controls may be able to support variable-width fonts in the future
 
 ###Highly Flexible
@@ -53,7 +53,7 @@ Current Features:
 -   Can get an arbitrary amount of blend between two colors
 -   Colors are also available as standard java.awt.Color constants in the Colors class
 -   Starting with 3.0.0 beta 2, you can alter colors automatically using Filters
--   Starting with 3.0.0 beta 4, lots of options are available for generating gradients, including with Filters, and gradients that wrap around like a rainbow
+-   Starting with 3.0.0 beta 5, lots of options are available for generating gradients, including with Filters, and gradients that wrap around like a rainbow
 
 ###Roguelike Specific Toolkit
 -   Robust Field of View and Line of Sight system
@@ -75,7 +75,7 @@ Current Features:
   -   FOV resistance maps can be generated automatically by DungeonUtility given a `char[][]`
 - MixedGenerator can produce maps that combine cave areas with artificial areas, starting in 3.0.0 beta 2.
   - A winding, snake-like path can be produced by SerpentMapGenerator, and has been adapted to generate multi-level dungeons with SerpentDeepMapGenerator. Both of these use MixedGenerator, and so can mix natural rock with worked stone.
--   Big improvements in 3.0.0 beta 4, including...
+-   Big improvements in 3.0.0 beta 5, including...
   -   SectionDungeonGenerator, which can put different dungeon features in different areas (grass or moss may grow in caves but not rooms, for instance)
   -   More maze generators and improvements to existing ones, including an arcade-reminiscent PacMazeGenerator
   -   ModularMapGenerator can produce repeated sections of map, like one common style of room, for military or sci-fi themed areas
@@ -91,7 +91,7 @@ Current Features:
   -   DijkstraMap can partially scan an area, stopping once it reaches a given distance.
   -   Several classes support multi-cell creatures, including DijkstraMap
   -   DijkstraMap is currently recommended for pathfinding because it has been optimized much more heavily than AStarSearch
-    -   AStarSearch is expected to receive some optimization in the near future, but this isn't in beta 4.
+    -   AStarSearch is expected to receive some optimization in the near future, but this isn't in beta 5.
    
 ###Fully Documented API
 -   Each named color has a sample of its appearance in the Javadoc against multiple backgrounds
@@ -170,7 +170,7 @@ Current Features:
   - SpatialMap provides a common convenience by allowing values to be indexed by a key or by a Coord position, and updates all 3 of these as one entry.
   - IColoredString has lots of new useful features, including justified and wrapped text, on top of its existing multi-colored text.
   - SquidMessageBox provides a simple scrolling message box that be used as a scene2d.ui widget, and can display IColoredString data.
-- And a fourth beta!
+- And a fourth beta, called 3.0.0-b5 because b4 had a single-character-wrong bug in the configuration that prevented its use.
   - HTML works for sure as a target
     - Lots of things needed changing to get this in a solid state, but now we can be confident SquidLib works with GWT to generate HTML pages
   - Things are split up more now and the dependencies on SquidLib should add less to application size
@@ -208,7 +208,7 @@ Download
 
 Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your choice of features, or simply use SquidSetup to make a new project configured the way libGDX prefers to work, and copy in any code you might already have.
 
-Ideally, if you're just starting out you should use SquidSetup. Beta 4 is currently being added to SquidSetup; in the meanwhile there's the beta 3 setup and the snapshot setup.
+Ideally, if you're just starting out you should use SquidSetup. Beta 5 is currently being added to SquidSetup; in the meanwhile there's the beta 3 setup and the snapshot setup.
 This is [the most beta 3 release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b3);
 that version is now discouraged since targeting HTML simply doesn't work in it, and many features have been added in the current latest code.
 This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is
@@ -220,7 +220,7 @@ ability to place lakes without messing up connectivity in SectionDungeonGenerato
 rooms that meet certain criteria (like corners, centers of rooms, floors near large flat walls, etc.) with Placement,
 regular expressions work when targeting HTML (which enables FakeLanguageGen to work on all platforms), there's support
 for non-monospaced fonts in message boxes and similar groups of text (you can see this in action in Dungeon Mercenary)
-and so on. Those features will all be present in the beta 4 release once it's finished.
+and so on. Those features will all be present in the beta 5 release once it's finished.
 
 More information is available on the wiki here on Github, at the page on [Project Setup](https://github.com/SquidPony/SquidLib/wiki/Project-Setup).
 
