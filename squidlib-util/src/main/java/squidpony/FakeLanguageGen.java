@@ -94,34 +94,33 @@ public class FakeLanguageGen implements Serializable {
                     Pattern.compile("[ÌÍÎÏĨĪĬĮI]").replacer("I"),
                     Pattern.compile("[ÒÓÔÕÖØŌŎŐŒǾ]").replacer("O"),
                     Pattern.compile("[ÙÚÛÜŨŪŬŮŰŲ]").replacer("U"),
-
                     Pattern.compile("[çćĉċč]").replacer("c"),
-                    Pattern.compile("[þðďđ]").replacer("d"),
-                    Pattern.compile("[ſƒ]").replacer("f"),
+                    Pattern.compile("[þðďđḍ]").replacer("d"),
                     Pattern.compile("[ĝğġģ]").replacer("g"),
-                    Pattern.compile("[ĥħ]").replacer("h"),
+                    Pattern.compile("[ĥħḥ]").replacer("h"),
                     Pattern.compile("[ĵȷ]").replacer("j"),
-                    Pattern.compile("[ķĸ]").replacer("k"),
-                    Pattern.compile("[ℓĺļľŀł]").replacer("l"),
-                    Pattern.compile("[ñńņňŉŋ]").replacer("n"),
-                    Pattern.compile("[ŕŗř]").replacer("r"),
-                    Pattern.compile("[śŝşšș]").replacer("s"),
-                    Pattern.compile("[ţťŧț]").replacer("t"),
+                    Pattern.compile("ķ").replacer("k"),
+                    Pattern.compile("[ĺļľŀłḷḹļ]").replacer("l"),
+                    Pattern.compile("ṃ").replacer("m"),
+                    Pattern.compile("[ñńņňŋṅṇ]").replacer("n"),
+                    Pattern.compile("[ŕŗřṛṝŗŕ]").replacer("r"),
+                    Pattern.compile("[śŝşšșṣ]").replacer("s"),
+                    Pattern.compile("[ţťŧțṭ]").replacer("t"),
                     Pattern.compile("[ŵẁẃẅ]").replacer("w"),
                     Pattern.compile("[ýÿŷỳ]").replacer("y"),
                     Pattern.compile("[źżž]").replacer("z"),
                     Pattern.compile("[ÇĆĈĊČ]").replacer("C"),
-                    Pattern.compile("[ÞÐĎĐ]").replacer("D"),
-                    Pattern.compile("Ƒ").replacer("F"),
+                    Pattern.compile("[ÞÐĎĐḌ]").replacer("D"),
                     Pattern.compile("[ĜĞĠĢ]").replacer("G"),
-                    Pattern.compile("[ĤĦ]").replacer("H"),
+                    Pattern.compile("[ĤĦḤ]").replacer("H"),
                     Pattern.compile("Ĵ").replacer("J"),
                     Pattern.compile("Ķ").replacer("K"),
-                    Pattern.compile("[ĹĻĽĿŁ]").replacer("L"),
-                    Pattern.compile("[ÑŃŅŇŊ]").replacer("N"),
-                    Pattern.compile("[ŔŖŘ]").replacer("R"),
-                    Pattern.compile("[ŚŜŞŠȘ]").replacer("S"),
-                    Pattern.compile("[ŢŤŦȚ]").replacer("T"),
+                    Pattern.compile("[ĹĻĽĿŁḶḸĻ]").replacer("L"),
+                    Pattern.compile("Ṃ").replacer("M"),
+                    Pattern.compile("[ÑŃŅŇŊṄṆ]").replacer("N"),
+                    Pattern.compile("[ŔŖŘṚṜŖŔ]").replacer("R"),
+                    Pattern.compile("[ŚŜŞŠȘṢ]").replacer("S"),
+                    Pattern.compile("[ŢŤŦȚṬ]").replacer("T"),
                     Pattern.compile("[ŴẀẂẄ]").replacer("W"),
                     Pattern.compile("[ÝŸŶỲ]").replacer("Y"),
                     Pattern.compile("[ŹŻŽ]").replacer("Z"),
@@ -157,7 +156,7 @@ public class FakeLanguageGen implements Serializable {
                                     'd', 'þ', 'ð', 'ď', 'đ',
                             },
                             new char[]{
-                                    'f', 'ſ', 'ƒ',
+                                    'f'
                             },
                             new char[]{
                                     'g', 'ĝ', 'ğ', 'ġ', 'ģ',
@@ -169,16 +168,16 @@ public class FakeLanguageGen implements Serializable {
                                     'j', 'ĵ', 'ȷ',
                             },
                             new char[]{
-                                    'k', 'ķ', 'ĸ',
+                                    'k', 'ķ',
                             },
                             new char[]{
-                                    'l', 'ℓ', 'ĺ', 'ļ', 'ľ', 'ŀ', 'ł',
+                                    'l', 'ĺ', 'ļ', 'ľ', 'ŀ', 'ł',
                             },
                             new char[]{
                                     'm',
                             },
                             new char[]{
-                                    'n', 'ñ', 'ń', 'ņ', 'ň', 'ŉ', 'ŋ',
+                                    'n', 'ñ', 'ń', 'ņ', 'ň', 'ŋ',
                             },
                             new char[]{
                                     'p',
@@ -193,7 +192,7 @@ public class FakeLanguageGen implements Serializable {
                                     's', 'ś', 'ŝ', 'ş', 'š', 'ș',
                             },
                             new char[]{
-                                    't', 'ţ', 'ť', 'ŧ', 'ț',
+                                    't', 'ţ', 'ť', 'ț',
                             },
                             new char[]{
                                     'v',
@@ -612,9 +611,13 @@ public class FakeLanguageGen implements Serializable {
             new String[]{"aw", "ow", "ay", "ey", "oy", "ay", "ay"},
             new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 4, 5, 4, 1}, 0.25, 0.3, 0.0, 0.08, null, true);
     /**
-     * Imitation Hindu, romanized to use the Latin alphabet using the accented glyphs from the IAST standard.
+     * Imitation Hindi, romanized to use the Latin alphabet using accented glyphs similar to the IAST standard.
+     * You can get this to produce actual IAST glyphs by calling removeModifiers() on this, but most fonts do not
+     * support the glyphs that needs. If the modifier that does this is not removed, then the IAST standard glyphs
+     * {@code "ṛṝḷḹḍṭṅṇṣṃḥ"} become {@code "ŗŕļĺđţńņşĕĭ"}, with the nth glyph in the first string being substituted
+     * with the nth glyph in the second string.
      * <br>
-     * Surmoṃ, didā khḹathāḍirmopati, iḍā thadiṅa uṃgupḹatṛonyurbhū khṝairga bhunṣa anśi.
+     * Darvāga yar; ghađhinopŕauka āĕrdur, conśaigaijo śabhodhaĕđū jiviđaudu.
      */
     public static final FakeLanguageGen HINDI_ROMANIZED = new FakeLanguageGen(
             new String[]{
@@ -689,14 +692,14 @@ public class FakeLanguageGen implements Serializable {
 
                     "c", "c", "c", "c", "c", "c", "cṛ", "cṝ", "cḷ",
                     "ṭ", "t", "t", "t", "t", "t", "nt", "rt",
-                    "t", "t", "t", "t", "t", "nt", "rt",
-                    "t", "t", "t", "t", "t", "nt", "rt",
-                    "t", "t", "t", "t", "t", "nt", "rt",
-                    "t", "t", "t", "t", "t", "nt", "rt",
-                    "t", "t", "t", "t", "t", "nt", "rt",
-                    "t", "t", "t", "t", "t", "nt", "rt",
-                    "t", "t", "t", "t", "t", "nt", "rt",
-                    "t", "t", "t", "t", "t", "nt", "rt",
+                    "ṭ", "t", "t", "t", "t", "nt", "rt",
+                    "ṭ", "t", "t", "t", "t", "nt", "rt",
+                    "ṭ", "t", "t", "t", "t", "nt", "rt",
+                    "ṭ", "t", "t", "t", "t", "nt", "rt",
+                    "ṭ", "t", "t", "t", "t", "nt", "rt",
+                    "ṭ", "t", "t", "t", "t", "nt", "rt",
+                    "ṭ", "t", "t", "t", "t", "nt", "rt",
+                    "ṭ", "t", "t", "t", "t", "nt", "rt",
                     "tṛ", "tṛ", "tṛ", "tṛ", "tṛ", "ntṛ", "rtṛ",
                     "tṝ", "tṝ", "tṝ", "tṝ", "tṝ", "ntṝ", "rtṝ",
                     "tṛ", "tṛ", "tṛ", "tṛ", "tṛ", "ntṛ", "rtṛ",
@@ -966,12 +969,11 @@ public class FakeLanguageGen implements Serializable {
                     "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
                     "n", "m", "m", "m", "m", "m", "nm", "rm",
                     "v", "v", "v", "v", "v", "nv", "rv",
-
             },
             new String[]{"t", "d", "m", "r", "dh", "b", "t", "d", "m", "r", "dh", "bh", "nt", "nt", "nk", "ṣ"},
             new String[]{"it", "it", "ati", "adva", "aṣ", "arma", "ardha", "abi", "ab", "aya"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 5, 5, 4, 3, 1}, 0.15, 0.75, 0.0, 0.12, null, true)
-            .addModifiers(Modifier.replacementTable("ṛṝḷḹḍṅṇṣṃ", "ŗŕļĺđńņşĕ"));
+            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{1, 2, 3, 3, 1}, 0.15, 0.75, 0.0, 0.12, null, true)
+            .addModifiers(Modifier.replacementTable("ṛṝḷḹḍṭṅṇṣṃḥ", "ŗŕļĺđţńņşĕĭ"));
 
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
@@ -1852,16 +1854,42 @@ public class FakeLanguageGen implements Serializable {
                 syllableEndFrequency, sanityChecks, clean, modifiers);
     }
 
+    /**
+     * Adds the specified Modifier objects from a Collection to a copy of this FakeLanguageGen and returns it.
+     * You can obtain a Modifier with the static constants in the FakeLanguageGen.Modifier nested class, the
+     * FakeLanguageGen.modifier() method, or Modifier's constructor.
+     * @param mods an array or vararg of Modifier objects
+     * @return a copy of this with the Modifiers added
+     */
     public FakeLanguageGen addModifiers(Collection<Modifier> mods)
     {
         FakeLanguageGen next = copy();
         next.modifiers.addAll(mods);
         return next;
     }
+
+    /**
+     * Adds the specified Modifier objects to a copy of this FakeLanguageGen and returns it.
+     * You can obtain a Modifier with the static constants in the FakeLanguageGen.Modifier nested class, the
+     * FakeLanguageGen.modifier() method, or Modifier's constructor.
+     * @param mods an array or vararg of Modifier objects
+     * @return a copy of this with the Modifiers added
+     */
     public FakeLanguageGen addModifiers(Modifier... mods)
     {
         FakeLanguageGen next = copy();
         Collections.addAll(next.modifiers, mods);
+        return next;
+    }
+
+    /**
+     * Creates a copy of this FakeLanguageGen with no modifiers.
+     * @return a copy of this FakeLanguageGen with modifiers removed.
+     */
+    public FakeLanguageGen removeModifiers()
+    {
+        FakeLanguageGen next = copy();
+        next.modifiers.clear();
         return next;
     }
 
@@ -2000,32 +2028,35 @@ public class FakeLanguageGen implements Serializable {
         }
 
         /**
-         * For a character who always pronounces 's' and 'sh' as 'th'.
+         * For a character who always pronounces 's', 'ss', and 'sh' as 'th'.
          */
-        public static final Modifier LISP = new Modifier("sh?", "th");
+        public static final Modifier LISP = new Modifier("[sśŝşšș]+h?", "th");
 
         /**
          * For a character who always lengthens 's' and 'z' sounds not starting a word.
          */
-        public static final Modifier HISS = new Modifier("(.)([sz])+", "$1$2$2$2");
+        public static final Modifier HISS = new Modifier("(.)([sśŝşšșzźżž])+", "$1$2$2$2");
 
         /**
          * For a character who has a 20% chance to repeat a starting consonant or vowel.
          */
         public static final Modifier STUTTER = new Modifier(
-                new Alteration("^([^aeiouy]+)", "$1-$1", 0.2),
-                new Alteration("^([aeiou]+)", "$1-$1", 0.2));
+                new Alteration("^([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоу]+)", "$1-$1", 0.2),
+                new Alteration("^([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųαοειυаеёийъыэюяоу]+)", "$1-$1", 0.2));
 
         /**
-         * For a language that has a 40% chance to repeat a single vowel.
+         * For a language that has a 40% chance to repeat a single Latin vowel.
          */
-        public static final Modifier DOUBLE_VOWELS = new Modifier("([aeo])([^aeiouy]|$)", "$1$1$2", 0.4);
+        public static final Modifier DOUBLE_VOWELS = new Modifier(
+                "([aàáâãäåæāăąǻǽeèéêëēĕėęěòóôõöøōŏőœǿ])([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳ]|$)", "$1$1$2", 0.4);
 
 
         /**
          * For a language that has a 50% chance to repeat a single consonant.
          */
-        public static final Modifier DOUBLE_CONSONANTS = new Modifier("([aeiouy])([^aeiouyqwhjx])([aeiouy]|$)", "$1$2$2$3", 0.5);
+        public static final Modifier DOUBLE_CONSONANTS = new Modifier("([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоу])" +
+                "([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоуqwhjx])" +
+                "([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳαοειυаеёийъыэюяоу]|$)", "$1$2$2$3", 0.5);
 
         /**
          * For a language that never repeats the same letter twice in a row.
@@ -2081,7 +2112,7 @@ public class FakeLanguageGen implements Serializable {
         public double chance;
         public Alteration()
         {
-            this("sh?", "th");
+            this("[sśŝşšș]+h?", "th");
         }
         public Alteration(String pattern, String replacement)
         {
