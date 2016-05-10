@@ -208,19 +208,17 @@ Download
 
 Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your choice of features, or simply use SquidSetup to make a new project configured the way libGDX prefers to work, and copy in any code you might already have.
 
-Ideally, if you're just starting out you should use SquidSetup. Beta 5 is currently being added to SquidSetup; in the meanwhile there's the beta 3 setup and the snapshot setup.
-This is [the most beta 3 release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b3);
-that version is now discouraged since targeting HTML simply doesn't work in it, and many features have been added in the current latest code.
+Ideally, if you're just starting out you should use SquidSetup. Beta 5 has been added to SquidSetup.
+This is [the most recent, beta 5, release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b5);
+that version is no longer discouraged like beta 3 was.
 This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is
-advised in general, but especially if you want to test new features/fixes as
-they come in. In the snapshot from April 12, 2016 relative to beta 3, there's several new dungeon generation and room
-finding features/fixes, SquidColorCenter now matches or exceeds most features in the older SColorFactory, distance field
-fonts should be better (especially on HTML targets, and now for all usages, not just in SquidLayers), there's the
-ability to place lakes without messing up connectivity in SectionDungeonGenerator, you can find certain areas within
-rooms that meet certain criteria (like corners, centers of rooms, floors near large flat walls, etc.) with Placement,
-regular expressions work when targeting HTML (which enables FakeLanguageGen to work on all platforms), there's support
-for non-monospaced fonts in message boxes and similar groups of text (you can see this in action in Dungeon Mercenary)
-and so on. Those features will all be present in the beta 5 release once it's finished.
+good if you already understand Gradle, but especially if you want to test new features/fixes as they come in. It
+currently isn't named in the most accurate way; it actually downloads a fixed version from JitPack.io, but you can
+change that version to the latest commit if you want to use more recent code between releases.
+
+Work is under way to support SquidLib as a third-party extension for [gdx-setup](https://github.com/czyzby/gdx-setup),
+an alternative to the current official libGDX setup that aims to have more features and update more readily. This may
+soon replace SquidSetup.
 
 More information is available on the wiki here on Github, at the page on [Project Setup](https://github.com/SquidPony/SquidLib/wiki/Project-Setup).
 
