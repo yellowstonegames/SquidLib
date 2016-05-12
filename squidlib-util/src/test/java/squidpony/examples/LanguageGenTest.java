@@ -192,33 +192,59 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
                     new String[]{".", ".", ".", "!", "?"}, 0.12));
         }
+        System.out.println("\n-----------------------------------------------------------------------------");
         System.out.println();
-        LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.FRENCH, 0.3));
+        FakeLanguageGen[] languages = new FakeLanguageGen[]{
+                FakeLanguageGen.JAPANESE_ROMANIZED,
+                FakeLanguageGen.FRENCH,
+                FakeLanguageGen.GREEK_AUTHENTIC,
+                FakeLanguageGen.RUSSIAN_AUTHENTIC,
+                FakeLanguageGen.SWAHILI,
+                FakeLanguageGen.SOMALI,
+                FakeLanguageGen.ENGLISH,
+                FakeLanguageGen.FANTASY_NAME,
+                FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.SOMALI, 0.25),
+                FakeLanguageGen.GREEK_ROMANIZED.mix(FakeLanguageGen.HINDI_ROMANIZED.removeModifiers().removeAccents(), 0.5),
+                FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.FRENCH, 0.3)
+        };
         String[] oz = new String[]{
                 "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",
-                        "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the ",
-                        "lumber to build it had to be carried by wagon many miles. There were four walls, ",
-                        "a floor and a roof, which made one room; and this room contained a rusty looking ",
-                        "cookstove, a cupboard for the dishes, a table, three or four chairs, and the beds. ",
-                        "Uncle Henry and Aunt Em had a big bed in one corner, and Dorothy a little bed in ",
-                        "another corner. There was no garret at all, and no cellar—except a small hole dug ",
-                        "in the ground, called a cyclone cellar, where the family could go in case one of ",
-                        "those great whirlwinds arose, mighty enough to crush any building in its path. It ",
-                        "was reached by a trap door in the middle of the floor, from which a ladder led ",
-                        "down into the small, dark hole. Toto fell in the hole once and Dorothy had to ",
-                        "slay the Black Duke of the Goblin Realms to get him back. Good times."
-        }, oz2 = new String[oz.length];
-        int ctr = 0;
-        for(String s : oz) {
-            oz2[ctr] = cipher.cipher(s);
-            System.out.println(oz2[ctr++]);
-        }
-        HashMap<String, String> vocabulary = new HashMap<>(16);
-        cipher.learnTranslations(vocabulary, "Dorothy", "farmer", "the", "fell", "one", "uncle", "aunt");
-        for(String s : oz2)
-        {
-            System.out.println(cipher.decipher(s, vocabulary));
-        }
+                "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the ",
+                "lumber to build it had to be carried by wagon many miles. There were four walls, ",
+                "a floor and a roof, which made one room; and this room contained a rusty looking ",
+                "cookstove, a cupboard for the dishes, a table, three or four chairs, and the beds. ",
+                "Uncle Henry and Aunt Em had a big bed in one corner, and Dorothy a little bed in ",
+                "another corner. There was no garret at all, and no cellar—except a small hole dug ",
+                "in the ground, called a cyclone cellar, where the family could go in case one of ",
+                "those great whirlwinds arose, mighty enough to crush any building in its path. It ",
+                "was reached by a trap door in the middle of the floor, from which a ladder led ",
+                "down into the small, dark hole."
 
+        }, oz2 = new String[oz.length];
+        System.out.println("ORIGINAL:");
+        for(String o : oz)
+        {
+            System.out.println(o);
+        }
+        System.out.println("\nGENERATED:");
+        for(FakeLanguageGen lang : languages) {
+            LanguageCipher cipher = new LanguageCipher(lang);
+            int ctr = 0;
+            for (String s : oz) {
+                oz2[ctr] = cipher.cipher(s);
+                System.out.println(oz2[ctr++]);
+            }
+
+            HashMap<String, String> vocabulary = new HashMap<>(16);
+            cipher.learnTranslations(vocabulary, "Dorothy", "farmer", "the", "room", "one", "uncle", "aunt");
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, vocabulary));
+            }
+            System.out.println();
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, cipher.reverse));
+            }
+            System.out.println();
+        }
     }
 }
