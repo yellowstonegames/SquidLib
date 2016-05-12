@@ -23,6 +23,7 @@ import java.util.Map;
  * Created by Tommy Ettinger on 5/1/2016.
  */
 public class LanguageCipher implements Serializable{
+    private static final long serialVersionUID = 1287835632461186341L;
     /**
      * The FakeLanguageGen this will use to construct words; normally one of the static fields in FakeLanguageGen or a
      * FakeLanguageGen produced by using the mix() method of one of them. Manually constructing FakeLanguageGen objects
@@ -91,11 +92,16 @@ public class LanguageCipher implements Serializable{
         if(table.containsKey(s2))
             ciphered = table.get(s2);
         else {
-            long h = CrossHash.hash64(s2);
+            long h = CrossHash.hash64(s2), frustration = 0;
             rng.setState(h);
-            ciphered = language.word(rng, false, (int) Math.ceil(s2.length() / (2.2 + rng.nextDouble())));
+            do {
+                ciphered = language.word(rng, false, (int) Math.ceil(s2.length() / (2.2 + rng.nextDouble())));
+                if(frustration++ > 9)
+                    break;
+            }while (reverse.containsKey(ciphered));
             table.put(s2, ciphered);
             reverse.put(ciphered, s2);
+
         }
         char[] chars = ciphered.toCharArray();
         // Lu is the upper case letter category in Unicode; we're using regexodus for this because GWT probably
@@ -146,7 +152,7 @@ public class LanguageCipher implements Serializable{
         Pattern pat;
         Replacer rep;
         StringBuilder sb = new StringBuilder(128);
-        sb.append("\\b(?:");
+        sb.append("(?:");
         for(String k : vocabulary.keySet())
         {
             sb.append("(?:\\Q");
@@ -154,7 +160,7 @@ public class LanguageCipher implements Serializable{
             sb.append("\\E)|");
         }
         sb.deleteCharAt(sb.length() - 1);
-        sb.append(")\\b");
+        sb.append(')');
 
         pat = Pattern.compile("\\b" + sb + "\\b", "ui");
 
