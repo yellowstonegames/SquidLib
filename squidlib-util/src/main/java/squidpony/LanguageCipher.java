@@ -19,6 +19,20 @@ import java.util.Map;
  * source text to determine the RNG seed that FakeLanguageGen will use, so the translation is not random. Can cipher a
  * typically English text and generate a text with FakeLanguageGen, but also decipher such a generated text with a
  * fully-complete, partially-complete, or partially-incorrect vocabulary.
+ * <br>
+ * This defaults to caching source-language words to their generated-language word translations in the field table, as
+ * well as the reverse translation in reverse. This can be changed to reduce memory usage for large vocabularies with
+ * {@code setCacheLevel()}, where it starts at 2 (writing to table and reverse), and can be lowered to 1 (writing to
+ * table only) if you don't need reverse to decipher a language easily, or to 0 (writing to neither) if you expect that
+ * memory will be at a premium and don't mind re-generating the same word each time it occurs in a source text. If
+ * cacheLevel is 1 or less, then this will not check for overlap between previously-generated words (it won't have an
+ * easy way to look up previously-generated ones) and so may be impossible to accurately decipher. As an example, one
+ * test of level 1 generated "he" as the translation for both "a" and "at", so every time "a" had been ciphered and then
+ * deciphered, the reproduced version said "at" instead. This won't happen by default, but the default instead relies on
+ * words being entered as inputs to cipher() or lookup() in the same order. If words are entered in two different orders
+ * to different runs of the program, they may have different generated results if cacheLevel is 2. One way to handle
+ * this is to use cacheLevel 2 and cipher the whole game script, or just the unique words in it (maybe just a large word
+ * list, such as http://wordlist.aspell.net/12dicts/ ), then serialize the LanguageCipher for later usage.
  * @author Tommy Ettinger
  * Created by Tommy Ettinger on 5/1/2016.
  */
@@ -44,6 +58,17 @@ public class LanguageCipher implements Serializable{
      */
     reverse;
     private static final Pattern wordMatch = Pattern.compile("(\\pL+)|(\\pL[\\pL\\p{Pd}]*\\pL)");
+
+    /**
+     * The degree of vocabulary to cache to speed up future searches at the expense of memory usage.
+     * <ul>
+     * <li>2 will cache source words to generated words in table, and generated to source in reverse.</li>
+     * <li>1 will cache source words to generated words in table, and won't write to reverse.</li>
+     * <li>0 won't write to table or reverse.</li>
+     * </ul>
+     * Defaults to 2, writing to both table and reverse.
+     */
+    public int cacheLevel = 2;
 
     /**
      * Constructs a LanguageCipher that will generate English-like or Dutch-like text by default.
@@ -96,12 +121,13 @@ public class LanguageCipher implements Serializable{
             rng.setState(h);
             do {
                 ciphered = language.word(rng, false, (int) Math.ceil(s2.length() / (2.2 + rng.nextDouble())));
-                if(frustration++ > 9)
+                if(cacheLevel < 2 || frustration++ > 9)
                     break;
             }while (reverse.containsKey(ciphered));
-            table.put(s2, ciphered);
-            reverse.put(ciphered, s2);
-
+            switch (cacheLevel) {
+                case 2: reverse.put(ciphered, s2);
+                case 1: table.put(s2, ciphered);
+            }
         }
         char[] chars = ciphered.toCharArray();
         // Lu is the upper case letter category in Unicode; we're using regexodus for this because GWT probably
@@ -254,5 +280,15 @@ public class LanguageCipher implements Serializable{
     {
         vocabulary.put(lookup(correctWord.toLowerCase()), mismatchWord);
         return this;
+    }
+
+    public int getCacheLevel() {
+        return cacheLevel;
+    }
+
+    public void setCacheLevel(int cacheLevel) {
+        if(cacheLevel >= 2) this.cacheLevel = 2;
+        else if(cacheLevel <= 0) this.cacheLevel = 0;
+        else this.cacheLevel = cacheLevel;
     }
 }
