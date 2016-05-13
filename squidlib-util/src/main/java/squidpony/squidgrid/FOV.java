@@ -3,9 +3,7 @@ package squidpony.squidgrid;
 import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class provides methods for calculating Field of View in grids. Field of
@@ -499,6 +497,65 @@ public class FOV {
             }
         }
         return lightMap;
+    }
+
+    /**
+     * Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.
+     * Clamps the highest value for any single position at 1.0.
+     * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()
+     * @return the sum of all the 2D double arrays passed, using the dimensions of the first if they don't all match
+     */
+    public static double[][] addFOVs(double[][]... maps)
+    {
+        if(maps == null || maps.length == 0)
+            return new double[0][0];
+        double[][] map = GwtCompatibility.copy2D(maps[0]);
+        for(int i = 1; i < maps.length; i++)
+        {
+            for (int x = 0; x < map.length && x < maps[i].length; x++) {
+                for (int y = 0; y < map[x].length && y < maps[i][x].length; y++) {
+                    map[x][y] += maps[i][x][y];
+                }
+            }
+        }
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[x].length; y++) {
+                if(map[x][y] > 1.0) map[x][y] = 1.0;
+            }
+        }
+        return map;
+    }
+
+    /**
+     * Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.
+     * Clamps the highest value for any single position at 1.0.
+     * @param maps an Iterable of 2D double arrays (most collections implement Iterable),
+     *             each usually returned by calculateFOV()
+     * @return the sum of all the 2D double arrays passed, using the dimensions of the first if they don't all match
+     */
+    public static double[][] addFOVs(Iterable<double[][]> maps)
+    {
+        if(maps == null)
+            return new double[0][0];
+        Iterator<double[][]> it = maps.iterator();
+        if(!it.hasNext())
+            return new double[0][0];
+        double[][] map = GwtCompatibility.copy2D(it.next()), t;
+        while (it.hasNext())
+        {
+            t = it.next();
+            for (int x = 0; x < map.length && x < t.length; x++) {
+                for (int y = 0; y < map[x].length && y < t[x].length; y++) {
+                    map[x][y] += t[x][y];
+                }
+            }
+        }
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[x].length; y++) {
+                if(map[x][y] > 1.0) map[x][y] = 1.0;
+            }
+        }
+        return map;
     }
 
 }

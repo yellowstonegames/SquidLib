@@ -220,8 +220,9 @@ public class CoordPacker {
      * the {@link CoordPacker} class documentation. This short[] can be passed to CoordPacker.unpack() to restore the
      * relevant states and their positions as a boolean[][] (with false meaning 0 or less and true being any double
      * greater than 0). As stated in the class documentation, the compressed result is intended to use as little memory
-     * as possible for most roguelike FOV maps.
-     *<br>
+     * as possible for most roguelike FOV maps. To avoid floating-point number comparison issues, this actually needs
+     * doubles to be greater than 0.0001, which should never cause incorrect behavior with FOV's double[][] maps.
+     * <br>
      * <b>To store more than two states</b>, you should use packMulti().
      *
      * @param map a double[][] that probably was returned by FOV. If you obtained a double[][] from DijkstraMap, it
@@ -269,7 +270,7 @@ public class CoordPacker {
                 continue;
             }
             ml++;
-            current = map[hilbertX[i]][hilbertY[i]] > 0.0;
+            current = map[hilbertX[i]][hilbertY[i]] > 0.0001;
             if(current != on)
             {
                 packing.add((short) skip);
@@ -655,6 +656,10 @@ public class CoordPacker {
      */
     public static short[] pack(char[][] map, char... yes)
     {
+        if(yes == null || yes.length == 0)
+            return ALL_WALL;
+        if(yes.length == 1)
+            return pack(map, yes[0]);
         if(map == null || map.length == 0)
             throw new ArrayIndexOutOfBoundsException("CoordPacker.pack() must be given a non-empty array");
         int xSize = map.length, ySize = map[0].length;
@@ -1718,6 +1723,7 @@ public class CoordPacker {
         }
         return cs;
     }
+
     /**
      * Gets all positions that are "on" in the given packed array, without unpacking it, and returns them as an array of
      * Hilbert Curve indices.
@@ -1743,6 +1749,45 @@ public class CoordPacker {
         return vla.toArray();
     }
 
+    /**
+     * Gets the nth position that is "on" in the given packed array, without unpacking it, and returns it as a Coord.
+     * Uses Hilbert Curve ordering for the exact Hilbert Curve CoordPacker uses, so any two given Coords will always
+     * have the same before-after relationship. Returns null if n is not between 0 (inclusive) and the count of packed
+     * (exclusive), as by {@code CoordPacker.count()}.
+     *
+     * You can technically use nth to iterate over only the Coords that are defined in some packed data, but it's
+     * drastically more efficient to store a Coord array once with allPacked(). Using nth() as an iterator is
+     * essentially running a growing portion of what allPacked() does, over and over again, until the last Coord encoded
+     * in packed takes almost as long to process as one call to allPacked(). That said, for a single Coord this can be
+     * significantly faster than getting an array with allPacked() and fetching only one item from it.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @param n the index to get in packed
+     * @return the nth Coord encoded as "on" by packed, ordered by distance along the Hilbert Curve, or null if n is out of bounds
+     */
+    public static Coord nth(final short[] packed, final int n)
+    {
+        if(n < 0)
+            return null;
+        boolean on = false;
+        int idx = 0, ct = n, tmp;
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            tmp = (packed[p] & 0xffff);
+            if (on) {
+                if(ct - tmp < 0)
+                {
+                    idx += ct;
+                    ct -= tmp;
+                    break;
+                }
+                ct -= tmp;
+            }
+            idx += tmp;
+        }
+        if(ct >= 0)
+            return null;
+        return Coord.get(hilbertX[idx], hilbertY[idx]);
+    }
     /**
      * Gets the positions that are "on" in the given packed array, without unpacking it, repeatedly goes through a
      * number of "on" cells equal to fraction and stores one of those cells as a Coord, and returns the accumulated
@@ -3942,13 +3987,13 @@ public class CoordPacker {
     }
 
     /**
-     * Checks if any cells are encoded as "on" in packed.
+     * Checks if no cells are encoded as "on" in packed.
      * @param packed a packed array such as one produced by pack()
-     * @return true if there is at least one "on" cell in packed
+     * @return false if there is at least one "on" cell in packed; true if there are no "on" cells
      */
     public static boolean isEmpty(short[] packed)
     {
-        return packed.length <= 1;
+        return packed == null || packed.length <= 1;
     }
     /**
      * Given two packed short arrays, left and right, this returns true if they encode any overlapping area (their areas
@@ -4240,7 +4285,7 @@ public class CoordPacker {
      */
     public static short[] packSeveral(int... hilbert)
     {
-        if(hilbert.length == 0)
+        if(hilbert == null || hilbert.length == 0)
             return ALL_WALL;
         Arrays.sort(hilbert);
         ShortVLA vla = new ShortVLA(128);
@@ -4270,10 +4315,11 @@ public class CoordPacker {
      */
     public static short[] packSeveral(Coord... points)
     {
-        if(points.length == 0)
+        if(points == null || points.length == 0)
             return ALL_WALL;
         int[] hilbert = new int[points.length];
         for (int i = 0; i < points.length; i++) {
+            if(points[i] == null) return ALL_WALL;
             hilbert[i] = coordToHilbert(points[i]);
         }
 
@@ -4304,13 +4350,14 @@ public class CoordPacker {
      */
     public static short[] packSeveral(Collection<Coord> points)
     {
-        int sz = points.size();
-        if(sz == 0)
+        if(points == null || points.isEmpty())
             return ALL_WALL;
+        int sz = points.size();
         int[] hilbert = new int[sz];
         int idx = 0;
         for(Coord c : points)
         {
+            if(c == null) return ALL_WALL;
             hilbert[idx++] = coordToHilbert(c);
         }
         Arrays.sort(hilbert);

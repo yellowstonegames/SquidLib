@@ -479,11 +479,14 @@ public enum Radius {
             default:
             {
                 int high;
-                for (int dx = -radiusLength; dx <= radiusLength; ++dx)
-                {
-                    high = (int)Math.floor(Math.sqrt(radiusLength * radiusLength - dx * dx));
-                    for (int dy = -high; dy <= high; ++dy)
+                for (int dx = -radiusLength; dx <= radiusLength; ++dx) {
+                    high = (int) Math.floor(Math.sqrt(radiusLength * radiusLength - dx * dx));
+                    for (int dy = -high; dy <= high; ++dy) {
+                        if (!surpassEdges && (center.x + dx < 0 || center.y + dy < 0 ||
+                                center.x + dx >= width || center.y + dy >= height))
+                            continue;
                         contents.add(Coord.get(center.x + dx, center.y + dy));
+                    }
                 }
             }
         }
