@@ -3,6 +3,7 @@ package squidpony.squidgrid;
 import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -11,27 +12,47 @@ import java.util.*;
  * seen. They return a two dimensional array of doubles, representing the amount
  * of view (typically sight, but perhaps sound, smell, etc.) which the origin
  * has of each cell.
- *
- * After a calculation has been run, the resulting light map is saved in the
- * class. This allows the values to be checked on individual cells without being
- * required to work with the returned light map. If no calculation has been
- * performed, all value checking methods will return their version of "unlit".
- *
+ * <br>
  * The input resistanceMap is considered the percent of opacity. This resistance
- * is on top of the resistance applied from the light spreading out.
- *
+ * is on top of the resistance applied from the light spreading out. You can
+ * obtain a resistance map easily with the DungeonUtility.generateResistances()
+ * method, which uses defaults for common chars used in SquidLib, but you may
+ * also want to create a resistance map manually if a given char means something
+ * very different in your game. This is easy enough to do by looping over all the
+ * x,y positions in your char[][] map and running a switch statement on each char,
+ * assigning a double to the same x,y position in a double[][]. The value should
+ * be between 0.0 (unblocked) for things light passes through, 1.0 (blocked) for
+ * things light can't pass at all, and possibly other values if you have
+ * translucent obstacles.
+ * <br>
  * The returned light map is considered the percent of light in the cells.
- *
+ * <br>
  * Not all implementations are required to provide percentage levels of light.
  * In such cases the returned values will be 0 for no light and 1.0 for fully
  * lit. Implementations that return this way note so in their documentation.
- *
+ * Currently, all implementations do provide percentage levels.
+ * <br>
  * All solvers perform bounds checking so solid borders in the map are not
  * required.
+ * <br>
+ * Static methods are provided to add together FOV maps in the simple way
+ * (disregarding visibility of distant FOV from a given cell), or the more
+ * practical way for roguelikes (where a cell needs to be within line-of-sight
+ * in the first place for a distant light to illuminate it). The second method
+ * relies on an LOS map, which is essentially the same as a very-high-radius
+ * FOV map and can be easily obtained with calculateLOSMap().
+ * <br>
+ * If you want to iterate through cells that are visible in a double[][] returned
+ * by FOV, you can pass that double[][] to the constructor for Region, and you
+ * can use the Region as a reliably-ordered List of Coord (among other things).
+ * The order Region iterates in is somewhat strange, and doesn't, for example,
+ * start at the center of an FOV map, but it will be the same every time you
+ * create a Region with the same FOV map (or the same visible Coords).
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class FOV {
+public class FOV implements Serializable {
+    private static final long serialVersionUID = 3258723684733275798L;
 
     public static final int
             /**
@@ -93,7 +114,7 @@ public class FOV {
      * calculations. The light will be treated as having infinite possible
      * radius.
      *
-     * @param resistanceMap the grid of cells to calculate on
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
      * @param startx the horizontal component of the starting location
      * @param starty the vertical component of the starting location
      * @return the computed light grid
@@ -108,10 +129,10 @@ public class FOV {
      * of fully lit.
      *
      * The starting point for the calculation is considered to be at the center
-     * of the origin cell. Radius determinations based on Euclidian
+     * of the origin cell. Radius determinations based on Euclidean
      * calculations.
      *
-     * @param resistanceMap the grid of cells to calculate on
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
      * @param startx the horizontal component of the starting location
      * @param starty the vertical component of the starting location
      * @param radius the distance the light will extend to
@@ -130,7 +151,7 @@ public class FOV {
      * of the origin cell. Radius determinations are determined by the provided
      * RadiusStrategy.
      *
-     * @param resistanceMap the grid of cells to calculate on
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
      * @param radius the distance the light will extend to
@@ -193,7 +214,7 @@ public class FOV {
      * RadiusStrategy. A conical section of FOV is lit by this method if
      * span is greater than 0.
      *
-     * @param resistanceMap the grid of cells to calculate on
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
      * @param startX the horizontal component of the starting location
      * @param startY the vertical component of the starting location
      * @param radius the distance the light will extend to
@@ -558,4 +579,91 @@ public class FOV {
         return map;
     }
 
+    /**
+     * Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
+     * you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map
+     * is calculated by calculateLOSMap(), using the same resistance map used to calculate the FOV maps.
+     * Clamps the highest value for any single position at 1.0.
+     * @param losMap an LOS map such as one generated by calculateLOSMap()
+     * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()
+     * @return the sum of all the 2D double arrays in maps where a cell was visible in losMap
+     */
+    public static double[][] mixVisibleFOVs(double[][] losMap, double[][]... maps)
+    {
+        if(losMap == null || losMap.length == 0)
+            return addFOVs(maps);
+        if(maps == null || maps.length == 0)
+            return new double[losMap.length][losMap[0].length];
+        double[][] map = GwtCompatibility.copy2D(maps[0]);
+        for(int i = 1; i < maps.length; i++)
+        {
+            for (int x = 0; x < losMap.length && x < map.length && x < maps[i].length; x++) {
+                for (int y = 0; y < losMap[x].length && y < map[x].length && y < maps[i][x].length; y++) {
+                    if(losMap[x][y] > 0.0001)
+                        map[x][y] += maps[i][x][y];
+                }
+            }
+        }
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[x].length; y++) {
+                if(map[x][y] > 1.0) map[x][y] = 1.0;
+            }
+        }
+        return map;
+    }
+
+    /**
+     * Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
+     * you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map
+     * is calculated by calculateLOSMap(), using the same resistance map used to calculate the FOV maps.
+     * Clamps the highest value for any single position at 1.0.
+     * @param losMap an LOS map such as one generated by calculateLOSMap()
+     * @param maps an Iterable of 2D double arrays, each usually returned by calculateFOV()
+     * @return the sum of all the 2D double arrays in maps where a cell was visible in losMap
+     */
+    public static double[][] mixVisibleFOVs(double[][] losMap, Iterable<double[][]> maps)
+    {
+        if(losMap == null || losMap.length == 0)
+            return addFOVs(maps);
+        if(maps == null)
+            return new double[losMap.length][losMap[0].length];
+        Iterator<double[][]> it = maps.iterator();
+        if(!it.hasNext())
+            return new double[losMap.length][losMap[0].length];
+
+        double[][] map = GwtCompatibility.copy2D(it.next()), t;
+        while (it.hasNext())
+        {
+            t = it.next();
+            for (int x = 0; x < map.length && x < t.length; x++) {
+                for (int y = 0; y < map[x].length && y < t[x].length; y++) {
+                    if(losMap[x][y] > 0.0001)
+                        map[x][y] += t[x][y];
+                }
+            }
+        }
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[x].length; y++) {
+                if(map[x][y] > 1.0) map[x][y] = 1.0;
+            }
+        }
+        return map;
+    }
+
+    /**
+     * Calculates what cells are visible from (startX,startY) using the given resistanceMap; this can be given to
+     * mixVisibleFOVs() to limit extra light sources to those visible from the starting point. Just like calling
+     * calculateFOV(), this creates a new double[][]; there doesn't appear to be a way to work with Ripple FOV and avoid
+     * needing an empty double[][] every time, since it uses previously-placed light to determine how it should spread.
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param startX the center of the LOS map; typically the player's x-position
+     * @param startY the center of the LOS map; typically the player's y-position
+     * @return an LOS map with the given starting point
+     */
+    public double[][] calculateLOSMap(double[][] resistanceMap, int startX, int startY)
+    {
+        if(resistanceMap == null || resistanceMap.length == 0)
+            return new double[0][0];
+        return calculateFOV(resistanceMap, startX, startY, resistanceMap.length + resistanceMap[0].length, Radius.SQUARE);
+    }
 }

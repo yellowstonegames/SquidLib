@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Collection;
 
@@ -14,7 +15,9 @@ import static squidpony.squidmath.CoordPacker.*;
  * More features are likely to be ported into Region as they are added to CoordPacker.
  * Created by Tommy Ettinger on 5/12/2016.
  */
-public class Region extends AbstractList<Coord>{
+public class Region extends AbstractList<Coord> implements Serializable{
+
+    private static final long serialVersionUID = 4015272367863327093L;
 
     protected short[] raw;
     protected Coord[] coords;
