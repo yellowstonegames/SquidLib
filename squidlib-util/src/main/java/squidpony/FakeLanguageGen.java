@@ -2108,6 +2108,7 @@ public class FakeLanguageGen implements Serializable {
 
     public static class Alteration implements Serializable
     {
+        private static final long serialVersionUID = -2138854697837563188L;
         public Replacer replacer;
         public double chance;
         public Alteration()
