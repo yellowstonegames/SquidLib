@@ -592,21 +592,18 @@ public class FOV implements Serializable {
     {
         if(losMap == null || losMap.length == 0)
             return addFOVs(maps);
+        double[][] map = new double[losMap.length][losMap[0].length];
         if(maps == null || maps.length == 0)
-            return new double[losMap.length][losMap[0].length];
-        double[][] map = GwtCompatibility.copy2D(maps[0]);
-        for(int i = 1; i < maps.length; i++)
+            return map;
+        for(int i = 0; i < maps.length; i++)
         {
             for (int x = 0; x < losMap.length && x < map.length && x < maps[i].length; x++) {
                 for (int y = 0; y < losMap[x].length && y < map[x].length && y < maps[i][x].length; y++) {
-                    if(losMap[x][y] > 0.0001)
+                    if(losMap[x][y] > 0.0001) {
                         map[x][y] += maps[i][x][y];
+                        if(map[x][y] > 1.0) map[x][y] = 1.0;
+                    }
                 }
-            }
-        }
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[x].length; y++) {
-                if(map[x][y] > 1.0) map[x][y] = 1.0;
             }
         }
         return map;
@@ -625,26 +622,23 @@ public class FOV implements Serializable {
     {
         if(losMap == null || losMap.length == 0)
             return addFOVs(maps);
+        double[][] map = new double[losMap.length][losMap[0].length], t;
         if(maps == null)
-            return new double[losMap.length][losMap[0].length];
+            return map;
         Iterator<double[][]> it = maps.iterator();
         if(!it.hasNext())
-            return new double[losMap.length][losMap[0].length];
+            return map;
 
-        double[][] map = GwtCompatibility.copy2D(it.next()), t;
         while (it.hasNext())
         {
             t = it.next();
-            for (int x = 0; x < map.length && x < t.length; x++) {
-                for (int y = 0; y < map[x].length && y < t[x].length; y++) {
-                    if(losMap[x][y] > 0.0001)
+            for (int x = 0; x < losMap.length && x < map.length && x < t.length; x++) {
+                for (int y = 0; y < losMap[x].length && y < map[x].length && y < t[x].length; y++) {
+                    if (losMap[x][y] > 0.0001) {
                         map[x][y] += t[x][y];
+                        if(map[x][y] > 1.0) map[x][y] = 1.0;
+                    }
                 }
-            }
-        }
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[x].length; y++) {
-                if(map[x][y] > 1.0) map[x][y] = 1.0;
             }
         }
         return map;
