@@ -80,6 +80,30 @@ public class Region extends AbstractList<Coord> implements Serializable{
     }
 
     /**
+     * A constructor that copies another Region so this Region will have the same contents. If the other Region is
+     * "dirty", this won't perform "cleanup" on it, but will ensure that this Region is "clean" at creation.
+     * None of the reference types in other will be used directly in this Region, so changes made to this Region won't
+     * be reflected in other.
+     * @param other another Region to copy into this one
+     */
+    public Region(Region other)
+    {
+        raw = new short[other.raw.length];
+        System.arraycopy(other.raw, 0, raw, 0, raw.length);
+        if(other.dirty)
+        {
+            coords = allPacked(raw);
+        }
+        else
+        {
+            coords = new Coord[other.coords.length];
+            System.arraycopy(other.coords, 0, coords, 0, coords.length);
+        }
+        dirty = false;
+
+    }
+
+    /**
      * A constructor for a circular Region (possibly truncated at the edges) with a Coord center, an int radius, and a
      * maximum width and height that the Coords in this Region will not exceed.
      * @param center the center of the circular Region
@@ -145,9 +169,21 @@ public class Region extends AbstractList<Coord> implements Serializable{
      * @param separation an int where higher numbers mean there will be more distance between Coords, and fewer total
      * @return a new Region made of the separated Coords
      */
-    public Region separatedCoords(int separation)
+    public Region separated(int separation)
     {
         return new Region(fractionPacked(raw, separation));
+    }
+
+    /**
+     * Takes this region and walks through its Coords in chunks with length equal to separation, creating a new Region
+     * where one randomly-chosen Coord in each chunk is kept and the others are discarded.
+     * @param separation an int where higher numbers mean there will be more distance between Coords, and fewer total
+     * @param rng the source of random numbers used to randomize Coords used, removing any noticeable pattern
+     * @return a new Region made of the separated Coords
+     */
+    public Region randomSeparated(int separation, RNG rng)
+    {
+        return new Region(CoordPacker.randomSeparated(raw, separation, rng));
     }
 
 
