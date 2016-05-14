@@ -79,11 +79,12 @@ public class DungeonUtility {
 
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location that is encoded as "on" in packed.
-     * This is useful when you have used {@code CoordPacker.pack(char[][] map, char yes)} to encode all cells in a
-     * char[][] map that match a particular type, like '.' for floors or '~' for deep water, and want to efficiently
-     * get one randomly-chosen tile from it. Calling pack() is likely slightly less efficient than using randomFloor(),
-     * but it only needs to be done once per map and cell type, and this method should be substantially more efficient
-     * when the type of cell is uncommon on the map.
+     * This is useful when you have used {@code DungeonUtility.packedFloors(char[][] map)} to encode all floors in map,
+     * or {@code CoordPacker.pack(char[][] map, char... yes)} to encode all cells in a char[][] map that match a
+     * particular type, like '.' for floors or '~' for deep water, and want to efficiently get one randomly-chosen tile
+     * from it. Calling pack() is likely slightly less efficient than using randomFloor(), but it only needs to be done
+     * once per map and cell type, and this method should be substantially more efficient when the type of cell is
+     * uncommon on the map.
      * Uses this class' rng field for pseudo-random number generation.
      *
      * @param packed a packed array produced by CoordPacker encoding the cells to choose from as "on"
@@ -91,6 +92,18 @@ public class DungeonUtility {
      */
     public Coord randomCell(short[] packed) {
         return CoordPacker.singleRandom(packed, rng);
+    }
+
+    /**
+     * A convenience wrapper for getting a packed-data representation of all floors ('.') in map, for randomCell().
+     * If you want other chars or more chars than just the period, you can use CoordPacker.pack() with a char[][] map
+     * and one or more chars to find as the parameters. This is the same as calling {@code CoordPacker.pack(map, '.')}.
+     * @param map a char[][] that uses '.' to represent floors
+     * @return all floors in map in packed data format (a special short array) that can be given to randomCell()
+     */
+    public static short[] packedFloors(char[][] map)
+    {
+        return CoordPacker.pack(map, '.');
     }
 
     /**

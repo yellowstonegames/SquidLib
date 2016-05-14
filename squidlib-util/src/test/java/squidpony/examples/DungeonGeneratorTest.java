@@ -77,25 +77,13 @@ import java.io.IOException;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 150, height = 100, depth = 16;
+    public static int width = 100, height = 100, depth = 16;
     public static void main( String[] args )
     {
         //seed is, in base 36, the number SQUIDLIB
         StatefulRNG rng = new StatefulRNG(2252637788195L);
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
 
-        /*
-        String[][] tiles = new DungeonBoneGen().getTiles(TilesetType.DEFAULT_DUNGEON);
-        for(String[] tile : tiles)
-        {
-            System.out.println("{");
-            for(String row : tile)
-            {
-                System.out.println("\"" + row + "\",");
-            }
-            System.out.println("},");
-        }
-        */
         dungeonGenerator.addDoors(15, true);
         dungeonGenerator.addWater(15);
         dungeonGenerator.addGrass(10);
