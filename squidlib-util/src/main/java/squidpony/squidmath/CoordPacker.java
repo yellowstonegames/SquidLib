@@ -1794,10 +1794,13 @@ public class CoordPacker {
      * portion of positions as a Coord[].
      * <br>
      * For purposes of finding mostly cells with a similar distance to each other but without obvious patterns, a value
-     * of 5, 6, or 7 for fraction works well.
+     * of 5, 6, or 7 for fraction works well for relatively-close Coords, but larger values are better for packed data
+     * with wide, expansive areas. If you want to make the regular pattern this uses impossible to discern, you can use
+     * {@code randomSeparated()} to keep distance between Coords and sample most areas of some packed data. Values for
+     * fraction that are multiples of 4 are likely to show a pattern in large open spaces more easily.
      * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
      *               not be null (this method does not check due to very tight performance constraints).
-     * @param fraction the approximate fraction of "on" cells to use
+     * @param fraction the denominator of the approximate fraction of "on" cells to use
      * @return a Coord[] corresponding to a fraction of the "on" cells in packed.
      */
     public static Coord[] fractionPacked(short[] packed, int fraction)
@@ -1811,6 +1814,50 @@ public class CoordPacker {
             if (on) {
                 for (int i = idx; i < idx + (packed[p] & 0xffff); i++, ctr = (ctr + 1) % fraction) {
                     if(ctr == 0)
+                        vla.add((short)i);
+                }
+            }
+            idx += packed[p] & 0xffff;
+        }
+        int[] distances = vla.asInts();
+        Coord[] cs = new Coord[distances.length];
+        for (int i = 0; i < distances.length; i++) {
+            cs[i] = Coord.get(hilbertX[distances[i]], hilbertY[distances[i]]);
+        }
+        return cs;
+    }
+
+    /**
+     * Gets the positions that are "on" in the given packed array, without unpacking it, repeatedly goes through a
+     * number of "on" cells equal to fraction and stores a random one of those cells as a Coord, and returns the
+     * accumulated random portion of positions as a Coord[]. Because of how this works, it is much more likely that the
+     * Coords will be dispersed so that there's a good amount of minimum distance between most Coords, while methods
+     * like randomPortion() do not make such dispersal a priority and may return tight clusters of Coords.
+     * <br>
+     * For purposes of finding mostly cells with a similar distance to each other but without obvious patterns, a value
+     * of at least 7 for fraction works well.
+     * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must
+     *               not be null (this method does not check due to very tight performance constraints).
+     * @param separation the denominator of the approximate fraction of "on" cells to use
+     * @param rng the RNG to use to incorporate a random factor to the generation
+     * @return a Coord[] corresponding to a fraction of the "on" cells in packed.
+     */
+    public static Coord[] randomSeparated(short[] packed, int separation, RNG rng)
+    {
+        if(separation <= 1)
+            return allPacked(packed);
+        ShortVLA vla = new ShortVLA(64);
+        boolean on = false;
+        int idx = 0, ctr = 0, tgt = rng.nextInt(separation);
+        for(int p = 0; p < packed.length; p++, on = !on) {
+            if (on) {
+                for (int i = idx; i < idx + (packed[p] & 0xffff); i++, ctr++) {
+                    if(ctr >= separation)
+                    {
+                        ctr %= separation;
+                        tgt = rng.nextInt(separation);
+                    }
+                    if(ctr == tgt)
                         vla.add((short)i);
                 }
             }
