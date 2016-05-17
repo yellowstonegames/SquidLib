@@ -12,9 +12,6 @@ public class MimicFill {
 
     private static final int N = 3;
 
-    // We will want predefined patterns at some point
-    //public static final boolean[][] something = new boolean[4][4];
-
     /**
      * Converts a 2D char array map to a 2D boolean array, where any chars in the array or vararg yes will result in
      * true in the returned array at that position and any other chars will result in false. The result can be given to
@@ -187,4 +184,255 @@ public class MimicFill {
             return result;
         }
     }
+
+    /**
+     * Predefined sample; many small separate squares.
+     */
+    public static final boolean[][] boulders = new boolean[][]{
+            new boolean[]{true,true,true,true,true,true,true,true,true,true,true,false,false,true,true,true},
+            new boolean[]{true,true,false,false,true,true,false,false,true,true,true,false,false,true,true,true},
+            new boolean[]{true,true,false,false,true,true,false,false,true,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,true,false,false,true,true,false,false,true},
+            new boolean[]{true,true,true,false,false,true,false,false,true,false,false,true,true,false,false,true},
+            new boolean[]{true,true,true,false,false,true,false,false,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,true,true,false,false,true,false,false,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,false,false,true,false,false,true,true,true,false,false,true,true},
+            new boolean[]{true,false,false,true,true,true,true,true,true,true,true,true,false,false,true,true},
+            new boolean[]{true,false,false,true,false,false,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,false,false,true,true,true,false,false,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,true,false,false,true,false,false,true,true},
+            new boolean[]{true,false,false,true,true,true,false,false,true,true,true,true,false,false,true,true},
+            new boolean[]{true,false,false,true,true,true,false,false,true,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true}
+    };
+
+    /**
+     * Predefined sample; a large, enclosed, organic space that usually makes large cave-like rooms,
+     */
+    public static final boolean[][] cave = new boolean[][]{
+            new boolean[]{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+            new boolean[]{false, false, false, false, true, false, false, false, false, true, false, false, false, false, false, false},
+            new boolean[]{false, false, false, true, true, true, false, false, true, true, true, true, true, true, false, false},
+            new boolean[]{false, false, true, true, true, true, true, true, true, true, true, true, false, false, false, false},
+            new boolean[]{false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false},
+            new boolean[]{false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false},
+            new boolean[]{false, false, false, true, true, true, true, true, true, true, true, true, true, false, false, false},
+            new boolean[]{false, false, false, false, true, true, true, true, true, true, true, true, false, false, false, false},
+            new boolean[]{false, false, false, false, true, true, true, true, true, true, true, true, true, false, false, false},
+            new boolean[]{false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false},
+            new boolean[]{false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false},
+            new boolean[]{false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false},
+            new boolean[]{false, false, false, true, true, true, true, true, false, false, true, true, true, true, true, false},
+            new boolean[]{false, false, false, false, true, true, true, false, false, false, false, true, true, false, false, false},
+            new boolean[]{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false},
+            new boolean[]{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}
+    };
+
+    /**
+     * Predefined sample; several medium-sized organic spaces that usually make tight, chaotic tunnels.
+     */
+    public static final boolean[][] caves = new boolean[][]{
+            new boolean[]{false,false,false,true,false,false,false,false,false,false,false,false,true,false,false,false},
+            new boolean[]{false,false,false,true,false,false,false,false,false,false,false,true,true,false,false,false},
+            new boolean[]{false,false,true,true,true,false,false,false,false,false,false,true,true,false,false,false},
+            new boolean[]{false,true,true,true,true,true,false,false,false,false,true,true,true,true,false,false},
+            new boolean[]{false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false},
+            new boolean[]{true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true},
+            new boolean[]{false,false,true,true,true,true,true,false,false,false,true,true,true,true,false,false},
+            new boolean[]{false,false,false,true,true,true,false,false,false,false,false,true,true,false,false,false},
+            new boolean[]{false,false,false,false,true,true,false,false,false,false,false,true,false,false,false,false},
+            new boolean[]{false,false,false,false,true,false,false,false,false,false,true,true,true,false,false,false},
+            new boolean[]{false,false,true,true,true,true,false,false,false,true,true,true,true,true,false,false},
+            new boolean[]{false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false},
+            new boolean[]{true,true,true,true,true,true,true,false,false,true,true,true,true,true,true,true},
+            new boolean[]{false,true,true,true,true,true,false,false,false,true,true,true,true,true,false,false},
+            new boolean[]{false,false,true,true,true,true,false,false,false,false,true,true,true,true,false,false},
+            new boolean[]{false,false,false,true,false,false,false,false,false,false,false,false,true,false,false,false}
+    };
+
+    /**
+     * Predefined sample; a checkerboard pattern that typically loses recognition as such after generation.
+     */
+    public static final boolean[][] chess = new boolean[][]{
+            new boolean[]{true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false},
+            new boolean[]{false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true},
+            new boolean[]{true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false},
+            new boolean[]{false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true},
+            new boolean[]{true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false},
+            new boolean[]{false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true},
+            new boolean[]{true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false},
+            new boolean[]{false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true},
+            new boolean[]{true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false},
+            new boolean[]{false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true},
+            new boolean[]{true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false},
+            new boolean[]{false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true},
+            new boolean[]{true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false},
+            new boolean[]{false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true},
+            new boolean[]{true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false},
+            new boolean[]{false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true}
+    };
+
+    /**
+     * Predefined sample; produces rectangular rooms with small corridors between them.
+     */
+    public static final boolean[][] lessRooms = new boolean[][]{
+            new boolean[]{false,false,false,true,false,false,false,false,false,false,false,false,true,false,false,false},
+            new boolean[]{false,false,false,true,false,false,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,false,false,true,false,false,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,false,false,true,false,false,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,false},
+            new boolean[]{true,true,true,false,false,false,false,false,false,true,true,true,true,true,true,true},
+            new boolean[]{false,false,true,false,false,false,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,false,true,false,false,false,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,false,true,false,false,false,false,false,false,false,false,true,false,false,false,false},
+            new boolean[]{false,false,true,false,false,false,false,false,false,false,false,true,false,false,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,false,false,false,true,false,false,false,false},
+            new boolean[]{true,true,true,true,true,true,true,true,false,false,false,true,true,true,true,true},
+            new boolean[]{false,false,true,true,true,true,true,true,true,true,true,true,true,false,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,false,false,false,false,true,false,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,false,false,false,false,true,false,false,false},
+            new boolean[]{false,false,false,true,false,false,false,false,false,false,false,false,true,false,false,false}
+    };
+
+    /**
+     * Predefined sample; produces a suitable filler for a maze (but it is unlikely to connect both ends like a maze).
+     */
+    public static final boolean[][] maze = new boolean[][]{
+            new boolean[]{true,true,true,true,true,false,false,false,false,true,true,true,false,true,true,false},
+            new boolean[]{true,false,false,false,true,false,true,true,false,true,false,false,false,false,false,false},
+            new boolean[]{true,false,true,true,true,false,true,false,false,false,false,true,true,true,false,true},
+            new boolean[]{true,false,false,false,false,false,true,false,true,true,true,true,false,true,false,false},
+            new boolean[]{true,true,true,false,true,true,true,false,false,false,false,true,false,false,false,true},
+            new boolean[]{false,false,false,false,false,false,true,true,true,true,false,true,false,true,false,false},
+            new boolean[]{true,true,true,true,true,false,true,true,false,true,false,true,false,true,false,true},
+            new boolean[]{false,false,false,false,false,false,true,true,false,true,true,true,false,true,false,true},
+            new boolean[]{true,true,true,true,true,true,true,true,false,false,false,false,false,true,false,false},
+            new boolean[]{false,false,false,true,false,false,false,true,true,false,true,true,true,true,false,true},
+            new boolean[]{true,true,false,true,false,true,true,true,false,false,false,false,false,false,false,false},
+            new boolean[]{true,false,false,true,false,true,false,true,false,true,true,false,true,false,true,true},
+            new boolean[]{true,true,true,true,false,false,false,true,false,false,true,false,true,false,false,true},
+            new boolean[]{false,false,true,true,false,true,true,true,true,true,true,false,true,true,false,false},
+            new boolean[]{true,false,false,false,false,false,false,false,false,true,true,false,false,true,true,false},
+            new boolean[]{true,true,true,true,true,true,true,true,false,true,true,true,false,true,true,false}
+    };
+
+    /**
+     * Predefined sample; produces weird, large areas of "true" and "false" that suddenly change to the other.
+     */
+    public static final boolean[][] quarterBlack = new boolean[][]{
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true}
+    };
+
+    /**
+     * Predefined sample; produces multiple directions of flowing, river-like shapes made of "false".
+     */
+    public static final boolean[][] river = new boolean[][]{
+            new boolean[]{true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,false,false,false,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,false,false,false,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,false,false,false,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,false,false,false,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,false,false,false,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,false,false,false,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,false,false,false,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,false,false,false,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,false,false,false,true,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,false,false,false,true,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,true}
+    };
+
+    /**
+     * Predefined sample; produces rectangular rooms with a dense packing.
+     */
+    public static final boolean[][] rooms = new boolean[][]{
+            new boolean[]{false,false,false,true,false,false,false,false,false,false,false,false,true,false,false,false},
+            new boolean[]{false,false,false,true,false,false,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,true,true,true,true,true,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,true,true,true,true,true,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false},
+            new boolean[]{true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,true},
+            new boolean[]{false,true,true,true,true,true,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,false,true,false,false,false,false,false,false,true,true,true,true,true,true,false},
+            new boolean[]{false,false,true,false,false,false,false,false,false,false,false,true,false,false,false,false},
+            new boolean[]{false,false,true,false,false,false,false,false,false,false,false,true,false,false,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,false,false,true,true,true,true,false,false},
+            new boolean[]{true,true,true,true,true,true,true,true,false,false,true,true,true,true,true,true},
+            new boolean[]{false,false,true,true,true,true,true,true,true,true,true,true,true,true,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,false,false,true,true,true,true,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,false,false,false,false,true,false,false,false},
+            new boolean[]{false,false,false,true,false,false,false,false,false,false,false,false,true,false,false,false}
+    };
+
+    /**
+     * Predefined sample; produces an uncanny imitation of a maze with a tiny sample size.
+     */
+    public static final boolean[][] simpleMaze = new boolean[][]{
+            new boolean[]{true,true,true,true},
+            new boolean[]{true,false,false,false},
+            new boolean[]{true,false,true,false},
+            new boolean[]{true,false,false,false}
+    };
+
+    /**
+     * Predefined sample; produces mostly rectangular rooms with very few corridor-like areas.
+     */
+    public static final boolean[][] simpleRooms = new boolean[][]{
+            new boolean[]{false,false,false,false,false,true,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,true,false,false,false,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,true,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,true,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,true,false,false},
+            new boolean[]{true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,true,true,true,true,true,true,true,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,true,false,false},
+            new boolean[]{false,false,true,true,true,true,true,true,true,false,false},
+            new boolean[]{false,false,false,false,false,true,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,true,false,false,false,false,false}
+    };
+
+    /**
+     * Predefined sample; produces largely rectangular rooms with a good amount of thin corridors.
+     */
+    public static final boolean[][] thickWalls = new boolean[][]{
+            new boolean[]{false,false,false,false,false,false,false,true,false,false,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,false,true,false,false,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,false,true,false,false,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,false,true,false,false,false,false,false,false,false},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,false,false,false,false},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,false,false,false,false},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,false,false,false,false},
+            new boolean[]{true,true,true,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,false,false,false,false},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,false,false,false,false},
+            new boolean[]{false,false,false,false,true,true,true,true,true,true,true,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,false,true,false,false,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,false,true,false,false,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,false,true,false,false,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,false,true,false,false,false,false,false,false,false}
+    };
+
+    public static final boolean[][][] samples = new boolean[][][]{
+            boulders, cave, caves, chess, lessRooms, maze, quarterBlack,
+            river, rooms, simpleMaze, simpleRooms, thickWalls
+    };
 }
