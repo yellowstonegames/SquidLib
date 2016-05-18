@@ -286,9 +286,9 @@ public enum Radius {
             break;
             default:
             {
-                double theta = PI2;
+                double theta;
                 int x, y, denom = 1;
-                boolean anySuccesses = false;
+                boolean anySuccesses;
                 while(denom <= 256) {
                     anySuccesses = false;
                     for (int i = 1; i <= denom; i+=2)
@@ -323,7 +323,8 @@ public enum Radius {
         if(radiusLength < 1) {
             return center;
         }
-        double theta = Math.atan2(middle.y - center.y, middle.x - center.x);
+        double theta = Math.atan2(middle.y - center.y, middle.x - center.x),
+                cosTheta = Math.cos(theta), sinTheta = Math.sin(theta);
 
         Coord end = Coord.get(middle.x, middle.y);
         switch (this) {
@@ -337,15 +338,15 @@ public enum Radius {
                 {
                     while (radius(center.x, center.y, end.x, end.y) < radiusLength) {
                         rad2++;
-                        end = Coord.get((int) Math.round(Math.cos(theta) * rad2) + center.x
-                                , (int) Math.round(Math.sin(theta) * rad2) + center.y);
+                        end = Coord.get((int) Math.round(cosTheta * rad2) + center.x
+                                , (int) Math.round(sinTheta * rad2) + center.y);
                     }
                 }
                 else {
                     while (radius(center.x, center.y, end.x, end.y) < radiusLength) {
                         rad2++;
-                        end = Coord.get(clamp((int) Math.round(Math.cos(theta) * rad2) + center.x, 0, width)
-                                      , clamp((int) Math.round(Math.sin(theta) * rad2) + center.y, 0, height));
+                        end = Coord.get(clamp((int) Math.round(cosTheta * rad2) + center.x, 0, width)
+                                      , clamp((int) Math.round(sinTheta * rad2) + center.y, 0, height));
                         if (end.x == 0 || end.x == width - 1 || end.y == 0 || end.y == height - 1)
                             return end;
                     }
@@ -355,8 +356,8 @@ public enum Radius {
             }
             default:
             {
-                end = Coord.get(clamp( (int) Math.round(Math.cos(theta) * radiusLength) + center.x, 0, width)
-                        ,clamp( (int) Math.round(Math.sin(theta) * radiusLength) + center.y, 0, height));
+                end = Coord.get(clamp( (int) Math.round(cosTheta * radiusLength) + center.x, 0, width)
+                        , clamp( (int) Math.round(sinTheta * radiusLength) + center.y, 0, height));
                 if(!surpassEdges) {
                     long edgeLength = 0;
 //                    if (end.x == 0 || end.x == width - 1 || end.y == 0 || end.y == height - 1)
@@ -364,30 +365,30 @@ public enum Radius {
                     {
                         // wow, we lucked out here. the only situation where cos(angle) is 0 is if the angle aims
                         // straight up or down, and then x cannot be < 0 or >= width.
-                        edgeLength = Math.round((0 - center.x) / Math.cos(theta));
-                        end = end.setY(clamp((int) Math.round(Math.sin(theta) * edgeLength) + center.y, 0, height));
+                        edgeLength = Math.round((0 - center.x) / cosTheta);
+                        end = end.setY(clamp((int) Math.round(sinTheta * edgeLength) + center.y, 0, height));
                     }
                     else if(end.x >= width)
                     {
                         // wow, we lucked out here. the only situation where cos(angle) is 0 is if the angle aims
                         // straight up or down, and then x cannot be < 0 or >= width.
-                        edgeLength = Math.round((width - 1 - center.x) / Math.cos(theta));
-                        end = end.setY(clamp((int) Math.round(Math.sin(theta) * edgeLength) + center.y, 0, height));
+                        edgeLength = Math.round((width - 1 - center.x) / cosTheta);
+                        end = end.setY(clamp((int) Math.round(sinTheta * edgeLength) + center.y, 0, height));
                     }
 
                     if (end.y < 0)
                     {
                         // wow, we lucked out here. the only situation where sin(angle) is 0 is if the angle aims
                         // straight left or right, and then y cannot be < 0 or >= height.
-                        edgeLength = Math.round((0 - center.y) / Math.sin(theta));
-                        end = end.setX(clamp((int) Math.round(Math.cos(theta) * edgeLength) + center.x, 0, width));
+                        edgeLength = Math.round((0 - center.y) / sinTheta);
+                        end = end.setX(clamp((int) Math.round(cosTheta * edgeLength) + center.x, 0, width));
                     }
                     else if(end.y >= height)
                     {
                         // wow, we lucked out here. the only situation where sin(angle) is 0 is if the angle aims
                         // straight left or right, and then y cannot be < 0 or >= height.
-                        edgeLength = Math.round((height - 1 - center.y) / Math.sin(theta));
-                        end = end.setX(clamp((int) Math.round(Math.cos(theta) * edgeLength) + center.x, 0, width));
+                        edgeLength = Math.round((height - 1 - center.y) / sinTheta);
+                        end = end.setX(clamp((int) Math.round(cosTheta * edgeLength) + center.x, 0, width));
                     }
                 }
                 return end;
@@ -445,7 +446,7 @@ public enum Radius {
     public Set<Coord> pointsInside(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
     {
         LinkedHashSet<Coord> contents = new LinkedHashSet<Coord>((int)Math.ceil(volume2D(radiusLength)));
-        if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height))
+        if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y >= height))
             return contents;
         if(radiusLength < 1) {
             contents.add(center);
@@ -491,7 +492,36 @@ public enum Radius {
             }
         }
         return contents;
-
     }
 
+    /**
+     * Given an Iterable of Coord (such as a List or Set), a distance to expand outward by (using this Radius), and the
+     * bounding height and width of the map, gets a "thickened" group of Coord as a Set where each Coord in points has
+     * been expanded out by an amount no greater than distance. As an example, you could call this on a line generated
+     * by Bresenham, OrthoLine, or an LOS object's getLastPath() method, and expand the line into a thick "brush stroke"
+     * where this Radius affects the shape of the ends. This will never produce a Coord with negative x or y, a Coord
+     * with x greater than or equal to width, or a Coord with y greater than or equal to height.
+     * @param distance the distance, as measured by this Radius, to expand each Coord on points up to
+     * @param width the bounding width of the map (exclusive)
+     * @param height the bounding height of the map (exclusive)
+     * @param points an Iterable (such as a List or Set) of Coord that this will make a "thickened" version of
+     * @return a Set of Coord that covers a wider area than what points covers; each Coord will be unique (it's a Set)
+     */
+    public Set<Coord> expand(int distance, int width, int height, Iterable<Coord> points)
+    {
+        Set<Coord> around = pointsInside(Coord.get(distance, distance), distance, false, width, height),
+                expanded = new LinkedHashSet<>(around.size() * 16);
+        int tx, ty;
+        for(Coord pt : points)
+        {
+            for(Coord ar : around)
+            {
+                tx = pt.x + ar.x - distance;
+                ty = pt.y + ar.y - distance;
+                if(tx >= 0 && tx < width && ty >= 0 && ty < height)
+                    expanded.add(Coord.get(tx, ty));
+            }
+        }
+        return expanded;
+    }
 }

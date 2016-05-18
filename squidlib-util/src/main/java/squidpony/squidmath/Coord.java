@@ -35,9 +35,10 @@ public class Coord implements Serializable {
     }
 
 	/**
-	 * @param from
-	 * @param to
-	 * @return The degree from {@code from} to {@code to}.
+     * Gets the angle in degrees to go between two Coords; 0 is up.
+	 * @param from the starting Coord to measure from
+	 * @param to the ending Coord to measure to
+	 * @return The degree from {@code from} to {@code to}; 0 is up
 	 */
 	public static double degrees(Coord from, Coord to) {
 		final int x = to.x - from.x;

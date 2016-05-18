@@ -1,5 +1,7 @@
 package squidpony.squidmath;
 
+import squidpony.squidgrid.mapping.DungeonUtility;
+
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Collection;
@@ -186,6 +188,33 @@ public class Region extends AbstractList<Coord> implements Serializable{
         return new Region(CoordPacker.randomSeparated(raw, separation, rng));
     }
 
+    /**
+     * Gets a representation of this Region as a 2D boolean array with the given width and height. If this contains a
+     * Coord with x and y less than width and height, that position will be true in the 2D array this returns, otherwise
+     * it will be false.
+     * @param width the width of the 2D array to return
+     * @param height the height of the 2D array to return
+     * @return a 2D boolean array where present Coords in this Region will be true, and everything else will be false
+     */
+    public boolean[][] toBooleanArray(int width, int height)
+    {
+        return CoordPacker.unpack(raw, width, height);
+    }
+
+    /**
+     * Gets a representation of this Region as a 2D char array with the given width and height, using on to represent
+     * present Coords and off to represent absent ones. If this contains a Coord with x and y less than width and
+     * height, that position will be equal to on in the 2D array this returns, otherwise it will be equal to off.
+     * @param width the width of the 2D array to return
+     * @param height the height of the 2D array to return
+     * @param on the char to use when a Coord is present in this Region
+     * @param off the char to use where no Coord is present in this Region
+     * @return a 2D char array where present Coords in this Region will be on, and everything else will be off
+     */
+    public char[][] toCharArray(int width, int height, char on, char off)
+    {
+        return CoordPacker.unpackChar(raw, width, height, on, off);
+    }
 
     /**
      * Gets the Coord stored at the given index in this Region, or null if index is out of bounds.
@@ -309,5 +338,17 @@ public class Region extends AbstractList<Coord> implements Serializable{
             System.arraycopy(coords, 0, this.coords, 0, coords.length);
             dirty = false;
         }
+    }
+
+    /**
+     * Prints this Region to System.out as a grid of chars with the given width and height, using '.' for Coords this
+     * contains and '#' for empty space. Consider using toCharArray() instead if you need more customization for what
+     * you want printed.
+     * @param width the width in chars of the grid to print
+     * @param height the height in chars of the grid to print
+     */
+    public void debugPrint(int width, int height)
+    {
+        DungeonUtility.debugPrint(toCharArray(width, height, '.', '#'));
     }
 }

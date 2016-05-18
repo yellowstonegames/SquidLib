@@ -23,20 +23,23 @@ public class MimicFillTest {
                     DungeonUtility.wallWrap(MimicFill.sampleToMap(result, '.', '#')),
                     true));
             System.out.println();
-            rng.setState(2252637788195L);
+            //rng.setState(2252637788195L);
         }
 
         //char[][] dungeon = new DungeonBoneGen(rng).generate(TilesetType.DEFAULT_DUNGEON, 47, 47);
-        SerpentMapGenerator serpent = new SerpentMapGenerator(47, 47, rng, 0.1);
-        serpent.putWalledRoundRoomCarvers(1);
-        serpent.putWalledBoxRoomCarvers(3);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(35, 35, rng, 0.1);
+        serpent.putWalledRoundRoomCarvers(3);
+        serpent.putWalledBoxRoomCarvers(2);
         char[][] dungeon = serpent.generate();
-        result = MimicFill.fill(MimicFill.mapToSample(dungeon, '.'), 32, 0.2, 3, rng);
+        //dungeon = new DungeonBoneGen(rng).generate(TilesetType.DEFAULT_DUNGEON, 30, 30);
+        result = MimicFill.fill(MimicFill.mapToSample(dungeon, '.'), 32, 0.25, 5, rng);
 
         DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
                 DungeonUtility.wallWrap(MimicFill.sampleToMap(result, '.', '#')),
                 true));
         System.out.println();
+        //DungeonUtility.debugPrint(MimicFill.sampleToMap(result, '1', '0'));
+
         rng.setState(2252637788195L);
 
         /*
