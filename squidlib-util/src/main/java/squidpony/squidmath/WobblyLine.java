@@ -48,7 +48,7 @@ public class WobblyLine {
      */
     public static List<Coord> line(int startX, int startY, int endX, int endY,
                                    int width, int height, double weight, RNG rng) {
-        List<Coord> pts = new ArrayList<Coord>();
+        List<Coord> pts = new ArrayList<>();
         Coord start = Coord.get(startX, startY);
         Direction dir;
         do {

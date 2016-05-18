@@ -1,5 +1,7 @@
 package squidpony.squidgrid;
 
+import squidpony.GwtCompatibility;
+import squidpony.squidmath.Coord;
 import squidpony.squidmath.RNG;
 
 /**
@@ -12,6 +14,10 @@ public class MimicFill {
 
     private static final int N = 3;
 
+    private MimicFill()
+    {
+
+    }
     /**
      * Converts a 2D char array map to a 2D boolean array, where any chars in the array or vararg yes will result in
      * true in the returned array at that position and any other chars will result in false. The result can be given to
@@ -60,12 +66,87 @@ public class MimicFill {
     }
 
     /**
+     * Runs a logical OR on each pair of booleans at the same position in left and right, and returns the result of all
+     * the OR operations as a 2D boolean array (using the minimum dimensions shared between left and right).
+     * @param left a 2D boolean array
+     * @param right another 2D boolean array
+     * @return the 2D array resulting from a logical OR on each pair of booleans at a point shared by left and right
+     */
+    public static boolean[][] orSamples(boolean[][] left, boolean[][] right)
+    {
+        if(left == null && right == null) return new boolean[0][0];
+        else if(left == null || left.length <= 0) return GwtCompatibility.copy2D(right);
+        else if(right == null || right.length <= 0) return GwtCompatibility.copy2D(left);
+
+        int width = Math.min(left.length, right.length),
+                height = Math.min(left[0].length, right[0].length);
+        boolean[][] done = new boolean[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                done[x][y] = left[x][y] || right[x][y];
+            }
+        }
+        return done;
+    }
+
+
+    /**
+     * Runs a logical AND on each pair of booleans at the same position in left and right, and returns the result of all
+     * the AND operations as a 2D boolean array (using the minimum dimensions shared between left and right).
+     * @param left a 2D boolean array
+     * @param right another 2D boolean array
+     * @return the 2D array resulting from a logical AND on each pair of booleans at a point shared by left and right
+     */
+    public static boolean[][] andSamples(boolean[][] left, boolean[][] right)
+    {
+        if(left == null || right == null || left.length <= 0 || right.length <= 0) return new boolean[0][0];
+
+        int width = Math.min(left.length, right.length),
+                height = Math.min(left[0].length, right[0].length);
+        boolean[][] done = new boolean[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                done[x][y] = left[x][y] && right[x][y];
+            }
+        }
+        return done;
+    }
+
+    /**
+     * Given a 2D boolean array sample (usually a final product of this class' fill() method) and an Iterable of Coord
+     * (such as a List or Set of Coord, but a Region can also work), copies sample, then marks every Coord in points as
+     * true if it is in-bounds, and returns the modified copy of sample. Does not alter the original sample. You may
+     * want to use this with techniques like drawing a long line with Bresenham, OrthoLine, or WobblyLine, potentially
+     * widening the line with Radius.expand(), and then passing the result as the Iterable of Coord. You could then make
+     * the start and end of the line into an entrance and exit and be sure the player can get from one to the other
+     * (except for Bresenham and other lines that may make diagonal movements, if the player cannot move diagonally).
+     * @param sample a 2D boolean array; will be copied, not modified directly
+     * @param points an Iterable (such as a List or Set) of Coord that will be marked as true if in-bounds
+     * @return a copy of sample with the Coords in points marked as true
+     */
+    public static boolean[][] markSample(boolean[][] sample, Iterable<Coord> points)
+    {
+        if(sample == null || sample.length <= 0)
+            return new boolean[0][0];
+        boolean[][] sample2 = GwtCompatibility.copy2D(sample);
+        int width = sample2.length, height = sample2[0].length;
+        for(Coord c : points)
+        {
+            if(c.x >= 0 && c.x < width && c.y >= 0 && c.y < height)
+            {
+                sample2[c.x][c.y] = true;
+            }
+        }
+        return sample2;
+    }
+
+    /**
      *
      * @param sample a 2D boolean array to mimic visually; you can use mapToSample() if you have a 2D char array
      * @param size the side length of the square boolean array to generate
      * @param temperature typically 0.2 works well for this, but other numbers between 0 and 1 may work
-     * @param iterations typically 3 works well for this; lower numbers may have slight problems with quality,
-     *                   and higher numbers make this slower
+     * @param iterations typically 3-5 works well for this; lower numbers may have slight problems with quality,
+     *                   and higher numbers make this slightly slower
      * @param random an RNG to use for the random components of this technique
      * @return a new 2D boolean array, width = size, height = size, mimicking the visual style of sample
      */
@@ -431,8 +512,78 @@ public class MimicFill {
             new boolean[]{false,false,false,false,false,false,false,true,false,false,false,false,false,false,false}
     };
 
+    public static final boolean[][] ruins = new boolean[][]{
+            new boolean[]{false,true,false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,true,true,true,true,true,true},
+            new boolean[]{false,true,false,false,false,false,false,true,true,false,false,false,false,false,false,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,true,true},
+            new boolean[]{false,true,false,false,false,false,false,false,true,false,false,false,false,false,false,true,true,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,true,true,true,true,true,false,false,true,false,false,false,false,false,false,true,true,true,true,true,true,false,false,false,false,false,false,false,true,false,false,true},
+            new boolean[]{false,true,true,true,true,true,true,false,true,false,false,false,false,false,false,true,false,false,false,true,false,false,false,false,true,true,true,true,true,false,false,true},
+            new boolean[]{false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,true,false,false,false,true,true,true,true,true,true,false,false,true},
+            new boolean[]{true,true,true,true,true,true,false,false,false,false,true,true,true,true,true,true,true,true,true,true,false,false,false,false,true,true,true,true,true,true,true,true},
+            new boolean[]{false,true,false,false,true,true,true,true,true,true,true,false,false,true,true,true,true,true,true,true,false,false,false,false,true,true,true,true,false,false,false,false},
+            new boolean[]{false,true,false,false,false,false,false,false,false,false,true,true,false,true,true,true,true,true,true,false,false,false,false,false,false,false,true,true,false,false,false,false},
+            new boolean[]{false,true,false,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,true,true,false,false,false,false},
+            new boolean[]{true,true,true,false,false,false,true,true,true,true,true,true,true,true,false,false,true,false,false,false,false,false,false,false,false,false,true,true,true,true,true,true},
+            new boolean[]{true,true,true,false,false,false,false,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,false},
+            new boolean[]{true,true,true,false,false,false,false,true,true,true,true,true,true,true,false,false,false,false,true,true,false,false,false,false,false,true,true,true,false,false,false,false},
+            new boolean[]{true,true,true,false,false,false,false,true,true,true,true,true,true,false,false,false,false,false,false,true,false,false,false,false,false,false,false,true,false,false,true,true},
+            new boolean[]{false,false,false,false,false,false,false,true,true,true,true,false,true,false,false,true,false,false,false,true,false,false,false,false,false,false,false,true,true,true,true,true},
+            new boolean[]{false,false,false,false,false,false,false,false,false,true,false,false,true,false,false,true,false,false,false,true,false,false,false,false,false,false,true,true,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,false,false,false,true,false,true,true,false,false,true,false,false,false,true,true,true,true,true,true,true,true,true,false,false,false,false},
+            new boolean[]{false,false,false,false,true,false,false,false,false,true,false,false,true,false,false,true,false,false,false,true,true,true,false,true,true,true,true,true,false,false,false,false},
+            new boolean[]{false,false,false,true,true,false,false,false,false,true,false,false,true,false,false,true,true,false,false,false,true,true,false,true,false,false,true,false,false,false,false,false},
+            new boolean[]{false,false,false,true,true,false,false,false,false,true,false,false,true,false,false,true,true,false,false,false,false,true,false,true,false,false,true,false,false,false,false,false},
+            new boolean[]{false,false,false,false,true,false,false,true,false,true,false,false,true,false,false,false,true,false,false,false,false,true,false,true,false,false,true,false,false,false,true,false},
+            new boolean[]{false,true,false,false,true,true,true,true,true,true,true,false,true,false,false,false,true,false,false,false,false,true,false,true,true,true,true,false,false,false,true,false},
+            new boolean[]{true,true,true,true,true,true,true,false,false,true,false,false,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,false,true,false,false,true,false,false,false,true,true,true,true,true,true,false,false,false,false,false,true,true,true,true,true},
+            new boolean[]{false,false,false,false,false,false,true,false,false,true,false,false,true,false,false,false,false,true,false,false,true,true,false,false,false,false,false,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,true,false,false,true,true,true,true,true,false,false,false,false,false,false,true,true,false,false,false,false,true,true,true,false,false,false},
+            new boolean[]{false,false,false,false,false,false,true,false,false,false,false,true,true,true,false,false,false,false,false,false,true,true,false,false,false,false,true,true,true,false,false,false},
+            new boolean[]{true,true,true,true,true,true,true,true,false,false,false,true,true,true,false,false,false,false,false,false,true,true,true,false,false,false,true,true,true,true,true,true},
+            new boolean[]{false,false,false,false,false,false,true,true,true,true,true,true,true,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,false,false,true,false},
+            new boolean[]{false,false,false,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false,true,true,true,false,false,false},
+            new boolean[]{false,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false,true,true,true,false,false,false},
+            new boolean[]{false,true,false,false,false,false,false,true,true,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,true,true,true,true,true,true,true,true},
+    };
+
+    public static final boolean[][] openRooms = new boolean[][]{
+            new boolean[]{true,true,true,true,true,true,false,true,true,true,true,true,true,false,true,true,true,true,true,true,false,false,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,false,false,false,true,true,true,false,false,true,true,true,true,true,true,true,true,true,true,false,true,true,false,true,true,true,false,true,true},
+            new boolean[]{true,true,false,false,false,false,false,true,true,true,true,false,true,true,true,true,true,false,false,false,false,false,false,true,true,false,true,true,true,false,true,true},
+            new boolean[]{true,true,true,true,true,false,false,false,false,true,true,false,false,false,false,false,false,false,false,true,true,true,true,true,true,false,true,true,true,false,false,false},
+            new boolean[]{true,true,true,true,true,false,false,false,false,true,true,false,false,false,false,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,false,false},
+            new boolean[]{true,true,true,true,true,false,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,false,false,false,false,false,false,true,true,false,false},
+            new boolean[]{true,true,true,true,true,false,true,true,true,true,true,true,true,true,false,false,false,true,true,true,true,true,false,true,true,true,true,false,false,false,false,false},
+            new boolean[]{true,true,true,true,true,false,true,true,false,false,true,true,true,true,false,false,false,true,true,true,true,true,false,true,true,true,true,false,false,false,false,false},
+            new boolean[]{true,true,true,true,true,false,true,true,false,false,false,false,false,true,true,true,true,true,true,true,true,true,false,true,true,true,true,false,false,false,false,false},
+            new boolean[]{true,true,true,true,true,false,true,true,false,false,false,false,false,true,true,true,true,true,true,true,true,true,false,true,true,true,true,false,false,false,false,false},
+            new boolean[]{false,false,false,false,false,false,true,true,false,true,true,true,false,false,false,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,false,false},
+            new boolean[]{true,true,true,true,true,true,true,true,false,true,true,true,false,false,false,false,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,false,false,false,false,false,true,true,false,true,true,true,true,true,true,true,true,true},
+            new boolean[]{false,true,true,true,true,true,false,false,false,true,true,true,true,true,true,false,false,false,false,false,true,true,false,false,false,false,false,false,false,true,true,false},
+            new boolean[]{false,true,true,false,false,false,false,false,true,true,true,true,true,true,true,false,true,true,false,false,false,false,false,false,false,false,false,false,false,true,true,false},
+            new boolean[]{false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,true,true,true,true,true,true,true,true,false},
+            new boolean[]{false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,false,true,true,true,true,true,true,true,true,false},
+            new boolean[]{false,false,false,false,false,true,true,true,true,true,true,true,false,true,true,true,true,true,false,true,true,true,false,true,true,true,true,true,true,true,true,false},
+            new boolean[]{true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,false,false,false,false,false,true,true,true,true,true,true,true,true,false},
+            new boolean[]{true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false},
+            new boolean[]{true,true,true,true,true,false,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false},
+            new boolean[]{true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true,true,false,false,false,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,true,false,false,false,false,true,true,true,true,true,false,true,true,true,true,true,true,false,false,false,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,true,false,false,false,false,true,true,true,true,true,false,true,true,true,false,false,false,false,false,false,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,false,true,true,true,false,true,true,true,true,false,true,true,true,true},
+            new boolean[]{true,true,true,true,true,true,true,false,false,false,true,true,true,true,true,true,true,true,false,true,true,true,false,true,true,true,true,false,false,false,true,true},
+            new boolean[]{true,false,false,false,false,false,false,false,false,false,true,true,true,true,true,true,true,true,false,false,false,false,false,true,true,true,true,false,false,false,true,true},
+            new boolean[]{true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,true,true},
+            new boolean[]{true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,true,true,true,true,true,true,true,true,true,true},
+            new boolean[]{true,false,false,false,false,false,false,true,true,true,true,true,true,false,false,false,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true},
+    };
+
     public static final boolean[][][] samples = new boolean[][][]{
             boulders, cave, caves, chess, lessRooms, maze, quarterBlack,
-            river, rooms, simpleMaze, simpleRooms, thickWalls
+            river, rooms, simpleMaze, simpleRooms, thickWalls, ruins, openRooms
     };
 }
