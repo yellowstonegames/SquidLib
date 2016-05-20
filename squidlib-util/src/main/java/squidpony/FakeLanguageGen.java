@@ -1,5 +1,6 @@
 package squidpony;
 
+import regexodus.MatchResult;
 import regexodus.Matcher;
 import regexodus.Pattern;
 import regexodus.Replacer;
@@ -29,7 +30,8 @@ public class FakeLanguageGen implements Serializable {
     protected final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final StatefulRNG srng = new StatefulRNG();
-    protected static final Pattern repeats = Pattern.compile("(.)\\1+"), diacritics = Pattern.compile("[\u0300-\u036F\u1DC0-\u1DFF]+");
+    protected static final Pattern repeats = Pattern.compile("(.)\\1+");
+    //, diacritics = Pattern.compile("[\u0300-\u036F\u1DC0-\u1DFF]+");
     public static final Pattern[]
             vulgarChecks = new Pattern[]
             {
@@ -445,8 +447,11 @@ public class FakeLanguageGen implements Serializable {
     /**
      * Swahili is one of the more commonly-spoken languages in sub-Saharan Africa, and serves mainly as a shared language
      * that is often learned after becoming fluent in one of many other (vaguely-similar) languages of the area. An
-     * example sentence in Swahili, that this might try to imitate aesthetically, is "Mtoto mdogo amekisoma," meaning "The
-     * small child reads it" (where it is a book).
+     * example sentence in Swahili, that this might try to imitate aesthetically, is "Mtoto mdogo amekisoma," meaning
+     * "The small child reads it" (where it is a book). A notable language feature used here is the redoubling of words,
+     * which is used in Swahili to emphasize or alter the meaning of the doubled word; here, it always repeats exactly
+     * and can't make minor changes like a real language might. This generates things like "gata-gata", "hapi-hapi", and
+     * "mimamzu-mimamzu", always separating with a hyphen here.
      * <br>
      * As an aside, please try to avoid the ugly stereotypes that fantasy media often assigns to speakers of African-like
      * languages when using this or any of the generators. Many fantasy tropes come from older literature written with
@@ -1998,7 +2003,7 @@ public class FakeLanguageGen implements Serializable {
         public final Alteration[] alterations;
         public Modifier()
         {
-            this("sh?", "th");
+            this("[tţťțṭ]?[sśŝşšș]+h?", "th");
         }
         public Modifier(String pattern, String replacement)
         {
@@ -2014,23 +2019,43 @@ public class FakeLanguageGen implements Serializable {
         {
             alterations = (alts == null) ? new Alteration[0] : alts;
         }
-
         public StringBuilder modify(RNG rng, StringBuilder sb)
         {
-            StringBuilder sb2;
-            for(Alteration alt : alterations)
-            {
-                sb2 = new StringBuilder(sb.length());
-                if(rng.nextDouble() < alt.chance && alt.replacer.replace(sb, sb2) > 0)
-                    sb = sb2;
-            }
-            return sb;
-        }
+            Matcher m;
+            Replacer.StringBuilderBuffer tb, working = Replacer.wrap(sb);
+            String tmp;
+            boolean found;
+            for(Alteration alt : alterations) {
+                tmp = working.toString();
+                tb = Replacer.wrap(new StringBuilder(tmp.length()));
+                m = alt.replacer.getPattern().matcher(tmp);
 
+                found = false;
+                while (true) {
+                    if (rng.nextDouble() < alt.chance) {
+                        if(!Replacer.replaceStep(m, alt.replacer.getSubstitution(), tb))
+                            break;
+                        found = true;
+                    } else {
+                        if(!m.find())
+                            break;
+                        found = true;
+                        m.getGroup(MatchResult.PREFIX, tb);
+                        m.getGroup(MatchResult.MATCH, tb);
+                        m.setTarget(m, MatchResult.SUFFIX);
+                    }
+                }
+                if (found) {
+                    m.getGroup(MatchResult.TARGET, tb);
+                    working = tb;
+                }
+            }
+            return working.toStringBuilder();
+        }
         /**
          * For a character who always pronounces 's', 'ss', and 'sh' as 'th'.
          */
-        public static final Modifier LISP = new Modifier("[sśŝşšș]+h?", "th");
+        public static final Modifier LISP = new Modifier("[tţťțṭ]?[sśŝşšș]+h?", "th");
 
         /**
          * For a character who always lengthens 's' and 'z' sounds not starting a word.
@@ -2045,7 +2070,8 @@ public class FakeLanguageGen implements Serializable {
                 new Alteration("^([aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųαοειυаеёийъыэюяоу]+)", "$1-$1", 0.2));
 
         /**
-         * For a language that has a 40% chance to repeat a single Latin vowel.
+         * For a language that has a 40% chance to repeat a single Latin vowel (a, e, o, or a variant on one of them
+         * like æ or ö).
          */
         public static final Modifier DOUBLE_VOWELS = new Modifier(
                 "([aàáâãäåæāăąǻǽeèéêëēĕėęěòóôõöøōŏőœǿ])([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳ]|$)", "$1$1$2", 0.4);
@@ -2113,7 +2139,7 @@ public class FakeLanguageGen implements Serializable {
         public double chance;
         public Alteration()
         {
-            this("[sśŝşšș]+h?", "th");
+            this("[tţťțṭ]?[sśŝşšș]+h?", "th");
         }
         public Alteration(String pattern, String replacement)
         {
