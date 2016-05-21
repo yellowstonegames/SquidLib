@@ -24,6 +24,7 @@ import static squidpony.squidmath.CoordPacker.*;
 public class CoordPackerTest {
 
     public static short[] dataCross = unionPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14));
+    public static short[] dataCross2 = unionPacked(rectangle(24, 2, 16, 60), rectangle(2, 24, 60, 16));
     public static StatefulRNG srng = new StatefulRNG(0x1337BEEF);
     @Test
     public void testBasics() {
@@ -62,6 +63,18 @@ public class CoordPackerTest {
             ctr += arrayMemoryUsage(arr[i].length, 2);
         }
         return (((ctr + 12 - 1) / 8) + 1) * 8;
+    }
+
+    @Test
+    public void testBraille()
+    {
+        String encoded = encodeBraille(dataCross2);
+        //System.out.println(encoded);
+        //System.out.println("short array length: " + dataCross2.length);
+        //System.out.println("encoded length: " + encoded.length());
+        short[] decoded = decodeBraille(encoded);
+        assertArrayEquals(dataCross2, decoded);
+
     }
 
     @Test

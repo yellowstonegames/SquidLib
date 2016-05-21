@@ -4852,6 +4852,50 @@ public class CoordPacker {
         return packed;
     }
 
+    /**
+     * Encodes a short array of packed data as a (larger, slightly more memory-hungry) Unicode string using only Braille
+     * characters, which can be decoded using CoordPacker.decodeBraille(). Uses 256 semi-printable chars, from 0x2800
+     * to 0x28FF, which allows UTF-8 encoding (and some other encodings) to more efficiently store the data. These are
+     * only semi-printable because many fonts do not support Braille, and 0x2800 is sometimes printed equivalently to a
+     * space char (or sometimes as 8 small dots or open circles, which is preferable). Braille was chosen because it's
+     * available as a full Unicode block of 256 characters with no gaps or chars that require special treatment, like
+     * newlines and carriage returns.
+     * @param packed a packed data item produced by pack() or some other method from this class.
+     * @return a semi-printable String, which can be decoded with CoordPacker.decodeBraille()
+     */
+    public static String encodeBraille(short[] packed)
+    {
+        int len = packed.length * 2;
+        char[] chars = new char[len];
+        for (int i = 0, c = 0; c < len; i++, c += 2) {
+            chars[c] = (char) ((packed[i] & 0xff) | 0x2800);
+            chars[c+1] = (char)((packed[i] >>> 8) | 0x2800);
+        }
+        return new String(chars);
+    }
+    /**
+     * Given a String specifically produced by CoordPacker.encodeBraille(), this will produce a packed data array.
+     * Uses 256 semi-printable chars, from 0x2800 to 0x28FF, which allows UTF-8 encoding (and some other encodings) to
+     * more efficiently store the data. These are only semi-printable because many fonts do not support Braille, and
+     * 0x2800 is sometimes printed equivalently to a space char (or sometimes as 8 small dots or open circles, which is
+     * preferable). Braille was chosen because it's available as a full Unicode block of 256 characters with no gaps or
+     * chars that require special treatment, like newlines and carriage returns.
+     * @param text a String produced by CoordPacker.encodeBraille(); this will almost certainly fail on other strings.
+     * @return the packed data as a short array that was originally used to encode text
+     */
+    public static short[] decodeBraille(String text)
+    {
+        int len = text.length();
+        if(len % 2 != 0 || len == 0)
+            return ALL_WALL;
+        char[] chars = text.toCharArray();
+        short[] packed = new short[len / 2];
+        for (int c = 0, i = 0; c < len; i++, c += 2) {
+            packed[i] = (short)((chars[c] ^ 0x2800) | ((chars[c+1] ^ 0x2800) << 8));
+        }
+        return packed;
+    }
+
 
 
     /**
