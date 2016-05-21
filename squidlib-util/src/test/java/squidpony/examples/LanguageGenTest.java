@@ -192,6 +192,12 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";", ";"},
                     new String[]{".", ".", ".", "!", "?"}, 0.12));
         }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.ARABIC_ROMANIZED;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 6, 9, new String[]{",", ",", ",", ";", ";"},
+                    new String[]{".", ".", ".", "!", "?"}, 0.18));
+        }
         System.out.println("\n-----------------------------------------------------------------------------");
         System.out.println();
         FakeLanguageGen[] languages = new FakeLanguageGen[]{
@@ -205,7 +211,8 @@ public class LanguageGenTest {
                 FakeLanguageGen.FANTASY_NAME,
                 FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.SOMALI, 0.25),
                 FakeLanguageGen.GREEK_ROMANIZED.mix(FakeLanguageGen.HINDI_ROMANIZED.removeModifiers().removeAccents(), 0.5),
-                FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.FRENCH, 0.3)
+                FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.FRENCH, 0.3),
+                FakeLanguageGen.ARABIC_ROMANIZED
         };
         String[] oz = new String[]{
                 "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",

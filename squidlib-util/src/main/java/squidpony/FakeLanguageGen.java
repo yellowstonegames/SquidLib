@@ -82,7 +82,13 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("[Tt][ui]"),
                             Pattern.compile("[SsZzDd]i"),
                             Pattern.compile("[Hh]u"),
+                    },
+            arabicSanityChecks  = new Pattern[]
+                    {
+                            Pattern.compile("(\\w)\\1\\1"),
+                            Pattern.compile("-[^aeiou]{2}"),
                     };
+
     public static final Replacer[]
             accentFinders = new Replacer[]
             {
@@ -979,6 +985,72 @@ public class FakeLanguageGen implements Serializable {
             new String[]{"it", "it", "ati", "adva", "aṣ", "arma", "ardha", "abi", "ab", "aya"},
             new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{1, 2, 3, 3, 1}, 0.15, 0.75, 0.0, 0.12, null, true)
             .addModifiers(Modifier.replacementTable("ṛṝḷḹḍṭṅṇṣṃḥ", "ŗŕļĺđţńņşĕĭ"));
+
+    /**
+     * Imitation Arabic, using mostly the Latin alphabet but with some Greek letters for tough transliteration topics.
+     * It's hard to think of a more different (widely-spoken) language to romanize than Arabic. Written Arabic does not
+     * ordinarily use vowels (the writing system is called an abjad, in contrast to an alphabet), and it has more than a
+     * few sounds that are very different from those in English. This version, because of limited support in fonts and
+     * the need for separate words to be distinguishable with regular expressions, uses Greek letters in place of hamzah
+     * and 'ayin (the second of the two isn't entered correctly here since it wouldn't be printed with most fonts; you
+     * can see https://en.wikipedia.org/wiki/Ayin for more details). Hamzah is represented with Greek delta, 'δ', and
+     * 'ayin is represented with Greek xi, 'ξ', both picked because of similarity to some forms of the glyphs in the
+     * Arabic script. Many other glyphs are mapped to alternate representations because the common romanizations use
+     * rare glyphs that SquidLib's fonts in the display module can't support. Using the conventions this FakeLanguageGen
+     * does for writing the Arabic glyph names, these are: ţāδ becomes ţ, ĥāδ becomes ĥ, ħāδ becomes ħ, đāl becomes
+     * đ, šīn becomes š, şād becomes ş, ďād becomes ď, ťāδ becomes ť, żāδ becomes ż, gain becomes g, wāw becomes ū, and
+     * yāδ becomes ī.
+     * <br>
+     * Please try to be culturally-sensitive about how you use this generator. Classical Arabic (the variant that
+     * normally marks vowels explicitly and is used to write the Qur'an) has deep religious significance in Islam, and
+     * if you machine-generate text that (probably) isn't valid Arabic, but claim that it is real, or that it has
+     * meaning when it actually doesn't, that would be an improper usage of what this generator is meant to do. In a
+     * fantasy setting, you can easily confirm that the language is fictional and any overlap is coincidental; an
+     * example of imitation Arabic in use is the Dungeons and Dragons setting, Al-Qadim, which according to one account
+     * sounds similar to a word in real Arabic (that does not mean anything like what the designer was aiming for). In a
+     * historical setting, FakeLanguageGen is probably "too fake" to make a viable imitation for any language, and may
+     * just sound insulting if portrayed as realistic. You may want to mix ARABIC_ROMANIZED with a very different kind
+     * of language, like GREEK_ROMANIZED or RUSSIAN_AUTHENTIC, to emphasize that this is not a real-world language.
+     * <br>
+     * Iramzā qāşi, qīqa banji, rūşiďīq ifateh!
+     */
+    public static final FakeLanguageGen ARABIC_ROMANIZED = new FakeLanguageGen(
+            new String[]{"a", "a", "a", "a", "a", "a", "ā", "ā", "ā", "ai", "au",
+                    "a", "i", "u", "a", "i", "u",
+                    "i", "i", "i", "i", "i", "ī", "ī", "ī",
+                    "u", "u", "u", "ū", "ū",
+            },
+            new String[]{},
+            new String[]{"δ", "b", "t", "ţ", "j", "ĥ", "ħ", "d", "đ", "r", "z", "s", "š", "ş", "ď", "ť",
+                    "ż", "ξ", "g", "f", "q", "k", "l", "m", "n", "h", "w",
+                    "q", "k", "q", "k", "b", "d", "f", "l", "z", "ż", "h", "h", "ĥ", "j", "s", "š", "ş", "r",
+                    "q", "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                    "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                    "al-", "al-", "ibn-",
+            },
+            new String[]{
+                    "kk", "kk", "kk", "kk", "kk", "dd", "dd", "dd", "dd",
+                    "nj", "mj", "bj", "mj", "bj", "mj", "bj", "dj", "ďj", "đj",
+                    "nz", "nż", "mz", "mż", "rz", "rż", "bz", "dz", "tz",
+                    "s-h", "š-h", "ş-h", "tw", "bn", "fq", "hz", "hl", "ĥm",
+                    "lb", "lz", "lj", "lf", "ll", "lk", "lq", "lg", "ln"
+            },
+            new String[]{
+                    "δ", "b", "t", "ţ", "j", "ĥ", "ħ", "d", "đ", "r", "z", "s", "š", "ş", "ď", "ť",
+                    "ż", "ξ", "g", "f", "q", "k", "l", "m", "n", "h", "w",
+                    "k", "q", "k", "b", "d", "f", "l", "z", "ż", "h", "h", "ĥ", "j", "s", "š", "ş", "r",
+                    "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                    "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                    "b", "t", "ţ", "j", "ĥ", "ħ", "d", "đ", "r", "z", "s", "š", "ş", "ď", "ť",
+                    "ż", "g", "f", "q", "k", "l", "m", "n", "h", "w",
+                    "k", "q", "k", "b", "d", "f", "l", "z", "ż", "h", "h", "ĥ", "j", "s", "š", "ş", "r",
+                    "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                    "k", "f", "l", "z", "h", "h", "j", "s", "r",
+            },
+            new String[]{"āδ", "āδ", "ari", "ari", "aīd", "ūq", "arīd", "adih", "ateh", "adeš", "amīt", "it",
+                    "īt", "aĥmen","aĥmed", "ani", "abīb", "īb", "ūni", "īz", "aqarī", "adīq",
+            },
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{6, 5, 5, 1}, 0.55, 0.65, 0.0, 0.15, arabicSanityChecks, true);
 
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
