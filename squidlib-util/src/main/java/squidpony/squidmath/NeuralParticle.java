@@ -20,8 +20,8 @@ import java.util.List;
  * http://www.nolithius.com/game-development/neural-particle-deposition
  *
  * Source code is available on GitHub:
- * https://github.com/Nolithius/neural-particle As well as Google Code:
- * http://code.google.com/p/neural-particle/
+ * https://github.com/Nolithius/neural-particle as well as Google Code
+ * (now archived): http://code.google.com/p/neural-particle/
  *
  * @author @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
@@ -31,7 +31,7 @@ public class NeuralParticle implements Serializable{
 
     private final RNG rng;
     private final int maxDistance, minDistance, width, height;
-    private final List<Coord> distribution = new LinkedList<>();
+    private final LinkedList<Coord> distribution = new LinkedList<>();
 
     public NeuralParticle(int width, int height, int maxDistance, RNG rng) {
         this.rng = rng;
@@ -44,7 +44,7 @@ public class NeuralParticle implements Serializable{
     /**
      * Populates the field with given number of points.
      *
-     * @param quantity
+     * @param quantity the number of points to insert
      */
     public void populate(int quantity) {
         for (int i = 0; i < quantity; i++) {
@@ -55,7 +55,7 @@ public class NeuralParticle implements Serializable{
     /**
      * Returns a list of the current distribution.
      *
-     * @return
+     * @return the distribution as a List of Coord
      */
     public List<Coord> asList() {
         return new LinkedList<>(distribution);
@@ -65,7 +65,7 @@ public class NeuralParticle implements Serializable{
      * Returns an integer mapping of the current distribution.
      *
      * @param scale the value that active points will hold
-     * @return
+     * @return a 2D int array, with all elements equal to either 0 or scale
      */
     public int[][] asIntMap(int scale) {
         int ret[][] = new int[width][height];
@@ -78,7 +78,7 @@ public class NeuralParticle implements Serializable{
     /**
      * Adds a single specific point to the distribution.
      *
-     * @param point
+     * @param point the Coord, also called a pip here, to insert
      */
     public void add(Coord point) {
         distribution.add(point);
@@ -118,7 +118,7 @@ public class NeuralParticle implements Serializable{
             return center;
         }
 
-        Coord nearestPoint = distribution.get(0);
+        Coord nearestPoint = distribution.getFirst();
         double nearestDistance = point.distance(nearestPoint);
         for (Coord candidatePoint : distribution) {
             double candidateDistance = point.distance(candidatePoint);

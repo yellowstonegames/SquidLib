@@ -35,7 +35,7 @@ public class StatefulRNG extends RNG {
 
     @Override
     public void setRandomness(RandomnessSource random) {
-        super.setRandomness((random instanceof StatefulRandomness) ? random : new LightRNG(random.next(32)));
+        super.setRandomness((random instanceof StatefulRandomness) ? random : new LightRNG(random.nextLong()));
     }
 
     /**

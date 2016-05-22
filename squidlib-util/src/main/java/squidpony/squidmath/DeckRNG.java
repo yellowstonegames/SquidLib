@@ -374,7 +374,7 @@ public class DeckRNG extends StatefulRNG {
     }
 
     @Override
-    public <T> ArrayList<T> shuffle(List<T> elements) {
+    public <T> ArrayList<T> shuffle(Collection<T> elements) {
         return super.shuffle(elements);
     }
 
