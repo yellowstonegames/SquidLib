@@ -214,7 +214,7 @@ public class CombinationGenerator<T> implements Iterable<List<T>>, Serializable
         if (remainingCombinations == 0)
         {
             throw new IllegalStateException("There are no combinations remaining.  " +
-                                            "Generator must be reset to continue using.");
+                                            "Generator must have reset() called to continue.");
         }
         else if (remainingCombinations < totalCombinations)
         {
