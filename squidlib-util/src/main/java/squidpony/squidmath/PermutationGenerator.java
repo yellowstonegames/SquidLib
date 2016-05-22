@@ -342,7 +342,6 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
         return e;
     }
 
-
     private static int[] getPermutationShift(int[] perm) {
         int[] sh = new int[perm.length];
         boolean[] taken = new boolean[perm.length];
@@ -395,7 +394,7 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
             sequence[elements.length - 1 - k] = (int)(e % base);
             e /= base;
 
-            base++; // b[k+1] = b[k] + 1
+            base++;
         }
         return sequence;
     }
@@ -410,10 +409,11 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
             sequence[count - 1 - k] = (int)(e % base);
             e /= base;
 
-            base++; // b[k+1] = b[k] + 1
+            base++;
         }
         return sequence;
     }
+
     /**
      * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
      * this) and an int count of how many indices to find a permutation of, returns an array with the permutation
@@ -461,6 +461,28 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
         return destination;
     }
 
+    /**
+     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
+     * this) and an int count of how many indices to find a permutation of, returns an array with the permutation
+     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get
+     * an index for a specific permutation with encodePermutation() or by generating a random number between 0 and
+     * getTotalPermutations(), if you want it randomly. This variant adds an int to each item in the returned array,
+     * which may be useful if generating indices that don't start at 0.
+     * <br>
+     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
+     * @param encoded the index encoded as a long
+     * @param count an int between 1 and 20, inclusive, that will be the size of the returned array
+     * @param add an int to add to each item of the permutation
+     * @return the looked-up permutation as an int array with length equal to count
+     */
+    public static int[] decodePermutation(long encoded, int count, int add)
+    {
+        int[] p = decodePermutation(encoded, count);
+        for (int i = 0; i < p.length; i++) {
+            p[i] += add;
+        }
+        return p;
+    }
 
     /**
      * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access

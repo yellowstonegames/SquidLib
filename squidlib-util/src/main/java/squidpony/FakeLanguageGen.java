@@ -27,12 +27,12 @@ public class FakeLanguageGen implements Serializable {
     public final LinkedHashMap<Integer, Double> syllableFrequencies;
     protected double totalSyllableFrequency = 0.0;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
-    protected final Pattern[] sanityChecks;
+    public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final StatefulRNG srng = new StatefulRNG();
-    protected static final Pattern repeats = Pattern.compile("(.)\\1+");
+    static final Pattern repeats = Pattern.compile("(.)\\1+");
     //, diacritics = Pattern.compile("[\u0300-\u036F\u1DC0-\u1DFF]+");
-    public static final Pattern[]
+    static final Pattern[]
             vulgarChecks = new Pattern[]
             {
                     Pattern.compile("[SsξCcсςС][hнН].*[dtтτТΤf]"),
@@ -89,7 +89,7 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("-[^aeiou]{2}"),
                     };
 
-    public static final Replacer[]
+    static final Replacer[]
             accentFinders = new Replacer[]
             {
                     Pattern.compile("[àáâãäåæāăąǻǽ]").replacer("a"),
@@ -135,7 +135,7 @@ public class FakeLanguageGen implements Serializable {
 
             };
 
-    public static final char[][] accentedVowels = new char[][]{
+    static final char[][] accentedVowels = new char[][]{
             new char[]{
                     'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ā', 'ă', 'ą', 'ǻ', 'ǽ'
             },
@@ -995,7 +995,7 @@ public class FakeLanguageGen implements Serializable {
      * and 'ayin (the second of the two isn't entered correctly here since it wouldn't be printed with most fonts; you
      * can see https://en.wikipedia.org/wiki/Ayin for more details). Hamzah is represented with Greek delta, 'δ', and
      * 'ayin is represented with Greek xi, 'ξ', both picked because of similarity to some forms of the glyphs in the
-     * Arabic script. Many other glyphs are mapped to alternate representations because the common romanizations use
+     * Arabic script. Many other letters are mapped to alternate representations because the common romanizations use
      * rare glyphs that SquidLib's fonts in the display module can't support. Using the conventions this FakeLanguageGen
      * does for writing the Arabic glyph names, these are: ţāδ becomes ţ, ĥāδ becomes ĥ, ħāδ becomes ħ, đāl becomes
      * đ, šīn becomes š, şād becomes ş, ďād becomes ď, ťāδ becomes ť, żāδ becomes ż, gain becomes g, wāw becomes ū, and
