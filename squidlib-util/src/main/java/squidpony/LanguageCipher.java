@@ -143,7 +143,7 @@ public class LanguageCipher implements Serializable{
     }
 
     /**
-     * Given a String, StringBuilder, or otherCharSequence that should contain words in the source language, this
+     * Given a String, StringBuilder, or other CharSequence that should contain words in the source language, this
      * translates each word to the fake language, using existing translations if previous calls to cipher() or lookup()
      * had translated that word.
      * @param text a CharSequence, such as a String, that contains words in the source language
@@ -151,13 +151,16 @@ public class LanguageCipher implements Serializable{
      */
     public String cipher(CharSequence text)
     {
-        Replacer rep = wordMatch.replacer(new Substitution() {
-            @Override
-            public void appendSubstitution(MatchResult match, TextBuffer dest) {
-                dest.append(lookup(match.group(0)));
-            }
-        });
+        Replacer rep = wordMatch.replacer(new CipherSubstitution());
         return rep.replace(text);
+    }
+
+    private class CipherSubstitution implements Substitution
+    {
+        @Override
+        public void appendSubstitution(MatchResult match, TextBuffer dest) {
+            dest.append(lookup(match.group(0)));
+        }
     }
 
     /**
