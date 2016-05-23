@@ -98,7 +98,10 @@ public class GapShuffler<T> implements Iterable<T>, Serializable {
             index = 0;
             int build = 0, inner, rotated;
             for (int i = 0; i < indexSections.length; i++) {
-                rotated = (indexSections.length + 1 - i) % indexSections.length;
+                if(indexSections.length <= 2)
+                    rotated = (indexSections.length + 2 - i) % indexSections.length;
+                else
+                    rotated = (indexSections.length + 1 - i) % indexSections.length;
                 inner = indexSections[rotated].length;
                 indexSections[rotated] =
                         PermutationGenerator.decodePermutation(
@@ -156,7 +159,11 @@ public class GapShuffler<T> implements Iterable<T>, Serializable {
                 innerIndex = 0;
                 int build = 0, inner, rotated;
                 for (int i = 0; i < indexSections.length; i++) {
-                    rotated = (indexSections.length + 1 - i) % indexSections.length;
+
+                    if(indexSections.length <= 2)
+                        rotated = (indexSections.length + 2 - i) % indexSections.length;
+                    else
+                        rotated = (indexSections.length + 1 - i) % indexSections.length;
                     inner = indexSections[rotated].length;
                     indexSections[rotated] =
                             PermutationGenerator.decodePermutation(

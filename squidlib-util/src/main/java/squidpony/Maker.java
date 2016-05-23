@@ -1,5 +1,7 @@
 package squidpony;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 
 /**
@@ -75,6 +77,12 @@ public class Maker {
         return new LinkedHashMap<>();
     }
 
-
+    @SafeVarargs
+    public static <T> ArrayList<T> makeList(T... elements) {
+        if(elements == null) return null;
+        ArrayList<T> list = new ArrayList<>(elements.length);
+        Collections.addAll(list, elements);
+        return list;
+    }
 
 }

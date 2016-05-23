@@ -654,7 +654,7 @@ public class FakeLanguageGen implements Serializable {
                     //"aĭ", "aĭ", "aĭ", "aĭ", "aĭ", "āĭ", "āĭ", "iĭ", "iĭ", "iĭ", "īĭ", "īĭ",
                     //"uĭ", "uĭ", "ūĭ", "aiĭ", "aiĭ", "oĭ", "oĭ", "oĭ", "auĭ",
             },
-            new String[]{"a'","i'","u'", "o'", "a'","i'","u'", "o'",
+            new String[]{"á","í","ú", "ó", "á","í","ú", "ó",
             },
             new String[]{
                     "k", "k", "k", "k", "k", "k", "k", "k", "kŗ", "kŕ", "kļ",
