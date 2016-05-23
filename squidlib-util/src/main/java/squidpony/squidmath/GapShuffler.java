@@ -56,17 +56,18 @@ public class GapShuffler<T> implements Iterable<T>, Serializable {
      * through mostly-random shuffles of the given collection. These shuffles are spaced so that a single element should
      * always have a large amount of "gap" in order between one appearance and the next. It helps to keep the appearance
      * of a gap if every item in elements is unique, but that is not necessary and does not affect how this works. The
-     * rng parameter is used directly (not copied), and is also used whenever the iterator needs to re-shuffle the
-     * internal ordering of elements. I suggest that the RNG should use LongPeriodRNG as its RandomnessSource, since it
-     * is in general a good choice for shuffling, but since this class mostly delegates its unique-shuffling code to
-     * PermutationGenerator and looks up at most 20 elements' permutation at once (allowing it to use a single random
-     * long to generate the permutation), there probably won't be problems if you use any other RandomnessSource.
+     * rng parameter is copied so externally using it won't change the order this produces its values; the rng field is
+     * used whenever the iterator needs to re-shuffle the internal ordering of elements. I suggest that the RNG should
+     * use LongPeriodRNG as its RandomnessSource, since it is in general a good choice for shuffling, but since this
+     * class mostly delegates its unique-shuffling code to PermutationGenerator and looks up at most 20 elements'
+     * permutation at once (allowing it to use a single random long to generate the permutation), there probably won't
+     * be problems if you use any other RandomnessSource.
      * @param elements a Collection of T that will not be modified
-     * @param rng an RNG that can be pre-seeded; will be directly used and not copied
+     * @param rng an RNG that can be pre-seeded; will be copied and not used directly
      */
     public GapShuffler(Collection<T> elements, RNG rng)
     {
-        this.rng = rng;
+        this.rng = rng.copy();
         this.elements = rng.shuffle(elements);
         size = this.elements.size();
         double sz2 = size;
@@ -87,8 +88,34 @@ public class GapShuffler<T> implements Iterable<T>, Serializable {
     }
 
     /**
+     * Gets the next element of the infinite sequence of T this shuffles through. The same as calling next() on an
+     * iterator returned by this class' iterator() method.
+     * @return the next element in the infinite sequence
+     */
+    public T getNext() {
+        if(index >= size)
+        {
+            index = 0;
+            int build = 0, inner, rotated;
+            for (int i = 0; i < indexSections.length; i++) {
+                rotated = (indexSections.length + 1 - i) % indexSections.length;
+                inner = indexSections[rotated].length;
+                indexSections[rotated] =
+                        PermutationGenerator.decodePermutation(
+                                rng.nextLong(PermutationGenerator.getTotalPermutations(inner)),
+                                inner,
+                                build);
+                build += inner;
+            }
+        }
+        int ilen = indexSections[0].length, ii = index / ilen, ij = index - ilen * ii;
+        ++index;
+        return elements.get(indexSections[ii][ij]);
+    }
+    /**
      * Returns an <b>infinite</b> iterator over elements of type {@code T}. You should be prepared to break out of any
-     * for loops that use this once you've gotten enough elements!
+     * for loops that use this once you've gotten enough elements! The remove() method is not supported by this iterator
+     * and hasNext() will always return true.
      *
      * @return an infinite Iterator over elements of type T.
      */
@@ -97,13 +124,15 @@ public class GapShuffler<T> implements Iterable<T>, Serializable {
         return new GapIterator();
     }
 
-    /**
-     *
-     */
-    public class GapIterator implements Iterator<T>, Serializable
+    private class GapIterator implements Iterator<T>, Serializable
     {
         private static final long serialVersionUID = 3167045364623458470L;
-        GapIterator() {}
+        private int innerIndex;
+        private RNG innerRNG;
+        GapIterator() {
+            innerIndex = 0;
+            innerRNG = rng.copy();
+        }
         /**
          * Returns {@code true} if the iteration has more elements.
          * This is always the case for this Iterator.
@@ -122,23 +151,23 @@ public class GapShuffler<T> implements Iterable<T>, Serializable {
          */
         @Override
         public T next() {
-            if(index >= size)
+            if(innerIndex >= size)
             {
-                index = 0;
+                innerIndex = 0;
                 int build = 0, inner, rotated;
                 for (int i = 0; i < indexSections.length; i++) {
                     rotated = (indexSections.length + 1 - i) % indexSections.length;
                     inner = indexSections[rotated].length;
                     indexSections[rotated] =
                             PermutationGenerator.decodePermutation(
-                            rng.nextLong(PermutationGenerator.getTotalPermutations(inner)),
-                            inner,
-                            build);
+                                    innerRNG.nextLong(PermutationGenerator.getTotalPermutations(inner)),
+                                    inner,
+                                    build);
                     build += inner;
                 }
             }
-            int ilen = indexSections[0].length, ii = index / ilen, ij = index - ilen * ii;
-            ++index;
+            int ilen = indexSections[0].length, ii = innerIndex / ilen, ij = innerIndex - ilen * ii;
+            ++innerIndex;
             return elements.get(indexSections[ii][ij]);
         }
 

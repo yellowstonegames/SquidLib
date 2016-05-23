@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.FakeLanguageGen;
 import squidpony.LanguageCipher;
+import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.HashMap;
@@ -253,10 +254,13 @@ public class LanguageGenTest {
             }
             System.out.println();
         }
-        /*
+        RNG nrng = new RNG();
+        /*for (int i = 0; i < 10; i++) {
+            System.out.println(FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC)
+                    .mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.4).word(nrng, true, 3));
+        }*/
         for (int i = 0; i < 10; i++) {
-            System.out.println(FakeLanguageGen.FRENCH.word(true));
+            System.out.println(FakeLanguageGen.GREEK_ROMANIZED.word(nrng, true, 2));
         }
-        */
     }
 }

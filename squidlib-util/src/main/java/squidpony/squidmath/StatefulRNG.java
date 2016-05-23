@@ -39,6 +39,17 @@ public class StatefulRNG extends RNG {
     }
 
     /**
+     * Creates a copy of this StatefulRNG; it will generate the same random numbers, given the same calls in order, as
+     * this StatefulRNG at the point copy() is called. The copy will not share references with this StatefulRNG.
+     *
+     * @return a copy of this StatefulRNG
+     */
+    @Override
+    public RNG copy() {
+        return new StatefulRNG(random.copy());
+    }
+
+    /**
      * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.
      * @return a long that can be used as state.
      */

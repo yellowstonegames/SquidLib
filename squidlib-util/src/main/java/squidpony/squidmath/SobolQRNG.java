@@ -471,4 +471,18 @@ public class SobolQRNG implements RandomnessSource {
         }
         return (nextLongVector()[0] << 32) ^ (nextLongVector()[0]);
     }
+
+    /**
+     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
+     *
+     * @return a copy of this RandomnessSource
+     */
+    @Override
+    public RandomnessSource copy() {
+        SobolQRNG next = new SobolQRNG(dimension);
+        next.count = count;
+        return next;
+    }
 }

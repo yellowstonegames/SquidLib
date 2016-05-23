@@ -685,6 +685,16 @@ public class RNG implements Serializable {
         this.random = random;
     }
 
+    /**
+     * Creates a copy of this RNG; it will generate the same random numbers, given the same calls in order, as this RNG
+     * at the point copy() is called. The copy will not share references with this RNG.
+     * @return a copy of this RNG
+     */
+    public RNG copy()
+    {
+        return new RNG(random.copy());
+    }
+
     @Override
     public String toString() {
         return "RNG with Randomness Source " + random;
