@@ -133,6 +133,20 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         return p ^ (p >>> 43);
     }
 
+    /**
+     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
+     *
+     * @return a copy of this RandomnessSource
+     */
+    @Override
+    public RandomnessSource copy() {
+        PermutedRNG next = new PermutedRNG(state);
+        next.setState(state);
+        return next;
+    }
+
     private static long permute(long p)
     {
         p ^= p >>> (5 + ((p >>> 59) & 31));

@@ -176,4 +176,19 @@ public class MersenneTwister implements RandomnessSource {
         return ((next(32) & 0xffffffffL) << 32) | (next(32) & 0xffffffffL);
     }
 
+    /**
+     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
+     *
+     * @return a copy of this RandomnessSource
+     */
+    @Override
+    public RandomnessSource copy() {
+        MersenneTwister next = new MersenneTwister(seed);
+        System.arraycopy(mt, 0, next.mt, 0, mt.length);
+        next.mtIndex = mtIndex;
+        return next;
+    }
+
 }

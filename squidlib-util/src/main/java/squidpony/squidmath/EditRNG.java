@@ -557,4 +557,17 @@ public class EditRNG extends StatefulRNG {
     public double getRawLatest() {
         return rawLatest;
     }
+
+    /**
+     * Creates a copy of this StatefulRNG; it will generate the same random numbers, given the same calls in order, as
+     * this StatefulRNG at the point copy() is called. The copy will not share references with this StatefulRNG.
+     *
+     * @return a copy of this StatefulRNG
+     */
+    @Override
+    public RNG copy() {
+        EditRNG next = new EditRNG(random.copy(), expected, centrality);
+        next.rawLatest = rawLatest;
+        return next;
+    }
 }

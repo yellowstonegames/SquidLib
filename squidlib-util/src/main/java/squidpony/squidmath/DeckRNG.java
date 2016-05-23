@@ -135,8 +135,7 @@ public class DeckRNG extends StatefulRNG {
             sum += between(min, max);
         }
 
-        int answer = Math.round((float) sum / samples);
-        return answer;
+        return Math.round((float) sum / samples);
     }
 
     /**
@@ -308,7 +307,7 @@ public class DeckRNG extends StatefulRNG {
             return 0;
         if(bits > 32)
             bits = 32;
-        return (int)(nextDouble() * (1l << bits));
+        return (int)(nextDouble() * (1L << bits));
 
     }
 
@@ -402,6 +401,21 @@ public class DeckRNG extends StatefulRNG {
     public void setRandomness(RandomnessSource random) {
         setState(((long)random.next(32) << 32) | random.next(32));
 
+    }
+
+    /**
+     * Creates a copy of this DeckRNG; it will generate the same random numbers, given the same calls in order, as
+     * this DeckRNG at the point copy() is called. The copy will not share references with this DeckRNG.
+     *
+     * @return a copy of this DeckRNG
+     */
+    public RNG copy()
+    {
+        DeckRNG next = new DeckRNG(lastShuffledState);
+        next.random = random.copy();
+        System.arraycopy(deck, 0, next.deck, 0, deck.length);
+        next.step = step;
+        return next;
     }
 
     /**

@@ -126,4 +126,19 @@ public class XorRNG implements RandomnessSource {
     public String toString() {
         return "XorRNG with state hash 0x" + StringKit.hexHash(state0, state1) + 'L';
     }
+
+    /**
+     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
+     *
+     * @return a copy of this RandomnessSource
+     */
+    @Override
+    public RandomnessSource copy() {
+        XorRNG next = new XorRNG(state0);
+        next.state0 = state0;
+        next.state1 = state1;
+        return next;
+    }
 }

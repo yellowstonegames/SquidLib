@@ -57,7 +57,7 @@ public class DharmaRNG extends RNG {
      * @param seed used to seed the default RandomnessSource.
      */
     public DharmaRNG(final long seed) {
-        super(new LightRNG(seed));
+        super(seed);
     }
 
     /**
@@ -67,13 +67,41 @@ public class DharmaRNG extends RNG {
      * @param fairness the desired fairness metric, which must be between 0.0 and 1.0
      */
     public DharmaRNG(final long seed, final double fairness) {
-        super(new LightRNG(seed));
+        super(seed);
         if(fairness < 0.0 || fairness >= 1.0)
             this.fairness = 0.54;
         else
             this.fairness = fairness;
     }
 
+
+    /**
+     * String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
+     * seed for LightRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+     * tiny state size, and excellent 64-bit number generation.
+     *
+     * @param seedString a String as a seed
+     */
+    public DharmaRNG(String seedString) {
+        super(seedString);
+    }
+
+
+    /**
+     * String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
+     * seed for LightRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+     * tiny state size, and excellent 64-bit number generation.
+     *
+     * @param seedString a String as a seed
+     */
+    public DharmaRNG(String seedString, double fairness) {
+        super(seedString);
+        if(fairness < 0.0 || fairness >= 1.0)
+            this.fairness = 0.54;
+        else
+            this.fairness = fairness;
+
+    }
     /**
      * Construct a new DharmaRNG with the given seed.
      *
@@ -402,6 +430,20 @@ public class DharmaRNG extends RNG {
     @Override
     public void setRandomness(RandomnessSource random) {
         this.random = random;
+    }
+
+    /**
+     * Creates a copy of this DharmaRNG; it will generate the same random numbers, given the same calls in order, as
+     * this DharmaRNG at the point copy() is called. The copy will not share references with this DharmaRNG.
+     *
+     * @return a copy of this DharmaRNG
+     */
+    @Override
+    public RNG copy() {
+        DharmaRNG next = new DharmaRNG(random.copy(), fairness);
+        next.produced = produced;
+        next.baseline = baseline;
+        return next;
     }
 
     /**

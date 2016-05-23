@@ -62,15 +62,24 @@ public class ChaosRNG implements RandomnessSource{
         state[choice] = s1 ^ s0 ^ (s1 >> 11) ^ (s0 >> 30); // b,c
         return state[choice] * 1181783497276652981L;
     }
+
+    /**
+     * Produces another ChaosRNG with no relation to this one; this breaks the normal rules that RandomnessSource.copy
+     * abides by because this class should never have its generated number sequence be predictable.
+     * @return a new, unrelated ChaosRNG as a RandomnessSource
+     */
+    @Override
+    public RandomnessSource copy() {
+        return new ChaosRNG();
+    }
+
     /**
      * Changes the internal state to a new, fully-random version that should have no relation to the previous state.
      * May be somewhat slow; you shouldn't need to call this often.
      */
     public void randomize()
     {
-        sec = new SecureRandom();
-        byte[] bytes = new byte[128];
-        sec.nextBytes(bytes);
+        byte[] bytes = sec.generateSeed(128);
         for (int i = sec.nextInt() & 127, c = 0; c < 128; c++, i = i + 1 & 127) {
             state[i & 15] |= bytes[c] << ((i >> 4) << 3);
         }

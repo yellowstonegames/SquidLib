@@ -239,6 +239,22 @@ public class LongPeriodRNG implements RandomnessSource {
     }
 
     /**
+     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
+     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
+     *
+     * @return a copy of this RandomnessSource
+     */
+    @Override
+    public RandomnessSource copy() {
+        LongPeriodRNG next = new LongPeriodRNG();
+        System.arraycopy(state, 0, next.state, 0, 16);
+        next.choice = choice;
+        return next;
+
+    }
+
+    /**
      * This is the jump function for the generator. It is equivalent to 2^512 calls to nextLong(); it can be used to
      * generate 2^512 non-overlapping subsequences for parallel computations. Alters the state of this object.
      * <br>
