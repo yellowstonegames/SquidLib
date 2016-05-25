@@ -1,6 +1,7 @@
 package squidpony;
 
 import regexodus.*;
+import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.GapShuffler;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
@@ -78,6 +79,9 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus addSynonyms(Collection<String> synonyms)
     {
+        if(synonyms.isEmpty())
+            return this;
+        rng.setState(CrossHash.hash64(synonyms));
         GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng);
         for(String syn : synonyms)
         {
@@ -97,6 +101,9 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus addCategory(String keyword, Collection<String> synonyms)
     {
+        if(synonyms.isEmpty())
+            return this;
+        rng.setState(CrossHash.hash64(synonyms));
         GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng);
         mappings.put(keyword, shuffler);
         return this;
@@ -109,9 +116,9 @@ public class Thesaurus implements Serializable{
      * <br>
      * <ul>
      *     <li>"calm`adj`": harmonious, peaceful, pleasant, serene, placid, tranquil, calm</li>
-     *     <li>"calm`noun`": harmony, peace, kindness, serenity, tranquility, calmness</li>
-     *     <li>"org`noun`": fraternity, brotherhood, order, group, union</li>
-     *     <li>"org`nouns`": fraternities, brotherhoods, orders, groups, unions</li>
+     *     <li>"calm`noun`": harmony, peace, kindness, serenity, tranquility, calmn</li>
+     *     <li>"org`noun`": fraternity, brotherhood, order, group, foundation</li>
+     *     <li>"org`nouns`": fraternities, brotherhoods, orders, groups, foundations</li>
      *     <li>"empire`adj`": imperial, princely, kingly, regal, dominant, dynastic, royal, hegemonic, monarchic, ascendant</li>
      *     <li>"empire`noun`": empire, emirate, kingdom, sultanate, dominion, dynasty, imperium, hegemony, triumvirate, ascendancy</li>
      *     <li>"empire`nouns`": empires, emirates, kingdoms, sultanates, dominions, dynasties, imperia, hegemonies, triumvirates, ascendancies</li>
@@ -236,17 +243,29 @@ public class Thesaurus implements Serializable{
             "calm`adj`",
             makeList("harmonious", "peaceful", "pleasant", "serene", "placid", "tranquil", "calm"),
             "calm`noun`",
-            makeList("harmony", "peace", "kindness", "serenity", "tranquility", "calmness"),
+            makeList("harmony", "peace", "kindness", "serenity", "tranquility", "calm"),
             "org`noun`",
-            makeList("fraternity", "brotherhood", "order", "group", "union"),
+            makeList("fraternity", "brotherhood", "order", "group", "foundation", "association", "guild", "fellowship", "partnership"),
             "org`nouns`",
-            makeList("fraternities", "brotherhoods", "orders", "groups", "unions"),
+            makeList("fraternities", "brotherhoods", "orders", "groups", "foundations", "associations", "guilds", "fellowships", "partnerships"),
             "empire`adj`",
             makeList("imperial", "princely", "kingly", "regal", "dominant", "dynastic", "royal", "hegemonic", "monarchic", "ascendant"),
             "empire`noun`",
             makeList("empire", "emirate", "kingdom", "sultanate", "dominion", "dynasty", "imperium", "hegemony", "triumvirate", "ascendancy"),
             "empire`nouns`",
             makeList("empires", "emirates", "kingdoms", "sultanates", "dominions", "dynasties", "imperia", "hegemonies", "triumvirates", "ascendancies"),
+            "union`noun`",
+            makeList("union", "alliance", "coalition", "confederation", "federation", "congress", "confederacy", "league", "faction"),
+            "union`nouns`",
+            makeList("unions", "alliances", "coalitions", "confederations", "federations", "congresses", "confederacies", "leagues", "factions"),
+            "militia`noun`",
+            makeList("rebellion", "resistance", "militia", "liberators", "warriors", "fighters", "militants", "front", "irregulars"),
+            "militia`nouns`",
+            makeList("rebellions", "resistances", "militias", "liberators", "warriors", "fighters", "militants", "fronts", "irregulars"),
+            "gang`noun`",
+            makeList("gang", "syndicate", "mob", "crew", "posse", "mafia", "cartel"),
+            "gang`nouns`",
+            makeList("gangs", "syndicates", "mobs", "crews", "posses", "mafias", "cartels"),
             "duke`noun`",
             makeList("duke", "earl", "baron", "fief", "lord", "shogun"),
             "duke`nouns`",
@@ -260,11 +279,73 @@ public class Thesaurus implements Serializable{
             "holy`adj`",
             makeList("auspicious", "divine", "holy", "sacred", "prophetic", "blessed", "godly"),
             "unholy`adj`",
-            makeList("bewitched", "occult", "unholy", "macabre", "accursed", "foul", "vile"),
+            makeList("bewitched", "occult", "unholy", "macabre", "accursed", "profane", "vile"),
             "forest`adj`",
             makeList("natural", "primal", "verdant", "lush", "fertile", "bountiful"),
             "forest`noun`",
-            makeList("nature", "forest", "greenery", "jungle", "woodland", "grove", "copse")
+            makeList("nature", "forest", "greenery", "jungle", "woodland", "grove", "copse"),
+            "fancy`adj`",
+            makeList("grand", "glorious", "magnificent", "magnanimous", "majestic", "great", "powerful"),
+            "evil`adj`",
+            makeList("heinous", "scurrilous", "terrible", "horrible", "debased", "wicked", "evil", "malevolent", "nefarious", "vile"),
+            "good`adj`",
+            makeList("righteous", "moral", "good", "pure", "compassionate", "flawless", "perfect"),
+            "sinister`adj`",
+            makeList("shadowy", "silent", "lethal", "deadly", "fatal", "venomous", "cutthroat", "murderous", "bloodstained"),
+            "sinister`noun`",
+            makeList("shadow", "silence", "assassin", "ninja", "venom", "poison", "snake", "murder", "blood", "razor"),
+            "blade`noun`",
+            makeList("blade", "knife", "sword", "axe", "stiletto", "katana", "scimitar", "hatchet", "spear", "glaive", "halberd",
+                    "hammer", "maul", "flail", "mace", "sickle", "scythe", "whip", "lance", "nunchaku", "saber", "cutlass", "trident"),
+            "bow`noun`",
+            makeList("bow", "longbow", "shortbow", "crossbow", "sling", "atlatl", "bolas", "javelin", "net", "shuriken", "dagger"),
+            "weapon`noun`",
+            makeList("blade", "knife", "sword", "axe", "stiletto", "katana", "scimitar", "hatchet", "spear", "glaive", "halberd",
+                    "hammer", "maul", "flail", "mace", "sickle", "scythe", "whip", "lance", "nunchaku", "saber", "cutlass", "trident",
+                    "bow", "longbow", "shortbow", "crossbow", "sling", "atlatl", "bolas", "javelin", "net", "shuriken", "dagger"),
+            "musket`noun`",
+            makeList("arquebus", "blunderbuss", "musket", "matchlock", "flintlock", "wheellock", "cannon"),
+            "grenade`noun`",
+            makeList("rocket", "grenade", "missile", "bomb", "warhead", "explosive", "flamethrower"),
+            "rifle`noun`",
+            makeList("pistol", "rifle", "handgun", "firearm", "longarm", "shotgun"),
+            "blade`nouns`",
+            makeList("blades", "knives", "swords", "axes", "stilettos", "katana", "scimitars", "hatchets", "spears", "glaives", "halberds",
+                    "hammers", "mauls", "flails", "maces", "sickles", "scythes", "whips", "lances", "nunchaku", "sabers", "cutlasses", "tridents"),
+            "bow`nouns`",
+            makeList("bows", "longbows", "shortbows", "crossbows", "slings", "atlatls", "bolases", "javelins", "nets", "shuriken", "daggers"),
+            "weapon`nouns`",
+            makeList("blades", "knives", "swords", "axes", "stilettos", "katana", "scimitars", "hatchets", "spears", "glaives", "halberds",
+                    "hammers", "mauls", "flails", "maces", "sickles", "scythes", "whips", "lances", "nunchaku", "sabers", "cutlasses", "tridents",
+                    "bows", "longbows", "shortbows", "crossbows", "slings", "atlatls", "bolases", "javelins", "nets", "shuriken", "daggers"),
+            "musket`nouns`",
+            makeList("arquebusses", "blunderbusses", "muskets", "matchlocks", "flintlocks", "wheellocks", "cannons"),
+            "grenade`nouns`",
+            makeList("rockets", "grenades", "missiles", "bombs", "warheads", "explosives", "flamethrowers"),
+            "rifle`nouns`",
+            makeList("pistols", "rifles", "handguns", "firearms", "longarms", "shotguns"),
+            "tech`adj`",
+            makeList("cyber", "digital", "electronic", "techno", "hacker", "crypto", "turbo", "mechanical", "servo"),
+            "sole`adj`",
+            makeList("sole", "true", "singular", "total", "ultimate", "final"),
+            "light`noun`",
+            makeList("light", "glow", "sun", "star", "moon", "radiance", "dawn", "torch"),
+            "light`nouns`",
+            makeList("lights", "glimmers", "suns", "stars", "moons", "torches"),
+            "smart`adj`",
+            makeList("brilliant", "smart", "genius", "wise", "clever", "cunning", "mindful", "aware"),
+            "smart`noun`",
+            makeList("genius", "wisdom", "cunning", "awareness", "mindfulness", "acumen", "smarts", "knowledge"),
+            "bandit`noun`",
+            makeList("thief", "raider", "bandit", "rogue", "brigand", "highwayman", "pirate"),
+            "bandit`nouns`",
+            makeList("thieves", "raiders", "bandits", "rogues", "brigands", "highwaymen", "pirates"),
+            "guard`noun`",
+            makeList("protector", "guardian", "warden", "defender", "guard", "shield", "sentinel", "watchman", "knight"),
+            "guard`nouns`",
+            makeList("protectors", "guardians", "wardens", "defenders", "guards", "shields", "sentinels", "watchmen", "knights"),
+            "rage`noun`",
+            makeList("rage", "fury", "anger", "wrath", "frenzy", "vengeance")
             ),
             languages = makeLHM(
             "lc`gen`",

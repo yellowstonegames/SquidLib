@@ -375,6 +375,32 @@ public class CrossHash {
         }
         return h;
     }
+    public static long hash64(Iterable<String> data)
+    {
+        if(data == null)
+            return 0;
+        long h = -3750763034362895579L, t;
+        for (String datum : data) {
+            t = hash64(datum);
+            h ^= (t & 0xff);
+            h *= 1099511628211L;
+            h ^= ((t >>> 8) & 0xff);
+            h *= 1099511628211L;
+            h ^= ((t >>> 16) & 0xff);
+            h *= 1099511628211L;
+            h ^= ((t >>> 24) & 0xff);
+            h *= 1099511628211L;
+            h ^= ((t >>> 32) & 0xff);
+            h *= 1099511628211L;
+            h ^= ((t >>> 40) & 0xff);
+            h *= 1099511628211L;
+            h ^= ((t >>> 48) & 0xff);
+            h *= 1099511628211L;
+            h ^= (t >>> 56);
+            h *= 1099511628211L;
+        }
+        return h;
+    }
     public static long hash64(String[]... data)
     {
         if(data == null)
