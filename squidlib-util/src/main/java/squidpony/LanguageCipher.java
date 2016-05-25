@@ -57,7 +57,7 @@ public class LanguageCipher implements Serializable{
      * are in the source language. Can be used as a complete vocabulary when passed to decipher.
      */
     reverse;
-    private static final Pattern wordMatch = Pattern.compile("(\\pL+)|(\\pL[\\pL\\p{Pd}]*\\pL)");
+    private static final Pattern wordMatch = Pattern.compile("(\\pL+)|(\\pL[\\pL-]*\\pL)");
 
     /**
      * The degree of vocabulary to cache to speed up future searches at the expense of memory usage.
@@ -162,6 +162,35 @@ public class LanguageCipher implements Serializable{
             dest.append(lookup(match.group(0)));
         }
     }
+    private class DecipherSubstition implements Substitution
+    {
+        private final Map<String, String> vocabulary;
+        DecipherSubstition(final Map<String, String> vocabulary)
+        {
+            this.vocabulary = vocabulary;
+        }
+        public void appendSubstitution(MatchResult match, TextBuffer dest) {
+            String translated = match.group(0);
+            if(translated == null) {
+                return;
+            }
+            translated = translated.toLowerCase();
+            translated = vocabulary.get(translated);
+            if(translated == null) {
+                dest.append(match.group(0));
+                return;
+            }
+            char[] chars = translated.toCharArray();
+            if(Category.Lu.contains(match.charAt(0)))
+                chars[0] = Character.toUpperCase(chars[0]);
+            if(match.length() > 1 && Category.Lu.contains(match.charAt(1))) {
+                for (int i = 1; i < chars.length; i++) {
+                    chars[i] = Character.toUpperCase(chars[i]);
+                }
+            }
+            dest.append(chars, 0, chars.length);
+        }
+    }
 
     /**
      * Deciphers words in an already-ciphered text with a given String-to-String Map for a vocabulary. This Map could be
@@ -193,30 +222,7 @@ public class LanguageCipher implements Serializable{
 
         pat = Pattern.compile("\\b" + sb + "\\b", "ui");
 
-        rep = pat.replacer(new Substitution() {
-            @Override
-            public void appendSubstitution(MatchResult match, TextBuffer dest) {
-                String translated = match.group(0);
-                if(translated == null) {
-                    return;
-                }
-                translated = translated.toLowerCase();
-                translated = vocabulary.get(translated);
-                if(translated == null) {
-                    dest.append(match.group(0));
-                    return;
-                }
-                char[] chars = translated.toCharArray();
-                if(Category.Lu.contains(match.charAt(0)))
-                    chars[0] = Character.toUpperCase(chars[0]);
-                if(match.length() > 1 && Category.Lu.contains(match.charAt(1))) {
-                    for (int i = 1; i < chars.length; i++) {
-                        chars[i] = Character.toUpperCase(chars[i]);
-                    }
-                }
-                dest.append(chars, 0, chars.length);
-            }
-        });
+        rep = pat.replacer(new DecipherSubstition(vocabulary));
         return rep.replace(text);
     }
 

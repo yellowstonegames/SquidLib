@@ -35,20 +35,20 @@ public class FakeLanguageGen implements Serializable {
     static final Pattern[]
             vulgarChecks = new Pattern[]
             {
-                    Pattern.compile("[SsξCcсςС][hнН].*[dtтτТΤf]"),
-                    Pattern.compile("([PpрρРΡ][hнН])|[KkкκКΚFfDdCcсςС].{1,4}[KkкκКΚCcсςСxхжχХЖΧ]"), // lots of these end in a 'k' sound, huh
+                    Pattern.compile("[SsξCcсςС][hнН].*[dtтτТΤ]"),
+                    Pattern.compile("([PpрρРΡ][hнН])|[KkкκКΚFfDdCcсςСQq].{1,4}[KkкκКΚCcсςСxхжχХЖΧQq]"), // lots of these end in a 'k' sound, huh
                     Pattern.compile("[BbъыбвβЪЫБВΒ]..?.?[cсςС][hнН]"),
                     Pattern.compile("[WwшщψШЩHhнН]..?[rяЯ]"),
                     Pattern.compile("[TtтτТΤ]..?[tтτТΤ]"),
                     Pattern.compile("([PpрρРΡ][hнН])|[Ff]..?[rяЯ][tтτТΤ]"),
-                    Pattern.compile("([Ssξ][hнН])|[j][iτιΙ].?[sξzΖ]"),
+                    Pattern.compile("([Ssξ][hнН])[iτιΙ].?[sξzΖ]"),
                     Pattern.compile("[AaаαАΑΛ][NnийИЙΝ]..?[SsξlιζzΖ]"),
                     Pattern.compile("[AaаαАΑΛ][sξ][sξ]"),
                     Pattern.compile(".[uμυν][hнН]?[nийИЙΝ]+[tтτТΤ]"),
                     Pattern.compile("[NnFf]..?g"), // might as well remove two possible slurs with one check
                     Pattern.compile("[PpрρРΡ][eеёзξεЕЁЗΞΕΣioоюσοОЮΟuμυν][eеёзξεЕЁЗΞΕΣoоюσοОЮΟs]"), // the grab bag of juvenile words
                     Pattern.compile("[MmмМΜ]..?[rяЯ].?d"), // should pick up the #1 obscenity from Spanish and French
-                    Pattern.compile("[Gg][hнН]?[aаαАΑΛeеёзξεЕЁЗΞΕΣ][yуλγУΥeеёзξεЕЁЗΞΕΣ]") // could be inappropriate for random text
+                    Pattern.compile("[Gg][HhнН]?[aаαАΑΛeеёзξεЕЁЗΞΕΣ][yуλγУΥeеёзξεЕЁЗΞΕΣ]") // could be inappropriate for random text
             },
             englishSanityChecks = new Pattern[]
                     {
@@ -88,7 +88,6 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("(\\w)\\1\\1"),
                             Pattern.compile("-[^aeiou]{2}"),
                     };
-
     static final Replacer[]
             accentFinders = new Replacer[]
             {
@@ -2508,10 +2507,12 @@ public class FakeLanguageGen implements Serializable {
 
         /**
          * For a language that has a 40% chance to repeat a single Latin vowel (a, e, o, or a variant on one of them
-         * like æ or ö).
+         * like å or ö, but not merged letters like æ and œ).
          */
         public static final Modifier DOUBLE_VOWELS = new Modifier(
-                "([aàáâãäåæāăąǻǽeèéêëēĕėęěòóôõöøōŏőœǿ])([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳ]|$)", "$1$1$2", 0.4);
+                "([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳ]|^)"
+                + "([aàáâãäåāăąǻeèéêëēĕėęěòóôõöøōŏőǿ])"
+                + "([^aàáâãäåæāăąǻǽeèéêëēĕėęěiìíîïĩīĭįıoòóôõöøōŏőœǿuùúûüũūŭůűųyýÿŷỳ]|$)", "$1$2$2$3", 0.4);
 
 
         /**
@@ -2550,7 +2551,7 @@ public class FakeLanguageGen implements Serializable {
                 new Alteration("ĥ", "kh"),
                 new Alteration("ħ", "khr"),
                 new Alteration("đ", "dh"),
-                new Alteration("ď", "dw"),
+                new Alteration("ď", "dt"),
                 new Alteration("š", "sh"),
                 new Alteration("ş", "shw"),
                 new Alteration("ť", "ch"),

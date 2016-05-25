@@ -2,7 +2,6 @@ package squidpony.examples;
 
 import squidpony.FakeLanguageGen;
 import squidpony.LanguageCipher;
-import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.HashMap;
@@ -202,18 +201,50 @@ public class LanguageGenTest {
         System.out.println("\n-----------------------------------------------------------------------------");
         System.out.println();
         FakeLanguageGen[] languages = new FakeLanguageGen[]{
+                FakeLanguageGen.LOVECRAFT,
                 FakeLanguageGen.JAPANESE_ROMANIZED,
                 FakeLanguageGen.FRENCH,
-                FakeLanguageGen.GREEK_AUTHENTIC,
-                FakeLanguageGen.RUSSIAN_AUTHENTIC,
+                FakeLanguageGen.GREEK_ROMANIZED,
+                FakeLanguageGen.RUSSIAN_ROMANIZED,
                 FakeLanguageGen.SWAHILI,
                 FakeLanguageGen.SOMALI,
                 FakeLanguageGen.ENGLISH,
                 FakeLanguageGen.FANTASY_NAME,
+                FakeLanguageGen.FANCY_FANTASY_NAME,
+                FakeLanguageGen.ARABIC_ROMANIZED,
+                FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC),
+                FakeLanguageGen.HINDI_ROMANIZED.removeAccents(),
                 FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.SOMALI, 0.25),
-                FakeLanguageGen.GREEK_ROMANIZED.mix(FakeLanguageGen.HINDI_ROMANIZED.removeModifiers().removeAccents(), 0.5),
+                FakeLanguageGen.GREEK_ROMANIZED.mix(FakeLanguageGen.HINDI_ROMANIZED.removeAccents(), 0.5),
                 FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.FRENCH, 0.3),
-                FakeLanguageGen.ARABIC_ROMANIZED
+                FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC).mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.4),
+                FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
+                FakeLanguageGen.GREEK_ROMANIZED.mix(FakeLanguageGen.SOMALI, 0.4),
+                FakeLanguageGen.ENGLISH.mix(FakeLanguageGen.HINDI_ROMANIZED.removeAccents(), 0.4),
+                FakeLanguageGen.ENGLISH.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.4),
+                FakeLanguageGen.SOMALI.mix(FakeLanguageGen.HINDI_ROMANIZED.removeAccents(), 0.4),
+                FakeLanguageGen.FRENCH.addModifiers(FakeLanguageGen.modifier("([^aeiou])\\1", "$1ph", 0.3),
+                        FakeLanguageGen.modifier("([^aeiou])\\1", "$1ch", 0.4),
+                        FakeLanguageGen.modifier("([^aeiou])\\1", "$1sh", 0.5),
+                        FakeLanguageGen.modifier("([^aeiou])\\1", "$1", 0.9)),
+                FakeLanguageGen.JAPANESE_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.DOUBLE_VOWELS),
+                FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
+                        FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
+                        FakeLanguageGen.modifier("a+", "á", 0.18),
+                        FakeLanguageGen.modifier("e+", "é", 0.18),
+                        FakeLanguageGen.modifier("i+", "í", 0.18),
+                        FakeLanguageGen.modifier("o+", "ó", 0.18),
+                        FakeLanguageGen.modifier("u+", "ú", 0.18),
+                        FakeLanguageGen.modifier("aa", "au"),
+                        FakeLanguageGen.modifier("ii", "ai"),
+                        FakeLanguageGen.modifier("uu", "eu"),
+                        FakeLanguageGen.modifier("^x", "chw"),
+                        FakeLanguageGen.modifier("q$", "rk"),
+                        FakeLanguageGen.modifier("qu+", "qui"),
+                        FakeLanguageGen.modifier("q([^u])", "qu$1"),
+                        FakeLanguageGen.modifier("cc", "ch")),
+                FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
+                FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
         };
         String[] oz = new String[]{
                 "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",
@@ -254,13 +285,24 @@ public class LanguageGenTest {
             }
             System.out.println();
         }
-        RNG nrng = new RNG();
+        StatefulRNG nrng = new StatefulRNG("SquidLib!");
         /*for (int i = 0; i < 10; i++) {
             System.out.println(FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC)
                     .mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.4).word(nrng, true, 3));
         }*/
-        for (int i = 0; i < 10; i++) {
+        /*for (int i = 0; i < 10; i++) {
             System.out.println(FakeLanguageGen.GREEK_ROMANIZED.word(nrng, true, 2));
+        }
+        */
+        System.out.println(nrng.getState());
+        for(FakeLanguageGen lang : languages) {
+            for (int n = 0; n < 20; n++) {
+                for (int i = 0; i < 4; i++) {
+                    System.out.print(nrng.getState() + " : " + lang.word(nrng, false, 3) + ", ");
+                }
+                System.out.println();
+            }
+            System.out.println();
         }
     }
 }
