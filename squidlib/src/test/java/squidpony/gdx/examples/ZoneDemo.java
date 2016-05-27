@@ -8,8 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+
+import squidpony.ColoredStringList;
 import squidpony.GwtCompatibility;
-import squidpony.panel.IColoredString;
 import squidpony.squidai.ZOI;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
@@ -21,9 +22,6 @@ import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.RNG;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ZoneDemo extends ApplicationAdapter {
     SpriteBatch batch;
@@ -255,17 +253,13 @@ public class ZoneDemo extends ApplicationAdapter {
                 DefaultResources.getStretchablePrintFont()
         );
         current.backgroundColor = colorCenter.get(30, 30, 30);
-        final List<IColoredString<Color>> text = new ArrayList<>();
-        IColoredString<Color> buf = IColoredString.Impl.create();
-        buf.append("SquidLib ", colorCenter.get(255, 0, 0));
-        buf.append("is brought to you by Tommy Ettinger, Eben Howard, smelC, and others", null);
-        text.add(buf);
-    	/* Jump line */
-        text.add(IColoredString.Impl.<Color> create());
-        buf = IColoredString.Impl.create();
-        buf.append("If you wanna contribute, visit ", null);
-        buf.append("https://github.com/SquidPony/SquidLib", colorCenter.get(29, 0, 253));
-        text.add(buf);
+        final ColoredStringList<Color> text = new ColoredStringList<Color>();
+        text.addColoredText("SquidLib ", colorCenter.get(255, 0, 0));
+        text.addText("is brought to you by Tommy Ettinger, Eben Howard, smelC, and others");
+        /* Jump a line */
+        text.addEmptyLine();
+        text.addText("If you wanna contribute, visit ");
+        text.addColoredText("https://github.com/SquidPony/SquidLib", colorCenter.get(29, 0, 253));
         /* // useful during debugging
         char[] big = new char[50];
         Arrays.fill(big, 'A');
