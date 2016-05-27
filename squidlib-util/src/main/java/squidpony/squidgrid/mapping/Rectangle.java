@@ -152,54 +152,6 @@ public interface Rectangle {
 			return result;
 		}
 
-		public static List<Coord> column(Rectangle r, boolean leftOrRight) {
-			final Coord bl = r.getBottomLeft();
-			final int height = r.getHeight();
-			final int width = r.getWidth();
-			final List<Coord> result = new ArrayList<Coord>(height);
-			Coord current = leftOrRight ? bl : bl.translate(width, 0);
-			for (int i = 0; i < height; i++) {
-				result.add(current);
-				current = current.translate(0, 1);
-			}
-			return result;
-		}
-
-		public static List<Coord> line(Rectangle r, boolean botOrTop) {
-			final Coord bl = r.getBottomLeft();
-			final int height = r.getHeight();
-			final int width = r.getWidth();
-			final List<Coord> result = new ArrayList<Coord>(width);
-			/* In SquidLib, (0,0) is top left so bl has a big 'y' */
-			Coord current = botOrTop ? bl : bl.translate(0, -height);
-			for (int i = 0; i < width; i++) {
-				result.add(current);
-				current = current.translate(1, 0);
-			}
-			return result;
-		}
-
-		public static List<Coord> getBorder(Rectangle r) {
-			final List<Coord> result = new ArrayList<Coord>((r.getHeight() + r.getWidth()) * 2);
-			/* bottom line */
-			result.addAll(line(r, true));
-			/* right colum */
-			result.addAll(column(r, false));
-			/* top line */
-			result.addAll(line(r, false));
-			/* left colum */
-			result.addAll(column(r, true));
-			return result;
-		}
-
-		public static List<Coord> getOutsideBorder(Rectangle r) {
-			Rectangle extension = extend(r, Direction.DOWN);
-			extension = extend(extension, Direction.RIGHT);
-			extension = extend(extension, Direction.UP);
-			extension = extend(extension, Direction.LEFT);
-			return getBorder(extension);
-		}
-
 		/**
 		 * @param d
 		 *            A direction.

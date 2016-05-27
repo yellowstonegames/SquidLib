@@ -185,6 +185,14 @@ public interface IColorCenter<T> {
 	IColoredString<T> filter(IColoredString<T> ics);
 
 	/**
+	 * @param t
+	 * @param doAlpha
+	 *            Whether to include (and hereby change) the alpha component.
+	 * @return A monochromatic variation of {@code t}.
+	 */
+	T greify(/*@Nullable*/ T t, boolean doAlpha);
+
+	/**
 	 * A skeletal implementation of {@link IColorCenter}.
 	 * 
 	 * @author smelC
@@ -443,6 +451,8 @@ public interface IColorCenter<T> {
 			boolean change = false;
 			for (IColoredString.Bucket<T> bucket : ics) {
 				final T in = bucket.getColor();
+				if (in == null)
+					continue;
 				final T out = filter(in);
 				if (in != out) {
 					change = true;
@@ -458,6 +468,29 @@ public interface IColorCenter<T> {
 			} else
 				/* Only one allocation: the iterator, yay \o/ */
 				return ics;
+		}
+
+		@Override
+		public T greify(T t, boolean doAlpha) {
+			if (t == null)
+				/* Cannot do */
+				return null;
+			final int red = getRed(t);
+			final int green = getGreen(t);
+			final int blue = getBlue(t);
+			final int alpha = getAlpha(t);
+			final int rgb = red + green + blue;
+			final int mean;
+			final int newAlpha;
+			if (doAlpha) {
+				mean = (rgb + alpha) / 4;
+				newAlpha = mean;
+			} else {
+				mean = rgb / 3;
+				/* No change */
+				newAlpha = alpha;
+			}
+			return get(mean, mean, mean, newAlpha);
 		}
 
         /**

@@ -1,32 +1,34 @@
 package squidpony.squidgrid.gui.gdx;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Align;
 
-import squidpony.IColorCenter;
-import squidpony.SquidTags;
 import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
 
 /**
  * An actor capable of drawing {@link IColoredString}s. It is lines-oriented:
- * putting a line erases the previous line. It is designed for panels to write
- * text with a serif font (where {@link SquidPanel} is less appropriate if you
- * want tight serif display).
+ * putting a line may erase a line put before. It is designed to write text with
+ * a serif font (as opposed to {@link SquidPanel}). It performs line wrapping by
+ * default. It can write from top to bottom or from bottom to top (the default).
  * 
  * <p>
  * This
- * <a href="https://twitter.com/hgamesdev/status/709147572548575233">tweet</a>
+ * <a href="https://twitter.com/hgamesdev/status/736091292132724736">tweet</a>
  * shows an example. The panel at the top of the screenshot is implemented using
- * this class.
+ * this class (with {@link #drawBottomUp} being {@code true}).
  * </p>
  * 
  * <p>
@@ -35,254 +37,236 @@ import squidpony.panel.IMarkup;
  * brogue's messages area).
  * </p>
  * 
- * <p>
- * The usual manner in which this panel is used is with the
- * {@link #put(int, int, IColoredString)} method, using {@code 0} as the first
- * parameter, and making {@code y} vary to display on different lines.
- * </p>
- * 
  * @author smelC
+ * @param <T>
  * 
  * @see SquidMessageBox An alternative, doing similar lines-drawing business,
  *      but being backed up by {@link SquidPanel}.
  */
 public class LinesPanel<T extends Color> extends Actor {
 
+	/** The markup used to typeset {@link #content}. */
 	protected final IMarkup<T> markup;
 
-	public final BitmapFont font;
+	/** The font used to draw {@link #content}. */
+	protected final BitmapFont font;
 
-	/** The number of (vertical) lines that this panel covers */
-	public final int vlines;
+	/** What to display. Doesn't contain {@code null} entries. */
+	protected final LinkedList<IColoredString<T>> content;
 
-	protected boolean gdxYStyle = false;
-
-	protected final T defaultTextColor;
-	protected final T bgColor;
-
-	protected final Map<Integer, ToDraw<T>> yToLine;
-
-	/** The offset applied when drawing */
-	protected int yoffset = 0;
-
-	/** The color center to filter colors, or {@code null}. */
-	protected /* @Nullable */ IColorCenter<T> colorCenter;
-
-	public boolean clearBeforeDrawing = true;
+	/** The maximal size of {@link #content} */
+	protected final int maxLines;
 
 	/**
-	 * Lazily allocated, and kept in-between calls to
-	 * {@link #draw(Batch, float)} to avoid bloating the heap if drawing is done
-	 * at every frame.
+	 * The renderer used by {@link #clearArea(Batch)}. Do not access directly:
+	 * use {@link #getRenderer()} instead.
 	 */
-	private /* @Nullable */ ShapeRenderer renderer;
+	protected /* @Nullable */ ShapeRenderer renderer;
 
 	/**
-	 * <b>This call sets markup in {@code font}'s data.</b>
+	 * The horizontal offset to use when writing. If you aren't doing anything
+	 * weird, should be left to {@code 0}.
+	 */
+	public float xOffset = 0;
+
+	/**
+	 * The vertical offset to use when writing. If you aren't doing anything
+	 * weird, should be left to {@code 0}.
+	 */
+	public float yOffset = 0;
+
+	/**
+	 * If {@code true}, draws:
 	 * 
+	 * <pre>
+	 * ...
+	 * content[1]
+	 * content[0]
+	 * </pre>
+	 * 
+	 * If {@code false}, draws:
+	 * 
+	 * <pre>
+	 * content[0]
+	 * content[1]
+	 * ...
+	 * </pre>
+	 */
+	public boolean drawBottomUp = false;
+
+	/**
+	 * The color to use to clear the screen before drawing. Set it to
+	 * {@code null} if you clean on your own.
+	 */
+	public Color clearingColor = Color.BLACK;
+
+	/* Now comes the usual libgdx options */
+
+	/** Whether to wrap text */
+	public boolean wrap = true;
+
+	/** The alignment used when typesetting */
+	public int align = Align.left;
+
+	/**
 	 * @param markup
-	 *            The markup to use
+	 *            The markup to use, or {@code null} if none. You likely want to
+	 *            give {@link GDXMarkup}. If non-{@code null}, markup will be
+	 *            enabled in {@code font}.
 	 * @param font
 	 *            The font to use.
-	 * @param pixelwidth
-	 *            The width (in pixels) that {@code this} must have.
-	 * @param pixelheight
-	 *            The height (in pixels) that {@code this} must have.
-	 * @param defaultTextColor
-	 *            The color to use when buckets of {@link IColoredString}
-	 *            contains {@code null} for the color.
-	 * @param bgColor
-	 *            The background color to use.
+	 * @param maxLines
+	 *            The maximum number of lines that this panel should display.
+	 *            Must be {@code >= 0}.
+	 * @throws IllegalStateException
+	 *             If {@code maxLines < 0}
 	 */
-	public LinesPanel(IMarkup<T> markup, BitmapFont font, int pixelwidth, int pixelheight, T bgColor,
-			T defaultTextColor) {
+	public LinesPanel(/* @Nullable */ IMarkup<T> markup, BitmapFont font, int maxLines) {
 		this.markup = markup;
-		font.getData().markupEnabled |= true;
 		this.font = font;
-
-		this.vlines = (int) Math.floor(pixelheight / font.getLineHeight());
-		this.defaultTextColor = defaultTextColor;
-		this.bgColor = bgColor;
-		this.yToLine = new HashMap<Integer, ToDraw<T>>();
-
-		setWidth(pixelwidth);
-		setHeight(pixelheight);
+		if (markup != null)
+			this.font.getData().markupEnabled |= true;
+		this.content = new LinkedList<IColoredString<T>>();
+		if (maxLines < 0)
+			throw new IllegalStateException("The maximum number of lines in an instance of "
+					+ getClass().getSimpleName() + " must be greater or equal than zero");
+		this.maxLines = maxLines;
 	}
 
 	/**
-	 * Writes {@code c} at (x, y).
-	 * 
-	 * @param x
-	 *            The x offset, in terms of width of a character in the font.
-	 * @param y
-	 *            The y offset, in terms of the height of the font.
-	 * @param c
-	 *            What to write
-	 * @param color
-	 *            The color to use. Can be {@code null}.
+	 * @param font
+	 * @param height
+	 * @return The last argument to give to
+	 *         {@link #WrappingLinesPanel(IMarkup, BitmapFont, int)} when the
+	 *         desired <b>pixel</b> height is {@code height}
 	 */
-	public void put(int x, int y, char c, /* @Nullable */ T color) {
-		final IColoredString<T> buf = IColoredString.Impl.<T> create();
-		buf.append(c, color);
-		put(x, y, buf);
+	public static int computeMaxLines(BitmapFont font, float height) {
+		return MathUtils.ceil(height / font.getData().lineHeight);
 	}
 
 	/**
-	 * Writes {@code string} at (x, y).
+	 * Adds {@code ics} first in {@code this}, possibly removing the last entry,
+	 * if {@code this}' size would grow over {@link #maxLines}.
 	 * 
-	 * @param x
-	 *            The x offset, in terms of width of a character in the font.
-	 * @param y
-	 *            The y offset, in terms of the height of the font.
-	 * @param string
-	 *            What to write
-	 * @param color
-	 *            The color to use. Can be {@code null}.
-	 */
-	public void put(int x, int y, String string, /* @Nullable */ T color) {
-		final IColoredString<T> buf = IColoredString.Impl.<T> create();
-		buf.append(string, color);
-		put(x, y, buf);
-	}
-
-	/**
-	 * Writes {@code ics} at (x, y).
-	 * 
-	 * @param x
-	 *            The x offset, in terms of width of a character in the font.
-	 * @param y
-	 *            The y offset, in terms of the height of the font.
 	 * @param ics
-	 *            What to write
 	 */
-	public void put(int x, int y, IColoredString<T> ics) {
-		if (vlines <= y) {
-			Gdx.app.log(SquidTags.LAYOUT, getClass().getSimpleName() + "'s height is " + vlines + " cell"
-					+ (vlines == 1 ? "" : "s") + ", but it is receiving a request to draw at height " + y);
-			return;
-		}
-		yToLine.put(gdxYStyle ? vlines - y : y, new ToDraw<T>(x, ics));
+	public void addFirst(IColoredString<T> ics) {
+		if (ics == null)
+			throw new NullPointerException("Adding a null entry is forbidden");
+		if (atMax())
+			content.removeLast();
+		content.addFirst(ics);
 	}
 
 	/**
-	 * You should not change this value while text has been drawn already. It
-	 * should not be changed after allocating {@code this}. By default it is
-	 * {@code false}.
+	 * Adds {@code ics} last in {@code this}, possibly removing the last entry,
+	 * if {@code this}' size would grow over {@link #maxLines}.
 	 * 
-	 * @param b
-	 *            {@code true} for {@code y=0} to be the bottom (gdx-style).
-	 *            {@code false} for {@code y=0} to be the top (squidlib-style).
+	 * @param ics
 	 */
-	public void setGdxYStyle(boolean b) {
-		this.gdxYStyle = b;
-	}
-
-	/**
-	 * @return The y offset applied to every drawing.
-	 */
-	public int getYOffset() {
-		return yoffset;
-	}
-
-	/**
-	 * Use that if you wanna draw top-aligned, or bottom-aligned, or are doing
-	 * funky stuff.
-	 * 
-	 * @param offset
-	 *            The offset to apply to every drawing (can be negative).
-	 */
-	public void setYOffset(int offset) {
-		this.yoffset = offset;
+	public void addLast(IColoredString<T> ics) {
+		if (ics == null)
+			throw new NullPointerException("Adding a null entry is forbidden");
+		if (atMax())
+			content.removeLast();
+		content.addLast(ics);
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		if (clearBeforeDrawing) {
+		clearArea(batch);
+
+		final float width = getWidth();
+
+		final BitmapFontData data = font.getData();
+		final float lineHeight = data.lineHeight;
+
+		final float height = getHeight();
+
+		final float x = getX() + xOffset;
+		float y = getY() + (drawBottomUp ? lineHeight : height) - data.descent + yOffset;
+
+		final ListIterator<IColoredString<T>> it = content.listIterator();
+		int ydx = 0;
+		float consumed = 0;
+		while (it.hasNext()) {
+			final IColoredString<T> ics = it.next();
+			final String str = toDraw(ics, ydx);
+			/* Let's see if the drawing would go outside this Actor */
+			final BitmapFontCache cache = font.getCache();
+			cache.clear();
+			final GlyphLayout glyph = cache.addText(str, 0, y, width, align, wrap);
+			if (height < consumed + glyph.height)
+				/* We would draw outside this Actor's bounds */
+				break;
+			final int increaseAlready;
+			if (drawBottomUp) {
+				/*
+				 * If the text span multiple lines and we draw bottom-up, we
+				 * must go up *before* drawing.
+				 */
+				final int nbLines = MathUtils.ceil(glyph.height / lineHeight);
+				if (1 < nbLines) {
+					increaseAlready = nbLines - 1;
+					y += increaseAlready * lineHeight;
+				} else
+					increaseAlready = 0;
+			} else
+				increaseAlready = 0;
+			/* Actually draw */
+			font.draw(batch, str, x, y, width, align, wrap);
+			y += (drawBottomUp ? /* Go up */ 1 : /* Go down */ -1) * glyph.height;
+			y -= increaseAlready * lineHeight;
+			consumed += glyph.height;
+			ydx++;
+		}
+	}
+
+	/**
+	 * Paints this panel with {@link #clearingColor}
+	 */
+	protected void clearArea(Batch batch) {
+		if (clearingColor != null) {
 			batch.end();
-
-			clearArea(bgColor);
-
+			UIUtil.drawRectangle(getRenderer(), getX(), getY(), getWidth(), getHeight(), ShapeType.Filled,
+					clearingColor);
 			batch.begin();
 		}
-
-		final float charwidth = font.getSpaceWidth();
-		final float charheight = font.getLineHeight();
-		final float x = getX();
-		final float y = getY() + (charheight / 2);
-
-		/*
-		 * Do not fetch memory (field read) at every loop roll, you're not
-		 * supposed to change #yoffset in the middle of this call anyway.
-		 */
-		final int yoff = yoffset;
-
-		for (Map.Entry<Integer, ToDraw<T>> yAndLine : yToLine.entrySet()) {
-			final ToDraw<T> todraw = yAndLine.getValue();
-			final int key = yAndLine.getKey();
-			final float xdest = x + (todraw.x * charwidth);
-			final float ydest = y + (key * charheight) + charheight + yoff;
-			final IColoredString<T> shown = colorCenter == null ? todraw.ics : colorCenter.filter(todraw.ics);
-			font.draw(batch, shown.presentWithMarkup(markup), xdest, ydest);
-		}
 	}
 
-	public void dispose() {
-		if (renderer != null)
-			renderer.dispose();
+	protected boolean atMax() {
+		return content.size() == maxLines;
+
+	}
+
+	protected String toDraw(IColoredString<T> ics, int ydx) {
+		return applyMarkup(transform(ics, ydx));
+	}
+
+	protected String applyMarkup(IColoredString<T> ics) {
+		if (ics == null)
+			return null;
+		else
+			return markup == null ? ics.toString() : ics.presentWithMarkup(markup);
 	}
 
 	/**
-	 * @param cc
-	 *            The color center to use. Used to change the font color using
-	 *            {@link IColorCenter#filter(Object)}.
-	 */
-	public void setColorCenter(IColorCenter<T> cc) {
-		this.colorCenter = cc;
-	}
-
-	/**
-	 * Paints this panel with {@code color}.
+	 * If you want to grey out "older" messages, you would do it in this method,
+	 * when {@code ydx > 0} (using an {@link IColorCenter} maybe ?).
 	 * 
-	 * @param color
+	 * @param ics
+	 * @param ydx
+	 *            The index of {@link #ics} within {@link #content}.
+	 * @return A variation of {@code ics}, or {@code ics} itself.
 	 */
-	public void clearArea(T color) {
-		UIUtil.drawRectangle(getX(), getY(), getWidth(), getHeight(), ShapeType.Filled, color);
-		if (renderer == null) {
+	protected IColoredString<T> transform(IColoredString<T> ics, int ydx) {
+		return ics;
+	}
+
+	protected ShapeRenderer getRenderer() {
+		if (renderer == null)
 			renderer = new ShapeRenderer();
-			renderer.setColor(color);
-		} else
-			renderer.setColor(color);
-		renderer.begin(ShapeType.Filled);
-		renderer.rect(getX(), getY(), getWidth(), getHeight());
-		renderer.end();
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + " vlines:" + vlines + " fontwidth:" + font.getSpaceWidth() + " fontheight:"
-				+ font.getLineHeight();
-	}
-
-	/**
-	 * @author smelC
-	 * 
-	 * @param <T>
-	 *            The type of color
-	 */
-	protected static class ToDraw<T> {
-
-		final int x;
-		final IColoredString<T> ics;
-
-		ToDraw(int x, IColoredString<T> ics) {
-			this.x = x;
-			this.ics = ics;
-		}
-
-		@Override
-		public String toString() {
-			return (x == 0 ? "" : (">" + x + " ")) + ics.toString();
-		}
+		return renderer;
 	}
 
 }
