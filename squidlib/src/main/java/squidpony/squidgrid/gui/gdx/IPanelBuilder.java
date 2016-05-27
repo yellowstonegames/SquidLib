@@ -27,7 +27,7 @@ public interface IPanelBuilder {
 	 * @return A screen wide squid panel, margins-aware, and with its position
 	 *         set.
 	 */
-	public SquidPanel buildScreenWide(int screenWidth, int screenHeight, int desiredCellSize,
+	SquidPanel buildScreenWide(int screenWidth, int screenHeight, int desiredCellSize,
 			/* @Nullable */ TextCellFactory tcf);
 
 	/**
@@ -45,7 +45,7 @@ public interface IPanelBuilder {
 	 *            The text cell factory to use, if any.
 	 * @return A freshly built panel.
 	 */
-	public SquidPanel buildByCells(int hCells, int vCells, int cellWidth, int cellHeight,
+	SquidPanel buildByCells(int hCells, int vCells, int cellWidth, int cellHeight,
 			/* @Nullable */ TextCellFactory tcf_);
 
 	/**
@@ -55,7 +55,7 @@ public interface IPanelBuilder {
 	 *         {@link #fontSizeForCellSize(int)} and {@link #hasFontOfSize(int)}
 	 *         ).
 	 */
-	public int adjustCellSize(int sz);
+	int adjustCellSize(int sz);
 
 	/**
 	 * Method to check whether increasing the cell size is possible.
@@ -63,7 +63,7 @@ public interface IPanelBuilder {
 	 * @param cellSize
 	 * @return {@code true} if {@code cellSize} is too big.
 	 */
-	public boolean cellSizeTooBig(int cellSize);
+	boolean cellSizeTooBig(int cellSize);
 
 	/**
 	 * Method to check whether decreasing the cell size is possible.
@@ -71,14 +71,14 @@ public interface IPanelBuilder {
 	 * @param cellSize
 	 * @return {@code true} if {@code cellSize} is too small.
 	 */
-	public boolean cellSizeTooSmall(int cellSize);
+	boolean cellSizeTooSmall(int cellSize);
 
 	/**
 	 * @param cellSize
 	 * @return Whether there's a font available for a cell of size
 	 *         {@code cellSize}.
 	 */
-	public boolean hasFontForCellOfSize(int cellSize);
+	boolean hasFontForCellOfSize(int cellSize);
 
 	/**
 	 * @param cellSize
@@ -86,20 +86,20 @@ public interface IPanelBuilder {
 	 *         Generally, it is {@code cellSize}; but it can be less in case
 	 *         glyphs are too large.
 	 */
-	public int fontSizeForCellSize(int cellSize);
+	int fontSizeForCellSize(int cellSize);
 
 	/**
 	 * @param sz
 	 * @return Whether a square font of size {@code sz} is available.
 	 */
-	public boolean hasFontOfSize(int sz);
+	boolean hasFontOfSize(int sz);
 
 	/**
 	 * A partial implementation of {@link IPanelBuilder}.
 	 * 
 	 * @author smelC
 	 */
-	public static abstract class Skeleton implements IPanelBuilder {
+	abstract class Skeleton implements IPanelBuilder {
 
 		@Override
 		public boolean hasFontForCellOfSize(int cellSize) {

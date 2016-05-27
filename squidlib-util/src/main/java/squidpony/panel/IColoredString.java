@@ -74,7 +74,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	/**
 	 * @return {@code true} if {@link #present()} is {@code ""}.
 	 */
-	public boolean isEmpty();
+	boolean isEmpty();
 
 	/**
 	 * @param width
@@ -108,7 +108,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * 
 	 * @return The color of the last bucket, if any.
 	 */
-	public /* @Nullable */ T lastColor();
+	/* @Nullable */ T lastColor();
 
 	/**
 	 * @param index
@@ -116,7 +116,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 * @throws NoSuchElementException
 	 *             If {@code index} equals or is greater to {@link #length()}.
 	 */
-	public /* @Nullable */ T colorAt(int index);
+	/* @Nullable */ T colorAt(int index);
 
 	/**
 	 * @return The length of text.

@@ -185,14 +185,63 @@ public interface IColorCenter<T> {
 	IColoredString<T> filter(IColoredString<T> ics);
 
 	/**
-	 * @param t
+	 * Gets a copy of t and modifies it to make a shade of gray with the same brightness.
+	 * The doAlpha parameter causes the alpha to be considered in the calculation of brightness and also changes the
+	 * returned alpha of the color.
+	 * Not related to reified types or any usage of "reify."
+	 * @param t a T to copy; only the copy will be modified
 	 * @param doAlpha
 	 *            Whether to include (and hereby change) the alpha component.
 	 * @return A monochromatic variation of {@code t}.
 	 */
 	T greify(/*@Nullable*/ T t, boolean doAlpha);
 
-	/**
+    /**
+     * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.
+     * @param start the initial color T
+     * @param end the "target" color T
+     * @param change the degree to change closer to end; a change of 0.0f produces start, 1.0f produces end
+     * @return a new T between start and end
+     */
+    T lerp(T start, T end, float change);
+    /**
+     * Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).
+     * Keeps alpha the same; if you want alpha to be considered (and brightness to be calculated differently), then
+     * you can use greify() in this class instead.
+     * @param color the color T to desaturate (will not be modified)
+     * @return the grayscale version of color
+     */
+    T desaturated(T color);
+
+    /**
+     * Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).
+     * Alpha is left unchanged.
+     * @param color the color T to desaturate
+     * @param degree a float between 0.0f and 1.0f; more makes it less colorful
+     * @return the desaturated (and if a filter is used, also filtered) new color T
+     */
+    T desaturate(T color, float degree);
+
+    /**
+     * Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.
+     * Leaves alpha unchanged.
+     * @param color the color T to saturate (will not be modified)
+     * @return the saturated version of color
+     */
+    T saturated(T color);
+
+
+    /**
+     * Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and
+     * returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this does
+     * not necessarily return a specific color, but most implementations will treat a hue of 0 as red.
+     * @param color the color T to saturate
+     * @param degree a float between 0.0f and 1.0f; more makes it more colorful
+     * @return the saturated (and if a filter is used, also filtered) new color
+     */
+    public T saturate(T color, float degree);
+
+    /**
 	 * A skeletal implementation of {@link IColorCenter}.
 	 * 
 	 * @author smelC
@@ -469,7 +518,16 @@ public interface IColorCenter<T> {
 				/* Only one allocation: the iterator, yay \o/ */
 				return ics;
 		}
-
+		/**
+		 * Gets a copy of t and modifies it to make a shade of gray with the same brightness.
+		 * The doAlpha parameter causes the alpha to be considered in the calculation of brightness and also changes the
+		 * returned alpha of the color.
+		 * Not related to reified types or any usage of "reify."
+		 * @param t a T to copy; only the copy will be modified
+		 * @param doAlpha
+		 *            Whether to include (and hereby change) the alpha component.
+		 * @return A monochromatic variation of {@code t}.
+		 */
 		@Override
 		public T greify(T t, boolean doAlpha) {
 			if (t == null)
@@ -493,7 +551,80 @@ public interface IColorCenter<T> {
 			return get(mean, mean, mean, newAlpha);
 		}
 
+		/**
+		 * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.
+         * This implementation tries to work with colors in a way that is as general as possible, using getRed() instead
+         * of some specific detail that depends on how a color is implemented. Other implementations that specialize in
+         * a specific type of color may be able to be more efficient.
+         * @param start the initial color T
+         * @param end the "target" color T
+         * @param change the degree to change closer to end; a change of 0.0f produces start, 1.0f produces end
+         * @return a new T between start and end
+		 */
+		public T lerp(T start, T end, float change)
+		{
+			if(start == null || end == null)
+				return null;
+			final int sr = getRed(start), sg = getGreen(start), sb = getBlue(start), sa = getAlpha(start),
+					er = getRed(end), eg = getGreen(end), eb = getBlue(end), ea = getAlpha(end);
+			return get(
+					(int)(sr + change * (er - sr)),
+					(int)(sg + change
+							* (eg - sg)),
+					(int)(sb + change * (eb - sb)),
+					(int)(sa + change * (ea - sa))
+			);
+		}
+		/**
+		 * Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).
+		 * Keeps alpha the same; if you want alpha to be considered (and brightness to be calculated differently), then
+		 * you can use greify() in this class instead.
+		 * @param color the color T to desaturate (will not be modified)
+		 * @return the grayscale version of color
+		 */
+		public T desaturated(T color)
+		{
+			int f = (int)Math.min(255, getRed(color) * 0.299f + getGreen(color) * 0.587f + getBlue(color) * 0.114f);
+			return get(f, f, f, getAlpha(color));
+		}
+
+		/**
+		 * Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).
+		 * Alpha is left unchanged.
+		 * @param color the color T to desaturate
+		 * @param degree a float between 0.0f and 1.0f; more makes it less colorful
+		 * @return the desaturated (and if a filter is used, also filtered) new color T
+		 */
+		public T desaturate(T color, float degree)
+		{
+			return lerp(color, desaturated(color), degree);
+		}
+
         /**
+         * Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.
+         * Leaves alpha unchanged.
+         * @param color the color T to saturate (will not be modified)
+         * @return the saturated version of color
+         */
+        public T saturated(T color)
+        {
+            return getHSV(getHue(color), 1f, getValue(color), getAlpha(color));
+        }
+		/**
+		 * Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and
+		 * returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this is
+		 * likely to produce a red hue by default (if there's no hue to make vivid, it needs to choose something).
+		 * @param color the color T to saturate
+		 * @param degree a float between 0.0f and 1.0f; more makes it more colorful
+		 * @return the saturated (and if a filter is used, also filtered) new color
+		 */
+		public T saturate(T color, float degree)
+		{
+			return lerp(color, saturated(color), degree);
+		}
+
+
+		/**
 		 * Create a concrete instance of the color type given as a type parameter. That's the
 		 * place to use the {@link #filter}.
 		 * 

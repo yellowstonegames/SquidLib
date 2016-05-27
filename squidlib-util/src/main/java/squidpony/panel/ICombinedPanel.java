@@ -121,21 +121,21 @@ public interface ICombinedPanel<T> {
 	 * @return Returns true if there are animations running when this method is
 	 *         called.
 	 */
-	public boolean hasActiveAnimations();
+	boolean hasActiveAnimations();
 
 	/**
 	 * Changes the underlying {@link IColorCenter}.
 	 * 
 	 * @param icc
 	 */
-	public void setColorCenter(IColorCenter<T> icc);
+	void setColorCenter(IColorCenter<T> icc);
 
 	/**
 	 * What to fill
 	 * 
 	 * @author smelC
 	 */
-	public static enum What {
+	enum What {
 		BG,
 		FG,
 		BG_AND_FG;
