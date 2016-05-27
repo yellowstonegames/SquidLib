@@ -54,7 +54,9 @@ public class SquidLayersTest extends ApplicationAdapter{
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
                 DefaultResources.getStretchableFont());
         layers.setTextSize(cellWidth, cellHeight+1);
-        colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
+        //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
+        colors = DefaultResources.getSCC().zigzagGradient(Color.RED, Color.PINK, 200);
+        colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.PINK, Color.RED, 200));
         layers.setLightingColor(colors.get(colorIndex));
         fov = new FOV(FOV.SHADOW);
         //PacMazeGenerator maze = new PacMazeGenerator(gridWidth, gridHeight, rng);
@@ -100,6 +102,8 @@ public class SquidLayersTest extends ApplicationAdapter{
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ctr += Gdx.graphics.getDeltaTime();
+        if(ctr > 0.1)
+            layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));
         if(ctr > 0.2) {
             ctr -= 0.2;
             lightness = new int[gridWidth][gridHeight];
@@ -132,7 +136,6 @@ public class SquidLayersTest extends ApplicationAdapter{
             }
         }
 
-        layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));
         layers.put(0, 0, displayedMap, indicesFG, indicesBG, lightness);
         stage.draw();
 
