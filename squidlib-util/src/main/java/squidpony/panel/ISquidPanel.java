@@ -146,7 +146,7 @@ public interface ISquidPanel<T> {
 	 * @param icc
 	 * @return {@code this}
 	 */
-	public ISquidPanel<T> setColorCenter(IColorCenter<T> icc);
+	ISquidPanel<T> setColorCenter(IColorCenter<T> icc);
 
 	/**
 	 * @return The panel doing the real job, i.e. an instance of

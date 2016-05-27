@@ -22,26 +22,26 @@ public interface Rectangle {
 	/**
 	 * @return The bottom left coordinate of the room.
 	 */
-	public Coord getBottomLeft();
+	Coord getBottomLeft();
 
 	/**
 	 * @return The room's width (from {@link #getBottomLeft()). It is greater or
 	 *         equal than 0.
 	 */
-	public int getWidth();
+	int getWidth();
 
 	/**
 	 * @return The room's height (from {@link #getBottomLeft()). It is greater
 	 *         or equal than 0.
 	 */
-	public int getHeight();
+	int getHeight();
 
 	/**
 	 * Utilities pertaining to {@link Room}
 	 * 
 	 * @author smelC
 	 */
-	public static class Utils {
+	class Utils {
 
 		/** A comparator that uses {@link #size(Rectangle)} as the measure. */
 		public static final Comparator<Rectangle> SIZE_COMPARATOR = new Comparator<Rectangle>() {
@@ -190,7 +190,7 @@ public interface Rectangle {
 	/**
 	 * @author smelC
 	 */
-	public static class Impl implements Rectangle {
+	class Impl implements Rectangle {
 
 		protected final Coord bottomLeft;
 		protected final int width;

@@ -69,6 +69,7 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      * @param change the degree to change closer to end; a change of 0.0f produces start, 1.0f produces end
      * @return a new Color
      */
+    @Override
     public Color lerp(Color start, Color end, float change)
     {
         if(start == null || end == null)
@@ -202,6 +203,7 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      * @param color the color to desaturate (will not be modified)
      * @return the grayscale version of color
      */
+    @Override
     public Color desaturated(Color color)
     {
         float f = color.r * 0.299f + color.g * 0.587f + color.b * 0.114f;
@@ -214,9 +216,22 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      * @param degree a float between 0.0f and 1.0f; more makes it less colorful
      * @return the desaturated (and if a filter is used, also filtered) new color
      */
+    @Override
     public Color desaturate(Color color, float degree)
     {
         return lerp(color, desaturated(color), degree);
+    }
+
+    /**
+     * Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.
+     * Leaves alpha unchanged.
+     *
+     * @param color the color T to saturate (will not be modified)
+     * @return the saturated version of color
+     */
+    @Override
+    public Color saturated(Color color) {
+        return getHSV(getHue(color), 1f, getValue(color), getAlpha(color));
     }
 
     /**
@@ -227,11 +242,10 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      * @param degree a float between 0.0f and 1.0f; more makes it more colorful
      * @return the saturated (and if a filter is used, also filtered) new color
      */
+    @Override
     public Color saturate(Color color, float degree)
     {
-        Color fully = getHSV(getHue(color), 1f, getValue(color));
-        fully.a = color.a;
-        return lerp(color, fully, degree);
+        return lerp(color, saturated(color), degree);
     }
     /**
      * Gets a fully random color that is only required to be opaque.
