@@ -1,14 +1,13 @@
 package squidpony.squidgrid.gui.gdx;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import squidpony.IColorCenter;
-import squidpony.SquidTags;
 
 /**
  * A SquidLib-aware partial implementation of {@link ScreenAdapter}. This is a
@@ -66,6 +65,8 @@ public abstract class AbstractSquidScreen<T extends Color> extends ScreenAdapter
 	protected boolean disposed = false;
 	protected boolean resized = false;
 
+	private ShapeRenderer renderer = null;
+
 	/**
 	 * Here's what the content of {@code ssi} must be:
 	 * 
@@ -105,6 +106,9 @@ public abstract class AbstractSquidScreen<T extends Color> extends ScreenAdapter
 			 * leaving in which case we don't care.
 			 */
 			clearScreen();
+
+			if (renderer != null)
+				renderer.dispose();
 
 			if (stage != null) {
 				stage.dispose();
@@ -245,9 +249,10 @@ public abstract class AbstractSquidScreen<T extends Color> extends ScreenAdapter
 
 	protected void clearScreen() {
 		final T c = getClearingColor();
-		Gdx.app.log(SquidTags.SCREEN, "Clearing the screen from (0,0) to (" + sizeManager.screenWidth + ","
-				+ sizeManager.screenHeight + ") with the following color: " + c);
-		UIUtil.drawRectangle(0, 0, sizeManager.screenWidth, sizeManager.screenHeight, ShapeType.Filled, c);
+		if (renderer == null)
+			renderer = new ShapeRenderer();
+		UIUtil.drawRectangle(renderer, 0, 0, sizeManager.screenWidth, sizeManager.screenHeight,
+				ShapeType.Filled, c);
 	}
 
 	/**
