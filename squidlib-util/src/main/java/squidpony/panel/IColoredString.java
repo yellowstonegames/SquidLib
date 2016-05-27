@@ -180,6 +180,16 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		}
 
 		/**
+		 * A convenience method, equivalent to {@code create(s, null)}.
+		 * 
+		 * @param s
+		 * @return {@code create(s, null)}
+		 */
+		public static <T> IColoredString.Impl<T> create(String s) {
+			return create(s, null);
+		}
+
+		/**
 		 * A static constructor, to avoid having to write {@code <T>} in the
 		 * caller.
 		 * 

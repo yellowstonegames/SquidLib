@@ -47,7 +47,7 @@ import java.util.List;
  * 
  * <pre>
  * final TextPanel<Color> tp = new TextPanel<>(new GDXMarkup(), font);
- * tp.init(screenHeight, screenWidth, text); <- first 2 params: for fullscreen
+ * tp.init(screenWidth, screenHeight, text); <- first 2 params: for fullscreen
  * final ScrollPane sp = tp.getScrollPane();
  * sp.setScrollPaneStyle(new ScrollPaneStyle(...)); <- set textures
  * stage.addActor(sp);
@@ -59,7 +59,7 @@ import java.util.List;
  * 
  * <p>
  * In addition to what {@link ScrollPane} does (knobs, handling of the wheel);
- * this class plugs srolling with arrow keys (up, down, page up, page down) and
+ * this class plugs scrolling with arrow keys (up, down, page up, page down) and
  * vim shortcuts (j/k).
  * </p>
  * 
