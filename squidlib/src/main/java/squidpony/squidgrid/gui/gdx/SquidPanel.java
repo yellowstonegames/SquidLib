@@ -338,11 +338,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void erase() {
         for (int i = 0; i < contents.length; i++) {
+            Arrays.fill(contents[i], "\0");
+            Arrays.fill(colors[i], Color.CLEAR);
+            /*
             for (int j = 0; j < contents[i].length; j++) {
-                contents[i][j] = "";
+                contents[i][j] = "\0";
                 colors[i][j] = Color.CLEAR;
             }
-
+            */
         }
     }
 
@@ -883,7 +886,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
         addActor(a);
 
-        contents[x][y] = "";
+        //contents[x][y] = "";
         return a;
     }
 
@@ -915,12 +918,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     */
     public void recallActor(Actor a)
     {
+        animationCount--;
         int x = Math.round((a.getX() - getX()) / cellWidth),
-             y = gridHeight - Math.round((a.getY() - getY()) / cellHeight) - 1;
+             y = gridHeight - (int)((a.getY() - getY()) / cellHeight) - 1;
         if(x < 0 || y < 0 || x >= contents.length || y >= contents[x].length)
             return;
         contents[x][y] = a.getName();
-        animationCount--;
         removeActor(a);
     }
     public void recallActor(AnimatedEntity ae)
@@ -929,7 +932,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             ae.gridX = Math.round((ae.actor.getX() - getX()) / (2 * cellWidth));
         else
             ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth);
-        ae.gridY = gridHeight - Math.round((ae.actor.getY() - getY()) / cellHeight) - 1;
+        ae.gridY = gridHeight - (int)((ae.actor.getY() - getY()) / cellHeight) - 1;
         ae.animating = false;
         animationCount--;
     }
@@ -1202,7 +1205,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public void tint(final AnimatedEntity ae, Color color, float duration) {
         final Actor a = ae.actor;
-        if(a == null || ae.animating)
+        if(a == null)
             return;
         duration = clampDuration(duration);
         ae.animating = true;
@@ -1246,12 +1249,20 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             a.addAction(Actions.sequence(
                     Actions.color(color, duration * 0.3f),
                     Actions.color(ac, duration * 0.7f),
-                    Actions.run(new Runnable() {
+                    Actions.delay(0.0f, Actions.run(new Runnable() {
                         @Override
                         public void run() {
                             recallActor(a);
                         }
-                    })));
+                    }))));
+        /*
+        Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            recallActor(a);
+                        }
+                    })
+         */
                 /*Actions.run(new Runnable() {
                     @Override
                     public void run() {

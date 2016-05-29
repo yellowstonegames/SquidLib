@@ -689,7 +689,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
     public void putMap()
     {
-        boolean overlapping = false;
+        boolean overlapping;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 overlapping = monsters.containsPosition(Coord.get(i,j)) || (player.gridX == i && player.gridY == j);
@@ -746,6 +746,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // if the user clicked, we have a list of moves to perform.
         if(!awaitedMoves.isEmpty())
         {
+
             // extremely similar to the block below that also checks if animations are done
             // this doesn't check for input, but instead processes and removes Points from awaitedMoves.
             if(!display.hasActiveAnimations()) {

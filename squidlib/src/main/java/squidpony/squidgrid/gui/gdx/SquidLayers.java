@@ -1251,8 +1251,8 @@ public class SquidLayers extends Group {
         return this;
     }
     /**
-     * Erase everything visible in all cells or all layers.  This can be expensive to do in a traditional game loop,
-     * since Swing is not meant for that at all.
+     * Erase everything visible in all cells or all layers.  This is not at all expensive to do compared to the
+     * pre-SquidLib-3.0.0 version of this method that used Swing and took a long time to erase.
      *
      * @return this, for chaining
      */
