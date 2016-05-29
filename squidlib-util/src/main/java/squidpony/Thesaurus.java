@@ -328,6 +328,8 @@ public class Thesaurus implements Serializable{
             makeList("cyber", "digital", "electronic", "techno", "hacker", "crypto", "turbo", "mechanical", "servo"),
             "sole`adj`",
             makeList("sole", "true", "singular", "total", "ultimate", "final"),
+            "light`adj`",
+            makeList("bright", "glowing", "solar", "stellar", "lunar", "radiant", "luminous", "shimmering"),
             "light`noun`",
             makeList("light", "glow", "sun", "star", "moon", "radiance", "dawn", "torch"),
             "light`nouns`",
