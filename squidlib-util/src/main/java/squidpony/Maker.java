@@ -3,6 +3,7 @@ package squidpony;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 /**
  * Utility methods for more easily constructing data structures, particularly those in Java's standard library.
@@ -77,12 +78,33 @@ public class Maker {
         return new LinkedHashMap<>();
     }
 
+    /**
+     * Makes an ArrayList of T given an array or vararg of T elements.
+     * @param elements an array or vararg of T
+     * @param <T> just about any non-primitive type
+     * @return a newly-allocated ArrayList containing all of elements, in order
+     */
     @SafeVarargs
     public static <T> ArrayList<T> makeList(T... elements) {
         if(elements == null) return null;
         ArrayList<T> list = new ArrayList<>(elements.length);
         Collections.addAll(list, elements);
         return list;
+    }
+
+    /**
+     * Makes a LinkedHashSet (LHS) of T given an array or vararg of T elements. Duplicate items in elements will have
+     * all but one item discarded, using the later item in elements.
+     * @param elements an array or vararg of T
+     * @param <T> just about any non-primitive type
+     * @return a newly-allocated LinkedHashSet containing all of the non-duplicate items in elements, in order
+     */
+    @SafeVarargs
+    public static <T> LinkedHashSet<T> makeLHS(T... elements) {
+        if(elements == null) return null;
+        LinkedHashSet<T> set = new LinkedHashSet<>(elements.length);
+        Collections.addAll(set, elements);
+        return set;
     }
 
 }
