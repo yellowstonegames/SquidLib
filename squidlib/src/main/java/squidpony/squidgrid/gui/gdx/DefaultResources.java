@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import squidpony.squidmath.StatefulRNG;
@@ -35,6 +36,7 @@ public class DefaultResources implements LifecycleListener {
             unicode1 = null, unicode2 = null;
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null;
+    private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
             unicodeName = "Mandrill-6x16.fnt",
@@ -452,6 +454,33 @@ public class DefaultResources implements LifecycleListener {
         return instance.tentacleRegion;
     }
 
+
+    /**
+     * Gets a TextureAtlas containing many icons with a distance field effect applied, allowing them to be used with
+     * "stretchable" fonts and be resized in the same way. These will not look as-expected if stretchable fonts are not
+     * in use, and will seem hazy and indistinct if the shader hasn't been set up for a distance field effect by
+     * TextCellFactory (which stretchable fonts will do automatically). The one page of the TextureAtlas is 2048x2048,
+     * which may be too large for some old, low-end Android phones, and possibly integrated graphics with fairly old
+     * processors on desktop. It has over 2000 icons.
+     * <br>
+     * The icons are CC-BY and the license is distributed with them, though the icons are not necessarily included with
+     * SquidLib. If you use the icon atlas, be sure to include icons-license.txt with it and reference it with your
+     * game's license and/or credits information.
+     * @return a TextureAtlas containing over 2000 icons with a distance field effect
+     */
+    public static TextureAtlas getIconAtlas()
+    {
+        initialize();
+        if(instance.iconAtlas == null)
+        {
+            try {
+                instance.iconAtlas = new TextureAtlas(Gdx.files.internal("icons.atlas"));
+            } catch (Exception ignored) {
+            }
+        }
+        return instance.iconAtlas;
+    }
+
     /**
      * This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any
      * changes to this RNG's state will not change behavior elsewhere in the program; this means the GUI mainly.
@@ -579,6 +608,10 @@ public class DefaultResources implements LifecycleListener {
         if(tentacle != null) {
             tentacle.dispose();
             tentacle = null;
+        }
+        if(iconAtlas != null) {
+            iconAtlas.dispose();
+            iconAtlas = null;
         }
     }
 
