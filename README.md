@@ -190,13 +190,23 @@ Current Features:
     - LanguageCipher can use FakeLanguageGen to produce deterministic "translations" of a source text into a fake language, and then allows deciphering with a vocabulary that the player character might learn over time
   - Only a few places in SquidLib make heavy use of regular expressions, but there's no support for the standard library's regex package on GWT for targeting HTML
     - This is why the RegExodus project was formed, and SquidLib depends on this small lib to allow FakeLanguageGen, LanguageCipher, and Dice to work on HTML
+- Now another beta, 3.0.0-b6.
+  - Primarily a bugfix release, but also has some new features
+  - MimicFill is a port of [ConvChain](https://github.com/mxgmn/ConvChain) and allows a square boolean 2D array to be used as a "stylistic basis" for filling an unlimited region with an imitation of the original square's style
+  - Thesaurus allows replacement of words with their synonyms for procedural text, or replacement of special keywords with one of a list of words in a thematic field, like "plural nouns referring to empires, kingdoms, dynasties, or similar large nations"
+  - More color stuff, including saturation modifying methods in IColorCenter and all its implementations, plus an odd gradient type that varies more in SquidColorCenter
+  - Improvements to FakeLanguageGen, including more languages it can imitate and better handling of modifiers
+  - Improvements to LanguageCipher as well, allowing library users to choose how much to cache, or to make it so a single fake word virtually-never can be generated as the translation for multiple source words
+  - LinesPanel is simpler, allows line wrapping, and a choice of vertical direction for line layout
+  - Over 2000 icons from http://game-icons.net added to the optional assets download, with a distance field effect applied so they can be used along with "stretchable" fonts, and all this put in a texture atlas for efficient lookup
+  - Various other small improvements, like RNG and RandomnessSource allowing all their variants to be copied with `copy()`, GapShuffler being added (used in Thesaurus to ensure the same word doesn't show up twice in rapid succession, which repeated loops through sequences shuffled with `RNG.shuffle()` can't guarantee), and Maker being added to help construction of cumbersome objects, like a LinkedHashMap, with one method call
 - But, 3.0.0's final release will be major, and so should be expected to *break* API backwards compatibility
   - Any minor releases after 3.0.0 and before 4.0.0 should be expected to *keep* API backwards compatibility, unless a feature is broken or unusable
   - The most significant change in 3.0.0 will be the removal of the Swing-based rendering and full transition to the similar, but much faster and more responsive, libGDX renderer
   - 3.0.0-b1 is the last release to contain Swing. If you're porting code that used an earlier version of SquidLib and need Swing for some reason, you may want to stay with the largely-compatible 2.9.1 instead of the very-different 3.0.0-b1.
     - This should also enable SquidLib to be used for rendering on Android/iOS and not only the desktop platforms Swing is limited to
   - There is now a tool that sets up a project for people who want an easy way to handle the dependencies of SquidLib and/or libGDX
-    - We now have SquidSetup to automatically handle the setup of a new project that uses SquidLib 3.0.0-b3, including fetching dependencies automatically and setting up a project that potentially targets both desktop and Android, potentially HTML, and possibly iOS as well.
+    - We now have SquidSetup to automatically handle the setup of a new project that uses SquidLib 3.0.0-b6, including fetching dependencies automatically and setting up a project that potentially targets both desktop and Android, potentially HTML, and ~~possibly iOS as well~~ iOS is currently in a bit of a chaotic state with RoboVM's changes, and isn't recommended.
     - If you already use Maven, Gradle, SBT, Leiningen, or some other dependency manager, upgrading should be easier to the 3.0.0 series
     - If you don't, you should, and SquidSetup should handle the hard parts for you.
   - If you use SquidLib's latest version as of April 12, the assets have been moved out of the `squidlib` jar, making the download size smaller, but a freshly-updated SquidSetup has all the latest assets
@@ -208,8 +218,8 @@ Download
 
 Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your choice of features, or simply use SquidSetup to make a new project configured the way libGDX prefers to work, and copy in any code you might already have.
 
-Ideally, if you're just starting out you should use SquidSetup. Beta 5 has been added to SquidSetup.
-This is [the most recent, beta 5, release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b5);
+Ideally, if you're just starting out you should use SquidSetup. Beta 6 has been added to SquidSetup.
+This is [the most recent, beta 6, release of the setup tool](https://github.com/SquidPony/SquidLib/releases/tag/v3.0.0-b6);
 that version is no longer discouraged like beta 3 was.
 This is [the new snapshot setup tool](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST), which is
 good if you already understand Gradle, but especially if you want to test new features/fixes as they come in. It
@@ -218,7 +228,8 @@ change that version to the latest commit if you want to use more recent code bet
 
 Work is under way to support SquidLib as a third-party extension for [gdx-setup](https://github.com/czyzby/gdx-setup),
 an alternative to the current official libGDX setup that aims to have more features and update more readily. This may
-soon replace SquidSetup.
+soon replace SquidSetup. The gdx-setup project also allows demo code to be more easily supplied, and some demos are in
+progress for SquidLib.
 
 More information is available on the wiki here on Github, at the page on [Project Setup](https://github.com/SquidPony/SquidLib/wiki/Project-Setup).
 
