@@ -11,19 +11,36 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import squidpony.squidmath.StatefulRNG;
 
 /**
- * Default BitmapFonts, a sample image, and a central RNG for use with LibGDX.
+ * Default BitmapFonts, a sample image, "stretchable" fonts and icons, and a central RNG for use with LibGDX.
  * The fonts provided are all monospaced, with most looking rather similar (straight orthogonal lines and right-angle
- * curves), but the one that looks... better than the rest (Inconsolata-LGC, accessible by getSmoothFont(),
+ * curves), but one that looks... better than the rest (Inconsolata-LGC, accessible by getSmoothFont(),
  * getLargeSmoothFont(), or as a distance field font that smoothly scales with getStretchableFont() or a square variant
- * with getStretchableSquareFont()) also supports Greek and Cyrillic, and is the only one to do so. If you can't decide,
- * go with getStretchableFont() or getStretchableSquareFont(), which return TextCellFactory objects.
- *
- * The most Latin script support is in the font Mandrill, accessible by getDefaultUnicodeFont() and
- * getLargeUnicodeFont() in two different sizes, and the latter should be suitable for everything from Spanish and
- * French, to Polish to Vietnamese.
+ * with getStretchableSquareFont()) also supports Greek and Cyrillic, and is one of a few to do so.
+ * getStretchableTypewriterFont() is a nice alternative to the other monospaced fonts, with a chunky, ornamented style.
+ * getStretchablePrintFont() and getStretchableCleanFont() are non-monospaced fonts for use in LinesPanel and other
+ * places that can use variable-width fonts (you can still use fixed-width ones, but square fonts probably won't look
+ * good).
+ * <br>
+ * If you can't decide, go with getStretchableFont() or getStretchableSquareFont(), which return TextCellFactory
+ * objects, and call their .width(int), .height(int), and .initBySize() methods to make them the size (and aspect ratio)
+ * you want. You can use getStretchableFont() or getStretchableTypewriterFont() with the same width and height to make
+ * a horizontally-stretched version of a square font instead of the existing square fonts that add blank space.
+ * <br>
+ * The most Latin script support for a monospaced font is in the font Mandrill, accessible by getDefaultUnicodeFont()
+ * and getLargeUnicodeFont() in two different sizes, and the latter should be suitable for everything from Spanish and
+ * French, to Polish to Vietnamese. You can use Gentium for even better language support with a variable-width font in
+ * LinesPanel or the like; it is accessible with getStretchablePrintFont(). Google's Noto font also supports many glyphs
+ * in a variable-width format; it is accessible with getStretchableCleanFont() but may have some issues with baseline
+ * level changing and character-to-character alignment seeming too high or low.
  * <br>
  * The sample image is a tentacle taken from a public domain icon collection graciously released by Henrique Lazarini;
  * it's fitting for SquidLib to have a tentacle as a logo or something, I guess?
+ * <br>
+ * The icons are from http://game-icons.net , there are over 2000 of them, and they're among the only images that should
+ * both be recolor-able easily (like chars in a font) and resize-able easily if you use a stretchable font at the same
+ * time. The stretchable font TextCellFactories do some work with shaders that makes most images look incorrect, but
+ * allow distance field fonts and these distance field icons to resize smoothly. Mixing stretchable fonts with
+ * non-stretchable images or fonts is not a great idea, and usually involves a slow shader change back and forth.
  * <br>
  * You can get a default RNG with getGuiRandom(); this should probably not be reused for non-GUI-related randomness,
  * but is meant instead to be used wherever randomized purely-aesthetic effects are needed, such as a jiggling effect.
