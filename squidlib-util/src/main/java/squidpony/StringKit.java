@@ -96,6 +96,21 @@ public class StringKit {
         }
         return new String(chars);
     }
+    public static CharSequence encode(float[] data)
+    {
+        if(data == null)
+            return "";
+        int len = data.length * 4, item;
+        char[] chars = new char[len];
+        for (int i = 0, c = 0; c < len; i++, c += 4) {
+            item = Float.floatToIntBits(data[i]);
+            chars[c] = (char) ((item & 0xff) | 0x2800);
+            chars[c+1] = (char)(((item >>> 8)  & 0xff) | 0x2800);
+            chars[c+2] = (char)(((item >>> 16) & 0xff) | 0x2800);
+            chars[c+3] = (char)(((item >>> 24) & 0xff) | 0x2800);
+        }
+        return new String(chars);
+    }
     public static CharSequence encode(long[] data)
     {
         if(data == null)
@@ -154,6 +169,22 @@ public class StringKit {
                     | ((data.charAt(i * 4 + 3) & 0xff) << 24));
         }
         return ints;
+    }
+
+    public static float[] decodeFloats(CharSequence data)
+    {
+        if(data == null)
+            return new float[0];
+        int len = data.length() / 4, tmp;
+        float[] floats = new float[len];
+        for (int i = 0; i < len; i++) {
+            tmp = ((data.charAt(i * 4) & 0xff)
+                    | ((data.charAt(i * 4 + 1) & 0xff) << 8)
+                    | ((data.charAt(i * 4 + 2) & 0xff) << 16)
+                    | ((data.charAt(i * 4 + 3) & 0xff) << 24));
+            floats[i] = Float.intBitsToFloat(tmp);
+        }
+        return floats;
     }
     public static long[] decodeLongs(CharSequence data)
     {
@@ -216,6 +247,20 @@ public class StringKit {
         return sb;
     }
 
+    public static CharSequence encode(float[][] data)
+    {
+        if(data == null || data.length == 0)
+            return ";";
+        StringBuilder sb = new StringBuilder(256);
+        sb.append(encode(data[0]));
+        for (int i = 1; i < data.length; i++) {
+            sb.append('\t');
+            sb.append(encode(data[i]));
+        }
+        sb.append(';');
+        return sb;
+    }
+
     public static CharSequence encode(long[][] data)
     {
         if(data == null || data.length == 0)
@@ -229,7 +274,68 @@ public class StringKit {
         sb.append(';');
         return sb;
     }
-    private static final Pattern decoder2D = Pattern.compile("(?:([^\t;]*)[\t;])+?", 0);
+
+    public static CharSequence encode(byte[][][] data)
+    {
+        if(data == null || data.length == 0)
+            return "#";
+        StringBuilder sb = new StringBuilder(512);
+        for (int i = 0; i < data.length; i++) {
+            sb.append(encode(data[i]));
+        }
+        sb.append('#');
+        return sb;
+    }
+
+    public static CharSequence encode(short[][][] data)
+    {
+        if(data == null || data.length == 0)
+            return "#";
+        StringBuilder sb = new StringBuilder(1024);
+        for (int i = 0; i < data.length; i++) {
+            sb.append(encode(data[i]));
+        }
+        sb.append('#');
+        return sb;
+    }
+
+    public static CharSequence encode(int[][][] data)
+    {
+        if(data == null || data.length == 0)
+            return "#";
+        StringBuilder sb = new StringBuilder(1024);
+        for (int i = 0; i < data.length; i++) {
+            sb.append(encode(data[i]));
+        }
+        sb.append('#');
+        return sb;
+    }
+
+    public static CharSequence encode(float[][][] data)
+    {
+        if(data == null || data.length == 0)
+            return "#";
+        StringBuilder sb = new StringBuilder(1024);
+        for (int i = 0; i < data.length; i++) {
+            sb.append(encode(data[i]));
+        }
+        sb.append('#');
+        return sb;
+    }
+
+    public static CharSequence encode(long[][][] data)
+    {
+        if(data == null || data.length == 0)
+            return "#";
+        StringBuilder sb = new StringBuilder(1024);
+        for (int i = 0; i < data.length; i++) {
+            sb.append(encode(data[i]));
+        }
+        sb.append('#');
+        return sb;
+    }
+    private static final Pattern decoder2D = Pattern.compile("(?:([^\t;]*)[\t;])+?", 0),
+            decoder3D = Pattern.compile("([^;]*;)#?", 0);
     public static byte[][] decodeBytes2D(CharSequence data)
     {
         if(data == null)
@@ -275,6 +381,22 @@ public class StringKit {
         }
         return values;
     }
+
+    public static float[][] decodeFloats2D(CharSequence data)
+    {
+        if(data == null)
+            return new float[0][0];
+        Matcher matcher = decoder2D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        float[][] values = new float[mi.count()][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeFloats(mi.nextMatch().group(1));
+        }
+        return values;
+    }
     public static long[][] decodeLongs2D(CharSequence data)
     {
         if(data == null)
@@ -287,6 +409,82 @@ public class StringKit {
         while (mi.hasMore())
         {
             values[i++] = decodeLongs(mi.nextMatch().group(1));
+        }
+        return values;
+    }
+
+    public static byte[][][] decodeBytes3D(CharSequence data)
+    {
+        if(data == null)
+            return new byte[0][0][0];
+        Matcher matcher = decoder3D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        byte[][][] values = new byte[mi.count()][][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeBytes2D(mi.nextMatch().group(1));
+        }
+        return values;
+    }
+    public static short[][][] decodeShorts3D(CharSequence data)
+    {
+        if(data == null)
+            return new short[0][0][0];
+        Matcher matcher = decoder3D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        short[][][] values = new short[mi.count()][][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeShorts2D(mi.nextMatch().group(1));
+        }
+        return values;
+    }
+    public static int[][][] decodeInts3D(CharSequence data)
+    {
+        if(data == null)
+            return new int[0][0][0];
+        Matcher matcher = decoder3D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        int[][][] values = new int[mi.count()][][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeInts2D(mi.nextMatch().group(1));
+        }
+        return values;
+    }
+    public static float[][][] decodeFloats3D(CharSequence data)
+    {
+        if(data == null)
+            return new float[0][0][0];
+        Matcher matcher = decoder3D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        float[][][] values = new float[mi.count()][][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeFloats2D(mi.nextMatch().group(1));
+        }
+        return values;
+    }
+    public static long[][][] decodeLongs3D(CharSequence data)
+    {
+        if(data == null)
+            return new long[0][0][0];
+        Matcher matcher = decoder3D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        long[][][] values = new long[mi.count()][][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeLongs2D(mi.nextMatch().group(1));
         }
         return values;
     }
