@@ -1,5 +1,8 @@
 package squidpony;
 
+import regexodus.MatchIterator;
+import regexodus.Matcher;
+import regexodus.Pattern;
 import squidpony.squidmath.CrossHash;
 
 /**
@@ -51,6 +54,241 @@ public class StringKit {
     public static String hexHash(long... array)
     {
         return hex(CrossHash.hash(array));
+    }
+
+    public static CharSequence encode(byte[] data)
+    {
+        if(data == null)
+            return "";
+        int len = data.length;
+        char[] chars = new char[len];
+        for (int i = 0, c = 0; c < len; i++, c++) {
+            chars[c] = (char) (data[i] | 0x2800);
+        }
+        return new String(chars);
+    }
+    public static CharSequence encode(short[] data)
+    {
+        if(data == null)
+            return "";
+        int len = data.length * 2;
+        char[] chars = new char[len];
+        short item;
+        for (int i = 0, c = 0; c < len; i++, c += 2) {
+            item = data[i];
+            chars[c] = (char) ((item & 0xff) | 0x2800);
+            chars[c+1] = (char)((item >>> 8) | 0x2800);
+        }
+        return new String(chars);
+    }
+    public static CharSequence encode(int[] data)
+    {
+        if(data == null)
+            return "";
+        int len = data.length * 4, item;
+        char[] chars = new char[len];
+        for (int i = 0, c = 0; c < len; i++, c += 4) {
+            item = data[i];
+            chars[c] = (char) ((item & 0xff) | 0x2800);
+            chars[c+1] = (char)(((item >>> 8)  & 0xff) | 0x2800);
+            chars[c+2] = (char)(((item >>> 16) & 0xff) | 0x2800);
+            chars[c+3] = (char)(((item >>> 24) & 0xff) | 0x2800);
+        }
+        return new String(chars);
+    }
+    public static CharSequence encode(long[] data)
+    {
+        if(data == null)
+            return "";
+        int len = data.length * 8;
+        char[] chars = new char[len];
+        long item;
+        for (int i = 0, c = 0; c < len; i++, c += 8) {
+            item = data[i];
+            chars[c] = (char) ((item & 0xff) | 0x2800);
+            chars[c+1] = (char)(((item >>> 8)  & 0xff) | 0x2800);
+            chars[c+2] = (char)(((item >>> 16) & 0xff) | 0x2800);
+            chars[c+3] = (char)(((item >>> 24) & 0xff) | 0x2800);
+            chars[c+4] = (char)(((item >>> 32) & 0xff) | 0x2800);
+            chars[c+5] = (char)(((item >>> 40) & 0xff) | 0x2800);
+            chars[c+6] = (char)(((item >>> 48) & 0xff) | 0x2800);
+            chars[c+7] = (char)(((item >>> 56) & 0xff) | 0x2800);
+        }
+        return new String(chars);
+    }
+
+    public static byte[] decodeBytes(CharSequence data)
+    {
+        if(data == null)
+            return new byte[0];
+        int len = data.length();
+        byte[] bytes = new byte[len];
+        for (int i = 0; i < len; i++) {
+            bytes[i] = (byte)(data.charAt(i) & 0xff);
+        }
+        return bytes;
+    }
+
+    public static short[] decodeShorts(CharSequence data)
+    {
+        if(data == null)
+            return new short[0];
+        int len = data.length() / 2;
+        short[] shorts = new short[len];
+        for (int i = 0; i < len; i++) {
+            shorts[i] = (short) ((data.charAt(i * 2) & 0xff)
+                    | ((data.charAt(i * 2 + 1) & 0xff) << 8));
+        }
+        return shorts;
+    }
+    public static int[] decodeInts(CharSequence data)
+    {
+        if(data == null)
+            return new int[0];
+        int len = data.length() / 4;
+        int[] ints = new int[len];
+        for (int i = 0; i < len; i++) {
+            ints[i] = ((data.charAt(i * 4) & 0xff)
+                    | ((data.charAt(i * 4 + 1) & 0xff) << 8)
+                    | ((data.charAt(i * 4 + 2) & 0xff) << 16)
+                    | ((data.charAt(i * 4 + 3) & 0xff) << 24));
+        }
+        return ints;
+    }
+    public static long[] decodeLongs(CharSequence data)
+    {
+        if(data == null)
+            return new long[0];
+        int len = data.length() / 8;
+        long[] longs = new long[len];
+        for (int i = 0; i < len; i++) {
+            longs[i] = ((data.charAt(i * 4) & 0xffL)
+                    | ((data.charAt(i * 4 + 1) & 0xffL) << 8)
+                    | ((data.charAt(i * 4 + 2) & 0xffL) << 16)
+                    | ((data.charAt(i * 4 + 3) & 0xffL) << 24)
+                    | ((data.charAt(i * 4 + 2) & 0xffL) << 32)
+                    | ((data.charAt(i * 4 + 3) & 0xffL) << 40)
+                    | ((data.charAt(i * 4 + 2) & 0xffL) << 48)
+                    | ((data.charAt(i * 4 + 3) & 0xffL) << 56));
+        }
+        return longs;
+    }
+
+    public static CharSequence encode(byte[][] data)
+    {
+        if(data == null || data.length == 0)
+            return ";";
+        StringBuilder sb = new StringBuilder(128);
+        sb.append(encode(data[0]));
+        for (int i = 1; i < data.length; i++) {
+            sb.append('\t');
+            sb.append(encode(data[i]));
+        }
+        sb.append(';');
+        return sb;
+    }
+
+    public static CharSequence encode(short[][] data)
+    {
+        if(data == null || data.length == 0)
+            return ";";
+        StringBuilder sb = new StringBuilder(256);
+        sb.append(encode(data[0]));
+        for (int i = 1; i < data.length; i++) {
+            sb.append('\t');
+            sb.append(encode(data[i]));
+        }
+        sb.append(';');
+        return sb;
+    }
+
+    public static CharSequence encode(int[][] data)
+    {
+        if(data == null || data.length == 0)
+            return ";";
+        StringBuilder sb = new StringBuilder(256);
+        sb.append(encode(data[0]));
+        for (int i = 1; i < data.length; i++) {
+            sb.append('\t');
+            sb.append(encode(data[i]));
+        }
+        sb.append(';');
+        return sb;
+    }
+
+    public static CharSequence encode(long[][] data)
+    {
+        if(data == null || data.length == 0)
+            return ";";
+        StringBuilder sb = new StringBuilder(256);
+        sb.append(encode(data[0]));
+        for (int i = 1; i < data.length; i++) {
+            sb.append('\t');
+            sb.append(encode(data[i]));
+        }
+        sb.append(';');
+        return sb;
+    }
+    private static final Pattern decoder2D = Pattern.compile("(?:([^\t;]*)[\t;])+?", 0);
+    public static byte[][] decodeBytes2D(CharSequence data)
+    {
+        if(data == null)
+            return new byte[0][0];
+        Matcher matcher = decoder2D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        byte[][] values = new byte[mi.count()][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeBytes(mi.nextMatch().group(1));
+        }
+        return values;
+    }
+    public static short[][] decodeShorts2D(CharSequence data)
+    {
+        if(data == null)
+            return new short[0][0];
+        Matcher matcher = decoder2D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        short[][] values = new short[mi.count()][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeShorts(mi.nextMatch().group(1));
+        }
+        return values;
+    }
+    public static int[][] decodeInts2D(CharSequence data)
+    {
+        if(data == null)
+            return new int[0][0];
+        Matcher matcher = decoder2D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        int[][] values = new int[mi.count()][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeInts(mi.nextMatch().group(1));
+        }
+        return values;
+    }
+    public static long[][] decodeLongs2D(CharSequence data)
+    {
+        if(data == null)
+            return new long[0][0];
+        Matcher matcher = decoder2D.matcher(data);
+        MatchIterator mi = matcher.findAll();
+        long[][] values = new long[mi.count()][];
+        int i = 0;
+        matcher.setTarget(data);
+        while (mi.hasMore())
+        {
+            values[i++] = decodeLongs(mi.nextMatch().group(1));
+        }
+        return values;
     }
 
 }
