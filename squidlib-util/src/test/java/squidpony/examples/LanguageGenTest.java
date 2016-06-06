@@ -265,7 +265,7 @@ public class LanguageGenTest {
         {
             System.out.println(o);
         }
-        System.out.println("\nGENERATED:");
+        System.out.println("\n\nGENERATED:\n");
         for(FakeLanguageGen lang : languages) {
             LanguageCipher cipher = new LanguageCipher(lang);
             int ctr = 0;
@@ -284,16 +284,29 @@ public class LanguageGenTest {
                 System.out.println(cipher.decipher(s, cipher.reverse));
             }
             System.out.println();
+
+            cipher = new LanguageCipher(lang, 0x123456789L);
+            ctr = 0;
+            for (String s : oz) {
+                oz2[ctr] = cipher.cipher(s);
+                System.out.println(oz2[ctr++]);
+            }
+
+            vocabulary.clear();
+            cipher.learnTranslations(vocabulary, "Dorothy", "farmer", "the", "room", "one", "uncle", "aunt");
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, vocabulary));
+            }
+            System.out.println();
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, cipher.reverse));
+            }
+            System.out.println();
+
         }
+        /*
         StatefulRNG nrng = new StatefulRNG("SquidLib!");
-        /*for (int i = 0; i < 10; i++) {
-            System.out.println(FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC)
-                    .mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.4).word(nrng, true, 3));
-        }*/
-        /*for (int i = 0; i < 10; i++) {
-            System.out.println(FakeLanguageGen.GREEK_ROMANIZED.word(nrng, true, 2));
-        }
-        */
+
         System.out.println(nrng.getState());
         for(FakeLanguageGen lang : languages) {
             for (int n = 0; n < 20; n++) {
@@ -304,5 +317,6 @@ public class LanguageGenTest {
             }
             System.out.println();
         }
+        */
     }
 }

@@ -70,6 +70,8 @@ public class LanguageCipher implements Serializable{
      */
     public int cacheLevel = 2;
 
+    public final long shift;
+
     /**
      * Constructs a LanguageCipher that will generate English-like or Dutch-like text by default.
      */
@@ -84,6 +86,17 @@ public class LanguageCipher implements Serializable{
      */
     public LanguageCipher(FakeLanguageGen language)
     {
+        this(language, 0);
+    }
+
+    /**
+     * Constructs a LanguageCipher that will use the given style of language generator to produce its text.
+     * @param language a FakeLanguageGen, typically one of the static constants in that class or a mix of them.
+     * @param shift any long; this will be used to alter the specific words generated unless it is 0
+     */
+    public LanguageCipher(FakeLanguageGen language, long shift)
+    {
+        this.shift = shift;
         this.language = language.copy();
         rng = new StatefulRNG();
         table = new HashMap<>(512);
@@ -101,6 +114,7 @@ public class LanguageCipher implements Serializable{
         this.rng = new StatefulRNG();
         this.table = new HashMap<>(other.table);
         this.reverse = new HashMap<>(other.reverse);
+        this.shift = other.shift;
     }
 
     /**
@@ -117,7 +131,7 @@ public class LanguageCipher implements Serializable{
         if(table.containsKey(s2))
             ciphered = table.get(s2);
         else {
-            long h = CrossHash.hash64(s2), frustration = 0;
+            long h = CrossHash.hash64(s2) + shift, frustration = 0;
             rng.setState(h);
             do {
                 ciphered = language.word(rng, false, (int) Math.ceil(s2.length() / (2.2 + rng.nextDouble())));
