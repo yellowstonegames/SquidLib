@@ -1,10 +1,7 @@
 package squidpony.examples;
 
 import squidpony.squidgrid.DetailedMimic;
-import squidpony.squidgrid.mapping.DungeonGenerator;
-import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.SectionDungeonGenerator;
-import squidpony.squidgrid.mapping.SerpentMapGenerator;
+import squidpony.squidgrid.mapping.*;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -25,7 +22,7 @@ public class DetailedMimicDungeonTest {
         rng.setState(2252637788195L);
         SectionDungeonGenerator sdg = new SectionDungeonGenerator(width, height, rng);
         DungeonGenerator dg;
-        sdg.addDoors(12, false);
+/*        sdg.addDoors(12, false);
         //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
         sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
         sdg.addWater(SectionDungeonGenerator.CAVE, 14);
@@ -47,10 +44,31 @@ public class DetailedMimicDungeonTest {
                 DungeonUtility.hashesToLines(sdungeon, true)));
         System.out.println(sdg);
         System.out.println("------------------------------------------------------------");
+        */
+        sdg.addDoors(30, false);
+        //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
+        sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
+        sdg.addWater(SectionDungeonGenerator.ALL, 10);
+        sdg.addGrass(SectionDungeonGenerator.ALL, 7);
+        //sdg.addLake(12, '£', '¢');
+        rng.setState(0xFEEEEEEEEEL);
+        DenseRoomMapGenerator dense = new DenseRoomMapGenerator(width, height, rng);
+        char[][] map = dense.generate();
+        int[][] env = dense.getEnvironment();
+        //map = sdg.generate(map, env);
+        //RNG rand = new RNG();
+        //sdg.generate(rand.getRandomElement(TilesetType.values()));
+        //char[][] sdungeon = sdg.getDungeon();
+        char[][] sdungeon = map;
+
+        sdg.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdungeon, true)));
+        System.out.println(sdg);
+        System.out.println("------------------------------------------------------------");
         DetailedMimic dm = new DetailedMimic(null, rng);
         int[] sample = convertCharToInt(map);
         dm.analyze(sample, width, height, 2, 3, true);
-        for (double i = 0.8775; i <= 2.0; i+= 0.125) {
+        for (double i = 0.875; i <= 2.0; i+= 0.125) {
             int w = (int)(width * i), h = (int)(height * i);
             dg = new DungeonGenerator(w, h, rng);
             sdungeon = dg.generate(convertIntToChar(dm.process(sample, width, height, w, h,

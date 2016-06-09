@@ -760,6 +760,11 @@ public class SectionDungeonGenerator {
             dijkstra.initialize(map);
             dijkstra.clearGoals();
             stairsUp = utility.randomFloor(map);
+            if(stairsUp == null)
+            {
+                frustrated++;
+                continue;
+            }
             dijkstra.setGoal(stairsUp);
             dijkstra.scan(null);
             frustrated++;
