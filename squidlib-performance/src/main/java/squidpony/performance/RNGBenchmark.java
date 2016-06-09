@@ -108,6 +108,24 @@ import java.util.concurrent.TimeUnit;
  * RNGBenchmark.measureXorIntR               avgt    3    1228.443 ±  280.454  ms/op
  * RNGBenchmark.measureXorR                  avgt    3    1355.535 ±   74.150  ms/op
  *
+ * Benchmark                         Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureLight         avgt    3  1251.677 ± 138.161  ms/op
+ * RNGBenchmark.measureLightInt      avgt    3  1245.465 ±  30.920  ms/op
+ * RNGBenchmark.measureLightIntR     avgt    3  1405.867 ±  71.977  ms/op
+ * RNGBenchmark.measureLightR        avgt    3  1249.536 ±  17.589  ms/op
+ * RNGBenchmark.measurePermuted      avgt    3  1618.965 ± 191.034  ms/op
+ * RNGBenchmark.measurePermutedInt   avgt    3  1719.651 ±  81.618  ms/op
+ * RNGBenchmark.measurePermutedIntR  avgt    3  1724.723 ± 361.353  ms/op
+ * RNGBenchmark.measurePermutedR     avgt    3  1631.643 ± 224.490  ms/op
+ * RNGBenchmark.measureXoRo          avgt    3  1215.819 ± 123.754  ms/op
+ * RNGBenchmark.measureXoRoInt       avgt    3  1377.244 ±  82.096  ms/op
+ * RNGBenchmark.measureXoRoIntR      avgt    3  1446.973 ±  61.399  ms/op
+ * RNGBenchmark.measureXoRoR         avgt    3  1274.790 ± 114.618  ms/op
+ * RNGBenchmark.measureXor           avgt    3  1362.249 ±  24.538  ms/op
+ * RNGBenchmark.measureXorInt        avgt    3  1263.790 ±  41.724  ms/op
+ * RNGBenchmark.measureXorIntR       avgt    3  1210.991 ± 105.103  ms/op
+ * RNGBenchmark.measureXorR          avgt    3  1331.630 ±  77.693  ms/op
+ *
  */
 public class RNGBenchmark {
 
