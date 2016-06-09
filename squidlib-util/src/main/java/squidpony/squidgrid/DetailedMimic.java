@@ -14,8 +14,8 @@ import squidpony.GwtCompatibility;
 import squidpony.squidgrid.mapping.AestheticDifference;
 import squidpony.squidmath.RNG;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 /**
  * Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on
@@ -71,7 +71,7 @@ public class DetailedMimic {
     {
         int area = width * height;
         analyzed = new int[area][];
-        ArrayList<Integer> points = new ArrayList<>();
+        LinkedHashSet<Integer> points = new LinkedHashSet<>(area);
         for (int i = 0; i < area; i++) points.add(i);
 
         double[] similarities = new double[area * area];
@@ -82,7 +82,7 @@ public class DetailedMimic {
         for (int i = 0; i < area; i++)
         {
             analyzed[i] = new int[K];
-            ArrayList<Integer> copy = new ArrayList<>(points);
+            LinkedHashSet<Integer> copy = new LinkedHashSet<>(points);
 
             analyzed[i][0] = i;
             copy.remove(i);

@@ -52,9 +52,9 @@ public class DenseRoomMapGenerator {
         short[] tempPacked;
         int ctr = 0, nh, nw, nx, ny, hnw, hnh, maxw = 8 + width / 10, maxh = 8 + height / 10;
         ArrayList<Coord> sampled = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 2, height - 2),
-                6.5f, width, height, 25, rng);
+                6.5f * width * height / 5000f, width, height, 35, rng);
         sampled.addAll(PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 2, height - 2),
-                8.5f, width, height, 30, rng));
+                8.5f * width * height / 5000f, width, height, 40, rng));
 
 
         for(Coord center : sampled) {
@@ -82,7 +82,7 @@ public class DenseRoomMapGenerator {
         tempPacked = CoordPacker.intersectPacked(
                 CoordPacker.rectangle(1, 1, width - 2, height - 2),
                 CoordPacker.pack(map, '#'));
-        Coord[] holes = CoordPacker.fractionPacked(tempPacked, 7);
+        Coord[] holes = CoordPacker.randomSeparated(tempPacked, 3, rng);
         for(Coord hole : holes) {
             if (hole.x > 0 && hole.y > 0 && hole.x < width - 1 && hole.y < height - 1 &&
                     ((map[hole.x - 1][hole.y] == '.' && map[hole.x + 1][hole.y] == '.') ||
