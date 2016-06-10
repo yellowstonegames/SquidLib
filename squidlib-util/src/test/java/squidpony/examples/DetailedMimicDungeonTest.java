@@ -62,7 +62,7 @@ public class DetailedMimicDungeonTest {
         char[][] sdungeon = map;
 
         sdg.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(sdungeon, true)));
+                DungeonUtility.hashesToLines(sdungeon, false)));
         System.out.println(sdg);
         System.out.println("------------------------------------------------------------");
         DetailedMimic dm = new DetailedMimic(null, rng);
@@ -71,10 +71,13 @@ public class DetailedMimicDungeonTest {
         for (double i = 0.875; i <= 2.0; i+= 0.125) {
             int w = (int)(width * i), h = (int)(height * i);
             dg = new DungeonGenerator(w, h, rng);
-            sdungeon = dg.generate(convertIntToChar(dm.process(sample, width, height, w, h,
-                    2, 3, 0.7, true), w, h));
+            map = convertIntToChar(dm.process(sample, width, height, w, h,
+                    2, 3, 0.7, true), w, h);
+            DungeonUtility.ensurePath(map, rng, '\t', '#');
+            map = DungeonUtility.wallWrap(map);
+            sdungeon = dg.generate(map);
             sdg.setDungeon(DungeonUtility.doubleWidth(
-                    DungeonUtility.hashesToLines(sdungeon, true)));
+                    DungeonUtility.hashesToLines(sdungeon, false)));
             System.out.println(sdg);
             System.out.println("------------------------------------------------------------");
 

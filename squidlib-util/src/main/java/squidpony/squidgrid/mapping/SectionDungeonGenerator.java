@@ -734,6 +734,17 @@ public class SectionDungeonGenerator {
      * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
+     * <br>
+     * Special behavior here: If tab characters are present in the 2D char array, they will be replaced with '.' in the
+     * final dungeon, but will also be tried first as valid staircase locations (with a high distance possible to travel
+     * away from the starting staircase). If no tab characters are present this will search for '.' floors to place
+     * stairs on, as normal. This tab-first behavior is useful in conjunction with some methods that establish a good
+     * path in an existing dungeon; an example is {@code DungeonUtility.ensurePath(dungeon, rng, '\t', '#');} then
+     * passing dungeon (which that code modifies) in as baseDungeon to this method. Because tabs will always be replaced
+     * by floors ('.'), this considers any tabs that overlap with what the environment considers a wall (cave wall, room
+     * wall, corridor wall, or untouched) to really refer to a corridor floor, but doesn't reconsider tabs that overlap
+     * with floors already (it keeps the state of actual room, cave, and corridor floors). This is useful so you only
+     * have to call ensurePath or a similar method on the 2D char array and can leave the 2D int array alone.
      * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors; may be modified in-place
      * @param environment stores whether a cell is room, corridor, or cave; getEnvironment() typically gives this
      * @return a char[][] dungeon
@@ -753,17 +764,17 @@ public class SectionDungeonGenerator {
             System.arraycopy(environment[x], 0, env2[x], 0, height);
         }
 
-        DijkstraMap dijkstra = new DijkstraMap();
-        dijkstra.measurement = DijkstraMap.Measurement.MANHATTAN;
+        DijkstraMap dijkstra = new DijkstraMap(map);
         int frustrated = 0;
         do {
-            dijkstra.initialize(map);
             dijkstra.clearGoals();
-            stairsUp = utility.randomFloor(map);
-            if(stairsUp == null)
-            {
-                frustrated++;
-                continue;
+            stairsUp = utility.randomMatchingTile(map, '\t');
+            if(stairsUp == null) {
+                stairsUp = utility.randomFloor(map);
+                if (stairsUp == null) {
+                    frustrated++;
+                    continue;
+                }
             }
             dijkstra.setGoal(stairsUp);
             dijkstra.scan(null);
@@ -778,6 +789,11 @@ public class SectionDungeonGenerator {
                 }
                 else if(dijkstra.gradientMap[i][j] > maxDijkstra) {
                     maxDijkstra = dijkstra.gradientMap[i][j];
+                }
+                if (map[i][j] == '\t') {
+                    map[i][j] = '.';
+                    if((env2[i][j] & 1) == 0) // environment is a wall here
+                        env2[i][j] = MixedGenerator.CORRIDOR_FLOOR;
                 }
             }
         }

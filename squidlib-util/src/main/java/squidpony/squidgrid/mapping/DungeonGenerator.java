@@ -444,6 +444,13 @@ public class DungeonGenerator {
      * that provide horizontal passage, and '/' for doors that provide vertical passage.
      * Use the addDoors, addWater, addGrass, and addTraps methods of this class to request these in the generated map.
      * Also sets the fields stairsUp and stairsDown to two randomly chosen, distant, connected, walkable cells.
+     * <br>
+     * Special behavior here: If tab characters are present in the 2D char array, they will be replaced with '.' in the
+     * final dungeon, but will also be tried first as valid staircase locations (with a high distance possible to travel
+     * away from the starting staircase). If no tab characters are present this will search for '.' floors to place
+     * stairs on, as normal. This tab-first behavior is useful in conjunction with some methods that establish a good
+     * path in an existing dungeon; an example is {@code DungeonUtility.ensurePath(dungeon, rng, '\t', '#');} then
+     * passing dungeon (which that code modifies) in as baseDungeon to this method.
      * @param baseDungeon a pre-made dungeon consisting of '#' for walls and '.' for floors; may be modified in-place
      * @return a char[][] dungeon
      */
@@ -461,11 +468,13 @@ public class DungeonGenerator {
         int frustrated = 0;
         do {
             dijkstra.clearGoals();
-            stairsUp = utility.randomFloor(map);
-            if(stairsUp == null)
-            {
-                frustrated++;
-                continue;
+            stairsUp = utility.randomMatchingTile(map, '\t');
+            if(stairsUp == null) {
+                stairsUp = utility.randomFloor(map);
+                if (stairsUp == null) {
+                    frustrated++;
+                    continue;
+                }
             }
             dijkstra.setGoal(stairsUp);
             dijkstra.scan(null);
@@ -474,11 +483,13 @@ public class DungeonGenerator {
         double maxDijkstra = 0.0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if(dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
+                if (dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
-                }
-                else if(dijkstra.gradientMap[i][j] > maxDijkstra) {
+                } else if (dijkstra.gradientMap[i][j] > maxDijkstra) {
                     maxDijkstra = dijkstra.gradientMap[i][j];
+                }
+                if (map[i][j] == '\t') {
+                    map[i][j] = '.';
                 }
             }
         }
