@@ -1,13 +1,10 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.squidai.DijkstraMap;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.PerlinNoise;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -1386,5 +1383,36 @@ public class DungeonUtility {
             map[upperX][i] = '#';
         }
         return map;
+    }
+
+    /**
+     * Ensures a path exists in a rough ring around the map by first creating the path (using
+     * SerpentMapGenerator.pointPath with the given RNG), then finding chars in blocking that are on that path and
+     * replacing them with replacement. Modifies map in-place (!) and returns an ArrayList of Coord points that will
+     * always be on the path.
+     * @param map a 2D char array, x then y, etc. that will be modified directly; this is the "returned map"
+     * @param rng used for random factors in the path choice
+     * @param replacement the char that will fill be used where a path needs to be carved out; usually '.'
+     * @param blocking an array or vararg of char that are considered blocking for the path and will be replaced if
+     *                 they are in the way
+     * @return the ArrayList of Coord points that are on the carved path, including existing non-blocking cells; will be empty if any parameters are invalid
+     */
+    public static ArrayList<Coord> ensurePath(char[][] map, RNG rng, char replacement, char... blocking)
+    {
+        if(map == null || map.length <= 0 || blocking == null || blocking.length <= 0)
+            return new ArrayList<Coord>(0);
+        int width = map.length, height = map[0].length;
+        ArrayList<Coord> points = SerpentMapGenerator.pointPath(width, height, rng);
+        char[] blocks = new char[blocking.length];
+        System.arraycopy(blocking, 0, blocks, 0, blocking.length);
+        Arrays.sort(blocks);
+        for(Coord c : points)
+        {
+            if(c.x >= 0 && c.x < width && c.y >= 0 && c.y < height && Arrays.binarySearch(blocks, map[c.x][c.y]) >= 0)
+            {
+                map[c.x][c.y] = replacement;
+            }
+        }
+        return points;
     }
 }
