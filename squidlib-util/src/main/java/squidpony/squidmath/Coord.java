@@ -375,6 +375,42 @@ public class Coord implements Serializable {
         return hash;
     }
 
+    /**
+     * Something like hashCode(), but reversible with {@code Coord.decode()}. Works for Coords between roughly -256 and
+     * 32000 in each of x and y, but will probably only decode to pooled Coords if x and y are both between -3 and 255
+     * (inclusive for both).
+     * @return an int as a unique code for this Coord
+     */
+    public int encode()
+    {
+        return ((x + 256) << 16) ^ (y + 256);
+    }
+
+    /**
+     * An alternative to getting a Coord with Coord.get() only to encode() it as the next step. This doesn't create a
+     * Coord in the middle step. Can be decoded with Coord.decode() to get the (x,y) Coord.
+     * @param x the x position to encode
+     * @param y the y position to encode
+     * @return the coded int that a Coord at (x,y) would produce with encode()
+     */
+    public static int pureEncode(int x, int y)
+    {
+        return ((x + 256) << 16) ^ (y + 256);
+    }
+    /**
+     * This can take an int produced by {@code someCoord.encode()} and get the original Coord back out of it. It
+     * works for all pooled Coords where the pool hasn't been expanded past about 32,000 in either dimension. It even
+     * works for Coords with negative x or y as well, if they are no lower than -256 in either dimension. This will
+     * almost certainly fail (producing a gibberish Coord that probably won't be pooled) on hashes produced by any other
+     * class, including subclasses of Coord.
+     * @param code an encoded int from a Coord, but not a subclass of Coord
+     * @return the Coord that gave hash as its hashCode()
+     */
+    public static Coord decode(int code)
+    {
+        return get((code >>> 16) - 256, (code & 0xFFFF) - 256);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Coord) {
