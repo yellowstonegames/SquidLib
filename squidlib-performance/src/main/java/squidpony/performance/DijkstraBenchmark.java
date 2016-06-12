@@ -51,7 +51,7 @@ import static squidpony.squidmath.CoordPacker.count;
 
 public class DijkstraBenchmark {
 
-    public static final int DIMENSION = 40, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
+    public static final int DIMENSION = 60, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
             new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
@@ -67,7 +67,7 @@ public class DijkstraBenchmark {
         System.out.println("Percentage walkable: " + count(floors) * 100.0 / (DIMENSION * DIMENSION) + "%");
         astarMap = DungeonUtility.generateAStarCostMap(map, Collections.<Character, Double>emptyMap(), 1);
     }
-    public long doScan()
+    public long doScanDijkstra()
     {
         DijkstraMap dijkstra = new DijkstraMap(
                 map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
@@ -86,30 +86,15 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
-    /*
-     * JMH generates lots of synthetic code for the benchmarks for you
-     * during the benchmark compilation. JMH can measure the benchmark
-     * methods in lots of modes. Users may select the default benchmark
-     * mode with the special annotation, or select/override the mode via
-     * the runtime options.
-     *
-     * When you are puzzled with some particular behavior, it usually helps
-     * to look into the generated code. You might see the code is doing not
-     * something you intend it to do. Good experiments always follow up on
-     * the experimental setup, and cross-checking the generated code is an
-     * important part of that follow up.
-     *
-     * The generated code for this particular sample is somewhere at
-     *  target/generated-sources/annotations/.../JMHSample_02_BenchmarkModes.java
-     */
+
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureScan() throws InterruptedException {
-        doScan();
+    public void measureScanDijkstra() throws InterruptedException {
+        doScanDijkstra();
     }
 
-    public long doPath()
+    public long doPathDijkstra()
     {
         DijkstraMap dijkstra = new DijkstraMap(
                 map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
@@ -135,9 +120,70 @@ public class DijkstraBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measurePath() throws InterruptedException {
-        System.out.println(doPath());
+    public void measurePathDijkstra() throws InterruptedException {
+        System.out.println(doPathDijkstra());
     }
+
+
+    public long doScanBoxedDijkstra()
+    {
+        squidpony.performance.alternate.DijkstraMap dijkstra = new squidpony.performance.alternate.DijkstraMap(
+                map, squidpony.performance.alternate.DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
+
+        long scanned = 0;
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                dijkstra.setGoal(x, y);
+                dijkstra.scan(null);
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureScanBoxedDijkstra() throws InterruptedException {
+        doScanBoxedDijkstra();
+    }
+
+    public long doPathBoxedDijkstra()
+    {
+        squidpony.performance.alternate.DijkstraMap dijkstra = new squidpony.performance.alternate.DijkstraMap(
+                map, squidpony.performance.alternate.DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
+        Coord r;
+        long scanned = 0;
+        DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+        for (int x = 1; x < DIMENSION - 1; x++) {
+            for (int y = 1; y < DIMENSION - 1; y++) {
+                if (map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                utility.rng.setState((x << 22) | (y << 16) | (x * y));
+                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
+                r = utility.randomCell(floors);
+                dijkstra.findPath(PATH_LENGTH, null, null, r, Coord.get(x, y));
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measurePathBoxedDijkstra() throws InterruptedException {
+        System.out.println(doPathBoxedDijkstra());
+    }
+
+
+
 
     public long doPathAStar()
     {
@@ -158,7 +204,7 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathAStar() throws InterruptedException {
@@ -183,7 +229,7 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathPlannedAStar() throws InterruptedException {

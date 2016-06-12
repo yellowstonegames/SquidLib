@@ -1,7 +1,9 @@
-package squidpony.squidai;
+package squidpony.performance.alternate;
 
 import squidpony.GwtCompatibility;
 import squidpony.annotation.GwtIncompatible;
+import squidpony.squidai.Technique;
+import squidpony.squidai.Threat;
 import squidpony.squidgrid.*;
 import squidpony.squidmath.*;
 
@@ -108,8 +110,8 @@ public class DijkstraMap {
      * Goals that pathfinding will seek out. The Double value should almost always be 0.0 , the same as the static GOAL
      * constant in this class.
      */
-    public IntDoubleOrderedMap goals;
-    private IntDoubleOrderedMap fresh, closed, open;
+    public LinkedHashMap<Coord, Double> goals;
+    private LinkedHashMap<Coord, Double> fresh, closed, open;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
@@ -135,10 +137,10 @@ public class DijkstraMap {
         rng = new RNG(new LightRNG());
         path = new ArrayList<>();
 
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
     }
 
     /**
@@ -150,10 +152,10 @@ public class DijkstraMap {
         rng = random;
         path = new ArrayList<>();
 
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
     }
 
     /**
@@ -165,10 +167,10 @@ public class DijkstraMap {
         rng = new RNG(new LightRNG());
         path = new ArrayList<>();
 
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -183,10 +185,10 @@ public class DijkstraMap {
         this.measurement = measurement;
         path = new ArrayList<>();
 
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -202,10 +204,10 @@ public class DijkstraMap {
         rng = new RNG(new LightRNG());
         path = new ArrayList<>();
 
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -223,10 +225,10 @@ public class DijkstraMap {
         this.rng = rng;
         path = new ArrayList<>();
 
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -242,10 +244,10 @@ public class DijkstraMap {
         rng = new RNG(new LightRNG());
         path = new ArrayList<>();
 
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level, alternateWall);
     }
 
@@ -263,10 +265,10 @@ public class DijkstraMap {
         path = new ArrayList<>();
         this.measurement = measurement;
 
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -285,10 +287,10 @@ public class DijkstraMap {
         path = new ArrayList<>();
         this.measurement = measurement;
 
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
+        goals = new LinkedHashMap<>();
+        fresh = new LinkedHashMap<>();
+        closed = new LinkedHashMap<>();
+        open = new LinkedHashMap<>();
         initialize(level);
     }
 
@@ -537,7 +539,7 @@ public class DijkstraMap {
             return;
         }
 
-        goals.put(Coord.pureEncode(x, y), GOAL);
+        goals.put(Coord.get(x, y), GOAL);
     }
 
     /**
@@ -551,7 +553,7 @@ public class DijkstraMap {
             return;
         }
 
-        goals.put(pt.encode(), GOAL);
+        goals.put(pt, GOAL);
     }
 
     /**
@@ -625,22 +627,22 @@ public class DijkstraMap {
     public void clearGoals() {
         if (!initialized)
             return;
-        IntDoubleOrderedMap.KeyIterator ki = goals.keySet().iterator();
-        while(ki.hasNext())
-            resetCell(Coord.decode(ki.nextInt()));
+        for (Coord entry : goals.keySet()) {
+            resetCell(entry);
+        }
         goals.clear();
     }
 
     protected void setFresh(int x, int y, double counter) {
         if (!initialized) return;
         gradientMap[x][y] = counter;
-        fresh.put(Coord.pureEncode(x, y), counter);
+        fresh.put(Coord.get(x, y), counter);
     }
 
     protected void setFresh(final Coord pt, double counter) {
         if (!initialized) return;
         gradientMap[pt.x][pt.y] = counter;
-        fresh.put(pt.encode(), counter);
+        fresh.put(pt, counter);
     }
 
     /**
@@ -738,33 +740,30 @@ public class DijkstraMap {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new LinkedHashSet<>();
-        IntDoubleOrderedMap blocking = new IntDoubleOrderedMap(impassable.size());
+        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
         for (Coord pt : impassable) {
-            blocking.put(pt.encode(), WALL);
+            blocking.put(pt, WALL);
         }
         closed.putAll(blocking);
-        Coord dec, adj, cen;
-        int enc;
 
-        for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
-            if (closed.containsKey(entry.getIntKey()))
-                closed.remove(entry.getIntKey());
-            dec = Coord.decode(entry.getIntKey());
-            gradientMap[dec.x][dec.y] = entry.getDoubleValue();
+        for (Map.Entry<Coord, Double> entry : goals.entrySet()) {
+            if (closed.containsKey(entry.getKey()))
+                closed.remove(entry.getKey());
+            gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
-        IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.pureEncode(x, y)))
-                    closed.put(Coord.pureEncode(x, y), physicalMap[x][y]);
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.get(x, y)))
+                    closed.put(Coord.get(x, y), physicalMap[x][y]);
                 else if (gradientMap[x][y] < currentLowest) {
                     currentLowest = gradientMap[x][y];
                     lowest.clear();
-                    lowest.put(Coord.pureEncode(x, y), currentLowest);
+                    lowest.put(Coord.get(x, y), currentLowest);
                 } else if (gradientMap[x][y] == currentLowest) {
-                    lowest.put(Coord.pureEncode(x, y), currentLowest);
+                    lowest.put(Coord.get(x, y), currentLowest);
                 }
             }
         }
@@ -776,24 +775,22 @@ public class DijkstraMap {
 //            ++iter;
             numAssigned = 0;
 
-            for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
-                cen = Coord.decode(cell.getIntKey());
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
-                    adj = cen.translate(dirs[d].deltaX, dirs[d].deltaY);
+                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
                     if (adj.x < 0 || adj.y < 0 || width <= adj.x || height <= adj.y)
                     	/* Outside the map */
                     	continue;
-                    enc = adj.encode();
                     double h = heuristic(dirs[d]);
-                    if (!closed.containsKey(enc) && !open.containsKey(enc) && gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
-                        setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                     }
                 }
             }
 //            closed.putAll(open);
-            open = new IntDoubleOrderedMap(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -830,33 +827,30 @@ public class DijkstraMap {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new LinkedHashSet<>();
-        IntDoubleOrderedMap blocking = new IntDoubleOrderedMap(impassable.size());
+        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
         for (Coord pt : impassable) {
-            blocking.put(pt.encode(), WALL);
+            blocking.put(pt, WALL);
         }
         closed.putAll(blocking);
-        Coord dec, adj, cen;
-        int enc;
 
-        for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
-            if (closed.containsKey(entry.getIntKey()))
-                closed.remove(entry.getIntKey());
-            dec = Coord.decode(entry.getIntKey());
-            gradientMap[dec.x][dec.y] = entry.getDoubleValue();
+        for (Map.Entry<Coord, Double> entry : goals.entrySet()) {
+            if (closed.containsKey(entry.getKey()))
+                closed.remove(entry.getKey());
+            gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         double currentLowest = 999000;
-        IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<>();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.pureEncode(x, y)))
-                    closed.put(Coord.pureEncode(x, y), physicalMap[x][y]);
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.get(x, y)))
+                    closed.put(Coord.get(x, y), physicalMap[x][y]);
                 else if (gradientMap[x][y] < currentLowest) {
                     currentLowest = gradientMap[x][y];
                     lowest.clear();
-                    lowest.put(Coord.pureEncode(x, y), currentLowest);
+                    lowest.put(Coord.get(x, y), currentLowest);
                 } else if (gradientMap[x][y] == currentLowest) {
-                    lowest.put(Coord.pureEncode(x, y), currentLowest);
+                    lowest.put(Coord.get(x, y), currentLowest);
                 }
             }
         }
@@ -870,25 +864,19 @@ public class DijkstraMap {
 //            ++iter;
             numAssigned = 0;
 
-            for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
-                cen = Coord.decode(cell.getIntKey());
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
-                    adj = cen.translate(dirs[d].deltaX, dirs[d].deltaY);
-                    if (adj.x < 0 || adj.y < 0 || width <= adj.x || height <= adj.y)
-                    	/* Outside the map */
-                        continue;
-                    enc = adj.encode();
+                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
-                    if (!closed.containsKey(enc) && !open.containsKey(enc) &&
-                            gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
-                        setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                     }
                 }
             }
 //            closed.putAll(open);
-            open = new IntDoubleOrderedMap(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
             ++iter;
         }
@@ -929,40 +917,32 @@ public class DijkstraMap {
             start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(1 + xShift * 2) - xShift), width - 2),
                     Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
         }
-        if (closed.containsKey(start2.encode()))
-            closed.remove(start2.encode());
+        if (closed.containsKey(start2))
+            closed.remove(start2);
         gradientMap[start2.x][start2.y] = 0.0;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.pureEncode(x, y)))
-                    closed.put(Coord.pureEncode(x, y), physicalMap[x][y]);
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.get(x, y)))
+                    closed.put(Coord.get(x, y), physicalMap[x][y]);
             }
         }
         int numAssigned = 1;
         mappedCount = 1;
-        open.put(start2.encode(), 0.0);
-        Coord dec, adj, cen;
-        int enc;
-
+        open.put(start2, 0.0);
 
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (numAssigned > 0) {
 //            ++iter;
             numAssigned = 0;
 
-            for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
-                cen = Coord.decode(cell.getIntKey());
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
-                    adj = cen.translate(dirs[d].deltaX, dirs[d].deltaY);
-                    if (adj.x < 0 || adj.y < 0 || width <= adj.x || height <= adj.y)
-                    	/* Outside the map */
-                        continue;
-                    enc = adj.encode();
+                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
-                    if (!closed.containsKey(enc) && !open.containsKey(enc) &&
-                            gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
-                        setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) &&
+                            gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                         if (targets.contains(adj)) {
@@ -975,7 +955,7 @@ public class DijkstraMap {
                 }
             }
 //            closed.putAll(open);
-            open = new IntDoubleOrderedMap(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -1064,44 +1044,37 @@ public class DijkstraMap {
         ArrayList<Coord> found = new ArrayList<>(limit);
         if (targets.contains(start))
             return found;
-        Coord start2 = start, adj, cen;
-        int enc;
+        Coord start2 = start;
         while (physicalMap[start.x][start.y] >= WALL && frustration < 50) {
             start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(15) - 7), width - 2),
                     Math.min(Math.max(1, start.y + rng.nextInt(15) - 7), height - 2));
             frustration++;
         }
-        if (closed.containsKey(start2.encode()))
-            closed.remove(start2.encode());
+        if (closed.containsKey(start2))
+            closed.remove(start2);
         gradientMap[start2.x][start2.y] = 0.0;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.pureEncode(x, y)))
-                    closed.put(Coord.pureEncode(x, y), physicalMap[x][y]);
+                if (gradientMap[x][y] > FLOOR && !goals.containsKey(Coord.get(x, y)))
+                    closed.put(Coord.get(x, y), physicalMap[x][y]);
             }
         }
         int numAssigned = 1;
         mappedCount = 1;
-        open.put(start2.encode(), 0.0);
+        open.put(start2, 0.0);
 
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (numAssigned > 0) {
 //            ++iter;
             numAssigned = 0;
-            for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
-                cen = Coord.decode(cell.getIntKey());
-                for (int d = 0; d < dirs.length; d++) {
-                    adj = cen.translate(dirs[d].deltaX, dirs[d].deltaY);
-                    if (adj.x < 0 || adj.y < 0 || width <= adj.x || height <= adj.y)
-                    	/* Outside the map */
-                        continue;
-                    enc = adj.encode();
 
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
+                for (int d = 0; d < dirs.length; d++) {
+                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
-                    if (!closed.containsKey(enc) && !open.containsKey(enc) &&
-                            gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
-                        setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                         if (targets.contains(adj)) {
@@ -1117,7 +1090,7 @@ public class DijkstraMap {
                 }
             }
 //            closed.putAll(open);
-            open = new IntDoubleOrderedMap(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -1149,35 +1122,33 @@ public class DijkstraMap {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new LinkedHashSet<>();
-        IntDoubleOrderedMap blocking = new IntDoubleOrderedMap(impassable.size());
+        LinkedHashMap<Coord, Double> blocking = new LinkedHashMap<>(impassable.size());
         for (Coord pt : impassable) {
-            blocking.put(pt.encode(), WALL);
+            blocking.put(pt, WALL);
             for (int x = 0; x < size; x++) {
                 for (int y = 0; y < size; y++) {
                     if (x + y == 0)
                         continue;
                     if (gradientMap[pt.x - x][pt.y - y] <= FLOOR)
-                        blocking.put(Coord.pureEncode(pt.x - x, pt.y - y), DARK);
+                        blocking.put(Coord.get(pt.x - x, pt.y - y), DARK);
                 }
             }
         }
         closed.putAll(blocking);
-        Coord dec, cen, adj;
-        int enc;
-        for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
-            if (closed.containsKey(entry.getIntKey()))
-                closed.remove(entry.getIntKey());
-            dec = Coord.decode(entry.getIntKey());
-            gradientMap[dec.x][dec.y] = entry.getDoubleValue();
+
+        for (Map.Entry<Coord, Double> entry : goals.entrySet()) {
+            if (closed.containsKey(entry.getKey()))
+                closed.remove(entry.getKey());
+            gradientMap[entry.getKey().x][entry.getKey().y] = entry.getValue();
         }
         mappedCount = goals.size();
         double currentLowest = 999000;
-        IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
-        int temp, p;
+        LinkedHashMap<Coord, Double> lowest = new LinkedHashMap<>();
+        Coord p = Coord.get(0, 0), temp = Coord.get(0, 0);
         for (int y = 0; y < height; y++) {
             I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS:
             for (int x = 0; x < width; x++) {
-                p = Coord.pureEncode(x, y);
+                p = Coord.get(x, y);
                 if (gradientMap[x][y] > FLOOR && !goals.containsKey(p)) {
                     closed.put(p, physicalMap[x][y]);
                     if (gradientMap[x][y] == WALL) {
@@ -1185,11 +1156,11 @@ public class DijkstraMap {
                             if (x - i < 0)
                                 continue;
                             for (int j = 0; j < size; j++) {
-                                temp = Coord.pureEncode(x - i, y - j);
+                                temp = Coord.get(x - i, y - j);
                                 if (y - j < 0 || closed.containsKey(temp))
                                     continue;
-                                if (gradientMap[x - i][y - j] <= FLOOR && !goals.containsKey(temp))
-                                    closed.put(temp, DARK);
+                                if (gradientMap[temp.x][temp.y] <= FLOOR && !goals.containsKey(temp))
+                                    closed.put(Coord.get(temp.x, temp.y), DARK);
                             }
                         }
                     }
@@ -1198,7 +1169,7 @@ public class DijkstraMap {
                         if (x + i >= width)
                             continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
                         for (int j = 0; j < size; j++) {
-                            temp = Coord.pureEncode(x + i, y + j);
+                            temp = Coord.get(x + i, y + j);
                             if (y + j >= height || closed.containsKey(temp))
                                 continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
                         }
@@ -1206,7 +1177,7 @@ public class DijkstraMap {
 
                     currentLowest = gradientMap[x][y];
                     lowest.clear();
-                    lowest.put(Coord.pureEncode(x, y), currentLowest);
+                    lowest.put(Coord.get(x, y), currentLowest);
 
                 } else if (gradientMap[x][y] == currentLowest && !closed.containsKey(p)) {
                     if (!closed.containsKey(p)) {
@@ -1214,12 +1185,12 @@ public class DijkstraMap {
                             if (x + i >= width)
                                 continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
                             for (int j = 0; j < size; j++) {
-                                temp = Coord.pureEncode(x + i, y + j);
+                                temp = Coord.get(x + i, y + j);
                                 if (y + j >= height || closed.containsKey(temp))
                                     continue I_AM_BECOME_DEATH_DESTROYER_OF_WORLDS;
                             }
                         }
-                        lowest.put(p, currentLowest);
+                        lowest.put(Coord.get(x, y), currentLowest);
                     }
                 }
             }
@@ -1229,24 +1200,19 @@ public class DijkstraMap {
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (numAssigned > 0) {
             numAssigned = 0;
-            for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
-                cen = Coord.decode(cell.getIntKey());
+            for (Map.Entry<Coord, Double> cell : open.entrySet()) {
                 for (int d = 0; d < dirs.length; d++) {
-                    adj = cen.translate(dirs[d].deltaX, dirs[d].deltaY);
-                    if (adj.x < 0 || adj.y < 0 || width <= adj.x || height <= adj.y)
-                    	/* Outside the map */
-                        continue;
-                    enc = adj.encode();
+                    Coord adj = cell.getKey().translate(dirs[d].deltaX, dirs[d].deltaY);
                     double h = heuristic(dirs[d]);
-                    if (!closed.containsKey(enc) && !open.containsKey(enc) && gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
-                        setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
+                    if (!closed.containsKey(adj) && !open.containsKey(adj) && gradientMap[cell.getKey().x][cell.getKey().y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
+                        setFresh(adj, cell.getValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
                         ++mappedCount;
                     }
                 }
             }
 //            closed.putAll(open);
-            open = new IntDoubleOrderedMap(fresh);
+            open = new LinkedHashMap<>(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -1335,7 +1301,7 @@ public class DijkstraMap {
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findPath(length, impassable2, onlyPassable, start, targets);
                 }
@@ -1495,7 +1461,7 @@ public class DijkstraMap {
 
                 if (onlyPassable.contains(currentPos)) {
 
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
                             onlyPassable, start, targets);
@@ -1642,18 +1608,18 @@ public class DijkstraMap {
 
         double currentDistance = gradientMap[start.x][start.y];
         if (currentDistance <= moveLength) {
-            int[] g_arr = goals.keySet().toIntArray();
+            Coord[] g_arr = new Coord[goals.size()];
+            g_arr = goals.keySet().toArray(g_arr);
 
             goals.clear();
             setGoal(start);
             scan(impassable2);
             goals.clear();
             gradientMap[start.x][start.y] = moveLength;
-            Coord dec;
-            for (int g : g_arr) {
-                dec = Coord.decode(g);
-                if (gradientMap[dec.x][dec.y] <= moveLength && worthMap[dec.x][dec.y] > 0) {
-                    goals.put(g, 0.0 - worthMap[dec.x][dec.y]);
+
+            for (Coord g : g_arr) {
+                if (gradientMap[g.x][g.y] <= moveLength && worthMap[g.x][g.y] > 0) {
+                    goals.put(g, 0.0 - worthMap[g.x][g.y]);
                 }
             }
             resetMap();
@@ -1688,7 +1654,7 @@ public class DijkstraMap {
             }
             if (best >= gradientMap[currentPos.x][currentPos.y]) {
                 if (friends.contains(currentPos)) {
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findTechniquePath(moveLength, tech, dungeon, los, impassable2,
                             friends, start, targets);
@@ -1705,7 +1671,7 @@ public class DijkstraMap {
             frustration++;
             if (paidLength > moveLength - 1.0) {
                 if (friends.contains(currentPos)) {
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findTechniquePath(moveLength, tech, dungeon, los, impassable2,
                             friends, start, targets);
@@ -1860,7 +1826,7 @@ public class DijkstraMap {
 
                 if (onlyPassable.contains(currentPos)) {
 
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, cache, impassable2,
                             onlyPassable, start, targets);
@@ -1947,7 +1913,7 @@ public class DijkstraMap {
         }
         scan(impassable2);
         goals.clear();
-        IntDoubleOrderedMap cachedGoals = new IntDoubleOrderedMap();
+        LinkedHashMap<Coord, Double> cachedGoals = new LinkedHashMap<Coord, Double>();
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -1955,7 +1921,7 @@ public class DijkstraMap {
                     continue;
                 if (gradientMap[x][y] >= minPreferredRange && gradientMap[x][y] <= maxPreferredRange) {
                     gradientMap[x][y] = 0.001 * (maxPreferredRange - gradientMap[x][y]);
-                    cachedGoals.put(Coord.pureEncode(x, y), gradientMap[x][y]);
+                    cachedGoals.put(Coord.get(x, y), gradientMap[x][y]);
                 } else
                     gradientMap[x][y] = FLOOR;
             }
@@ -2029,7 +1995,7 @@ public class DijkstraMap {
         }
         goals.clear();
         if (onlyPassable.contains(currentPos) || impassable2.contains(currentPos)) {
-            closed.put(currentPos.encode(), WALL);
+            closed.put(currentPos, WALL);
             impassable2.add(currentPos);
             return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
                     impassable2, onlyPassable, threats, start, targets);
@@ -2156,7 +2122,7 @@ public class DijkstraMap {
         }
         scan(impassable2);
         goals.clear();
-        IntDoubleOrderedMap cachedGoals = new IntDoubleOrderedMap();
+        LinkedHashMap<Coord, Double> cachedGoals = new LinkedHashMap<Coord, Double>();
 
         for (int x = 0; x < width; x++) {
             CELL:
@@ -2171,7 +2137,7 @@ public class DijkstraMap {
                     for (Coord goal : targets) {
                         if (seekDistantGoals || results[goal.x][goal.y] > 0.0) {
                             gradientMap[x][y] = 0.001 * (maxPreferredRange - gradientMap[x][y]);
-                            cachedGoals.put(Coord.pureEncode(x, y), gradientMap[x][y]);
+                            cachedGoals.put(Coord.get(x, y), gradientMap[x][y]);
                             continue CELL;
                         }
                     }
@@ -2256,7 +2222,7 @@ public class DijkstraMap {
         }
         goals.clear();
         if (onlyPassable.contains(currentPos) || impassable2.contains(currentPos)) {
-            closed.put(currentPos.encode(), WALL);
+            closed.put(currentPos, WALL);
             impassable2.add(currentPos);
             return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
                     fov, seekDistantGoals, impassable2, onlyPassable, threats, start, targets);
@@ -2385,7 +2351,7 @@ public class DijkstraMap {
         }
         scan(impassable2);
         goals.clear();
-        IntDoubleOrderedMap cachedGoals = new IntDoubleOrderedMap();
+        LinkedHashMap<Coord, Double> cachedGoals = new LinkedHashMap<>();
 
         for (int x = 0; x < width; x++) {
             CELL:
@@ -2400,7 +2366,7 @@ public class DijkstraMap {
                     for (Coord goal : targets) {
                         if (seekDistantGoals || results[goal.x][goal.y] > 0.0) {
                             gradientMap[x][y] = 0.001 * (maxPreferredRange - gradientMap[x][y]);
-                            cachedGoals.put(Coord.pureEncode(x, y), gradientMap[x][y]);
+                            cachedGoals.put(Coord.get(x, y), gradientMap[x][y]);
                             continue CELL;
                         }
                     }
@@ -2484,7 +2450,7 @@ public class DijkstraMap {
         }
         goals.clear();
         if (onlyPassable.contains(currentPos) || impassable2.contains(currentPos)) {
-            closed.put(currentPos.encode(), WALL);
+            closed.put(currentPos, WALL);
             impassable2.add(currentPos);
             return findCoveredAttackPath(moveLength, minPreferredRange, maxPreferredRange, coverPreference,
                     fov, seekDistantGoals, impassable2, onlyPassable, threats, start, targets);
@@ -2628,8 +2594,8 @@ public class DijkstraMap {
 
         double currentDistance = gradientMap[start.x][start.y];
         if (currentDistance <= moveLength) {
-            int[] g_arr = goals.keySet().toIntArray();
-            Coord dec;
+            Coord[] g_arr = new Coord[goals.size()];
+            g_arr = goals.keySet().toArray(g_arr);
 
             goals.clear();
             setGoal(start);
@@ -2637,10 +2603,9 @@ public class DijkstraMap {
             goals.clear();
             gradientMap[start.x][start.y] = moveLength;
 
-            for (int g : g_arr) {
-                dec = Coord.decode(g);
-                if (gradientMap[dec.x][dec.y] <= moveLength && worthMap[dec.x][dec.y] > 0) {
-                    goals.put(g, 0.0 - worthMap[dec.x][dec.y]);
+            for (Coord g : g_arr) {
+                if (gradientMap[g.x][g.y] <= moveLength && worthMap[g.x][g.y] > 0) {
+                    goals.put(g, 0.0 - worthMap[g.x][g.y]);
                 }
             }
             resetMap();
@@ -2675,7 +2640,7 @@ public class DijkstraMap {
             }
             if (best >= gradientMap[currentPos.x][currentPos.y]) {
                 if (friends.contains(currentPos)) {
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findTechniquePath(moveLength, tech, dungeon, cache, impassable2,
                             friends, start, targets);
@@ -2692,7 +2657,7 @@ public class DijkstraMap {
             frustration++;
             if (paidLength > moveLength - 1.0) {
                 if (friends.contains(currentPos)) {
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findTechniquePath(moveLength, tech, dungeon, cache, impassable2,
                             friends, start, targets);
@@ -2816,7 +2781,7 @@ public class DijkstraMap {
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findFleePath(length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
@@ -2907,7 +2872,7 @@ public class DijkstraMap {
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findPathLarge(size, length, impassable2, onlyPassable, start, targets);
                 }
@@ -3042,7 +3007,7 @@ public class DijkstraMap {
             if (paidLength > moveLength - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findAttackPathLarge(size, moveLength, preferredRange, los, impassable2, onlyPassable, start, targets);
                 }
@@ -3181,7 +3146,7 @@ public class DijkstraMap {
             if (paidLength > moveLength - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findAttackPathLarge(size, moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
                             onlyPassable, start, targets);
@@ -3304,7 +3269,7 @@ public class DijkstraMap {
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
 
-                    closed.put(currentPos.encode(), WALL);
+                    closed.put(currentPos, WALL);
                     impassable2.add(currentPos);
                     return findFleePathLarge(size, length, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
