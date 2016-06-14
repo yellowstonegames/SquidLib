@@ -63,40 +63,40 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     /**
      * The array of keys.
      */
-    protected transient int[] key;
+    protected int[] key;
     /**
      * The array of values.
      */
-    protected transient double[] value;
+    protected double[] value;
     /**
      * The mask for wrapping a position counter.
      */
-    protected transient int mask;
+    protected int mask;
     /**
      * Whether this set contains the key zero.
      */
-    protected transient boolean containsNullKey;
+    protected boolean containsNullKey;
     /**
      * The index of the first entry in iteration order. It is valid iff {@link #size} is nonzero; otherwise, it contains -1.
      */
-    protected transient int first = -1;
+    protected int first = -1;
     /**
      * The index of the last entry in iteration order. It is valid iff {@link #size} is nonzero; otherwise, it contains -1.
      */
-    protected transient int last = -1;
+    protected int last = -1;
     /**
      * For each entry, the next and the previous entry in iteration order, stored as <code>((prev & 0xFFFFFFFFL) << 32) | (next & 0xFFFFFFFFL)</code>. The first entry contains predecessor -1, and the
      * last entry contains successor -1.
      */
-    protected transient long[] link;
+    protected long[] link;
     /**
      * The current table size.
      */
-    protected transient int n;
+    protected int n;
     /**
      * Threshold after which we rehash. It must be the table size times {@link #f}.
      */
-    protected transient int maxFill;
+    protected int maxFill;
     /**
      * Number of entries in the set (including the key zero, if present).
      */
@@ -108,15 +108,15 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     /**
      * Cached set of entries.
      */
-    protected transient volatile MapEntrySet entries;
+    protected volatile MapEntrySet entries;
     /**
      * Cached set of keys.
      */
-    protected transient volatile KeySet keys;
+    protected volatile KeySet keys;
     /**
      * Cached collection of values.
      */
-    protected transient volatile DoubleCollection values;
+    protected volatile DoubleCollection values;
     /**
      * Default return value.
      */
@@ -125,19 +125,19 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     /**
      * The initial default size of a hash table.
      */
-    final static public int DEFAULT_INITIAL_SIZE = 16;
+    public static final int DEFAULT_INITIAL_SIZE = 16;
     /**
      * The default load factor of a hash table.
      */
-    final static public float DEFAULT_LOAD_FACTOR = .1875f; // .75f;
+    public static final float DEFAULT_LOAD_FACTOR = .1875f; // .75f;
     /**
      * The load factor for a (usually small) table that is meant to be particularly fast.
      */
-    final static public float FAST_LOAD_FACTOR = .5f;
+    public static final float FAST_LOAD_FACTOR = .5f;
     /**
      * The load factor for a (usually very small) table that is meant to be extremely fast.
      */
-    final static public float VERY_FAST_LOAD_FACTOR = .25f;
+    public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
     public void defaultReturnValue(final double rv) {
         defRetValue = rv;
@@ -363,7 +363,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             link[pos] = -1L;
         } else {
             link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
+            link[pos] = ((last & 0xFFFFFFFFL) << 32) | (0xFFFFFFFFL);
             last = pos;
         }
         if (size++ >= maxFill) rehash(arraySize(size + 1, f));
@@ -1641,15 +1641,15 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             return null;
         }
 
-        final public SortedSet<Integer> tailSet(Integer from) {
+        public final SortedSet<Integer> tailSet(Integer from) {
             throw new UnsupportedOperationException();
         }
 
-        final public SortedSet<Integer> headSet(Integer to) {
+        public final SortedSet<Integer> headSet(Integer to) {
             throw new UnsupportedOperationException();
         }
 
-        final public SortedSet<Integer> subSet(Integer from, Integer to) {
+        public final SortedSet<Integer> subSet(Integer from, Integer to) {
             throw new UnsupportedOperationException();
         }
 
