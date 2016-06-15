@@ -15,17 +15,9 @@
  */
 package squidpony.squidmath;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
+import squidpony.annotation.Beta;
+
+import java.util.*;
 
 /**
  * A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.
@@ -42,12 +34,12 @@ import java.util.SortedSet;
  * parallel to the table.
  * <p>
  * <P>This class implements the interface of a sorted map, so to allow easy access of the iteration order: for instance, you can get the first key in iteration order with {@code firstKey()} without
- * having to create an iterator; however, this class partially violates the {@link java.util.SortedMap} contract because all submap methods throw an exception and {@link #comparator()} returns always
+ * having to create an iterator; however, this class partially violates the {@link SortedMap} contract because all submap methods throw an exception and {@link #comparator()} returns always
  * <code>null</code>.
  * <p>
  * <p>Additional methods, such as <code>getAndMoveToFirst()</code>, make it easy to use instances of this class as a cache (e.g., with LRU policy).
  * <p>
- * <P>The iterators provided by the views of this class using are type-specific {@linkplain java.util.ListIterator list iterators}, and can be started at any element <em>which is a key of the map</em>,
+ * <P>The iterators provided by the views of this class using are type-specific {@linkplain ListIterator list iterators}, and can be started at any element <em>which is a key of the map</em>,
  * or a {@link NoSuchElementException} exception will be thrown. If, however, the provided element is not the first or last key in the set, the first access to the list index will require linear time,
  * as in the worst case the entire key set must be scanned in iteration order to retrieve the positional index of the starting key.
  * <br>
@@ -58,16 +50,17 @@ import java.util.SortedSet;
  * @author Tommy Ettinger (just responsible for squashing several layers of parent classes into one monster class)
  * @see HashCommon
  */
-public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.Serializable, Cloneable {
+@Beta
+public class ObjectObjectOrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 0L;
     /**
      * The array of keys.
      */
-    protected int[] key;
+    protected K[] key;
     /**
      * The array of values.
      */
-    protected double[] value;
+    protected V[] value;
     /**
      * The mask for wrapping a position counter.
      */
@@ -89,6 +82,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * last entry contains successor -1.
      */
     protected long[] link;
+
     /**
      * The current table size.
      */
@@ -116,11 +110,11 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     /**
      * Cached collection of values.
      */
-    protected volatile DoubleCollection values;
+    protected volatile Collection<V> values;
     /**
      * Default return value.
      */
-    protected double defRetValue;
+    protected V defRetValue = null;
 
     /**
      * The initial default size of a hash table.
@@ -139,11 +133,11 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    public void defaultReturnValue(final double rv) {
+    public void defaultReturnValue(final V rv) {
         defRetValue = rv;
     }
 
-    public double defaultReturnValue() {
+    public V defaultReturnValue() {
         return defRetValue;
     }
 
@@ -156,7 +150,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param f        the load factor.
      */
 
-    public IntDoubleOrderedMap(final int expected, final float f) {
+    @SuppressWarnings("unchecked")
+    public ObjectObjectOrderedMap(final int expected, final float f) {
         if (f <= 0 || f > 1)
             throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
         if (expected < 0) throw new IllegalArgumentException("The expected number of elements must be nonnegative");
@@ -164,8 +159,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         n = arraySize(expected, f);
         mask = n - 1;
         maxFill = maxFill(n, f);
-        key = new int[n + 1];
-        value = new double[n + 1];
+        key = (K[]) new Object[n + 1];
+        value = (V[]) new Object[n + 1];
         link = new long[n + 1];
     }
 
@@ -174,14 +169,14 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      *
      * @param expected the expected number of elements in the hash map.
      */
-    public IntDoubleOrderedMap(final int expected) {
+    public ObjectObjectOrderedMap(final int expected) {
         this(expected, DEFAULT_LOAD_FACTOR);
     }
 
     /**
      * Creates a new hash map with initial expected 16 entries and 0.75f as load factor.
      */
-    public IntDoubleOrderedMap() {
+    public ObjectObjectOrderedMap() {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR);
     }
 
@@ -191,7 +186,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param m a {@link Map} to be copied into the new hash map.
      * @param f the load factor.
      */
-    public IntDoubleOrderedMap(final Map<? extends Integer, ? extends Double> m, final float f) {
+    public ObjectObjectOrderedMap(final Map<? extends K, ? extends V> m, final float f) {
         this(m.size(), f);
         putAll(m);
     }
@@ -201,27 +196,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      *
      * @param m a {@link Map} to be copied into the new hash map.
      */
-    public IntDoubleOrderedMap(final Map<? extends Integer, ? extends Double> m) {
-        this(m, DEFAULT_LOAD_FACTOR);
-    }
-
-    /**
-     * Creates a new hash map copying a given type-specific one.
-     *
-     * @param m a type-specific map to be copied into the new hash map.
-     * @param f the load factor.
-     */
-    public IntDoubleOrderedMap(final IntDoubleOrderedMap m, final float f) {
-        this(m.size(), f);
-        putAll(m);
-    }
-
-    /**
-     * Creates a new hash map with 0.75f as load factor copying a given type-specific one.
-     *
-     * @param m a type-specific map to be copied into the new hash map.
-     */
-    public IntDoubleOrderedMap(final IntDoubleOrderedMap m) {
+    public ObjectObjectOrderedMap(final Map<? extends K, ? extends V> m) {
         this(m, DEFAULT_LOAD_FACTOR);
     }
 
@@ -233,12 +208,12 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param f the load factor.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public IntDoubleOrderedMap(final int[] k, final double[] v, final float f) {
+    public ObjectObjectOrderedMap(final K[] k, final V[] v, final float f) {
         this(k.length, f);
         if (k.length != v.length)
             throw new IllegalArgumentException("The key array and the value array have different lengths (" + k.length + " and " + v.length + ")");
         for (int i = 0; i < k.length; i++)
-            this.put(k[i], v[i]);
+            put(k[i], v[i]);
     }
 
     /**
@@ -248,186 +223,93 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param v the array of corresponding values in the new hash map.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public IntDoubleOrderedMap(final int[] k, final double[] v) {
+    public ObjectObjectOrderedMap(final K[] k, final V[] v) {
         this(k, v, DEFAULT_LOAD_FACTOR);
     }
 
 
-    public boolean containsKey(final Object ok) {
-        return containsKey(((((Integer) (ok)).intValue())));
-    }
-
-    /**
-     * Delegates to the corresponding type-specific method, taking care of returning <code>null</code> on a missing key.
-     * <p>
-     * <P>This method must check whether the provided key is in the map using <code>containsKey()</code>. Thus, it probes the map <em>twice</em>. Implementors of subclasses should override it with a
-     * more efficient method.
-     *
-     * @deprecated Please use the corresponding type-specific method instead.
-     */
-    @Deprecated
-    public Double get(final Object ok) {
-        final int k = ((((Integer) (ok)).intValue()));
-        return containsKey(k) ? (Double.valueOf(get(k))) : null;
-    }
-
     private int realSize() {
         return containsNullKey ? size - 1 : size;
     }
-
     private void ensureCapacity(final int capacity) {
         final int needed = arraySize(capacity, f);
-        if (needed > n) rehash(needed);
+        if (needed > n)
+            rehash(needed);
     }
-
     private void tryCapacity(final long capacity) {
-        final int needed = (int) Math.min(1 << 30, Math.max(2, HashCommon.nextPowerOfTwo((long) Math.ceil(capacity / f))));
-        if (needed > n) rehash(needed);
+        final int needed = (int) Math.min(
+                1 << 30,
+                Math.max(2, HashCommon.nextPowerOfTwo((long) Math.ceil(capacity
+                        / f))));
+        if (needed > n)
+            rehash(needed);
     }
-
-    private double removeEntry(final int pos) {
-        final double oldValue = value[pos];
+    private V removeEntry(final int pos) {
+        final V oldValue = value[pos];
+        value[pos] = null;
         size--;
         fixPointers(pos);
         shiftKeys(pos);
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE) rehash(n / 2);
+        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
+            rehash(n / 2);
         return oldValue;
     }
-
-    private double removeNullEntry() {
+    private V removeNullEntry() {
         containsNullKey = false;
-        final double oldValue = value[n];
+        key[n] = null;
+        final V oldValue = value[n];
+        value[n] = null;
         size--;
         fixPointers(n);
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE) rehash(n / 2);
+        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
+            rehash(n / 2);
         return oldValue;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void putAll(Map<? extends Integer, ? extends Double> m) {
-        if (f <= .5) ensureCapacity(m.size()); // The resulting map will be sized for m.size() elements
+    /** {@inheritDoc} */
+    public void putAll(Map<? extends K, ? extends V> m) {
+        if (f <= .5)
+            ensureCapacity(m.size()); // The resulting map will be sized for
+            // m.size() elements
         else
-            tryCapacity(size() + m.size()); // The resulting map will be tentatively sized for size() + m.size() elements
+            tryCapacity(size() + m.size()); // The resulting map will be
         int n = m.size();
-        final Iterator<? extends Entry<? extends Integer, ? extends Double>> i = m.entrySet().iterator();
-        if (m instanceof IntDoubleOrderedMap) {
-            MapEntry e;
-            while (n-- != 0) {
-                e = (MapEntry) i.next();
-                put(e.getIntKey(), e.getDoubleValue());
-            }
-        } else {
-            Map.Entry<? extends Integer, ? extends Double> e;
+        final Iterator<? extends Map.Entry<? extends K, ? extends V>> i = m
+                .entrySet().iterator();
+        if (m instanceof ObjectObjectOrderedMap) {
+            Entry<? extends K, ? extends V> e;
             while (n-- != 0) {
                 e = i.next();
                 put(e.getKey(), e.getValue());
             }
-        }
-    }
-    public void putAll(IntDoubleOrderedMap m) {
-        if (f <= .5) ensureCapacity(m.size()); // The resulting map will be sized for m.size() elements
-        else
-            tryCapacity(size() + m.size()); // The resulting map will be tentatively sized for size() + m.size() elements
-        int n = m.size();
-        final EntryIterator i = m.mapEntrySet().iterator();
-        MapEntry e;
-        while (n-- != 0) {
-            e = i.next();
-            put(e.getIntKey(), e.getDoubleValue());
-        }
-    }
-
-    private int insert(final int k, final double v) {
+        } else {
+            Map.Entry<? extends K, ? extends V> e;
+            while (n-- != 0) {
+                e = i.next();
+                put(e.getKey(), e.getValue());
+            }
+        }    }
+    private int insert(final K k, final V v) {
         int pos;
-        if (((k) == (0))) {
-            if (containsNullKey) return n;
+        if (((k) == null)) {
+            if (containsNullKey)
+                return n;
             containsNullKey = true;
             pos = n;
         } else {
-            int curr;
-            final int[] key = this.key;
+            K curr;
+            final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) {
-                if (((curr) == (k))) return pos;
-                while (!((curr = key[pos = (pos + 1) & mask]) == (0)))
-                    if (((curr) == (k))) return pos;
+            if (!((curr = key[pos = (HashCommon.mix((k)
+                    .hashCode())) & mask]) == null)) {
+                if (((curr).equals(k)))
+                    return pos;
+                while (!((curr = key[pos = (pos + 1) & mask]) == null))
+                    if (((curr).equals(k)))
+                        return pos;
             }
         }
         key[pos] = k;
         value[pos] = v;
-        if (size == 0) {
-            first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            link[pos] = -1L;
-        } else {
-            link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[pos] = ((last & 0xFFFFFFFFL) << 32) | (0xFFFFFFFFL);
-            last = pos;
-        }
-        if (size++ >= maxFill) rehash(arraySize(size + 1, f));
-        return -1;
-    }
-
-    public double put(final int k, final double v) {
-        final int pos = insert(k, v);
-        if (pos < 0) return defRetValue;
-        final double oldValue = value[pos];
-        value[pos] = v;
-        return oldValue;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Please use the corresponding type-specific method instead.
-     */
-    @Deprecated
-    @Override
-    public Double put(final Integer ok, final Double ov) {
-        final double v = ((ov).doubleValue());
-        final int pos = insert(((ok).intValue()), v);
-        if (pos < 0) return (null);
-        final double oldValue = value[pos];
-        value[pos] = v;
-        return (Double.valueOf(oldValue));
-    }
-
-    private double addToValue(final int pos, final double incr) {
-        final double oldValue = value[pos];
-        value[pos] = oldValue + incr;
-        return oldValue;
-    }
-
-    /**
-     * Adds an increment to value currently associated with a key.
-     * <p>
-     * <P>Note that this method respects the {@linkplain #defaultReturnValue() default return value} semantics: when called with a key that does not currently appears in the map, the key will be
-     * associated with the default return value plus the given increment.
-     *
-     * @param k    the key.
-     * @param incr the increment.
-     * @return the old value, or the {@linkplain #defaultReturnValue() default return value} if no value was present for the given key.
-     */
-    public double addTo(final int k, final double incr) {
-        int pos;
-        if (((k) == (0))) {
-            if (containsNullKey) return addToValue(n, incr);
-            pos = n;
-            containsNullKey = true;
-        } else {
-            int curr;
-            final int[] key = this.key;
-            // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) {
-                if (((curr) == (k))) return addToValue(pos, incr);
-                while (!((curr = key[pos = (pos + 1) & mask]) == (0)))
-                    if (((curr) == (k))) return addToValue(pos, incr);
-            }
-        }
-        key[pos] = k;
-        value[pos] = defRetValue + incr;
         if (size == 0) {
             first = last = pos;
             // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
@@ -437,29 +319,43 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
             last = pos;
         }
-        if (size++ >= maxFill) rehash(arraySize(size + 1, f));
-        return defRetValue;
+        if (size++ >= maxFill)
+            rehash(arraySize(size + 1, f));
+        return -1;
     }
-
+    public V put(final K k, final V v) {
+        final int pos = insert(k, v);
+        if (pos < 0)
+            return defRetValue;
+        final V oldValue = value[pos];
+        value[pos] = v;
+        return oldValue;
+    }
     /**
-     * Shifts left entries with the specified hash code, starting at the specified position, and empties the resulting free entry.
+     * Shifts left entries with the specified hash code, starting at the
+     * specified position, and empties the resulting free entry.
      *
-     * @param pos a starting position.
+     * @param pos
+     *            a starting position.
      */
     protected final void shiftKeys(int pos) {
         // Shift entries with the same hash.
         int last, slot;
-        int curr;
-        final int[] key = this.key;
-        for (; ; ) {
+        K curr;
+        final K[] key = this.key;
+        for (;;) {
             pos = ((last = pos) + 1) & mask;
-            for (; ; ) {
-                if (((curr = key[pos]) == (0))) {
-                    key[last] = (0);
+            for (;;) {
+                if (((curr = key[pos]) == null)) {
+                    key[last] = (null);
+                    value[last] = null;
                     return;
                 }
-                slot = (HashCommon.mix((curr))) & mask;
-                if (last <= pos ? last >= slot || slot > pos : last >= slot && slot > pos) break;
+                slot = (HashCommon.mix((curr).hashCode()))
+                        & mask;
+                if (last <= pos ? last >= slot || slot > pos : last >= slot
+                        && slot > pos)
+                    break;
                 pos = (pos + 1) & mask;
             }
             key[last] = curr;
@@ -467,63 +363,45 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             fixPointers(pos, last);
         }
     }
-
-    public double remove(final int k) {
-        if (((k) == (0))) {
-            if (containsNullKey) return removeNullEntry();
+    @SuppressWarnings("unchecked")
+    public V remove(final Object k) {
+        if ((((K) k) == null)) {
+            if (containsNullKey)
+                return removeNullEntry();
             return defRetValue;
         }
-        int curr;
-        final int[] key = this.key;
+        K curr;
+        final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return defRetValue;
-        if (((k) == (curr))) return removeEntry(pos);
+        if (((curr = key[pos = (HashCommon.mix((k)
+                .hashCode())) & mask]) == null))
+            return defRetValue;
+        if (((k).equals(curr)))
+            return removeEntry(pos);
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return defRetValue;
-            if (((k) == (curr))) return removeEntry(pos);
+            if (((curr = key[pos = (pos + 1) & mask]) == null))
+                return defRetValue;
+            if (((k).equals(curr)))
+                return removeEntry(pos);
         }
     }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Please use the corresponding type-specific method instead.
-     */
-    @Deprecated
-    @Override
-    public Double remove(final Object ok) {
-        final int k = ((((Integer) (ok)).intValue()));
-        if (((k) == (0))) {
-            if (containsNullKey) return (Double.valueOf(removeNullEntry()));
-            return (null);
-        }
-        int curr;
-        final int[] key = this.key;
-        int pos;
-        // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return (null);
-        if (((curr) == (k))) return (Double.valueOf(removeEntry(pos)));
-        while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return (null);
-            if (((curr) == (k))) return (Double.valueOf(removeEntry(pos)));
-        }
-    }
-
-    private double setValue(final int pos, final double v) {
-        final double oldValue = value[pos];
+    private V setValue(final int pos, final V v) {
+        final V oldValue = value[pos];
         value[pos] = v;
         return oldValue;
     }
-
     /**
      * Removes the mapping associated with the first key in iteration order.
      *
-     * @return the value previously associated with the first key in iteration order.
-     * @throws NoSuchElementException is this map is empty.
+     * @return the value previously associated with the first key in iteration
+     *         order.
+     * @throws NoSuchElementException
+     *             is this map is empty.
      */
-    public double removeFirstDouble() {
-        if (size == 0) throw new NoSuchElementException();
+    public V removeFirst() {
+        if (size == 0)
+            throw new NoSuchElementException();
         final int pos = first;
         // Abbreviated version of fixPointers(pos)
         first = (int) link[pos];
@@ -532,22 +410,28 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             link[first] |= (-1 & 0xFFFFFFFFL) << 32;
         }
         size--;
-        final double v = value[pos];
+        final V v = value[pos];
         if (pos == n) {
             containsNullKey = false;
-        } else shiftKeys(pos);
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE) rehash(n / 2);
+            key[n] = null;
+            value[n] = null;
+        } else
+            shiftKeys(pos);
+        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
+            rehash(n / 2);
         return v;
     }
-
     /**
      * Removes the mapping associated with the last key in iteration order.
      *
-     * @return the value previously associated with the last key in iteration order.
-     * @throws NoSuchElementException is this map is empty.
+     * @return the value previously associated with the last key in iteration
+     *         order.
+     * @throws NoSuchElementException
+     *             is this map is empty.
      */
-    public double removeLastDouble() {
-        if (size == 0) throw new NoSuchElementException();
+    public V removeLast() {
+        if (size == 0)
+            throw new NoSuchElementException();
         final int pos = last;
         // Abbreviated version of fixPointers(pos)
         last = (int) (link[pos] >>> 32);
@@ -556,16 +440,20 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             link[last] |= -1 & 0xFFFFFFFFL;
         }
         size--;
-        final double v = value[pos];
+        final V v = value[pos];
         if (pos == n) {
             containsNullKey = false;
-        } else shiftKeys(pos);
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE) rehash(n / 2);
+            key[n] = null;
+            value[n] = null;
+        } else
+            shiftKeys(pos);
+        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
+            rehash(n / 2);
         return v;
     }
-
     private void moveIndexToFirst(final int i) {
-        if (size == 1 || first == i) return;
+        if (size == 1 || first == i)
+            return;
         if (last == i) {
             last = (int) (link[i] >>> 32);
             // Special case of SET_NEXT( link[ last ], -1 );
@@ -581,9 +469,9 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         link[i] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
         first = i;
     }
-
     private void moveIndexToLast(final int i) {
-        if (size == 1 || last == i) return;
+        if (size == 1 || last == i)
+            return;
         if (first == i) {
             first = (int) link[i];
             // Special case of SET_PREV( link[ first ], -1 );
@@ -599,83 +487,98 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         link[i] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
         last = i;
     }
-
     /**
-     * Returns the value to which the given key is mapped; if the key is present, it is moved to the first position of the iteration order.
+     * Returns the value to which the given key is mapped; if the key is
+     * present, it is moved to the first position of the iteration order.
      *
-     * @param k the key.
-     * @return the corresponding value, or the {@linkplain #defaultReturnValue() default return value} if no value was present for the given key.
+     * @param k
+     *            the key.
+     * @return the corresponding value, or the
+     *         {@linkplain #defaultReturnValue() default return value} if no
+     *         value was present for the given key.
      */
-    public double getAndMoveToFirst(final int k) {
-        if (((k) == (0))) {
+    public V getAndMoveToFirst(final K k) {
+        if (((k) == null)) {
             if (containsNullKey) {
                 moveIndexToFirst(n);
                 return value[n];
             }
             return defRetValue;
         }
-        int curr;
-        final int[] key = this.key;
+        K curr;
+        final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return defRetValue;
-        if (((k) == (curr))) {
+        if (((curr = key[pos = (HashCommon.mix((k)
+                .hashCode())) & mask]) == null))
+            return defRetValue;
+        if (((k).equals(curr))) {
             moveIndexToFirst(pos);
             return value[pos];
         }
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return defRetValue;
-            if (((k) == (curr))) {
+            if (((curr = key[pos = (pos + 1) & mask]) == null))
+                return defRetValue;
+            if (((k).equals(curr))) {
                 moveIndexToFirst(pos);
                 return value[pos];
             }
         }
     }
-
     /**
-     * Returns the value to which the given key is mapped; if the key is present, it is moved to the last position of the iteration order.
+     * Returns the value to which the given key is mapped; if the key is
+     * present, it is moved to the last position of the iteration order.
      *
-     * @param k the key.
-     * @return the corresponding value, or the {@linkplain #defaultReturnValue() default return value} if no value was present for the given key.
+     * @param k
+     *            the key.
+     * @return the corresponding value, or the
+     *         {@linkplain #defaultReturnValue() default return value} if no
+     *         value was present for the given key.
      */
-    public double getAndMoveToLast(final int k) {
-        if (((k) == (0))) {
+    public V getAndMoveToLast(final K k) {
+        if (((k) == null)) {
             if (containsNullKey) {
                 moveIndexToLast(n);
                 return value[n];
             }
             return defRetValue;
         }
-        int curr;
-        final int[] key = this.key;
+        K curr;
+        final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return defRetValue;
-        if (((k) == (curr))) {
+        if (((curr = key[pos = (HashCommon.mix((k)
+                .hashCode())) & mask]) == null))
+            return defRetValue;
+        if (((k).equals(curr))) {
             moveIndexToLast(pos);
             return value[pos];
         }
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return defRetValue;
-            if (((k) == (curr))) {
+            if (((curr = key[pos = (pos + 1) & mask]) == null))
+                return defRetValue;
+            if (((k).equals(curr))) {
                 moveIndexToLast(pos);
                 return value[pos];
             }
         }
     }
-
     /**
-     * Adds a pair to the map; if the key is already present, it is moved to the first position of the iteration order.
+     * Adds a pair to the map; if the key is already present, it is moved to the
+     * first position of the iteration order.
      *
-     * @param k the key.
-     * @param v the value.
-     * @return the old value, or the {@linkplain #defaultReturnValue() default return value} if no value was present for the given key.
+     * @param k
+     *            the key.
+     * @param v
+     *            the value.
+     * @return the old value, or the {@linkplain #defaultReturnValue() default
+     *         return value} if no value was present for the given key.
      */
-    public double putAndMoveToFirst(final int k, final double v) {
+    public V putAndMoveToFirst(final K k, final V v) {
         int pos;
-        if (((k) == (0))) {
+        if (((k) == null)) {
             if (containsNullKey) {
                 moveIndexToFirst(n);
                 return setValue(n, v);
@@ -683,16 +586,17 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             containsNullKey = true;
             pos = n;
         } else {
-            int curr;
-            final int[] key = this.key;
+            K curr;
+            final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) {
-                if (((curr) == (k))) {
+            if (!((curr = key[pos = (HashCommon.mix((k)
+                    .hashCode())) & mask]) == null)) {
+                if (((curr).equals(k))) {
                     moveIndexToFirst(pos);
                     return setValue(pos, v);
                 }
-                while (!((curr = key[pos = (pos + 1) & mask]) == (0)))
-                    if (((curr) == (k))) {
+                while (!((curr = key[pos = (pos + 1) & mask]) == null))
+                    if (((curr).equals(k))) {
                         moveIndexToFirst(pos);
                         return setValue(pos, v);
                     }
@@ -709,20 +613,24 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             link[pos] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
             first = pos;
         }
-        if (size++ >= maxFill) rehash(arraySize(size, f));
+        if (size++ >= maxFill)
+            rehash(arraySize(size, f));
         return defRetValue;
     }
-
     /**
-     * Adds a pair to the map; if the key is already present, it is moved to the last position of the iteration order.
+     * Adds a pair to the map; if the key is already present, it is moved to the
+     * last position of the iteration order.
      *
-     * @param k the key.
-     * @param v the value.
-     * @return the old value, or the {@linkplain #defaultReturnValue() default return value} if no value was present for the given key.
+     * @param k
+     *            the key.
+     * @param v
+     *            the value.
+     * @return the old value, or the {@linkplain #defaultReturnValue() default
+     *         return value} if no value was present for the given key.
      */
-    public double putAndMoveToLast(final int k, final double v) {
+    public V putAndMoveToLast(final K k, final V v) {
         int pos;
-        if (((k) == (0))) {
+        if (((k) == null)) {
             if (containsNullKey) {
                 moveIndexToLast(n);
                 return setValue(n, v);
@@ -730,16 +638,17 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             containsNullKey = true;
             pos = n;
         } else {
-            int curr;
-            final int[] key = this.key;
+            K curr;
+            final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) {
-                if (((curr) == (k))) {
+            if (!((curr = key[pos = (HashCommon.mix((k)
+                    .hashCode())) & mask]) == null)) {
+                if (((curr).equals(k))) {
                     moveIndexToLast(pos);
                     return setValue(pos, v);
                 }
-                while (!((curr = key[pos = (pos + 1) & mask]) == (0)))
-                    if (((curr) == (k))) {
+                while (!((curr = key[pos = (pos + 1) & mask]) == null))
+                    if (((curr).equals(k))) {
                         moveIndexToLast(pos);
                         return setValue(pos, v);
                     }
@@ -756,73 +665,77 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
             last = pos;
         }
-        if (size++ >= maxFill) rehash(arraySize(size, f));
+        if (size++ >= maxFill)
+            rehash(arraySize(size, f));
         return defRetValue;
     }
-
-    public Double get(final Integer ok) {
-        final int k = ((ok).intValue());
-        if (((k) == (0))) return containsNullKey ? (Double.valueOf(value[n])) : (null);
-        int curr;
-        final int[] key = this.key;
+    @SuppressWarnings("unchecked")
+    public V get(final Object k) {
+        if ((((K) k) == null))
+            return containsNullKey ? value[n] : defRetValue;
+        K curr;
+        final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return (null);
-        if (((k) == (curr))) return (Double.valueOf(value[pos]));
+        if (((curr = key[pos = (HashCommon.mix((k)
+                .hashCode())) & mask]) == null))
+            return defRetValue;
+        if (((k).equals(curr)))
+            return value[pos];
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return (null);
-            if (((k) == (curr))) return (Double.valueOf(value[pos]));
+            if (((curr = key[pos = (pos + 1) & mask]) == null))
+                return defRetValue;
+            if (((k).equals(curr)))
+                return value[pos];
         }
     }
-
-    public double get(final int k) {
-        if (((k) == (0))) return containsNullKey ? value[n] : defRetValue;
-        int curr;
-        final int[] key = this.key;
+    @SuppressWarnings("unchecked")
+    public boolean containsKey(final Object k) {
+        if ((((K) k) == null))
+            return containsNullKey;
+        K curr;
+        final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return defRetValue;
-        if (((k) == (curr))) return value[pos];
+        if (((curr = key[pos = (HashCommon.mix((k)
+                .hashCode())) & mask]) == null))
+            return false;
+        if (((k).equals(curr)))
+            return true;
         // There's always an unused entry.
         while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return defRetValue;
-            if (((k) == (curr))) return value[pos];
+            if (((curr = key[pos = (pos + 1) & mask]) == null))
+                return false;
+            if (((k).equals(curr)))
+                return true;
         }
     }
-
-    public boolean containsKey(final int k) {
-        if (((k) == (0))) return containsNullKey;
-        int curr;
-        final int[] key = this.key;
-        int pos;
-        // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return false;
-        if (((k) == (curr))) return true;
-        // There's always an unused entry.
-        while (true) {
-            if (((curr = key[pos = (pos + 1) & mask]) == (0))) return false;
-            if (((k) == (curr))) return true;
-        }
-    }
-
-    public boolean containsValue(final double v) {
-        final double value[] = this.value;
-        final int key[] = this.key;
-        if (containsNullKey && ((value[n]) == (v))) return true;
-        for (int i = n; i-- != 0; )
-            if (!((key[i]) == (0)) && ((value[i]) == (v))) return true;
+    public boolean containsValue(final Object v) {
+        final V value[] = this.value;
+        final K key[] = this.key;
+        if (containsNullKey
+                && ((value[n]) == null ? (v) == null : (value[n]).equals(v)))
+            return true;
+        for (int i = n; i-- != 0;)
+            if (!((key[i]) == null)
+                    && ((value[i]) == null ? (v) == null : (value[i]).equals(v)))
+                return true;
         return false;
     }
-
-    /* Removes all elements from this map.
+    /*
+     * Removes all elements from this map.
      *
-	 * <P>To increase object reuse, this method does not change the table size. If you want to reduce the table size, you must use {@link #trim()}. */
+     * <P>To increase object reuse, this method does not change the table size.
+     * If you want to reduce the table size, you must use {@link #trim()}.
+     */
     public void clear() {
-        if (size == 0) return;
+        if (size == 0)
+            return;
         size = 0;
         containsNullKey = false;
-        Arrays.fill(key, (0));
+        Arrays.fill(key, (null));
+        Arrays.fill(value, null);
         first = last = -1;
     }
 
@@ -858,68 +771,46 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
     /**
      * The entry class for a hash map does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
-     * {@link Map.Entry#setValue(Object)} are reflected in the map
+     * {@link Entry#setValue(Object)} are reflected in the map
      */
-    public final class MapEntry implements Entry<Integer, Double> {
-        // The table index this entry refers to, or -1 if this entry has been deleted.
+    final class MapEntry
+            implements
+            Entry<K, V> {
+        // The table index this entry refers to, or -1 if this entry has been
+        // deleted.
         int index;
-
         MapEntry(final int index) {
             this.index = index;
         }
-
         MapEntry() {
         }
-
-        /**
-         * {@inheritDoc}
-         *
-         * @deprecated Please use the corresponding type-specific method instead.
-         */
-        @Deprecated
-        public Integer getKey() {
-            return (Integer.valueOf(key[index]));
+        public K getKey() {
+            return (key[index]);
         }
-
-        public int getIntKey() {
-            return key[index];
+        public V getValue() {
+            return (value[index]);
         }
-
-        /**
-         * {@inheritDoc}
-         *
-         * @deprecated Please use the corresponding type-specific method instead.
-         */
-        @Deprecated
-        public Double getValue() {
-            return (Double.valueOf(value[index]));
-        }
-
-        public double getDoubleValue() {
-            return value[index];
-        }
-
-        public double setValue(final double v) {
-            final double oldValue = value[index];
+        public V setValue(final V v) {
+            final V oldValue = value[index];
             value[index] = v;
             return oldValue;
         }
-
-        public Double setValue(final Double v) {
-            return (Double.valueOf(setValue(((v).doubleValue()))));
-        }
-
         @SuppressWarnings("unchecked")
         public boolean equals(final Object o) {
-            if (!(o instanceof Map.Entry)) return false;
-            Map.Entry<Integer, Double> e = (Map.Entry<Integer, Double>) o;
-            return ((key[index]) == (((e.getKey()).intValue()))) && ((value[index]) == (((e.getValue()).doubleValue())));
+            if (!(o instanceof Map.Entry))
+                return false;
+            Map.Entry<K, V> e = (Map.Entry<K, V>) o;
+            return ((key[index]) == null
+                    ? ((e.getKey())) == null
+                    : (key[index]).equals((e.getKey())))
+                    && ((value[index]) == null
+                    ? ((e.getValue())) == null
+                    : (value[index]).equals((e.getValue())));
         }
-
         public int hashCode() {
-            return (key[index]) ^ HashCommon.double2int(value[index]);
+            return ((key[index]) == null ? 0 : (key[index]).hashCode())
+                    ^ ((value[index]) == null ? 0 : (value[index]).hashCode());
         }
-
         public String toString() {
             return key[index] + "=>" + value[index];
         }
@@ -996,95 +887,89 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      *
      * @return the first key in iteration order.
      */
-    public int firstIntKey() {
-        if (size == 0) throw new NoSuchElementException();
+    public K firstKey() {
+        if (size == 0)
+            throw new NoSuchElementException();
         return key[first];
     }
-
     /**
      * Returns the last key of this map in iteration order.
      *
      * @return the last key in iteration order.
      */
-    public int lastIntKey() {
-        if (size == 0) throw new NoSuchElementException();
+    public K lastKey() {
+        if (size == 0)
+            throw new NoSuchElementException();
         return key[last];
     }
-
-    public Comparator<Integer> comparator() {
+    public Comparator<? super K> comparator() {
         return null;
     }
-
-    public IntDoubleOrderedMap tailMap(int from) {
+    public SortedMap<K, V> tailMap(K from) {
         throw new UnsupportedOperationException();
     }
-
-    public IntDoubleOrderedMap headMap(int to) {
+    public SortedMap<K, V> headMap(K to) {
         throw new UnsupportedOperationException();
     }
-
-    public IntDoubleOrderedMap subMap(int from, int to) {
+    public SortedMap<K, V> subMap(K from, K to) {
         throw new UnsupportedOperationException();
     }
-
-    public IntDoubleOrderedMap tailMap(Integer from) {
-        throw new UnsupportedOperationException();
-    }
-
-    public IntDoubleOrderedMap headMap(Integer to) {
-        throw new UnsupportedOperationException();
-    }
-
-    public IntDoubleOrderedMap subMap(Integer from, Integer to) {
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * A list iterator over a linked map.
-     * <p>
-     * <P>This class provides a list iterator over a linked hash map. The constructor runs in constant time.
+     *
+     * <P>
+     * This class provides a list iterator over a linked hash map. The
+     * constructor runs in constant time.
      */
     private class MapIterator {
         /**
-         * The entry that will be returned by the next call to {@link java.util.ListIterator#previous()} (or <code>null</code> if no previous entry exists).
+         * The entry that will be returned by the next call to
+         * {@link java.util.ListIterator#previous()} (or <code>null</code> if no
+         * previous entry exists).
          */
         int prev = -1;
         /**
-         * The entry that will be returned by the next call to {@link java.util.ListIterator#next()} (or <code>null</code> if no next entry exists).
+         * The entry that will be returned by the next call to
+         * {@link java.util.ListIterator#next()} (or <code>null</code> if no
+         * next entry exists).
          */
         int next = -1;
         /**
-         * The last entry that was returned (or -1 if we did not iterate or used {@link java.util.Iterator#remove()}).
+         * The last entry that was returned (or -1 if we did not iterate or used
+         * {@link java.util.Iterator#remove()}).
          */
         int curr = -1;
         /**
-         * The current index (in the sense of a {@link java.util.ListIterator}). Note that this value is not meaningful when this iterator has been created using the nonempty constructor.
+         * The current index (in the sense of a {@link java.util.ListIterator}).
+         * Note that this value is not meaningful when this iterator has been
+         * created using the nonempty constructor.
          */
         int index = -1;
-
         private MapIterator() {
             next = first;
             index = 0;
         }
-
-        private MapIterator(final int from) {
-            if (((from) == (0))) {
-                if (IntDoubleOrderedMap.this.containsNullKey) {
+        private MapIterator(final K from) {
+            if (((from) == null)) {
+                if (containsNullKey) {
                     next = (int) link[n];
                     prev = n;
                     return;
-                } else throw new NoSuchElementException("The key " + from + " does not belong to this map.");
+                } else
+                    throw new NoSuchElementException("The key null"
+                            + " does not belong to this map.");
             }
-            if (((key[last]) == (from))) {
+            if (((key[last]) != null && (key[last]).equals(from))) {
                 prev = last;
                 index = size;
                 return;
             }
             // The starting point.
-            int pos = (HashCommon.mix((from))) & mask;
+            int pos = (HashCommon.mix((from).hashCode()))
+                    & mask;
             // There's always an unused entry.
-            while (!((key[pos]) == (0))) {
-                if (((key[pos]) == (from))) {
+            while (!((key[pos]) == null)) {
+                if (((key[pos]).equals(from))) {
                     // Note: no valid index known.
                     next = (int) link[pos];
                     prev = pos;
@@ -1092,19 +977,18 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
                 }
                 pos = (pos + 1) & mask;
             }
-            throw new NoSuchElementException("The key " + from + " does not belong to this map.");
+            throw new NoSuchElementException("The key " + from
+                    + " does not belong to this map.");
         }
-
         public boolean hasNext() {
             return next != -1;
         }
-
         public boolean hasPrevious() {
             return prev != -1;
         }
-
         private final void ensureIndexKnown() {
-            if (index >= 0) return;
+            if (index >= 0)
+                return;
             if (prev == -1) {
                 index = 0;
                 return;
@@ -1120,86 +1004,105 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
                 index++;
             }
         }
-
         public int nextIndex() {
             ensureIndexKnown();
             return index;
         }
-
         public int previousIndex() {
             ensureIndexKnown();
             return index - 1;
         }
-
         public int nextEntry() {
-            if (!hasNext()) throw new NoSuchElementException();
+            if (!hasNext())
+                throw new NoSuchElementException();
             curr = next;
             next = (int) link[curr];
             prev = curr;
-            if (index >= 0) index++;
+            if (index >= 0)
+                index++;
             return curr;
         }
-
         public int previousEntry() {
-            if (!hasPrevious()) throw new NoSuchElementException();
+            if (!hasPrevious())
+                throw new NoSuchElementException();
             curr = prev;
             prev = (int) (link[curr] >>> 32);
             next = curr;
-            if (index >= 0) index--;
+            if (index >= 0)
+                index--;
             return curr;
         }
-
         public void remove() {
             ensureIndexKnown();
-            if (curr == -1) throw new IllegalStateException();
+            if (curr == -1)
+                throw new IllegalStateException();
             if (curr == prev) {
 				/*
-				 * If the last operation was a next(), we are removing an entry that preceeds the current index, and thus we must decrement it. */
+				 * If the last operation was a next(), we are removing an entry
+				 * that preceeds the current index, and thus we must decrement
+				 * it.
+				 */
                 index--;
                 prev = (int) (link[curr] >>> 32);
-            } else next = (int) link[curr];
+            } else
+                next = (int) link[curr];
             size--;
 			/*
-			 * Now we manually fix the pointers. Because of our knowledge of next and prev, this is going to be faster than calling fixPointers(). */
-            if (prev == -1) first = next;
-            else link[prev] ^= ((link[prev] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            if (next == -1) last = prev;
-            else link[next] ^= ((link[next] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+			 * Now we manually fix the pointers. Because of our knowledge of
+			 * next and prev, this is going to be faster than calling
+			 * fixPointers().
+			 */
+            if (prev == -1)
+                first = next;
+            else
+                link[prev] ^= ((link[prev] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
+            if (next == -1)
+                last = prev;
+            else
+                link[next] ^= ((link[next] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
             int last, slot, pos = curr;
             curr = -1;
             if (pos == n) {
-                IntDoubleOrderedMap.this.containsNullKey = false;
+                containsNullKey = false;
+                key[n] = null;
+                value[n] = null;
             } else {
-                int curr;
-                final int[] key = IntDoubleOrderedMap.this.key;
-                // We have to horribly duplicate the shiftKeys() code because we need to update next/prev.
-                for (; ; ) {
+                K curr;
+                final K[] key = ObjectObjectOrderedMap.this.key;
+                // We have to horribly duplicate the shiftKeys() code because we
+                // need to update next/prev.
+                for (;;) {
                     pos = ((last = pos) + 1) & mask;
-                    for (; ; ) {
-                        if (((curr = key[pos]) == (0))) {
-                            key[last] = (0);
+                    for (;;) {
+                        if (((curr = key[pos]) == null)) {
+                            key[last] = (null);
+                            value[last] = null;
                             return;
                         }
-                        slot = (HashCommon.mix((curr))) & mask;
-                        if (last <= pos ? last >= slot || slot > pos : last >= slot && slot > pos) break;
+                        slot = (HashCommon.mix((curr)
+                                .hashCode())) & mask;
+                        if (last <= pos
+                                ? last >= slot || slot > pos
+                                : last >= slot && slot > pos)
+                            break;
                         pos = (pos + 1) & mask;
                     }
                     key[last] = curr;
                     value[last] = value[pos];
-                    if (next == pos) next = last;
-                    if (prev == pos) prev = last;
+                    if (next == pos)
+                        next = last;
+                    if (prev == pos)
+                        prev = last;
                     fixPointers(pos, last);
                 }
             }
         }
-
         public int skip(final int n) {
             int i = n;
             while (i-- != 0 && hasNext())
                 nextEntry();
             return n - i - 1;
         }
-
         public int back(final int n) {
             int i = n;
             while (i-- != 0 && hasPrevious())
@@ -1207,36 +1110,30 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             return n - i - 1;
         }
     }
-
-    public class EntryIterator extends MapIterator implements Iterator<MapEntry> {
+    private class EntryIterator extends MapIterator
+            implements
+            Iterator<Entry<K, V>> {
         private MapEntry entry;
-
         public EntryIterator() {
         }
-
-        public EntryIterator(int from) {
+        public EntryIterator(K from) {
             super(from);
         }
-
         public MapEntry next() {
             return entry = new MapEntry(nextEntry());
         }
-
         public MapEntry previous() {
             return entry = new MapEntry(previousEntry());
         }
-
         @Override
         public void remove() {
             super.remove();
             entry.index = -1; // You cannot use a deleted entry.
         }
-
-        public void set(MapEntry ok) {
+        public void set(Entry<K, V> ok) {
             throw new UnsupportedOperationException();
         }
-
-        public void add(MapEntry ok) {
+        public void add(Entry<K, V> ok) {
             throw new UnsupportedOperationException();
         }
     }
@@ -1246,162 +1143,144 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
         public FastEntryIterator() {
         }
-
-        public FastEntryIterator(int from) {
+        public FastEntryIterator(K from) {
             super(from);
         }
-
         public MapEntry next() {
             entry.index = nextEntry();
             return entry;
         }
-
         public MapEntry previous() {
             entry.index = previousEntry();
             return entry;
         }
-
         public void set(MapEntry ok) {
             throw new UnsupportedOperationException();
         }
-
         public void add(MapEntry ok) {
             throw new UnsupportedOperationException();
         }
     }
-
-    public final class MapEntrySet implements Cloneable, SortedSet<MapEntry>, Set<MapEntry>, Collection<MapEntry> {
+    private final class MapEntrySet
+            implements Cloneable, SortedSet<Entry<K, V>>, Set<Entry<K, V>>, Collection<Entry<K, V>> {
         public EntryIterator iterator() {
             return new EntryIterator();
         }
-
-        public Comparator<? super MapEntry> comparator() {
+        public Comparator<? super Entry<K, V>> comparator() {
             return null;
         }
-
-        public MapEntrySet subSet(MapEntry fromElement, MapEntry toElement) {
+        public SortedSet<Entry<K, V>> subSet(
+                Entry<K, V> fromElement,
+                Entry<K, V> toElement) {
             throw new UnsupportedOperationException();
         }
-
-        public MapEntrySet headSet(MapEntry toElement) {
+        public SortedSet<Entry<K, V>> headSet(
+                Entry<K, V> toElement) {
             throw new UnsupportedOperationException();
         }
-
-        public MapEntrySet tailSet(MapEntry fromElement) {
+        public SortedSet<Entry<K, V>> tailSet(
+                Entry<K, V> fromElement) {
             throw new UnsupportedOperationException();
         }
-
-
-        public MapEntry first() {
-            if (size == 0) throw new NoSuchElementException();
-            return new MapEntry(first);
+        public Entry<K, V> first() {
+            if (size == 0)
+                throw new NoSuchElementException();
+            return new MapEntry(ObjectObjectOrderedMap.this.first);
         }
-
-        public MapEntry last() {
-            if (size == 0) throw new NoSuchElementException();
-            return new MapEntry(last);
+        public Entry<K, V> last() {
+            if (size == 0)
+                throw new NoSuchElementException();
+            return new MapEntry(ObjectObjectOrderedMap.this.last);
         }
-
         @SuppressWarnings("unchecked")
         public boolean contains(final Object o) {
-            if (!(o instanceof Map.Entry)) return false;
-            final Map.Entry<Integer, Double> e = (Map.Entry<Integer, Double>) o;
-            final int k = ((e.getKey()).intValue());
-            if (((k) == (0)))
-                return (IntDoubleOrderedMap.this.containsNullKey && ((value[n]) == (((e.getValue()).doubleValue()))));
-            int curr;
-            final int[] key = IntDoubleOrderedMap.this.key;
+            if (!(o instanceof Map.Entry))
+                return false;
+            final Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+            final K k = ((K) e.getKey());
+            final V v = ((V) e.getValue());
+            if (((k) == null))
+                return containsNullKey
+                        && ((value[n]) == null ? (v) == null : (value[n])
+                        .equals(v));
+            K curr;
+            final K[] key = ObjectObjectOrderedMap.this.key;
             int pos;
             // The starting point.
-            if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return false;
-            if (((k) == (curr))) return ((value[pos]) == (((e.getValue()).doubleValue())));
+            if (((curr = key[pos = (HashCommon.mix((k)
+                    .hashCode())) & mask]) == null))
+                return false;
+            if (((k).equals(curr)))
+                return ((value[pos]) == null ? (v) == null : (value[pos])
+                        .equals(v));
             // There's always an unused entry.
             while (true) {
-                if (((curr = key[pos = (pos + 1) & mask]) == (0))) return false;
-                if (((k) == (curr))) return ((value[pos]) == (((e.getValue()).doubleValue())));
+                if (((curr = key[pos = (pos + 1) & mask]) == null))
+                    return false;
+                if (((k).equals(curr)))
+                    return ((value[pos]) == null ? (v) == null : (value[pos])
+                            .equals(v));
             }
         }
-
         @SuppressWarnings("unchecked")
         public boolean remove(final Object o) {
-            if (!(o instanceof Map.Entry)) return false;
-            final Map.Entry<Integer, Double> e = (Map.Entry<Integer, Double>) o;
-            final int k = ((e.getKey()).intValue());
-            final double v = ((e.getValue()).doubleValue());
-            if (((k) == (0))) {
-                if (containsNullKey && ((value[n]) == (v))) {
+            if (!(o instanceof Map.Entry))
+                return false;
+            final Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+            final K k = ((K) e.getKey());
+            final V v = ((V) e.getValue());
+            if (((k) == null)) {
+                if (containsNullKey
+                        && ((value[n]) == null ? (v) == null : (value[n])
+                        .equals(v))) {
                     removeNullEntry();
                     return true;
                 }
                 return false;
             }
-            int curr;
-            final int[] key = IntDoubleOrderedMap.this.key;
+            K curr;
+            final K[] key = ObjectObjectOrderedMap.this.key;
             int pos;
             // The starting point.
-            if (((curr = key[pos = (HashCommon.mix((k))) & mask]) == (0))) return false;
-            if (((curr) == (k))) {
-                if (((value[pos]) == (v))) {
+            if (((curr = key[pos = (HashCommon.mix((k)
+                    .hashCode())) & mask]) == null))
+                return false;
+            if (((curr).equals(k))) {
+                if (((value[pos]) == null ? (v) == null : (value[pos])
+                        .equals(v))) {
                     removeEntry(pos);
                     return true;
                 }
                 return false;
             }
             while (true) {
-                if (((curr = key[pos = (pos + 1) & mask]) == (0))) return false;
-                if (((curr) == (k))) {
-                    if (((value[pos]) == (v))) {
+                if (((curr = key[pos = (pos + 1) & mask]) == null))
+                    return false;
+                if (((curr).equals(k))) {
+                    if (((value[pos]) == null ? (v) == null : (value[pos])
+                            .equals(v))) {
                         removeEntry(pos);
                         return true;
                     }
                 }
             }
         }
-
         public int size() {
             return size;
         }
-
         public void clear() {
-            IntDoubleOrderedMap.this.clear();
+            ObjectObjectOrderedMap.this.clear();
         }
-
-        public EntryIterator iterator(final MapEntry from) {
-            return new EntryIterator(from.getIntKey());
+        public Iterator<Entry<K, V>> iterator(
+                final Entry<K, V> from) {
+            return new EntryIterator((from.getKey()));
         }
-
-        public boolean equals(final Object o) {
-            if (o == this) return true;
-            if (!(o instanceof Set)) return false;
-            Set<?> s = (Set<?>) o;
-            if (s.size() != size()) return false;
-            return containsAll(s);
+        public FastEntryIterator fastIterator() {
+            return new FastEntryIterator();
         }
-
-        /**
-         * Returns a hash code for this set.
-         * <p>
-         * The hash code of a set is computed by summing the hash codes of its elements.
-         *
-         * @return a hash code for this set.
-         */
-        public int hashCode() {
-            int h = 0, n = size();
-            EntryIterator i = iterator();
-            MapEntry k;
-            while (n-- != 0) {
-                k = i.next(); // We need k because KEY2JAVAHASH() is a macro with repeated evaluation.
-                h += ((k) == null ? 0 : (k).hashCode());
-            }
-            return h;
-        }
-
-        public EntryIterator fastIterator() {
-            return new EntryIterator();
-        }
-
-        public EntryIterator fastIterator(final MapEntry from) {
-            return new EntryIterator(from.getIntKey());
+        public FastEntryIterator fastIterator(
+                final Entry<K, V> from) {
+            return new FastEntryIterator((from.getKey()));
         }
 
         public Object[] toArray() {
@@ -1429,7 +1308,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * @return nothing, throws UnsupportedOperationException
          * @throws UnsupportedOperationException always
          */
-        public boolean addAll(Collection<? extends MapEntry> c) {
+        public boolean addAll(Collection<? extends Entry<K, V>> c) {
             throw new UnsupportedOperationException("addAll not supported");
         }
 
@@ -1440,7 +1319,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * @return nothing, throws UnsupportedOperationException
          * @throws UnsupportedOperationException always
          */
-        public boolean add(MapEntry k) {
+        public boolean add(Entry<K, V> k) {
             throw new UnsupportedOperationException("add not supported");
         }
 
@@ -1524,22 +1403,13 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             s.append("}");
             return s.toString();
         }
-        public Set<Entry<Integer, Double>> toBoxed()
-        {
-            return new LinkedHashSet<Entry<Integer, Double>>(this);
-        }
+
     }
 
-    /**
-     * THIS ONE IS BAD; it copies the entry set to allow it to be considered a Set of Map.Entry with the right (boxed)
-     * key and value types. Prefer {@code mapEntrySet()}!!!
-     * @return a Set of Map.Entry with Integer keys and Double values
-     * @see IntDoubleOrderedMap#mapEntrySet strongly preferred variant that allows primitive access
-     */
     @Override
-    public Set<Entry<Integer, Double>> entrySet() {
+    public SortedSet<Entry<K, V>> entrySet() {
         if (entries == null) entries = new MapEntrySet();
-        return entries.toBoxed();
+        return entries;
     }
     public MapEntrySet mapEntrySet() {
         if (entries == null) entries = new MapEntrySet();
@@ -1549,53 +1419,30 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     /**
      * An iterator on keys.
      * <p>
-     * <P>We simply override the {@link java.util.ListIterator#next()}/{@link java.util.ListIterator#previous()} methods (and possibly their type-specific counterparts) so that they return keys
+     * <P>We simply override the {@link ListIterator#next()}/{@link ListIterator#previous()} methods (and possibly their type-specific counterparts) so that they return keys
      * instead of entries.
      */
-    public final class KeyIterator extends MapIterator implements Iterator<Integer> {
-        public KeyIterator(final int k) {
+    public final class KeyIterator extends MapIterator implements Iterator<K> {
+        public KeyIterator(final K k) {
             super(k);
         }
-
-        public int previousInt() {
+        public K previous() {
             return key[previousEntry()];
         }
-
-        public void set(int k) {
+        public void set(K k) {
             throw new UnsupportedOperationException();
         }
-
-        public void add(int k) {
+        public void add(K k) {
             throw new UnsupportedOperationException();
         }
-
-        public Integer previous() {
-            return (Integer.valueOf(key[previousEntry()]));
-        }
-
-        public void set(Integer ok) {
-            throw new UnsupportedOperationException();
-        }
-
-        public void add(Integer ok) {
-            throw new UnsupportedOperationException();
-        }
-
-        public KeyIterator() {
-            super();
-        }
-
-        public int nextInt() {
+        public KeyIterator() {}
+        public K next() {
             return key[nextEntry()];
-        }
-
-        public Integer next() {
-            return (Integer.valueOf(key[nextEntry()]));
         }
     }
 
-    public final class KeySet implements SortedSet<Integer> {
-        public KeyIterator iterator(final int from) {
+    public final class KeySet implements SortedSet<K> {
+        public KeyIterator iterator(final K from) {
             return new KeyIterator(from);
         }
 
@@ -1607,114 +1454,61 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             return size;
         }
 
-        public boolean contains(int k) {
-            return containsKey(k);
-        }
-
-        public boolean remove(int k) {
-            final int oldSize = size;
-            IntDoubleOrderedMap.this.remove(k);
-            return size != oldSize;
-        }
-
-        public boolean remove(Integer k) {
-            final int oldSize = size;
-            IntDoubleOrderedMap.this.remove(k);
-            return size != oldSize;
-        }
-
         public void clear() {
-            IntDoubleOrderedMap.this.clear();
+            ObjectObjectOrderedMap.this.clear();
         }
 
-        public int firstInt() {
+        public K first() {
             if (size == 0) throw new NoSuchElementException();
             return key[first];
         }
 
-        public int lastInt() {
+        public K last() {
             if (size == 0) throw new NoSuchElementException();
             return key[last];
         }
 
-        public Comparator<Integer> comparator() {
+        public Comparator<K> comparator() {
             return null;
         }
 
-        public final SortedSet<Integer> tailSet(Integer from) {
+        public final SortedSet<K> tailSet(K from) {
             throw new UnsupportedOperationException();
         }
 
-        public final SortedSet<Integer> headSet(Integer to) {
+        public final SortedSet<K> headSet(K to) {
             throw new UnsupportedOperationException();
         }
 
-        public final SortedSet<Integer> subSet(Integer from, Integer to) {
+        public final SortedSet<K> subSet(K from, K to) {
             throw new UnsupportedOperationException();
         }
 
-
-        /**
-         * Delegates to the corresponding type-specific method.
-         *
-         * @deprecated Please use the corresponding type-specific method instead.
-         */
-        @Deprecated
-        public Integer first() {
-            return (Integer.valueOf(firstInt()));
-        }
-
-        /**
-         * Delegates to the corresponding type-specific method.
-         *
-         * @deprecated Please use the corresponding type-specific method instead.
-         */
-        @Deprecated
-        public Integer last() {
-            return (Integer.valueOf(lastInt()));
-        }
-
-
-        public int[] toArray(int a[]) {
-            return toIntArray(a);
-        }
-
-        public int[] toIntArray() {
-            return toIntArray(null);
-        }
-
-        public int[] toIntArray(int a[]) {
-            if (a == null || a.length < size()) a = new int[size()];
+        public Object[] toArray(Object a[]) {
+            if (a == null || a.length < size()) a = new Object[size()];
             unwrap(iterator(), a);
             return a;
         }
 
         /**
-         * Delegates to the type-specific <code>rem()</code> method.
+         * Always throws an UnsupportedOperationException
          */
         public boolean remove(Object ok) {
-            return rem(((((Integer) (ok)).intValue())));
+            throw new UnsupportedOperationException("Cannot remove from the key set directly");
         }
 
         /**
-         * Delegates to the corresponding type-specific method.
+         * Always throws an UnsupportedOperationException
          */
-        public boolean add(final Integer o) {
-            return add(o.intValue());
-        }
-
-        /**
-         * Delegates to the corresponding type-specific method.
-         */
-        public boolean rem(final Object o) {
-            return rem(((((Integer) (o)).intValue())));
+        public boolean add(final K o) {
+            throw new UnsupportedOperationException("Cannot add to the key set directly");
         }
 
         /**
          * Delegates to the corresponding type-specific method.
          */
         public boolean contains(final Object o) {
-            return contains(((((Integer) (o)).intValue())));
+            return containsKey(o);
         }
 
         /**
@@ -1771,33 +1565,20 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             return a;
         }
 
-        @SuppressWarnings("unchecked")
-        public <T> T[] toArray(T[] a) {
-            if (a.length < size())
-                a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size());
-            objectUnwrap(iterator(), a);
-            return a;
-        }
-
         /**
          * Adds all elements of the given collection to this collection.
          *
          * @param c a collection.
          * @return <code>true</code> if this collection changed as a result of the call.
          */
-        public boolean addAll(Collection<? extends Integer> c) {
+        public boolean addAll(Collection<? extends K> c) {
             boolean retVal = false;
-            final Iterator<? extends Integer> i = c.iterator();
+            final Iterator<? extends K> i = c.iterator();
             int n = c.size();
             while (n-- != 0)
                 if (add(i.next())) retVal = true;
             return retVal;
         }
-
-        public boolean add(int k) {
-            throw new UnsupportedOperationException();
-        }
-
 
         /**
          * Unwraps an iterator into an array starting at a given offset for a given number of elements.
@@ -1811,12 +1592,12 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * @param max    the maximum number of elements to unwrap.
          * @return the number of elements unwrapped.
          */
-        public int unwrap(final KeyIterator i, final int array[], int offset, final int max) {
+        public int unwrap(final KeyIterator i, final Object[] array, int offset, final int max) {
             if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
             if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
             int j = max;
             while (j-- != 0 && i.hasNext())
-                array[offset++] = i.nextInt();
+                array[offset++] = i.next();
             return max - j - 1;
         }
 
@@ -1830,7 +1611,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * @param array an array to contain the output of the iterator.
          * @return the number of elements unwrapped.
          */
-        public int unwrap(final KeyIterator i, final int array[]) {
+        public int unwrap(final KeyIterator i, final Object[] array) {
             return unwrap(i, array, 0, array.length);
         }
 
@@ -1842,14 +1623,12 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             final StringBuilder s = new StringBuilder();
             final KeyIterator i = iterator();
             int n = size();
-            int k;
             boolean first = true;
             s.append("{");
             while (n-- != 0) {
                 if (first) first = false;
                 else s.append(", ");
-                k = i.nextInt();
-                s.append(String.valueOf(k));
+                s.append(i.next());
             }
             s.append("}");
             return s.toString();
@@ -1864,55 +1643,43 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     /**
      * An iterator on values.
      * <p>
-     * <P>We simply override the {@link java.util.ListIterator#next()}/{@link java.util.ListIterator#previous()} methods (and possibly their type-specific counterparts) so that they return values
+     * <P>We simply override the {@link ListIterator#next()}/{@link ListIterator#previous()} methods (and possibly their type-specific counterparts) so that they return values
      * instead of entries.
      */
-    public final class DoubleIterator extends MapIterator implements ListIterator<Double> {
-        public double previousDouble() {
+    public final class ValueIterator extends MapIterator implements ListIterator<V> {
+        public V previous() {
             return value[previousEntry()];
         }
-
-        public Double previous() {
-            return (Double.valueOf(value[previousEntry()]));
-        }
-
-        public void set(Double ok) {
+        public void set(V v) {
             throw new UnsupportedOperationException();
         }
-
-        public void add(Double ok) {
+        public void add(V v) {
             throw new UnsupportedOperationException();
         }
-
-        public void set(double v) {
-            throw new UnsupportedOperationException();
-        }
-
-        public void add(double v) {
-            throw new UnsupportedOperationException();
-        }
-
-        public DoubleIterator() {
+        public ValueIterator() {
             super();
         }
-
-        public double nextDouble() {
+        public V next() {
             return value[nextEntry()];
-        }
-
-        /**
-         * {@inheritDoc}
-         *
-         * @deprecated Please use the corresponding type-specific method instead.
-         */
-        @Deprecated
-        public Double next() {
-            return (Double.valueOf(value[nextEntry()]));
         }
     }
 
-    public DoubleCollection values() {
-        if (values == null) values = new DoubleCollection();
+    public Collection<V> values() {
+        if (values == null) values = new AbstractCollection<V>(){
+
+            public ValueIterator iterator() {
+                return new ValueIterator();
+            }
+            public int size() {
+                return size;
+            }
+            public boolean contains(Object v) {
+                return containsValue(v);
+            }
+            public void clear() {
+                ObjectObjectOrderedMap.this.clear();
+            }
+        };
         return values;
     }
 
@@ -1977,28 +1744,34 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
     /**
      * Rehashes the map.
-     * <p>
-     * <P>This method implements the basic rehashing strategy, and may be overriden by subclasses implementing different rehashing strategies (e.g., disk-based rehashing). However, you should not
-     * override this method unless you understand the internal workings of this class.
      *
-     * @param newN the new size
+     * <P>
+     * This method implements the basic rehashing strategy, and may be overriden
+     * by subclasses implementing different rehashing strategies (e.g.,
+     * disk-based rehashing). However, you should not override this method
+     * unless you understand the internal workings of this class.
+     *
+     * @param newN
+     *            the new size
      */
-
+    @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final int key[] = this.key;
-        final double value[] = this.value;
-        final int mask = newN - 1; // Note that this is used by the hashing macro
-        final int newKey[] = new int[newN + 1];
-        final double newValue[] = new double[newN + 1];
+        final K key[] = this.key;
+        final V value[] = this.value;
+        final int mask = newN - 1; // Note that this is used by the hashing
+        // macro
+        final K newKey[] = (K[]) new Object[newN + 1];
+        final V newValue[] = (V[]) new Object[newN + 1];
         int i = first, prev = -1, newPrev = -1, t, pos;
         final long link[] = this.link;
         final long newLink[] = new long[newN + 1];
         first = -1;
-        for (int j = size; j-- != 0; ) {
-            if (((key[i]) == (0))) pos = newN;
+        for (int j = size; j-- != 0;) {
+            if (((key[i]) == null))
+                pos = newN;
             else {
-                pos = (HashCommon.mix((key[i]))) & mask;
-                while (!((newKey[pos]) == (0)))
+                pos = (HashCommon.mix((key[i]).hashCode())) & mask;
+                while (!((newKey[pos]) == null))
                     pos = (pos + 1) & mask;
             }
             newKey[pos] = key[i];
@@ -2027,63 +1800,53 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         this.key = newKey;
         this.value = newValue;
     }
-
     /**
      * Returns a deep copy of this map.
-     * <p>
-     * <P>This method performs a deep copy of this hash map; the data stored in the map, however, is not cloned. Note that this makes a difference only for object keys.
+     *
+     * <P>
+     * This method performs a deep copy of this hash map; the data stored in the
+     * map, however, is not cloned. Note that this makes a difference only for
+     * object keys.
      *
      * @return a deep copy of this map.
      */
+    @SuppressWarnings("unchecked")
+    public ObjectObjectOrderedMap<K, V> clone() {
+        ObjectObjectOrderedMap<K, V> c;
+        try {
+            super.clone();
+        } catch (CloneNotSupportedException cantHappen) {
+        }
 
-    public IntDoubleOrderedMap clone() {
-        return new IntDoubleOrderedMap(this);
+        return new ObjectObjectOrderedMap<>(this);
     }
-
     /**
      * Returns a hash code for this map.
-     * <p>
-     * This method overrides the generic method provided by the superclass. Since <code>equals()</code> is not overriden, it is important that the value returned by this method is the same value as
-     * the one returned by the overriden method.
+     *
+     * This method overrides the generic method provided by the superclass.
+     * Since <code>equals()</code> is not overriden, it is important that the
+     * value returned by this method is the same value as the one returned by
+     * the overriden method.
      *
      * @return a hash code for this map.
      */
     public int hashCode() {
         int h = 0;
-        for (int j = realSize(), i = 0, t = 0; j-- != 0; ) {
-            while (((key[i]) == (0)))
+        for (int j = realSize(), i = 0, t = 0; j-- != 0;) {
+            while (((key[i]) == null))
                 i++;
-            t = (key[i]);
-            t ^= HashCommon.double2int(value[i]);
+            if (this != key[i])
+                t = ((key[i]).hashCode());
+            if (this != value[i])
+                t ^= ((value[i]) == null ? 0 : (value[i]).hashCode());
             h += t;
             i++;
         }
         // Zero / null keys have hash zero.
-        if (containsNullKey) h += HashCommon.double2int(value[n]);
+        if (containsNullKey)
+            h += ((value[n]) == null ? 0 : (value[n]).hashCode());
         return h;
     }
-
-    /**
-     * Delegates to the corresponding type-specific method.
-     *
-     * @deprecated Please use the corresponding type-specific method instead.
-     */
-    @Deprecated
-    public Integer firstKey() {
-        return (Integer.valueOf(firstIntKey()));
-    }
-
-    /**
-     * Delegates to the corresponding type-specific method.
-     *
-     * @deprecated Please use the corresponding type-specific method instead.
-     */
-    @Deprecated
-    public Integer lastKey() {
-        return (Integer.valueOf(lastIntKey()));
-    }
-
-
     /**
      * Returns the maximum number of entries that can be filled before rehashing.
      *
@@ -2247,40 +2010,6 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             return (x ^ x >>> 32) * INV_LONG_PHI;
         }
 
-
-        /**
-         * Returns the hash code that would be returned by {@link Float#hashCode()}.
-         *
-         * @param f a float.
-         * @return the same code as {@link Float#hashCode() new Float(f).hashCode()}.
-         */
-
-        static int float2int(final float f) {
-            return Float.floatToIntBits(f);
-        }
-
-        /**
-         * Returns the hash code that would be returned by {@link Double#hashCode()}.
-         *
-         * @param d a double.
-         * @return the same code as {@link Double#hashCode() new Double(f).hashCode()}.
-         */
-
-        static int double2int(final double d) {
-            final long l = Double.doubleToLongBits(d);
-            return (int) (l ^ (l >>> 32));
-        }
-
-        /**
-         * Returns the hash code that would be returned by {@link Long#hashCode()}.
-         *
-         * @param l a long.
-         * @return the same code as {@link Long#hashCode() new Long(f).hashCode()}.
-         */
-        static int long2int(final long l) {
-            return (int) (l ^ (l >>> 32));
-        }
-
         /**
          * Return the least power of two greater than or equal to the specified value.
          * <br>Note that this function will return 1 when the argument is 0.
@@ -2328,247 +2057,6 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         }
     }
 
-    public class DoubleCollection implements Collection<Double> {
-
-        public double[] toArray(double a[]) {
-            return toDoubleArray(a);
-        }
-
-        public double[] toDoubleArray() {
-            return toDoubleArray(null);
-        }
-
-        public double[] toDoubleArray(double a[]) {
-            if (a == null || a.length < size()) a = new double[size()];
-            unwrap(iterator(), a);
-            return a;
-        }
-
-        /**
-         * Adds all elements of the given type-specific collection to this collection.
-         *
-         * @param c a type-specific collection.
-         * @return <code>true</code> if this collection changed as a result of the call.
-         */
-        public boolean addAll(DoubleCollection c) {
-            boolean retVal = false;
-            final DoubleIterator i = c.iterator();
-            int n = c.size();
-            while (n-- != 0)
-                if (add(i.nextDouble())) retVal = true;
-            return retVal;
-        }
-
-        /**
-         * Checks whether this collection contains all elements from the given type-specific collection.
-         *
-         * @param c a type-specific collection.
-         * @return <code>true</code> if this collection contains all elements of the argument.
-         */
-        public boolean containsAll(DoubleCollection c) {
-            final DoubleIterator i = c.iterator();
-            int n = c.size();
-            while (n-- != 0)
-                if (!contains(i.nextDouble())) return false;
-            return true;
-        }
-
-        /**
-         * Retains in this collection only elements from the given type-specific collection.
-         *
-         * @param c a type-specific collection.
-         * @return <code>true</code> if this collection changed as a result of the call.
-         */
-        public boolean retainAll(DoubleCollection c) {
-            boolean retVal = false;
-            int n = size();
-            final DoubleIterator i = iterator();
-            while (n-- != 0) {
-                if (!c.contains(i.nextDouble())) {
-                    i.remove();
-                    retVal = true;
-                }
-            }
-            return retVal;
-        }
-
-        /**
-         * Remove from this collection all elements in the given type-specific collection.
-         *
-         * @param c a type-specific collection.
-         * @return <code>true</code> if this collection changed as a result of the call.
-         */
-        public boolean removeAll(DoubleCollection c) {
-            boolean retVal = false;
-            int n = c.size();
-            final DoubleIterator i = c.iterator();
-            while (n-- != 0)
-                if (rem(i.nextDouble())) retVal = true;
-            return retVal;
-        }
-
-        public Object[] toArray() {
-            final Object[] a = new Object[size()];
-            objectUnwrap(iterator(), a);
-            return a;
-        }
-
-        @SuppressWarnings("unchecked")
-        public <T> T[] toArray(T[] a) {
-            if (a.length < size())
-                a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size());
-            objectUnwrap(iterator(), a);
-            return a;
-        }
-
-        /**
-         * Adds all elements of the given collection to this collection.
-         *
-         * @param c a collection.
-         * @return <code>true</code> if this collection changed as a result of the call.
-         */
-        public boolean addAll(Collection<? extends Double> c) {
-            boolean retVal = false;
-            final Iterator<? extends Double> i = c.iterator();
-            int n = c.size();
-            while (n-- != 0)
-                if (add(i.next())) retVal = true;
-            return retVal;
-        }
-
-        public boolean add(double k) {
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         * Delegates to the type-specific <code>rem()</code> method.
-         */
-        public boolean remove(Object ok) {
-            return rem(((((Double) (ok)).doubleValue())));
-        }
-
-        /**
-         * Delegates to the corresponding type-specific method.
-         */
-        public boolean add(final Double o) {
-            return add(o.doubleValue());
-        }
-
-        /**
-         * Delegates to the corresponding type-specific method.
-         */
-        public boolean rem(final Object o) {
-            return rem(((((Double) (o)).doubleValue())));
-        }
-
-        /**
-         * Delegates to the corresponding type-specific method.
-         */
-        public boolean contains(final Object o) {
-            return contains(((((Double) (o)).doubleValue())));
-        }
-
-        public boolean rem(final double k) {
-            final DoubleIterator iterator = iterator();
-            while (iterator.hasNext())
-                if (k == iterator.nextDouble()) {
-                    iterator.remove();
-                    return true;
-                }
-            return false;
-        }
-
-        /**
-         * Checks whether this collection contains all elements from the given collection.
-         *
-         * @param c a collection.
-         * @return <code>true</code> if this collection contains all elements of the argument.
-         */
-        public boolean containsAll(Collection<?> c) {
-            int n = c.size();
-            final Iterator<?> i = c.iterator();
-            while (n-- != 0)
-                if (!contains(i.next())) return false;
-            return true;
-        }
-
-        /**
-         * Retains in this collection only elements from the given collection.
-         *
-         * @param c a collection.
-         * @return <code>true</code> if this collection changed as a result of the call.
-         */
-        public boolean retainAll(Collection<?> c) {
-            boolean retVal = false;
-            int n = size();
-            final Iterator<?> i = iterator();
-            while (n-- != 0) {
-                if (!c.contains(i.next())) {
-                    i.remove();
-                    retVal = true;
-                }
-            }
-            return retVal;
-        }
-
-        /**
-         * Remove from this collection all elements in the given collection. If the collection is an instance of this class, it uses faster iterators.
-         *
-         * @param c a collection.
-         * @return <code>true</code> if this collection changed as a result of the call.
-         */
-        public boolean removeAll(Collection<?> c) {
-            boolean retVal = false;
-            int n = c.size();
-            final Iterator<?> i = c.iterator();
-            while (n-- != 0)
-                if (remove(i.next())) retVal = true;
-            return retVal;
-        }
-
-        public boolean isEmpty() {
-            return size() == 0;
-        }
-
-        public String toString() {
-            final StringBuilder s = new StringBuilder();
-            final DoubleIterator i = iterator();
-            int n = size();
-            double k;
-            boolean first = true;
-            s.append("{");
-            while (n-- != 0) {
-                if (first) first = false;
-                else s.append(", ");
-                k = i.nextDouble();
-                s.append(String.valueOf(k));
-            }
-            s.append("}");
-            return s.toString();
-        }
-
-        public DoubleIterator iterator() {
-            return new DoubleIterator();
-        }
-
-        public int size() {
-            return size;
-        }
-
-        public boolean contains(double v) {
-            return containsValue(v);
-        }
-
-        public void clear() {
-            IntDoubleOrderedMap.this.clear();
-        }
-
-    }
-
-    public boolean containsValue(Object ov) {
-        return containsValue(((((Double) (ov)).doubleValue())));
-    }
-
     /**
      * Unwraps an iterator into an array starting at a given offset for a given number of elements.
      * <p>
@@ -2581,12 +2069,12 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param max    the maximum number of elements to unwrap.
      * @return the number of elements unwrapped.
      */
-    private static int unwrap(final DoubleIterator i, final double array[], int offset, final int max) {
+    private int unwrap(final ValueIterator i, final Object[] array, int offset, final int max) {
         if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
         if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
         int j = max;
         while (j-- != 0 && i.hasNext())
-            array[offset++] = i.nextDouble();
+            array[offset++] = i.next();
         return max - j - 1;
     }
 
@@ -2600,7 +2088,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped.
      */
-    private static int unwrap(final DoubleIterator i, final double array[]) {
+    private int unwrap(final ValueIterator i, final Object[] array) {
         return unwrap(i, array, 0, array.length);
     }
 
