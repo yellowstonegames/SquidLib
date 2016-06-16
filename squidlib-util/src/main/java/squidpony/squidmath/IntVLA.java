@@ -254,6 +254,33 @@ public class IntVLA implements Serializable{
         return size != startSize;
     }
 
+
+    /** Moves the item at the specified index to the first index and returns it. */
+    public int moveToFirst (int index) {
+        if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
+        int[] items = this.items;
+        int value = items[index];
+        if(index == 0) return value;
+        if (ordered) {
+            System.arraycopy(items, 0, items, 1, index);
+            items[0] = value;
+        }
+        return value;
+    }
+
+    /** Moves the item at the specified index to the last index and returns it. */
+    public int moveToLast (int index) {
+        if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
+        int[] items = this.items;
+        int value = items[index];
+        if(index == size - 1) return value;
+        if (ordered) {
+            System.arraycopy(items, index + 1, items, index, size - index - 1);
+            items[size - 1] = value;
+        }
+        return value;
+    }
+
     /** Removes and returns the last item. */
     public int pop () {
         return items[--size];
