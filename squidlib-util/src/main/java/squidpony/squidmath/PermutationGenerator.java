@@ -342,48 +342,6 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
         return e;
     }
 
-    private static int[] getPermutationShift(int[] perm) {
-        int[] sh = new int[perm.length];
-        boolean[] taken = new boolean[perm.length];
-
-        for (int i = 0; i < perm.length - 1; i++) {
-            int ctr = -1;
-            for (int j = 0; j < perm.length; j++) {
-                if (!taken[j])
-                    ctr++;
-                if (perm[j] == i) {
-                    taken[j] = true;
-                    sh[i] = ctr;
-                    break;
-                }
-            }
-        }
-        return sh;
-    }
-    /**
-     * Given an array of int that constitutes a permutation of indices, where no element in perm is repeated and all
-     * ints are less than perm.length, finds the specific index of the permutation given a factoradic numbering scheme
-     * (not used by the rest of this class, except the decodePermutation() method). The index can be passed to
-     * decodePermutation to reproduce the index permutation passed to this, or modified and then passed to
-     * decodePermutation().
-     * <br>
-     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
-     * @param perm an array of int that is a permutation of the range from 0 (inclusive) to perm.length (exclusive)
-     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()
-     */
-    public static long encodePermutation(int[] perm)
-    {
-        long e = 0;
-        if(perm == null || perm.length <= 0)
-            return e;
-        int[] shift = getPermutationShift(perm);
-        for (int i = 1; i < shift.length; i++) {
-            e += shift[i] * MathExtras.factorialsStart[i];
-        }
-        return e;
-    }
-
-
     private int[] factoradicDecode(long e)
     {
         int[] sequence = new int[elements.length];
@@ -397,91 +355,6 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
             base++;
         }
         return sequence;
-    }
-
-    private static int[] factoradicDecode(long e, int count)
-    {
-        int[] sequence = new int[count];
-        int base = 2;
-
-        for (int k = 1; k < count; k++)
-        {
-            sequence[count - 1 - k] = (int)(e % base);
-            e /= base;
-
-            base++;
-        }
-        return sequence;
-    }
-
-    /**
-     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
-     * this) and an int count of how many indices to find a permutation of, returns an array with the permutation
-     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get
-     * an index for a specific permutation with encodePermutation() or by generating a random number between 0 and
-     * getTotalPermutations(), if you want it randomly.
-     * <br>
-     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
-     * @param encoded the index encoded as a long
-     * @param count an int between 1 and 20, inclusive, that will be the size of the returned array
-     * @return the looked-up permutation as an int array with length equal to count
-     */
-    public static int[] decodePermutation(long encoded, int count)
-    {
-        if(count <= 0)
-            return new int[0];
-        encoded %= MathExtras.factorial(count);
-        int[] sequence = factoradicDecode(encoded, count), destination = new int[count];
-        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements
-
-        //char[] permuted = new char[n]; //change for destination
-        boolean[] set = new boolean[count];
-
-        for (int i = 0; i < count; i++)
-        {
-            int s = sequence[i];
-            int remainingPosition = 0;
-            int index;
-
-            // Find the s'th position in the permuted list that has not been set yet.
-            for (index = 0; index < count; index++)
-            {
-                if (!set[index])
-                {
-                    if (remainingPosition == s)
-                        break;
-
-                    remainingPosition++;
-                }
-            }
-
-            destination[index] = i;
-            set[index] = true;
-        }
-        return destination;
-    }
-
-    /**
-     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
-     * this) and an int count of how many indices to find a permutation of, returns an array with the permutation
-     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get
-     * an index for a specific permutation with encodePermutation() or by generating a random number between 0 and
-     * getTotalPermutations(), if you want it randomly. This variant adds an int to each item in the returned array,
-     * which may be useful if generating indices that don't start at 0.
-     * <br>
-     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
-     * @param encoded the index encoded as a long
-     * @param count an int between 1 and 20, inclusive, that will be the size of the returned array
-     * @param add an int to add to each item of the permutation
-     * @return the looked-up permutation as an int array with length equal to count
-     */
-    public static int[] decodePermutation(long encoded, int count, int add)
-    {
-        int[] p = decodePermutation(encoded, count);
-        for (int i = 0; i < p.length; i++) {
-            p[i] += add;
-        }
-        return p;
     }
 
     /**
@@ -633,4 +506,133 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
             }
         };
     }
+
+
+    private static int[] getPermutationShift(int[] perm) {
+        int[] sh = new int[perm.length];
+        boolean[] taken = new boolean[perm.length];
+
+        for (int i = 0; i < perm.length - 1; i++) {
+            int ctr = -1;
+            for (int j = 0; j < perm.length; j++) {
+                if (!taken[j])
+                    ctr++;
+                if (perm[j] == i) {
+                    taken[j] = true;
+                    sh[i] = ctr;
+                    break;
+                }
+            }
+        }
+        return sh;
+    }
+    /**
+     * Given an array of int that constitutes a permutation of indices, where no element in perm is repeated and all
+     * ints are less than perm.length, finds the specific index of the permutation given a factoradic numbering scheme
+     * (not used by the rest of this class, except the decodePermutation() method). The index can be passed to
+     * decodePermutation to reproduce the index permutation passed to this, or modified and then passed to
+     * decodePermutation().
+     * <br>
+     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
+     * @param perm an array of int that is a permutation of the range from 0 (inclusive) to perm.length (exclusive)
+     * @return an encoded number that can be used to reconstruct the permutation when passed to decodePermutation()
+     */
+    public static long encodePermutation(int[] perm)
+    {
+        long e = 0;
+        if(perm == null || perm.length <= 0)
+            return e;
+        int[] shift = getPermutationShift(perm);
+        for (int i = 1; i < shift.length; i++) {
+            e += shift[i] * MathExtras.factorialsStart[i];
+        }
+        return e;
+    }
+
+
+    private static int[] factoradicDecode(long e, int count)
+    {
+        int[] sequence = new int[count];
+        int base = 2;
+
+        for (int k = 1; k < count; k++)
+        {
+            sequence[count - 1 - k] = (int)(e % base);
+            e /= base;
+
+            base++;
+        }
+        return sequence;
+    }
+
+    /**
+     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
+     * this) and an int count of how many indices to find a permutation of, returns an array with the permutation
+     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get
+     * an index for a specific permutation with encodePermutation() or by generating a random number between 0 and
+     * getTotalPermutations(), if you want it randomly.
+     * <br>
+     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
+     * @param encoded the index encoded as a long
+     * @param count an int between 1 and 20, inclusive, that will be the size of the returned array
+     * @return the looked-up permutation as an int array with length equal to count
+     */
+    public static int[] decodePermutation(long encoded, int count)
+    {
+        if(count <= 0)
+            return new int[0];
+        encoded %= MathExtras.factorial(count);
+        int[] sequence = factoradicDecode(encoded, count), destination = new int[count];
+        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements
+
+        //char[] permuted = new char[n]; //change for destination
+        boolean[] set = new boolean[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            int s = sequence[i];
+            int remainingPosition = 0;
+            int index;
+
+            // Find the s'th position in the permuted list that has not been set yet.
+            for (index = 0; index < count; index++)
+            {
+                if (!set[index])
+                {
+                    if (remainingPosition == s)
+                        break;
+
+                    remainingPosition++;
+                }
+            }
+
+            destination[index] = i;
+            set[index] = true;
+        }
+        return destination;
+    }
+
+    /**
+     * Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
+     * this) and an int count of how many indices to find a permutation of, returns an array with the permutation
+     * of the indices described by the long as a special (factoradic) index into the possible permutations. You can get
+     * an index for a specific permutation with encodePermutation() or by generating a random number between 0 and
+     * getTotalPermutations(), if you want it randomly. This variant adds an int to each item in the returned array,
+     * which may be useful if generating indices that don't start at 0.
+     * <br>
+     * Credit goes to user Joren on StackOverflow, http://stackoverflow.com/a/1506337
+     * @param encoded the index encoded as a long
+     * @param count an int between 1 and 20, inclusive, that will be the size of the returned array
+     * @param add an int to add to each item of the permutation
+     * @return the looked-up permutation as an int array with length equal to count
+     */
+    public static int[] decodePermutation(long encoded, int count, int add)
+    {
+        int[] p = decodePermutation(encoded, count);
+        for (int i = 0; i < p.length; i++) {
+            p[i] += add;
+        }
+        return p;
+    }
+
 }

@@ -5,6 +5,7 @@ import regexodus.Matcher;
 import regexodus.Pattern;
 import regexodus.Replacer;
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.IntDoubleOrderedMap;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -24,7 +25,7 @@ public class FakeLanguageGen implements Serializable {
     public final String[] openingVowels, midVowels, openingConsonants, midConsonants, closingConsonants,
             vowelSplitters, closingSyllables;
     public boolean clean;
-    public final LinkedHashMap<Integer, Double> syllableFrequencies;
+    public final IntDoubleOrderedMap syllableFrequencies; //LinkedHashMap<Integer, Double>
     protected double totalSyllableFrequency = 0.0;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     public final Pattern[] sanityChecks;
@@ -1580,13 +1581,9 @@ public class FakeLanguageGen implements Serializable {
         this.vowelSplitters = vowelSplitters;
         this.closingSyllables = closingSyllables;
 
-        this.syllableFrequencies = new LinkedHashMap<>(syllableLengths.length);
-        for (int i = 0; i < syllableLengths.length && i < syllableFrequencies.length; i++) {
-            this.syllableFrequencies.put(syllableLengths[i], syllableFrequencies[i]);
-        }
-        for (Double freq : this.syllableFrequencies.values()) {
-            totalSyllableFrequency += freq;
-        }
+        this.syllableFrequencies = new IntDoubleOrderedMap(syllableLengths, syllableFrequencies, 0.75f);
+
+        totalSyllableFrequency = this.syllableFrequencies.values().sum();
         if (vowelStartFrequency > 1.0)
             this.vowelStartFrequency = 1.0 / vowelStartFrequency;
         else
@@ -1614,7 +1611,7 @@ public class FakeLanguageGen implements Serializable {
 
     private FakeLanguageGen(String[] openingVowels, String[] midVowels, String[] openingConsonants,
                             String[] midConsonants, String[] closingConsonants, String[] closingSyllables,
-                            String[] vowelSplitters, LinkedHashMap<Integer, Double> syllableFrequencies,
+                            String[] vowelSplitters, IntDoubleOrderedMap syllableFrequencies,
                             double vowelStartFrequency, double vowelEndFrequency, double vowelSplitFrequency,
                             double syllableEndFrequency, Pattern[] sanityChecks, boolean clean,
                             List<Modifier> modifiers) {
@@ -1625,7 +1622,7 @@ public class FakeLanguageGen implements Serializable {
         this.closingConsonants = copyStrings(closingConsonants);
         this.closingSyllables = copyStrings(closingSyllables);
         this.vowelSplitters = copyStrings(vowelSplitters);
-        this.syllableFrequencies = new LinkedHashMap<>(syllableFrequencies);
+        this.syllableFrequencies = new IntDoubleOrderedMap(syllableFrequencies);
         this.vowelStartFrequency = vowelStartFrequency;
         this.vowelEndFrequency = vowelEndFrequency;
         this.vowelSplitFrequency = vowelSplitFrequency;
@@ -2214,12 +2211,12 @@ public class FakeLanguageGen implements Serializable {
                         Math.max(0.0, Math.min(1.0, (other.syllableEndFrequency - syllableEndFrequency)))),
                 splitters = merge1000(rng, vowelSplitters, other.vowelSplitters, otherInfluence);
 
-        LinkedHashMap<Integer, Double> freqs = new LinkedHashMap<>(syllableFrequencies);
-        for (Map.Entry<Integer, Double> kv : other.syllableFrequencies.entrySet()) {
-            if (freqs.containsKey(kv.getKey()))
-                freqs.put(kv.getKey(), kv.getValue() + freqs.get(kv.getKey()));
+        IntDoubleOrderedMap freqs = new IntDoubleOrderedMap(syllableFrequencies);
+        for (IntDoubleOrderedMap.MapEntry kv : other.syllableFrequencies.mapEntrySet()) {
+            if (freqs.containsKey(kv.getIntKey()))
+                freqs.put(kv.getIntKey(), kv.getDoubleValue() + freqs.get(kv.getIntKey()));
             else
-                freqs.put(kv.getKey(), kv.getValue());
+                freqs.put(kv.getIntKey(), kv.getDoubleValue());
         }
         List<Modifier> mods = new ArrayList<>((int)(Math.ceil(modifiers.size() * myInfluence) +
                 Math.ceil(other.modifiers.size() * otherInfluence)));
