@@ -700,45 +700,44 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             rehash(arraySize(size, f));
         return defRetValue;
     }
-    @SuppressWarnings("unchecked")
     public V get(final Object k) {
-        if ((((K) k) == null))
+        if (k == null)
             return containsNullKey ? value[n] : defRetValue;
         K curr;
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k)
+        if (((curr = key[pos = (HashCommon.mix(k
                 .hashCode())) & mask]) == null))
             return defRetValue;
-        if (((k).equals(curr)))
+        if ((k.equals(curr)))
             return value[pos];
         // There's always an unused entry.
         while (true) {
             if (((curr = key[pos = (pos + 1) & mask]) == null))
                 return defRetValue;
-            if (((k).equals(curr)))
+            if ((k.equals(curr)))
                 return value[pos];
         }
     }
-    @SuppressWarnings("unchecked")
+
     public boolean containsKey(final Object k) {
-        if ((((K) k) == null))
+        if (k == null)
             return containsNullKey;
         K curr;
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k)
+        if (((curr = key[pos = (HashCommon.mix(k
                 .hashCode())) & mask]) == null))
             return false;
-        if (((k).equals(curr)))
+        if ((k.equals(curr)))
             return true;
         // There's always an unused entry.
         while (true) {
             if (((curr = key[pos = (pos + 1) & mask]) == null))
                 return false;
-            if (((k).equals(curr)))
+            if ((k.equals(curr)))
                 return true;
         }
     }
@@ -746,11 +745,11 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         final V value[] = this.value;
         final K key[] = this.key;
         if (containsNullKey
-                && ((value[n]) == null ? (v) == null : (value[n]).equals(v)))
+                && ((value[n]) == null ? v == null : (value[n]).equals(v)))
             return true;
         for (int i = n; i-- != 0;)
             if (!((key[i]) == null)
-                    && ((value[i]) == null ? (v) == null : (value[i]).equals(v)))
+                    && ((value[i]) == null ? v == null : (value[i]).equals(v)))
                 return true;
         return false;
     }
@@ -1330,13 +1329,8 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
 
         @SuppressWarnings("unchecked")
         public <T> T[] toArray(T[] a) {
-            final int size = size();
-            if (a.length < size)
-                a = (T[]) java.lang.reflect.Array.newInstance(a.getClass()
-                        .getComponentType(), size);
+            if (a == null || a.length < size()) a = (T[]) new Object[size()];
             objectUnwrap(iterator(), a);
-            if (size < a.length)
-                a[size] = null;
             return a;
         }
 
@@ -1516,6 +1510,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             throw new UnsupportedOperationException();
         }
 
+        @SuppressWarnings("unchecked")
         public Object[] toArray(Object a[]) {
             if (a == null || a.length < size()) a = new Object[size()];
             unwrap(iterator(), a);
@@ -2170,7 +2165,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param offset the first element of the array to be returned.
      * @param max the maximum number of elements to unwrap.
      * @return the number of elements unwrapped. */
-    public static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max ) {
         if ( max < 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );
         if ( offset < 0 || offset + max > array.length ) throw new IllegalArgumentException();
         int j = max;
@@ -2187,8 +2182,92 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param i a type-specific iterator.
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped. */
-    public static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[] ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[] ) {
         return objectUnwrap(i, array, 0, array.length );
     }
 
+    /**
+     * Gets the value at the given index in the iteration order in constant time (random-access).
+     * @param idx the index in the iteration order of the value to fetch
+     * @return the value at the index, if the index is valid, otherwise the default return value
+     */
+    public V getAt(final int idx) {
+        int pos;
+        final K[] key = this.key;
+        if (idx < 0 || idx >= order.size)
+            return containsNullKey ? value[n] : defRetValue;
+        // The starting point.
+        if ((key[pos = order.get(idx)]) == null)
+            return defRetValue;
+        return value[pos];
+    }
+    /**
+     * Gets the key at the given index in the iteration order in constant time (random-access).
+     * @param idx the index in the iteration order of the key to fetch
+     * @return the key at the index, if the index is valid, otherwise null
+     */
+    public K keyAt(final int idx) {
+        final K[] key = this.key;
+        if (idx < 0 || idx >= order.size)
+            return null;
+        // The starting point.
+        return key[order.get(idx)];
+    }
+
+    /**
+     * Gets the key-value Map.Entry at the given index in the iteration order in constant time (random-access).
+     * @param idx the index in the iteration order of the entry to fetch
+     * @return the key-value entry at the index, if the index is valid, otherwise null
+     */
+    public Entry<K, V> entryAt(final int idx)
+    {
+        if (idx < 0 || idx >= order.size)
+            return null;
+        return new MapEntry(order.get(idx));
+    }
+
+    /**
+     * Gets a random value from this OrderedMap in constant time, using the given RNG to generate a random number.
+     * @param rng used to generate a random index for a value
+     * @return a random value from this OrderedMap
+     */
+    public V randomValue(RNG rng)
+    {
+        return getAt(rng.nextInt(order.size));
+    }
+
+    /**
+     * Gets a random key from this OrderedMap in constant time, using the given RNG to generate a random number.
+     * @param rng used to generate a random index for a key
+     * @return a random key from this OrderedMap
+     */
+    public K randomKey(RNG rng)
+    {
+        return keyAt(rng.nextInt(order.size));
+    }
+
+    /**
+     * Gets a random entry from this OrderedMap in constant time, using the given RNG to generate a random number.
+     * @param rng used to generate a random index for a entry
+     * @return a random key-value entry from this OrderedMap
+     */
+    public Entry<K, V> randomEntry(RNG rng)
+    {
+        return new MapEntry(order.getRandomElement(rng));
+    }
+
+    /**
+     * Randomly alters the iteration order for this OrderedMap using the given RNG to shuffle.
+     * @param rng used to generate a random ordering
+     * @return this for chaining
+     */
+    public OrderedMap<K, V> shuffle(RNG rng)
+    {
+        if(size < 2)
+            return this;
+        order.shuffle(rng);
+        first = order.get(0);
+        last = order.peek();
+        return this;
+    }
 }

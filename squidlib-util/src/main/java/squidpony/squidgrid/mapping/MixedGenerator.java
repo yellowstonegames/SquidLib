@@ -142,7 +142,7 @@ public class MixedGenerator {
     }
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
-     * This version of the constructor uses a LinkedHashMap with Coord keys and Coord array values to determine a
+     * This version of the constructor uses a Map with Coord keys and Coord array values to determine a
      * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you
      * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
@@ -153,13 +153,13 @@ public class MixedGenerator {
      * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public MixedGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections)
+    public MixedGenerator(int width, int height, RNG rng, Map<Coord, List<Coord>> connections)
     {
         this(width, height, rng, connections, 0.8f);
     }
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
-     * This version of the constructor uses a LinkedHashMap with Coord keys and Coord array values to determine a
+     * This version of the constructor uses a Map with Coord keys and Coord array values to determine a
      * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you
      * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
@@ -171,7 +171,7 @@ public class MixedGenerator {
      * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public MixedGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections,
+    public MixedGenerator(int width, int height, RNG rng, Map<Coord, List<Coord>> connections,
                           float roomSizeMultiplier) {
         this.width = width;
         this.height = height;

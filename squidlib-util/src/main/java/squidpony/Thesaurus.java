@@ -1,18 +1,15 @@
 package squidpony;
 
 import regexodus.*;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.GapShuffler;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static squidpony.Maker.*;
+import static squidpony.Maker.makeList;
+import static squidpony.Maker.makeOM;
 
 /**
  * A text processing class that can swap out occurrences of words and replace them with their synonyms.
@@ -21,7 +18,7 @@ import static squidpony.Maker.*;
 public class Thesaurus implements Serializable{
     private static final long serialVersionUID = 3387639905758074640L;
     protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+)");
-    public LinkedHashMap<String, GapShuffler<String>> mappings;
+    public OrderedMap<String, GapShuffler<String>> mappings;
     protected StatefulRNG rng;
 
     /**
@@ -29,7 +26,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus()
     {
-        mappings = new LinkedHashMap<>(256);
+        mappings = new OrderedMap<>(256);
         rng = new StatefulRNG();
     }
 
@@ -39,7 +36,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus(RNG rng)
     {
-        mappings = new LinkedHashMap<>(256);
+        mappings = new OrderedMap<>(256);
         this.rng = new StatefulRNG(rng.nextLong());
     }
 
@@ -49,7 +46,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus(long shuffleSeed)
     {
-        mappings = new LinkedHashMap<>(256);
+        mappings = new OrderedMap<>(256);
         this.rng = new StatefulRNG(shuffleSeed);
     }
 
@@ -60,7 +57,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus(String shuffleSeed)
     {
-        mappings = new LinkedHashMap<>(256);
+        mappings = new OrderedMap<>(256);
         this.rng = new StatefulRNG(shuffleSeed);
     }
 
@@ -239,7 +236,7 @@ public class Thesaurus implements Serializable{
         }
     }
 
-    public static LinkedHashMap<String, ArrayList<String>> categories = makeLHM(
+    public static OrderedMap<String, ArrayList<String>> categories = makeOM(
             "calm`adj`",
             makeList("harmonious", "peaceful", "pleasant", "serene", "placid", "tranquil", "calm"),
             "calm`noun`",
@@ -349,7 +346,7 @@ public class Thesaurus implements Serializable{
             "rage`noun`",
             makeList("rage", "fury", "anger", "wrath", "frenzy", "vengeance")
             ),
-            languages = makeLHM(
+            languages = makeOM(
             "lc`gen`",
             makeList("lahatos", "iatsiltak", "hmimrekaarl", "yixaltaishk", "cthupaxa", "zvroggamraa", "ixaakran"),
             "jp`gen`",

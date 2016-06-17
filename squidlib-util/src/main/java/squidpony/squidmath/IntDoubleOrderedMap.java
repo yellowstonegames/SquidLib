@@ -2563,6 +2563,14 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             IntDoubleOrderedMap.this.clear();
         }
 
+        public double sum()
+        {
+            DoubleIterator i = iterator();
+            int j = 0;
+            while (i.hasNext())
+                j += i.nextDouble();
+            return j;
+        }
     }
 
     public boolean containsValue(Object ov) {

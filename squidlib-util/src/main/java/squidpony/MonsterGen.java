@@ -539,7 +539,7 @@ public class MonsterGen {
     /**
      * Randomly add appearance and power descriptors to a new Chimera creature with random body part adjectives.
      * Produces a new Chimera with a random name using FakeLanguageGen, and adds a total of 5 appearance adjectives,
-     * power adjectives and phrases, and 5 body parts. Since this uses FakeLanguageGen, it isn't GWT-compatible.
+     * power adjectives and phrases, and 5 body parts.
      * @return a new Chimera with random traits
      */
     public Chimera randomize()
@@ -548,7 +548,7 @@ public class MonsterGen {
     }
 
     /**
-     * Gets a random name as a String using FakeLanguageGen. Since this uses FakeLanguageGen, it isn't GWT-compatible.
+     * Gets a random name as a String using FakeLanguageGen.
      * @param rng the RNG to use for random factors
      * @return a String meant to be used as a creature name
      */
@@ -558,7 +558,7 @@ public class MonsterGen {
     }
 
     /**
-     * Gets a random name as a String using FakeLanguageGen. Since this uses FakeLanguageGen, it isn't GWT-compatible.
+     * Gets a random name as a String using FakeLanguageGen.
      * @return a String meant to be used as a creature name
      */
     public String randomName()
