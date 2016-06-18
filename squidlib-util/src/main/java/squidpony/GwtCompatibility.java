@@ -45,7 +45,8 @@ public class GwtCompatibility {
     /**
      * Gets the first item in an Iterable of T, or null if it is empty. Meant for collections like LinkedHashSet, which
      * can promise a stable first element but don't provide a way to access it. Not exactly a GWT compatibility method,
-     * but more of a Java standard library stand-in.
+     * but more of a Java standard library stand-in. Even though LinkedHashSet does not support this out-of-the-box,
+     * OrderedSet already provides a first() method.
      * @param collection an Iterable of T; if collection is null or empty this returns null
      * @param <T> any object type
      * @return the first element in collection, or null if it is empty or null itself

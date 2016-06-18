@@ -132,7 +132,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     /**
      * The default load factor of a hash table.
      */
-    public static final float DEFAULT_LOAD_FACTOR = .1875f; // .75f;
+    public static final float DEFAULT_LOAD_FACTOR = .375f; // .1875f; // .75f;
     /**
      * The load factor for a (usually small) table that is meant to be particularly fast.
      */
@@ -297,7 +297,8 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 e = i.next();
                 put(e.getKey(), e.getValue());
             }
-        }    }
+        }
+    }
     private int insert(final K k, final V v) {
         int pos;
         if (((k) == null)) {
@@ -360,6 +361,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 if (((curr = key[pos]) == null)) {
                     key[last] = (null);
                     value[last] = null;
+                    order.removeValue(last);
                     return;
                 }
                 slot = (HashCommon.mix((curr).hashCode()))
@@ -767,6 +769,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         Arrays.fill(key, (null));
         Arrays.fill(value, null);
         first = last = -1;
+        order.clear();
     }
 
     public int size() {
@@ -888,7 +891,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     /**
-     * Modifies the link vector for a shift from s to d. <P>This method will complete in logarithmic time.
+     * Modifies the link vector for a shift from s to d. <P>This method will complete in logarithmic time or better.
      *
      * @param s the source position.
      * @param d the destination position.
@@ -911,6 +914,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             order.set(order.size - 1, d);
             //link[(int) (link[s] >>> 32)] ^= ((link[(int) (link[s] >>> 32)] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
             //link[d] = link[s];
+        }
+        else
+        {
+            order.set(order.indexOf(s), d);
         }
         /*
         final long links = link[s];
@@ -1038,7 +1045,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 index = size;
                 return;
             }
-            int pos = first;
             index = 0;
             /*while (pos != prev) {
                 pos = (int) link[pos];
@@ -1074,8 +1080,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 prev = order.get(index - 1);
             //prev = (int) (link[curr] >>> 32);
             next = curr;
-            if (index >= 0)
-                index--;
             return curr;
         }
         public void remove() {
@@ -1511,8 +1515,9 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
 
         @SuppressWarnings("unchecked")
-        public Object[] toArray(Object a[]) {
-            if (a == null || a.length < size()) a = new Object[size()];
+        @Override
+        public <T> T[] toArray(T[] a) {
+            if (a == null || a.length < size()) a = (T[]) new Object[size()];
             unwrap(iterator(), a);
             return a;
         }

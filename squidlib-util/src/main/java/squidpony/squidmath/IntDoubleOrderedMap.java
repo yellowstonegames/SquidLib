@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -1414,8 +1413,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         public <T> T[] toArray(T[] a) {
             final int size = size();
             if (a.length < size)
-                a = (T[]) java.lang.reflect.Array.newInstance(a.getClass()
-                        .getComponentType(), size);
+                a = (T[]) new MapEntry[size];
             objectUnwrap(iterator(), a);
             if (size < a.length)
                 a[size] = null;
@@ -1526,7 +1524,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         }
         public Set<Entry<Integer, Double>> toBoxed()
         {
-            return new LinkedHashSet<Entry<Integer, Double>>(this);
+            return new OrderedSet<Entry<Integer, Double>>(this);
         }
     }
 
@@ -1535,6 +1533,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * key and value types. Prefer {@code mapEntrySet()}!!!
      * @return a Set of Map.Entry with Integer keys and Double values
      * @see IntDoubleOrderedMap#mapEntrySet strongly preferred variant that allows primitive access
+     * @deprecated prefer {@link IntDoubleOrderedMap#mapEntrySet}
      */
     @Override
     public Set<Entry<Integer, Double>> entrySet() {
@@ -1773,8 +1772,6 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
         @SuppressWarnings("unchecked")
         public <T> T[] toArray(T[] a) {
-            if (a.length < size())
-                a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size());
             objectUnwrap(iterator(), a);
             return a;
         }
@@ -2415,8 +2412,6 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
         @SuppressWarnings("unchecked")
         public <T> T[] toArray(T[] a) {
-            if (a.length < size())
-                a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size());
             objectUnwrap(iterator(), a);
             return a;
         }
