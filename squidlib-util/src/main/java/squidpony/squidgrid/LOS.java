@@ -166,8 +166,7 @@ public class LOS {
                 return bresenhamReachable(radiusStrategy);
             case ELIAS:
             	throw new IllegalStateException("Elias LOS is Gwt Incompatible");
-            	/* FIXME Find a way around that */
-            	// Required to compile with GWT:
+            	// Comment required to compile with GWT:
             	// return eliasReachable(radiusStrategy);
             case RAY:
                 return rayReachable(radiusStrategy);
@@ -339,7 +338,7 @@ public class LOS {
     private boolean thickReachable(Radius radiusStrategy) {
         lastPath = new LinkedList<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety), decay = 1 / dist;
-        LinkedHashSet<Coord> visited = new LinkedHashSet<>((int) dist + 3);
+        OrderedSet<Coord> visited = new OrderedSet<>((int) dist + 3);
         List<List<Coord>> paths = new ArrayList<>(4);
         /* // actual corners
         paths.add(DDALine.line(startx, starty, targetx, targety, 0, 0));
@@ -387,7 +386,7 @@ public class LOS {
     private boolean brushReachable(Radius radiusStrategy, int spread) {
         lastPath = new LinkedList<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2, decay = 1 / dist;
-        LinkedHashSet<Coord> visited = new LinkedHashSet<>((int) (dist + 3) * spread);
+        OrderedSet<Coord> visited = new OrderedSet<>((int) (dist + 3) * spread);
         List<List<Coord>> paths = new ArrayList<>((int) (radiusStrategy.volume2D(spread) * 1.25));
         int length = 0;
         List<Coord> currentPath;

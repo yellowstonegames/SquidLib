@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
+import squidpony.squidmath.OrderedMap;
 
 import java.util.*;
 
@@ -67,7 +68,7 @@ public class TextCellFactory implements Disposable {
     protected float smoothingMultiplier = 1f;
     protected float descent, lineHeight;
     private Label.LabelStyle style;
-    protected java.util.LinkedHashMap<String, String> swap = new LinkedHashMap<>(32);
+    protected OrderedMap<String, String> swap = new OrderedMap<>(32);
 
 
     /**
@@ -101,7 +102,7 @@ public class TextCellFactory implements Disposable {
         next.bmpFont = new BitmapFont(new BitmapFont.BitmapFontData(bmpFont.getData().getFontFile(), false),
                 bmpFont.getRegions(), bmpFont.usesIntegerPositions());
         next.block = block;
-        next.swap = new LinkedHashMap<>(swap);
+        next.swap = new OrderedMap<>(swap);
         next.distanceField = distanceField;
         next.distanceFieldScaleX = distanceFieldScaleX;
         next.distanceFieldScaleY = distanceFieldScaleY;
@@ -1363,7 +1364,7 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their
-     * values in the LinkedHashMap.
+     * values in the OrderedMap.
      * <br>
      * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
      * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
@@ -1373,7 +1374,7 @@ public class TextCellFactory implements Disposable {
      * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
      * @return the mapping of replacement pairs
      */
-    public LinkedHashMap<String, String> getAllSwaps() {
+    public OrderedMap<String, String> getAllSwaps() {
         return swap;
     }
 
@@ -1390,7 +1391,7 @@ public class TextCellFactory implements Disposable {
      * @return this for chaining
      */
     public TextCellFactory setAllSwaps(Map<String, String> swaps) {
-        this.swap = new LinkedHashMap<>(swaps.size());
+        this.swap = new OrderedMap<>(swaps.size());
         for(Map.Entry<String, String> kv : swaps.entrySet())
         {
             if(!kv.getKey().startsWith("\0"))

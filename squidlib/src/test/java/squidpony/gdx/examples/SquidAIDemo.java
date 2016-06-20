@@ -16,10 +16,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.*;
 
@@ -42,8 +39,8 @@ public class SquidAIDemo extends ApplicationAdapter {
 
     private SquidInput input;
     private static final Color bgColor = SColor.DARK_SLATE_GRAY;
-    private LinkedHashMap<AnimatedEntity, Integer> teamRed, teamBlue;
-    private LinkedHashSet<Coord> redPlaces, bluePlaces;
+    private OrderedMap<AnimatedEntity, Integer> teamRed, teamBlue;
+    private OrderedSet<Coord> redPlaces, bluePlaces;
     private Technique redCone, redCloud, blueBlast, blueBeam;
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
@@ -80,11 +77,11 @@ public class SquidAIDemo extends ApplicationAdapter {
         short[] placement = CoordPacker.pack(bareDungeon, '.');
 
 
-        teamRed = new LinkedHashMap<>(numMonsters);
-        teamBlue = new LinkedHashMap<>(numMonsters);
+        teamRed = new OrderedMap<>(numMonsters);
+        teamBlue = new OrderedMap<>(numMonsters);
 
-        redPlaces = new LinkedHashSet<>(numMonsters);
-        bluePlaces = new LinkedHashSet<>(numMonsters);
+        redPlaces = new OrderedSet<>(numMonsters);
+        bluePlaces = new OrderedSet<>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
@@ -213,7 +210,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         int i = 0;
         DijkstraMap whichDijkstra;
         Technique whichTech;
-        Set<Coord> whichFoes, whichAllies = new LinkedHashSet<>(8);
+        Set<Coord> whichFoes, whichAllies = new OrderedSet<>(8);
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
@@ -309,13 +306,13 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         int i = 0;
         Technique whichTech;
-        Set<Coord> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
+        Set<Coord> whichFoes, whichAllies, visibleTargets = new OrderedSet<>(8);
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
         Color whichTint = Color.WHITE;
-        LinkedHashMap<AnimatedEntity, Integer> whichEnemyTeam = null;
-        LinkedHashMap<Coord, Double> effects = null;
+        OrderedMap<AnimatedEntity, Integer> whichEnemyTeam = null;
+        OrderedMap<Coord, Double> effects = null;
         if (blueTurn) {
             whichTech = (idx % 2 == 0) ? blueBeam : blueBlast;
             whichFoes = redPlaces;
@@ -358,7 +355,7 @@ public class SquidAIDemo extends ApplicationAdapter {
             }
         }
 
-        LinkedHashMap<Coord, ArrayList<Coord>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
+        OrderedMap<Coord, ArrayList<Coord>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
         Coord targetCell = null;
         targetCell = GwtCompatibility.first(ideal.keySet());
 

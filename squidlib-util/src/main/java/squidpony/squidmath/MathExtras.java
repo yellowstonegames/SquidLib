@@ -16,7 +16,6 @@
 package squidpony.squidmath;
 
 import java.math.BigInteger;
-import java.util.LinkedHashMap;
 
 /**
  * Mathematical operations not provided by {@link Math java.lang.Math}.
@@ -36,8 +35,8 @@ public final class MathExtras
             6227020800L, 87178291200L, 1307674368000L, 20922789888000L, 355687428096000L,
             6402373705728000L, 121645100408832000L, 2432902008176640000L
     };
-    private static final LinkedHashMap<Integer, BigInteger> BIG_FACTORIALS
-        = new LinkedHashMap<Integer, BigInteger>();
+    private static final OrderedMap<Integer, BigInteger> BIG_FACTORIALS
+        = new OrderedMap<Integer, BigInteger>();
 
 
     private MathExtras()

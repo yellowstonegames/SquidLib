@@ -9,7 +9,6 @@ import squidpony.squidgrid.Radius;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 
 
 /**
@@ -1627,9 +1626,9 @@ public class CoordPacker {
      *               returned by packMulti(); null elements in packed will be skipped.
      * @return an ArrayList of all packed arrays that store true at the given x,y location.
      */
-    public static LinkedHashSet<short[]> findManyPacked(int x, int y, short[] ... packed)
+    public static OrderedSet<short[]> findManyPacked(int x, int y, short[] ... packed)
     {
-        LinkedHashSet<short[]> packs = new LinkedHashSet<>(packed.length);
+        OrderedSet<short[]> packs = new OrderedSet<>(packed.length);
         int hilbertDistance = posToHilbert(x, y);
         for (int a = 0; a < packed.length; a++) {
             if(packed[a] == null) continue;
@@ -1658,7 +1657,7 @@ public class CoordPacker {
      */
     public static boolean regionsContain(short[] checking, short[] ... packed)
     {
-        LinkedHashSet<short[]> packs = new LinkedHashSet<>(packed.length);
+        OrderedSet<short[]> packs = new OrderedSet<>(packed.length);
         for (int a = 0; a < packed.length; a++) {
             if(packed[a] == null) continue;
             int total = 0;

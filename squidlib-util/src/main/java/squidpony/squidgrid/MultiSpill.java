@@ -2,13 +2,13 @@ package squidpony.squidgrid;
 
 import squidpony.squidgrid.Spill.Measurement;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -66,7 +66,7 @@ public class MultiSpill {
      * are reached on all sides and the Spill has no more room to fill.
      */
     public int filled = 0;
-    private ArrayList<LinkedHashSet<Coord>> fresh;
+    private ArrayList<OrderedSet<Coord>> fresh;
     /**
      * The StatefulRNG used to decide how to randomly fill a space; can have its state set and read.
      */
@@ -308,7 +308,7 @@ public class MultiSpill {
 
     protected void setFresh(int idx, final Coord pt) {
         if(!initialized) return;
-        for(LinkedHashSet<Coord> f : fresh)
+        for(OrderedSet<Coord> f : fresh)
         {
             if(f.contains(pt))
                 return;
@@ -337,7 +337,7 @@ public class MultiSpill {
     public ArrayList<ArrayList<Coord>> start(List<Coord> entries, int volume, Set<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
-            impassable = new LinkedHashSet<>();
+            impassable = new OrderedSet<>();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
         ArrayList<Coord> spillers = new ArrayList<>(entries);
@@ -345,7 +345,7 @@ public class MultiSpill {
         fresh.clear();
         for (short i = 0; i < spillers.size(); i++) {
             spreadPattern.add(new ArrayList<Coord>(128));
-            fresh.add(new LinkedHashSet<Coord>(128));
+            fresh.add(new OrderedSet<Coord>(128));
             Coord c = spillers.get(i);
             spillMap[c.x][c.y] = i;
 
@@ -366,7 +366,7 @@ public class MultiSpill {
         while (hasFresh && filled < volume) {
             hasFresh = false;
             for (short i = 0; i < spillers.size() && filled < volume; i++) {
-                LinkedHashSet<Coord> currentFresh = fresh.get(i);
+                OrderedSet<Coord> currentFresh = fresh.get(i);
                 if(currentFresh.isEmpty())
                     continue;
                 else
@@ -416,10 +416,10 @@ public class MultiSpill {
      * @return an ArrayList of Points that this will enter, in order starting with entry at index 0, until it
      * reaches its volume or fills its boundaries completely.
      */
-    public ArrayList<ArrayList<Coord>> start(LinkedHashMap<Coord, Double> entries, int volume, Set<Coord> impassable) {
+    public ArrayList<ArrayList<Coord>> start(Map<Coord, Double> entries, int volume, Set<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
-            impassable = new LinkedHashSet<>();
+            impassable = new OrderedSet<>();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
         ArrayList<Coord> spillers0 = new ArrayList<>(entries.keySet()),
@@ -430,7 +430,7 @@ public class MultiSpill {
         fresh.clear();
         for (short i = 0, ctr = 0; i < spillers0.size(); i++, ctr++) {
             spreadPattern.add(new ArrayList<Coord>(128));
-            fresh.add(new LinkedHashSet<Coord>(128));
+            fresh.add(new OrderedSet<Coord>(128));
             Coord c = spillers0.get(i);
             spillers.add(c);
             biases.add(biases0.get(i));
@@ -456,7 +456,7 @@ public class MultiSpill {
         while (hasFresh && filled < volume) {
             hasFresh = false;
             for (short i = 0; i < spillers.size() && filled < volume; i++) {
-                LinkedHashSet<Coord> currentFresh = fresh.get(i);
+                OrderedSet<Coord> currentFresh = fresh.get(i);
                 if(currentFresh.isEmpty())
                     continue;
                 else

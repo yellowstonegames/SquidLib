@@ -737,7 +737,7 @@ public class DijkstraMap {
     public double[][] scan(Set<Coord> impassable) {
         if (!initialized) return null;
         if (impassable == null)
-            impassable = new LinkedHashSet<>();
+            impassable = new OrderedSet<>();
         IntDoubleOrderedMap blocking = new IntDoubleOrderedMap(impassable.size());
         for (Coord pt : impassable) {
             blocking.put(pt.encode(), WALL);
@@ -829,7 +829,7 @@ public class DijkstraMap {
     public double[][] partialScan(int limit, Set<Coord> impassable) {
         if (!initialized) return null;
         if (impassable == null)
-            impassable = new LinkedHashSet<>();
+            impassable = new OrderedSet<>();
         IntDoubleOrderedMap blocking = new IntDoubleOrderedMap(impassable.size());
         for (Coord pt : impassable) {
             blocking.put(pt.encode(), WALL);
@@ -992,7 +992,7 @@ public class DijkstraMap {
      * @return the Coord that it found first.
      */
     public Coord findNearest(Coord start, Coord... targets) {
-        LinkedHashSet<Coord> tgts = new LinkedHashSet<>(targets.length);
+        OrderedSet<Coord> tgts = new OrderedSet<>(targets.length);
         Collections.addAll(tgts, targets);
         return findNearest(start, tgts);
     }
@@ -1148,7 +1148,7 @@ public class DijkstraMap {
     public double[][] scan(Set<Coord> impassable, int size) {
         if (!initialized) return null;
         if (impassable == null)
-            impassable = new LinkedHashSet<>();
+            impassable = new OrderedSet<>();
         IntDoubleOrderedMap blocking = new IntDoubleOrderedMap(impassable.size());
         for (Coord pt : impassable) {
             blocking.put(pt.encode(), WALL);
@@ -1288,13 +1288,13 @@ public class DijkstraMap {
                                      Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         path.clear();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<>();
+            onlyPassable = new OrderedSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -1418,13 +1418,13 @@ public class DijkstraMap {
             }
         }
         path.clear();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<>();
+            onlyPassable = new OrderedSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -1562,7 +1562,7 @@ public class DijkstraMap {
         double[][] userDistanceMap;
         double paidLength = 0.0;
 
-        LinkedHashSet<Coord> friends;
+        OrderedSet<Coord> friends;
 
 
         for (int x = 0; x < width; x++) {
@@ -1575,16 +1575,16 @@ public class DijkstraMap {
         path.clear();
         if (targets == null || targets.size() == 0)
             return new ArrayList<>(path);
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
 
         if (allies == null)
-            friends = new LinkedHashSet<>();
+            friends = new OrderedSet<>();
         else {
-            friends = new LinkedHashSet<>(allies);
+            friends = new OrderedSet<>(allies);
             friends.remove(start);
         }
 
@@ -1610,7 +1610,7 @@ public class DijkstraMap {
         clearGoals();
 
         Coord tempPt = Coord.get(0, 0);
-        LinkedHashMap<Coord, ArrayList<Coord>> ideal;
+        OrderedMap<Coord, ArrayList<Coord>> ideal;
         // generate an array of the single best location to attack when you are in a given cell.
         for (int x = 0; x < width; x++) {
             CELL:
@@ -1622,13 +1622,11 @@ public class DijkstraMap {
                     for (Coord tgt : targets) {
                         if (los == null || los.isReachable(resMap, x, y, tgt.x, tgt.y)) {
                             ideal = tech.idealLocations(tempPt, targets, friends);
-                            // this is weird but it saves the trouble of getting the iterator and checking hasNext() .
-                            for (Map.Entry<Coord, ArrayList<Coord>> ip : ideal.entrySet()) {
-                                targetMap[x][y] = ip.getKey();
-                                worthMap[x][y] = ip.getValue().size();
+                            if (!ideal.isEmpty()) {
+                                targetMap[x][y] = ideal.keyAt(0);
+                                worthMap[x][y] = ideal.getAt(0).size();
                                 setGoal(x, y);
                                 gradientMap[x][y] = 0;
-                                break;
                             }
                             continue CELL;
                         }
@@ -1783,13 +1781,13 @@ public class DijkstraMap {
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
 
         path.clear();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<>();
+            onlyPassable = new OrderedSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -1910,7 +1908,7 @@ public class DijkstraMap {
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
                                                   double coverPreference, Set<Coord> impassable,
-                                                  Set<Coord> onlyPassable, List<Threat> threats, Coord start,
+                                                  Set<Coord> onlyPassable, Iterable<Threat> threats, Coord start,
                                                   Coord... targets) {
         if (!initialized) return null;
 
@@ -1926,13 +1924,13 @@ public class DijkstraMap {
 
 
         path = new ArrayList<Coord>();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new OrderedSet<Coord>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new OrderedSet<Coord>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new OrderedSet<Coord>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -2116,7 +2114,7 @@ public class DijkstraMap {
      */
     public ArrayList<Coord> findCoveredAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange,
                                                   double coverPreference, FOV fov, boolean seekDistantGoals, Set<Coord> impassable,
-                                                  Set<Coord> onlyPassable, List<Threat> threats, Coord start,
+                                                  Set<Coord> onlyPassable, Iterable<Threat> threats, Coord start,
                                                   Coord... targets) {
         if (!initialized) return null;
         if(fov == null) {
@@ -2135,13 +2133,13 @@ public class DijkstraMap {
 
 
         path = new ArrayList<Coord>();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<Coord>();
+            impassable2 = new OrderedSet<Coord>();
         else
-            impassable2 = new LinkedHashSet<Coord>(impassable);
+            impassable2 = new OrderedSet<Coord>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<Coord>();
+            onlyPassable = new OrderedSet<Coord>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -2364,13 +2362,13 @@ public class DijkstraMap {
         }
 
         path.clear();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<>();
+            onlyPassable = new OrderedSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -2548,7 +2546,7 @@ public class DijkstraMap {
         double[][] userDistanceMap;
         double paidLength = 0.0;
 
-        LinkedHashSet<Coord> friends;
+        OrderedSet<Coord> friends;
 
 
         for (int x = 0; x < width; x++) {
@@ -2561,16 +2559,16 @@ public class DijkstraMap {
         path.clear();
         if (targets == null || targets.size() == 0)
             return new ArrayList<>(path);
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
 
         if (allies == null)
-            friends = new LinkedHashSet<>();
+            friends = new OrderedSet<>();
         else {
-            friends = new LinkedHashSet<>(allies);
+            friends = new OrderedSet<>(allies);
             friends.remove(start);
         }
 
@@ -2596,7 +2594,7 @@ public class DijkstraMap {
         clearGoals();
 
         Coord tempPt = Coord.get(0, 0);
-        LinkedHashMap<Coord, ArrayList<Coord>> ideal;
+        OrderedMap<Coord, ArrayList<Coord>> ideal;
         // generate an array of the single best location to attack when you are in a given cell.
         for (int x = 0; x < width; x++) {
             CELL:
@@ -2608,13 +2606,11 @@ public class DijkstraMap {
                     for (Coord tgt : targets) {
                         if (cache == null || cache.queryLOS(x, y, tgt.x, tgt.y)) {
                             ideal = tech.idealLocations(tempPt, targets, friends);
-                            // this is weird but it saves the trouble of getting the iterator and checking hasNext() .
-                            for (Map.Entry<Coord, ArrayList<Coord>> ip : ideal.entrySet()) {
-                                targetMap[x][y] = ip.getKey();
-                                worthMap[x][y] = ip.getValue().size();
+                            if (!ideal.isEmpty()) {
+                                targetMap[x][y] = ideal.keyAt(0);
+                                worthMap[x][y] = ideal.getAt(0).size();
                                 setGoal(x, y);
                                 gradientMap[x][y] = 0;
-                                break;
                             }
                             continue CELL;
                         }
@@ -2709,7 +2705,7 @@ public class DijkstraMap {
 
 
     private double cachedLongerPaths = 1.2;
-    private Set<Coord> cachedImpassable = new LinkedHashSet<>();
+    private Set<Coord> cachedImpassable = new OrderedSet<>();
     private Coord[] cachedFearSources;
     private double[][] cachedFleeMap;
     private int cachedSize = 1;
@@ -2744,14 +2740,14 @@ public class DijkstraMap {
                                          Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path.clear();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<>();
+            onlyPassable = new OrderedSet<>();
         if (fearSources == null || fearSources.length < 1) {
             path.clear();
             return new ArrayList<>(path);
@@ -2761,7 +2757,7 @@ public class DijkstraMap {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new LinkedHashSet<>(impassable2);
+            cachedImpassable = new OrderedSet<>(impassable2);
             cachedFearSources = GwtCompatibility.cloneCoords(fearSources);
             cachedSize = 1;
             resetMap();
@@ -2857,14 +2853,14 @@ public class DijkstraMap {
                                           Set<Coord> onlyPassable, Coord start, Coord... targets) {
         if (!initialized) return null;
         path.clear();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<>();
+            onlyPassable = new OrderedSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -2962,14 +2958,14 @@ public class DijkstraMap {
             }
         }
         path.clear();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<>();
+            onlyPassable = new OrderedSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -3100,14 +3096,14 @@ public class DijkstraMap {
             }
         }
         path.clear();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<>();
+            onlyPassable = new OrderedSet<>();
 
         resetMap();
         for (Coord goal : targets) {
@@ -3230,14 +3226,14 @@ public class DijkstraMap {
                                               Set<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path.clear();
-        LinkedHashSet<Coord> impassable2;
+        OrderedSet<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new LinkedHashSet<>();
+            impassable2 = new OrderedSet<>();
         else
-            impassable2 = new LinkedHashSet<>(impassable);
+            impassable2 = new OrderedSet<>(impassable);
 
         if (onlyPassable == null)
-            onlyPassable = new LinkedHashSet<>();
+            onlyPassable = new OrderedSet<>();
         if (fearSources == null || fearSources.length < 1) {
             path.clear();
             return new ArrayList<>(path);
@@ -3247,7 +3243,7 @@ public class DijkstraMap {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable = new LinkedHashSet<>(impassable2);
+            cachedImpassable = new OrderedSet<>(impassable2);
             cachedFearSources = GwtCompatibility.cloneCoords(fearSources);
             cachedSize = size;
             resetMap();
@@ -3367,17 +3363,17 @@ public class DijkstraMap {
     }
 
     /**
-     * A simple limited flood-fill that returns a LinkedHashMap of Coord keys to the Double values in the DijkstraMap, only
+     * A simple limited flood-fill that returns a OrderedMap of Coord keys to the Double values in the DijkstraMap, only
      * calculating out to a number of steps determined by limit. This can be useful if you need many flood-fills and
      * don't need a large area for each, or if you want to have an effect spread to a certain number of cells away.
      *
      * @param radius the number of steps to take outward from each starting position.
      * @param starts a vararg group of Points to step outward from; this often will only need to be one Coord.
-     * @return A LinkedHashMap of Coord keys to Double values; the starts are included in this with the value 0.0.
+     * @return A OrderedMap of Coord keys to Double values; the starts are included in this with the value 0.0.
      */
-    public LinkedHashMap<Coord, Double> floodFill(int radius, Coord... starts) {
+    public Map<Coord, Double> floodFill(int radius, Coord... starts) {
         if (!initialized) return null;
-        LinkedHashMap<Coord, Double> fill = new LinkedHashMap<>();
+        OrderedMap<Coord, Double> fill = new OrderedMap<>();
 
         resetMap();
         for (Coord goal : starts) {

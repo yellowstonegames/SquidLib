@@ -3,6 +3,7 @@ package squidpony.squidgrid;
 import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.ShortVLA;
 
 import java.util.*;
@@ -101,7 +102,7 @@ public class FOVCache extends FOV{
     protected final int NUM_THREADS;
     private ExecutorService executor;
     protected double fovPermissiveness;
-    protected LinkedHashMap<Coord, Integer> lights;
+    protected OrderedMap<Coord, Integer> lights;
     protected Coord[] lightSources;
     protected int[] lightBrightnesses;
     private double[][] levels;
@@ -143,7 +144,7 @@ public class FOVCache extends FOV{
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
-        lights = new LinkedHashMap<>();
+        lights = new OrderedMap<>();
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -212,7 +213,7 @@ public class FOVCache extends FOV{
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
-        lights = new LinkedHashMap<>();
+        lights = new OrderedMap<>();
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];
@@ -284,7 +285,7 @@ public class FOVCache extends FOV{
         decay = 1.0 / maxRadius;
         this.radiusKind = radiusKind;
         fovPermissiveness = 0.9;
-        this.lights = new LinkedHashMap<>(lights);
+        this.lights = new OrderedMap<>(lights);
         cache = new short[mapLimit][][];
         tmpCache = new short[mapLimit][][];
         losCache = new short[mapLimit][];

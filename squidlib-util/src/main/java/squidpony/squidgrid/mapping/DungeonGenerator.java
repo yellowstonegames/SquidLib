@@ -8,7 +8,6 @@ import squidpony.squidmath.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.LinkedHashSet;
 
 import static squidpony.squidmath.CoordPacker.*;
 
@@ -326,7 +325,7 @@ public class DungeonGenerator {
         return this;
     }
 
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt)
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt)
     {
         for(Coord temp : new Coord[]{Coord.get(pt.x + 1, pt.y), Coord.get(pt.x - 1, pt.y),
                 Coord.get(pt.x, pt.y + 1), Coord.get(pt.x, pt.y - 1)})
@@ -337,7 +336,7 @@ public class DungeonGenerator {
 
         return coll;
     }
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt1, Coord pt2)
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt1, Coord pt2)
     {
 
         for(Coord temp : new Coord[]{Coord.get(pt1.x + 1, pt1.y), Coord.get(pt1.x - 1, pt1.y),
@@ -352,9 +351,9 @@ public class DungeonGenerator {
         return coll;
     }
 
-    protected LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map)
+    protected OrderedSet<Coord> viableDoorways(boolean doubleDoors, char[][] map)
     {
-        LinkedHashSet<Coord> doors = new LinkedHashSet<>();
+        OrderedSet<Coord> doors = new OrderedSet<>();
         for(int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map[x].length - 1; y++) {
                 if(map[x][y] == '#')
@@ -544,8 +543,8 @@ public class DungeonGenerator {
 
     private char[][] innerGenerate(char[][] map)
     {
-        LinkedHashSet<Coord> doorways;
-        LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
+        OrderedSet<Coord> doorways;
+        OrderedSet<Coord> hazards = new OrderedSet<>();
         Coord temp;
         boolean doubleDoors = false;
         int floorCount = DungeonUtility.countCells(map, '.'),
@@ -582,7 +581,7 @@ public class DungeonGenerator {
 
         doorways = viableDoorways(doubleDoors, map);
 
-        LinkedHashSet<Coord> obstacles = new LinkedHashSet<>(doorways.size() * doorFill / 100);
+        OrderedSet<Coord> obstacles = new OrderedSet<>(doorways.size() * doorFill / 100);
         if(doorFill > 0)
         {
             int total = doorways.size() * doorFill / 100;

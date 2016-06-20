@@ -16,10 +16,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.*;
 
@@ -58,8 +55,8 @@ public class CoveredPathDemo extends ApplicationAdapter {
     private SquidInput input;
     private static final Color bgColor = SColor.DARK_SLATE_GRAY;
     private ArrayList<Creature> teamRed, teamBlue;
-    private LinkedHashSet<Coord> redPlaces, bluePlaces;
-    private List<Threat> redThreats, blueThreats;
+    private OrderedSet<Coord> redPlaces, bluePlaces;
+    private OrderedSet<Threat> redThreats, blueThreats;
     private DijkstraMap getToRed, getToBlue;
     private Stage stage;
     private int framesWithoutAnimation = 0, moveLength = 6;
@@ -103,11 +100,11 @@ public class CoveredPathDemo extends ApplicationAdapter {
         teamRed = new ArrayList<>(numMonsters);
         teamBlue = new ArrayList<>(numMonsters);
 
-        redPlaces = new LinkedHashSet<>(numMonsters);
-        bluePlaces = new LinkedHashSet<>(numMonsters);
+        redPlaces = new OrderedSet<>(numMonsters);
+        bluePlaces = new OrderedSet<>(numMonsters);
 
-        redThreats = new ArrayList<>(numMonsters);
-        blueThreats = new ArrayList<>(numMonsters);
+        redThreats = new OrderedSet<>(numMonsters);
+        blueThreats = new OrderedSet<>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
             Coord monPos = dungeonGen.utility.randomCell(placement);
@@ -176,7 +173,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
         DijkstraMap whichDijkstra = null;
         Technique whichTech;
         Set<Coord> whichFoes, whichAllies;
-        List<Threat> whichThreats;
+        OrderedSet<Threat> whichThreats;
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
@@ -263,22 +260,11 @@ public class CoveredPathDemo extends ApplicationAdapter {
         }
         return false;
     }
-
-    private LinkedHashMap<Integer, Threat> convertThreats(List<Threat> ts)
-    {
-        LinkedHashMap<Integer, Threat> numbered = new LinkedHashMap<>();
-        int i = 0;
-        for (Threat t : ts)
-        {
-            numbered.put(i, t);
-            i++;
-        }
-        return numbered;
-    }
+    
     private void postMove(int idx) {
 
         int i = 0, myMax, myMin;
-        LinkedHashSet<Coord> whichFoes, whichAllies, visibleTargets = new LinkedHashSet<>(8);
+        OrderedSet<Coord> whichFoes, whichAllies, visibleTargets = new OrderedSet<>(8);
         AnimatedEntity ae = null;
         int health = 0;
         Coord user = null;
@@ -286,14 +272,14 @@ public class CoveredPathDemo extends ApplicationAdapter {
         ArrayList<Coord> previous = null;
         Color whichTint = Color.WHITE;
         ArrayList<Creature> whichEnemyTeam;
-        LinkedHashMap<Integer, Threat> myThreats, enemyThreats;
+        OrderedSet<Threat> myThreats, enemyThreats;
         if (blueTurn) {
             whichFoes = redPlaces;
             whichAllies = bluePlaces;
             whichTint = Color.CYAN;
             whichEnemyTeam = teamRed;
-            myThreats = convertThreats(blueThreats);
-            enemyThreats = convertThreats(redThreats);
+            myThreats = blueThreats;
+            enemyThreats = redThreats;
             myMin = 3;
             myMax = 5;
             Creature entry = teamBlue.get(idx);
@@ -307,8 +293,8 @@ public class CoveredPathDemo extends ApplicationAdapter {
             whichAllies = redPlaces;
             whichTint = Color.RED;
             whichEnemyTeam = teamBlue;
-            myThreats = convertThreats(redThreats);
-            enemyThreats = convertThreats(blueThreats);
+            myThreats = redThreats;
+            enemyThreats = blueThreats;
             myMin = 0;
             myMax = 1;
 
@@ -360,8 +346,10 @@ public class CoveredPathDemo extends ApplicationAdapter {
                 }
                 ix++;
             }
-            if (successfulKill >= 0) {
-                Coord deadPos = enemyThreats.remove(successfulKill).position;
+            if (successfulKill >= 0 && successfulKill < enemyThreats.size()) {
+                Threat succ = enemyThreats.getAt(successfulKill);
+                enemyThreats.remove(succ);
+                Coord deadPos = succ.position;
                 AnimatedEntity deadAE = whichEnemyTeam.get(successfulKill).entity;
                 display.removeAnimatedEntity(deadAE);
                 whichFoes.remove(deadPos);

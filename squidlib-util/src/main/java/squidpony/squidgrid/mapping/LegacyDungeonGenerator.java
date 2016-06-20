@@ -5,14 +5,9 @@ import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.PoissonDisk;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 
 import static squidpony.squidmath.CoordPacker.*;
 
@@ -269,17 +264,17 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
     }
 
     @Override
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt) {
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt) {
         return super.removeAdjacent(coll, pt);
     }
 
     @Override
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt1, Coord pt2) {
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt1, Coord pt2) {
         return super.removeAdjacent(coll, pt1, pt2);
     }
 
     @Override
-    protected LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map) {
+    protected OrderedSet<Coord> viableDoorways(boolean doubleDoors, char[][] map) {
         return super.viableDoorways(doubleDoors, map);
     }
 
@@ -415,9 +410,9 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
     private char[][] innerGenerate(char[][] map)
     {
 
-        LinkedHashSet<Coord> floors = new LinkedHashSet<>();
-        LinkedHashSet<Coord> doorways;
-        LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
+        OrderedSet<Coord> floors = new OrderedSet<>();
+        OrderedSet<Coord> doorways;
+        OrderedSet<Coord> hazards = new OrderedSet<>();
         Coord temp;
         boolean doubleDoors = false;
         int doorFill = 0;
@@ -460,7 +455,7 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
         floorRate -= waterRate + grassRate;
         doorways = viableDoorways(doubleDoors, map);
 
-        LinkedHashSet<Coord> obstacles = new LinkedHashSet<>(doorways.size() * doorFill / 100);
+        OrderedSet<Coord> obstacles = new OrderedSet<>(doorways.size() * doorFill / 100);
         if(doorFill > 0)
         {
             int total = doorways.size() * doorFill / 100;
@@ -528,7 +523,7 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
         }
 
         MultiSpill ms = new MultiSpill(map, Spill.Measurement.MANHATTAN, rng);
-        LinkedHashMap<Coord, Double> fillers = new LinkedHashMap<>(128);
+        OrderedMap<Coord, Double> fillers = new OrderedMap<>(128);
         ArrayList<Coord> dots = PoissonDisk.sampleMap(map, Math.min(width, height) / 8f, rng, '#', '+', '/','<', '>');
         for (int i = 0; i < dots.size(); i++) {
             switch (i % 3) {
@@ -629,9 +624,9 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
     private char[][] innerGenerateOld(char[][] map)
     {
 
-        LinkedHashSet<Coord> floors = new LinkedHashSet<>();
-        LinkedHashSet<Coord> doorways;
-        LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
+        OrderedSet<Coord> floors = new OrderedSet<>();
+        OrderedSet<Coord> doorways;
+        OrderedSet<Coord> hazards = new OrderedSet<>();
         Coord temp;
         boolean doubleDoors = false;
         int doorFill = 0;
@@ -663,7 +658,7 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
 
         doorways = viableDoorways(doubleDoors, map);
 
-        LinkedHashSet<Coord> obstacles = new LinkedHashSet<>(doorways.size() * doorFill / 100);
+        OrderedSet<Coord> obstacles = new OrderedSet<>(doorways.size() * doorFill / 100);
         if(doorFill > 0)
         {
             int total = doorways.size() * doorFill / 100;

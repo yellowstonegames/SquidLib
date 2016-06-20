@@ -1,12 +1,8 @@
 package squidpony.squidgrid;
 
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.Set;
 /**
  * A randomized flood-fill implementation that can be used for level generation (e.g. filling ponds and lakes), for
@@ -79,7 +75,7 @@ public class Spill {
      * are reached on all sides and the Spill has no more room to fill.
      */
     public int filled = 0;
-    private LinkedHashSet<Coord> fresh;
+    private OrderedSet<Coord> fresh;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
@@ -98,7 +94,7 @@ public class Spill {
         lrng = new LightRNG();
         rng = new StatefulRNG(lrng);
 
-        fresh = new LinkedHashSet<>();
+        fresh = new OrderedSet<>();
     }
     /**
      * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual
@@ -111,7 +107,7 @@ public class Spill {
         lrng = new LightRNG(random.nextLong());
         rng = new StatefulRNG(lrng);
 
-        fresh = new LinkedHashSet<>();
+        fresh = new OrderedSet<>();
     }
 
     /**
@@ -125,7 +121,7 @@ public class Spill {
         lrng = random;
         rng = new StatefulRNG(lrng);
 
-        fresh = new LinkedHashSet<>();
+        fresh = new OrderedSet<>();
     }
 
     /**
@@ -245,7 +241,7 @@ public class Spill {
      * @return
      */
     public Spill initialize(final boolean[][] level) {
-        fresh = new LinkedHashSet<>();
+        fresh = new OrderedSet<>();
         width = level.length;
         height = level[0].length;
         spillMap = new boolean[width][height];
@@ -268,7 +264,7 @@ public class Spill {
      * @return
      */
     public Spill initialize(final char[][] level) {
-        fresh = new LinkedHashSet<>();
+        fresh = new OrderedSet<>();
         width = level.length;
         height = level[0].length;
         spillMap = new boolean[width][height];
@@ -293,7 +289,7 @@ public class Spill {
      * @return
      */
     public Spill initialize(final char[][] level, char alternateWall) {
-        fresh = new LinkedHashSet<>();
+        fresh = new OrderedSet<>();
         width = level.length;
         height = level[0].length;
         spillMap = new boolean[width][height];
@@ -378,7 +374,7 @@ public class Spill {
     public ArrayList<Coord> start(Coord entry, int volume, Set<Coord> impassable) {
         if(!initialized) return null;
         if(impassable == null)
-            impassable = new LinkedHashSet<>();
+            impassable = new OrderedSet<>();
         if(!physicalMap[entry.x][entry.y] || impassable.contains(entry))
             return null;
         spreadPattern = new ArrayList<>(volume);

@@ -5,7 +5,6 @@ import squidpony.squidgrid.Radius;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 
 /**
  * This provides a Uniform Poisson Disk Sampling technique that can be used to generate random points that have a
@@ -121,7 +120,7 @@ public class PoissonDisk {
         int gridHeight = (int)(dimensions.y / cellSize) + 1;
         Coord[][] grid = new Coord[gridWidth][gridHeight];
         ArrayList<Coord> activePoints = new ArrayList<>();
-        LinkedHashSet<Coord> points = new LinkedHashSet<>(128);
+        OrderedSet<Coord> points = new OrderedSet<>(128);
 
         //add first point
         boolean added = false;
@@ -223,7 +222,7 @@ public class PoissonDisk {
         int gridHeight = (int) (dimensions.y / cellSize) + 1;
         Coord[][] grid = new Coord[gridWidth][gridHeight];
         ArrayList<Coord> activePoints = new ArrayList<>();
-        LinkedHashSet<Coord> points = new LinkedHashSet<>(128);
+        OrderedSet<Coord> points = new OrderedSet<>(128);
 
         //add first point
 

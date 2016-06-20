@@ -1,12 +1,8 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.OrthoLine;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -173,7 +169,7 @@ public class SerpentMapGenerator {
             rows[i] += rs3;
         }
 
-        LinkedHashMap<Coord, List<Coord>> connections = new LinkedHashMap<>(80);
+        OrderedMap<Coord, List<Coord>> connections = new OrderedMap<>(80);
         Coord temp, t;
         int m = random.nextInt(64), r = random.between(4, 12);
         temp = CoordPacker.mooreToCoord(m);

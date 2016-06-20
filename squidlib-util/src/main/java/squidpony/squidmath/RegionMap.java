@@ -341,10 +341,10 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable 
      * @param y the y coordinate of the point in question
      * @return an ArrayList of all V values corresponding to regions containing the given x,y point.
      */
-    public LinkedHashSet<V> allAt(int x, int y)
+    public OrderedSet<V> allAt(int x, int y)
     {
-        LinkedHashSet<V> found = new LinkedHashSet<>(capacity);
-        LinkedHashSet<short[]> regions = CoordPacker.findManyPacked(x, y, keyTable);
+        OrderedSet<V> found = new OrderedSet<>(capacity);
+        OrderedSet<short[]> regions = CoordPacker.findManyPacked(x, y, keyTable);
         for(short[] region : regions)
         {
             found.add(get(region));
@@ -368,7 +368,7 @@ public class RegionMap<V> implements Iterable<RegionMap.Entry<V>>, Serializable 
      * @param y the y coordinate of the point in question
      * @return an ArrayList of all regions in this data structure containing the given x,y point.
      */
-    public LinkedHashSet<short[]> regionsContaining(int x, int y)
+    public OrderedSet<short[]> regionsContaining(int x, int y)
     {
         return CoordPacker.findManyPacked(x, y, keyTable);
     }

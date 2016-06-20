@@ -3,8 +3,7 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * A generic method of holding a probability table to determine weighted random
@@ -20,9 +19,9 @@ import java.util.Set;
 @Beta
 public class ProbabilityTable<T> implements Serializable {
     private static final long serialVersionUID = -1307656083434154736L;
-    private final HashMap<T, Integer> table = new HashMap<>();
+    private final OrderedMap<T, Integer> table;
     private RNG rng;
-    private int total = 0;
+    private int total;
 
     /**
      * Creates a new probability table.
@@ -39,6 +38,8 @@ public class ProbabilityTable<T> implements Serializable {
      */
     public ProbabilityTable(RNG rng) {
         this.rng = rng;
+        table = new OrderedMap<>();
+        total = 0;
     }
 
     /**
@@ -97,9 +98,9 @@ public class ProbabilityTable<T> implements Serializable {
      * Provides a set of the items in this table, without reference to their
      * weight.
      *
-     * @return a set of all items stored
+     * @return a "sorted" set of all items stored, really sorted in insertion order
      */
-    public Set<T> items() {
+    public SortedSet<T> items() {
         return table.keySet();
     }
 }

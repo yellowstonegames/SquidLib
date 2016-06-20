@@ -1670,12 +1670,12 @@ public class FakeLanguageGen implements Serializable {
             StringBuilder sb = new StringBuilder(20);
             double syllableChance = rng.nextDouble(totalSyllableFrequency);
             int syllables = 1, i = 0;
-            for (Map.Entry<Integer, Double> kv : syllableFrequencies.entrySet()) {
-                if (syllableChance < kv.getValue()) {
-                    syllables = kv.getKey();
+            for (IntDoubleOrderedMap.MapEntry kv : syllableFrequencies.mapEntrySet()) {
+                if (syllableChance < kv.getDoubleValue()) {
+                    syllables = kv.getIntKey();
                     break;
                 } else
-                    syllableChance -= kv.getValue();
+                    syllableChance -= kv.getDoubleValue();
             }
             if (rng.nextDouble() < vowelStartFrequency) {
                 sb.append(rng.getRandomElement(openingVowels));

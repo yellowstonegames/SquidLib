@@ -1,9 +1,9 @@
 package squidpony.squidai;
 
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
@@ -127,9 +127,9 @@ public class Technique {
      * @param user The location of the user of this Technique
      * @param targets Set of Coord of desirable targets to include in the area of this Technique, as many as possible.
      * @param requiredExclusions Set of Coord where each value is something this Technique will really try to avoid.
-     * @return LinkedHashMap of Coord keys representing target points to pass to apply, to ArrayList of Coord values representing what targets' locations will be affected.
+     * @return OrderedMap of Coord keys representing target points to pass to apply, to ArrayList of Coord values representing what targets' locations will be affected.
      */
-    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Set<Coord> targets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Set<Coord> targets, Set<Coord> requiredExclusions) {
         aoe.setOrigin(user);
         return aoe.idealLocations(targets, requiredExclusions);
 
@@ -151,9 +151,9 @@ public class Technique {
      * @param priorityTargets Set of Coord of important targets to include in the area of this Technique, preferring to target a single priorityTarget over four lesserTargets.
      * @param lesserTargets Set of Coord of desirable targets to include in the area of this Technique, as many as possible without excluding priorityTargets.
      * @param requiredExclusions Set of Coord where each value is something this Technique will really try to avoid.
-     * @return LinkedHashMap of Coord keys representing target points to pass to apply, to ArrayList of Coord values representing what targets' locations will be affected.
+     * @return OrderedMap of Coord keys representing target points to pass to apply, to ArrayList of Coord values representing what targets' locations will be affected.
      */
-    public LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Coord user, Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
         aoe.setOrigin(user);
         return aoe.idealLocations(priorityTargets, lesserTargets, requiredExclusions);
     }
@@ -173,7 +173,7 @@ public class Technique {
      * @param aimAt A target Coord typically obtained from idealLocations that determines how to position the AOE.
      * @return a HashMap of Coord keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).
      */
-    public LinkedHashMap<Coord, Double> apply(Coord user, Coord aimAt)
+    public OrderedMap<Coord, Double> apply(Coord user, Coord aimAt)
     {
         aoe.setOrigin(user);
         aoe.shift(aimAt);
