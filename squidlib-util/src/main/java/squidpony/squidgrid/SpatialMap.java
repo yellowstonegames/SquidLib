@@ -1,6 +1,8 @@
 package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
 
 import java.util.*;
 
@@ -11,7 +13,7 @@ import java.util.*;
  * a new value, and perform analogues to most of the features of the Map interface, though this does not implement Map
  * because it essentially has two key types and one value type. You can also iterate through the values in insertion
  * order, where insertion order should be stable even when elements are moved or modified (the relevant key is the
- * identity, which is never changed in this class). Uses two LinkedHashMap fields internally.
+ * identity, which is never changed in this class). Uses two OrderedMap fields internally.
  * Created by Tommy Ettinger on 1/2/2016.
  */
 public class SpatialMap<I, E> implements Iterable<E> {
@@ -56,26 +58,26 @@ public class SpatialMap<I, E> implements Iterable<E> {
         }
     }
 
-    protected LinkedHashMap<I, SpatialTriple<I, E>> itemMapping;
-    protected LinkedHashMap<Coord, SpatialTriple<I, E>> positionMapping;
+    protected OrderedMap<I, SpatialTriple<I, E>> itemMapping;
+    protected OrderedMap<Coord, SpatialTriple<I, E>> positionMapping;
 
     /**
      * Constructs a SpatialMap with capacity 32.
      */
     public SpatialMap()
     {
-        itemMapping = new LinkedHashMap<>(32);
-        positionMapping = new LinkedHashMap<>(32);
+        itemMapping = new OrderedMap<>(32);
+        positionMapping = new OrderedMap<>(32);
     }
 
     /**
      * Constructs a SpatialMap with the given capacity
-     * @param capacity the capacity for each of the internal LinkedHashMaps
+     * @param capacity the capacity for each of the internal OrderedMaps
      */
     public SpatialMap(int capacity)
     {
-        itemMapping = new LinkedHashMap<>(capacity);
-        positionMapping = new LinkedHashMap<>(capacity);
+        itemMapping = new OrderedMap<>(capacity);
+        positionMapping = new OrderedMap<>(capacity);
     }
 
     /**
@@ -88,9 +90,9 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public SpatialMap(Coord[] coords, I[] ids, E[] elements)
     {
-        itemMapping = new LinkedHashMap<>(
+        itemMapping = new OrderedMap<>(
                 Math.min(coords.length, Math.min(ids.length, elements.length)));
-        positionMapping = new LinkedHashMap<>(
+        positionMapping = new OrderedMap<>(
                 Math.min(coords.length, Math.min(ids.length, elements.length)));
 
         for (int i = 0; i < coords.length && i < ids.length && i < elements.length; i++) {
@@ -109,9 +111,9 @@ public class SpatialMap<I, E> implements Iterable<E> {
      */
     public SpatialMap(Collection<Coord> coords, Collection<I> ids, Collection<E> elements)
     {
-        itemMapping = new LinkedHashMap<>(
+        itemMapping = new OrderedMap<>(
                 Math.min(coords.size(), Math.min(ids.size(), elements.size())));
-        positionMapping = new LinkedHashMap<>(
+        positionMapping = new OrderedMap<>(
                 Math.min(coords.size(), Math.min(ids.size(), elements.size())));
         if(itemMapping.size() <= 0)
             return;
@@ -383,22 +385,22 @@ public class SpatialMap<I, E> implements Iterable<E> {
     }
 
     /**
-     * Get a Set of all positions used for values in this data structure, returning a LinkedHashSet (defensively copying
+     * Get a Set of all positions used for values in this data structure, returning a OrderedSet (defensively copying
      * the key set used internally) for its stable iteration order.
-     * @return a LinkedHashSet of Coord corresponding to the positions present in this data structure.
+     * @return a OrderedSet of Coord corresponding to the positions present in this data structure.
      */
-    public LinkedHashSet<Coord> positions()
+    public OrderedSet<Coord> positions()
     {
-        return new LinkedHashSet<>(positionMapping.keySet());
+        return new OrderedSet<>(positionMapping.keySet());
     }
     /**
-     * Get a Set of all identities used for values in this data structure, returning a LinkedHashSet (defensively
+     * Get a Set of all identities used for values in this data structure, returning a OrderedSet (defensively
      * copying the key set used internally) for its stable iteration order.
-     * @return a LinkedHashSet of I corresponding to the identities present in this data structure.
+     * @return a OrderedSet of I corresponding to the identities present in this data structure.
      */
-    public LinkedHashSet<I> identities()
+    public OrderedSet<I> identities()
     {
-        return new LinkedHashSet<>(itemMapping.keySet());
+        return new OrderedSet<>(itemMapping.keySet());
     }
 
     /**

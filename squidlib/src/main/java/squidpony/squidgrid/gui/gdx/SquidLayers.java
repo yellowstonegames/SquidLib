@@ -1632,7 +1632,7 @@ public class SquidLayers extends Group {
         return animateActor(x, y, tr, Color.WHITE, doubleWidth, stretch);
     }
 
-    public LinkedHashSet<AnimatedEntity> getAnimatedEntities(int layer) {
+    public Set<AnimatedEntity> getAnimatedEntities(int layer) {
         SquidPanel p = foregroundPanel;
         switch (layer) {
             case 0:
@@ -1648,7 +1648,7 @@ public class SquidLayers extends Group {
         return p.getAnimatedEntities();
     }
 
-    public LinkedHashSet<AnimatedEntity> getAnimatedEntities() {
+    public Set<AnimatedEntity> getAnimatedEntities() {
         return foregroundPanel.getAnimatedEntities();
     }
 

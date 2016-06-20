@@ -14,9 +14,13 @@ import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Displays text and images in a grid pattern. Supports basic animations.
@@ -42,7 +46,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected Color lightingColor = SColor.WHITE;
     protected final TextCellFactory textFactory;
     protected float xOffset, yOffset;
-    protected LinkedHashSet<AnimatedEntity> animatedEntities;
+    protected OrderedSet<AnimatedEntity> animatedEntities;
     protected boolean distanceField = false;
 
     /**
@@ -147,7 +151,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         setSize(w, h);
-        animatedEntities = new LinkedHashSet<>();
+        animatedEntities = new OrderedSet<>();
     }
 
     /**
@@ -1312,7 +1316,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         return animationCount != 0;
     }
 
-    public LinkedHashSet<AnimatedEntity> getAnimatedEntities() {
+    public Set<AnimatedEntity> getAnimatedEntities() {
         return animatedEntities;
     }
 

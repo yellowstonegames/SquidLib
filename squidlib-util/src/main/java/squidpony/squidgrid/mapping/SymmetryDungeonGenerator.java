@@ -1,10 +1,11 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.PoissonDisk;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A variant on {@link MixedGenerator} that creates bi-radially symmetric maps (basically a yin-yang shape). Useful for
@@ -15,7 +16,7 @@ import java.util.*;
  */
 public class SymmetryDungeonGenerator extends MixedGenerator {
 
-    public static LinkedHashMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, List<Coord> sequence)
+    public static OrderedMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, List<Coord> sequence)
     {
         List<Coord> s2 = new ArrayList<>(sequence.size());
         for(Coord c : sequence)
@@ -25,9 +26,9 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
         }
         return listToMap(s2);
     }
-    public static LinkedHashMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, Map<Coord, List<Coord>> connections) {
-        LinkedHashMap<Coord, List<Coord>> lhm2 = new LinkedHashMap<>(connections.size());
-        Set<Coord> keyset = connections.keySet(), newkeys = new LinkedHashSet<>(connections.size());
+    public static OrderedMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, Map<Coord, List<Coord>> connections) {
+        OrderedMap<Coord, List<Coord>> lhm2 = new OrderedMap<>(connections.size());
+        Set<Coord> keyset = connections.keySet(), newkeys = new OrderedSet<>(connections.size());
         for (Coord c : keyset) {
             if (c.x * 1.0 / width + c.y * 1.0 / height <= 1.0) {
                 newkeys.add(c);
@@ -100,7 +101,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
      * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public SymmetryDungeonGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections) {
+    public SymmetryDungeonGenerator(int width, int height, RNG rng, OrderedMap<Coord, List<Coord>> connections) {
         this(width, height, rng, connections, 0.8f);
     }
 
@@ -119,13 +120,13 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
      * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public SymmetryDungeonGenerator(int width, int height, RNG rng, LinkedHashMap<Coord, List<Coord>> connections, float roomSizeMultiplier) {
+    public SymmetryDungeonGenerator(int width, int height, RNG rng, OrderedMap<Coord, List<Coord>> connections, float roomSizeMultiplier) {
         super(width, height, rng, crossConnect(width, height, connections), roomSizeMultiplier);
     }
 
-    protected static LinkedHashMap<Coord, List<Coord>> listToMap(List<Coord> sequence)
+    protected static OrderedMap<Coord, List<Coord>> listToMap(List<Coord> sequence)
     {
-        LinkedHashMap<Coord, List<Coord>> conns = new LinkedHashMap<>(sequence.size() - 1);
+        OrderedMap<Coord, List<Coord>> conns = new OrderedMap<>(sequence.size() - 1);
         for (int i = 0; i < sequence.size() - 1; i++) {
             Coord c1 = sequence.get(i), c2 = sequence.get(i+1);
             List<Coord> cs = new ArrayList<>(1);
@@ -135,9 +136,9 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
         return conns;
     }
 
-    protected static LinkedHashMap<Coord, List<Coord>> crossConnect(int width, int height, Map<Coord, List<Coord>> connections)
+    protected static OrderedMap<Coord, List<Coord>> crossConnect(int width, int height, Map<Coord, List<Coord>> connections)
     {
-        LinkedHashMap<Coord, List<Coord>> conns = new LinkedHashMap<>(connections.size());
+        OrderedMap<Coord, List<Coord>> conns = new OrderedMap<>(connections.size());
         for(Map.Entry<Coord, List<Coord>> entry : connections.entrySet())
         {
             conns.put(entry.getKey(), new ArrayList<>(entry.getValue()));

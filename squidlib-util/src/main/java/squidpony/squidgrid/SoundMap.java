@@ -2,9 +2,9 @@ package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.RNG;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -62,7 +62,7 @@ public class SoundMap
      * The latest results of findAlerted(), with Coord keys representing the positions of creatures that were alerted
      * and Double values representing how loud the sound was when it reached them.
      */
-    public HashMap<Coord, Double> alerted = new HashMap<>();
+    public OrderedMap<Coord, Double> alerted = new OrderedMap<>();
     /**
      * Cells with no sound are always marked with 0.
      */
@@ -75,8 +75,8 @@ public class SoundMap
      * Sources of sound on the map; keys are positions, values are how loud the noise is (10.0 should spread 10 cells
      * away, with diminishing values assigned to further positions).
      */
-    public HashMap<Coord, Double> sounds;
-    private HashMap<Coord, Double> fresh;
+    public OrderedMap<Coord, Double> sounds;
+    private OrderedMap<Coord, Double> fresh;
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
@@ -89,9 +89,9 @@ public class SoundMap
      */
     public SoundMap() {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<>();
-        fresh = new HashMap<>();
-        sounds = new HashMap<>();
+        alerted = new OrderedMap<>();
+        fresh = new OrderedMap<>();
+        sounds = new OrderedMap<>();
     }
 
     /**
@@ -100,9 +100,9 @@ public class SoundMap
      */
     public SoundMap(RNG random) {
         rng = random;
-        alerted = new HashMap<>();
-        fresh = new HashMap<>();
-        sounds = new HashMap<>();
+        alerted = new OrderedMap<>();
+        fresh = new OrderedMap<>();
+        sounds = new OrderedMap<>();
     }
 
     /**
@@ -111,9 +111,9 @@ public class SoundMap
      */
     public SoundMap(final double[][] level) {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<>();
-        fresh = new HashMap<>();
-        sounds = new HashMap<>();
+        alerted = new OrderedMap<>();
+        fresh = new OrderedMap<>();
+        sounds = new OrderedMap<>();
         initialize(level);
     }
     /**
@@ -124,9 +124,9 @@ public class SoundMap
     public SoundMap(final double[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
         this.measurement = measurement;
-        alerted = new HashMap<>();
-        fresh = new HashMap<>();
-        sounds = new HashMap<>();
+        alerted = new OrderedMap<>();
+        fresh = new OrderedMap<>();
+        sounds = new OrderedMap<>();
         initialize(level);
     }
 
@@ -140,9 +140,9 @@ public class SoundMap
      */
     public SoundMap(final char[][] level) {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<>();
-        fresh = new HashMap<>();
-        sounds = new HashMap<>();
+        alerted = new OrderedMap<>();
+        fresh = new OrderedMap<>();
+        sounds = new OrderedMap<>();
         initialize(level);
     }
     /**
@@ -155,9 +155,9 @@ public class SoundMap
      */
     public SoundMap(final char[][] level, char alternateWall) {
         rng = new RNG(new LightRNG());
-        alerted = new HashMap<>();
-        fresh = new HashMap<>();
-        sounds = new HashMap<>();
+        alerted = new OrderedMap<>();
+        fresh = new OrderedMap<>();
+        sounds = new OrderedMap<>();
         initialize(level, alternateWall);
     }
 
@@ -173,9 +173,9 @@ public class SoundMap
     public SoundMap(final char[][] level, Measurement measurement) {
         rng = new RNG(new LightRNG());
         this.measurement = measurement;
-        alerted = new HashMap<>();
-        fresh = new HashMap<>();
-        sounds = new HashMap<>();
+        alerted = new OrderedMap<>();
+        fresh = new OrderedMap<>();
+        sounds = new OrderedMap<>();
         initialize(level);
     }
 
@@ -404,7 +404,7 @@ public class SoundMap
 
         while (numAssigned > 0) {
             numAssigned = 0;
-            HashMap<Coord, Double> fresh2 = new HashMap<>(fresh.size());
+            OrderedMap<Coord, Double> fresh2 = new OrderedMap<>(fresh.size());
             fresh2.putAll(fresh);
             fresh.clear();
 
@@ -449,9 +449,9 @@ public class SoundMap
      * @param extraSounds
      * @return
      */
-    public HashMap<Coord, Double> findAlerted(Set<Coord> creatures, Map<Coord, Double> extraSounds) {
+    public OrderedMap<Coord, Double> findAlerted(Set<Coord> creatures, Map<Coord, Double> extraSounds) {
         if(!initialized) return null;
-        alerted = new HashMap<>(creatures.size());
+        alerted = new OrderedMap<>(creatures.size());
 
         resetMap();
         for (Map.Entry<Coord, Double> sound : extraSounds.entrySet()) {

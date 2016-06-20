@@ -4,15 +4,11 @@ import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 
 /**
  * A test for the randomized flood-fill in the Spill class. This runs the Spill twice from the same starting position,
@@ -69,7 +65,7 @@ public class SpillTest {
             System.out.println(dg);
             short[] valid = CoordPacker.pack(dun, '.');
 
-            LinkedHashMap<Coord, Double> entries = new LinkedHashMap<>(16);
+            OrderedMap<Coord, Double> entries = new OrderedMap<>(16);
             ArrayList<Coord> section = CoordPacker.randomPortion(valid, 16, rng);
             for (int i = 0; i < 4; i++) {
                 entries.put(section.get(i * 4    ), 1.0);

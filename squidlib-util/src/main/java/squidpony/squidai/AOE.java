@@ -4,9 +4,9 @@ import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
@@ -37,7 +37,7 @@ public interface AOE {
     boolean mayContainTarget(Set<Coord> targets);
 
     /**
-     * Returns a LinkedHashMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
+     * Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
      * hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value
      * is the collection of targets that will be hit if the associated key is used. The length of any ArrayList in the
      * returned collection's values will be the number of targets likely to be affected by the AOE when shift() is
@@ -54,9 +54,9 @@ public interface AOE {
      * shift(Coord) with the location of some enemy (probably the closest) as its argument.
      * @param targets a Set of Points that are desirable targets to include in this AOE
      * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE
-     * @return a LinkedHashMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.
+     * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.
      */
-    LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions);
+    OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions);
 
     /**
      * A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
@@ -69,9 +69,9 @@ public interface AOE {
      * @param priorityTargets A Set of Points that are the most-wanted targets to include in this AOE
      * @param lesserTargets A Set of Points that are the less-wanted targets to include in this AOE, should not overlap with priorityTargets
      * @param requiredExclusions a Set of Points that this tries strongly to avoid including in this AOE
-     * @return a LinkedHashMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.
+     * @return a OrderedMap of Coord keys and ArrayList of Coord values where keys are ideal locations and values are the target points that will be hit when that key is used.
      */
-    LinkedHashMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions);
+    OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions);
 
     /**
      * This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.
@@ -86,12 +86,12 @@ public interface AOE {
      * the map. The map must be bounded by walls, which DungeonGenerator does automatically and other generators can
      * easily add with two loops.
      *
-     * This returns a HashMap of Coord keys to Double values; if a cell is 100% affected by the AOE then the value
+     * This returns an OrderedMap of Coord keys to Double values; if a cell is 100% affected by the AOE then the value
      * should be 1.0; if it is 50% affected it should be 0.5, if unaffected should be 0.0, etc. The Coord keys should
      * have the same x and y as the x,y map positions they correspond to.
-     * @return a HashMap of Coord keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).
+     * @return an OrderedMap of Coord keys to Double values from 1.0 (fully affected) to 0.0 (unaffected).
      */
-    LinkedHashMap<Coord, Double> findArea();
+    OrderedMap<Coord, Double> findArea();
 
     /**
      * Get the position from which the AOE originates, which may be related to the location of the AOE's effect, as for

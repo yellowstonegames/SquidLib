@@ -169,7 +169,7 @@ public class DungeonGeneratorTest {
         }
         */
         /*
-        for(LinkedHashSet<Coord> lhs : sdg.placement.getAlongStraightWalls())
+        for(OrderedSet<Coord> lhs : sdg.placement.getAlongStraightWalls())
         {
             for(Coord c : lhs)
             {
@@ -177,7 +177,7 @@ public class DungeonGeneratorTest {
             }
         }
 
-        for(LinkedHashSet<Coord> lhs : sdg.placement.getCorners())
+        for(OrderedSet<Coord> lhs : sdg.placement.getCorners())
         {
             for(Coord c : lhs)
             {
@@ -185,7 +185,7 @@ public class DungeonGeneratorTest {
             }
         }
 
-        for(LinkedHashSet<Coord> lhs : sdg.placement.getCenters())
+        for(OrderedSet<Coord> lhs : sdg.placement.getCenters())
         {
             for(Coord c : lhs)
             {

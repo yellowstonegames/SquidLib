@@ -564,7 +564,7 @@ public class SectionDungeonGenerator {
         return this;
     }
 
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt)
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt)
     {
         for(Coord temp : new Coord[]{Coord.get(pt.x + 1, pt.y), Coord.get(pt.x - 1, pt.y),
                 Coord.get(pt.x, pt.y + 1), Coord.get(pt.x, pt.y - 1)})
@@ -575,7 +575,7 @@ public class SectionDungeonGenerator {
 
         return coll;
     }
-    protected LinkedHashSet<Coord> removeAdjacent(LinkedHashSet<Coord> coll, Coord pt1, Coord pt2)
+    protected OrderedSet<Coord> removeAdjacent(OrderedSet<Coord> coll, Coord pt1, Coord pt2)
     {
 
         for(Coord temp : new Coord[]{Coord.get(pt1.x + 1, pt1.y), Coord.get(pt1.x - 1, pt1.y),
@@ -589,11 +589,11 @@ public class SectionDungeonGenerator {
 
         return coll;
     }
-    protected LinkedHashSet<Coord> removeNearby(LinkedHashSet<Coord> coll, char[][] disallowed)
+    protected OrderedSet<Coord> removeNearby(OrderedSet<Coord> coll, char[][] disallowed)
     {
         if(coll == null || disallowed == null || disallowed.length == 0 || disallowed[0].length == 0)
-            return new LinkedHashSet<>();
-        LinkedHashSet<Coord> next = new LinkedHashSet<>(coll.size());
+            return new OrderedSet<>();
+        OrderedSet<Coord> next = new OrderedSet<>(coll.size());
         int width = disallowed.length, height = disallowed[0].length;
         COORD_WISE:
         for(Coord c : coll)
@@ -612,10 +612,10 @@ public class SectionDungeonGenerator {
     }
 
 
-    protected LinkedHashSet<Coord> viableDoorways(boolean doubleDoors, char[][] map, char[][] allCaves,
+    protected OrderedSet<Coord> viableDoorways(boolean doubleDoors, char[][] map, char[][] allCaves,
                                                   char[][] allCorridors)
     {
-        LinkedHashSet<Coord> doors = new LinkedHashSet<>();
+        OrderedSet<Coord> doors = new OrderedSet<>();
         for(int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map[x].length - 1; y++) {
                 if(map[x][y] == '#' || allCorridors[x][y] != '#')
@@ -917,7 +917,7 @@ public class SectionDungeonGenerator {
 
         map = RoomFinder.merge(fused, width, height);
 
-        LinkedHashSet<Coord> doorways = viableDoorways(doubleDoors, map, allCaves, allCorridors);
+        OrderedSet<Coord> doorways = viableDoorways(doubleDoors, map, allCaves, allCorridors);
 
 
         int total = doorways.size() * doorFill / 100;
@@ -1063,7 +1063,7 @@ public class SectionDungeonGenerator {
 
     private char[][] innerGenerate(char[][] map, EnumMap<FillEffect, Integer> fx)
     {
-        LinkedHashSet<Coord> hazards = new LinkedHashSet<>();
+        OrderedSet<Coord> hazards = new OrderedSet<>();
         int floorCount = DungeonUtility.countCells(map, '.'),
                 doorFill = 0,
                 waterFill = 0,

@@ -25,10 +25,10 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.MixedGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 public class EverythingDemo extends ApplicationAdapter {
@@ -506,7 +506,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // this is an important piece of DijkstraMap usage; the argument is a Set of Points for squares that
         // temporarily cannot be moved through (not walls, which are automatically known because the map char[][]
         // was passed to the DijkstraMap constructor, but things like moving creatures and objects).
-        LinkedHashSet<Coord> monplaces = monsters.positions();
+        OrderedSet<Coord> monplaces = monsters.positions();
 
         pathMap = getToPlayer.scan(monplaces);
 

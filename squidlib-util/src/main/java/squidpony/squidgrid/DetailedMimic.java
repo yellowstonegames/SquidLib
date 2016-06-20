@@ -12,10 +12,9 @@ package squidpony.squidgrid;
 
 import squidpony.GwtCompatibility;
 import squidpony.squidgrid.mapping.AestheticDifference;
+import squidpony.squidmath.IntDoubleOrderedMap;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 
 /**
  * Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on
@@ -71,7 +70,7 @@ public class DetailedMimic {
     {
         int area = width * height;
         analyzed = new int[area][];
-        LinkedHashSet<Integer> points = new LinkedHashSet<>(area);
+        OrderedSet<Integer> points = new OrderedSet<>(area);
         for (int i = 0; i < area; i++) points.add(i);
 
         double[] similarities = new double[area * area];
@@ -82,7 +81,7 @@ public class DetailedMimic {
         for (int i = 0; i < area; i++)
         {
             analyzed[i] = new int[K];
-            LinkedHashSet<Integer> copy = new LinkedHashSet<>(points);
+            OrderedSet<Integer> copy = new OrderedSet<>(points);
 
             analyzed[i][0] = i;
             copy.remove(i);
@@ -117,7 +116,7 @@ public class DetailedMimic {
         for (int i = 0; i < OW * OH; i++)
         {
             int x = i % OW, y = i / OW;
-            LinkedHashMap<Integer, Double> candidates = new LinkedHashMap<Integer, Double>();
+            IntDoubleOrderedMap candidates = new IntDoubleOrderedMap();
             GwtCompatibility.insert2D(cleanMask, mask, 0, 0);
 
             for (int dy = -1; dy <= 1; dy++){
@@ -240,15 +239,11 @@ public class DetailedMimic {
         return 0;
     }
 
-    private static int weightedRandom(LinkedHashMap<Integer, Double> dic, double r) {
-        Integer[] ints = new Integer[dic.size()];
+    private static int weightedRandom(IntDoubleOrderedMap dic, double r) {
+        int[] ints = new int[dic.size()];
         double[] doubles = new double[dic.size()];
         dic.keySet().toArray(ints);
-        int i = 0;
-        for(Double d : dic.values())
-        {
-            doubles[i++] = d;
-        }
+        dic.values().toArray(doubles);
         return ints[weightedRandom(doubles, r)];
     }
 }

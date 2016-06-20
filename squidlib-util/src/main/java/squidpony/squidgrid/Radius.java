@@ -2,9 +2,9 @@ package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.Coord3D;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -229,7 +229,7 @@ public enum Radius {
 
     public Set<Coord> perimeter(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
     {
-        LinkedHashSet<Coord> rim = new LinkedHashSet<>(4 * radiusLength);
+        OrderedSet<Coord> rim = new OrderedSet<>(4 * radiusLength);
         if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height))
             return rim;
         if(radiusLength < 1) {
@@ -445,7 +445,7 @@ public enum Radius {
 
     public Set<Coord> pointsInside(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
     {
-        LinkedHashSet<Coord> contents = new LinkedHashSet<Coord>((int)Math.ceil(volume2D(radiusLength)));
+        OrderedSet<Coord> contents = new OrderedSet<Coord>((int)Math.ceil(volume2D(radiusLength)));
         if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y >= height))
             return contents;
         if(radiusLength < 1) {
@@ -510,7 +510,7 @@ public enum Radius {
     public Set<Coord> expand(int distance, int width, int height, Iterable<Coord> points)
     {
         Set<Coord> around = pointsInside(Coord.get(distance, distance), distance, false, width, height),
-                expanded = new LinkedHashSet<>(around.size() * 16);
+                expanded = new OrderedSet<>(around.size() * 16);
         int tx, ty;
         for(Coord pt : points)
         {
