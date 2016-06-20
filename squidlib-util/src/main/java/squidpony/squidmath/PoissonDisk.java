@@ -193,7 +193,9 @@ public class PoissonDisk {
             }
 
             if (!found)
+            {
                 activePoints.remove(listIndex);
+            }
         }
         activePoints = new ArrayList<>(points);
         return activePoints;

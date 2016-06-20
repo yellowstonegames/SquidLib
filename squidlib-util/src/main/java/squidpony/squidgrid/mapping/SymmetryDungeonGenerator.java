@@ -27,7 +27,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
         return listToMap(s2);
     }
     public static OrderedMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, Map<Coord, List<Coord>> connections) {
-        OrderedMap<Coord, List<Coord>> lhm2 = new OrderedMap<>(connections.size());
+        OrderedMap<Coord, List<Coord>> om2 = new OrderedMap<>(connections.size());
         Set<Coord> keyset = connections.keySet(), newkeys = new OrderedSet<>(connections.size());
         for (Coord c : keyset) {
             if (c.x * 1.0 / width + c.y * 1.0 / height <= 1.0) {
@@ -48,10 +48,10 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
                     }
 
                 }
-                lhm2.put(c, cs);
+                om2.put(c, cs);
             }
         }
-        return lhm2;
+        return om2;
     }
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.

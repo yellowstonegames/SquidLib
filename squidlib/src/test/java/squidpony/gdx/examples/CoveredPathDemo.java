@@ -260,7 +260,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
         }
         return false;
     }
-    
+
     private void postMove(int idx) {
 
         int i = 0, myMax, myMin;

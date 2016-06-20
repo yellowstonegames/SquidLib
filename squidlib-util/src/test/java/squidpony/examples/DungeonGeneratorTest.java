@@ -277,6 +277,7 @@ public class DungeonGeneratorTest {
         rng.setState(0xFEEEEEEEEEL);
         DenseRoomMapGenerator dense = new DenseRoomMapGenerator(width, height, rng);
         map = dense.generate();
+        DungeonUtility.ensurePath(map, rng, '\t', '#');
         env = dense.getEnvironment();
         sdg.addDoors(80, false);
         sdg.generate(map, env);

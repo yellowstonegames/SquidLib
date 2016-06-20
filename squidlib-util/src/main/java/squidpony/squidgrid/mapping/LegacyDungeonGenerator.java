@@ -463,7 +463,7 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
             BigLoop:
             for(int i = 0; i < total; i++)
             {
-                Coord entry = doorways.toArray(new Coord[doorways.size()])[rng.nextInt(doorways.size())];
+                Coord entry = doorways.randomItem(rng);//toArray(new Coord[doorways.size()])[rng.nextInt(doorways.size())];
                 if(map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '>')
                     continue;
                 if(map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#')
@@ -606,7 +606,7 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
 
             for(int i = 0; i < total; i++)
             {
-                Coord entry = hazards.toArray(new Coord[hazards.size()])[rng.nextInt(hazards.size())];
+                Coord entry = hazards.randomItem(rng);//.toArray(new Coord[hazards.size()])[rng.nextInt(hazards.size())];
                 if(map[entry.x][entry.y] == '<' || map[entry.x][entry.y] == '<')
                     continue;
                 map[entry.x][entry.y] = '^';
@@ -666,7 +666,7 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
             BigLoop:
             for(int i = 0; i < total; i++)
             {
-                Coord entry = doorways.toArray(new Coord[doorways.size()])[rng.nextInt(doorways.size())];
+                Coord entry = doorways.randomItem(rng);//.toArray(new Coord[doorways.size()])[rng.nextInt(doorways.size())];
                 if(map[entry.x - 1][entry.y] != '#' && map[entry.x + 1][entry.y] != '#')
                 {
                     map[entry.x][entry.y] = '+';
@@ -741,7 +741,7 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
             for(int i = 0; i < numPatches; i++)
             {
                 floors.removeAll(obstacles);
-                Coord entry = floors.toArray(new Coord[floors.size()])[rng.nextInt(floors.size())];
+                Coord entry = floors.randomItem(rng);//.toArray(new Coord[floors.size()])[rng.nextInt(floors.size())];
                 spill.start(entry, volumes[i] / 3, obstacles);
                 spill.start(entry, 2 * volumes[i] / 3, obstacles);
                 ArrayList<Coord> ordered = new ArrayList<>(spill.start(entry, volumes[i], obstacles));
@@ -798,7 +798,7 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
             for(int i = 0; i < numPools; i++)
             {
                 floors.removeAll(obstacles);
-                Coord entry = floors.toArray(new Coord[floors.size()])[rng.nextInt(floors.size())];
+                Coord entry = floors.randomItem(rng);//.toArray(new Coord[floors.size()])[rng.nextInt(floors.size())];
 //                spill.start(entry, volumes[i] / 3, obstacles);
 //                spill.start(entry, 2 * volumes[i] / 3, obstacles);
                 ArrayList<Coord> ordered = new ArrayList<>(spill.start(entry, volumes[i], obstacles));
@@ -865,7 +865,7 @@ public class LegacyDungeonGenerator extends DungeonGenerator {
 
             for(int i = 0; i < total; i++)
             {
-                Coord entry = hazards.toArray(new Coord[hazards.size()])[rng.nextInt(hazards.size())];
+                Coord entry = hazards.randomItem(rng);//.toArray(new Coord[hazards.size()])[rng.nextInt(hazards.size())];
                 map[entry.x][entry.y] = '^';
                 hazards.remove(entry);
             }

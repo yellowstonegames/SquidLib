@@ -346,7 +346,7 @@ public class SerpentDeepMapGenerator {
                 above = new OrderedSet<>(linksDown.get(i - 1));
                 if(above.size() == 0)
                     continue;
-                Coord higher = random.getRandomElement(above.toArray(new Coord[above.size()]));
+                Coord higher = above.randomItem(random);//random.getRandomElement(above.toArray(new Coord[above.size()]));
                 while(above.size() > 0)
                 {
                     short[] nearAbove = CoordPacker.flood(floors[i - 1],
@@ -365,7 +365,7 @@ public class SerpentDeepMapGenerator {
                     }
                     if(above.isEmpty())
                         break;
-                    higher = random.getRandomElement(above.toArray(new Coord[above.size()]));
+                    higher = above.randomItem(random);//random.getRandomElement(above.toArray(new Coord[above.size()]));
                 }
             }
         }
