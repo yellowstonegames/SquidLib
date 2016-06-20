@@ -3,6 +3,7 @@ package squidpony.squidgrid;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.RNG;
 
 import java.util.*;
 
@@ -482,6 +483,33 @@ public class SpatialMap<I, E> implements Iterable<E> {
                 gotten.add(ie.element);
         }
         return gotten;
+    }
+
+    public E randomElement(RNG rng)
+    {
+        if(itemMapping.isEmpty())
+            return null;
+        return itemMapping.randomValue(rng).element;
+    }
+
+    public Coord randomPosition(RNG rng)
+    {
+        if(positionMapping.isEmpty())
+            return null;
+        return positionMapping.randomKey(rng);
+    }
+    public I randomIdentity(RNG rng)
+    {
+        if(itemMapping.isEmpty())
+            return null;
+        return itemMapping.randomKey(rng);
+    }
+
+    public SpatialTriple<I, E> randomEntry(RNG rng)
+    {
+        if(itemMapping.isEmpty())
+            return null;
+        return itemMapping.randomValue(rng);
     }
 
     /**

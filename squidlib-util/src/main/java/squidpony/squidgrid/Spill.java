@@ -392,7 +392,7 @@ public class Spill {
 
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
         while (!fresh.isEmpty() && spreadPattern.size() < volume) {
-            Coord cell = fresh.toArray(new Coord[fresh.size()])[rng.nextInt(fresh.size())];
+            Coord cell = fresh.randomItem(rng);//toArray(new Coord[fresh.size()])[rng.nextInt(fresh.size())];
             spreadPattern.add(cell);
             spillMap[cell.x][cell.y] = true;
             for (int d = 0; d < dirs.length; d++) {
