@@ -1596,7 +1596,20 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[] ) {
         return objectUnwrap(i, array, 0, array.length );
     }
-
+    @Override
+    public String toString() {
+        final StringBuilder s = new StringBuilder();
+        int n = size(), i = 0;
+        boolean first = true;
+        s.append("OrderedSet{");
+        while (i < n) {
+            if (first) first = false;
+            else s.append(", ");
+            s.append(getAt(i++));
+        }
+        s.append("}");
+        return s.toString();
+    }
     /**
      * Gets the item at the given index in the iteration order in constant time (random-access).
      * @param idx the index in the iteration order of the key to fetch

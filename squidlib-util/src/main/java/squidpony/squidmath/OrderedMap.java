@@ -844,6 +844,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             return ((key[index]) == null ? 0 : (key[index]).hashCode())
                     ^ ((value[index]) == null ? 0 : (value[index]).hashCode());
         }
+        @Override
         public String toString() {
             return key[index] + "=>" + value[index];
         }
@@ -1419,6 +1420,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             return size() == 0;
         }
 
+        @Override
         public String toString() {
             final StringBuilder s = new StringBuilder();
             final EntryIterator i = iterator();
@@ -1651,6 +1653,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             return size() == 0;
         }
 
+        @Override
         public String toString() {
             final StringBuilder s = new StringBuilder();
             final KeyIterator i = iterator();
@@ -2189,6 +2192,21 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @return the number of elements unwrapped. */
     private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[] ) {
         return objectUnwrap(i, array, 0, array.length );
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder s = new StringBuilder();
+        int n = size(), i = 0;
+        boolean first = true;
+        s.append("OrderedMap{");
+        while (i < n) {
+            if (first) first = false;
+            else s.append(", ");
+            s.append(entryAt(i++));
+        }
+        s.append("}");
+        return s.toString();
     }
 
     /**

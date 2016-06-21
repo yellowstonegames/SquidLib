@@ -76,6 +76,10 @@ public class BiasTest {
         };
         for(RandomBias rb : randomBiases)
         {
+            /*
+            rb.putBias("normal", 0.5);
+            rb.putBias("deadly", 0.85);
+            rb.putBias("wimpy", 0.15);*/
             for (double d = 0.15; d < 0.9; d+= 0.1) {
                 d10Graph(rb, d);
             }
