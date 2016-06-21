@@ -2293,4 +2293,29 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         last = order.peek();
         return this;
     }
+
+    /**
+     * Given an array or varargs of replacement indices for this OrderedMap's iteration order, reorders this so the
+     * first item in the returned version is the same as {@code getAt(ordering[0])} (with some care taken for negative
+     * or too-large indices), the second item in the returned version is the same as {@code getAt(ordering[1])}, etc.
+     * <br>
+     * Negative indices are considered reversed distances from the end of ordering, so -1 refers to the same index as
+     * {@code ordering[ordering.length - 1]}. If ordering is smaller than {@code size()}, only the indices up to the
+     * length of ordering will be modified. If ordering is larger than {@code size()}, only as many indices will be
+     * affected as {@code size()}, and reversed distances are measured from the end of this Map's entries instead of
+     * the end of ordering. Duplicate values in ordering will produce duplicate values in the returned Map.
+     * <br>
+     * This method modifies this OrderedMap in-place and also returns it for chaining.
+     * @param ordering an array or varargs of int indices, where the nth item in ordering changes the nth item in this
+     *                 Map to have the value currently in this Map at the index specified by the value in ordering
+     * @return this for chaining, after modifying it in-place
+     */
+    public OrderedMap<K, V> reorder(int... ordering)
+    {
+        order.reorder(ordering);
+        first = order.get(0);
+        last = order.peek();
+        return this;
+    }
+
 }
