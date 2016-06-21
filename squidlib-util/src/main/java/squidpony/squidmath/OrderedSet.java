@@ -20,7 +20,7 @@ import squidpony.annotation.Beta;
 import java.util.*;
 
 /**
- * A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashMap but modified to support indexed access.
+ * A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but modified to support indexed access.
  * <p>
  * <P>
  * Instances of this class use a hash table to represent a set. The table is
@@ -120,23 +120,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * The acceptable load factor.
      */
     protected final float f;
-
-    /**
-     * Cached set of entries.
-     */
-    ///protected volatile MapEntrySet entries;
-    /**
-     * Cached set of keys.
-     */
-    //protected volatile KeySet keys;
-    /**
-     * Cached collection of values.
-     */
-    //protected volatile Collection<V> values;
-    /**
-     * Default return value.
-     */
-    //protected V defRetValue = null;
 
     /**
      * The initial default size of a hash table.
@@ -1624,9 +1607,9 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
 
     /**
-     * Gets a random value from this OrderedMap in constant time, using the given RNG to generate a random number.
+     * Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.
      * @param rng used to generate a random index for a value
-     * @return a random value from this OrderedMap
+     * @return a random value from this OrderedSet
      */
     public K randomItem(RNG rng)
     {
@@ -1634,15 +1617,38 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
 
     /**
-     * Randomly alters the iteration order for this OrderedMap using the given RNG to shuffle.
+     * Randomly alters the iteration order for this OrderedSet using the given RNG to shuffle.
      * @param rng used to generate a random ordering
      * @return this for chaining
      */
     public OrderedSet<K> shuffle(RNG rng)
     {
-        if(size < 2)
+        if(size < 2 || rng == null)
             return this;
         order.shuffle(rng);
+        first = order.get(0);
+        last = order.peek();
+        return this;
+    }
+    /**
+     * Given an array or varargs of replacement indices for this OrderedSet's iteration order, reorders this so the
+     * first item in the returned version is the same as {@code getAt(ordering[0])} (with some care taken for negative
+     * or too-large indices), the second item in the returned version is the same as {@code getAt(ordering[1])}, etc.
+     * <br>
+     * Negative indices are considered reversed distances from the end of ordering, so -1 refers to the same index as
+     * {@code ordering[ordering.length - 1]}. If ordering is smaller than {@code size()}, only the indices up to the
+     * length of ordering will be modified. If ordering is larger than {@code size()}, only as many indices will be
+     * affected as {@code size()}, and reversed distances are measured from the end of this Set's entries instead of
+     * the end of ordering. Duplicate values in ordering will produce duplicate values in the returned Set.
+     * <br>
+     * This method modifies this OrderedSet in-place and also returns it for chaining.
+     * @param ordering an array or varargs of int indices, where the nth item in ordering changes the nth item in this
+     *                 Set to have the value currently in this Set at the index specified by the value in ordering
+     * @return this for chaining, after modifying it in-place
+     */
+    public OrderedSet<K> reorder(int... ordering)
+    {
+        order.reorder(ordering);
         first = order.get(0);
         last = order.peek();
         return this;

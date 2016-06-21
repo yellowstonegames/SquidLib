@@ -26,7 +26,7 @@ import java.util.Arrays;
  * array) was chosen as a different name.
  * Copied from LibGDX by Tommy Ettinger on 10/1/2015.
  * @author Nathan Sweet */
-public class IntVLA implements Serializable{
+public class IntVLA implements Serializable {
     private static final long serialVersionUID = -2948161891082748626L;
 
     public int[] items;
@@ -171,6 +171,35 @@ public class IntVLA implements Serializable{
         int firstValue = items[first];
         items[first] = items[second];
         items[second] = firstValue;
+    }
+
+    /**
+     * Given an array or varargs of replacement indices for the values of this IntVLA, reorders this so the first item
+     * in the returned version is the same as {@code get(ordering[0])} (with some care taken for negative or too-large
+     * indices), the second item in the returned version is the same as {@code get(ordering[1])}, etc.
+     * <br>
+     * Negative indices are considered reversed distances from the end of ordering, so -1 refers to the same index as
+     * {@code ordering[ordering.length - 1]}. If ordering is smaller than this IntVLA, only the indices up to the
+     * length of ordering will be modified. If ordering is larger than this IntVLA, only as many indices will be
+     * affected as this IntVLA's size, and reversed distances are measured from the end of this IntVLA instead of the
+     * end of ordering. Duplicate values in ordering will produce duplicate values in the returned IntVLA.
+     * <br>
+     * This method modifies this IntVLA in-place and also returns it for chaining.
+     *
+     * @param ordering an array or varargs of int indices, where the nth item in ordering changes the nth item in this
+     *                 IntVLA to have the value currently in this IntVLA at the index specified by the value in ordering
+     * @return this for chaining, after modifying it in-place
+     */
+    public IntVLA reorder (int... ordering) {
+        int ol;
+        if (ordering == null || (ol = Math.min(size, ordering.length)) == 0)
+            return this;
+        int[] items = this.items, alt = new int[ol];
+        for (int i = 0; i < ol; i++) {
+            alt[i] = items[(ordering[i] % ol + ol) % ol];
+        }
+        System.arraycopy(alt, 0, items, 0, ol);
+        return this;
     }
 
     public boolean contains (int value) {
@@ -380,6 +409,11 @@ public class IntVLA implements Serializable{
         int[] array = new int[size];
         System.arraycopy(items, 0, array, 0, size);
         return array;
+    }
+
+    public IntVLA copy()
+    {
+        return new IntVLA(this);
     }
 
     @Override
