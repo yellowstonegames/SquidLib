@@ -200,7 +200,7 @@ public class RandomBias implements Serializable {
     }
     private double exponentialQuantile(double expected)
     {
-        return 1.0 - Math.pow( rng.nextDouble(), 1.0 / (1.0 - expected) - 1.0);
+        return 0.9999999999999999 - Math.pow( rng.nextDouble(), 1.0 / (1.0 - expected) - 1.0);
     }
     private static float longToFloat(long n)
     {
