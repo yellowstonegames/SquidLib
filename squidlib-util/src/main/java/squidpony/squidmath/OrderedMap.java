@@ -1064,10 +1064,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             if (!hasNext())
                 throw new NoSuchElementException();
             curr = next;
-            if(++index >= order.size - 1)
+            if(index >= order.size - 1)
                 next = -1;
             else
-                next = order.get(index + 1);//(int) link[curr];
+                next = order.get(++index);//(int) link[curr];
             prev = curr;
             return curr;
         }
