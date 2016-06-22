@@ -49,7 +49,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
     private int[][] colors, bgColors, lights;
     private int width, height;
     private int cellWidth, cellHeight;
-    private int numMonsters = 10;
+    private int numMonsters = 25;
     private Radius radiusKind = Radius.DIAMOND;
 
     private SquidInput input;
@@ -75,7 +75,7 @@ public class CoveredPathDemo extends ApplicationAdapter {
         cellWidth = 6;
         cellHeight = 12;
         display = new SquidLayers(width, height, cellWidth, cellHeight, DefaultResources.narrowName);
-        display.setAnimationDuration(0.15f);
+        display.setAnimationDuration(0.09f);
         display.addExtraLayer();
         stage = new Stage(new ScreenViewport(), batch);
 
@@ -305,11 +305,11 @@ public class CoveredPathDemo extends ApplicationAdapter {
             previous = entry.previousPositions;
             user = Coord.get(ae.gridX, ae.gridY);
         }
-        myThreats.get(idx).position = user;
+        myThreats.getAt(idx).position = user;
 
         if (health <= 0 || dijkstra == null) {
-            myThreats.get(idx).reach.maxDistance = 0;
-            myThreats.get(idx).reach.minDistance = 0;
+            myThreats.getAt(idx).reach.maxDistance = 0;
+            myThreats.getAt(idx).reach.minDistance = 0;
             phase = Phase.ATTACK_ANIM;
             return;
         }

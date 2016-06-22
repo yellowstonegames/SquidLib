@@ -29,7 +29,6 @@ public class SquidMessageBox extends SquidPanel {
     protected ArrayList<Label> labels = new ArrayList<>(256);
     protected int messageIndex = 0;
     //private static Pattern lineWrapper;
-    protected GDXMarkup markup = new GDXMarkup();
     private char[][] basicBorders;
     /**
      * Creates a bare-bones panel with all default values for text rendering.

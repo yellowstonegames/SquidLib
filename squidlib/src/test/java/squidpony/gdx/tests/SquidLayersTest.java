@@ -14,6 +14,7 @@ import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -55,8 +56,8 @@ public class SquidLayersTest extends ApplicationAdapter{
                 DefaultResources.getStretchableFont());
         layers.setTextSize(cellWidth, cellHeight+1);
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
-        colors = DefaultResources.getSCC().zigzagGradient(Color.RED, Color.PINK, 200);
-        colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.PINK, Color.RED, 200));
+        colors = DefaultResources.getSCC().loopingGradient(SColor.ATOMIC_TANGERINE, SColor.PEACH_YELLOW, 100);
+        //colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.MAGENTA, Color.RED, 200));
         layers.setLightingColor(colors.get(colorIndex));
         fov = new FOV(FOV.SHADOW);
         //PacMazeGenerator maze = new PacMazeGenerator(gridWidth, gridHeight, rng);
