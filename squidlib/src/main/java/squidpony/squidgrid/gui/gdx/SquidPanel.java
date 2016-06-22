@@ -68,7 +68,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param cellHeight the number of vertical pixels in each cell
      */
     public SquidPanel(int gridWidth, int gridHeight, int cellWidth, int cellHeight) {
-        this(gridWidth, gridHeight, new TextCellFactory().defaultSquareFont().width(cellWidth).height(cellHeight));
+        this(gridWidth, gridHeight, new TextCellFactory().defaultSquareFont().width(cellWidth).height(cellHeight).initBySize());
     }
 
     /**

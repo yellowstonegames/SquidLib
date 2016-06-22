@@ -1,9 +1,9 @@
 package squidpony.examples;
 
-import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
 
@@ -168,7 +168,7 @@ public class DungeonGeneratorTest {
             }
         }
         */
-        /*
+
         for(OrderedSet<Coord> lhs : sdg.placement.getAlongStraightWalls())
         {
             for(Coord c : lhs)
@@ -192,10 +192,11 @@ public class DungeonGeneratorTest {
                 sdungeon[c.x][c.y] = '$';
             }
         }
-        */
+
+        /*
         for(Coord c : sdg.placement.getHidingPlaces(Radius.CIRCLE, 8)) {
             sdungeon[c.x][c.y] = 'h';
-        }
+        }*/
         // Just a little fun with Java that uses no alphanumerics other than keywords to express "Hello, World!"
         //char[] __ = new char[]{'$' << (',' ^ '-'), '`' | ('-' - '('), '$' << (',' ^ '-') | '$', '$' << (',' ^ '-') | '$', '/' + '@', ',', ' ', '(' + '/', '/' + '@', '(' + '%' + '%', '$' << (',' ^ '-') | '$', '*' + ':', '!'};
 
