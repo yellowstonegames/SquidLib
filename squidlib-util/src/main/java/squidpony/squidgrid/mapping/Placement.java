@@ -193,6 +193,6 @@ public class Placement {
 
     private static OrderedSet<Coord> arrayToSet(Coord[] arr)
     {
-        return new OrderedSet<Coord> (arr);
+        return new OrderedSet<> (arr);
     }
 }

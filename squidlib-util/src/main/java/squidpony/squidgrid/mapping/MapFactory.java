@@ -28,12 +28,12 @@ public class MapFactory {
             for (int y = 0; y < height; y++) {
                 //Get noise
                 double n = 0;
-                double i = Math.max(width, height);
+                double xi = width * 1.1, yi = height * 1.1;//Math.max(width, height);
 
-//                double i = 128;
                 for (int p = 0; p < perldivisors.length; p++) {
-                    n += (PerlinNoise.noise((x + offset) / i, (y + offset) / i)) / perldivisors[p];
-                    i /= 2;
+                    n += (PerlinNoise.noise((x + offset) / xi, (y + offset) / yi)) / perldivisors[p];
+                    xi /= 2;
+                    yi /= 2;
                 }
                 double xdist = x - width / 2.0;
                 xdist *= xdist;

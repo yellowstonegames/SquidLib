@@ -109,6 +109,7 @@ public class Maker {
         Collections.addAll(set, elements);
         return set;
     }
+
     /**
      * Makes an OrderedMap (OM) with key and value types inferred from the types of k0 and v0, and considers all
      * parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at positions
