@@ -28,7 +28,9 @@ import static squidpony.squidmath.CoordPacker.*;
  * level as its map, then call cacheAll() on the second level's FOVCache. This will calculate the cache, as before, on
  * another thread, and you should call the appropriate awaiting method when the player is entering the second level
  * (descending or ascending a staircase, for example). This time, as long as the player spent more than a few seconds on
- * the first level for most maps, the cache should be pre-calculated and awaiting should take no time.
+ * the first level for most maps, the cache should be pre-calculated and awaiting should take no time. When the game is
+ * closed or the player quits, you should call destroy() on this FOVCache to avoid threads possibly lingering after the
+ * game should have ended.
  * <br>
  * The FOV calculation this class performs includes a post-processing stage that guarantees symmetry for both LOS and
  * FOV. This works by checking every cell that is within the maximum radius for each non-wall cell, and if any cell A
@@ -80,7 +82,7 @@ import static squidpony.squidmath.CoordPacker.*;
  * @author Tommy Ettinger
  */
 @GwtIncompatible
-public class FOVCache extends FOV{
+public class FOVCache extends FOV {
 
     protected int maxRadius, maxLOSRadius;
     protected int width;
@@ -1967,7 +1969,6 @@ public class FOVCache extends FOV{
                     e.printStackTrace();
                 }
                 symUnits.remove(p);
-                System.gc();
             }
             cache = tmpCache;
             qualityComplete = true;
@@ -2140,5 +2141,17 @@ public class FOVCache extends FOV{
         public Long call() throws Exception {
             return storeCellSymmetry(index);
         }
+    }
+
+    /**
+     * Shuts down any threads that may prevent the game from closing properly.
+     * It is recommended you call this at the end of the program to avoid threads lingering too long.
+     * You don't have to do anything special after you call this, other than not using this FOVCache any more.
+     */
+    public void destroy()
+    {
+        performanceThread.interrupt();
+        qualityThread.interrupt();
+        executor.shutdown();
     }
 }

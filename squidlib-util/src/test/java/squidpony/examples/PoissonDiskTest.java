@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class PoissonDiskTest {
 
     public static void main(String[] args) {
-        LightRNG lrng = new LightRNG(0xbeefbabel);
+        LightRNG lrng = new LightRNG(0xBEEFBABEL);
         RNG rng = new RNG(lrng);
         DungeonGenerator dg = new DungeonGenerator(80, 80, rng);
 

@@ -1,6 +1,5 @@
 package squidpony.examples;
 
-import squidpony.GwtCompatibility;
 import squidpony.squidgrid.MimicFill;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
@@ -47,7 +46,9 @@ public class MimicFillTest {
         rng.setState(2252637788195L);
 
         ArrayList<Coord> pts = SerpentMapGenerator.pointPath(60, 60, rng);
-        result = MimicFill.markSample(GwtCompatibility.fill2D(false, 60, 60), pts);
+        result = MimicFill.markSample(
+                MimicFill.fill(MimicFill.mapToSample(dungeon, '.'), 60, 0.25, 5, rng),
+                pts);
         DungeonUtility.debugPrint(DungeonUtility.hashesToLines(
                 DungeonUtility.wallWrap(MimicFill.sampleToMap(result, '.', '#')),
                 true));
