@@ -117,15 +117,13 @@ public class DijkstraMap {
     private int frustration = 0;
     public Coord[][] targetMap;
 
+    private Direction[] reuse = new Direction[9];
 
     private boolean initialized = false;
 
-
     private int mappedCount = 0;
 
-    public int getMappedCount() {
-        return mappedCount;
-    }
+    private int blockingRequirement = 2;
 
     /**
      * Construct a DijkstraMap without a level to actually scan. If you use this constructor, you must call an
@@ -162,14 +160,7 @@ public class DijkstraMap {
      * @param level
      */
     public DijkstraMap(final double[][] level) {
-        rng = new RNG(new LightRNG());
-        path = new ArrayList<>();
-
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
-        initialize(level);
+        this(level, Measurement.MANHATTAN);
     }
 
     /**
@@ -179,7 +170,7 @@ public class DijkstraMap {
      * @param measurement
      */
     public DijkstraMap(final double[][] level, Measurement measurement) {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         this.measurement = measurement;
         path = new ArrayList<>();
 
@@ -199,14 +190,7 @@ public class DijkstraMap {
      * @param level
      */
     public DijkstraMap(final char[][] level) {
-        rng = new RNG(new LightRNG());
-        path = new ArrayList<>();
-
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
-        initialize(level);
+        this(level, Measurement.MANHATTAN, new RNG());
     }
 
     /**
@@ -220,14 +204,7 @@ public class DijkstraMap {
      * @param rng   The RNG to use for certain decisions; only affects find* methods like findPath, not scan.
      */
     public DijkstraMap(final char[][] level, RNG rng) {
-        this.rng = rng;
-        path = new ArrayList<>();
-
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
-        initialize(level);
+        this(level, Measurement.MANHATTAN, rng);
     }
 
     /**
@@ -239,7 +216,7 @@ public class DijkstraMap {
      * @param level
      */
     public DijkstraMap(final char[][] level, char alternateWall) {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         path = new ArrayList<>();
 
         goals = new IntDoubleOrderedMap();
@@ -259,15 +236,7 @@ public class DijkstraMap {
      * @param measurement
      */
     public DijkstraMap(final char[][] level, Measurement measurement) {
-        rng = new RNG(new LightRNG());
-        path = new ArrayList<>();
-        this.measurement = measurement;
-
-        goals = new IntDoubleOrderedMap();
-        fresh = new IntDoubleOrderedMap();
-        closed = new IntDoubleOrderedMap();
-        open = new IntDoubleOrderedMap();
-        initialize(level);
+        this(level, measurement, new RNG());
     }
 
     /**
@@ -738,11 +707,9 @@ public class DijkstraMap {
         if (!initialized) return null;
         if (impassable == null)
             impassable = new OrderedSet<>();
-        IntDoubleOrderedMap blocking = new IntDoubleOrderedMap(impassable.size());
         for (Coord pt : impassable) {
-            blocking.put(pt.encode(), WALL);
+            closed.put(pt.encode(), WALL);
         }
-        closed.putAll(blocking);
         Coord dec, adj, cen;
         int enc;
 
@@ -783,6 +750,15 @@ public class DijkstraMap {
                     if (adj.x < 0 || adj.y < 0 || width <= adj.x || height <= adj.y)
                     	/* Outside the map */
                     	continue;
+                    if(d >= 4 && blockingRequirement > 0) // diagonal
+                    {
+                        if((gradientMap[cen.x + dirs[d].deltaX][cen.y] > FLOOR ? 1 : 0)
+                                + (gradientMap[cen.x][cen.y + dirs[d].deltaY] > FLOOR ? 1 : 0)
+                                >= blockingRequirement)
+                        {
+                            continue;
+                        }
+                    }
                     enc = adj.encode();
                     double h = heuristic(dirs[d]);
                     if (!closed.containsKey(enc) && !open.containsKey(enc) && gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
@@ -1018,7 +994,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -1311,7 +1287,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -1470,7 +1446,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -1672,7 +1648,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -1833,7 +1809,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -1999,7 +1975,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2226,7 +2202,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2454,7 +2430,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2657,7 +2633,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2784,7 +2760,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -2878,7 +2854,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -3014,7 +2990,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -3153,7 +3129,7 @@ public class DijkstraMap {
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -3271,7 +3247,7 @@ public class DijkstraMap {
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng);
             int choice = rng.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -3334,7 +3310,7 @@ public class DijkstraMap {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDir(shuffleDirs(rng2), Direction.NONE);
+            final Direction[] dirs = appendDirToShuffle(rng2);
             int choice = rng2.nextInt(dirs.length);
 
             for (int d = 0; d < dirs.length; d++) {
@@ -3416,20 +3392,63 @@ public class DijkstraMap {
         }
         return 1.0;
     }
-    
+    public int getMappedCount() {
+        return mappedCount;
+    }
+
+    /**
+     * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
+     * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any
+     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.
+     * <br>
+     * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.
+     * <br>
+     * If this is 1, having one orthogonal obstacle adjacent to both the current cell and the cell the pathfinder is
+     * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard
+     * corner" rule used in some games.
+     * <br>
+     * If this is 2, having two orthogonal obstacles adjacent to both the current cell and the cell the pathfinder is
+     * trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the north and a wall
+     * to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
+     * @return the current level of blocking required to stop a diagonal move
+     */
+    public int getBlockingRequirement() {
+        return blockingRequirement;
+    }
+
+    /**
+     * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
+     * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any
+     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.
+     * <br>
+     * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.
+     * <br>
+     * If this is 1, having one orthogonal obstacle adjacent to both the current cell and the cell the pathfinder is
+     * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard
+     * corner" rule used in some games.
+     * <br>
+     * If this is 2, having two orthogonal obstacles adjacent to both the current cell and the cell the pathfinder is
+     * trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the north and a wall
+     * to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
+     * @param blockingRequirement the desired level of blocking required to stop a diagonal move
+     */
+    public void setBlockingRequirement(int blockingRequirement) {
+        this.blockingRequirement = (blockingRequirement > 2 ? 2 : blockingRequirement < 0 ? 0 : blockingRequirement);
+    }
+
     /* For Gwt compatibility */
     private Direction[] shuffleDirs(RNG rng) {
     	final Direction[] src = measurement == Measurement.MANHATTAN
     			? Direction.CARDINALS : Direction.OUTWARDS;
-    	return rng.shuffle(src, new Direction[src.length]);
+    	return rng.randomPortion(src, reuse);
     }
 
     /* For Gwt compatibility */
-    private static Direction[] appendDir(Direction[] src, Direction additional) {
-    	final Direction[] result = new Direction[src.length + 1];
-    	for (int i = 0; i < src.length; i++)
-    		result[i] = src[i];
-    	result[result.length - 1] = additional;
-    	return result;
+    private Direction[] appendDirToShuffle(RNG rng) {
+        //appendDir(shuffleDirs(rng),  Direction.NONE)
+        shuffleDirs(rng);
+        reuse[measurement == Measurement.MANHATTAN
+                ? 4 : 8] = Direction.NONE;
+        return reuse;
 	}
 }
