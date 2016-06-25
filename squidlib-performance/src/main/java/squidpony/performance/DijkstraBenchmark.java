@@ -71,6 +71,7 @@ public class DijkstraBenchmark {
     {
         DijkstraMap dijkstra = new DijkstraMap(
                 map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
+        dijkstra.setBlockingRequirement(0);
 
         long scanned = 0;
         for (int x = 1; x < DIMENSION - 1; x++) {
@@ -98,6 +99,7 @@ public class DijkstraBenchmark {
     {
         DijkstraMap dijkstra = new DijkstraMap(
                 map, DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(new LightRNG(0x1337BEEF)));
+        dijkstra.setBlockingRequirement(0);
         Coord r;
         long scanned = 0;
         DungeonUtility utility = new DungeonUtility(new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
