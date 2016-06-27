@@ -17,7 +17,7 @@ public class GreasedRegion {
         width = bits.length;
         height = bits[0].length;
         ySections = (height + 63) >> 6;
-        yEndMask = ~(-1L << (height & 63));
+        yEndMask = (-1L >>> (64 - (height & 63)));
         data = new long[width * ySections];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -31,7 +31,8 @@ public class GreasedRegion {
         width = map.length;
         height = map[0].length;
         ySections = (height + 63) >> 6;
-        yEndMask = ~(-1L << (height & 63));
+        yEndMask = (-1L >>> (64 - (height & 63)));
+        //yEndMask = ~(-1L << (height & 63));
         data = new long[width * ySections];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -45,7 +46,7 @@ public class GreasedRegion {
         this.width = width;
         this.height = height;
         ySections = (height + 63) >> 6;
-        yEndMask = ~(-1L << (height & 63));
+        yEndMask = (-1L >>> (64 - (height & 63)));
         data = new long[width * ySections];
         for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
             if(bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
@@ -86,12 +87,34 @@ public class GreasedRegion {
         return bools;
     }
 
+    public char[][] toChars(char on, char off)
+    {
+        char[][] chars = new char[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                chars[x][y] = (data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0 ? on : off;
+            }
+        }
+        return chars;
+    }
+
+    public char[][] toChars()
+    {
+        return toChars('.', '#');
+    }
+
     public GreasedRegion or(GreasedRegion other)
     {
         for (int x = 0; x < width && x < other.width; x++) {
-            for (int y = 0; y < height && x < other.height; y++) {
-                data[x * ySections + (y >> 6)] |= other.data[x * ySections + (y >> 6)];
+            for (int y = 0; y < ySections && y < other.ySections; y++) {
+                data[x * ySections + y] |= other.data[x * ySections + y];
             }
+            /*
+            for (int y = 0; y < height && y < other.height; y++) {
+                data[x * ySections + (y >> 6)] &= other.data[x * ySections + (y >> 6)];
+            }
+
+             */
         }
 
         if(ySections > 0 && yEndMask != -1) {
@@ -106,8 +129,8 @@ public class GreasedRegion {
     public GreasedRegion and(GreasedRegion other)
     {
         for (int x = 0; x < width && x < other.width; x++) {
-            for (int y = 0; y < height && x < other.height; y++) {
-                data[x * ySections + (y >> 6)] &= other.data[x * ySections + (y >> 6)];
+            for (int y = 0; y < ySections && y < other.ySections; y++) {
+                data[x * ySections + y] &= other.data[x * ySections + y];
             }
         }
         return this;
@@ -116,8 +139,8 @@ public class GreasedRegion {
     public GreasedRegion andNot(GreasedRegion other)
     {
         for (int x = 0; x < width && x < other.width; x++) {
-            for (int y = 0; y < height && x < other.height; y++) {
-                data[x * ySections + (y >> 6)] &= ~other.data[x * ySections + (y >> 6)];
+            for (int y = 0; y < ySections && y < other.ySections; y++) {
+                data[x * ySections + y] &= ~other.data[x * ySections + y];
             }
         }
         return this;
@@ -126,8 +149,8 @@ public class GreasedRegion {
     public GreasedRegion xor(GreasedRegion other)
     {
         for (int x = 0; x < width && x < other.width; x++) {
-            for (int y = 0; y < height && x < other.height; y++) {
-                data[x * ySections + (y >> 6)] ^= other.data[x * ySections + (y >> 6)];
+            for (int y = 0; y < ySections && y < other.ySections; y++) {
+                data[x * ySections + y] ^= other.data[x * ySections + y];
             }
         }
 
@@ -156,13 +179,24 @@ public class GreasedRegion {
 
     public GreasedRegion translate(int x, int y)
     {
-        if(width < 2 || ySections == 0)
+        if(width < 2 || ySections == 0 || (x == 0 && y == 0))
             return this;
 
         long[] data2 = new long[width * ySections];
         int start = Math.max(0, x), len = Math.min(width, width + x) - start;
-        System.arraycopy(data, 0, data2, start, len * ySections);
         long prev, tmp;
+        if(x < 0)
+        {
+            System.arraycopy(data, Math.max(0, -x) * ySections, data2, 0, len * ySections);
+        }
+        else if(x > 0)
+        {
+            System.arraycopy(data, 0, data2, start * ySections, len * ySections);
+        }
+        else
+        {
+            System.arraycopy(data, 0, data2, 0, len * ySections);
+        }
         if(y < 0) {
             for (int i = start; i < len; i++) {
                 prev = 0L;
@@ -175,7 +209,7 @@ public class GreasedRegion {
             }
         }
         else if(y > 0) {
-            for (int i = start; i < len; i++) {
+            for (int i = start; i < start + len; i++) {
                 prev = 0L;
                 for (int j = ySections - 1; j >= 0; j--) {
                     tmp = prev;
