@@ -96,7 +96,25 @@ import java.util.concurrent.TimeUnit;
  CoordPackerBenchmark.measureUnion       avgt    3     36.260 ±    4.809  ms/op
  CoordPackerBenchmark.measureUnionG      avgt    3      4.054 ±    0.355  ms/op
 
-
+ This is a relatively more-even measurement that uses 8-way (Chebyshev) distance measurement.
+ This causes corners to be included in the "visible walls" packed maps, which helps reduce
+ the amount of load the non-G (CoordPacker-based) code has to process.
+ GreasedRegion is still massively faster.
+ Benchmark                               Mode  Cnt     Score     Error  Units
+ CoordPackerBenchmark.measureExpand      avgt    3   676.298 ± 101.887  ms/op
+ CoordPackerBenchmark.measureExpandG     avgt    3     4.104 ±   1.221  ms/op
+ CoordPackerBenchmark.measureFringe      avgt    3   692.355 ±  66.108  ms/op
+ CoordPackerBenchmark.measureFringeG     avgt    3     5.434 ±   0.108  ms/op
+ CoordPackerBenchmark.measureIntersect   avgt    3    60.514 ±  12.220  ms/op
+ CoordPackerBenchmark.measureIntersectG  avgt    3     4.079 ±   0.542  ms/op
+ CoordPackerBenchmark.measurePack        avgt    3    94.342 ±  89.863  ms/op
+ CoordPackerBenchmark.measurePackG       avgt    3    12.704 ±   3.615  ms/op
+ CoordPackerBenchmark.measureRetract     avgt    3  3055.399 ± 418.414  ms/op
+ CoordPackerBenchmark.measureRetractG    avgt    3     4.034 ±   0.577  ms/op
+ CoordPackerBenchmark.measureSurface     avgt    3  3820.416 ± 185.474  ms/op
+ CoordPackerBenchmark.measureSurfaceG    avgt    3     5.305 ±   1.184  ms/op
+ CoordPackerBenchmark.measureUnion       avgt    3    36.320 ±  10.058  ms/op
+ CoordPackerBenchmark.measureUnionG      avgt    3     4.078 ±   0.828  ms/op
  */
 public class CoordPackerBenchmark {
 
@@ -122,10 +140,10 @@ public class CoordPackerBenchmark {
             maps[i] = dungeonGen.generate(serpent.generate());
             floors[i] = CoordPacker.pack(maps[i], '.');
             walls[i] = CoordPacker.pack(maps[i], '#');
-            visibleWalls[i] = CoordPacker.fringe(floors[i], 1, DIMENSION, DIMENSION, false);
+            visibleWalls[i] = CoordPacker.fringe(floors[i], 1, DIMENSION, DIMENSION, true);
             floorsG[i] = new GreasedRegion(maps[i], '.');
             wallsG[i] = new GreasedRegion(maps[i], '#');
-            visibleWallsG[i] = new GreasedRegion(floorsG[i]).fringe();
+            visibleWallsG[i] = new GreasedRegion(floorsG[i]).fringe8way();
         }
     }
 
@@ -181,7 +199,7 @@ public class CoordPackerBenchmark {
     {
         long l = 0;
         for (int i = 0; i < 0x1000; i++) {
-            l += CrossHash.hash(CoordPacker.fringe(floors[i], 1, DIMENSION, DIMENSION, false));
+            l += CrossHash.hash(CoordPacker.fringe(floors[i], 1, DIMENSION, DIMENSION, true));
         }
         return l;
     }
@@ -197,7 +215,7 @@ public class CoordPackerBenchmark {
     {
         long l = 0;
         for (int i = 0; i < 0x1000; i++) {
-            l += CrossHash.hash(CoordPacker.expand(floors[i], 1, DIMENSION, DIMENSION, false));
+            l += CrossHash.hash(CoordPacker.expand(floors[i], 1, DIMENSION, DIMENSION, true));
         }
         return l;
     }
@@ -213,7 +231,7 @@ public class CoordPackerBenchmark {
     {
         long l = 0;
         for (int i = 0; i < 0x1000; i++) {
-            l += CrossHash.hash(CoordPacker.surface(floors[i], 1, DIMENSION, DIMENSION, false));
+            l += CrossHash.hash(CoordPacker.surface(floors[i], 1, DIMENSION, DIMENSION, true));
         }
         return l;
     }
@@ -228,7 +246,7 @@ public class CoordPackerBenchmark {
     {
         long l = 0;
         for (int i = 0; i < 0x1000; i++) {
-            l += CrossHash.hash(CoordPacker.retract(floors[i], 1, DIMENSION, DIMENSION, false));
+            l += CrossHash.hash(CoordPacker.retract(floors[i], 1, DIMENSION, DIMENSION, true));
         }
         return l;
     }
@@ -365,7 +383,7 @@ public class CoordPackerBenchmark {
         long l = 0;
         GreasedRegion tmp = new GreasedRegion(floorsG[0]);
         for (int i = 0; i < 0x1000; i++) {
-            l += tmp.remake(floorsG[i]).fringe().hashCode();
+            l += tmp.remake(floorsG[i]).fringe8way().hashCode();
         }
         return l;
     }
@@ -382,7 +400,7 @@ public class CoordPackerBenchmark {
         long l = 0;
         GreasedRegion tmp = new GreasedRegion(floorsG[0]);
         for (int i = 0; i < 0x1000; i++) {
-            l += tmp.remake(floorsG[i]).expand().hashCode();
+            l += tmp.remake(floorsG[i]).expand8way().hashCode();
         }
         return l;
     }
@@ -399,7 +417,7 @@ public class CoordPackerBenchmark {
         long l = 0;
         GreasedRegion tmp = new GreasedRegion(floorsG[0]);
         for (int i = 0; i < 0x1000; i++) {
-            l += tmp.remake(floorsG[i]).surface().hashCode();
+            l += tmp.remake(floorsG[i]).surface8way().hashCode();
         }
         return l;
     }
@@ -415,7 +433,7 @@ public class CoordPackerBenchmark {
         long l = 0;
         GreasedRegion tmp = new GreasedRegion(floorsG[0]);
         for (int i = 0; i < 0x1000; i++) {
-            l += tmp.remake(floorsG[i]).retract().hashCode();
+            l += tmp.remake(floorsG[i]).retract8way().hashCode();
         }
         return l;
     }

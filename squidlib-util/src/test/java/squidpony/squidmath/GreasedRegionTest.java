@@ -2,6 +2,7 @@ package squidpony.squidmath;
 
 import org.junit.Test;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DungeonUtility;
 
 import static org.junit.Assert.assertTrue;
 import static squidpony.squidmath.CoordPacker.*;
@@ -13,7 +14,7 @@ import static squidpony.squidmath.CoordPacker.*;
 public class GreasedRegionTest {
 
     public static GreasedRegion dataCross = new GreasedRegion(unpack(unionPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14)), 64, 64));
-    public static GreasedRegion dataCross2 = new GreasedRegion(unpack(unionPacked(rectangle(24, 2, 16, 60), rectangle(2, 24, 60, 16)), 64, 64));
+    public static GreasedRegion dataCross2 = new GreasedRegion(unpack(unionPacked(rectangle(24 + 32, 2 + 32, 16, 60), rectangle(2 + 32, 24 + 32, 60, 16)), 128, 128));
     public static StatefulRNG srng = new StatefulRNG(0x1337BEEF);
     static {
         //printRegion(dataCross);
@@ -32,8 +33,8 @@ public class GreasedRegionTest {
 
     public static void printRegion(GreasedRegion r)
     {
-        //DungeonUtility.debugPrint(r.toChars());
-        //System.out.println();
+        DungeonUtility.debugPrint(r.toChars());
+        System.out.println();
     }
 
     public void printBits16(int n) {
@@ -108,6 +109,12 @@ public class GreasedRegionTest {
         GreasedRegion bonus = new GreasedRegion(dataCross).expand();
         printRegion(bonus);
         assertTrue(new GreasedRegion(bonus).andNot(edge).equals(dataCross));
+
+        GreasedRegion edge2 = new GreasedRegion(dataCross2).fringe8way();
+        printRegion(edge2);
+        GreasedRegion bonus2 = new GreasedRegion(dataCross2).expand8way();
+        printRegion(bonus2);
+        assertTrue(new GreasedRegion(bonus2).andNot(edge2).equals(dataCross2));
     }
     @Test
     public void testRetracting() {
@@ -115,7 +122,12 @@ public class GreasedRegionTest {
         printRegion(surf);
         GreasedRegion shrunk = new GreasedRegion(dataCross).retract();
         printRegion(shrunk);
-        //printPacked(shrunk, 64, 64);
         assertTrue(new GreasedRegion(shrunk).or(surf).equals(dataCross));
+
+        GreasedRegion surf2 = new GreasedRegion(dataCross2).surface8way();
+        printRegion(surf2);
+        GreasedRegion shrunk2 = new GreasedRegion(dataCross2).retract8way();
+        printRegion(shrunk2);
+        assertTrue(new GreasedRegion(shrunk2).or(surf2).equals(dataCross2));
     }
 }
