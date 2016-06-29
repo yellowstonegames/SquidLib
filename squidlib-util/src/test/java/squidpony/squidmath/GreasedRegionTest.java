@@ -15,6 +15,7 @@ public class GreasedRegionTest {
 
     public static GreasedRegion dataCross = new GreasedRegion(unpack(unionPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14)), 64, 64));
     public static GreasedRegion dataCross2 = new GreasedRegion(unpack(unionPacked(rectangle(24 + 32, 2 + 32, 16, 60), rectangle(2 + 32, 24 + 32, 60, 16)), 128, 128));
+    public static GreasedRegion box2 = new GreasedRegion(unpack(intersectPacked(rectangle(24 + 32, 2 + 32, 16, 60), rectangle(2 + 32, 24 + 32, 60, 16)), 120, 120));
     public static StatefulRNG srng = new StatefulRNG(0x1337BEEF);
     static {
         //printRegion(dataCross);
@@ -26,6 +27,21 @@ public class GreasedRegionTest {
         GreasedRegion singleNegative = new GreasedRegion(dataCross).not(),
                 doubleNegative = new GreasedRegion(dataCross).not().not();
         assertTrue(dataCross.equals(doubleNegative));
+        GreasedRegion gr = new GreasedRegion(box2);
+        printRegion(gr);
+        srng.setState(0x123456789ABCDEFL);
+        DungeonUtility.debugPrint(CoordPacker.unpackChar(CoordPacker.packSeveral(gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng),
+                gr.singleRandom(srng), gr.singleRandom(srng)),
+                120, 120, '@', '.'));
     }
 
     public static int FOV_RANGE = 12;

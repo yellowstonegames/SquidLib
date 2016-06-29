@@ -465,6 +465,57 @@ public class GreasedRegion {
         }
         return c;
     }
+    public Coord[] asCoords()
+    {
+        int ct = 0, idx = 0;
+        for (int i = 0; i < width * ySections; i++) {
+            ct += Long.bitCount(data[i]);
+        }
+        Coord[] points = new Coord[ct];
+        long t, w;
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                if((t = data[x * ySections + s]) != 0)
+                {
+                    w = Long.lowestOneBit(t);
+                    while (w != 0) {
+                        t ^= w;
+                        points[idx++] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return points;
+    }
+
+    public Coord singleRandom(RNG rng)
+    {
+        int ct = 0, tmp;
+        int[] counts = new int[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            tmp = Long.bitCount(data[i]);
+            counts[i] = tmp == 0 ? -1 : (ct += tmp);
+        }
+        tmp = rng.nextInt(ct);
+        long t, w;
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                if ((ct = counts[x * ySections + s]) > tmp) {
+                    t = data[x * ySections + s];
+                    w = Long.lowestOneBit(t);
+                    for (--ct; w != 0; ct--) {
+                        t ^= w;
+                        if (ct == tmp)
+                            return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+
+        return new Coord(-1, -1);
+    }
     public boolean test(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height && ySections > 0 &&
