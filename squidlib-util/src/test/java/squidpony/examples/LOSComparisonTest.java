@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class LOSComparisonTest {
-    public static int width = 35, height = 22;
+    public static int width = 32, height = 22;
     public static void main( String[] args )
     {
         for(int l : new int[]{1, 3, 4, 5, 6, 7, 8, 9}) {
@@ -32,14 +32,18 @@ public class LOSComparisonTest {
             short[] flooded = CoordPacker.flood(floors, CoordPacker.packOne(start), 10, true);
             short[] outside = CoordPacker.differencePacked(CoordPacker.rectangle(width, height),// flooded);
                     CoordPacker.expand(flooded, 1, width, height));
-            ArrayList<Coord> allSeen = new ArrayList<>(23 * 23), targets = new ArrayList<>(5);
+            ArrayList<Coord> allSeen = new ArrayList<>(128), targets = new ArrayList<>(5);
             LOS los;
             if(l < 7) los = new LOS(l);
             else los = new LOS(6);
             los.setRadiusStrategy(Radius.SQUARE);
             for (int i = 0; i < 4; i++) {
                 rng.nextLong();
-                Coord end = CoordPacker.singleRandom(flooded, rng);
+                Coord end = CoordPacker.singleRandom(
+                        CoordPacker.differencePacked(flooded,
+                                CoordPacker.flood(floors, CoordPacker.packOne(start), 3, true)),
+                        rng);
+
                 targets.add(end);
                 if(l < 7)
                     los.isReachable(bare, start.x, start.y, end.x, end.y);
