@@ -170,7 +170,7 @@ public abstract class AbstractSquidScreen<T extends Color> extends ScreenAdapter
 	 * 
 	 * @return How this class builds {@link SquidPanel}.
 	 */
-	public IPanelBuilder getPanelbuilder() {
+	public IPanelBuilder getPanelBuilder() {
 		return ipb;
 	}
 
