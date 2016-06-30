@@ -18,11 +18,13 @@ public class Bresenham {
     }
 
     /**
-     * Generates a 2D Bresenham line between two points.
+     * Generates a 2D Bresenham line between two points. If you don't need
+     * the {@link Queue} interface for the returned reference, consider
+     * using {@link #line2D_(Coord, Coord)} to save some memory.
      *
      * @param a the starting point
      * @param b the ending point
-     * @return
+     * @return The path between {@code a} and {@code b}.
      */
     public static Queue<Coord> line2D(Coord a, Coord b) {
         return line2D(a.x, a.y, b.x, b.y);
@@ -30,6 +32,19 @@ public class Bresenham {
 
     /**
      * Generates a 2D Bresenham line between two points.
+     *
+     * @param a the starting point
+     * @param b the ending point
+     * @return The path between {@code a} and {@code b}.
+     */
+    public static Coord[] line2D_(Coord a, Coord b) {
+        return line2D_(a.x, a.y, b.x, b.y);
+    }
+
+    /**
+     * Generates a 2D Bresenham line between two points. If you don't need
+     * the {@link Queue} interface for the returned reference, consider
+     * using {@link #line2D_(int, int, int, int)} to save some memory.
      *
      * @param startX the x coordinate of the starting point
      * @param startY the y coordinate of the starting point
@@ -46,6 +61,21 @@ public class Bresenham {
 		}
 		return line;
     }
+
+    /**
+     * Generates a 2D Bresenham line between two points.
+     *
+     * @param startX the x coordinate of the starting point
+     * @param startY the y coordinate of the starting point
+     * @param endX the x coordinate of the ending point
+     * @param endY the y coordinate of the ending point
+     */
+	public static Coord[] line2D_(int startX, int startY, int endX, int endY) {
+		final Queue<Coord3D> found = line3D(startX, startY, 0, endX, endY, 0);
+		final Coord[] result = new Coord[found.size()];
+		found.toArray(result);
+		return result;
+	}
 
     /**
      * Generates a 3D Bresenham line between two points.
