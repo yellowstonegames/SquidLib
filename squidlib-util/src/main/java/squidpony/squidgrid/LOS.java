@@ -269,7 +269,7 @@ public class LOS {
     public Queue<Coord> getLastPath() {
         return lastPath;
     }
-
+/*
     private boolean bresenhamReachable(Radius radiusStrategy) {
         Queue<Coord> path = Bresenham.line2D(startx, starty, targetx, targety);
         lastPath = new LinkedList<>();
@@ -280,6 +280,30 @@ public class LOS {
             lastPath.offer(p);
             if (p.x == targetx && p.y == targety) {
                 return true;//reached the end 
+            }
+            if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+                currentForce -= resistanceMap[p.x][p.y];
+            }
+            double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+            if (currentForce - (r * decay) <= 0) {
+                return false;//too much resistance
+            }
+        }
+        return false;//never got to the target point
+    }
+*/
+    private boolean bresenhamReachable(Radius radiusStrategy) {
+        Coord[] path = Bresenham.line2D_(startx, starty, targetx, targety);
+        lastPath = new LinkedList<>();
+        lastPath.add(Coord.get(startx, starty));
+        double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);
+        double currentForce = 1;
+        Coord p;
+        for (int i = 0; i < path.length; i++) {
+            p = path[i];
+            lastPath.offer(p);
+            if (p.x == targetx && p.y == targety) {
+                return true;//reached the end
             }
             if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
                 currentForce -= resistanceMap[p.x][p.y];
