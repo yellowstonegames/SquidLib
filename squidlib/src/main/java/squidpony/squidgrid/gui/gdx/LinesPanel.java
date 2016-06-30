@@ -32,6 +32,17 @@ import squidpony.panel.IMarkup;
  * </p>
  * 
  * <p>
+ * This class is usually used as follows:
+ * 
+ * <pre>
+ * final int nbLines = LinesPanel.computeMaxLines(font, pixelHeight);
+ * final LinesPanel<Color> lp = new LinesPanel(new GDXMarkup(), font, nbLines);
+ * lp.setSize(pixelWidth, pixelHeight);
+ * stage.addActor(lp);
+ * </pre>
+ * </p>
+ * 
+ * <p>
  * Contrary to {@link SquidMessageBox}, this panel doesn't support scrolling
  * (for now). So it's suited when it is fine forgetting old messages (as in
  * brogue's messages area).

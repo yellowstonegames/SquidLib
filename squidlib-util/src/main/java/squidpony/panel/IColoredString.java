@@ -65,6 +65,16 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	void append(IColoredString<T> other);
 
 	/**
+	 * Replace color {@code old} by {@code new_} in all buckets of {@code this}.
+	 * 
+	 * @param old
+	 *            The color to replace.
+	 * @param new_
+	 *            The replacing color.
+	 */
+	void replaceColor(/* @Nullable */ T old, /* @Nullable */ T new_);
+
+	/**
 	 * Deletes all content after index {@code len} (if any).
 	 * 
 	 * @param len
@@ -199,6 +209,55 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			return new IColoredString.Impl<>(s, t);
 		}
 
+		public static <T> IColoredString.Impl<T> clone(IColoredString<T> toClone) {
+			final IColoredString.Impl<T> result = new IColoredString.Impl<T>();
+			result.append(toClone);
+			return result;
+		}
+
+		/**
+		 * @param one
+		 * @param two 
+		 * @return Whether {@code one} represents the same content as
+		 *         {@code two}.
+		 */
+		/*
+		 * Method could be smarter, i.e. return true more often, by doing some
+		 * normalization. It is unnecessary if you only create instances of
+		 * IColoredString.Impl.
+		 */
+		public static <T> boolean equals(IColoredString<T> one, IColoredString<T> two) {
+			if (one == two)
+				return true;
+
+			final Iterator<IColoredString.Bucket<T>> oneIt = one.iterator();
+			final Iterator<IColoredString.Bucket<T>> twoIt = two.iterator();
+			while (true) {
+				if (oneIt.hasNext()) {
+					if (twoIt.hasNext()) {
+						final Bucket<T> oneb = oneIt.next();
+						final Bucket<T> twob = twoIt.next();
+						if (!equals(oneb.getText(), twob.getText()))
+							return false;
+						if (!equals(oneb.getColor(), twob.getColor()))
+							return false;
+						continue;
+					} else
+						/* 'this' not terminated, but 'other' is. */
+						return false;
+				} else {
+					if (twoIt.hasNext())
+						/* 'this' terminated, but not 'other'. */
+						return false;
+					else
+						/* Both terminated */
+						break;
+				}
+
+			}
+			return true;
+		}
+
 		@Override
 		public void append(char c, T color) {
 			append(String.valueOf(c), color);
@@ -239,6 +298,24 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		public void append(IColoredString<T> other) {
 			for (IColoredString.Bucket<T> ofragment : other)
 				append(ofragment.getText(), ofragment.getColor());
+		}
+
+		@Override
+		public void replaceColor(/* @Nullable */ T old, /* @Nullable */ T new_) {
+			if (equals(old, new_))
+				/* Nothing to do */
+				return;
+
+			final ListIterator<Bucket<T>> it = fragments.listIterator();
+			while (it.hasNext()) {
+				final Bucket<T> bucket = it.next();
+				if (equals(bucket.color, old)) {
+					/* Replace */
+					it.remove();
+					it.add(new Bucket<T>(bucket.getText(), new_));
+				}
+				/* else leave untouched */
+			}
 		}
 
 		public void append(Bucket<T> bucket) {
@@ -571,8 +648,8 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		 * Given some way of converting from a T value to an in-line markup tag, returns a string representation of
 		 * this IColoredString with in-line markup representing colors.
 		 * @param markup an IMarkup implementation
-         * @return a String with markup inserted inside.
-         */
+		 * @return a String with markup inserted inside.
+		 */
 		@Override
 		public String presentWithMarkup(IMarkup<T> markup) {
 			final StringBuilder result = new StringBuilder();
@@ -583,7 +660,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 					result.append(markup.closeMarkup());
 				result.append(fragment.text);
 			}
-            result.append(markup.closeMarkup());
+			result.append(markup.closeMarkup());
 			return result.toString();
 		}
 

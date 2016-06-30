@@ -119,4 +119,16 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 		addTextOnNewLine("");
 	}
 
+	/**
+	 * Changes a color in members of {@code this}.
+	 * 
+	 * @param old
+	 *            The color to replace. Can be {@code null}.
+	 */
+	public void replaceColor(T old, T new_) {
+		final int sz = size();
+		for (int i = 0; i < sz; i++)
+			get(i).replaceColor(old, new_);
+	}
+
 }
