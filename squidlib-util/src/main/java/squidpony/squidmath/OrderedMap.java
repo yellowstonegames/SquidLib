@@ -16,7 +16,9 @@
 package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
+import squidpony.annotation.GwtIncompatible;
 
+import java.io.Serializable;
 import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1064,10 +1066,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             if (!hasNext())
                 throw new NoSuchElementException();
             curr = next;
-            if(index >= order.size - 1)
+            if(++index >= order.size)
                 next = -1;
             else
-                next = order.get(++index);//(int) link[curr];
+                next = order.get(index);//(int) link[curr];
             prev = curr;
             return curr;
         }
@@ -1103,20 +1105,17 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 else
                     next = -1;
             }
-            size--;
-			/*
+            /*
 			 * Now we manually fix the pointers. Because of our knowledge of
 			 * next and prev, this is going to be faster than calling
 			 * fixPointers().
 			 */
             if (prev == -1)
                 first = next;
-            //else
-            //    link[prev] ^= ((link[prev] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
             if (next == -1)
                 last = prev;
-            //else
-            //    link[next] ^= ((link[next] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+            order.removeIndex(index);
+            size--;
             int last, slot, pos = curr;
             curr = -1;
             if (pos == n) {
@@ -1169,7 +1168,9 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
     private class EntryIterator extends MapIterator
             implements
-            Iterator<Entry<K, V>> {
+            Iterator<Entry<K, V>>, Serializable {
+        private static final long serialVersionUID = 0L;
+
         private MapEntry entry;
         public EntryIterator() {
         }
@@ -1192,7 +1193,9 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
     }
 
-    public class FastEntryIterator extends MapIterator implements ListIterator<MapEntry> {
+    public class FastEntryIterator extends MapIterator implements ListIterator<MapEntry>, Serializable {
+        private static final long serialVersionUID = 0L;
+
         final MapEntry entry = new MapEntry();
 
         public FastEntryIterator() {
@@ -1213,7 +1216,8 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
     }
     private final class MapEntrySet
-            implements Cloneable, SortedSet<Entry<K, V>>, Set<Entry<K, V>>, Collection<Entry<K, V>> {
+            implements Cloneable, SortedSet<Entry<K, V>>, Set<Entry<K, V>>, Collection<Entry<K, V>>, Serializable {
+        private static final long serialVersionUID = 0L;
         public EntryIterator iterator() {
             return new EntryIterator();
         }
@@ -1322,8 +1326,19 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         public void clear() {
             OrderedMap.this.clear();
         }
+
         public FastEntryIterator fastIterator() {
             return new FastEntryIterator();
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (o == this)
+                return true;
+            if (!(o instanceof Set))
+                return false;
+            Set<?> s = (Set<?>) o;
+            return s.size() == size() && containsAll(s);
         }
 
         public Object[] toArray() {
@@ -1461,7 +1476,8 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * <P>We simply override the {@link ListIterator#next()}/{@link ListIterator#previous()} methods (and possibly their type-specific counterparts) so that they return keys
      * instead of entries.
      */
-    public final class KeyIterator extends MapIterator implements Iterator<K> {
+    public final class KeyIterator extends MapIterator implements Iterator<K>, Serializable {
+        private static final long serialVersionUID = 0L;
         public K previous() {
             return key[previousEntry()];
         }
@@ -1475,9 +1491,12 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         public K next() {
             return key[nextEntry()];
         }
+        public void remove() { super.remove(); }
     }
 
-    public final class KeySet implements SortedSet<K> {
+    public final class KeySet implements SortedSet<K>, Serializable {
+        private static final long serialVersionUID = 0L;
+
         public KeyIterator iterator() {
             return new KeyIterator();
         }
@@ -1614,6 +1633,17 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             return retVal;
         }
 
+        @Override
+        public boolean equals(final Object o) {
+            if (o == this)
+                return true;
+            if (!(o instanceof Set))
+                return false;
+            Set<?> s = (Set<?>) o;
+            if (s.size() != size())
+                return false;
+            return containsAll(s);
+        }
         /**
          * Unwraps an iterator into an array starting at a given offset for a given number of elements.
          * <p>
@@ -1681,7 +1711,9 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * <P>We simply override the {@link ListIterator#next()}/{@link ListIterator#previous()} methods (and possibly their type-specific counterparts) so that they return values
      * instead of entries.
      */
-    public final class ValueIterator extends MapIterator implements ListIterator<V> {
+    public final class ValueIterator extends MapIterator implements ListIterator<V>, Serializable {
+        private static final long serialVersionUID = 0L;
+
         public V previous() {
             return value[previousEntry()];
         }
@@ -1691,30 +1723,30 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         public void add(V v) {
             throw new UnsupportedOperationException();
         }
-        public ValueIterator() {
-            super();
-        }
+        public ValueIterator() {}
         public V next() {
             return value[nextEntry()];
         }
+        public void remove() { super.remove(); }
     }
-
+    public final class ValueCollection extends AbstractCollection<V> implements Serializable
+    {
+        private static final long serialVersionUID = 0L;
+        public ValueIterator iterator() {
+            return new ValueIterator();
+        }
+        public int size() {
+            return size;
+        }
+        public boolean contains(Object v) {
+            return containsValue(v);
+        }
+        public void clear() {
+            OrderedMap.this.clear();
+        }
+    }
     public Collection<V> values() {
-        if (values == null) values = new AbstractCollection<V>(){
-
-            public ValueIterator iterator() {
-                return new ValueIterator();
-            }
-            public int size() {
-                return size;
-            }
-            public boolean contains(Object v) {
-                return containsValue(v);
-            }
-            public void clear() {
-                OrderedMap.this.clear();
-            }
-        };
+        if (values == null) values = new ValueCollection();
         return values;
     }
 
@@ -1884,11 +1916,17 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     public OrderedMap<K, V> clone() {
         OrderedMap<K, V> c;
         try {
-            super.clone();
+            c = (OrderedMap<K, V>) super.clone();
+            c.key = (K[]) new Object[n + 1];
+            System.arraycopy(key, 0, c.key, 0, n + 1);
+            c.value = (V[]) new Object[n + 1];
+            System.arraycopy(value, 0, c.value, 0, n + 1);
+            c.order = (IntVLA) order.clone();
+            return c;
         } catch (CloneNotSupportedException cantHappen) {
+            throw new InternalError(cantHappen + (cantHappen.getMessage() != null ?
+                    "; " + cantHappen.getMessage() : ""));
         }
-
-        return new OrderedMap<>(this);
     }
     /**
      * Returns a hash code for this map.
@@ -2207,6 +2245,70 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
         s.append("}");
         return s.toString();
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Map))
+            return false;
+        Map<?, ?> m = (Map<?, ?>) o;
+        if (m.size() != size())
+            return false;
+        return entrySet().containsAll(m.entrySet());
+    }
+
+    @GwtIncompatible
+    private void writeObject(java.io.ObjectOutputStream s)
+            throws java.io.IOException {
+        final K key[] = this.key;
+        final V value[] = this.value;
+        final MapIterator i = new MapIterator();
+        s.defaultWriteObject();
+        for (int j = size, e; j-- != 0;) {
+            e = i.nextEntry();
+            s.writeObject(key[e]);
+            s.writeObject(value[e]);
+        }
+    }
+    @GwtIncompatible
+    @SuppressWarnings("unchecked")
+    private void readObject(java.io.ObjectInputStream s)
+            throws java.io.IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        n = arraySize(size, f);
+        maxFill = maxFill(n, f);
+        mask = n - 1;
+        final K key[] = this.key = (K[]) new Object[n + 1];
+        final V value[] = this.value = (V[]) new Object[n + 1];
+        final IntVLA order = this.order = new IntVLA(n + 1);
+        int prev = -1;
+        first = last = -1;
+        K k;
+        V v;
+        for (int i = size, pos; i-- != 0;) {
+            k = (K) s.readObject();
+            v = (V) s.readObject();
+            if (((k) == null)) {
+                pos = n;
+                containsNullKey = true;
+            } else {
+                pos = (HashCommon.mix((k).hashCode()))
+                        & mask;
+                while (!((key[pos]) == null))
+                    pos = (pos + 1) & mask;
+            }
+
+            key[pos] = k;
+            value[pos] = v;
+            if (first != -1) {
+                prev = pos;
+            } else {
+                prev = first = pos;
+            }
+            order.add(pos);
+        }
+        last = prev;
     }
 
     /**

@@ -1044,7 +1044,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             if (pos == n) {
                 containsNull = false;
                 key[n] = null;
-                order.removeValue(pos);
+                //order.removeValue(pos);
             } else {
                 K curr;
                 final K[] key = OrderedSet.this.key;
