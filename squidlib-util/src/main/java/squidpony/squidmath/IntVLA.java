@@ -26,28 +26,19 @@ import java.util.Arrays;
  * array) was chosen as a different name.
  * Copied from LibGDX by Tommy Ettinger on 10/1/2015.
  * @author Nathan Sweet */
-public class IntVLA implements Serializable {
+public class IntVLA implements Serializable, Cloneable {
     private static final long serialVersionUID = -2948161891082748626L;
 
     public int[] items;
     public int size;
-    public boolean ordered;
 
     /** Creates an ordered array with a capacity of 16. */
     public IntVLA() {
-        this(true, 16);
+        this(16);
     }
 
     /** Creates an ordered array with the specified capacity. */
     public IntVLA(int capacity) {
-        this(true, capacity);
-    }
-
-    /** @param ordered If false, methods that remove elements may change the order of other elements in the array, which avoids a
-     *           memory copy.
-     * @param capacity Any elements added beyond this will cause the backing array to be grown. */
-    public IntVLA(boolean ordered, int capacity) {
-        this.ordered = ordered;
         items = new int[capacity];
     }
 
@@ -55,7 +46,6 @@ public class IntVLA implements Serializable {
      * ordered. The capacity is set to the number of elements, so any subsequent elements added will cause the backing array to be
      * grown. */
     public IntVLA(IntVLA array) {
-        ordered = array.ordered;
         size = array.size;
         items = new int[size];
         System.arraycopy(array.items, 0, items, 0, size);
@@ -64,16 +54,17 @@ public class IntVLA implements Serializable {
     /** Creates a new ordered array containing the elements in the specified array. The capacity is set to the number of elements,
      * so any subsequent elements added will cause the backing array to be grown. */
     public IntVLA(int[] array) {
-        this(true, array, 0, array.length);
+        this(array, 0, array.length);
     }
 
     /** Creates a new array containing the elements in the specified array. The capacity is set to the number of elements, so any
      * subsequent elements added will cause the backing array to be grown.
-     * @param ordered If false, methods that remove elements may change the order of other elements in the array, which avoids a
-     *           memory copy.
+     * @param array the int array to copy from
+     * @param startIndex the first index in array to copy from
+     * @param count the number of ints to copy from array into this IntVLA
      */
-    public IntVLA(boolean ordered, int[] array, int startIndex, int count) {
-        this(ordered, count);
+    public IntVLA(int[] array, int startIndex, int count) {
+        this(count);
         size = count;
         System.arraycopy(array, startIndex, items, 0, count);
     }
@@ -156,10 +147,7 @@ public class IntVLA implements Serializable {
         if (index > size) throw new IndexOutOfBoundsException("index can't be > size: " + index + " > " + size);
         int[] items = this.items;
         if (size == items.length) items = resize(Math.max(8, (int)(size * 1.75f)));
-        if (ordered)
-            System.arraycopy(items, index, items, index + 1, size - index);
-        else
-            items[size] = items[index];
+        System.arraycopy(items, index, items, index + 1, size - index);
         size++;
         items[index] = value;
     }
@@ -241,10 +229,7 @@ public class IntVLA implements Serializable {
         int[] items = this.items;
         int value = items[index];
         size--;
-        if (ordered)
-            System.arraycopy(items, index + 1, items, index, size - index);
-        else
-            items[index] = items[size];
+        System.arraycopy(items, index + 1, items, index, size - index);
         return value;
     }
 
@@ -254,13 +239,7 @@ public class IntVLA implements Serializable {
         if (start > end) throw new IndexOutOfBoundsException("start can't be > end: " + start + " > " + end);
         int[] items = this.items;
         int count = end - start + 1;
-        if (ordered)
-            System.arraycopy(items, start + count, items, start, size - (start + count));
-        else {
-            int lastIndex = size - 1;
-            for (int i = 0; i < count; i++)
-                items[start + i] = items[lastIndex - i];
-        }
+        System.arraycopy(items, start + count, items, start, size - (start + count));
         size -= count;
     }
 
@@ -290,10 +269,8 @@ public class IntVLA implements Serializable {
         int[] items = this.items;
         int value = items[index];
         if(index == 0) return value;
-        if (ordered) {
-            System.arraycopy(items, 0, items, 1, index);
-            items[0] = value;
-        }
+        System.arraycopy(items, 0, items, 1, index);
+        items[0] = value;
         return value;
     }
 
@@ -303,10 +280,8 @@ public class IntVLA implements Serializable {
         int[] items = this.items;
         int value = items[index];
         if(index == size - 1) return value;
-        if (ordered) {
-            System.arraycopy(items, index + 1, items, index, size - index - 1);
-            items[size - 1] = value;
-        }
+        System.arraycopy(items, index + 1, items, index, size - index - 1);
+        items[size - 1] = value;
         return value;
     }
 
@@ -416,9 +391,20 @@ public class IntVLA implements Serializable {
         return new IntVLA(this);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Object clone() {
+        try {
+            IntVLA nx = (IntVLA) super.clone();
+            nx.items = new int[items.length];
+            System.arraycopy(items, 0, nx.items, 0, items.length);
+            return nx;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e + (e.getMessage() != null ? "; " + e.getMessage() : ""));
+        }
+    }
     @Override
 	public int hashCode () {
-        if (!ordered) return super.hashCode();
         int[] items = this.items;
         int h = 1;
         for (int i = 0, n = size; i < n; i++)
@@ -429,10 +415,8 @@ public class IntVLA implements Serializable {
     @Override
 	public boolean equals (Object object) {
         if (object == this) return true;
-        if (!ordered) return false;
         if (!(object instanceof IntVLA)) return false;
         IntVLA array = (IntVLA)object;
-        if (!array.ordered) return false;
         int n = size;
         if (n != array.size) return false;
         for (int i = 0; i < n; i++)
