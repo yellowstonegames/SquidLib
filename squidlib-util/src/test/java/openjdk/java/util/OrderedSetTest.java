@@ -39,8 +39,8 @@ public class OrderedSetTest {
     static Random rnd = new Random(666);
 
     public static void main(String[] args) throws Exception {
-        int numItr =  500;
-        int setSize = 500;
+        int numItr =  200;
+        int setSize = 2500;
 
         for (int i=0; i<numItr; i++) {
             Set s1 = new OrderedSet();
