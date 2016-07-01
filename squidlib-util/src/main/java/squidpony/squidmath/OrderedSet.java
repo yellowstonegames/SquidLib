@@ -16,6 +16,7 @@
 package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
+import squidpony.annotation.GwtIncompatible;
 
 import java.util.*;
 
@@ -968,10 +969,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             if (!hasNext())
                 throw new NoSuchElementException();
             curr = next;
-            if(index >= order.size - 1)
+            if(++index >= order.size)
                 next = -1;
             else
-                next = order.get(++index);//(int) link[curr];
+                next = order.get(index);//(int) link[curr];
             prev = curr;
             return key[curr];
         }
@@ -1001,7 +1002,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         }
         public int nextIndex() {
             ensureIndexKnown();
-            return index;
+            return index+1;
         }
         public int previousIndex() {
             ensureIndexKnown();
@@ -1027,20 +1028,17 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                 else
                     next = -1;
             }
-            size--;
-			/*
+            /*
 			 * Now we manually fix the pointers. Because of our knowledge of
 			 * next and prev, this is going to be faster than calling
 			 * fixPointers().
 			 */
             if (prev == -1)
                 first = next;
-            //else
-            //    link[prev] ^= ((link[prev] ^ (next & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
             if (next == -1)
                 last = prev;
-            //else
-            //    link[next] ^= ((link[next] ^ ((prev & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
+            order.removeIndex(index);
+            size--;
             int last, slot, pos = curr;
             curr = -1;
             if (pos == n) {
@@ -1057,7 +1055,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                     for (; ; ) {
                         if (((curr = key[pos]) == null)) {
                             key[last] = null;
-                            order.pop();
                             return;
                         }
                         slot = (HashCommon.mix((curr)
@@ -1076,6 +1073,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                     fixPointers(pos, last);
                 }
             }
+
         }
 
         /**
@@ -1291,14 +1289,19 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @return a deep copy of this map.
      */
     @SuppressWarnings("unchecked")
-    public OrderedSet<K> clone() {
+    @Override
+    public Object clone() {
         OrderedSet<K> c;
         try {
-            super.clone();
+            c = (OrderedSet<K>) super.clone();
+            c.key = (K[]) new Object[n + 1];
+            System.arraycopy(key, 0, c.key, 0, n + 1);
+            c.order = (IntVLA) order.clone();
+            return c;
         } catch (CloneNotSupportedException cantHappen) {
+            throw new InternalError(cantHappen + (cantHappen.getMessage() != null ?
+                    "; " + cantHappen.getMessage() : ""));
         }
-
-        return new OrderedSet<>(this);
     }
     /**
      * Returns a hash code for this set.
@@ -1592,6 +1595,58 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         }
         s.append("}");
         return s.toString();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Set))
+            return false;
+        Set<?> s = (Set<?>) o;
+        if (s.size() != size())
+            return false;
+        return containsAll(s);
+    }
+    @GwtIncompatible
+    private void writeObject(java.io.ObjectOutputStream s)
+            throws java.io.IOException {
+        final ListIterator<K> i = iterator();
+        s.defaultWriteObject();
+        for (int j = size; j-- != 0;)
+            s.writeObject(i.next());
+    }
+    @GwtIncompatible
+    @SuppressWarnings("unchecked")
+    private void readObject(java.io.ObjectInputStream s)
+            throws java.io.IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        n = arraySize(size, f);
+        maxFill = maxFill(n, f);
+        mask = n - 1;
+        final K key[] = this.key = (K[]) new Object[n + 1];
+        final IntVLA order = this.order = new IntVLA(n + 1);
+        int prev = -1;
+        first = last = -1;
+        K k;
+        for (int i = size, pos; i-- != 0;) {
+            k = (K) s.readObject();
+            if (((k) == null)) {
+                pos = n;
+                containsNull = true;
+            } else {
+                if (!((key[pos = (HashCommon.mix((k)
+                        .hashCode())) & mask]) == null))
+                    while (!((key[pos = (pos + 1) & mask]) == null));
+            }
+            key[pos] = k;
+            if (first != -1) {
+                last = pos;
+            } else {
+                first = last = pos;
+            }
+            order.add(pos);
+        }
     }
     /**
      * Gets the item at the given index in the iteration order in constant time (random-access).
