@@ -1628,7 +1628,7 @@ public class CoordPacker {
      */
     public static OrderedSet<short[]> findManyPacked(int x, int y, short[] ... packed)
     {
-        OrderedSet<short[]> packs = new OrderedSet<>(packed.length);
+        OrderedSet<short[]> packs = new OrderedSet<>(packed.length, CrossHash.shortHasher);
         int hilbertDistance = posToHilbert(x, y);
         for (int a = 0; a < packed.length; a++) {
             if(packed[a] == null) continue;
@@ -1657,7 +1657,7 @@ public class CoordPacker {
      */
     public static boolean regionsContain(short[] checking, short[] ... packed)
     {
-        OrderedSet<short[]> packs = new OrderedSet<>(packed.length);
+        OrderedSet<short[]> packs = new OrderedSet<>(packed.length, CrossHash.shortHasher);
         for (int a = 0; a < packed.length; a++) {
             if(packed[a] == null) continue;
             int total = 0;

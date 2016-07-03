@@ -144,6 +144,8 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
+    protected CrossHash.IHasher hasher = null;
+
     public void defaultReturnValue(final V rv) {
         defRetValue = rv;
     }
@@ -174,6 +176,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         value = (V[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
+        hasher = new CrossHash.DefaultHasher();
     }
 
     /**
@@ -237,6 +240,67 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      */
     public OrderedMap(final K[] k, final V[] v) {
         this(k, v, DEFAULT_LOAD_FACTOR);
+    }
+
+    /**
+     * Creates a new hash map.
+     * <p>
+     * <p>The actual table size will be the least power of two greater than <code>expected</code>/<code>f</code>.
+     *
+     * @param expected the expected number of elements in the hash set.
+     * @param f        the load factor.
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     */
+
+    @SuppressWarnings("unchecked")
+    public OrderedMap(final int expected, final float f, CrossHash.IHasher hasher) {
+        if (f <= 0 || f > 1)
+            throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
+        if (expected < 0) throw new IllegalArgumentException("The expected number of elements must be nonnegative");
+        this.f = f;
+        n = arraySize(expected, f);
+        mask = n - 1;
+        maxFill = maxFill(n, f);
+        key = (K[]) new Object[n + 1];
+        value = (V[]) new Object[n + 1];
+        //link = new long[n + 1];
+        order = new IntVLA(expected);
+        this.hasher = (hasher == null) ? new CrossHash.DefaultHasher() : hasher;
+    }
+    /**
+     * Creates a new hash map with 0.75f as load factor.
+     *
+     * @param expected the expected number of elements in the hash map.
+     */
+    public OrderedMap(final int expected, CrossHash.IHasher hasher) {
+        this(expected, DEFAULT_LOAD_FACTOR, hasher);
+    }
+
+    /**
+     * Creates a new hash map with initial expected 16 entries and 0.75f as load factor.
+     */
+    public OrderedMap(CrossHash.IHasher hasher) {
+        this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR, hasher);
+    }
+
+    /**
+     * Creates a new hash map copying a given one.
+     *
+     * @param m a {@link Map} to be copied into the new hash map.
+     * @param f the load factor.
+     */
+    public OrderedMap(final Map<? extends K, ? extends V> m, final float f, CrossHash.IHasher hasher) {
+        this(m.size(), f, hasher);
+        putAll(m);
+    }
+
+    /**
+     * Creates a new hash map with 0.75f as load factor copying a given one.
+     *
+     * @param m a {@link Map} to be copied into the new hash map.
+     */
+    public OrderedMap(final Map<? extends K, ? extends V> m, CrossHash.IHasher hasher) {
+        this(m, DEFAULT_LOAD_FACTOR, hasher);
     }
 
 
@@ -312,8 +376,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k)
-                    .hashCode())) & mask]) == null)) {
+            if (!((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null)) {
                 if (((curr).equals(k)))
                     return pos;
                 while (!((curr = key[pos = (pos + 1) & mask]) == null))
@@ -366,7 +429,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                     order.removeValue(last);
                     return;
                 }
-                slot = (HashCommon.mix((curr).hashCode()))
+                slot = (HashCommon.mix(hasher.hash(curr)))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -389,8 +452,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k)
-                .hashCode())) & mask]) == null))
+        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
             return defRetValue;
         if (((k).equals(curr)))
             return removeEntry(pos);
@@ -542,8 +604,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k)
-                .hashCode())) & mask]) == null))
+        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
             return defRetValue;
         if (((k).equals(curr))) {
             moveIndexToFirst(pos);
@@ -581,8 +642,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k)
-                .hashCode())) & mask]) == null))
+        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
             return defRetValue;
         if (((k).equals(curr))) {
             moveIndexToLast(pos);
@@ -622,8 +682,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k)
-                    .hashCode())) & mask]) == null)) {
+            if (!((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null)) {
                 if (((curr).equals(k))) {
                     moveIndexToFirst(pos);
                     return setValue(pos, v);
@@ -675,8 +734,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k)
-                    .hashCode())) & mask]) == null)) {
+            if (!((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null)) {
                 if (((curr).equals(k))) {
                     moveIndexToLast(pos);
                     return setValue(pos, v);
@@ -711,8 +769,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(k
-                .hashCode())) & mask]) == null))
+        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
             return defRetValue;
         if ((k.equals(curr)))
             return value[pos];
@@ -732,8 +789,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(k
-                .hashCode())) & mask]) == null))
+        if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
             return false;
         if ((k.equals(curr)))
             return true;
@@ -843,7 +899,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                     : (value[index]).equals((e.getValue())));
         }
         public int hashCode() {
-            return ((key[index]) == null ? 0 : (key[index]).hashCode())
+            return ((key[index]) == null ? 0 : hasher.hash(key[index]))
                     ^ ((value[index]) == null ? 0 : (value[index]).hashCode());
         }
         @Override
@@ -1135,8 +1191,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                             value[last] = null;
                             return;
                         }
-                        slot = (HashCommon.mix((curr)
-                                .hashCode())) & mask;
+                        slot = (HashCommon.mix(hasher.hash(curr))) & mask;
                         if (last <= pos
                                 ? last >= slot || slot > pos
                                 : last >= slot && slot > pos)
@@ -1262,8 +1317,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             final K[] key = OrderedMap.this.key;
             int pos;
             // The starting point.
-            if (((curr = key[pos = (HashCommon.mix((k)
-                    .hashCode())) & mask]) == null))
+            if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
                 return false;
             if (((k).equals(curr)))
                 return ((value[pos]) == null ? (v) == null : (value[pos])
@@ -1297,8 +1351,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             final K[] key = OrderedMap.this.key;
             int pos;
             // The starting point.
-            if (((curr = key[pos = (HashCommon.mix((k)
-                    .hashCode())) & mask]) == null))
+            if (((curr = key[pos = (HashCommon.mix(hasher.hash(k))) & mask]) == null))
                 return false;
             if (((curr).equals(k))) {
                 if (((value[pos]) == null ? (v) == null : (value[pos])
@@ -1836,7 +1889,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             if (((key[i]) == null))
                 pos = newN;
             else {
-                pos = (HashCommon.mix((key[i]).hashCode())) & mask;
+                pos = (HashCommon.mix(hasher.hash(key[i]))) & mask;
                 while (!((newKey[pos]) == null))
                     pos = (pos + 1) & mask;
             }
@@ -1922,6 +1975,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             c.value = (V[]) new Object[n + 1];
             System.arraycopy(value, 0, c.value, 0, n + 1);
             c.order = (IntVLA) order.clone();
+            c.hasher = hasher;
             return c;
         } catch (CloneNotSupportedException cantHappen) {
             throw new InternalError(cantHappen + (cantHappen.getMessage() != null ?
@@ -1944,7 +1998,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             while (((key[i]) == null))
                 i++;
             if (this != key[i])
-                t = ((key[i]).hashCode());
+                t = hasher.hash(key[i]);
             if (this != value[i])
                 t ^= ((value[i]) == null ? 0 : (value[i]).hashCode());
             h += t;
@@ -2265,6 +2319,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         final V value[] = this.value;
         final MapIterator i = new MapIterator();
         s.defaultWriteObject();
+        s.writeObject(hasher);
         for (int j = size, e; j-- != 0;) {
             e = i.nextEntry();
             s.writeObject(key[e]);
@@ -2276,6 +2331,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
+        hasher = (CrossHash.IHasher) s.readObject();
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;
@@ -2293,7 +2349,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 pos = n;
                 containsNullKey = true;
             } else {
-                pos = (HashCommon.mix((k).hashCode()))
+                pos = (HashCommon.mix(hasher.hash(k)))
                         & mask;
                 while (!((key[pos]) == null))
                     pos = (pos + 1) & mask;

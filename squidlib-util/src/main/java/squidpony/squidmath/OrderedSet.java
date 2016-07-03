@@ -139,6 +139,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
+    protected CrossHash.IHasher hasher = null;
     /**
      * Creates a new hash map.
      * <p>
@@ -160,6 +161,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         key = (K[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
+        hasher = new CrossHash.DefaultHasher();
     }
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
@@ -291,6 +293,75 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         this(a, DEFAULT_LOAD_FACTOR);
     }
 
+    /**
+     * Creates a new hash map.
+     * <p>
+     * <p>The actual table size will be the least power of two greater than <code>expected</code>/<code>f</code>.
+     *
+     * @param expected the expected number of elements in the hash set.
+     * @param f         the load factor.
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     */
+    @SuppressWarnings("unchecked")
+    public OrderedSet(final int expected, final float f, CrossHash.IHasher hasher) {
+        if (f <= 0 || f > 1)
+            throw new IllegalArgumentException("Load factor must be greater than 0 and smaller than or equal to 1");
+        if (expected < 0) throw new IllegalArgumentException("The expected number of elements must be nonnegative");
+        this.f = f;
+        n = arraySize(expected, f);
+        mask = n - 1;
+        maxFill = maxFill(n, f);
+        key = (K[]) new Object[n + 1];
+        //link = new long[n + 1];
+        order = new IntVLA(expected);
+        this.hasher = (hasher == null) ? new CrossHash.DefaultHasher() : hasher;
+    }
+
+    /**
+     * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
+     * factor.
+     *
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     */
+    public OrderedSet(CrossHash.IHasher hasher) {
+        this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR, hasher);
+    }
+
+    /**
+     * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
+     * factor.
+     *
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     */
+    public OrderedSet(final int expected, CrossHash.IHasher hasher) {
+        this(expected, DEFAULT_LOAD_FACTOR, hasher);
+    }
+
+    /**
+     * Creates a new hash set copying a given collection.
+     *
+     * @param c
+     *            a {@link Collection} to be copied into the new hash set.
+     * @param f
+     *            the load factor.
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     */
+    public OrderedSet(final Collection<? extends K> c,
+                      final float f, CrossHash.IHasher hasher) {
+        this(c.size(), f, hasher);
+        addAll(c);
+    }
+    /**
+     * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
+     * factor copying a given collection.
+     *
+     * @param c
+     *            a {@link Collection} to be copied into the new hash set.
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     */
+    public OrderedSet(final Collection<? extends K> c, CrossHash.IHasher hasher) {
+        this(c, DEFAULT_LOAD_FACTOR, hasher);
+    }
 
     private int realSize() {
         return containsNull ? size - 1 : size;
@@ -337,12 +408,11 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k)
-                    .hashCode())) & mask]) == null)) {
-                if (((curr).equals(k)))
+            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+                if ((curr.equals(k)))
                     return false;
                 while (!((curr = key[pos = (pos + 1) & mask]) == null))
-                    if (((curr).equals(k)))
+                    if ((curr.equals(k)))
                         return false;
             }
             key[pos] = k;
@@ -386,8 +456,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = (HashCommon.mix((k)
-                    .hashCode())) & mask]) == null)) {
+            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
                 if (((curr).equals(k)))
                     return curr;
                 while (!((curr = key[pos = (pos + 1) & mask]) == null))
@@ -432,7 +501,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                     order.removeValue(last);
                     return;
                 }
-                slot = (HashCommon.mix((curr).hashCode()))
+                slot = HashCommon.mix(hasher.hash(curr))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -469,8 +538,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k)
-                .hashCode())) & mask]) == null))
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
             return false;
         if (k.equals(curr))
             return removeEntry(pos);
@@ -615,9 +683,9 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         } else {
             // The starting point.
             final K key[] = this.key;
-            pos = (HashCommon.mix((k).hashCode())) & mask;
+            pos = HashCommon.mix(hasher.hash(k)) & mask;
             while (!((key[pos]) == null)) {
-                if (((k).equals(key[pos]))) {
+                if (k.equals(key[pos])) {
                     moveIndexToFirst(pos);
                     return false;
                 }
@@ -659,10 +727,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         } else {
             // The starting point.
             final K key[] = this.key;
-            pos = HashCommon.mix((k).hashCode()) & mask;
+            pos = HashCommon.mix(hasher.hash(k)) & mask;
             // There's always an unused entry.
-            while (!((key[pos]) == null)) {
-                if (((k).equals(key[pos]))) {
+            while (!(key[pos] == null)) {
+                if ((k.equals(key[pos]))) {
                     moveIndexToLast(pos);
                     return false;
                 }
@@ -700,16 +768,15 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix((k)
-                .hashCode())) & mask]) == null))
+        if (((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null))
             return null;
-        if (((k).equals(curr)))
+        if ((k.equals(curr)))
             return curr;
         // There's always an unused entry.
         while (true) {
             if (((curr = key[pos = (pos + 1) & mask]) == null))
                 return null;
-            if (((k).equals(curr)))
+            if ((k.equals(curr)))
                 return curr;
         }
     }
@@ -721,8 +788,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if (((curr = key[pos = (HashCommon.mix(k
-                .hashCode())) & mask]) == null))
+        if (((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null))
             return false;
         if ((k.equals(curr)))
             return true;
@@ -1057,8 +1123,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                             key[last] = null;
                             return;
                         }
-                        slot = (HashCommon.mix((curr)
-                                .hashCode())) & mask;
+                        slot = HashCommon.mix(hasher.hash(curr)) & mask;
                         if (last <= pos
                                 ? last >= slot || slot > pos
                                 : last >= slot && slot > pos)
@@ -1214,7 +1279,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             if (((key[i]) == null))
                 pos = newN;
             else {
-                pos = (HashCommon.mix((key[i]).hashCode())) & mask;
+                pos = HashCommon.mix(hasher.hash(key[i])) & mask;
                 while (!((newKey[pos]) == null))
                     pos = (pos + 1) & mask;
             }
@@ -1297,6 +1362,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             c.key = (K[]) new Object[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
             c.order = (IntVLA) order.clone();
+            c.hasher = hasher;
             return c;
         } catch (CloneNotSupportedException cantHappen) {
             throw new InternalError(cantHappen + (cantHappen.getMessage() != null ?
@@ -1319,7 +1385,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             while (((key[i]) == null))
                 i++;
             if (this != key[i])
-                h += ((key[i]).hashCode());
+                h += hasher.hash(key[i]);
             i++;
         }
         // Zero / null have hash zero.
@@ -1370,15 +1436,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
 
         private HashCommon() {
         }
-
-        ;
-
-        /**
-         * This reference is used to fill keys and values of removed entries (if
-         * they are objects). <code>null</code> cannot be used as it would confuse the
-         * search algorithm in the presence of an actual <code>null</code> key.
-         */
-        public static final Object REMOVED = new Object();
 
         /**
          * 2<sup>32</sup> &middot; &phi;, &phi; = (&#x221A;5 &minus; 1)/2.
@@ -1522,17 +1579,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             x |= x >> 16;
             return (x | x >> 32) + 1;
         }
-
-        /**
-         * Returns the least power of two larger than or equal to <code>Math.ceil( expected / f )</code>.
-         *
-         * @param expected the expected number of elements in a hash table.
-         * @param f        the load factor.
-         * @return the minimum possible size for a backing big array.
-         */
-        static long bigArraySize(final long expected, final float f) {
-            return nextPowerOfTwo((long) Math.ceil(expected / f));
-        }
     }
     @Override
     public Object[] toArray() {
@@ -1613,6 +1659,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             throws java.io.IOException {
         final ListIterator<K> i = iterator();
         s.defaultWriteObject();
+        s.writeObject(hasher);
         for (int j = size; j-- != 0;)
             s.writeObject(i.next());
     }
@@ -1621,6 +1668,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
+        hasher = (CrossHash.IHasher) s.readObject();
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;
@@ -1635,8 +1683,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                 pos = n;
                 containsNull = true;
             } else {
-                if (!((key[pos = (HashCommon.mix((k)
-                        .hashCode())) & mask]) == null))
+                if (!((key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null))
                     while (!((key[pos = (pos + 1) & mask]) == null));
             }
             key[pos] = k;

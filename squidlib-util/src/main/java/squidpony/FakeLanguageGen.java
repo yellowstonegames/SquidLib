@@ -25,14 +25,13 @@ public class FakeLanguageGen implements Serializable {
     public final String[] openingVowels, midVowels, openingConsonants, midConsonants, closingConsonants,
             vowelSplitters, closingSyllables;
     public boolean clean;
-    public final IntDoubleOrderedMap syllableFrequencies; //LinkedHashMap<Integer, Double>
+    public final IntDoubleOrderedMap syllableFrequencies;
     protected double totalSyllableFrequency = 0.0;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final StatefulRNG srng = new StatefulRNG();
     static final Pattern repeats = Pattern.compile("(.)\\1+");
-    //, diacritics = Pattern.compile("[\u0300-\u036F\u1DC0-\u1DFF]+");
     static final Pattern[]
             vulgarChecks = new Pattern[]
             {
