@@ -284,7 +284,7 @@ public class LanguageGenTest {
                 System.out.println(cipher.decipher(s, cipher.reverse));
             }
             System.out.println();
-
+            /*
             cipher = new LanguageCipher(lang, 0x123456789L);
             ctr = 0;
             for (String s : oz) {
@@ -302,7 +302,7 @@ public class LanguageGenTest {
                 System.out.println(cipher.decipher(s, cipher.reverse));
             }
             System.out.println();
-
+            */
         }
         /*
         StatefulRNG nrng = new StatefulRNG("SquidLib!");
