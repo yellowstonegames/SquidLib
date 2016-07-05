@@ -1,17 +1,31 @@
 package squidpony.squidmath;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Region encoding of 64x64 areas as a number of long arrays; uncompressed (fatty), but fast (greased lightning).
  * Created by Tommy Ettinger on 6/24/2016.
  */
-public class GreasedRegion {
+public class GreasedRegion implements Serializable {
+    private static final long serialVersionUID = 0;
+
     public long[] data;
     public int height;
     public int width;
     private int ySections;
     private long yEndMask;
+
+    public GreasedRegion()
+    {
+        width = 64;
+        height = 64;
+        ySections = 1;
+        yEndMask = -1L;
+        data = new long[64];
+    }
+
     public GreasedRegion(boolean[][] bits)
     {
         width = bits.length;
@@ -32,7 +46,6 @@ public class GreasedRegion {
         height = map[0].length;
         ySections = (height + 63) >> 6;
         yEndMask = (-1L >>> (64 - (height & 63)));
-        //yEndMask = ~(-1L << (height & 63));
         data = new long[width * ySections];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -41,7 +54,7 @@ public class GreasedRegion {
         }
     }
 
-    public GreasedRegion(boolean[] bits, int height, int width)
+    public GreasedRegion(boolean[] bits, int width, int height)
     {
         this.width = width;
         this.height = height;
@@ -50,6 +63,33 @@ public class GreasedRegion {
         data = new long[width * ySections];
         for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
             if(bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+        }
+    }
+
+    public GreasedRegion(Coord single, int width, int height)
+    {
+        this.width = width;
+        this.height = height;
+        ySections = (height + 63) >> 6;
+        yEndMask = (-1L >>> (64 - (height & 63)));
+        data = new long[width * ySections];
+        data[single.x * ySections + (single.y >> 6)] |= 1L << (single.y & 63);
+    }
+
+    public GreasedRegion(int width, int height, Coord... points)
+    {
+        this.width = width;
+        this.height = height;
+        ySections = (height + 63) >> 6;
+        yEndMask = (-1L >>> (64 - (height & 63)));
+        data = new long[width * ySections];
+        if(points != null)
+        {
+            for (int i = 0, x, y; i < points.length; i++) {
+                x = points[i].x;
+                y = points[i].y;
+                data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+            }
         }
     }
 
@@ -62,6 +102,7 @@ public class GreasedRegion {
         data = new long[width * ySections];
         System.arraycopy(other.data, 0, data, 0, width * ySections);
     }
+
     public GreasedRegion remake(GreasedRegion other) {
         if (width == other.width && height == other.height) {
             System.arraycopy(other.data, 0, data, 0, width * ySections);
@@ -76,6 +117,12 @@ public class GreasedRegion {
             return this;
         }
     }
+
+    public GreasedRegion copy()
+    {
+        return new GreasedRegion(this);
+    }
+
     public boolean[][] decode()
     {
         boolean[][] bools = new boolean[width][height];
@@ -179,7 +226,7 @@ public class GreasedRegion {
 
     public GreasedRegion translate(int x, int y)
     {
-        if(width < 2 || ySections == 0 || (x == 0 && y == 0))
+        if(width < 2 || ySections <= 0 || (x == 0 && y == 0))
             return this;
 
         long[] data2 = new long[width * ySections];
@@ -237,10 +284,10 @@ public class GreasedRegion {
         System.arraycopy(data, 0, next, 0, width * ySections);
         for (int a = 0; a < ySections; a++) {
             next[a] |= (data[a] << 1) | (data[a] >>> 1) | (data[a+ySections]);
-            next[width-ySections+a] |= (data[width-ySections+a] << 1) | (data[width-ySections+a] >>> 1) | (data[width-ySections*2+a]);
+            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1) | (data[(width-2)*ySections+a]);
 
-            for (int i = ySections; i < (width - 1) * ySections; i+= ySections) {
-                next[i+a] |= (data[i+a] << 1) | (data[i+a] >>> 1) | (data[i - ySections+a]) | (data[i + ySections+a]);
+            for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
+                next[i] |= (data[i] << 1) | (data[i] >>> 1) | (data[i - ySections]) | (data[i + ySections]);
             }
 
             if(a > 0) {
@@ -265,16 +312,30 @@ public class GreasedRegion {
         return this;
     }
 
+    public GreasedRegion expand(int amount)
+    {
+        for (int i = 0; i < amount; i++) {
+            expand();
+        }
+        return this;
+    }
+
     public GreasedRegion fringe()
     {
         GreasedRegion cpy = new GreasedRegion(this);
         expand();
         return andNot(cpy);
     }
+    public GreasedRegion fringe(int amount)
+    {
+        GreasedRegion cpy = new GreasedRegion(this);
+        expand(amount);
+        return andNot(cpy);
+    }
 
     public GreasedRegion retract()
     {
-        if(width <= 2 || ySections == 0)
+        if(width <= 2 || ySections <= 0)
             return this;
 
         long[] next = new long[width * ySections];
@@ -320,18 +381,27 @@ public class GreasedRegion {
         data = next;
         return this;
     }
-
+    public GreasedRegion retract(int amount)
+    {
+        for (int i = 0; i < amount; i++) {
+            retract();
+        }
+        return this;
+    }
     public GreasedRegion surface()
     {
         GreasedRegion cpy = new GreasedRegion(this).retract();
         return xor(cpy);
     }
-
-
+    public GreasedRegion surface(int amount)
+    {
+        GreasedRegion cpy = new GreasedRegion(this).retract(amount);
+        return xor(cpy);
+    }
 
     public GreasedRegion expand8way()
     {
-        if(width < 2 || ySections == 0)
+        if(width < 2 || ySections <= 0)
             return this;
 
         long[] next = new long[width * ySections];
@@ -339,8 +409,8 @@ public class GreasedRegion {
         for (int a = 0; a < ySections; a++) {
             next[a] |= (data[a] << 1) | (data[a] >>> 1)
                     | (data[a+ySections]) | (data[a+ySections] << 1) | (data[a+ySections] >>> 1);
-            next[width-ySections+a] |= (data[width-ySections+a] << 1) | (data[width-ySections+a] >>> 1)
-                    | (data[width-ySections*2+a]) | (data[width-ySections*2+a] << 1) | (data[width-ySections*2+a] >>> 1);
+            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1)
+                    | (data[(width-2)*ySections+a]) | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1);
 
             for (int i = ySections+a; i < (width - 1) * ySections; i+= ySections) {
                 next[i] |= (data[i] << 1) | (data[i] >>> 1)
@@ -374,16 +444,29 @@ public class GreasedRegion {
         return this;
     }
 
+    public GreasedRegion expand8way(int amount)
+    {
+        for (int i = 0; i < amount; i++) {
+            expand8way();
+        }
+        return this;
+    }
     public GreasedRegion fringe8way()
     {
         GreasedRegion cpy = new GreasedRegion(this);
         expand8way();
         return andNot(cpy);
     }
+    public GreasedRegion fringe8way(int amount)
+    {
+        GreasedRegion cpy = new GreasedRegion(this);
+        expand8way(amount);
+        return andNot(cpy);
+    }
 
     public GreasedRegion retract8way()
     {
-        if(width <= 2 || ySections == 0)
+        if(width <= 2 || ySections <= 0)
             return this;
 
         long[] next = new long[width * ySections];
@@ -449,6 +532,13 @@ public class GreasedRegion {
         return this;
     }
 
+    public GreasedRegion retract8way(int amount)
+    {
+        for (int i = 0; i < amount; i++) {
+            retract8way();
+        }
+        return this;
+    }
 
     public GreasedRegion surface8way()
     {
@@ -456,6 +546,201 @@ public class GreasedRegion {
         return xor(cpy);
     }
 
+    public GreasedRegion surface8way(int amount)
+    {
+        GreasedRegion cpy = new GreasedRegion(this).retract8way(amount);
+        return xor(cpy);
+    }
+    public GreasedRegion flood(GreasedRegion bounds)
+    {
+        if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
+            return this;
+
+        long[] next = new long[width * ySections];
+        for (int a = 0; a < ySections && a < bounds.ySections; a++) {
+            next[a] |= (data[a] |(data[a] << 1) | (data[a] >>> 1) | (data[a+ySections])) & bounds.data[a];
+            next[(width-1)*ySections+a] = (data[(width-1)*ySections+a] | (data[(width-1)*ySections+a] << 1)
+                    | (data[(width-1)*ySections+a] >>> 1) | (data[(width-2)*ySections+a])) & bounds.data[(width-1)*bounds.ySections+a];
+
+            for (int i = ySections+a, j = bounds.ySections+a; i < (width - 1) * ySections &&
+                    j < (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {
+                next[i] = (data[i] | (data[i] << 1) | (data[i] >>> 1) | (data[i - ySections]) | (data[i + ySections])) & bounds.data[j];
+            }
+
+            if(a > 0) {
+                for (int i = ySections+a, j = bounds.ySections+a; i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections;
+                     i+= ySections, j += bounds.ySections) {
+                    next[i] = (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63)) & bounds.data[j];
+                }
+            }
+
+            if(a < ySections - 1 && a < bounds.ySections - 1) {
+                for (int i = ySections+a, j = bounds.ySections+a;
+                     i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections; i+= ySections, j += bounds.ySections) {
+                    next[i] = (data[i] | ((data[i + 1] & 1L) << 63)) & bounds.data[j];
+                }
+            }
+        }
+
+        if(yEndMask != -1 && bounds.yEndMask != -1) {
+            if(ySections == bounds.ySections) {
+                long mask = ((yEndMask >>> 1) <= (bounds.yEndMask >>> 1))
+                        ? yEndMask : bounds.yEndMask;
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= mask;
+                }
+            }
+            else if(ySections < bounds.ySections) {
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= yEndMask;
+                }
+            }
+            else {
+                for (int a = bounds.ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= bounds.yEndMask;
+                }
+            }
+        }
+        data = next;
+        return this;
+    }
+
+    public GreasedRegion flood(GreasedRegion bounds, int amount)
+    {
+        int ct = count(), ct2;
+        for (int i = 0; i < amount; i++) {
+            flood(bounds);
+            if(ct == (ct2 = count()))
+                break;
+            else
+                ct = ct2;
+
+        }
+        return this;
+    }
+    public GreasedRegion flood8way(GreasedRegion bounds)
+    {
+        if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
+            return this;
+
+        long[] next = new long[width * ySections];
+        for (int a = 0; a < ySections && a < bounds.ySections; a++) {
+            next[a] = (data[a] | (data[a] << 1) | (data[a] >>> 1)
+                    | (data[a+ySections]) | (data[a+ySections] << 1) | (data[a+ySections] >>> 1)) & bounds.data[a];
+            next[(width-1)*ySections+a] = (data[(width-1)*ySections+a]
+                    | (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1)
+                    | (data[(width-2)*ySections+a]) | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1))
+                    & bounds.data[(width-1)*bounds.ySections+a];
+
+            for (int i = ySections+a, j = bounds.ySections+a; i < (width - 1) * ySections &&
+                    j < (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {
+                next[i] = (data[i] | (data[i] << 1) | (data[i] >>> 1)
+                        | (data[i - ySections]) | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
+                        | (data[i + ySections]) | (data[i + ySections] << 1) | (data[i + ySections] >>> 1))
+                        & bounds.data[j];
+            }
+
+            if(a > 0) {
+                for (int i = ySections+a, j = bounds.ySections+a; i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections;
+                     i+= ySections, j += bounds.ySections) {
+                    next[i] = (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63) |
+                            ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63) |
+                            ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63)) & bounds.data[j];
+                }
+            }
+
+            if(a < ySections - 1 && a < bounds.ySections - 1) {
+                for (int i = ySections+a, j = bounds.ySections+a;
+                     i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections; i+= ySections, j += bounds.ySections) {
+                    next[i] = (data[i] | ((data[i + 1] & 1L) << 63) |
+                            ((data[i - ySections + 1] & 1L) << 63) |
+                            ((data[i + ySections+ 1] & 1L) << 63)) & bounds.data[j];
+                }
+            }
+        }
+
+        if(yEndMask != -1 && bounds.yEndMask != -1) {
+            if(ySections == bounds.ySections) {
+                long mask = ((yEndMask >>> 1) <= (bounds.yEndMask >>> 1))
+                        ? yEndMask : bounds.yEndMask;
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= mask;
+                }
+            }
+            else if(ySections < bounds.ySections) {
+                for (int a = ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= yEndMask;
+                }
+            }
+            else {
+                for (int a = bounds.ySections - 1; a < next.length; a += ySections) {
+                    next[a] &= bounds.yEndMask;
+                }
+            }
+        }
+        data = next;
+        return this;
+    }
+
+    public GreasedRegion flood8way(GreasedRegion bounds, int amount)
+    {
+        int ct = count(), ct2;
+        for (int i = 0; i < amount; i++) {
+            flood8way(bounds);
+            if(ct == (ct2 = count()))
+                break;
+            else
+                ct = ct2;
+        }
+        return this;
+    }
+    /**
+     * If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
+     * are only adjacent diagonally are considered separate from each other) and returns it as an element in an
+     * ArrayList of GreasedRegion, with one GreasedRegion per isolated area. Useful when you have, for example, all the
+     * rooms in a dungeon with their connecting corridors removed, but want to separate the rooms. You can get the
+     * aforementioned data assuming a bare dungeon called map using:
+     * <br>
+     * {@code GreasedRegion floors = new GreasedRegion(map, '.'),
+     * rooms = floors.copy().retract8way().flood(floors, 2),
+     * corridors = floors.copy().andNot(rooms),
+     * doors = rooms.copy().and(corridors.copy().fringe());}
+     * <br>
+     * You can then get all rooms as separate regions with {@code List<GreasedRegion> apart = split(rooms);}, or
+     * substitute {@code split(corridors)} to get the corridors. The room-finding technique works by shrinking floors
+     * by a radius of 1 (8-way), which causes thin areas like corridors of 2 or less width to be removed, then
+     * flood-filling the floors out from the area that produces by 2 cells (4-way this time) to restore the original
+     * size of non-corridor areas (plus some extra to ensure odd shapes are kept). Corridors are obtained by removing
+     * the rooms from floors. The example code also gets the doors (which overlap with rooms, not corridors) by finding
+     * where the a room and a corridor are adjacent. This technique is used with some enhancements in the RoomFinder
+     * class.
+     * @see squidpony.squidgrid.mapping.RoomFinder for a class that uses this technique without exposing GreasedRegion
+     * @return an ArrayList containing each unconnected area from packed as a GreasedRegion element
+     */
+    public ArrayList<GreasedRegion> split()
+    {
+        ArrayList<GreasedRegion> scattered = new ArrayList<>(32);
+        Coord fst = first();
+        GreasedRegion remaining = new GreasedRegion(this);
+        while (fst.x >= 0) {
+            GreasedRegion filled  = new GreasedRegion(fst, width, height).flood(remaining, width * height);
+            scattered.add(filled);
+            remaining.andNot(filled);
+            fst = remaining.first();
+        }
+        return scattered;
+    }
+
+    public boolean intersects(GreasedRegion other)
+    {
+        for (int x = 0; x < width && x < other.width; x++) {
+            for (int y = 0; y < ySections && y < other.ySections; y++) {
+                if((data[x * ySections + y] & other.data[x * ySections + y]) != 0)
+                    return true;
+            }
+        }
+        return false;
+    }
 
     public int count()
     {
@@ -487,6 +772,19 @@ public class GreasedRegion {
             }
         }
         return points;
+    }
+
+    public Coord first()
+    {
+        long t, w;
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0) {
+                    return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                }
+            }
+        }
+        return new Coord(-1, -1);
     }
 
     public Coord singleRandom(RNG rng)

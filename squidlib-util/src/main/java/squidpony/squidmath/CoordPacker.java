@@ -1652,8 +1652,8 @@ public class CoordPacker {
      * returns true if the region checking has some overlap with any of the packed arrays, or false otherwise.
      * @param checking the packed data to check for overlap with the other regions
      * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
-     *               returned by packMulti(); null elements in packed will be skipped.
-     * @return an ArrayList of all packed arrays that store true at the given x,y location.
+     *               returned by packMulti(); null elements in packed will be skipped
+     * @return true if checking overlaps with any of the packed arrays, or false otherwise
      */
     public static boolean regionsContain(short[] checking, short[] ... packed)
     {
@@ -4588,9 +4588,9 @@ public class CoordPacker {
      * aforementioned data assuming a bare dungeon called map with WIDTH and HEIGHT constants using:
      * <br>
      * {@code short[] floors = pack(map, '.'),
-     * rooms = flood(floors, retract(floors, 1, 60, 60, true), 2, false),
+     * rooms = flood(floors, retract(floors, 1, WIDTH, HEIGHT, true), 2, false),
      * corridors = differencePacked(floors, rooms),
-     * doors = intersectPacked(rooms, fringe(corridors, 1, 60, 60, false));}
+     * doors = intersectPacked(rooms, fringe(corridors, 1, WIDTH, HEIGHT, false));}
      * <br>
      * You can then get all rooms as separate regions with {@code List<short[]> apart = split(rooms);}, or substitute
      * {@code split(corridors)} to get the corridors. The room-finding technique works by shrinking floors by a radius
@@ -4622,7 +4622,9 @@ public class CoordPacker {
             }
         }
         return arrays;
-    }public static short[] removeIsolated(short[] packed)
+    }
+
+    public static short[] removeIsolated(short[] packed)
     {
         short[] remaining = new short[packed.length], viable = new short[packed.length];
         System.arraycopy(packed, 0, remaining, 0, packed.length);
