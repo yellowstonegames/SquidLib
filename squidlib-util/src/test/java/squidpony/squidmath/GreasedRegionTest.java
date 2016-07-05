@@ -131,6 +131,16 @@ public class GreasedRegionTest {
         GreasedRegion bonus2 = new GreasedRegion(dataCross2).expand8way();
         printRegion(bonus2);
         assertTrue(new GreasedRegion(bonus2).andNot(edge2).equals(dataCross2));
+
+
+        GreasedRegion flooded = new GreasedRegion(Coord.get(26, 2), 64, 64).flood(dataCross, 2);
+        GreasedRegion manual = new GreasedRegion(64, 64, Coord.get(25, 2), Coord.get(26, 2), Coord.get(27, 2), Coord.get(28, 2),
+                Coord.get(25, 3), Coord.get(26, 3), Coord.get(27, 3),
+                Coord.get(26, 4));
+        printRegion(flooded);
+        printRegion(manual);
+        assertTrue(flooded.equals(manual));
+
     }
     @Test
     public void testRetracting() {
