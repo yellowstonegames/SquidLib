@@ -1,9 +1,6 @@
 package squidpony;
 
-import regexodus.MatchResult;
-import regexodus.Matcher;
-import regexodus.Pattern;
-import regexodus.Replacer;
+import regexodus.*;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.IntDoubleOrderedMap;
 import squidpony.squidmath.RNG;
@@ -31,7 +28,13 @@ public class FakeLanguageGen implements Serializable {
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final StatefulRNG srng = new StatefulRNG();
-    static final Pattern repeats = Pattern.compile("(.)\\1+");
+    static final Pattern repeats = Pattern.compile("(.)\\1+"),
+    vowelClusters = Pattern.compile(
+            "[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+",
+            REFlags.IGNORE_CASE | REFlags.UNICODE),
+    consonantClusters = Pattern.compile(
+            "[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+",
+            REFlags.IGNORE_CASE | REFlags.UNICODE);
     static final Pattern[]
             vulgarChecks = new Pattern[]
             {
@@ -50,6 +53,23 @@ public class FakeLanguageGen implements Serializable {
                     Pattern.compile("[MmмМΜ]..?[rяЯ].?d"), // should pick up the #1 obscenity from Spanish and French
                     Pattern.compile("[Gg][HhнН]?[aаαАΑΛeеёзξεЕЁЗΞΕΣ][yуλγУΥeеёзξεЕЁЗΞΕΣ]") // could be inappropriate for random text
             },
+            genericSanityChecks = new Pattern[]
+                    {
+                            Pattern.compile("[AEIOUaeiou]{3}"),
+                            Pattern.compile("(\\p{L})\\1\\1"),
+                            Pattern.compile("[Uu][uoj]"),
+                            Pattern.compile("[Ii][iyqhl]"),
+                            Pattern.compile("[Yy]([aiu])\\1"),
+                            Pattern.compile("[Rr][aeiouy]+[rh]"),
+                            Pattern.compile("[Qq]u[yu]"),
+                            Pattern.compile("[^oaei]uch"),
+                            Pattern.compile("[Hh][tcszi]?h"),
+                            Pattern.compile("[Tt]t[^aeiouy]{2}"),
+                            Pattern.compile("[Yy]h([^aeiouy]|$)"),
+                            Pattern.compile("[szSZrlRL][^aeiou][rlsz]"),
+                            Pattern.compile("[UIuiYy][wy]"),
+                            Pattern.compile("^[UIui][ae]")
+                    },
             englishSanityChecks = new Pattern[]
                     {
                             Pattern.compile("[AEIOUaeiou]{3}"),
@@ -59,14 +79,13 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("[Uu][umlkj]"),
                             Pattern.compile("[Ii][iyqkhrl]"),
                             Pattern.compile("[Oo][c]"),
-                            Pattern.compile("[Yy][aeiou]{2}"),
-                            Pattern.compile("[Rr][aeiouy]+[xrhp]"),
+                            Pattern.compile("[Yy]([aiu])\\1"),
+                            Pattern.compile("[Rr][aeiouy]+[rh]"),
                             Pattern.compile("[Qq]u[yu]"),
-                            Pattern.compile("[^oai]uch"),
-                            Pattern.compile("[^tcsz]hh"),
-                            Pattern.compile("[Hh][tcszi]h"),
+                            Pattern.compile("[^oaei]uch"),
+                            Pattern.compile("[Hh][tcszi]?h"),
                             Pattern.compile("[Tt]t[^aeiouy]{2}"),
-                            Pattern.compile("[IYiy]h[^aeiouy ]"),
+                            Pattern.compile("[Yy]h([^aeiouy]|$)"),
                             Pattern.compile("[szSZrlRL][^aeiou][rlsz]"),
                             Pattern.compile("[UIuiYy][wy]"),
                             Pattern.compile("^[UIui][ae]"),
@@ -136,19 +155,19 @@ public class FakeLanguageGen implements Serializable {
 
     static final char[][] accentedVowels = new char[][]{
             new char[]{
-                    'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ā', 'ă', 'ą', 'ǻ', 'ǽ'
+                    'a', 'à', 'á', 'â', 'ä', 'ā', 'ă', 'ã', 'å', 'æ', 'ą', 'ǻ', 'ǽ'
             },
             new char[]{
-                    'è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'
+                    'e', 'è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'
             },
             new char[]{
-                    'ì', 'í', 'î', 'ï', 'ĩ', 'ī', 'ĭ', 'į', 'ı',
+                    'i', 'ì', 'í', 'î', 'ï', 'ī', 'ĭ', 'ĩ', 'į', 'ı',
             },
             new char[]{
-                    'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ō', 'ŏ', 'ő', 'œ', 'ǿ'
+                    'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ő', 'œ', 'ǿ'
             },
             new char[]{
-                    'ù', 'ú', 'û', 'ü', 'ũ', 'ū', 'ŭ', 'ů', 'ű', 'ų'
+                    'u', 'ù', 'ú', 'û', 'ü', 'ū', 'ŭ', 'ũ', 'ů', 'ű', 'ų'
             }
     },
             accentedConsonants = new char[][]
@@ -314,20 +333,24 @@ public class FakeLanguageGen implements Serializable {
                     "ough", "aught", "ant", "ont", "oe", "ance", "ell", "eal", "oa", "urt", "ut", "iom", "ion", "ion", "ision", "ation", "ation", "ition",
                     "ily", "ily", "ily", "adly", "owly", "oorly", "ardly", "iedly",
             },
-            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{7, 8, 4, 1}, 0.22, 0.1, 0.0, 0.25, englishSanityChecks, true);
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{10, 11, 4, 1}, 0.22, 0.1, 0.0, 0.22, englishSanityChecks, true);
     /**
      * Imitation ancient Greek, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
      * <br>
      * Psuilas alor; aipeomarta le liaspa...
      */
     public static final FakeLanguageGen GREEK_ROMANIZED = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "o", "o", "o", "e", "e", "i", "i", "i", "au", "ai", "ai", "oi", "oi", "ia", "io", "ou", "ou", "eo", "ei"},
-            new String[]{"ui", "ei"},
-            new String[]{"rh", "s", "z", "t", "t", "k", "ch", "n", "th", "kth", "m", "p", "ps", "b", "l", "kr", "g", "phth"},
+            new String[]{"a", "a", "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "i", "i", "au", "ai", "ai", "oi", "oi",
+                    "ia", "io", "u", "u", "eo", "ei", "o", "o", "ou", "oi", "y", "y", "y", "y"},
+            new String[]{"ui", "ui", "ei", "ei"},
+            new String[]{"rh", "s", "z", "t", "t", "k", "ch", "n", "th", "kth", "m", "p", "ps", "b", "l", "kr",
+                    "g", "phth", "d", "t", "k", "ch", "n", "ph", "ph", "k", },
             new String[]{"lph", "pl", "l", "l", "kr", "nch", "nx", "ps"},
-            new String[]{"s", "p", "t", "ch", "n", "m", "s", "p", "t", "ch", "n", "m", "b", "g", "st", "rst", "rt", "sp", "rk", "ph", "x", "z", "nk", "ng", "th"},
-            new String[]{"os", "os", "is", "us", "um", "eum", "ium", "iam", "us", "um", "es", "anes", "eros", "or", "ophon", "on", "otron"},
-            new String[]{}, new int[]{1, 2, 3}, new double[]{5, 7, 4}, 0.45, 0.45, 0.0, 0.3, null, true);
+            new String[]{"s", "p", "t", "ch", "n", "m", "s", "p", "t", "ch", "n", "m", "b", "g", "st", "rst",
+                    "rt", "sp", "rk", "ph", "x", "z", "nk", "ng", "th", "d", "k", "n", "n", },
+            new String[]{"os", "os", "os", "is", "is", "us", "um", "eum", "ium", "iam", "us", "um", "es",
+                    "anes", "eros", "or", "or", "ophon", "on", "on", "ikon", "otron", "ik",},
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 7, 4, 1}, 0.45, 0.45, 0.0, 0.3, null, true);
     /**
      * Imitation ancient Greek, using the original Greek alphabet. People may try to translate it and get gibberish.
      * Make sure the font you use to render this supports the Greek alphabet! In the GDX display module, the "smooth"
@@ -336,13 +359,17 @@ public class FakeLanguageGen implements Serializable {
      * Ψυιλασ αλορ; αιπεομαρτα λε λιασπα...
      */
     public static final FakeLanguageGen GREEK_AUTHENTIC = new FakeLanguageGen(
-            new String[]{"α", "α", "α", "ο", "ο", "ο", "ε", "ε", "ι", "ι", "ι", "αυ", "αι", "αι", "οι", "οι", "ια", "ιο", "ου", "ου", "εο", "ει"},
-            new String[]{"υι", "ει"},
-            new String[]{"ρ", "σ", "ζ", "τ", "τ", "κ", "χ", "ν", "θ", "κθ", "μ", "π", "ψ", "β", "λ", "κρ", "γ", "φθ"},
+            new String[]{"α", "α", "α", "α", "α", "ο", "ο", "ε", "ε", "ε", "ι", "ι", "ι", "ι", "ι", "αυ", "αι", "αι", "οι", "οι",
+                    "ια", "ιο", "ου", "ου", "εο", "ει", "ω", "ω", "ωυ", "ωι", "υ", "υ", "υ", "υ"},
+            new String[]{"υι", "υι", "ει", "ει"},
+            new String[]{"ρ", "σ", "ζ", "τ", "τ", "κ", "χ", "ν", "θ", "κθ", "μ", "π", "ψ", "β", "λ", "κρ",
+                    "γ", "φθ", "δ", "τ", "κ", "χ", "ν", "φ", "φ", "κ",},
             new String[]{"λφ", "πλ", "λ", "λ", "κρ", "γχ", "γξ", "ψ"},
-            new String[]{"σ", "π", "τ", "χ", "ν", "μ", "σ", "π", "τ", "χ", "ν", "μ", "β", "γ", "στ", "ρστ", "ρτ", "σπ", "ρκ", "φ", "ξ", "ζ", "γκ", "γγ", "θ"},
-            new String[]{"ος", "ος", "ις", "υς", "υμ", "ευμ", "ιυμ", "ιαμ", "υς", "υμ", "ες", "ανες", "ερος", "ορ", "οφον", "ον", "οτρον"},
-            new String[]{}, new int[]{1, 2, 3}, new double[]{5, 7, 4}, 0.45, 0.45, 0.0, 0.3, null, true);
+            new String[]{"σ", "π", "τ", "χ", "ν", "μ", "σ", "π", "τ", "χ", "ν", "μ", "β", "γ", "στ", "ρστ",
+                    "ρτ", "σπ", "ρκ", "φ", "ξ", "ζ", "γκ", "γγ", "θ", "δ", "κ", "ν", "ν",},
+            new String[]{"ος", "ος", "ος", "ις", "ις", "υς", "υμ", "ευμ", "ιυμ", "ιαμ", "υς", "υμ", "ες",
+                    "ανες", "ερος", "ορ", "ορ", "οφον", "ον", "ον", "ικον", "οτρον", "ικ",},
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 7, 4, 1}, 0.45, 0.45, 0.0, 0.3, null, true);
 
     /**
      * Imitation modern French, using (too many of) the accented vowels that are present in the language. Translating it
@@ -565,10 +592,8 @@ public class FakeLanguageGen implements Serializable {
                     "ng", "ng", "ng", "ng", "ng"
             },
             new String[]{""},
-            new String[]{"a-@2a", "a-@2a", "a-@3a","a-@2a", "a-@2a", "a-@3a","i-@2i", "i-@2i", "i-@3i",
-                    "e-@2e", "e-@2e", "e-@3e", "u-@2u", "u-@2u", "u-@3u",
-            },
-            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{1, 7, 6, 4, 2}, 0.2, 1.0, 0.0, 0.25, null, true);
+            new String[]{"-@"},
+            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 8, 6, 9, 2, 2}, 0.2, 1.0, 0.0, 0.3, null, true);
 
     /**
      * Imitation Somali, using the Latin alphabet. Due to uncommon word structure, unusual allowed combinations of
@@ -624,7 +649,7 @@ public class FakeLanguageGen implements Serializable {
      * Imitation Hindi, romanized to use the Latin alphabet using accented glyphs similar to the IAST standard.
      * Most fonts do not support the glyphs that IAST-standard romanization of Hindi needs, so this uses alternate
      * glyphs from at most Latin Extended-A. Relative to HINDI_IAST, also defined here, the IAST standard glyphs
-     * {@code "ŗŕļĺđţńņşĕĭ"} become {@code "ŗŕļĺđţńņşĕĭ"}, with the nth glyph in the first string being substituted
+     * {@code "ṛṝḷḹḍṭṅṇṣṃḥ"} become {@code "ŗŕļĺđţńņşĕĭ"}, with the nth glyph in the first string being substituted
      * with the nth glyph in the second string. This version of imitation Hindi is preferred over the IAST kind because
      * font support is much better for the glyphs this version uses.
      * <br>
@@ -1363,7 +1388,9 @@ public class FakeLanguageGen implements Serializable {
      * rare glyphs that SquidLib's fonts in the display module can't support. Using the conventions this FakeLanguageGen
      * does for writing the Arabic glyph names, these are: ţāδ becomes ţ, ĥāδ becomes ĥ, ħāδ becomes ħ, đāl becomes
      * đ, šīn becomes š, şād becomes ş, ďād becomes ď, ťāδ becomes ť, żāδ becomes ż, gain becomes g, wāw becomes ū, and
-     * yāδ becomes ī.
+     * yāδ becomes ī. You can add the modifier {@link FakeLanguageGen.Modifier#SIMPLIFY_ARABIC} to this FakeLanguageGen
+     * to remove the hard-or-impossible-to-pronounce greek letters and most accents from the generated text and use
+     * English-like blends such as "sh" in place of accented letters.
      * <br>
      * Please try to be culturally-sensitive about how you use this generator. Classical Arabic (the variant that
      * normally marks vowels explicitly and is used to write the Qur'an) has deep religious significance in Islam, and
@@ -1377,6 +1404,7 @@ public class FakeLanguageGen implements Serializable {
      * of language, like GREEK_ROMANIZED or RUSSIAN_AUTHENTIC, to emphasize that this is not a real-world language.
      * <br>
      * Iramzā qāşi, qīqa banji, rūşiďīq ifateh!
+     * @see FakeLanguageGen.Modifier#SIMPLIFY_ARABIC to make this more romanized and probaby more legible.
      */
     public static final FakeLanguageGen ARABIC_ROMANIZED = new FakeLanguageGen(
             new String[]{"a", "a", "a", "a", "a", "a", "ā", "ā", "ā", "ai", "au",
@@ -1666,7 +1694,7 @@ public class FakeLanguageGen implements Serializable {
      */
     public String word(RNG rng, boolean capitalize) {
         while(true) {
-            StringBuilder sb = new StringBuilder(20);
+            StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12);
             double syllableChance = rng.nextDouble(totalSyllableFrequency);
             int syllables = 1, i = 0;
             for (IntDoubleOrderedMap.MapEntry kv : syllableFrequencies.mapEntrySet()) {
@@ -1683,8 +1711,52 @@ public class FakeLanguageGen implements Serializable {
             } else {
                 sb.append(rng.getRandomElement(openingConsonants));
             }
+            String close = "";
+            boolean redouble = false;
+            if(i < syllables) {
+                if (rng.nextDouble() < syllableEndFrequency) {
+                    close = rng.getRandomElement(closingSyllables);
+                    if (close.contains("@") && (syllables & 1) == 0) {
+                        redouble = true;
+                        syllables = (syllables | 1) >> 1;
 
-            for (; i < syllables - 1; i++) {
+                        //sb.append(close.replaceAll("@\\d", sb.toString()));
+                    }
+                    if (!close.contains("@"))
+                        ender.append(close);
+                    else if (rng.nextDouble() < vowelEndFrequency) {
+                        ender.append(rng.getRandomElement(midVowels));
+                        if (rng.nextDouble() < vowelSplitFrequency) {
+                            ender.append(rng.getRandomElement(vowelSplitters));
+                            ender.append(rng.getRandomElement(midVowels));
+                        }
+                    }
+                } else {
+                    ender.append(rng.getRandomElement(midVowels));
+                    if (rng.nextDouble() < vowelSplitFrequency) {
+                        ender.append(rng.getRandomElement(vowelSplitters));
+                        ender.append(rng.getRandomElement(midVowels));
+                    }
+                    if (rng.nextDouble() >= vowelEndFrequency) {
+                        ender.append(rng.getRandomElement(closingConsonants));
+                        if (rng.nextDouble() < syllableEndFrequency) {
+                            close = rng.getRandomElement(closingSyllables);
+                            if (close.contains("@") && (syllables & 1) == 0) {
+                                redouble = true;
+                                syllables = (syllables | 1) >> 1;
+
+                                //sb.append(close.replaceAll("@\\d", sb.toString()));
+                            }
+                            if (!close.contains("@"))
+                                ender.append(close);
+                        }
+                    }
+                }
+                i += vowelClusters.matcher(ender).findAll().count();
+
+            }
+
+            for (; i < syllables; i++) {
                 sb.append(rng.getRandomElement(midVowels));
                 if (rng.nextDouble() < vowelSplitFrequency) {
                     sb.append(rng.getRandomElement(vowelSplitters));
@@ -1692,44 +1764,13 @@ public class FakeLanguageGen implements Serializable {
                 }
                 sb.append(rng.getRandomElement(midConsonants));
             }
-            if (rng.nextDouble() < syllableEndFrequency) {
-                String close = rng.getRandomElement(closingSyllables);
-                if((close.contains("@1") && syllables == 1) ||
-                        (close.contains("@2") && syllables == 2) ||
-                        (close.contains("@3") && syllables == 3) )
-                {
-                    sb.append(close.replaceAll("@\\d", sb.toString()));
-                }
-                else if(!close.contains("@"))
-                    sb.append(close);
-                else if (rng.nextDouble() < vowelEndFrequency) {
-                    sb.append(rng.getRandomElement(midVowels));
-                    if (rng.nextDouble() < vowelSplitFrequency) {
-                        sb.append(rng.getRandomElement(vowelSplitters));
-                        sb.append(rng.getRandomElement(midVowels));
-                    }
-                }
-            } else {
-                sb.append(rng.getRandomElement(midVowels));
-                if (rng.nextDouble() < vowelSplitFrequency) {
-                    sb.append(rng.getRandomElement(vowelSplitters));
-                    sb.append(rng.getRandomElement(midVowels));
-                }
-                if (rng.nextDouble() >= vowelEndFrequency) {
-                    sb.append(rng.getRandomElement(closingConsonants));
-                    if (rng.nextDouble() < syllableEndFrequency) {
-                        String close = rng.getRandomElement(closingSyllables);
-                        if((close.contains("@1") && syllables == 1) ||
-                                (close.contains("@2") && syllables == 2) ||
-                                (close.contains("@3") && syllables == 3) )
-                        {
-                            sb.append(close.replaceAll("@\\d", sb.toString()));
-                        }
-                        else if(!close.contains("@"))
-                            sb.append(close);
-                    }
-                }
+
+            sb.append(ender);
+            if(redouble && i <= syllables + 1)
+            {
+                sb.append(close.replaceAll("@", sb.toString()));
             }
+
             if(sanityChecks != null && !checkAll(sb, sanityChecks))
                 continue;
 
@@ -1760,7 +1801,7 @@ public class FakeLanguageGen implements Serializable {
             else return finished.substring(0, 1);
         }
         while(true) {
-            StringBuilder sb = new StringBuilder(20);
+            StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12);
             int i = 0;
             if (rng.nextDouble() < vowelStartFrequency) {
                 sb.append(rng.getRandomElement(openingVowels));
@@ -1769,8 +1810,51 @@ public class FakeLanguageGen implements Serializable {
             } else {
                 sb.append(rng.getRandomElement(openingConsonants));
             }
+            String close = "";
+            boolean redouble = false;
+            if(i < approxSyllables) {
+                if (rng.nextDouble() < syllableEndFrequency) {
+                    close = rng.getRandomElement(closingSyllables);
+                    if (close.contains("@") && (approxSyllables & 1) == 0) {
+                        redouble = true;
+                        approxSyllables = (approxSyllables | 1) >> 1;
 
-            for (; i < approxSyllables - 1; i++) {
+                        //sb.append(close.replaceAll("@\\d", sb.toString()));
+                    }
+                    if (!close.contains("@"))
+                        ender.append(close);
+                    else if (rng.nextDouble() < vowelEndFrequency) {
+                        ender.append(rng.getRandomElement(midVowels));
+                        if (rng.nextDouble() < vowelSplitFrequency) {
+                            ender.append(rng.getRandomElement(vowelSplitters));
+                            ender.append(rng.getRandomElement(midVowels));
+                        }
+                    }
+                } else {
+                    ender.append(rng.getRandomElement(midVowels));
+                    if (rng.nextDouble() < vowelSplitFrequency) {
+                        ender.append(rng.getRandomElement(vowelSplitters));
+                        ender.append(rng.getRandomElement(midVowels));
+                    }
+                    if (rng.nextDouble() >= vowelEndFrequency) {
+                        ender.append(rng.getRandomElement(closingConsonants));
+                        if (rng.nextDouble() < syllableEndFrequency) {
+                            close = rng.getRandomElement(closingSyllables);
+                            if (close.contains("@") && (approxSyllables & 1) == 0) {
+                                redouble = true;
+                                approxSyllables = (approxSyllables | 1) >> 1;
+
+                                //sb.append(close.replaceAll("@\\d", sb.toString()));
+                            }
+                            if (!close.contains("@"))
+                                ender.append(close);
+                        }
+                    }
+                }
+                i += vowelClusters.matcher(ender).findAll().count();
+            }
+
+            for (; i < approxSyllables; i++) {
                 sb.append(rng.getRandomElement(midVowels));
                 if (rng.nextDouble() < vowelSplitFrequency) {
                     sb.append(rng.getRandomElement(vowelSplitters));
@@ -1778,43 +1862,11 @@ public class FakeLanguageGen implements Serializable {
                 }
                 sb.append(rng.getRandomElement(midConsonants));
             }
-            if (rng.nextDouble() < syllableEndFrequency) {
-                String close = rng.getRandomElement(closingSyllables);
-                if((close.contains("@1") && approxSyllables == 1) || (close.contains("@2") && approxSyllables == 2) ||
-                        (close.contains("@3") && approxSyllables == 3) )
-                {
-                    sb.append(close.replaceAll("@\\d", sb.toString()));
-                }
-                else if(!close.contains("@"))
-                    sb.append(close);
-                else if (rng.nextDouble() < vowelEndFrequency) {
-                    sb.append(rng.getRandomElement(midVowels));
-                    if (rng.nextDouble() < vowelSplitFrequency) {
-                        sb.append(rng.getRandomElement(vowelSplitters));
-                        sb.append(rng.getRandomElement(midVowels));
-                    }
-                }
-            } else {
-                sb.append(rng.getRandomElement(midVowels));
-                if (rng.nextDouble() < vowelSplitFrequency) {
-                    sb.append(rng.getRandomElement(vowelSplitters));
-                    sb.append(rng.getRandomElement(midVowels));
-                }
-                if (rng.nextDouble() >= vowelEndFrequency) {
-                    sb.append(rng.getRandomElement(closingConsonants));
-                    if (rng.nextDouble() < syllableEndFrequency) {
-                        String close = rng.getRandomElement(closingSyllables);
-                        if((close.contains("@1") && approxSyllables == 1) ||
-                                (close.contains("@2") && approxSyllables == 2) ||
-                                (close.contains("@3") && approxSyllables == 3) )
-                        {
-                            close = close.replaceAll("@\\d", sb.toString());
-                            sb.append(close);
-                        }
-                        else if(!close.contains("@"))
-                            sb.append(close);
-                    }
-                }
+
+            sb.append(ender);
+            if(redouble && i <= approxSyllables + 1)
+            {
+                sb.append(close.replaceAll("@", sb.toString()));
             }
 
             if(sanityChecks != null && !checkAll(sb, sanityChecks))
