@@ -100,6 +100,7 @@ import java.util.concurrent.TimeUnit;
  This causes corners to be included in the "visible walls" packed maps, which helps reduce
  the amount of load the non-G (CoordPacker-based) code has to process.
  GreasedRegion is still massively faster.
+
  Benchmark                               Mode  Cnt     Score     Error  Units
  CoordPackerBenchmark.measureExpand      avgt    3   676.298 ± 101.887  ms/op
  CoordPackerBenchmark.measureExpandG     avgt    3     4.104 ±   1.221  ms/op
@@ -115,6 +116,29 @@ import java.util.concurrent.TimeUnit;
  CoordPackerBenchmark.measureSurfaceG    avgt    3     5.305 ±   1.184  ms/op
  CoordPackerBenchmark.measureUnion       avgt    3    36.320 ±  10.058  ms/op
  CoordPackerBenchmark.measureUnionG      avgt    3     4.078 ±   0.828  ms/op
+
+ Using 8-way for both, 64x64 maps, but putting expand, fringe, retract, and surface through much more work,
+ and adding flood as an operation. This tests two different amounts for each of those operations (1 and 2 for
+ most, 5 and 10 for flood), 4096 times for each amount. Flood does significantly less work because it only
+ expands one point at the start, which is (probably) why the CoordPacker version does relatively well there.
+
+ Benchmark                               Mode  Cnt     Score     Error  Units
+ CoordPackerBenchmark.measureExpand      avgt    3  1588.435 ± 177.613  ms/op
+ CoordPackerBenchmark.measureExpandG     avgt    3     8.763 ±   1.241  ms/op
+ CoordPackerBenchmark.measureFlood       avgt    3   116.499 ±   6.779  ms/op
+ CoordPackerBenchmark.measureFloodG      avgt    3    25.283 ±   2.088  ms/op
+ CoordPackerBenchmark.measureFringe      avgt    3  1770.287 ± 344.991  ms/op
+ CoordPackerBenchmark.measureFringeG     avgt    3    11.999 ±   0.963  ms/op
+ CoordPackerBenchmark.measureIntersect   avgt    3    58.724 ±   2.901  ms/op
+ CoordPackerBenchmark.measureIntersectG  avgt    3     4.061 ±   0.373  ms/op
+ CoordPackerBenchmark.measurePack        avgt    3    78.740 ±   2.093  ms/op
+ CoordPackerBenchmark.measurePackG       avgt    3    13.853 ±   1.575  ms/op
+ CoordPackerBenchmark.measureRetract     avgt    3  7005.192 ± 112.877  ms/op
+ CoordPackerBenchmark.measureRetractG    avgt    3     8.999 ±   1.188  ms/op
+ CoordPackerBenchmark.measureSurface     avgt    3  7075.360 ± 264.373  ms/op
+ CoordPackerBenchmark.measureSurfaceG    avgt    3    11.288 ±   3.861  ms/op
+ CoordPackerBenchmark.measureUnion       avgt    3    34.519 ±   8.301  ms/op
+ CoordPackerBenchmark.measureUnionG      avgt    3     4.035 ±   0.842  ms/op
  */
 public class CoordPackerBenchmark {
 
@@ -195,11 +219,11 @@ public class CoordPackerBenchmark {
         long l = doIntersect();
     }
 
-    public long doFringe()
+    public long doFringe(int count)
     {
         long l = 0;
         for (int i = 0; i < 0x1000; i++) {
-            l += CrossHash.hash(CoordPacker.fringe(floors[i], 1, DIMENSION, DIMENSION, true));
+            l += CrossHash.hash(CoordPacker.fringe(floors[i], count, DIMENSION, DIMENSION, true));
         }
         return l;
     }
@@ -208,14 +232,14 @@ public class CoordPackerBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureFringe() throws InterruptedException {
-        long l = doFringe();
+        long l = doFringe(1) + doFringe(2);
     }
 
-    public long doExpand()
+    public long doExpand(int count)
     {
         long l = 0;
         for (int i = 0; i < 0x1000; i++) {
-            l += CrossHash.hash(CoordPacker.expand(floors[i], 1, DIMENSION, DIMENSION, true));
+            l += CrossHash.hash(CoordPacker.expand(floors[i], count, DIMENSION, DIMENSION, true));
         }
         return l;
     }
@@ -224,14 +248,14 @@ public class CoordPackerBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureExpand() throws InterruptedException {
-        long l = doExpand();
+        long l = doExpand(1) + doExpand(2);
     }
 
-    public long doSurface()
+    public long doSurface(int count)
     {
         long l = 0;
         for (int i = 0; i < 0x1000; i++) {
-            l += CrossHash.hash(CoordPacker.surface(floors[i], 1, DIMENSION, DIMENSION, true));
+            l += CrossHash.hash(CoordPacker.surface(floors[i], count, DIMENSION, DIMENSION, true));
         }
         return l;
     }
@@ -240,13 +264,13 @@ public class CoordPackerBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureSurface() throws InterruptedException {
-        long l = doSurface();
+        long l = doSurface(1) + doSurface(2);
     }
-    public long doRetract()
+    public long doRetract(int count)
     {
         long l = 0;
         for (int i = 0; i < 0x1000; i++) {
-            l += CrossHash.hash(CoordPacker.retract(floors[i], 1, DIMENSION, DIMENSION, true));
+            l += CrossHash.hash(CoordPacker.retract(floors[i], count, DIMENSION, DIMENSION, true));
         }
         return l;
     }
@@ -255,9 +279,29 @@ public class CoordPackerBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureRetract() throws InterruptedException {
-        long l = doRetract();
+        long l = doRetract(1) + doRetract(2);
     }
-/*
+
+    public long doFlood(int count)
+    {
+        StatefulRNG srng = new StatefulRNG(0x1337BEEFDEAL);
+        long l = 0;
+        for (int i = 0; i < 0x1000; i++) {
+            l += CrossHash.hash(CoordPacker.flood(floors[i],
+                    CoordPacker.packOne(CoordPacker.singleRandom(floors[i], srng)), count, true));
+        }
+        return l;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureFlood() throws InterruptedException {
+        long l = doFlood(5) + doFlood(10);
+    }
+
+
+    /*
     public long doRetract1()
     {
         long l = 0;
@@ -378,12 +422,12 @@ public class CoordPackerBenchmark {
         long l = doIntersectG();
     }
 
-    public long doFringeG()
+    public long doFringeG(int count)
     {
         long l = 0;
         GreasedRegion tmp = new GreasedRegion(floorsG[0]);
         for (int i = 0; i < 0x1000; i++) {
-            l += tmp.remake(floorsG[i]).fringe8way().hashCode();
+            l += tmp.remake(floorsG[i]).fringe8way(count).hashCode();
         }
         return l;
     }
@@ -392,15 +436,15 @@ public class CoordPackerBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureFringeG() throws InterruptedException {
-        long l = doFringeG();
+        long l = doFringeG(1) + doFringeG(2);
     }
 
-    public long doExpandG()
+    public long doExpandG(int count)
     {
         long l = 0;
         GreasedRegion tmp = new GreasedRegion(floorsG[0]);
         for (int i = 0; i < 0x1000; i++) {
-            l += tmp.remake(floorsG[i]).expand8way().hashCode();
+            l += tmp.remake(floorsG[i]).expand8way(count).hashCode();
         }
         return l;
     }
@@ -409,15 +453,15 @@ public class CoordPackerBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureExpandG() throws InterruptedException {
-        long l = doExpandG();
+        long l = doExpandG(1) + doExpandG(2);
     }
 
-    public long doSurfaceG()
+    public long doSurfaceG(int count)
     {
         long l = 0;
         GreasedRegion tmp = new GreasedRegion(floorsG[0]);
         for (int i = 0; i < 0x1000; i++) {
-            l += tmp.remake(floorsG[i]).surface8way().hashCode();
+            l += tmp.remake(floorsG[i]).surface8way(count).hashCode();
         }
         return l;
     }
@@ -426,14 +470,14 @@ public class CoordPackerBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureSurfaceG() throws InterruptedException {
-        long l = doSurfaceG();
+        long l = doSurfaceG(1) + doSurfaceG(2);
     }
-    public long doRetractG()
+    public long doRetractG(int count)
     {
         long l = 0;
         GreasedRegion tmp = new GreasedRegion(floorsG[0]);
         for (int i = 0; i < 0x1000; i++) {
-            l += tmp.remake(floorsG[i]).retract8way().hashCode();
+            l += tmp.remake(floorsG[i]).retract8way(count).hashCode();
         }
         return l;
     }
@@ -442,7 +486,25 @@ public class CoordPackerBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureRetractG() throws InterruptedException {
-        long l = doRetractG();
+        long l = doRetractG(1) + doRetractG(2);
+    }
+
+    public long doFloodG(int count)
+    {
+        StatefulRNG srng = new StatefulRNG(0x1337BEEFDEAL);
+        long l = 0;
+        GreasedRegion tmp = new GreasedRegion(floorsG[0]);
+        for (int i = 0; i < 0x1000; i++) {
+            l += tmp.clear().insert(floorsG[i].singleRandom(srng)).flood8way(floorsG[i], count).hashCode();
+        }
+        return l;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureFloodG() throws InterruptedException {
+        long l = doFloodG(5) + doFloodG(10);
     }
 
 

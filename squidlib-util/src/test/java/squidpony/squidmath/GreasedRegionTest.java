@@ -21,6 +21,7 @@ public class GreasedRegionTest {
         //printRegion(dataCross);
         //printRegion(dataCross2);
     }
+    public static final boolean PRINTING = false;
     @Test
     public void testBasics() {
         //printPacked(dataCross, 64, 64);
@@ -29,28 +30,31 @@ public class GreasedRegionTest {
         assertTrue(dataCross.equals(doubleNegative));
         GreasedRegion gr = new GreasedRegion(box2);
         printRegion(gr);
-        srng.setState(0x123456789ABCDEFL);
-        DungeonUtility.debugPrint(CoordPacker.unpackChar(CoordPacker.packSeveral(gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng),
-                gr.singleRandom(srng), gr.singleRandom(srng)),
-                120, 120, '@', '.'));
+        if(PRINTING) {
+            srng.setState(0x123456789ABCDEFL);
+            DungeonUtility.debugPrint(CoordPacker.unpackChar(CoordPacker.packSeveral(gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng),
+                    gr.singleRandom(srng), gr.singleRandom(srng)),
+                    120, 120, '@', '.'));
+        }
     }
 
     public static int FOV_RANGE = 12;
     public static Radius RADIUS = Radius.SQUARE;
 
-    public static void printRegion(GreasedRegion r)
-    {
-        DungeonUtility.debugPrint(r.toChars());
-        System.out.println();
+    public static void printRegion(GreasedRegion r) {
+        if (PRINTING) {
+            DungeonUtility.debugPrint(r.toChars());
+            System.out.println();
+        }
     }
 
     public void printBits16(int n) {
