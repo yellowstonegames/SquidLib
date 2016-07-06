@@ -73,7 +73,9 @@ public class GreasedRegion implements Serializable {
         ySections = (height + 63) >> 6;
         yEndMask = (-1L >>> (64 - (height & 63)));
         data = new long[width * ySections];
-        data[single.x * ySections + (single.y >> 6)] |= 1L << (single.y & 63);
+
+        if(single.x < width && single.y < height && single.x >= 0 && single.y >= 0)
+            data[single.x * ySections + (single.y >> 6)] |= 1L << (single.y & 63);
     }
 
     public GreasedRegion(int width, int height, Coord... points)
@@ -88,7 +90,8 @@ public class GreasedRegion implements Serializable {
             for (int i = 0, x, y; i < points.length; i++) {
                 x = points[i].x;
                 y = points[i].y;
-                data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                if(x < width && y < height && x >= 0 && y >= 0)
+                    data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
     }
@@ -116,6 +119,33 @@ public class GreasedRegion implements Serializable {
             System.arraycopy(other.data, 0, data, 0, width * ySections);
             return this;
         }
+    }
+
+    public GreasedRegion insert(Coord point)
+    {
+            int x = point.x,
+                    y = point.y;
+            if(x < width && y < height && x >= 0 && y >= 0)
+                data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+        return this;
+    }
+
+    public GreasedRegion insertSeveral(Coord... points)
+    {
+        for (int i = 0, x, y; i < points.length; i++) {
+            x = points[i].x;
+            y = points[i].y;
+            if(x < width && y < height && x >= 0 && y >= 0)
+                data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+        }
+        return this;
+    }
+    public GreasedRegion clear()
+    {
+        for (int i = 0; i < data.length; i++) {
+            data[i] = 0;
+        }
+        return this;
     }
 
     public GreasedRegion copy()
