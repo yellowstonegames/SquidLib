@@ -245,6 +245,7 @@ public class LanguageGenTest {
                         FakeLanguageGen.modifier("cc", "ch")),
                 FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
                 FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
+                FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),
         };
         String[] oz = new String[]{
                 "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",
@@ -266,8 +267,10 @@ public class LanguageGenTest {
             System.out.println(o);
         }
         System.out.println("\n\nGENERATED:\n");
+        StatefulRNG sr = new StatefulRNG(2252637788195L);
         for(FakeLanguageGen lang : languages) {
-            LanguageCipher cipher = new LanguageCipher(lang);
+            //LanguageCipher cipher = new LanguageCipher(lang);
+            LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
             int ctr = 0;
             for (String s : oz) {
                 oz2[ctr] = cipher.cipher(s);
