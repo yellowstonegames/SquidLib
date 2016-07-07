@@ -43,6 +43,39 @@ public class GwtCompatibility {
 	}
 
     /**
+     * Stupidly simple convenience method that produces a range from 0 to end, not including end, as an int array.
+     * @param end the exclusive upper bound on the range
+     * @return the range of ints as an int array
+     */
+    public static int[] range(int end)
+    {
+        if(end <= 0)
+            return new int[0];
+        int[] r = new int[end];
+        for (int i = 0; i < end; i++) {
+            r[i] = i;
+        }
+        return r;
+    }
+
+    /**
+     * Stupidly simple convenience method that produces a range from start to end, not including end, as an int array.
+     * @param start the inclusive lower bound on the range
+     * @param end the exclusive upper bound on the range
+     * @return the range of ints as an int array
+     */
+    public static int[] range(int start, int end)
+    {
+        if(end - start <= 0)
+            return new int[0];
+        int[] r = new int[end - start];
+        for (int i = start; i < end; i++) {
+            r[i] = i;
+        }
+        return r;
+    }
+
+    /**
      * Gets the first item in an Iterable of T, or null if it is empty. Meant for collections like LinkedHashSet, which
      * can promise a stable first element but don't provide a way to access it. Not exactly a GWT compatibility method,
      * but more of a Java standard library stand-in. Even though LinkedHashSet does not support this out-of-the-box,

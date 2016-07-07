@@ -1666,77 +1666,29 @@ public class FakeLanguageGen implements Serializable {
         this.modifiers = new ArrayList<>(modifiers);
     }
 
-    private static String[] processParts(OrderedMap<String, String> parts, RNG rng, double repeatSingleChance, double diversity) {
-        OrderedMap<String, String> parts2 = new OrderedMap<>(parts);
-        OrderedSet<String> forbidden = new OrderedSet<>(1024, 0.25f), missingSounds = new OrderedSet<>(64, 0.875f);
-        int l, ct = 0, sz = parts2.size();
-        parts2.shuffle(rng);
-        int n = 0;
-        if(parts2.containsKey("z")) {
-            if (rng.nextDouble() < 0.75) {
-                missingSounds.add("z");
-                Collections.addAll(forbidden, parts2.get("z").split(" "));
-                n++;
-            }
-            if (rng.nextDouble() < 0.8) {
-                missingSounds.add("x");
-                Collections.addAll(forbidden, parts2.get("x").split(" "));
-                n++;
-            }
-            if (rng.nextDouble() < 0.9) {
-                missingSounds.add("qu");
-                Collections.addAll(forbidden, parts2.get("qu").split(" "));
-                n++;
-            }
-            if (rng.nextDouble() < 0.95) {
-                missingSounds.add("q");
-                Collections.addAll(forbidden, parts2.get("q").split(" "));
-                n++;
-            }
-            if (rng.nextDouble() < 0.9) {
-                missingSounds.add("tl");
-                Collections.addAll(forbidden, parts2.get("tl").split(" "));
-                n++;
-            }
-            if (rng.nextDouble() < 0.85) {
-                missingSounds.add("ph");
-                Collections.addAll(forbidden, parts2.get("ph").split(" "));
-                n++;
-            }
-            if (rng.nextDouble() < 0.9) {
-                missingSounds.add("kh");
-                Collections.addAll(forbidden, parts2.get("kh").split(" "));
-                n++;
-            }
-            if (rng.nextDouble() < 0.9) {
-                missingSounds.add("bh");
-                missingSounds.add("dh");
-                Collections.addAll(forbidden, parts2.get("bh").split(" "));
-                Collections.addAll(forbidden, parts2.get("dh").split(" "));
-                n++;
-                n++;
-            }
-        }
-        for (; n < sz * (1.0 - diversity); n++) {
-            missingSounds.add(parts2.keyAt(n));
-            Collections.addAll(forbidden, parts2.getAt(n).split(" "));
-        }
+    private static String[] processParts(OrderedMap<String, String> parts, OrderedSet<String> missingSounds,
+                                         OrderedSet<String> forbidden, RNG rng, double repeatSingleChance,
+                                         int preferredLimit) {
+        int l, sz = parts.size();
         List<String> working = new ArrayList<>(sz * 24);
-        for (Map.Entry<String, String> sn : parts.entrySet()) {
+        for (int e = 0; e < parts.size(); e++) {
+            Map.Entry<String, String> sn = parts.entryAt(e);
             if(missingSounds.contains(sn.getKey()))
                 continue;
             for (String t : sn.getValue().split(" ")) {
                 if(forbidden.contains(t))
                     continue;
                 l = t.length();
+                int num;
+                char c;
                 switch (l) {
                     case 0:
                         break;
                     case 1:
                         working.add(t);
                         working.add(t);
-                        char c = t.charAt(0);
-                        int num = 0;
+                        c = t.charAt(0);
+                        num = 0;
                         boolean repeat = true;
                         switch (c) {
                             case 'w':
@@ -1761,7 +1713,10 @@ public class FakeLanguageGen implements Serializable {
                                 num = 2;
                                 break;
                             default:
-                                num = 5;
+                                if(e >= preferredLimit)
+                                    num = 2;
+                                else
+                                    num = 5;
                         }
                         for (int i = 0; i < num * 3; i++) {
                             if (rng.nextDouble() < 0.7) {
@@ -1785,24 +1740,55 @@ public class FakeLanguageGen implements Serializable {
                         break;
                     case 2:
                         if (rng.nextDouble() < 0.75) {
+                            c = t.charAt(1);
+                            num = 0;
+                            switch (c) {
+                                case 'z':
+                                    num = 1;
+                                    break;
+                                case 'w':
+                                    num = 3;
+                                    break;
+                                case 'n':
+                                    num = 4;
+                                    break;
+                                default:
+
+                                    if(e >= preferredLimit)
+                                        num = 2;
+                                    else
+                                        num = 6;
+                            }
                             working.add(t);
-                            if (t.charAt(1) != 'z' || rng.nextDouble() < 0.3) {
-                                if (rng.nextDouble() < 0.6) {
-                                    working.add(t);
-                                }
-                                if (rng.nextDouble() < 0.6) {
-                                    working.add(t);
-                                }
-                                if (rng.nextDouble() < 0.6) {
-                                    working.add(t);
+                            for (int i = 0; i < num; i++) {
+                                    if (rng.nextDouble() < 0.3) {
+                                        working.add(t);
+                                    }
                                 }
                             }
-                        }
                         break;
                     case 3:
-                        if (rng.nextDouble() < 0.35) {
-                            working.add(t);
-                            if (rng.nextDouble() < 0.2 && (t.charAt(2) != 'z' || rng.nextDouble() < 0.15)) {
+                        c = t.charAt(0);
+                        num = 0;
+                        switch (c) {
+                            case 'z':
+                                num = 1;
+                                break;
+                            case 'w':
+                                num = 3;
+                                break;
+                            case 'n':
+                                num = 4;
+                                break;
+                            default:
+                                if(e >= preferredLimit)
+                                    num = 2;
+                                else
+                                    num = 6;
+                        }
+                        working.add(t);
+                        for (int i = 0; i < num; i++) {
+                            if (rng.nextDouble() < 0.2) {
                                 working.add(t);
                             }
                         }
@@ -1888,7 +1874,7 @@ public class FakeLanguageGen implements Serializable {
         midCons.put("r", "rb rc rch rd rf rg rj rk rm rn rp rph rs rsh rst rt rth rb rc rch rd rf rg rj rk rm rn rp rph rs rsh rst rt rth rsc rsk rsp rv rz br br br lbr rbl cr cr cr lcr rcl fr fr fr lfr rfl gr gr gr lgr rgl kr kr kr lkr rkl pr pr pr lpr rpl phr phr phr lphr rphl shr shr shr lshr rshl rsl sktr sctr skdr scdr skbr scbr skpr scpr dr dr dr rdr ldr tr tr tr rtr ltr rx zr zdr ztr zgr zkr ntr ntr ndr ngr mscr mshr mskr nscr ngscr ndscr nskr ngskr ndskr");
         midCons.put("s", "ls lst ls lst lsc lsk lsp rs rst rs rst rsc rsk rsp sl sl sl rsl lsl sktr sctr skdr scdr skbr scbr skpr scpr nsl msl msc mscr mst msp msk mskr nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp");
         midCons.put("t", "lst lt lst lt rst rt rst rt sktr sctr tr tr tr rtr ltr zt ztr ntr ntr mst nst ndst ltl rtl");
-        midCons.put("th", "lth lth rth rth zth");
+        midCons.put("th", "lth lth rth rth zth cth");
         midCons.put("tl", "ltl rtl");
         midCons.put("v", "lv rv");
         midCons.put("w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w w wr zw");
@@ -1935,13 +1921,140 @@ public class FakeLanguageGen implements Serializable {
         System.arraycopy(new double[]{
                 8 + rng.nextDouble(5), 9 + rng.nextDouble(5), 5 + rng.nextDouble(5), 2 + rng.nextDouble(4), 1 + rng.nextDouble(3)
         }, 0, chances, 0, chances.length);
-        double vowelHeavy = rng.between(0.2, 0.5);
+        double vowelHeavy = rng.between(0.2, 0.5), diversity = rng.between(0.4, 0.8);
+        int sz = openCons.size();
+        int[] reordering = rng.randomOrdering(sz), vOrd = rng.randomOrdering(5);
+            OrderedMap<String, String>
+                    parts0 = new OrderedMap<>(openVowels),
+                    parts1 = new OrderedMap<>(openCons),
+                    parts2 = new OrderedMap<>(midCons),
+                    parts3 = new OrderedMap<>(closeCons);
+            OrderedSet<String> forbidden = new OrderedSet<>(1024, 0.25f), missingSounds = new OrderedSet<>(64, 0.875f);
+        parts1.reorder(reordering);
+        parts2.reorder(reordering);
+        parts3.reorder(reordering);
+        parts0.reorder(vOrd);
+        int n = 0;
+
+        int mn = Math.min(rng.nextInt(3), rng.nextInt(3)), sz0, p0s;
+
+        for (n = 0; n < mn; n++) {
+            missingSounds.add(parts0.keyAt(0));
+            Collections.addAll(forbidden, parts0.getAt(0).split(" "));
+            parts0.removeFirst();
+        }
+        sz0 = Math.max(rng.between(1, parts0.size()+1), rng.between(1, parts0.size()+1));
+        char[] nextAccents = new char[sz0], unaccented = new char[sz0];
+        int vowelAccent = rng.between(1, 7);
+        for (int i = 0; i < sz0; i++) {
+            nextAccents[i] = accentedVowels[vOrd[i + mn]][vowelAccent];
+            unaccented[i] = accentedVowels[vOrd[i + mn]][0];
+        }
+        p0s = parts0.size();
+        if(rng.nextDouble() < 0.8)
+        {
+            for (int i = 0; i < sz0; i++) {
+                char ac = nextAccents[i], ua = unaccented[i];
+                String v = "", uas = String.valueOf(ua);
+                Pattern pat = Pattern.compile("\\b([a-z]*)(" + ua + ")([a-z]*)\\b");
+                Replacer rep = pat.replacer("$1$2$3 $1" + ac + "$3"), repLess = pat.replacer("$1" + ac + "$3");
+                for (int j = 0; j < p0s; j++) {
+                    String k = parts0.keyAt(j);
+                    if(uas.equals(k))
+                        v = parts0.getAt(j);
+                    else
+                    {
+                        String current = parts0.getAt(j);
+                        String[] splits = current.split(" ");
+                        for (int s = 0; s < splits.length; s++) {
+                            if(forbidden.contains(uas))
+                                forbidden.add(splits[s].replace(ua, ac));
+                        }
+                        parts0.put(k, rep.replace(current));
+                    }
+                }
+                parts0.put(String.valueOf(ac), repLess.replace(v));
+            }
+        }
+
+        n = 0;
+        if (rng.nextDouble() < 0.8) {
+            missingSounds.add("z");
+            Collections.addAll(forbidden, parts1.get("z").split(" "));
+            Collections.addAll(forbidden, parts2.get("z").split(" "));
+            Collections.addAll(forbidden, parts3.get("z").split(" "));
+            n++;
+        }
+        if (rng.nextDouble() < 0.8) {
+            missingSounds.add("x");
+            Collections.addAll(forbidden, parts1.get("x").split(" "));
+            Collections.addAll(forbidden, parts2.get("x").split(" "));
+            Collections.addAll(forbidden, parts3.get("x").split(" "));
+            n++;
+        }
+        if (rng.nextDouble() < 0.9) {
+            missingSounds.add("qu");
+            Collections.addAll(forbidden, parts1.get("qu").split(" "));
+            Collections.addAll(forbidden, parts2.get("qu").split(" "));
+            Collections.addAll(forbidden, parts3.get("qu").split(" "));
+            n++;
+        }
+        if (rng.nextDouble() < 0.96) {
+            missingSounds.add("q");
+            Collections.addAll(forbidden, parts1.get("q").split(" "));
+            Collections.addAll(forbidden, parts2.get("q").split(" "));
+            Collections.addAll(forbidden, parts3.get("q").split(" "));
+            n++;
+        }
+        if (rng.nextDouble() < 0.96) {
+            missingSounds.add("tl");
+            Collections.addAll(forbidden, parts1.get("tl").split(" "));
+            Collections.addAll(forbidden, parts2.get("tl").split(" "));
+            Collections.addAll(forbidden, parts3.get("tl").split(" "));
+            n++;
+        }
+        if (rng.nextDouble() < 0.85) {
+            missingSounds.add("ph");
+            Collections.addAll(forbidden, parts1.get("ph").split(" "));
+            Collections.addAll(forbidden, parts2.get("ph").split(" "));
+            Collections.addAll(forbidden, parts3.get("ph").split(" "));
+            n++;
+        }
+        if (rng.nextDouble() < 0.9) {
+            missingSounds.add("kh");
+            Collections.addAll(forbidden, parts1.get("kh").split(" "));
+            Collections.addAll(forbidden, parts2.get("kh").split(" "));
+            Collections.addAll(forbidden, parts3.get("kh").split(" "));
+            n++;
+        }
+        if (rng.nextDouble() < 0.9) {
+            missingSounds.add("bh");
+            missingSounds.add("dh");
+            Collections.addAll(forbidden, parts1.get("bh").split(" "));
+            Collections.addAll(forbidden, parts2.get("bh").split(" "));
+            Collections.addAll(forbidden, parts3.get("bh").split(" "));
+            Collections.addAll(forbidden, parts1.get("dh").split(" "));
+            Collections.addAll(forbidden, parts2.get("dh").split(" "));
+            Collections.addAll(forbidden, parts3.get("dh").split(" "));
+            n++;
+            n++;
+        }
+
+        for (; n < sz * diversity; n++) {
+            missingSounds.add(parts1.keyAt(n));
+            missingSounds.add(parts2.keyAt(n));
+            missingSounds.add(parts3.keyAt(n));
+            Collections.addAll(forbidden, parts1.getAt(n).split(" "));
+            Collections.addAll(forbidden, parts2.getAt(n).split(" "));
+            Collections.addAll(forbidden, parts3.getAt(n).split(" "));
+        }
+
         return new FakeLanguageGen(
-                processParts(openVowels, rng, 0.0, Math.min(1.0, rng.between(0.62, 1.3))),
+                processParts(parts0, missingSounds, forbidden, rng, 0.0, p0s),
                 new String[]{"y", "y"},
-                processParts(openCons, rng, 0.0, rng.between(0.22, 0.6)),
-                processParts(midCons, rng, (rng.nextDouble() * 3 - 0.75) / 2.25, rng.between(0.15, 0.45)),
-                processParts(closeCons, rng, 0.0, rng.between(0.19, 0.55)),
+                processParts(openCons, missingSounds, forbidden, rng, 0.0, 9999),
+                processParts(midCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) / 2.25, 9999),
+                processParts(closeCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) / 3.5, 9999),
                 new String[]{},
                 new String[]{}, lengths, chances, vowelHeavy, vowelHeavy * 1.8, 0.0, 0.0, genericSanityChecks, true);
     }
