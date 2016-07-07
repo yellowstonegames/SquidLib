@@ -480,6 +480,21 @@ public class RNG implements Serializable {
         return al;
     }
 
+
+    public int[] randomOrdering(int length)
+    {
+        int[] dest = new int[length];
+        for (int i = 0; i < length; i++)
+        {
+            int r = nextInt(i + 1);
+            if(r != i)
+                dest[i] = dest[r];
+            dest[r] = i;
+        }
+        return dest;
+
+    }
+
     /**
      * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
      * it can, and then returns output. Will only use a given position in the given data at most once; does this by
