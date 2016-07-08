@@ -1624,7 +1624,7 @@ public class CoordPacker {
      * @param y between 0 and 255, inclusive
      * @param packed an array or vararg of short[], such as those returned by pack() or one of the sub-arrays in what is
      *               returned by packMulti(); null elements in packed will be skipped.
-     * @return an ArrayList of all packed arrays that store true at the given x,y location.
+     * @return an OrderedSet of all packed arrays that store true at the given x,y location.
      */
     public static OrderedSet<short[]> findManyPacked(int x, int y, short[] ... packed)
     {
