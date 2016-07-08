@@ -350,6 +350,17 @@ public class GreasedRegion implements Serializable {
         return this;
     }
 
+    public GreasedRegion[] expandSeries(int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        GreasedRegion temp = new GreasedRegion(this);
+        for (int i = 0; i < amount; i++) {
+            regions[i] = new GreasedRegion(temp.expand());
+        }
+        return regions;
+    }
+
     public GreasedRegion fringe()
     {
         GreasedRegion cpy = new GreasedRegion(this);
@@ -361,6 +372,22 @@ public class GreasedRegion implements Serializable {
         GreasedRegion cpy = new GreasedRegion(this);
         expand(amount);
         return andNot(cpy);
+    }
+
+    public GreasedRegion[] fringeSeries(int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        GreasedRegion temp = new GreasedRegion(this);
+        regions[0] = new GreasedRegion(temp);
+        for (int i = 1; i < amount; i++) {
+            regions[i] = new GreasedRegion(temp.expand());
+        }
+        for (int i = 0; i < amount - 1; i++) {
+            regions[i].xor(regions[i + 1]);
+        }
+        regions[amount - 1].fringe();
+        return regions;
     }
 
     public GreasedRegion retract()
@@ -418,6 +445,18 @@ public class GreasedRegion implements Serializable {
         }
         return this;
     }
+
+    public GreasedRegion[] retractSeries(int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        GreasedRegion temp = new GreasedRegion(this);
+        for (int i = 0; i < amount; i++) {
+            regions[i] = new GreasedRegion(temp.retract());
+        }
+        return regions;
+    }
+
     public GreasedRegion surface()
     {
         GreasedRegion cpy = new GreasedRegion(this).retract();
@@ -427,6 +466,22 @@ public class GreasedRegion implements Serializable {
     {
         GreasedRegion cpy = new GreasedRegion(this).retract(amount);
         return xor(cpy);
+    }
+
+    public GreasedRegion[] surfaceSeries(int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        GreasedRegion temp = new GreasedRegion(this);
+        regions[0] = new GreasedRegion(temp);
+        for (int i = 1; i < amount; i++) {
+            regions[i] = new GreasedRegion(temp.retract());
+        }
+        for (int i = 0; i < amount - 1; i++) {
+            regions[i].xor(regions[i + 1]);
+        }
+        regions[amount - 1].surface();
+        return regions;
     }
 
     public GreasedRegion expand8way()
@@ -481,6 +536,18 @@ public class GreasedRegion implements Serializable {
         }
         return this;
     }
+
+    public GreasedRegion[] expandSeries8way(int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        GreasedRegion temp = new GreasedRegion(this);
+        for (int i = 0; i < amount; i++) {
+            regions[i] = new GreasedRegion(temp.expand8way());
+        }
+        return regions;
+    }
+
     public GreasedRegion fringe8way()
     {
         GreasedRegion cpy = new GreasedRegion(this);
@@ -492,6 +559,22 @@ public class GreasedRegion implements Serializable {
         GreasedRegion cpy = new GreasedRegion(this);
         expand8way(amount);
         return andNot(cpy);
+    }
+
+    public GreasedRegion[] fringeSeries8way(int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        GreasedRegion temp = new GreasedRegion(this);
+        regions[0] = new GreasedRegion(temp);
+        for (int i = 1; i < amount; i++) {
+            regions[i] = new GreasedRegion(temp.expand8way());
+        }
+        for (int i = 0; i < amount - 1; i++) {
+            regions[i].xor(regions[i + 1]);
+        }
+        regions[amount - 1].fringe8way();
+        return regions;
     }
 
     public GreasedRegion retract8way()
@@ -570,6 +653,17 @@ public class GreasedRegion implements Serializable {
         return this;
     }
 
+    public GreasedRegion[] retractSeries8way(int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        GreasedRegion temp = new GreasedRegion(this);
+        for (int i = 0; i < amount; i++) {
+            regions[i] = new GreasedRegion(temp.retract8way());
+        }
+        return regions;
+    }
+
     public GreasedRegion surface8way()
     {
         GreasedRegion cpy = new GreasedRegion(this).retract8way();
@@ -581,6 +675,23 @@ public class GreasedRegion implements Serializable {
         GreasedRegion cpy = new GreasedRegion(this).retract8way(amount);
         return xor(cpy);
     }
+
+    public GreasedRegion[] surfaceSeries8way(int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        GreasedRegion temp = new GreasedRegion(this);
+        regions[0] = new GreasedRegion(temp);
+        for (int i = 1; i < amount; i++) {
+            regions[i] = new GreasedRegion(temp.retract8way());
+        }
+        for (int i = 0; i < amount - 1; i++) {
+            regions[i].xor(regions[i + 1]);
+        }
+        regions[amount - 1].surface8way();
+        return regions;
+    }
+
     public GreasedRegion flood(GreasedRegion bounds)
     {
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
@@ -648,6 +759,30 @@ public class GreasedRegion implements Serializable {
         }
         return this;
     }
+
+
+    public GreasedRegion[] floodSeries(GreasedRegion bounds, int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        int ct = count(), ct2;
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        boolean done = false;
+        GreasedRegion temp = new GreasedRegion(this);
+        for (int i = 0; i < amount; i++) {
+            if(done) {
+                regions[i] = new GreasedRegion(temp);
+            }
+            else {
+                regions[i] = new GreasedRegion(temp.flood(bounds));
+                if (ct == (ct2 = temp.count()))
+                    done = true;
+                else
+                    ct = ct2;
+            }
+        }
+        return regions;
+    }
+
     public GreasedRegion flood8way(GreasedRegion bounds)
     {
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
@@ -724,6 +859,29 @@ public class GreasedRegion implements Serializable {
         }
         return this;
     }
+
+    public GreasedRegion[] floodSeries8way(GreasedRegion bounds, int amount)
+    {
+        if(amount <= 0) return new GreasedRegion[0];
+        int ct = count(), ct2;
+        GreasedRegion[] regions = new GreasedRegion[amount];
+        boolean done = false;
+        GreasedRegion temp = new GreasedRegion(this);
+        for (int i = 0; i < amount; i++) {
+            if(done) {
+                regions[i] = new GreasedRegion(temp);
+            }
+            else {
+                regions[i] = new GreasedRegion(temp.flood8way(bounds));
+                if (ct == (ct2 = temp.count()))
+                    done = true;
+                else
+                    ct = ct2;
+            }
+        }
+        return regions;
+    }
+
     /**
      * If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
      * are only adjacent diagonally are considered separate from each other) and returns it as an element in an
@@ -771,6 +929,18 @@ public class GreasedRegion implements Serializable {
         }
         return false;
     }
+
+    public static OrderedSet<GreasedRegion> whichContain(int x, int y, GreasedRegion ... packed)
+    {
+        OrderedSet<GreasedRegion> found = new OrderedSet<>(packed.length);
+        GreasedRegion tmp;
+        for (int i = 0; i < packed.length; i++) {
+            if((tmp = packed[i]) != null && tmp.test(x, y))
+                found.add(tmp);
+        }
+        return found;
+    }
+
 
     public int count()
     {
@@ -844,6 +1014,7 @@ public class GreasedRegion implements Serializable {
 
         return new Coord(-1, -1);
     }
+
     public boolean test(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height && ySections > 0 &&
