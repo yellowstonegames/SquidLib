@@ -501,7 +501,7 @@ public class DijkstraMap {
      * @param y
      */
     public void setGoal(int x, int y) {
-        if (!initialized) return;
+        if (!initialized || x < 0 || x >= width || y < 0 || y >= height) return;
         if (physicalMap[x][y] > FLOOR) {
             return;
         }
@@ -515,7 +515,7 @@ public class DijkstraMap {
      * @param pt
      */
     public void setGoal(Coord pt) {
-        if (!initialized) return;
+        if (!initialized || !pt.isWithin(width, height)) return;
         if (physicalMap[pt.x][pt.y] > FLOOR) {
             return;
         }
@@ -531,7 +531,7 @@ public class DijkstraMap {
      * @param cost
      */
     public void setCost(Coord pt, double cost) {
-        if (!initialized) return;
+        if (!initialized || !pt.isWithin(width, height)) return;
         if (physicalMap[pt.x][pt.y] > FLOOR) {
             costMap[pt.x][pt.y] = WALL;
             return;
@@ -548,7 +548,7 @@ public class DijkstraMap {
      * @param cost
      */
     public void setCost(int x, int y, double cost) {
-        if (!initialized) return;
+        if (!initialized || x < 0 || x >= width || y < 0 || y >= height) return;
         if (physicalMap[x][y] > FLOOR) {
             costMap[x][y] = WALL;
             return;
@@ -563,7 +563,7 @@ public class DijkstraMap {
      * @param y
      */
     public void setOccupied(int x, int y) {
-        if (!initialized) return;
+        if (!initialized || x < 0 || x >= width || y < 0 || y >= height) return;
         gradientMap[x][y] = WALL;
     }
 
@@ -574,7 +574,7 @@ public class DijkstraMap {
      * @param y
      */
     public void resetCell(int x, int y) {
-        if (!initialized) return;
+        if (!initialized || x < 0 || x >= width || y < 0 || y >= height) return;
         gradientMap[x][y] = physicalMap[x][y];
     }
 
@@ -584,7 +584,7 @@ public class DijkstraMap {
      * @param pt
      */
     public void resetCell(Coord pt) {
-        if (!initialized) return;
+        if (!initialized || !pt.isWithin(width, height)) return;
         gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
     }
 
@@ -601,13 +601,13 @@ public class DijkstraMap {
     }
 
     protected void setFresh(int x, int y, double counter) {
-        if (!initialized) return;
+        if (!initialized || x < 0 || x >= width || y < 0 || y >= height) return;
         gradientMap[x][y] = counter;
         fresh.put(Coord.pureEncode(x, y), counter);
     }
 
     protected void setFresh(final Coord pt, double counter) {
-        if (!initialized) return;
+        if (!initialized || !pt.isWithin(width, height)) return;
         gradientMap[pt.x][pt.y] = counter;
         fresh.put(pt.encode(), counter);
     }
@@ -644,7 +644,8 @@ public class DijkstraMap {
         Coord c;
         for (int i = 0; i < riskyPoints.length; i++) {
             c = riskyPoints[i];
-            safetyMap[c.x][c.y] += 1.0;
+            if(c.isWithin(width, height))
+                safetyMap[c.x][c.y] += 1.0;
         }
         return safetyMap;
     }
@@ -683,9 +684,11 @@ public class DijkstraMap {
         Coord c;
         for (int i = 0; i < saferPoints.length; i++) {
             c = saferPoints[i];
-            safetyMap[c.x][c.y] -= 1.0;
-            if (safetyMap[c.x][c.y] < 0.0)
-                safetyMap[c.x][c.y] = 0.0;
+            if (c.isWithin(width, height)) {
+                safetyMap[c.x][c.y] -= 1.0;
+                if (safetyMap[c.x][c.y] < 0.0)
+                    safetyMap[c.x][c.y] = 0.0;
+            }
         }
         return safetyMap;
     }
