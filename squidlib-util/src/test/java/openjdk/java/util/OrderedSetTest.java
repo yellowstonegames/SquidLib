@@ -38,6 +38,7 @@ import java.util.*;
 public class OrderedSetTest {
     static Random rnd = new Random(666);
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         int numItr =  200;
         int setSize = 2500;
@@ -54,6 +55,8 @@ public class OrderedSetTest {
             Set diff1 = clone(s1); diff1.removeAll(s2);
             Set diff2 = clone(s2); diff2.removeAll(s1);
             Set union = clone(s1); union.addAll(s2);
+            OrderedSet weird1 = new OrderedSet(s1); weird1.alter(weird1.first(), setSize);
+            OrderedSet weird2 = new OrderedSet(s2); weird2.alter(weird2.first(), setSize);
 
             if (diff1.removeAll(diff2))
                 throw new Exception("Set algebra identity 2 failed");
@@ -97,10 +100,22 @@ public class OrderedSetTest {
             s1.clear();
             if (!s1.isEmpty())
                 throw new Exception("Set nonempty after clear.");
+            if(!(weird1.contains(weird2.first()) && weird2.contains(weird1.first())))
+                throw new Exception("Weird ordered sets don't share a first element");
+            weird1.reorder(1, 0);
+            weird2.reorder(1, 0);
+            if(!(weird1.getAt(1).equals(weird2.getAt(1)) && weird2.getAt(1).equals(weird1.getAt(1))))
+                throw new Exception("Weird ordered sets don't share a reordered element");
+            weird1.removeAt(1);
+            weird2.removeAt(1);
+            if(weird1.contains(setSize) || weird2.contains(setSize))
+                throw new Exception("Weird ordered sets didn't respond correctly to removeAt()");
+
         }
         System.err.println("Success.");
     }
 
+    @SuppressWarnings("unchecked")
     static Set clone(Set s) throws Exception {
         Set clone;
         int method = rnd.nextInt(3);
@@ -137,10 +152,11 @@ public class OrderedSetTest {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     static void AddRandoms(Set s, int n) throws Exception {
         for (int i=0; i<n; i++) {
             int r = rnd.nextInt() % n;
-            Integer e = new Integer(r < 0 ? -r : r);
+            Integer e = r < 0 ? -r : r;
 
             int preSize = s.size();
             boolean prePresent = s.contains(e);

@@ -5,6 +5,23 @@ SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, [Dungeon Merce
 
 [![Join the slow-paced chat at https://gitter.im/SquidPony/SquidLib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SquidPony/SquidLib)
 
+Documentation:
+---
+Jars of javadocs are distributed with each release via Maven Central, and with the current latest via JitPack. You can
+get the docs and source of the latest version, 3.0.0-b6, in two parts for each; squidlib-util (the core of the library,
+and also the largest part) has its
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b6/squidlib-util-3.0.0-b6-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b6/squidlib-util-3.0.0-b6-sources.jar),
+while squidlib (the display part of the library, named the way it is because depending on squidlib should also pull in
+squidlib-util to make it a "one-stop shop" dependency) has its
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b6/squidlib-3.0.0-b6-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b6/squidlib-3.0.0-b6-sources.jar).
+You can browse the javadocs of the most recent commit
+[here for squidlib-util](https://jitpack.io/com/github/SquidPony/SquidLib/squidlib-util/-SNAPSHOT/javadoc/) and
+[here for squidlib](https://jitpack.io/com/github/SquidPony/SquidLib/squidlib/-SNAPSHOT/javadoc/), though JitPack will often
+need to rebuild the docs if there was a recent commit, which may take (according to their FAQ) up to 15 minutes; refresh
+if it isn't loading or looks wrong.
+
 Current Features:
 --
 ###Ease Of Use
@@ -199,7 +216,31 @@ Current Features:
   - Improvements to LanguageCipher as well, allowing library users to choose how much to cache, or to make it so a single fake word virtually-never can be generated as the translation for multiple source words
   - LinesPanel is simpler, allows line wrapping, and a choice of vertical direction for line layout
   - Over 2000 icons from http://game-icons.net added to the optional assets download, with a distance field effect applied so they can be used along with "stretchable" fonts, and all this put in a texture atlas for efficient lookup
-  - Various other small improvements, like RNG and RandomnessSource allowing all their variants to be copied with `copy()`, GapShuffler being added (used in Thesaurus to ensure the same word doesn't show up twice in rapid succession, which repeated loops through sequences shuffled with `RNG.shuffle()` can't guarantee), and Maker being added to help construction of cumbersome objects, like a LinkedHashMap, with one method call
+  - Various other small improvements, like RNG and RandomnessSource allowing all their variants to be copied with `copy()`, GapShuffler being added (used in Thesaurus
+    to ensure the same word doesn't show up twice in rapid succession, which repeated loops through sequences shuffled with `RNG.shuffle()` can't guarantee), and Maker
+    being added to help construction of cumbersome objects, like a LinkedHashMap, with one method call
+- In the upcoming next release, but not yet in a beta release (only in the master revision):
+  - Some breaking changes, though they should be easy to make un-broken in your code.
+    - The JRE's LinkedHashMap and LinkedHashSet were used heavily in SquidLib (mainly to ensure RNG seeds keep the same behavior across Java versions and platforms).
+    - These have been replaced with OrderedMap and OrderedSet, but the OrderedX classes have a superset of the LinkedHashX classes, so replacing is as simple as a find and
+      replace that swaps "LinkedHash" for "Ordered" and including squidlib-util's OrderedMap and/or OrderedSet classes (libGDX has unrelated classes with those names).
+    - But why? Well, OrderedMap and OrderedSet allow the ordering to be altered, so they can be shuffled, plus elements can be random-accessed by index in constant time,
+      and a useful feature is being able to generate a random ordering with `RNG.randomOrdering()` and use it with `reorder()` on multiple OrderedMap or OrderedSet
+      collections of the same size, producing the same "shuffle" for each one.
+      - Some other features are being added to the Ordered collections as they are needed, but they already do everything a LinkedHashMap or LinkedHashSet does (except
+        access-ordering instead of insertion-ordering in LinkedHashMaps, which is not commonly needed), and pass essentially the same tests the LinkedHashX classes do.
+  - Hopefully-significant speedups to region encoding!
+    - CoordPacker is nice to use, mostly, but if used too often it can get slow, especially on larger maps. The need for a better way of handling small amounts of
+      encoded regions quickly without needing tightly controlled memory usage (the initial reason CoordPacker was made) has led to GreasedRegion.
+    - GreasedRegion is an un-compressed bitset-like region encoding that already implements equivalents to much of CoordPacker's API but can be *hundreds of times faster*.
+    - It's a little less lean on memory usage, hence the "fat-filled" name, but it's also like greased lightning as to speed.
+    - It still hasn't been integrated into the rest of SquidLib, so it isn't clear how much speedup can be gained, but it should really help Placement and SectionDungeonGenerator.
+  - More FakeLanguageGen improvements; now you can generate purely random languages.
+  - DetailedMimic is like MimicFill, and is a port of [SynTex](https://github.com/mxgmn/SynTex) but can handle color or
+    char information, with the former useful for texture generation and the latter for map style imitation.
+  - Improvements to the long-neglected Bresenham line drawing class, letting 2D lines use 2D Coords (and pool them accordingly, helping performance).
+  - Some extra support for DijkstraMap, including checks for out-of-map points in more places and the ability to configure what makes diagonals pass-able.
+  - Several bugfixes, including to one annoying 9-month-old bug with a specific FOV type.
 - But, 3.0.0's final release will be major, and so should be expected to *break* API backwards compatibility
   - Any minor releases after 3.0.0 and before 4.0.0 should be expected to *keep* API backwards compatibility, unless a feature is broken or unusable
   - The most significant change in 3.0.0 will be the removal of the Swing-based rendering and full transition to the similar, but much faster and more responsive, libGDX renderer
@@ -212,6 +253,13 @@ Current Features:
   - If you use SquidLib's latest version as of April 12, the assets have been moved out of the `squidlib` jar, making the download size smaller, but a freshly-updated SquidSetup has all the latest assets
     and will put them in the correct assets folder (as before) without duplicating them.
     - If you don't use SquidSetup, you can download any assets you need from the assets/ folder of this GitHub repo, or get all the assets in a .zip or .tar.gz file from SquidSetup's release page for the [latest SquidSetup](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-LATEST).
+  - [This commit on June 19, 2016](https://github.com/SquidPony/SquidLib/commit/22c770b37b3635c6beacadda6ef71e07c9a55a8e)
+    changed usages of LinkedHashMap and LinkedHashSet to OrderedMap and OrderedSet in the squidpony.squidmath package.
+    If you use SquidLib versions before that commit, then update to after that commit (after beta 6), you should expect
+    some find/replace needed throughout your code. The APIs for LinkedHashSet and OrderedSet are identical except
+    for the additions OrderedSet makes, and almost the same is true for LinkedHashMap (no possible access-ordering like
+    in LinkedHashMap; only insertion-ordering or user-specified-ordering are possible in OrderedMap, though the last
+    isn't possible in LinkedHashMap).
 
 Download
 --

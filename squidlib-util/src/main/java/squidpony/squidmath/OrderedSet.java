@@ -419,11 +419,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         }
         if (size == 0) {
             first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            //link[pos] = -1L;
         } else {
-            //link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            //link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
             last = pos;
         }
         order.add(pos);
@@ -498,7 +494,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             for (;;) {
                 if (((curr = key[pos]) == null)) {
                     key[last] = (null);
-                    order.removeValue(last);
                     return;
                 }
                 slot = HashCommon.mix(hasher.hash(curr))
@@ -1701,13 +1696,30 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @return the key at the index, if the index is valid, otherwise null
      */
     public K getAt(final int idx) {
-        final K[] key = this.key;
         if (idx < 0 || idx >= order.size)
             return null;
+        final K[] key = this.key;
         // The starting point.
         return key[order.get(idx)];
     }
 
+    /**
+     * Removes the item at the given index in the iteration order in not-exactly constant time (though it still should
+     * be efficient).
+     * @param idx the index in the iteration order of the item to remove
+     * @return true if this Set was changed as a result of this call, or false if nothing changed.
+     */
+    public boolean removeAt(final int idx) {
+        if (idx < 0 || idx >= order.size)
+            throw new NoSuchElementException();
+        int pos = order.get(idx);
+        if (key[pos] == null) {
+            if (containsNull)
+                return removeNullEntry();
+            return false;
+        }
+        return removeEntry(pos);
+    }
     /**
      * Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.
      * @param rng used to generate a random index for a value
@@ -1754,5 +1766,85 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         first = order.get(0);
         last = order.peek();
         return this;
+    }
+    private boolean alterEntry(final int pos, final K replacement) {
+        int rep;
+        if ((replacement == null)) {
+            if (containsNull)
+                return false;
+            rep = n;
+            containsNull = true;
+        } else {
+            K curr;
+            final K[] key = this.key;
+            key[pos] = null;
+            // The starting point.
+            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
+                if (curr.equals(replacement))
+                    return false;
+                while (!((curr = key[rep = (rep + 1) & mask]) == null))
+                    if (curr.equals(replacement))
+                        return false;
+            }
+            key[rep] = replacement;
+        }
+        fixPointers(pos, rep);
+        return true;
+    }
+    private boolean alterNullEntry(final K replacement) {
+        containsNull = false;
+        key[n] = null;
+        int rep;
+        if (replacement == null) {
+            rep = n;
+            containsNull = true;
+        } else {
+            K curr;
+            final K[] key = this.key;
+            // The starting point.
+            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
+                if (curr.equals(replacement))
+                    return false;
+                while (!((curr = key[rep = (rep + 1) & mask]) == null))
+                    if (curr.equals(replacement))
+                        return false;
+            }
+            key[rep] = replacement;
+        }
+        fixPointers(n, rep);
+        return true;
+    }
+
+    /**
+     * Changes a K, original, to another, replacement, while keeping replacement at the same point in the ordering.
+     * @param original a K value that will be removed from this Set if present, and its iteration index remembered
+     * @param replacement another K value that will replace original at the remembered index
+     * @return true if the Set changed, or false if it didn't (such as if the two arguments are equal, or replacement was already in the Set but original was not)
+     */
+    public boolean alter(K original, K replacement)
+    {
+        if (original == null) {
+            if (containsNull) {
+                return replacement != null && alterNullEntry(replacement);
+            }
+            else
+                return add(replacement);
+        }
+        else if(original.equals(replacement))
+            return false;
+        K curr;
+        final K[] key = this.key;
+        int pos;
+        // The starting point.
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+            return add(replacement);
+        if (original.equals(curr))
+            return alterEntry(pos, replacement);
+        while (true) {
+            if (((curr = key[pos = (pos + 1) & mask]) == null))
+                return add(replacement);
+            if (original.equals(curr))
+                return alterEntry(pos, replacement);
+        }
     }
 }
