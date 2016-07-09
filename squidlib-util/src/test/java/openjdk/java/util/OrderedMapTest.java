@@ -37,8 +37,9 @@ import java.util.*;
 
 public class OrderedMapTest {
     static Random rnd = new Random(666);
-    static Object nil = new Integer(0);
+    static Object nil = 0;
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args)  throws Exception {
         int numItr =  200;
         int mapSize = 2500;
@@ -51,7 +52,7 @@ public class OrderedMapTest {
             for (int j=0; j<mapSize; j++) {
                 Object newHead;
                 do {
-                    newHead = new Integer(rnd.nextInt());
+                    newHead = rnd.nextInt();
                 } while (m.containsKey(newHead));
                 m.put(newHead, head);
                 head = newHead;
@@ -82,14 +83,52 @@ public class OrderedMapTest {
                 throw new Exception("Map nonempty after removing all links.");
             if (j != mapSize)
                 throw new Exception("Linked list size not as expected.");
+
+            //head = rnd.nextInt(mapSize*4);
+            OrderedMap weird1 = new OrderedMap();
+            for (int s=0; s<mapSize; s++) {
+                Object newHead;
+                do {
+                    newHead = rnd.nextInt(mapSize*4);
+                } while (weird1.containsKey(newHead));
+                weird1.put(newHead, head);
+                head = newHead;
+            }
+            weird1.alter(weird1.firstKey(), mapSize*4);
+            OrderedMap weird2 = new OrderedMap();
+            for (int s=0; s<mapSize; s++) {
+                Object newHead;
+                do {
+                    newHead = rnd.nextInt(mapSize*4);
+                } while (weird2.containsKey(newHead));
+                weird2.put(newHead, head);
+                head = newHead;
+            }
+            weird2.alter(weird2.firstKey(), mapSize*4);
+
+
+            if(!(weird1.containsKey(weird2.firstKey()) && weird2.containsKey(weird1.firstKey())))
+                throw new Exception("Weird ordered maps don't share a first key");
+            weird1.put(mapSize * 4, mapSize * 5 + rnd.nextInt(mapSize));
+            weird2.put(mapSize * 4, mapSize * 5 + rnd.nextInt(mapSize));
+            weird1.reorder(1, 0);
+            weird2.reorder(1, 0);
+            if(!(weird1.keyAt(1).equals(weird2.keyAt(1)) && weird2.keyAt(1).equals(weird1.keyAt(1))))
+                throw new Exception("Weird ordered maps don't share a reordered key");
+            Object weirdVal1 = weird1.removeAt(1);
+            Object weirdVal2 = weird2.removeAt(1);
+            if(weird1.containsKey(mapSize*4) || weird2.containsKey(mapSize*4))
+                throw new Exception("Weird ordered maps didn't respond correctly to removeAt(), keys");
+            if(weird1.containsValue(weirdVal1) || weird2.containsValue(weirdVal2))
+                throw new Exception("Weird ordered maps didn't respond correctly to removeAt(), values");
         }
 
         Map m = new OrderedMap();
         for (int i=0; i<mapSize; i++)
-            if (m.put(new Integer(i), new Integer(2*i)) != null)
+            if (m.put(i, 2 * i) != null)
                 throw new Exception("put returns non-null value erroneously.");
         for (int i=0; i<2*mapSize; i++)
-            if (m.containsValue(new Integer(i)) != (i%2==0))
+            if (m.containsValue(i) != (i%2==0))
                 throw new Exception("contains value "+i);
         if (m.put(nil, nil) == null)
             throw new Exception("put returns a null value erroneously.");
@@ -144,7 +183,7 @@ public class OrderedMapTest {
         m = new OrderedMap();
         List l = new ArrayList(mapSize);
         for (int i=0; i<mapSize; i++) {
-            Integer x = new Integer(i);
+            Integer x = i;
             m.put(x, x);
             l.add(x);
         }
@@ -165,7 +204,7 @@ public class OrderedMapTest {
         if (!new ArrayList(m.keySet()).equals(l))
             throw new Exception("Insert order not preserved after reinsert.");
 
-        m2 = (Map) ((OrderedMap)m).clone();
+        m2 = ((OrderedMap)m).clone();
         if (!m.equals(m2))
             throw new Exception("Insert-order Map != clone.");
 

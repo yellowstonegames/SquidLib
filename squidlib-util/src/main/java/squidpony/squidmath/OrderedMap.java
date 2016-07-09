@@ -388,11 +388,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         value[pos] = v;
         if (size == 0) {
             first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            //link[pos] = -1L;
         } else {
-            //link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            //link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
             last = pos;
         }
         order.add(pos);
@@ -426,7 +422,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 if (((curr = key[pos]) == null)) {
                     key[last] = (null);
                     value[last] = null;
-                    order.removeValue(last);
                     return;
                 }
                 slot = (HashCommon.mix(hasher.hash(curr)))
@@ -808,8 +803,8 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 && ((value[n]) == null ? v == null : (value[n]).equals(v)))
             return true;
         for (int i = n; i-- != 0;)
-            if (!((key[i]) == null)
-                    && ((value[i]) == null ? v == null : (value[i]).equals(v)))
+            if (key[i] != null
+                    && (value[i] == null ? v == null : value[i].equals(v)))
                 return true;
         return false;
     }
@@ -2376,10 +2371,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         int pos;
         final K[] key = this.key;
         if (idx < 0 || idx >= order.size)
-            return containsNullKey ? value[n] : defRetValue;
+            return defRetValue;
         // The starting point.
         if ((key[pos = order.get(idx)]) == null)
-            return defRetValue;
+            return containsNullKey ? value[n] : defRetValue;
         return value[pos];
     }
     /**
@@ -2407,6 +2402,24 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         return new MapEntry(order.get(idx));
     }
 
+    /**
+     * Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still
+     * should be efficient).
+     * @param idx the index in the iteration order of the key and value to remove
+     * @return the value removed, if there was anything removed, or the default return value otherwise (often null)
+     */
+    public V removeAt(final int idx) {
+
+        if (idx < 0 || idx >= order.size)
+            return defRetValue;
+        int pos = order.get(idx);
+        if (key[pos] == null) {
+            if (containsNullKey)
+                return removeNullEntry();
+            return defRetValue;
+        }
+        return removeEntry(pos);
+    }
     /**
      * Gets a random value from this OrderedMap in constant time, using the given RNG to generate a random number.
      * @param rng used to generate a random index for a value
@@ -2475,5 +2488,99 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         last = order.peek();
         return this;
     }
+    private V alterEntry(final int pos, final K replacement) {
+        key[pos] = null;
+
+        final V[] value = this.value;
+        V v = value[pos];
+        value[pos] = null;
+
+        int rep;
+        if ((replacement == null)) {
+            if (containsNullKey)
+                return v;
+            rep = n;
+            containsNullKey = true;
+        } else {
+            K curr;
+            final K[] key = this.key;
+
+            // The starting point.
+            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
+                if (curr.equals(replacement))
+                    return v;
+                while (!((curr = key[rep = (rep + 1) & mask]) == null))
+                    if (curr.equals(replacement))
+                        return v;
+            }
+            key[rep] = replacement;
+            value[rep] = v;
+        }
+        fixPointers(pos, rep);
+        return v;
+    }
+    private V alterNullEntry(final K replacement) {
+        containsNullKey = false;
+        key[n] = null;
+        final V[] value = this.value;
+        V v = value[n];
+        value[n] = null;
+
+        int rep;
+        if (replacement == null) {
+            rep = n;
+            containsNullKey = true;
+        } else {
+            K curr;
+            final K[] key = this.key;
+            // The starting point.
+            if ((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) != null) {
+                if (curr.equals(replacement))
+                    return v;
+                while ((curr = key[rep = (rep + 1) & mask]) != null)
+                    if (curr.equals(replacement))
+                        return v;
+            }
+            key[rep] = replacement;
+            value[rep] = v;
+
+        }
+        fixPointers(n, rep);
+        return v;
+    }
+
+    /**
+     * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
+     * order as original and keeping it associated with the same value (which also keeps its iteration index).
+     * @param original the key to find and swap out
+     * @param replacement the key to replace original with
+     * @return the value associated with original before, and replacement now
+     */
+    public V alter(final K original, final K replacement) {
+        if (original == null) {
+            if (containsNullKey) {
+                return alterNullEntry(replacement);
+            }
+            else
+                return put(replacement, null);
+        }
+        else if(original.equals(replacement))
+            return get(original);
+        K curr;
+        final K[] key = this.key;
+        int pos;
+        // The starting point.
+        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+            return put(replacement, null);
+        if (original.equals(curr))
+            return alterEntry(pos, replacement);
+        while (true) {
+            if (((curr = key[pos = (pos + 1) & mask]) == null))
+                return put(replacement, null);
+            if (original.equals(curr))
+                return alterEntry(pos, replacement);
+        }
+    }
+
 
 }
