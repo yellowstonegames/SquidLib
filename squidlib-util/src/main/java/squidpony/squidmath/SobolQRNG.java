@@ -53,7 +53,6 @@ import java.util.StringTokenizer;
  *
  * Created by Tommy Ettinger on 5/2/2015 based off Apache Commons Math 4.
  */
-@GwtIncompatible /* Because of getResourceAsStream */
 public class SobolQRNG implements RandomnessSource {
 
 	/** The number of bits to use. */
@@ -64,6 +63,28 @@ public class SobolQRNG implements RandomnessSource {
 
     /** The maximum supported space dimension. */
     private static final int MAX_DIMENSION = 1000;
+
+    /** The maximum supported space dimension. */
+    private static final int MAX_DIMENSION_GWT = 16;
+
+    /** The maximum supported space dimension. */
+    private static final int[][] RESOURCE_PRELOAD = new int[][]{
+            new int[]{2, 0,   1},
+            new int[]{3, 1,   1,3},
+            new int[]{4, 1,   1,3,1},
+            new int[]{5, 2,   1,1,1},
+            new int[]{6, 1,   1,1,3,3},
+            new int[]{7, 4,   1,3,5,13},
+            new int[]{8, 2,   1,1,5,5,17},
+            new int[]{9, 4,   1,1,5,5,5},
+            new int[]{10, 7,  1,1,7,11,19},
+            new int[]{11, 11, 1,1,5,1,1},
+            new int[]{12, 13, 1,1,1,3,11},
+            new int[]{13, 14, 1,3,5,5,31},
+            new int[]{14, 1,  1,3,3,9,7,49},
+            new int[]{15, 13, 1,1,1,15,21,21},
+            new int[]{16, 16, 1,3,1,13,27,49},
+    };
 
     /** The resource containing the direction numbers. */
     private static final String RESOURCE_NAME = "/qrng/new-joe-kuo-6.1000.txt";
@@ -95,6 +116,39 @@ public class SobolQRNG implements RandomnessSource {
      * @throws ArithmeticException if the space dimension is outside the allowed range of [1, 1000]
      */
     public SobolQRNG(final int dimension) throws ArithmeticException {
+        if (dimension < 1 || dimension > MAX_DIMENSION_GWT) {
+            throw new ArithmeticException("Dimension " + dimension + "is outside the GWT-compatible range of" +
+                    "[1, 16]; did you want the GWT-incompatible two-argument constructor?");
+        }
+
+        this.dimension = dimension;
+
+        // init data structures
+        direction = new long[dimension][BITS + 1];
+        x = new long[dimension];
+
+        // special case: dimension 1 -> use unit initialization
+        for (int i = 1; i <= BITS; i++) {
+            direction[0][i] = 1L << (BITS - i);
+        }
+        for (int d = 0; d < dimension-1; d++) {
+            initDirectionVector(RESOURCE_PRELOAD[d]);
+        }
+
+    }
+
+    /**
+     * Construct a new Sobol sequence generator for the given space dimension.
+     * You should call {@link #skipTo(int)} with a fairly large number (over 1000) to ensure the results aren't
+     * too obviously non-random. If you skipTo(1), all doubles in that result will be 0.5, and if you skipTo(0),
+     * all will be 0 (this class starts at index 1 instead of 0 for that reason). This is true for all dimensions.
+     *
+     * @param dimension the space dimension
+     * @param ignored not used, except to differentiate this from the GWT-compatible constructor
+     * @throws ArithmeticException if the space dimension is outside the allowed range of [1, 1000]
+     */
+    @GwtIncompatible /* Because of getResourceAsStream */
+    public SobolQRNG(final int dimension, boolean ignored) throws ArithmeticException {
         if (dimension < 1 || dimension > MAX_DIMENSION) {
             throw new ArithmeticException("Dimension " + dimension + "is outside the allowed range of [1, 1000]");
         }
@@ -127,7 +181,8 @@ public class SobolQRNG implements RandomnessSource {
             }
         }
     }
-/*
+
+    /*
     / **
      * Construct a new Sobol sequence generator for the given space dimension with
      * direction vectors loaded from the given stream.
@@ -192,7 +247,7 @@ public class SobolQRNG implements RandomnessSource {
 
         // special case: dimension 1 -> use unit initialization
         for (int i = 1; i <= BITS; i++) {
-            direction[0][i] = 1l << (BITS - i);
+            direction[0][i] = 1L << (BITS - i);
         }
 
         final Charset charset = Charset.forName(FILE_CHARSET);
@@ -205,7 +260,7 @@ public class SobolQRNG implements RandomnessSource {
 
             int lineNumber = 2;
             int index = 1;
-            String line = null;
+            String line;
             while ( (line = reader.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(line, " ");
                 try {
@@ -256,6 +311,23 @@ public class SobolQRNG implements RandomnessSource {
             }
         }
     }
+    /**
+     * Calculate the direction numbers from the given polynomial.
+     *
+     * @param m the initial direction numbers
+     */
+    private void initDirectionVector(final int[] m) {
+        final int s = m.length - 2, d = m[0] - 1, a = m[1];
+        for (int i = 1; i <= s; i++) {
+            direction[d][i] = ((long) m[i+1]) << (BITS - i);
+        }
+        for (int i = s + 1; i <= BITS; i++) {
+            direction[d][i] = direction[d][i - s] ^ (direction[d][i - s] >> s);
+            for (int k = 1; k <= s - 1; k++) {
+                direction[d][i] ^= ((a >> (s - 1 - k)) & 1) * direction[d][i - k];
+            }
+        }
+    }
 
     /** Generate a random vector.
      * @return a random vector as an array of double in the range [0.0, 1.0).
@@ -281,6 +353,30 @@ public class SobolQRNG implements RandomnessSource {
         }
         count++;
         return v;
+    }
+    /** Generate a random vector.
+     * @return a random vector as an array of double in the range [0.0, 1.0).
+     */
+    public double[] fillVector(double[] toFill) {
+        if (count == 0 || toFill == null) {
+            count++;
+            return toFill;
+        }
+
+        // find the index c of the rightmost 0
+        int c = 1;
+        int value = count - 1;
+        while ((value & 1) == 1) {
+            value >>= 1;
+            c++;
+        }
+
+        for (int i = 0; i < dimension && i < toFill.length; i++) {
+            x[i] ^= direction[i][c];
+            toFill[i] = (double) x[i] / SCALE;
+        }
+        count++;
+        return toFill;
     }
 
     /** Generate a random vector.

@@ -10,6 +10,7 @@ import java.util.Arrays;
  */
 public class GreasedRegion implements Serializable {
     private static final long serialVersionUID = 0;
+    private static final SobolQRNG sobol = new SobolQRNG(2);
 
     public long[] data;
     public int height;
@@ -1015,13 +1016,12 @@ public class GreasedRegion implements Serializable {
             }
         }
         Coord[] vl = new Coord[ct = (int)(fraction * xTotal)];
-        SobolQRNG sobol = new SobolQRNG(2);
-        double[] vec;
+        double[] vec = new double[2];
         sobol.skipTo(1337);
         EACH_SOBOL:
         for (int i = 0; i < ct; i++)
         {
-            vec = sobol.nextVector();
+            sobol.fillVector(vec);
             xTarget = (int) (xTotal * vec[0]);
             for (int x = 0; x < width; x++) {
                 if ((xTarget -= xCounts[x]) < 0) {
