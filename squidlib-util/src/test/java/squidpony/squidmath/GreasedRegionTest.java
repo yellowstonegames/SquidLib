@@ -2,6 +2,7 @@ package squidpony.squidmath;
 
 import org.junit.Test;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 
 import static org.junit.Assert.assertTrue;
@@ -17,6 +18,9 @@ public class GreasedRegionTest {
     public static GreasedRegion dataCross2 = new GreasedRegion(unpack(unionPacked(rectangle(24 + 32, 2 + 32, 16, 60), rectangle(2 + 32, 24 + 32, 60, 16)), 128, 128));
     public static GreasedRegion box2 = new GreasedRegion(unpack(intersectPacked(rectangle(24 + 32, 2 + 32, 16, 60), rectangle(2 + 32, 24 + 32, 60, 16)), 120, 120));
     public static StatefulRNG srng = new StatefulRNG(0x1337BEEF);
+    public static DungeonGenerator dungeonGen = new DungeonGenerator(64, 64, srng);
+    public static char[][] dungeon = dungeonGen.generate();
+    public static GreasedRegion dataDungeon = new GreasedRegion(dungeon, '.');
     static {
         //printRegion(dataCross);
         //printRegion(dataCross2);
@@ -44,6 +48,11 @@ public class GreasedRegionTest {
                     gr.singleRandom(srng), gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng)),
                     120, 120, '@', '.'));
+            System.out.println();
+            printRegion(dataCross.copy().not().insertSeveral(dataCross.separatedPortion(0.05)));
+            System.out.println();
+            printRegion(dataDungeon);
+            printRegion(dataDungeon.copy().clear().insertSeveral(dataDungeon.separatedPortion(0.06)));
         }
     }
 

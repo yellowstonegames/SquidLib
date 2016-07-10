@@ -950,6 +950,123 @@ public class GreasedRegion implements Serializable {
         }
         return c;
     }
+
+    public Coord fit(double xFraction, double yFraction)
+    {
+        int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1;
+        long t;
+        int[] xCounts = new int[width];
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                t = data[x * ySections + s];
+                if (t != 0) {
+                    tmp = Long.bitCount(t);
+                    xCounts[x] += tmp;
+                    xTotal += tmp;
+                }
+            }
+        }
+        xTarget = (int)(xTotal * xFraction);
+        for (int x = 0; x < width; x++) {
+            if((xTarget -= xCounts[x]) < 0)
+            {
+                bestX = x;
+                yTotal = xCounts[x];
+                break;
+            }
+        }
+        if(bestX < 0)
+        {
+            return Coord.get(-1, -1);
+        }
+        yTarget = (int)(yTotal * yFraction);
+
+        for (int s = 0, y = 0; s < ySections; s++) {
+            t = data[bestX * ySections + s];
+            for (long cy = 1; cy != 0 && y < height; y++, cy <<= 1) {
+                if((t & cy) != 0 && --yTarget < 0)
+                {
+                    return Coord.get(bestX, y);
+                }
+            }
+        }
+
+        return new Coord(-1, -1);
+
+    }
+
+    public Coord[] separatedPortion(double fraction)
+    {
+        if(fraction < 0)
+            return new Coord[0];
+        if(fraction > 1)
+            fraction = 1;
+        int ct, tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1;
+        long t;
+        int[] xCounts = new int[width];
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                t = data[x * ySections + s];
+                if (t != 0) {
+                    tmp = Long.bitCount(t);
+                    xCounts[x] += tmp;
+                    xTotal += tmp;
+                }
+            }
+        }
+        Coord[] vl = new Coord[ct = (int)(fraction * xTotal)];
+        SobolQRNG sobol = new SobolQRNG(2);
+        double[] vec;
+        sobol.skipTo(1337);
+        EACH_SOBOL:
+        for (int i = 0; i < ct; i++)
+        {
+            vec = sobol.nextVector();
+            xTarget = (int) (xTotal * vec[0]);
+            for (int x = 0; x < width; x++) {
+                if ((xTarget -= xCounts[x]) < 0) {
+                    bestX = x;
+                    yTotal = xCounts[x];
+                    break;
+                }
+            }
+            yTarget = (int) (yTotal * vec[1]);
+
+            for (int s = 0, y = 0; s < ySections; s++) {
+                t = data[bestX * ySections + s];
+                for (long cy = 1; cy != 0 && y < height; y++, cy <<= 1) {
+                    if ((t & cy) != 0 && --yTarget < 0) {
+                        vl[i] = Coord.get(bestX, y);
+                        continue EACH_SOBOL;
+                    }
+                }
+            }
+        }
+        return vl;
+
+    }
+
+
+    /*
+    // This showed a strong x-y correlation because it didn't have a way to use a non-base-2 van der Corput sequence.
+    // It also produced very close-together points, unfortunately.
+    public static double quasiRandomX(int idx)
+    {
+        return atVDCSequence(23L + idx * 255L);
+    }
+    public static double quasiRandomY(int idx)
+    {
+        return atVDCSequence(20L + idx);
+    }
+
+    private static double atVDCSequence(long idx)
+    {
+        long leading = Long.numberOfLeadingZeros(idx);
+        double t = (Long.reverse(idx) >>> leading) / (1.0 * (1L << (64L - leading)));
+        return t;
+    }
+    */
+
     public Coord[] asCoords()
     {
         int ct = 0, idx = 0;
