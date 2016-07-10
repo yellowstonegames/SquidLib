@@ -45,11 +45,12 @@ public class FakeLanguageGen implements Serializable {
                     Pattern.compile("([Ssξ][hнН])[iτιΙ].?[sξzΖ]"),
                     Pattern.compile("[AaаαАΑΛ][NnийИЙΝ]..?[SsξlιζzΖ]"),
                     Pattern.compile("[AaаαАΑΛ][sξ][sξ]"),
-                    Pattern.compile(".[uμυν][hнН]?[nийИЙΝ]+[tтτТΤ]"),
+                    Pattern.compile(".[uμυνv][hнН]?[nийИЙΝ]+[tтτТΤ]"),
                     Pattern.compile("[NnFf]..?g"), // might as well remove two possible slurs with one check
-                    Pattern.compile("[PpрρРΡ][eеёзξεЕЁЗΞΕΣioоюσοОЮΟuμυν][eеёзξεЕЁЗΞΕΣoоюσοОЮΟs]"), // the grab bag of juvenile words
+                    Pattern.compile("[PpрρРΡ][eеёзξεЕЁЗΞΕΣioоюσοОЮΟuμυνv][eеёзξεЕЁЗΞΕΣoоюσοОЮΟs]"), // the grab bag of juvenile words
                     Pattern.compile("[MmмМΜ]..?[rяЯ].?d"), // should pick up the #1 obscenity from Spanish and French
-                    Pattern.compile("[Gg][HhнН]?[aаαАΑΛeеёзξεЕЁЗΞΕΣ][yуλγУΥeеёзξεЕЁЗΞΕΣ]") // could be inappropriate for random text
+                    Pattern.compile("[Gg][HhнН]?[aаαАΑΛeеёзξεЕЁЗΞΕΣ][yуλγУΥeеёзξεЕЁЗΞΕΣ]"), // could be inappropriate for random text
+                    Pattern.compile("[CcсςС][KkкκКΚ]?[uμυνv]+[hнН]?[MmмМΜ]"),
             },
             genericSanityChecks = new Pattern[]
                     {

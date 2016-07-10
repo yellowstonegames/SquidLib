@@ -230,22 +230,36 @@ public class LanguageGenTest {
                 FakeLanguageGen.JAPANESE_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.DOUBLE_VOWELS),
                 FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
                         FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
-                        FakeLanguageGen.modifier("a+", "á", 0.18),
+                        /*FakeLanguageGen.modifier("a+", "á", 0.18),
                         FakeLanguageGen.modifier("e+", "é", 0.18),
                         FakeLanguageGen.modifier("i+", "í", 0.18),
                         FakeLanguageGen.modifier("o+", "ó", 0.18),
-                        FakeLanguageGen.modifier("u+", "ú", 0.18),
-                        FakeLanguageGen.modifier("aa", "au"),
+                        FakeLanguageGen.modifier("u+", "ú", 0.18),*/
+                        //FakeLanguageGen.modifier("aa", "au"),
                         FakeLanguageGen.modifier("ii", "ai"),
                         FakeLanguageGen.modifier("uu", "eu"),
-                        FakeLanguageGen.modifier("^x", "chw"),
-                        FakeLanguageGen.modifier("q$", "rk"),
+                        FakeLanguageGen.modifier("([aeo])\\1", "$1"),
+                        FakeLanguageGen.modifier("^x", "v"),
+                        FakeLanguageGen.modifier("([^aeiou]|^)u([^aeiou]|$)", "$1a$2", 0.6),
+                        FakeLanguageGen.modifier("([aeiou])([^aeiou])([aeiou])", "$1v$3", 0.06),
+                        FakeLanguageGen.modifier("([aeiou])([^aeiou])([aeiou])", "$1l$3", 0.07),
+                        FakeLanguageGen.modifier("([aeiou])([^aeiou])([aeiou])", "$1n$3", 0.07),
+                        FakeLanguageGen.modifier("([aeiou])([^aeiou])([aeiou])", "$1z$3", 0.08),
+                        FakeLanguageGen.modifier("([^aeiou])([aeiou]+)$", "$1ia", 0.35),
+                        FakeLanguageGen.modifier("([^aeiou])[bpdtkgj]", "$1"),
+                        FakeLanguageGen.modifier("[jg]$", "th"),
+                        FakeLanguageGen.modifier("g", "c", 0.92),
+                        FakeLanguageGen.modifier("q$", "l", 0.4),
+                        FakeLanguageGen.modifier("q$", "n", 0.5),
+                        FakeLanguageGen.modifier("q$", "s"),
                         FakeLanguageGen.modifier("qu+", "qui"),
                         FakeLanguageGen.modifier("q([^u])", "qu$1"),
-                        FakeLanguageGen.modifier("cc", "ch")),
-                FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
-                FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
-                FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),
+                        FakeLanguageGen.modifier("cc", "ch"),
+                        FakeLanguageGen.Modifier.NO_DOUBLES
+                )
+                //FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
+                //FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
+                //FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),
         };
         String[] oz = new String[]{
                 "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",
@@ -269,8 +283,8 @@ public class LanguageGenTest {
         System.out.println("\n\nGENERATED:\n");
         StatefulRNG sr = new StatefulRNG(2252637788195L);
         for(FakeLanguageGen lang : languages) {
-            //LanguageCipher cipher = new LanguageCipher(lang);
-            LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
+            LanguageCipher cipher = new LanguageCipher(lang);
+            //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
             int ctr = 0;
             for (String s : oz) {
                 oz2[ctr] = cipher.cipher(s);
