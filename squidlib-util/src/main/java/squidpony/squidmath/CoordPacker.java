@@ -177,7 +177,7 @@ public class CoordPacker {
     static {
         Coord c;
         for (int i = 0; i < 0x10000; i++) {
-            c = CoordPacker.hilbertToCoordNoLUT(i);
+            c = hilbertToCoordNoLUT(i);
             hilbertX[i] = (short) c.x;
             hilbertY[i] = (short) c.y;
             hilbertDistances[c.x + (c.y << 8)] = (short) i;
@@ -297,7 +297,7 @@ public class CoordPacker {
      * <b>To store more than two states</b>, you should use packMulti().
      *
      * @param map a double[][] that probably relates in some way to DijkstraMap.
-     * @param threshold any double greater than this will be off, any equal or less will be on
+     * @param threshold upper inclusive; any double greater than this will be off, any equal or less will be on
      * @return a packed short[] that should, in most circumstances, be passed to unpack() when it needs to be used.
      */
     public static short[] pack(double[][] map, double threshold)
@@ -370,10 +370,10 @@ public class CoordPacker {
      * <b>To store more than two states</b>, you should use packMulti().
      *
      * @param map a double[][] that probably relates in some way to DijkstraMap.
-     * @param lowerBound any double lower than this will be off, any equal to or greater than this, but less than upper,
-     *                   will be on
-     * @param upperBound any double greater than this will be off, any less than this, but equal to or greater than
-     *                   lower, will be on
+     * @param lowerBound lower inclusive; any double lower than this will be off, any equal to or greater than this,
+     *                   but less than upper, will be on
+     * @param upperBound upper exclusive; any double greater than this will be off, any doubles both less than this
+     *                   and equal to or greater than lower will be on
      * @return a packed short[] that should, in most circumstances, be passed to unpack() when it needs to be used.
      */
     public static short[] pack(double[][] map, double lowerBound, double upperBound)
