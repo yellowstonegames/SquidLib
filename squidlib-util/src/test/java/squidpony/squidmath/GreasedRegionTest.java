@@ -16,7 +16,9 @@ public class GreasedRegionTest {
 
     public static GreasedRegion dataCross = new GreasedRegion(unpack(unionPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14)), 64, 64));
     public static GreasedRegion dataCross2 = new GreasedRegion(unpack(unionPacked(rectangle(24 + 32, 2 + 32, 16, 60), rectangle(2 + 32, 24 + 32, 60, 16)), 128, 128));
+    public static GreasedRegion box = new GreasedRegion(unpack(intersectPacked(rectangle(24, 2, 16, 60), rectangle(2, 24, 60, 16)), 64, 64));
     public static GreasedRegion box2 = new GreasedRegion(unpack(intersectPacked(rectangle(24 + 32, 2 + 32, 16, 60), rectangle(2 + 32, 24 + 32, 60, 16)), 120, 120));
+    public static GreasedRegion box3 = new GreasedRegion(unpack(rectangle(30, 30, 180, 180), 240, 240));
     public static StatefulRNG srng = new StatefulRNG(0x1337BEEF);
     public static DungeonGenerator dungeonGen = new DungeonGenerator(64, 64, srng);
     public static char[][] dungeon = dungeonGen.generate();
@@ -25,7 +27,7 @@ public class GreasedRegionTest {
         //printRegion(dataCross);
         //printRegion(dataCross2);
     }
-    public static final boolean PRINTING = false;
+    public static final boolean PRINTING = true;
     @Test
     public void testBasics() {
         //printPacked(dataCross, 64, 64);
@@ -34,6 +36,9 @@ public class GreasedRegionTest {
         assertTrue(dataCross.equals(doubleNegative));
         GreasedRegion gr = new GreasedRegion(box2);
         printRegion(gr);
+        GreasedRegion gr2 = new GreasedRegion(120, 120);
+        gr2.insertRectangle(24 + 32, 24 + 32, 16, 16);
+        assertTrue(gr.equals(gr2));
         if(PRINTING) {
             srng.setState(0x123456789ABCDEFL);
             DungeonUtility.debugPrint(CoordPacker.unpackChar(CoordPacker.packSeveral(gr.singleRandom(srng),
@@ -54,6 +59,14 @@ public class GreasedRegionTest {
             printRegion(dataDungeon);
             printRegion(dataDungeon.copy().clear().insertSeveral(dataDungeon.separatedPortion(0.06)));
         }
+        GreasedRegion g = new GreasedRegion(box);
+        GreasedRegion g2 = new GreasedRegion(64, 64);
+        g2.insertRectangle(24, 24, 16, 16);
+        assertTrue(g.equals(g2));
+        GreasedRegion grr = new GreasedRegion(box3);
+        GreasedRegion grr2 = new GreasedRegion(240, 240);
+        grr2.insertRectangle(30, 30, 180, 180);
+        assertTrue(grr.equals(grr2));
     }
 
     public static int FOV_RANGE = 12;

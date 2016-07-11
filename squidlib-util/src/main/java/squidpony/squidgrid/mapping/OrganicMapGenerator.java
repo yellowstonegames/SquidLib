@@ -115,8 +115,8 @@ public class OrganicMapGenerator {
                 environment[x][y] = (map[x][y] == '.') ? MixedGenerator.CAVE_FLOOR : MixedGenerator.CAVE_WALL;
             }
         }
-        tempPacked = CoordPacker.pack(map, '.');
-        int tick = 1;
+        //tempPacked = CoordPacker.pack(map, '.');
+        //int tick = 1;
         regions = rng.shuffle(regions);
         while (regions.size() > 1)
         {
