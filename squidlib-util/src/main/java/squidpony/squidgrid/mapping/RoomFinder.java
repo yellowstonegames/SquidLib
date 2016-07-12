@@ -1,15 +1,15 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.RegionMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static squidpony.squidmath.CoordPacker.*;
+//import static squidpony.squidmath.CoordPacker.*;
 
 /**
  * A small class that can analyze a dungeon or other map and identify areas as being "room" or "corridor" based on how
@@ -33,7 +33,7 @@ public class RoomFinder {
      * Not likely to be used directly, but there may be things you can do with these that are cumbersome using only
      * RoomFinder's simpler API.
      */
-    public RegionMap<List<short[]>> rooms,
+    public OrderedMap<GreasedRegion, List<GreasedRegion>> rooms,
     /**
      * Not likely to be used directly, but there may be things you can do with these that are cumbersome using only
      * RoomFinder's simpler API.
@@ -74,37 +74,34 @@ public class RoomFinder {
         for (int i = 0; i < width; i++) {
             System.arraycopy(dungeon[i], 0, map[i], 0, height);
         }
-        rooms = new RegionMap<>(32);
-        corridors = new RegionMap<>(32);
-        caves = new RegionMap<>(8);
+        rooms = new OrderedMap<>(32);
+        corridors = new OrderedMap<>(32);
+        caves = new OrderedMap<>(8);
         basic = DungeonUtility.simplifyDungeon(map);
-        short[] floors = pack(basic, '.'),
-                r = flood(floors, retract(floors, 1, width, height, true), 2, false),
-                c = differencePacked(floors, r),
-                d = intersectPacked(r, fringe(c, 1, width, height, false));
-        connections = doorways = allPacked(d);
+        GreasedRegion floors = new GreasedRegion(basic, '.'),
+                r = floors.copy().retract8way().flood(floors, 2),
+                c = floors.copy().andNot(r),
+                d = c.copy().fringe().and(r);
+        connections = doorways = d.asCoords();
         mouths = new Coord[0];
-        List<short[]> rs = split(r), cs = split(c);
+        List<GreasedRegion> rs = r.split(), cs = c.split();
 
-        short[][] ra = rs.toArray(new short[rs.size()][]),
-                ca = cs.toArray(new short[cs.size()][]);
-
-        for (short[] sep : cs) {
-            short[] someDoors = intersectPacked(r, fringe(sep, 1, width, height, false));
-            short[] doors = allPackedHilbert(someDoors);
-            List<short[]> near = new ArrayList<short[]>(4);
-            for (int j = 0; j < doors.length; j++) {
-                near.addAll(findManyPackedHilbert(doors[j], ra));
+        for (GreasedRegion sep : cs) {
+            GreasedRegion someDoors = sep.copy().fringe().and(r);
+            Coord[] doors = someDoors.asCoords();
+            List<GreasedRegion> near = new ArrayList<>(4);
+            for (int i = 0; i < doors.length; i++) {
+                near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, rs));
             }
             corridors.put(sep, near);
         }
 
-        for (short[] sep : rs) {
-            List<short[]> near = new ArrayList<short[]>(10);
-            short[] aroundDoors = intersectPacked(c, fringe(sep, 1, width, height, false));
-            short[] doors = allPackedHilbert(aroundDoors);
-            for (int j = 0; j < doors.length; j++) {
-                near.addAll(findManyPackedHilbert(doors[j], ca));
+        for (GreasedRegion sep : rs) {
+            GreasedRegion aroundDoors = sep.copy().fringe().and(c);
+            Coord[] doors = aroundDoors.asCoords();
+            List<GreasedRegion> near = new ArrayList<>(10);
+            for (int i = 0; i < doors.length; i++) {
+                near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, cs));
             }
             rooms.put(sep, near);
         }
@@ -120,50 +117,46 @@ public class RoomFinder {
         for (int i = 0; i < width; i++) {
             System.arraycopy(dungeon[i], 0, map[i], 0, height);
         }
-        rooms = new RegionMap<>(32);
-        corridors = new RegionMap<>(32);
-        caves = new RegionMap<>(8);
+        rooms = new OrderedMap<>(32);
+        corridors = new OrderedMap<>(32);
+        caves = new OrderedMap<>(8);
+
         basic = DungeonUtility.simplifyDungeon(map);
 
         if(environmentKind == MixedGenerator.ROOM_FLOOR) {
-            short[] floors = pack(basic, '.'),
-                    r = flood(floors, retract(floors, 1, width, height, true), 2, false),
-                    c = differencePacked(floors, r),
-                    d = intersectPacked(r, fringe(c, 1, width, height, false));
-            connections = doorways = allPacked(d);
+            GreasedRegion floors = new GreasedRegion(basic, '.'),
+                    r = floors.copy().retract8way().flood(floors, 2),
+                    c = floors.copy().andNot(r),
+                    d = c.copy().fringe().and(r);
+            connections = doorways = d.asCoords();
             mouths = new Coord[0];
-            List<short[]> rs = split(r), cs = split(c);
+            List<GreasedRegion> rs = r.split(), cs = c.split();
 
-            short[][] ra = rs.toArray(new short[rs.size()][]),
-                    ca = cs.toArray(new short[cs.size()][]);
-
-            for (short[] sep : cs) {
-                short[] someDoors = intersectPacked(r, fringe(sep, 1, width, height, false));
-                short[] doors = allPackedHilbert(someDoors);
-                List<short[]> near = new ArrayList<short[]>(4);
-                for (int j = 0; j < doors.length; j++) {
-                    near.addAll(findManyPackedHilbert(doors[j], ra));
+            for (GreasedRegion sep : cs) {
+                GreasedRegion someDoors = sep.copy().fringe().and(r);
+                Coord[] doors = someDoors.asCoords();
+                List<GreasedRegion> near = new ArrayList<>(4);
+                for (int i = 0; i < doors.length; i++) {
+                    near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, rs));
                 }
                 corridors.put(sep, near);
             }
 
-            for (short[] sep : rs) {
-                List<short[]> near = new ArrayList<short[]>(10);
-                short[] aroundDoors = intersectPacked(c, fringe(sep, 1, width, height, false));
-                short[] doors = allPackedHilbert(aroundDoors);
-                for (int j = 0; j < doors.length; j++) {
-                    near.addAll(findManyPackedHilbert(doors[j], ca));
+            for (GreasedRegion sep : rs) {
+                GreasedRegion aroundDoors = sep.copy().fringe().and(c);
+                Coord[] doors = aroundDoors.asCoords();
+                List<GreasedRegion> near = new ArrayList<>(10);
+                for (int i = 0; i < doors.length; i++) {
+                    near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, cs));
                 }
                 rooms.put(sep, near);
             }
         }
         else
         {
-            short[] floors = pack(basic, '.');
-            caves.put(floors, new ArrayList<short[]>());
-            connections = mouths = allPacked(retract(
-                    differencePacked(floors, retract(floors, 1, width, height, true)),
-                    1, width, height, false));
+            GreasedRegion floors = new GreasedRegion(basic, '.');
+            caves.put(floors, new ArrayList<GreasedRegion>());
+            connections = mouths = floors.copy().andNot(floors.copy().retract8way()).retract().asCoords();
             doorways = new Coord[0];
         }
     }
@@ -187,73 +180,68 @@ public class RoomFinder {
         for (int i = 0; i < width; i++) {
             System.arraycopy(dungeon[i], 0, map[i], 0, height);
         }
-        rooms = new RegionMap<>(32);
-        corridors = new RegionMap<>(32);
-        caves = new RegionMap<>(32);
 
+        rooms = new OrderedMap<>(32);
+        corridors = new OrderedMap<>(32);
+        caves = new OrderedMap<>(32);
         basic = DungeonUtility.simplifyDungeon(map);
-        short[] r = pack(environment, MixedGenerator.ROOM_FLOOR),
-                c = pack(environment, MixedGenerator.CORRIDOR_FLOOR),
-                v = pack(environment, MixedGenerator.CAVE_FLOOR),
-                rc = unionPacked(r, c),
-                d = intersectPacked(r, fringe(c, 1, width, height, false)),
-                m = intersectPacked(rc, fringe(v, 1, width, height, false));
-        doorways = allPacked(d);
-        mouths = allPacked(m);
+        GreasedRegion r = new GreasedRegion(environment, MixedGenerator.ROOM_FLOOR),
+                c = new GreasedRegion(environment, MixedGenerator.CORRIDOR_FLOOR),
+                v = new GreasedRegion(environment, MixedGenerator.CAVE_FLOOR),
+                rc = r.copy().or(c),
+                d = c.copy().fringe().and(r),
+                m = v.copy().fringe().and(rc);
+        doorways = d.asCoords();
+        mouths = m.asCoords();
         connections = new Coord[doorways.length + mouths.length];
         System.arraycopy(doorways, 0, connections, 0, doorways.length);
         System.arraycopy(mouths, 0, connections, doorways.length, mouths.length);
 
-        List<short[]> rs = split(r), cs = split(c), vs = split(v);
-        short[][] ra = rs.toArray(new short[rs.size()][]),
-                ca = cs.toArray(new short[cs.size()][]),
-                va = vs.toArray(new short[vs.size()][]);
+        List<GreasedRegion> rs = r.split(), cs = c.split(), vs = v.split();
 
-        for (short[] sep : cs) {
-            short[] someDoors = intersectPacked(r, fringe(sep, 1, width, height, false));
-            short[] doors = allPackedHilbert(someDoors);
-            List<short[]> near = new ArrayList<short[]>(16);
-            for (int j = 0; j < doors.length; j++) {
-                near.addAll(findManyPackedHilbert(doors[j], ra));
+        for (GreasedRegion sep : cs) {
+            GreasedRegion someDoors = sep.copy().fringe().and(r);
+            Coord[] doors = someDoors.asCoords();
+            List<GreasedRegion> near = new ArrayList<>(16);
+            for (int i = 0; i < doors.length; i++) {
+                near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, rs));
             }
-            someDoors = intersectPacked(v, fringe(sep, 1, width, height, false));
-            doors = allPackedHilbert(someDoors);
-            for (int j = 0; j < doors.length; j++) {
-                near.addAll(findManyPackedHilbert(doors[j], va));
+            someDoors.remake(sep).fringe().and(v);
+            doors = someDoors.asCoords();
+            for (int i = 0; i < doors.length; i++) {
+                near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, vs));
             }
             corridors.put(sep, near);
         }
 
-        for (short[] sep : rs) {
-            List<short[]> near = new ArrayList<short[]>(32);
-            short[] aroundDoors = intersectPacked(c, fringe(sep, 1, width, height, false));
-            short[] doors = allPackedHilbert(aroundDoors);
-            for (int j = 0; j < doors.length; j++) {
-                near.addAll(findManyPackedHilbert(doors[j], ca));
+        for (GreasedRegion sep : rs) {
+            GreasedRegion aroundDoors = sep.copy().fringe().and(c);
+            Coord[] doors = aroundDoors.asCoords();
+            List<GreasedRegion> near = new ArrayList<>(32);
+            for (int i = 0; i < doors.length; i++) {
+                near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, cs));
             }
-            aroundDoors = intersectPacked(v, fringe(sep, 1, width, height, false));
-            doors = allPackedHilbert(aroundDoors);
-            for (int j = 0; j < doors.length; j++) {
-                near.addAll(findManyPackedHilbert(doors[j], va));
+            aroundDoors.remake(sep).fringe().and(v);
+            doors = aroundDoors.asCoords();
+            for (int i = 0; i < doors.length; i++) {
+                near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, vs));
             }
             rooms.put(sep, near);
         }
-
-        for (short[] sep : vs) {
-            List<short[]> near = new ArrayList<short[]>(48);
-            short[] aroundMouths = intersectPacked(c, fringe(sep, 1, width, height, false));
-            short[] maws = allPackedHilbert(aroundMouths);
-            for (int j = 0; j < maws.length; j++) {
-                near.addAll(findManyPackedHilbert(maws[j], ca));
+        for (GreasedRegion sep : vs) {
+            GreasedRegion aroundMouths = sep.copy().fringe().and(c);
+            Coord[] maws = aroundMouths.asCoords();
+            List<GreasedRegion> near = new ArrayList<>(48);
+            for (int i = 0; i < maws.length; i++) {
+                near.addAll(GreasedRegion.whichContain(maws[i].x, maws[i].y, cs));
             }
-            aroundMouths = intersectPacked(r, fringe(sep, 1, width, height, false));
-            maws = allPackedHilbert(aroundMouths);
-            for (int j = 0; j < maws.length; j++) {
-                near.addAll(findManyPackedHilbert(maws[j], ra));
+            aroundMouths.remake(sep).fringe().and(r);
+            maws = aroundMouths.asCoords();
+            for (int i = 0; i < maws.length; i++) {
+                near.addAll(GreasedRegion.whichContain(maws[i].x, maws[i].y, rs));
             }
             caves.put(sep, near);
         }
-
     }
 
     /**
@@ -263,10 +251,10 @@ public class RoomFinder {
      */
     public ArrayList<char[][]> findRooms()
     {
-        ArrayList<char[][]> rs = new ArrayList<char[][]>(rooms.size);
-        for(short[] r : rooms.keys())
+        ArrayList<char[][]> rs = new ArrayList<>(rooms.size());
+        for(GreasedRegion r : rooms.keySet())
         {
-            rs.add(mask(map, r, '#'));
+            rs.add(r.mask(map, '#'));
         }
         return rs;
     }
@@ -278,10 +266,10 @@ public class RoomFinder {
      */
     public ArrayList<char[][]> findCorridors()
     {
-        ArrayList<char[][]> cs = new ArrayList<char[][]>(corridors.size);
-        for(short[] c : corridors.keys())
+        ArrayList<char[][]> cs = new ArrayList<>(corridors.size());
+        for(GreasedRegion c : corridors.keySet())
         {
-            cs.add(mask(map, c, '#'));
+            cs.add(c.mask(map, '#'));
         }
         return cs;
     }
@@ -294,10 +282,10 @@ public class RoomFinder {
      */
     public ArrayList<char[][]> findCaves()
     {
-        ArrayList<char[][]> vs = new ArrayList<char[][]>(caves.size);
-        for(short[] v : caves.keys())
+        ArrayList<char[][]> vs = new ArrayList<>(caves.size());
+        for(GreasedRegion v : caves.keySet())
         {
-            vs.add(mask(map, v, '#'));
+            vs.add(v.mask(map, '#'));
         }
         return vs;
     }
@@ -309,16 +297,18 @@ public class RoomFinder {
      */
     public ArrayList<char[][]> findRegions()
     {
-        ArrayList<char[][]> rs = new ArrayList<char[][]>(rooms.size + corridors.size + caves.size);
-        for(short[] r : rooms.keys())
+        ArrayList<char[][]> rs = new ArrayList<char[][]>(rooms.size() + corridors.size() + caves.size());
+        for(GreasedRegion r : rooms.keySet())
         {
-            rs.add(mask(map, r, '#'));
+            rs.add(r.mask(map, '#'));
         }
-        for(short[] r : corridors.keys()) {
-            rs.add(mask(map, r, '#'));
+        for(GreasedRegion c : corridors.keySet())
+        {
+            rs.add(c.mask(map, '#'));
         }
-        for(short[] r : caves.keys()) {
-            rs.add(mask(map, r, '#'));
+        for(GreasedRegion v : caves.keySet())
+        {
+            rs.add(v.mask(map, '#'));
         }
         return rs;
     }
@@ -345,7 +335,7 @@ public class RoomFinder {
         if(regions == null || regions.isEmpty())
             return defaultFill(width, height);
         char[][] first = regions.get(0);
-        char[][] dungeon = new char[first.length][first[0].length];
+        char[][] dungeon = new char[Math.min(width, first.length)][Math.min(height, first[0].length)];
         for (int x = 0; x < first.length; x++) {
             Arrays.fill(dungeon[x], '#');
         }
@@ -370,15 +360,16 @@ public class RoomFinder {
      */
     public char[][] regionAt(int x, int y)
     {
-        OrderedSet<short[]> regions = rooms.regionsContaining(x, y);
-        regions.addAll(corridors.regionsContaining(x, y));
-        regions.addAll(caves.regionsContaining(x, y));
-        short[] found;
+
+        OrderedSet<GreasedRegion> regions = GreasedRegion.whichContain(x, y, rooms.keySet());
+        regions.addAll(GreasedRegion.whichContain(x, y, corridors.keySet()));
+        regions.addAll(GreasedRegion.whichContain(x, y, caves.keySet()));
+        GreasedRegion found;
         if(regions.isEmpty())
-            found = ALL_WALL;
+            found = new GreasedRegion(width, height);
         else
-            found = GwtCompatibility.first(regions);
-        return mask(map, found, '#');
+            found = regions.first();
+        return found.mask(map, '#');
     }
 
     /**
@@ -390,38 +381,42 @@ public class RoomFinder {
      */
     public char[][] regionsNear(int x, int y)
     {
-        OrderedSet<short[]> regions = rooms.regionsContaining(x, y);
-        regions.addAll(corridors.regionsContaining(x, y));
-        regions.addAll(caves.regionsContaining(x, y));
-        short[] found;
+        OrderedSet<GreasedRegion> atRooms = GreasedRegion.whichContain(x, y, rooms.keySet()),
+                atCorridors = GreasedRegion.whichContain(x, y, corridors.keySet()),
+                atCaves = GreasedRegion.whichContain(x, y, caves.keySet()),
+                regions = new OrderedSet<>(64);
+        regions.addAll(atRooms);
+        regions.addAll(atCorridors);
+        regions.addAll(atCaves);
+        GreasedRegion found;
         if(regions.isEmpty())
-            found = ALL_WALL;
+            found = new GreasedRegion(width, height);
         else
         {
-            found = GwtCompatibility.first(regions);
-            OrderedSet<List<short[]>> near = rooms.allAt(x, y);
-            for (List<short[]> links : near) {
-                for(short[] n : links)
+            found = regions.first();
+            List<List<GreasedRegion>> near = rooms.getMany(atRooms);
+            for (List<GreasedRegion> links : near) {
+                for(GreasedRegion n : links)
                 {
-                    found = unionPacked(found, n);
+                    found.or(n);
                 }
             }
-            near = corridors.allAt(x, y);
-            for (List<short[]> links : near) {
-                for(short[] n : links)
+            near = corridors.getMany(atCorridors);
+            for (List<GreasedRegion> links : near) {
+                for(GreasedRegion n : links)
                 {
-                    found = unionPacked(found, n);
+                    found.or(n);
                 }
             }
-            near = caves.allAt(x, y);
-            for (List<short[]> links : near) {
-                for(short[] n : links)
+            near = caves.getMany(atCaves);
+            for (List<GreasedRegion> links : near) {
+                for(GreasedRegion n : links)
                 {
-                    found = unionPacked(found, n);
+                    found.or(n);
                 }
             }
         }
-        return mask(map, found, '#');
+        return found.mask(map, '#');
     }
 
     /**
@@ -434,23 +429,24 @@ public class RoomFinder {
     public ArrayList<char[][]> regionsConnected(int x, int y)
     {
         ArrayList<char[][]> regions = new ArrayList<>(10);
-        OrderedSet<List<short[]>> near = rooms.allAt(x, y);
-        for (List<short[]> links : near) {
-            for(short[] n : links)
+        List<List<GreasedRegion>> near = rooms.getMany(GreasedRegion.whichContain(x, y, rooms.keySet()));
+        for (List<GreasedRegion> links : near) {
+            for(GreasedRegion n : links)
             {
-                regions.add(mask(map, n, '#'));
+                regions.add(n.mask(map, '#'));
             }
         }
-        near = corridors.allAt(x, y);
-        for (List<short[]> links : near) {
-            for (short[] n : links) {
-                regions.add(mask(map, n, '#'));
+        near = corridors.getMany(GreasedRegion.whichContain(x, y, corridors.keySet()));
+        for (List<GreasedRegion> links : near) {
+            for (GreasedRegion n : links) {
+                regions.add(n.mask(map, '#'));
             }
         }
-        near = caves.allAt(x, y);
-        for (List<short[]> links : near) {
-            for (short[] n : links) {
-                regions.add(mask(map, n, '#'));
+        near = caves.getMany(GreasedRegion.whichContain(x, y, caves.keySet()));
+        for (List<GreasedRegion> links : near) {
+            for(GreasedRegion n : links)
+            {
+                regions.add(n.mask(map, '#'));
             }
         }
 

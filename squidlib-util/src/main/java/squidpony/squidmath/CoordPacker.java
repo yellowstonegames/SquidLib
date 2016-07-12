@@ -1572,6 +1572,20 @@ public class CoordPacker {
         }
         return c;
     }
+
+    /**
+     * Simple utility method that constructs a GreasedRegion (a faster but more-memory-hungry way to encode regions)
+     * from a short array of packed data.
+     * @param packed a packed short array, as produced by pack()
+     * @param width the desired GreasedRegion's width
+     * @param height the desired GreasedRegion's height
+     * @return a GreasedRegion that contains the same data as packed, with the specified width and height
+     */
+    public static GreasedRegion unpackGreasedRegion(short[] packed, int width, int height)
+    {
+        return new GreasedRegion(unpack(packed, width, height));
+    }
+
     /**
      * Quickly determines if an x,y position is true or false in the given packed array, without unpacking it.
      * @param packed a short[] returned by pack() or one of the sub-arrays in what is returned by packMulti(); must

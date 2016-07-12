@@ -19,17 +19,7 @@ import squidpony.annotation.Beta;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
-import java.util.AbstractCollection;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
+import java.util.*;
 
 /**
  * A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap but modified to support indexed access.
@@ -2582,5 +2572,15 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
     }
 
-
+    public List<V> getMany(Collection<K> keys)
+    {
+        if(keys == null)
+            return new ArrayList<>(1);
+        ArrayList<V> vals = new ArrayList<>(keys.size());
+        for(K k : keys)
+        {
+            vals.add(get(k));
+        }
+        return vals;
+    }
 }

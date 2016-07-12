@@ -3,9 +3,8 @@ package squidpony.squidgrid.mapping;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.OrderedSet;
-
-import static squidpony.squidmath.CoordPacker.*;
 
 /**
  * Utility class for finding areas where game-specific terrain features might be suitable to place.
@@ -20,8 +19,7 @@ public class Placement {
      */
     public RoomFinder finder;
 
-    private short[] allRooms = ALL_WALL, allCaves = ALL_WALL, allCorridors = ALL_WALL, allFloors = ALL_WALL,
-            nonRoom;
+    private GreasedRegion allRooms, allCorridors, allCaves, allFloors, nonRoom;
     private OrderedSet<OrderedSet<Coord>> alongStraightWalls = null,
             corners = null, centers = null;
     private OrderedSet<Coord> hidingPlaces = null;
@@ -44,20 +42,25 @@ public class Placement {
 
         this.finder = finder;
 
-        for(short[] region : finder.rooms.keys())
+        allRooms = new GreasedRegion(finder.width, finder.height);
+        allCorridors = new GreasedRegion(finder.width, finder.height);
+        allCaves = new GreasedRegion(finder.width, finder.height);
+        allFloors = new GreasedRegion(finder.width, finder.height);
+
+        for(GreasedRegion region : finder.rooms.keySet())
         {
-            allRooms = unionPacked(allRooms, region);
+            allRooms.or(region);
         }
-        for(short[] region : finder.caves.keys())
+        for(GreasedRegion region : finder.caves.keySet())
         {
-            allCaves = unionPacked(allCaves, region);
+            allCaves.or(region);
         }
-        for(short[] region : finder.corridors.keys())
+        for(GreasedRegion region : finder.corridors.keySet())
         {
-            allCorridors = unionPacked(allCorridors, region);
+            allCorridors.or(region);
         }
-        allFloors = unionPacked(unionPacked(allRooms, allCorridors), allCaves);
-        nonRoom = expand(unionPacked(allCorridors, allCaves), 2, finder.width, finder.height, false);
+        allFloors = allRooms.copy().or(allCorridors).or(allCaves);
+        nonRoom = allCorridors.copy().or(allCaves).expand(2);
     }
 
     /**
@@ -71,20 +74,14 @@ public class Placement {
         if(alongStraightWalls == null)
         {
             alongStraightWalls = new OrderedSet<>(32);
-            short[] working;
-            for(short[] region : finder.rooms.keys()) {
-                working =
-                        differencePacked(
-                                fringe(
-                                        retract(region, 1, finder.width, finder.height, false),
-                                        1, finder.width, finder.height, false),
-                                nonRoom);
-                for (short[] sp : split(working)) {
-                    if (count(sp) >= 3)
-                        alongStraightWalls.add(arrayToSet(allPacked(sp)));
+            GreasedRegion working = new GreasedRegion(finder.width, finder.height);
+            for(GreasedRegion region : finder.rooms.keySet()) {
+                working.remake(region).retract().fringe().andNot(nonRoom);
+                for (GreasedRegion sp : working.split()) {
+                    if (sp.count() >= 3)
+                        alongStraightWalls.add(arrayToSet(sp.asCoords()));
                 }
             }
-
         }
         return alongStraightWalls;
     }
@@ -100,23 +97,11 @@ public class Placement {
         if(corners == null)
         {
             corners = new OrderedSet<>(32);
-            short[] working;
-            for(short[] region : finder.rooms.keys()) {
-                working =
-                        differencePacked(
-                                differencePacked(region,
-                                        retract(
-                                                expand(region, 1, finder.width, finder.height, false),
-                                                1, finder.width, finder.height, true)
-                                ),
-                                nonRoom);
-                for(Coord c : allPacked(working))
-                {
-                    OrderedSet<Coord> lhs = new OrderedSet<Coord>();
-                    lhs.add(c);
-                    corners.add(lhs);
-                }
-
+            GreasedRegion working = new GreasedRegion(finder.width, finder.height);
+            for(GreasedRegion region : finder.rooms.keySet()) {
+                working.remake(region).expand().retract8way().xor(region).andNot(nonRoom);
+                OrderedSet<Coord> os = new OrderedSet<>(working.asCoords());
+                corners.add(os);
             }
         }
         return corners;
@@ -134,16 +119,16 @@ public class Placement {
         if(centers == null)
         {
             centers = new OrderedSet<>(32);
-            short[] working, working2;
-            for(short[] region : finder.rooms.keys()) {
+            GreasedRegion working, working2;
+            for(GreasedRegion region : finder.rooms.keySet()) {
 
                 working = null;
-                working2 = retract(region, 1, finder.width, finder.height, false);
+                working2 = region.copy().retract();
                 for (int i = 2; i < 7; i++) {
-                    if(count(working2) <= 0)
+                    if(working2.count() <= 0)
                         break;
-                    working = working2;
-                    working2 = retract(region, i, finder.width, finder.height, false);
+                    working = working2.copy();
+                    working2.retract();
                 }
                 if(working == null)
                     continue;
@@ -152,7 +137,7 @@ public class Placement {
                 //        differencePacked(
                 //                working,
                 //                nonRoom);
-                centers.add(arrayToSet(allPacked(working)));
+                centers.add(arrayToSet(working.asCoords()));
 
             }
         }
@@ -186,7 +171,8 @@ public class Placement {
                     }
                 }
             }
-            hidingPlaces = arrayToSet(allPacked(intersectPacked(allFloors, pack(composite, 0.25))));
+
+            hidingPlaces = arrayToSet(new GreasedRegion(composite, 0.25).and(allFloors).asCoords());
         }
         return hidingPlaces;
     }

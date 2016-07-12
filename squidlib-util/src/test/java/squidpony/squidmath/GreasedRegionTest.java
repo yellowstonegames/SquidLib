@@ -27,7 +27,7 @@ public class GreasedRegionTest {
         //printRegion(dataCross);
         //printRegion(dataCross2);
     }
-    public static final boolean PRINTING = true;
+    public static final boolean PRINTING = false;
     @Test
     public void testBasics() {
         //printPacked(dataCross, 64, 64);

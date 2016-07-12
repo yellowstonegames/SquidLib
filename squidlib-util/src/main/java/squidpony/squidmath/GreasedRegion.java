@@ -6,6 +6,7 @@ import squidpony.squidgrid.Radius;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Region encoding of 64x64 areas as a number of long arrays; uncompressed (fatty), but fast (greased lightning).
@@ -46,6 +47,20 @@ public class GreasedRegion implements Serializable {
     }
 
     public GreasedRegion(char[][] map, char yes)
+    {
+        width = map.length;
+        height = map[0].length;
+        ySections = (height + 63) >> 6;
+        yEndMask = (-1L >>> (64 - (height & 63)));
+        data = new long[width * ySections];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(map[x][y] == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+            }
+        }
+    }
+
+    public GreasedRegion(int[][] map, int yes)
     {
         width = map.length;
         height = map[0].length;
@@ -472,6 +487,22 @@ public class GreasedRegion implements Serializable {
         for (int x = 0; x < width && x < other.width; x++) {
             for (int y = 0; y < ySections && y < other.ySections; y++) {
                 data[x * ySections + y] &= ~other.data[x * ySections + y];
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Like andNot, but subtracts this GreasedRegion from other and stores the result in this GreasedRegion, without
+     * mutating other.
+     * @param other
+     * @return
+     */
+    public GreasedRegion notAnd(GreasedRegion other)
+    {
+        for (int x = 0; x < width && x < other.width; x++) {
+            for (int y = 0; y < ySections && y < other.ySections; y++) {
+                data[x * ySections + y] = other.data[x * ySections + y] & ~data[x * ySections + y];
             }
         }
         return this;
@@ -954,25 +985,25 @@ public class GreasedRegion implements Serializable {
         long[] next = new long[width * ySections];
         for (int a = 0; a < ySections && a < bounds.ySections; a++) {
             next[a] |= (data[a] |(data[a] << 1) | (data[a] >>> 1) | (data[a+ySections])) & bounds.data[a];
-            next[(width-1)*ySections+a] = (data[(width-1)*ySections+a] | (data[(width-1)*ySections+a] << 1)
+            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a] | (data[(width-1)*ySections+a] << 1)
                     | (data[(width-1)*ySections+a] >>> 1) | (data[(width-2)*ySections+a])) & bounds.data[(width-1)*bounds.ySections+a];
 
             for (int i = ySections+a, j = bounds.ySections+a; i < (width - 1) * ySections &&
                     j < (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {
-                next[i] = (data[i] | (data[i] << 1) | (data[i] >>> 1) | (data[i - ySections]) | (data[i + ySections])) & bounds.data[j];
+                next[i] |= (data[i] | (data[i] << 1) | (data[i] >>> 1) | (data[i - ySections]) | (data[i + ySections])) & bounds.data[j];
             }
 
             if(a > 0) {
                 for (int i = ySections+a, j = bounds.ySections+a; i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections;
                      i+= ySections, j += bounds.ySections) {
-                    next[i] = (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63)) & bounds.data[j];
+                    next[i] |= (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63)) & bounds.data[j];
                 }
             }
 
             if(a < ySections - 1 && a < bounds.ySections - 1) {
                 for (int i = ySections+a, j = bounds.ySections+a;
                      i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections; i+= ySections, j += bounds.ySections) {
-                    next[i] = (data[i] | ((data[i + 1] & 1L) << 63)) & bounds.data[j];
+                    next[i] |= (data[i] | ((data[i + 1] & 1L) << 63)) & bounds.data[j];
                 }
             }
         }
@@ -1044,16 +1075,16 @@ public class GreasedRegion implements Serializable {
 
         long[] next = new long[width * ySections];
         for (int a = 0; a < ySections && a < bounds.ySections; a++) {
-            next[a] = (data[a] | (data[a] << 1) | (data[a] >>> 1)
+            next[a] |= (data[a] | (data[a] << 1) | (data[a] >>> 1)
                     | (data[a+ySections]) | (data[a+ySections] << 1) | (data[a+ySections] >>> 1)) & bounds.data[a];
-            next[(width-1)*ySections+a] = (data[(width-1)*ySections+a]
+            next[(width-1)*ySections+a] |= (data[(width-1)*ySections+a]
                     | (data[(width-1)*ySections+a] << 1) | (data[(width-1)*ySections+a] >>> 1)
                     | (data[(width-2)*ySections+a]) | (data[(width-2)*ySections+a] << 1) | (data[(width-2)*ySections+a] >>> 1))
                     & bounds.data[(width-1)*bounds.ySections+a];
 
             for (int i = ySections+a, j = bounds.ySections+a; i < (width - 1) * ySections &&
                     j < (bounds.width - 1) * bounds.ySections; i+= ySections, j+= bounds.ySections) {
-                next[i] = (data[i] | (data[i] << 1) | (data[i] >>> 1)
+                next[i] |= (data[i] | (data[i] << 1) | (data[i] >>> 1)
                         | (data[i - ySections]) | (data[i - ySections] << 1) | (data[i - ySections] >>> 1)
                         | (data[i + ySections]) | (data[i + ySections] << 1) | (data[i + ySections] >>> 1))
                         & bounds.data[j];
@@ -1062,7 +1093,7 @@ public class GreasedRegion implements Serializable {
             if(a > 0) {
                 for (int i = ySections+a, j = bounds.ySections+a; i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections;
                      i+= ySections, j += bounds.ySections) {
-                    next[i] = (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63) |
+                    next[i] |= (data[i] | ((data[i - 1] & 0x8000000000000000L) >>> 63) |
                             ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63) |
                             ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63)) & bounds.data[j];
                 }
@@ -1071,7 +1102,7 @@ public class GreasedRegion implements Serializable {
             if(a < ySections - 1 && a < bounds.ySections - 1) {
                 for (int i = ySections+a, j = bounds.ySections+a;
                      i < (width-1) * ySections && j < (bounds.width-1) * bounds.ySections; i+= ySections, j += bounds.ySections) {
-                    next[i] = (data[i] | ((data[i + 1] & 1L) << 63) |
+                    next[i] |= (data[i] | ((data[i + 1] & 1L) << 63) |
                             ((data[i - ySections + 1] & 1L) << 63) |
                             ((data[i + ySections+ 1] & 1L) << 63)) & bounds.data[j];
                 }
@@ -1136,6 +1167,22 @@ public class GreasedRegion implements Serializable {
         return regions;
     }
 
+    public GreasedRegion spill(GreasedRegion bounds, int volume, RNG rng)
+    {
+        if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
+            return this;
+        int current = count();
+        if(current >= volume)
+            return this;
+        GreasedRegion t = new GreasedRegion(this);
+        Coord c = Coord.get(-1, -1);
+        for (int i = current; i < volume; i++) {
+            insert(t.remake(this).fringe().and(bounds).singleRandom(rng));
+        }
+        return this;
+    }
+
+
     /**
      * If this GreasedRegion stores multiple unconnected "on" areas, this finds each isolated area (areas that
      * are only adjacent diagonally are considered separate from each other) and returns it as an element in an
@@ -1165,12 +1212,27 @@ public class GreasedRegion implements Serializable {
         Coord fst = first();
         GreasedRegion remaining = new GreasedRegion(this);
         while (fst.x >= 0) {
-            GreasedRegion filled  = new GreasedRegion(fst, width, height).flood(remaining, width * height);
+            GreasedRegion filled = new GreasedRegion(fst, width, height).flood(remaining, width * height);
             scattered.add(filled);
             remaining.andNot(filled);
             fst = remaining.first();
         }
         return scattered;
+    }
+
+
+    public GreasedRegion removeIsolated()
+    {
+        Coord fst = first();
+        GreasedRegion remaining = new GreasedRegion(this), filled = new GreasedRegion(this);
+        while (fst.x >= 0) {
+            filled.clear().insert(fst).flood(remaining, 8);
+            if(filled.count() <= 4)
+                andNot(filled);
+            remaining.andNot(filled);
+            fst = remaining.first();
+        }
+        return this;
     }
 
     public boolean intersects(GreasedRegion other)
@@ -1190,6 +1252,16 @@ public class GreasedRegion implements Serializable {
         GreasedRegion tmp;
         for (int i = 0; i < packed.length; i++) {
             if((tmp = packed[i]) != null && tmp.test(x, y))
+                found.add(tmp);
+        }
+        return found;
+    }
+
+    public static OrderedSet<GreasedRegion> whichContain(int x, int y, Collection<GreasedRegion> packed)
+    {
+        OrderedSet<GreasedRegion> found = new OrderedSet<>(packed.size());
+        for (GreasedRegion tmp : packed) {
+            if(tmp != null && tmp.test(x, y))
                 found.add(tmp);
         }
         return found;
