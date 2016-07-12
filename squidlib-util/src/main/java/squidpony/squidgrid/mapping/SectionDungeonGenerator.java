@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -779,7 +780,11 @@ public class SectionDungeonGenerator {
             dijkstra.setGoal(stairsUp);
             dijkstra.scan(null);
             frustrated++;
-        }while (dijkstra.getMappedCount() < width + height && frustrated < 15);
+        }while (dijkstra.getMappedCount() < width + height && frustrated < 5);
+        if(frustrated >= 5)
+        {
+            return generate();
+        }
         double maxDijkstra = 0.0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -971,40 +976,34 @@ public class SectionDungeonGenerator {
         fused.addAll(caves);
 
         fusedMap = RoomFinder.merge(fused, width, height);
-        short[] limit = rectangle(1, 1, width - 2, height - 2),
-                potential = intersectPacked(limit, pack(fusedMap, '#'));
-        int ctr = count(potential), potentialMazeSize = ctr * mazeFill / 100, potentialLakeSize = ctr * lakeFill / 100;
-        ArrayList<short[]> viable;
-        short[] chosen;
+        GreasedRegion limit = new GreasedRegion(width, height).insertRectangle(1, 1, width - 2, height - 2),
+                potential = new GreasedRegion(fusedMap, '#').and(limit),
+                flooded, chosen, tmp = new GreasedRegion(width, height);
+        int ctr = potential.count(), potentialMazeSize = ctr * mazeFill / 100, potentialLakeSize = ctr * lakeFill / 100;
+        ArrayList<GreasedRegion> viable;
         int minSize;
         Coord center;
-        short[] flooded;
         boolean[][] deep;
         if(potentialMazeSize > 0) {
-            viable = split(potential);
+            viable = potential.split();
             if (viable.isEmpty())
                 return maps;
 
             chosen = viable.get(0);
-            minSize = count(chosen);
-            for (short[] sa : viable) {
-                int sz = count(sa);
+            minSize = chosen.count();
+            for (GreasedRegion sa : viable) {
+                int sz = sa.count();
                 if (sz > minSize) {
                     chosen = sa;
                     minSize = sz;
                 }
             }
             PacMazeGenerator pac = new PacMazeGenerator(width - width % 3, height - height % 3, rng);
-            char[][] pacMap = pac.generate();
-            center = singleRandom(chosen, rng);
-            flooded = intersectPacked(limit, spill(chosen, packOne(center), potentialMazeSize, rng));
-            short[] pacEnv = removeIsolated(
-                    intersectPacked(
-                            flooded,
-                            translate(
-                                    pack(pacMap, '.'),
-                                    1, 1, width, height)));
-            deep = unpack(pacEnv, width, height);
+            char[][] pacMap = GwtCompatibility.insert2D(pac.generate(), GwtCompatibility.fill2D('#', width, height), 1, 1);
+            center = chosen.singleRandom(rng);
+            flooded = new GreasedRegion(center, width, height).spill(chosen, potentialMazeSize, rng).and(limit);
+            GreasedRegion pacEnv = new GreasedRegion(pacMap, '.').and(flooded).removeIsolated();
+            deep = pacEnv.decode();
 
             for (int x = 1; x < width - 1; x++) {
                 for (int y = 1; y < height - 1; y++) {
@@ -1012,33 +1011,31 @@ public class SectionDungeonGenerator {
                         maps[1][x][y] = pacMap[x-1][y-1];
                 }
             }
-            finder.corridors.put(pacEnv, new ArrayList<short[]>());
-            potential = differencePacked(potential, flooded);
+            finder.corridors.put(pacEnv, new ArrayList<GreasedRegion>());
+            potential.andNot(flooded);
         }
         if(potentialLakeSize > 0) {
-            viable = split(potential);
+            viable = potential.split();
             if (viable.isEmpty())
                 return maps;
             chosen = viable.get(0);
-            minSize = count(chosen);
-            for (short[] sa : viable) {
-                int sz = count(sa);
+            minSize = chosen.count();
+            for (GreasedRegion sa : viable) {
+                int sz = sa.count();
                 if (sz > minSize) {
                     chosen = sa;
                     minSize = sz;
                 }
             }
-            center = singleRandom(chosen, rng);
-            flooded = intersectPacked(limit, spill(chosen, packOne(center), potentialLakeSize, rng));
+            center = chosen.singleRandom(rng);
+            flooded = new GreasedRegion(center, width, height).spill(chosen, potentialLakeSize, rng).and(limit);
 
-            deep = unpack(flooded, width, height);
+            deep = flooded.decode();
 
-            short[] shore = intersectPacked(limit,
-                    flood(fringe(pack(fusedMap, '.'), 3, width, height, true, true),
-                            flooded, 3, false)),
-                    lake = unionPacked(flooded, shore);
+            GreasedRegion shore = new GreasedRegion(fusedMap, '.').fringe8way(3).flood(flooded, 3).and(limit),
+                    lake = shore.copy().or(flooded);
 
-            boolean[][] shallow = unpack(shore, width, height);
+            boolean[][] shallow = shore.decode();
 
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
@@ -1048,15 +1045,14 @@ public class SectionDungeonGenerator {
                         maps[0][x][y] = shallowLakeGlyph;
                 }
             }
-            ArrayList<short[]> change = new ArrayList<>();
-            for (short[] room : finder.rooms.keys()) {
-                if (intersects(lake, expand(room, 1, width, height)))
+            ArrayList<GreasedRegion> change = new ArrayList<>();
+            for (GreasedRegion room : finder.rooms.keySet()) {
+                if(lake.intersects(tmp.remake(room).expand8way()))
                     change.add(room);
             }
-            for (short[] region : change) {
+            for (GreasedRegion region : change) {
                 finder.caves.put(region, finder.rooms.remove(region));
             }
-            //finder.caves.put(lake, new ArrayList<short[]>());
         }
         return maps;
     }
