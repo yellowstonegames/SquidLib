@@ -185,6 +185,51 @@ public interface Rectangle {
 			throw new IllegalStateException("Unmatched direction in Rectangle.Utils::extend: " + d);
 		}
 
+		/**
+		 * @param r
+		 * @param diagonal
+		 *            A diagonal direction.
+		 * @return The coord at the corner identified by {@code diagonal} in
+		 *         {@code r}.
+		 */
+		public static Coord getCorner(Rectangle r, Direction diagonal) {
+			assert diagonal.isDiagonal();
+			switch (diagonal) {
+			case DOWN_LEFT:
+				return r.getBottomLeft();
+			case DOWN_RIGHT:
+				return r.getBottomLeft().translate(r.getWidth() - 1, 0);
+			case UP_LEFT:
+				return r.getBottomLeft().translate(0, r.getHeight() - 1);
+			case UP_RIGHT:
+				return r.getBottomLeft().translate(r.getWidth() - 1, r.getHeight() - 1);
+			case DOWN:
+			case LEFT:
+			case NONE:
+			case RIGHT:
+			case UP:
+				throw new IllegalStateException(
+						"Expected a cardinal direction in Rectangle.Utils::getCorner. Received: " + diagonal);
+			}
+			throw new IllegalStateException("Unmatched direction in Rectangle.Utils::getCorner: " + diagonal);
+		}
+
+		/**
+		 * @param r
+		 * @param buf
+		 *            An array of (at least) size 4, to hold the 4 corners. It
+		 *            is returned, except if {@code null} or too small, in which
+		 *            case a fresh array is returned.
+		 * @return
+		 */
+		public static Coord[] getAll4Corners(Rectangle r, Coord[] buf) {
+			final Coord[] result = buf == null || buf.length < 4 ? new Coord[4] : buf;
+			result[0] = getCorner(r, Direction.DOWN_LEFT);
+			result[1] = getCorner(r, Direction.DOWN_RIGHT);
+			result[2] = getCorner(r, Direction.UP_RIGHT);
+			result[3] = getCorner(r, Direction.UP_LEFT);
+			return result;
+		}
 	}
 
 	/**
