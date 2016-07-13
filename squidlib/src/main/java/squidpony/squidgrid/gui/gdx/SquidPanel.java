@@ -859,32 +859,29 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
     /**
-     * Created an Actor from the contents of the given x,y position on the grid.
+     * Created an Actor from the contents of the given x,y position on the grid; deleting
+     * the grid's String content at this cell.
+     * 
      * @param x
      * @param y
      * @param doubleWidth
-     * @return
+     * @return A fresh {@link Actor}, that has just been added to {@code this}.
      */
     public Actor cellToActor(int x, int y, boolean doubleWidth)
     {
-        if(contents[x][y] == null || contents[x][y].equals(""))
-            return null;
+    	return createActor(x, y, contents[x][y], colors[x][y], doubleWidth);
+    }
 
-        Actor a = textFactory.makeActor(contents[x][y], scc.filter(colors[x][y]));
-        a.setName(contents[x][y]);
-        a.setPosition(adjustX(x, doubleWidth) - getX() * 2, adjustY(y) - getY() * 2); // - textFactory.lineHeight * 0.25f
-
-        /*
-        if(doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight  - textFactory.getDescent() + getY());
-        else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight  - textFactory.getDescent() + getY());
-         */
-
-        addActor(a);
-
-        contents[x][y] = "";
-        return a;
+	protected /* @Nullable */ Actor createActor(int x, int y, String name, Color color, boolean doubleWidth) {
+		if (name == null || name.isEmpty())
+			return null;
+		else {
+			final Actor a = textFactory.makeActor(name, scc.filter(color));
+			a.setName(name);
+			a.setPosition(adjustX(x, doubleWidth) - getX() * 2, adjustY(y) - getY() * 2);
+			addActor(a);
+			return a;
+		}
     }
 
     public float adjustX(float x, boolean doubleWidth)
@@ -913,13 +910,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
     }
     */
-    public void recallActor(Actor a)
+    public void recallActor(Actor a, boolean restoreSym)
     {
         int x = Math.round((a.getX() - getX()) / cellWidth),
              y = gridHeight - Math.round((a.getY() - getY()) / cellHeight) - 1;
         if(x < 0 || y < 0 || x >= contents.length || y >= contents[x].length)
             return;
-        contents[x][y] = a.getName();
+        if (restoreSym)
+        	contents[x][y] = a.getName();
         animationCount--;
         removeActor(a);
     }
@@ -992,7 +990,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(a);
+                        recallActor(a, true);
                     }
                 }))));
 
@@ -1035,7 +1033,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         animationCount++;
         ae.animating = true;
         a.addAction(Actions.sequence(
-                Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration),
+                Actions.moveToAligned(nextX, nextY, Align.center, duration),
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
@@ -1074,10 +1072,54 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(a);
+                        recallActor(a, true);
                     }
                 }))));
     }
+
+	/**
+	 * Slides {@code name} from {@code (x,y)} to {@code (newx, newy)}. If
+	 * {@code name} or {@code
+	 * color} is {@code null}, it is picked from this panel (hereby removing the
+	 * current name, if any).
+	 * 
+	 * @param x
+	 *            Where to start the slide, horizontally.
+	 * @param y
+	 *            Where to start the slide, vertically.
+	 * @param name
+	 *            The name to slide, or {@code null} to pick it from this
+	 *            panel's {@code (x,y)} cell.
+	 * @param color
+	 *            The color to use, or {@code null} to pick it from this panel's
+	 *            {@code (x,y)} cell.
+	 * @param newX
+	 *            Where to end the slide, horizontally.
+	 * @param newY
+	 *            Where to end the slide, vertically.
+	 * @param duration
+	 *            The animation's duration.
+	 */
+	public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, int newX,
+			int newY, float duration) {
+		final Actor a = createActor(x, y, name == null ? contents[x][y] : name,
+				color == null ? colors[x][y] : color, false);
+		if (a == null)
+			return;
+
+		duration = clampDuration(duration);
+		animationCount++;
+		float nextX = adjustX(newX, false), nextY = adjustY(newY);
+
+		a.addAction(Actions.sequence(Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration),
+				Actions.delay(duration, Actions.run(new Runnable() {
+					@Override
+					public void run() {
+						recallActor(a, name == null);
+					}
+				}))));
+	}
+
     /**
      * Starts a movement animation for the object at the given grid location at the default speed.
      *
@@ -1188,7 +1230,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        recallActor(a);
+                        recallActor(a, true);
                     }
                 }))));
     }
@@ -1239,7 +1281,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                     Actions.delay(0.0f, Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            recallActor(a);
+                            recallActor(a, true);
                         }
                     }))));
         else
@@ -1249,7 +1291,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            recallActor(a);
+                            recallActor(a, true);
                         }
                     })));
                 /*Actions.run(new Runnable() {
@@ -1291,7 +1333,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 		a.addAction(Actions.sequence(Actions.color(c, duration), Actions.run(new Runnable() {
 			@Override
 			public void run() {
-				recallActor(a);
+				recallActor(a, true);
 			}
 		})));
 	}
