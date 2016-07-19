@@ -33,24 +33,35 @@ public class FakeLanguageGen implements Serializable {
             consonantClusters = Pattern.compile(
                     "[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+",
                     REFlags.IGNORE_CASE | REFlags.UNICODE);
+    //latin
+    //àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳybcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥ
+    //ÀÁÂÃÄÅÆĀĂĄǺǼAÈÉÊËĒĔĖĘĚEÌÍÎÏĨĪĬĮIIÒÓÔÕÖØŌŎŐŒǾOÙÚÛÜŨŪŬŮŰŲUÝŸŶỲYBCÇĆĈĊČDÞÐĎĐFGĜĞĠĢHĤĦJĴȷKĶLĹĻĽĿŁMNÑŃŅŇŊPQRŔŖŘSŚŜŞŠȘTŢŤȚVWŴẀẂẄXYÝŸŶỲZŹŻŽṚṜḶḸḌṬṄṆṢṂḤ
+    //greek
+    //αοειυρσζτκχνθμπψβλγφξς
+    //ΑΟΕΙΥΡΣΖΤΚΧΝΘΜΠΨΒΛΓΦΞΣ
+    //cyrillic
+    //аеёийоуъыэюябвгдклпрстфхцжмнзчшщ
+    //АЕЁИЙОУЪЫЭЮЯБВГДКЛПРСТФХЦЖМНЗЧШЩ
+
     static final Pattern[]
             vulgarChecks = new Pattern[]
             {
-                    Pattern.compile("[SsξCcсςС][hнН].*[dtтτТΤ]"),
-                    Pattern.compile("([PpрρРΡ][hнН])|[KkкκКΚFfDdCcсςСQq].{1,4}[KkкκКΚCcсςСxхжχХЖΧQq]"), // lots of these end in a 'k' sound, huh
-                    Pattern.compile("[BbъыбвβЪЫБВΒ]..?.?[cсςС][hнН]"),
-                    Pattern.compile("[WwшщψШЩHhнН]..?[rяЯ]"),
-                    Pattern.compile("[TtтτТΤ]..?[tтτТΤ]"),
-                    Pattern.compile("([PpрρРΡ][hнН])|[Ff]..?[rяЯ][tтτТΤ]"),
-                    Pattern.compile("([Ssξ][hнН])[iτιΙ].?[sξzΖ]"),
+                    Pattern.compile("[SsξCcсςСΖZ][hнНlι].{1,3}[dtтτТΤΓг]"),
+                    Pattern.compile("([PpрρРΡ][hнН])|[FfDd].{1,3}[KkкκКΚCcсςСxхжχХЖΧQq]"), // lots of these end in a 'k' sound, huh
+                    Pattern.compile("[KkкκКΚCcсςСQq].{1,3}[KkкκКΚCcсςСxхжχХЖΧQqMmмМΜ]"),
+                    Pattern.compile("[BbъыбвβЪЫБВΒ].?.?.?[cсςС][hнН]"),
+                    Pattern.compile("[HhнН][^AaаαАΑΛeеёзξεЕЁЗΞΕΣiτιΙ][^AaаαАΑΛeеёзξεЕЁЗΞΕΣiτιΙ]?[rяЯ]"),
+                    Pattern.compile("[TtтτТΤΓгCcсςС]..?[tтτТΤΓг]"),
+                    Pattern.compile("([PpрρРΡ][hнН])|[Ff]..?[rяЯ][tтτТΤΓг]"),
+                    Pattern.compile("[SsξΖZ]([CcсςС]?)[hнН][iτιΙ].?[sξzΖ]"),
                     Pattern.compile("[AaаαАΑΛ][NnийИЙΝ]..?[SsξlιζzΖ]"),
-                    Pattern.compile("[AaаαАΑΛ][sξ][sξ]"),
-                    Pattern.compile(".[uμυνv][hнН]?[nийИЙΝ]+[tтτТΤ]"),
-                    Pattern.compile("[NnFf]..?g"), // might as well remove two possible slurs with one check
-                    Pattern.compile("[PpрρРΡ][eеёзξεЕЁЗΞΕΣioоюσοОЮΟuμυνv][eеёзξεЕЁЗΞΕΣoоюσοОЮΟs]"), // the grab bag of juvenile words
-                    Pattern.compile("[MmмМΜ]..?[rяЯ].?d"), // should pick up the #1 obscenity from Spanish and French
+                    Pattern.compile("[AaаαАΑΛ]([sξζz]{2})"),
+                    Pattern.compile("[uμυνv]([hнН]?)[nийИЙΝ]+[tтτТΤΓг]"),
+                    Pattern.compile("[NnFfVvν]..?[jg]"), // might as well remove two possible slurs and a body part with one check
+                    Pattern.compile("[PpрρРΡ][eеёзξεЕЁЗΞΕΣiτιΙoоюσοОЮΟuμυνv][eеёзξεЕЁЗΞΕΣoоюσοОЮΟSsξζzΖZuμυνv]"), // the grab bag of juvenile words
+                    Pattern.compile("[MmмМΜ][hнНwWψΨшщШЩ]?..?[rяЯ].?d"), // should pick up the #1 obscenity from Spanish and French
                     Pattern.compile("[Gg][HhнН]?[aаαАΑΛeеёзξεЕЁЗΞΕΣ][yуλγУΥeеёзξεЕЁЗΞΕΣ]"), // could be inappropriate for random text
-                    Pattern.compile("[CcсςС][KkкκКΚ]?[uμυνv]+[hнН]?[MmмМΜ]"),
+                    Pattern.compile("[wWψΨшщШЩUuμυνv]([hнН]?)[AaаαАΑΛeеёзξεЕЁЗΞΕΣoоюσοОЮΟuμυνv]([NnийИЙΝ]+)[GgKkкκКΚCcсςСxхжχХЖΧQq]")
             },
             genericSanityChecks = new Pattern[]
                     {

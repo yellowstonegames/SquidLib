@@ -283,7 +283,7 @@ public class LanguageGenTest {
         System.out.println("\n\nGENERATED:\n");
         StatefulRNG sr = new StatefulRNG(2252637788195L);
         for(FakeLanguageGen lang : languages) {
-            LanguageCipher cipher = new LanguageCipher(lang);
+            LanguageCipher cipher = new LanguageCipher(lang, 2252637788195L);
             //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
             int ctr = 0;
             for (String s : oz) {

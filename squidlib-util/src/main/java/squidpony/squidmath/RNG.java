@@ -480,7 +480,12 @@ public class RNG implements Serializable {
         return al;
     }
 
-
+    /**
+     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
+     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
+     * @param length the size of the ordering to produce
+     * @return a random ordering containing all ints from 0 to length (exclusive)
+     */
     public int[] randomOrdering(int length)
     {
         int[] dest = new int[length];
