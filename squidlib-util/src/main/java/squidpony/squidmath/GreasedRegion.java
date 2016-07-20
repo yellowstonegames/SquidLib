@@ -1421,6 +1421,22 @@ public class GreasedRegion implements Serializable {
 
     }
 
+    public double rateDensity()
+    {
+        double sz = height * width;
+        if(sz == 0)
+            return 0;
+        double onAmount = sz - count(), retractedOn = sz - copy().retract().count();
+        return (onAmount + retractedOn) / (sz * 2.0);
+    }
+    public double rateRegularity()
+    {
+        GreasedRegion me2 = copy().surface8way();
+        double irregularCount = me2.count(), regularCount = me2.remake(this).surface().count();
+        if(irregularCount == 0)
+            return 0;
+        return regularCount / irregularCount;
+    }
 
     /*
     // This showed a strong x-y correlation because it didn't have a way to use a non-base-2 van der Corput sequence.

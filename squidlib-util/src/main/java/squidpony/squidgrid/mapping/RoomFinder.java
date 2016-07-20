@@ -45,6 +45,9 @@ public class RoomFinder {
      * the two-arg constructor using the environment produced by a MixedGenerator, SerpentMapGenerator, or similar.
      */
     caves;
+
+    public GreasedRegion allRooms, allCaves, allCorridors, allFloors;
+
     /**
      * When a RoomFinder is constructed, it stores all points of rooms that are adjacent to another region here.
      */
@@ -78,16 +81,17 @@ public class RoomFinder {
         corridors = new OrderedMap<>(32);
         caves = new OrderedMap<>(8);
         basic = DungeonUtility.simplifyDungeon(map);
-        GreasedRegion floors = new GreasedRegion(basic, '.'),
-                r = floors.copy().retract8way().flood(floors, 2),
-                c = floors.copy().andNot(r),
-                d = c.copy().fringe().and(r);
+        allFloors = new GreasedRegion(basic, '.');
+        allRooms = allFloors.copy().retract8way().flood(allFloors, 2);
+        allCorridors = allFloors.copy().andNot(allRooms);
+        allCaves = new GreasedRegion(width, height);
+        GreasedRegion d = allCorridors.copy().fringe().and(allRooms);
         connections = doorways = d.asCoords();
         mouths = new Coord[0];
-        List<GreasedRegion> rs = r.split(), cs = c.split();
+        List<GreasedRegion> rs = allRooms.split(), cs = allCorridors.split();
 
         for (GreasedRegion sep : cs) {
-            GreasedRegion someDoors = sep.copy().fringe().and(r);
+            GreasedRegion someDoors = sep.copy().fringe().and(allRooms);
             Coord[] doors = someDoors.asCoords();
             List<GreasedRegion> near = new ArrayList<>(4);
             for (int i = 0; i < doors.length; i++) {
@@ -97,7 +101,7 @@ public class RoomFinder {
         }
 
         for (GreasedRegion sep : rs) {
-            GreasedRegion aroundDoors = sep.copy().fringe().and(c);
+            GreasedRegion aroundDoors = sep.copy().fringe().and(allCorridors);
             Coord[] doors = aroundDoors.asCoords();
             List<GreasedRegion> near = new ArrayList<>(10);
             for (int i = 0; i < doors.length; i++) {
@@ -124,16 +128,17 @@ public class RoomFinder {
         basic = DungeonUtility.simplifyDungeon(map);
 
         if(environmentKind == MixedGenerator.ROOM_FLOOR) {
-            GreasedRegion floors = new GreasedRegion(basic, '.'),
-                    r = floors.copy().retract8way().flood(floors, 2),
-                    c = floors.copy().andNot(r),
-                    d = c.copy().fringe().and(r);
+
+            allFloors = new GreasedRegion(basic, '.');
+            allRooms = allFloors.copy().retract8way().flood(allFloors, 2);
+            allCorridors = allFloors.copy().andNot(allRooms);
+            GreasedRegion d = allCorridors.copy().fringe().and(allRooms);
             connections = doorways = d.asCoords();
             mouths = new Coord[0];
-            List<GreasedRegion> rs = r.split(), cs = c.split();
+            List<GreasedRegion> rs = allRooms.split(), cs = allCorridors.split();
 
             for (GreasedRegion sep : cs) {
-                GreasedRegion someDoors = sep.copy().fringe().and(r);
+                GreasedRegion someDoors = sep.copy().fringe().and(allRooms);
                 Coord[] doors = someDoors.asCoords();
                 List<GreasedRegion> near = new ArrayList<>(4);
                 for (int i = 0; i < doors.length; i++) {
@@ -143,7 +148,7 @@ public class RoomFinder {
             }
 
             for (GreasedRegion sep : rs) {
-                GreasedRegion aroundDoors = sep.copy().fringe().and(c);
+                GreasedRegion aroundDoors = sep.copy().fringe().and(allCorridors);
                 Coord[] doors = aroundDoors.asCoords();
                 List<GreasedRegion> near = new ArrayList<>(10);
                 for (int i = 0; i < doors.length; i++) {
@@ -185,28 +190,29 @@ public class RoomFinder {
         corridors = new OrderedMap<>(32);
         caves = new OrderedMap<>(32);
         basic = DungeonUtility.simplifyDungeon(map);
-        GreasedRegion r = new GreasedRegion(environment, MixedGenerator.ROOM_FLOOR),
-                c = new GreasedRegion(environment, MixedGenerator.CORRIDOR_FLOOR),
-                v = new GreasedRegion(environment, MixedGenerator.CAVE_FLOOR),
-                rc = r.copy().or(c),
-                d = c.copy().fringe().and(r),
-                m = v.copy().fringe().and(rc);
+        allFloors = new GreasedRegion(basic, '.');
+        allRooms = new GreasedRegion(environment, MixedGenerator.ROOM_FLOOR);
+        allCorridors = new GreasedRegion(environment, MixedGenerator.CORRIDOR_FLOOR);
+        allCaves = new GreasedRegion(environment, MixedGenerator.CAVE_FLOOR);
+        GreasedRegion rc = allRooms.copy().or(allCorridors),
+                d = allCorridors.copy().fringe().and(allRooms),
+                m = allCaves.copy().fringe().and(rc);
         doorways = d.asCoords();
         mouths = m.asCoords();
         connections = new Coord[doorways.length + mouths.length];
         System.arraycopy(doorways, 0, connections, 0, doorways.length);
         System.arraycopy(mouths, 0, connections, doorways.length, mouths.length);
 
-        List<GreasedRegion> rs = r.split(), cs = c.split(), vs = v.split();
+        List<GreasedRegion> rs = allRooms.split(), cs = allCorridors.split(), vs = allCaves.split();
 
         for (GreasedRegion sep : cs) {
-            GreasedRegion someDoors = sep.copy().fringe().and(r);
+            GreasedRegion someDoors = sep.copy().fringe().and(allRooms);
             Coord[] doors = someDoors.asCoords();
             List<GreasedRegion> near = new ArrayList<>(16);
             for (int i = 0; i < doors.length; i++) {
                 near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, rs));
             }
-            someDoors.remake(sep).fringe().and(v);
+            someDoors.remake(sep).fringe().and(allCaves);
             doors = someDoors.asCoords();
             for (int i = 0; i < doors.length; i++) {
                 near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, vs));
@@ -215,13 +221,13 @@ public class RoomFinder {
         }
 
         for (GreasedRegion sep : rs) {
-            GreasedRegion aroundDoors = sep.copy().fringe().and(c);
+            GreasedRegion aroundDoors = sep.copy().fringe().and(allCorridors);
             Coord[] doors = aroundDoors.asCoords();
             List<GreasedRegion> near = new ArrayList<>(32);
             for (int i = 0; i < doors.length; i++) {
                 near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, cs));
             }
-            aroundDoors.remake(sep).fringe().and(v);
+            aroundDoors.remake(sep).fringe().and(allCaves);
             doors = aroundDoors.asCoords();
             for (int i = 0; i < doors.length; i++) {
                 near.addAll(GreasedRegion.whichContain(doors[i].x, doors[i].y, vs));
@@ -229,13 +235,13 @@ public class RoomFinder {
             rooms.put(sep, near);
         }
         for (GreasedRegion sep : vs) {
-            GreasedRegion aroundMouths = sep.copy().fringe().and(c);
+            GreasedRegion aroundMouths = sep.copy().fringe().and(allCorridors);
             Coord[] maws = aroundMouths.asCoords();
             List<GreasedRegion> near = new ArrayList<>(48);
             for (int i = 0; i < maws.length; i++) {
                 near.addAll(GreasedRegion.whichContain(maws[i].x, maws[i].y, cs));
             }
-            aroundMouths.remake(sep).fringe().and(r);
+            aroundMouths.remake(sep).fringe().and(allRooms);
             maws = aroundMouths.asCoords();
             for (int i = 0; i < maws.length; i++) {
                 near.addAll(GreasedRegion.whichContain(maws[i].x, maws[i].y, rs));
@@ -312,7 +318,7 @@ public class RoomFinder {
         }
         return rs;
     }
-    protected static char[][] defaultFill(int width, int height)
+    private static char[][] defaultFill(int width, int height)
     {
         char[][] d = new char[width][height];
         for (int x = 0; x < width; x++) {

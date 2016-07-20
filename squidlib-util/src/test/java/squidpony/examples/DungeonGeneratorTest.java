@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -146,7 +147,7 @@ public class DungeonGeneratorTest {
         sdg.generate(map, env);
         //RNG rand = new RNG();
         //sdg.generate(rand.getRandomElement(TilesetType.values()));
-        sdungeon = sdg.getDungeon();
+        sdungeon = GwtCompatibility.copy2D(sdg.getDungeon());
         sdungeon[sdg.stairsUp.x][sdg.stairsUp.y] = '<';
         sdungeon[sdg.stairsDown.x][sdg.stairsDown.y] = '>';
 
@@ -200,9 +201,14 @@ public class DungeonGeneratorTest {
         // Just a little fun with Java that uses no alphanumerics other than keywords to express "Hello, World!"
         //char[] __ = new char[]{'$' << (',' ^ '-'), '`' | ('-' - '('), '$' << (',' ^ '-') | '$', '$' << (',' ^ '-') | '$', '/' + '@', ',', ' ', '(' + '/', '/' + '@', '(' + '%' + '%', '$' << (',' ^ '-') | '$', '*' + ':', '!'};
 
-        sdg.setDungeon(DungeonUtility.doubleWidth(
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon, true)));
-        System.out.println(sdg);
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(sdg.getDungeon(), true)));
+        System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
 
 /*

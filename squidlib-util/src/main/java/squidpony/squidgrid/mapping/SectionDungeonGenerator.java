@@ -876,8 +876,8 @@ public class SectionDungeonGenerator {
                 caveMap = innerGenerate(allCaves, caveFX),
                 doorMap = makeDoors(rm, cr, allCaves, allCorridors);
         char[][][] lakesAndMazes = makeLake(rm, cv);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 if(corridorMap[x][y] != '#' && lakesAndMazes[0][x][y] != '#')
                     dungeon[x][y] = ':';
                 else if(doorMap[x][y] == '+' || doorMap[x][y] == '/')
@@ -896,6 +896,7 @@ public class SectionDungeonGenerator {
                     dungeon[x][y] = lakesAndMazes[0][x][y];
             }
         }
+
         placement = new Placement(finder);
         return dungeon;
 
@@ -1008,10 +1009,12 @@ public class SectionDungeonGenerator {
             for (int x = 1; x < width - 1; x++) {
                 for (int y = 1; y < height - 1; y++) {
                     if (deep[x][y])
-                        maps[1][x][y] = pacMap[x-1][y-1];
+                        maps[1][x][y] = pacMap[x][y];
                 }
             }
             finder.corridors.put(pacEnv, new ArrayList<GreasedRegion>());
+            finder.allCorridors.or(pacEnv);
+            finder.allFloors.or(pacEnv);
             potential.andNot(flooded);
         }
         if(potentialLakeSize > 0) {
@@ -1052,6 +1055,8 @@ public class SectionDungeonGenerator {
             }
             for (GreasedRegion region : change) {
                 finder.caves.put(region, finder.rooms.remove(region));
+                finder.allRooms.andNot(region);
+                finder.allCaves.or(region);
             }
         }
         return maps;

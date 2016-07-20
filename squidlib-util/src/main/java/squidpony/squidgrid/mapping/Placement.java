@@ -42,6 +42,7 @@ public class Placement {
 
         this.finder = finder;
 
+        /*
         allRooms = new GreasedRegion(finder.width, finder.height);
         allCorridors = new GreasedRegion(finder.width, finder.height);
         allCaves = new GreasedRegion(finder.width, finder.height);
@@ -51,14 +52,18 @@ public class Placement {
         {
             allRooms.or(region);
         }
-        for(GreasedRegion region : finder.caves.keySet())
-        {
-            allCaves.or(region);
-        }
         for(GreasedRegion region : finder.corridors.keySet())
         {
             allCorridors.or(region);
         }
+        for(GreasedRegion region : finder.caves.keySet())
+        {
+            allCaves.or(region);
+        }
+        */
+        allCorridors = finder.allCorridors;
+        allRooms = finder.allRooms;
+        allCaves = finder.allCaves;
         allFloors = allRooms.copy().or(allCorridors).or(allCaves);
         nonRoom = allCorridors.copy().or(allCaves).expand(2);
     }
