@@ -497,7 +497,6 @@ public class RNG implements Serializable {
             dest[r] = i;
         }
         return dest;
-
     }
 
     /**
@@ -665,7 +664,7 @@ public class RNG implements Serializable {
         }
     }
     /**
-     * Returns a random integer below the given bound, or 0 if the bound is 0 or
+     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
      * negative.
      *
      * @param bound the upper bound (exclusive)
@@ -679,6 +678,42 @@ public class RNG implements Serializable {
             if (bits >= threshold)
                 return bits % bound;
         }
+    }
+    /**
+     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.
+     * Uses an aggressively optimized technique that has some bias, but mostly for values of
+     * bound over 1 billion. This method is considered "hasty" since it should be faster than
+     * nextInt() but gives up some statistical quality to do so. It also has undefined behavior
+     * if bound is negative, though it will probably produce a negative number (just how
+     * negative is an open question).
+     * <br>
+     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
+     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative
+     * @return the found number
+     */
+    public int nextIntHasty(final int bound) {
+        return (int)((bound * (random.nextLong() & 0x7FFFFFFFL)) >> 31);
+    }
+
+    /**
+     * Gets a random Coord that has x between 0 (inclusive) and width (exclusive) and y between 0 (inclusive)
+     * and height (exclusive). This makes one call to randomLong to generate (more than) 31 random bits for
+     * each axis, and should be very fast. Remember that Coord values are cached in a pool that starts able to
+     * hold up to 255 x and 255 y for positive values, and the pool should be grown with the static method
+     * Coord.expandPool() in order to efficiently use larger Coord values. If width and height are very large,
+     * greater than 100,000 for either, this particular method may show bias toward certain positions due to
+     * the "hasty" technique used to reduce the random numbers to the given size, but because most maps in
+     * tile-based games are relatively small, this technique should be fine.
+     * <br>
+     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
+     * @param width the upper bound (exclusive) for x coordinates
+     * @param height the upper bound (exclusive) for y coordinates
+     * @return a random Coord between (0,0) inclusive and (width,height) exclusive
+     */
+    public Coord nextCoord(int width, int height)
+    {
+        final long n = random.nextLong();
+        return Coord.get((int)((width * (n >>> 33)) >> 31), (int)((height * (n & 0x7FFFFFFFL)) >> 31));
     }
     /**
      * Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).

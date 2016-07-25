@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.StringKit;
 import squidpony.annotation.GwtIncompatible;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -16,7 +17,7 @@ import java.util.*;
  *
  * Created by Tommy Ettinger on 5/2/2015.
  */
-public class DeckRNG extends StatefulRNG {
+public class DeckRNG extends StatefulRNG implements Serializable {
 	private static final long serialVersionUID = 7828346657944720807L;
     private int step;
     private long lastShuffledState;
@@ -258,6 +259,67 @@ public class DeckRNG extends StatefulRNG {
             return 0;
         }
 
+        return (int)(nextDouble() * bound);
+    }
+
+    /**
+     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.
+     * <br>
+     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+     *
+     * @param elements an array of T; will not be modified
+     * @return a shuffled copy of elements
+     */
+    @Override
+    @GwtIncompatible
+    public <T> T[] shuffle(T[] elements)
+    {
+        int n = elements.length;
+        T[] array = Arrays.copyOf(elements, n);
+        for (int i = 0; i < n; i++)
+        {
+            int r = i + nextIntHasty(n - i);
+            T t = array[r];
+            array[r] = array[i];
+            array[i] = t;
+        }
+        return array;
+    }
+
+
+    /**
+     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
+     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
+     *
+     * @param length the size of the ordering to produce
+     * @return a random ordering containing all ints from 0 to length (exclusive)
+     */
+    @Override
+    public int[] randomOrdering(int length)
+    {
+        int[] dest = new int[length];
+        for (int i = 0; i < length; i++)
+        {
+            int r = nextIntHasty(i + 1);
+            if(r != i)
+                dest[i] = dest[r];
+            dest[r] = i;
+        }
+        return dest;
+    }
+
+    /**
+     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.
+     * Uses a slightly optimized technique. This method is considered "hasty" since
+     * it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also
+     * has undefined behavior if bound is negative, though it will probably produce a negative
+     * number (just how negative is an open question).
+     *
+     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative
+     * @return the found number
+     */
+    @Override
+    public int nextIntHasty(int bound) {
         return (int)(nextDouble() * bound);
     }
 
