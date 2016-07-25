@@ -202,6 +202,40 @@ public class RNGBenchmark {
         iseed = 9000;
         doLightIntR();
     }
+    public long doLightBetweenR()
+    {
+        RNG rng = new RNG(new LightRNG(iseed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt(1000);
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureLightBetweenR() throws InterruptedException {
+        iseed = 9000;
+        System.out.println(doLightBetweenR());
+    }
+    public long doLightBetweenHastyR()
+    {
+        RNG rng = new RNG(new LightRNG(iseed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextIntHasty(1000);
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureLightBetweenHastyR() throws InterruptedException {
+        iseed = 9000;
+        System.out.println(doLightBetweenHastyR());
+    }
 
     public long doThreadLocalRandom()
     {
