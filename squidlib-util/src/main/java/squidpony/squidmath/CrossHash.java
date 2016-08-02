@@ -17,20 +17,20 @@ import java.io.Serializable;
  * category of hashing algorithm that this is not, and since the goal is to be cross-
  * platform, the name was changed to CrossHash.
  * Created by Tommy Ettinger on 1/16/2016.
+ *
  * @author Glenn Fowler
  * @author Phong Vo
  * @author Landon Curt Noll
  * @author Tommy Ettinger
  */
 public class CrossHash {
-    public static int hash(boolean[] data)
-    {
-        if(data == null)
+    public static int hash(boolean[] data) {
+        if (data == null)
             return 0;
-        int h = -2128831035, len = data.length, o = 0;
-        for (int i = 0; i < len; i++) {
-            o |= (data[i]) ? (1 << (i % 8)) : 0;
-            if(i % 8 == 7 || i == len - 1) {
+        int h = -2128831035, len = data.length - 1, o = 0;
+        for (int i = 0; i <= len; i++) {
+            o |= (data[i]) ? (1 << (i & 7)) : 0;
+            if ((i & 7) == 7 || i == len) {
                 h ^= o;
                 h *= 16777619;
                 o = 0;
@@ -38,9 +38,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static int hash(byte[] data)
-    {
-        if(data == null)
+
+    public static int hash(byte[] data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
         for (int i = 0; i < len; i++) {
@@ -49,9 +49,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static int hash(char[] data)
-    {
-        if(data == null)
+
+    public static int hash(char[] data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
         for (int i = 0; i < len; i++) {
@@ -62,9 +62,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static int hash(short[] data)
-    {
-        if(data == null)
+
+    public static int hash(short[] data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
         for (int i = 0; i < len; i++) {
@@ -75,9 +75,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static int hash(int[] data)
-    {
-        if(data == null)
+
+    public static int hash(int[] data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
         for (int i = 0; i < len; i++) {
@@ -92,35 +92,34 @@ public class CrossHash {
         }
         return h;
     }
-    public static int hash(long[] data)
-    {
-        if(data == null)
+
+    public static int hash(long[] data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
         for (int i = 0; i < len; i++) {
-            h ^= (int)(data[i] & 0xff);
+            h ^= (int) (data[i] & 0xff);
             h *= 16777619;
-            h ^= (int)((data[i] >>> 8) & 0xff);
+            h ^= (int) ((data[i] >>> 8) & 0xff);
             h *= 16777619;
-            h ^= (int)((data[i] >>> 16) & 0xff);
+            h ^= (int) ((data[i] >>> 16) & 0xff);
             h *= 16777619;
-            h ^= (int)((data[i] >>> 24) & 0xff);
+            h ^= (int) ((data[i] >>> 24) & 0xff);
             h *= 16777619;
-            h ^= (int)((data[i] >>> 32) & 0xff);
+            h ^= (int) ((data[i] >>> 32) & 0xff);
             h *= 16777619;
-            h ^= (int)((data[i] >>> 40) & 0xff);
+            h ^= (int) ((data[i] >>> 40) & 0xff);
             h *= 16777619;
-            h ^= (int)((data[i] >>> 48) & 0xff);
+            h ^= (int) ((data[i] >>> 48) & 0xff);
             h *= 16777619;
-            h ^= (int)(data[i] >>> 56);
+            h ^= (int) (data[i] >>> 56);
             h *= 16777619;
         }
         return h;
     }
 
-    public static int hash(float[] data)
-    {
-        if(data == null)
+    public static int hash(float[] data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length, t;
         for (int i = 0; i < len; i++) {
@@ -136,43 +135,42 @@ public class CrossHash {
         }
         return h;
     }
-    public static int hash(double[] data)
-    {
-        if(data == null)
+
+    public static int hash(double[] data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
         long t;
         for (int i = 0; i < len; i++) {
             t = Double.doubleToLongBits(data[i]);
-            h ^= (int)(t & 0xff);
+            h ^= (int) (t & 0xff);
             h *= 16777619;
-            h ^= (int)((t >>> 8) & 0xff);
+            h ^= (int) ((t >>> 8) & 0xff);
             h *= 16777619;
-            h ^= (int)((t >>> 16) & 0xff);
+            h ^= (int) ((t >>> 16) & 0xff);
             h *= 16777619;
-            h ^= (int)((t >>> 24) & 0xff);
+            h ^= (int) ((t >>> 24) & 0xff);
             h *= 16777619;
-            h ^= (int)((t >>> 32) & 0xff);
+            h ^= (int) ((t >>> 32) & 0xff);
             h *= 16777619;
-            h ^= (int)((t >>> 40) & 0xff);
+            h ^= (int) ((t >>> 40) & 0xff);
             h *= 16777619;
-            h ^= (int)((t >>> 48) & 0xff);
+            h ^= (int) ((t >>> 48) & 0xff);
             h *= 16777619;
-            h ^= (int)(t >>> 56);
+            h ^= (int) (t >>> 56);
             h *= 16777619;
         }
         return h;
     }
-    public static int hash(String s)
-    {
-        if(s == null)
+
+    public static int hash(String s) {
+        if (s == null)
             return 0;
         return hash(s.toCharArray());
     }
 
-    public static int hash(String[] data)
-    {
-        if(data == null)
+    public static int hash(String[] data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length, t;
         for (int i = 0; i < len; i++) {
@@ -189,9 +187,8 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(char[][] data)
-    {
-        if(data == null)
+    public static int hash(char[][] data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length, t;
         for (int i = 0; i < len; i++) {
@@ -208,9 +205,8 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(String[]... data)
-    {
-        if(data == null)
+    public static int hash(String[]... data) {
+        if (data == null)
             return 0;
         int h = -2128831035, len = data.length, t;
         for (int i = 0; i < len; i++) {
@@ -226,14 +222,14 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(boolean[] data)
-    {
-        if(data == null)
+
+    public static long hash64(boolean[] data) {
+        if (data == null)
             return 0;
-        long h = -3750763034362895579L, len = data.length, o = 0;
-        for (int i = 0; i < len; i++) {
-            o |= (data[i]) ? (1 << (i % 8)) : 0;
-            if(i % 8 == 7 || i == len - 1) {
+        long h = -3750763034362895579L, len = data.length - 1, o = 0;
+        for (int i = 0; i <= len; i++) {
+            o |= (data[i]) ? (1 << (i & 7)) : 0;
+            if ((i & 7) == 7 || i == len) {
                 h ^= o;
                 h *= 1099511628211L;
                 o = 0;
@@ -241,9 +237,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(byte[] data)
-    {
-        if(data == null)
+
+    public static long hash64(byte[] data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
         for (int i = 0; i < len; i++) {
@@ -252,9 +248,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(char[] data)
-    {
-        if(data == null)
+
+    public static long hash64(char[] data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
         for (int i = 0; i < len; i++) {
@@ -265,9 +261,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(short[] data)
-    {
-        if(data == null)
+
+    public static long hash64(short[] data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
         for (int i = 0; i < len; i++) {
@@ -278,9 +274,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(int[] data)
-    {
-        if(data == null)
+
+    public static long hash64(int[] data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
         for (int i = 0; i < len; i++) {
@@ -295,9 +291,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(long[] data)
-    {
-        if(data == null)
+
+    public static long hash64(long[] data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
         for (int i = 0; i < len; i++) {
@@ -320,9 +316,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(float[] data)
-    {
-        if(data == null)
+
+    public static long hash64(float[] data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
@@ -338,9 +334,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(double[] data)
-    {
-        if(data == null)
+
+    public static long hash64(double[] data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
@@ -364,15 +360,15 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(String s)
-    {
-        if(s == null)
+
+    public static long hash64(String s) {
+        if (s == null)
             return 0;
         return hash64(s.toCharArray());
     }
-    public static long hash64(String[] data)
-    {
-        if(data == null)
+
+    public static long hash64(String[] data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
@@ -396,9 +392,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(char[][] data)
-    {
-        if(data == null)
+
+    public static long hash64(char[][] data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
@@ -422,9 +418,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(Iterable<String> data)
-    {
-        if(data == null)
+
+    public static long hash64(Iterable<String> data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, t;
         for (String datum : data) {
@@ -448,9 +444,9 @@ public class CrossHash {
         }
         return h;
     }
-    public static long hash64(String[]... data)
-    {
-        if(data == null)
+
+    public static long hash64(String[]... data) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
         for (int i = 0; i < len; i++) {
@@ -477,19 +473,19 @@ public class CrossHash {
 
     /**
      * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
-     * @param data the char array to hash
+     *
+     * @param data  the char array to hash
      * @param start the start of the section to hash (inclusive)
-     * @param end the end of the section to hash (exclusive)
+     * @param end   the end of the section to hash (exclusive)
      * @return
      */
-    public static long hash64(char[] data, int start, int end)
-    {
-        if(data == null)
+    public static long hash64(char[] data, int start, int end) {
+        if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
         start %= len;
         end %= len;
-        if(end <= start || start < 0 || end <= 0)
+        if (end <= start || start < 0 || end <= 0)
             return 0;
         for (int i = start; i < end; i++) {
             h ^= data[i] & 0xff;
@@ -500,105 +496,3306 @@ public class CrossHash {
         return h;
     }
 
-    public interface IHasher extends Serializable
-    {
+    public interface IHasher extends Serializable {
         int hash(Object data);
     }
+
     private static class BooleanHasher implements IHasher {
-        BooleanHasher(){};
-        public int hash(Object data)
-        {
+        BooleanHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof boolean[]) ? CrossHash.hash((boolean[]) data) : data.hashCode();
         }
     }
+
     public static final IHasher booleanHasher = new BooleanHasher();
 
     private static class ByteHasher implements IHasher {
-        ByteHasher(){};
-        public int hash(Object data)
-        {
+        ByteHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof byte[]) ? CrossHash.hash((byte[]) data) : data.hashCode();
         }
     }
+
     public static final IHasher byteHasher = new ByteHasher();
+
     private static class ShortHasher implements IHasher {
-        ShortHasher(){};
-        public int hash(Object data)
-        {
+        ShortHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof short[]) ? CrossHash.hash((short[]) data) : data.hashCode();
         }
     }
+
     public static final IHasher shortHasher = new ShortHasher();
+
     private static class CharHasher implements IHasher {
-        CharHasher(){};
-        public int hash(Object data)
-        {
+        CharHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof char[]) ? CrossHash.hash((char[]) data) : data.hashCode();
         }
     }
+
     public static final IHasher charHasher = new CharHasher();
+
     private static class IntHasher implements IHasher {
-        IntHasher(){};
-        public int hash(Object data)
-        {
+        IntHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof int[]) ? CrossHash.hash((int[]) data) : data.hashCode();
         }
     }
+
     public static final IHasher intHasher = new IntHasher();
+
     private static class LongHasher implements IHasher {
-        LongHasher(){};
-        public int hash(Object data)
-        {
+        LongHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof long[]) ? CrossHash.hash((long[]) data) : data.hashCode();
         }
     }
+
     public static final IHasher longHasher = new LongHasher();
+
     private static class FloatHasher implements IHasher {
-        FloatHasher(){};
-        public int hash(Object data)
-        {
+        FloatHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof float[]) ? CrossHash.hash((float[]) data) : data.hashCode();
         }
     }
+
     public static final IHasher floatHasher = new FloatHasher();
+
     private static class DoubleHasher implements IHasher {
-        DoubleHasher(){};
-        public int hash(Object data)
-        {
+        DoubleHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof double[]) ? CrossHash.hash((double[]) data) : data.hashCode();
         }
     }
+
     public static final IHasher doubleHasher = new DoubleHasher();
+
     private static class Char2DHasher implements IHasher {
-        Char2DHasher(){};
-        public int hash(Object data)
-        {
+        Char2DHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof char[][]) ? CrossHash.hash((char[][]) data) : data.hashCode();
         }
     }
+
     public static final IHasher char2DHasher = new Char2DHasher();
+
     private static class StringHasher implements IHasher {
-        StringHasher(){};
-        public int hash(Object data)
-        {
+        StringHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof String) ? CrossHash.hash((String) data) : data.hashCode();
         }
     }
+
     public static final IHasher stringHasher = new StringHasher();
+
     private static class StringArrayHasher implements IHasher {
-        StringArrayHasher(){};
-        public int hash(Object data)
-        {
+        StringArrayHasher() {
+        }
+
+        public int hash(Object data) {
             return (data instanceof String[]) ? CrossHash.hash((String[]) data) : data.hashCode();
         }
     }
+
     public static final IHasher stringArrayHasher = new StringArrayHasher();
+
     public static class DefaultHasher implements IHasher {
-        public DefaultHasher(){};
-        public int hash(Object data)
-        {
+        public DefaultHasher() {
+        }
+
+        public int hash(Object data) {
             return data.hashCode();
         }
     }
 
+    public static class Sip implements Serializable {
+        private static final long serialVersionUID = 0L;
+        private final long k0, k1;
+
+        public Sip() {
+            k0 = 0x2ffeeb0a48316f40L;
+            k1 = 0x5b34a39f070b5837L;
+        }
+
+        public Sip(long k) {
+            k0 = k;
+            k ^= k >> 33;
+            k *= 0xff51afd7ed558ccdL;
+            k ^= k >> 33;
+            k *= 0xc4ceb9fe1a85ec53L;
+            k1 = k ^ (k >> 33);
+        }
+
+        public Sip(long k0, long k1) {
+            this.k0 = k0;
+            this.k1 = k1;
+        }
+
+        /**
+         * SipHash implementation with hand inlining the SIPROUND.
+         * <br>
+         * Modified to use Long.rotateLeft instead of doing it by hand, since it's often a fast JVM intrinsic.
+         * <br>
+         * To know details about SipHash, see;
+         * "a fast short-input PRF" https://www.131002.net/siphash/
+         * <br>
+         * SIPROUND is defined in siphash24.c that can be downloaded from the above
+         * site.  Following license notice is subject to change based on the licensing
+         * policy of siphash24.c (currently Apache 2 license).
+         */
+
+        public long hash64(boolean[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m, o;
+            int last = (data.length >> 6) << 6,
+                    i = 0;
+            // processing 8 bytes blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 8 bytes
+                m = 0;
+                for (long j = 1L; j != 0; j <<= 1) {
+                    m |= (data[i++]) ? j : 0;
+                }
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 1;
+                m |= (data[i]) ? 1L : 0L;
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
+        }
+
+        public long hash64(byte[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 3) << 3,
+                    i = 0;
+            // processing 8 bytes blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 8 bytes
+                m = data[i++] & 0xffL
+                        | (data[i++] & 0xffL) << 8
+                        | (data[i++] & 0xffL) << 16
+                        | (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffL) << 32
+                        | (data[i++] & 0xffL) << 40
+                        | (data[i++] & 0xffL) << 48
+                        | (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 8;
+                m |= (data[i] & 0xffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
+        }
+
+        public long hash64(short[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 2) << 2,
+                    i = 0;
+            // processing 4 shorts blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 shorts
+                m = data[i++] & 0xffffL
+                        //| (data[i++] & 0xffL) << 8
+                        | (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffffL) << 32
+                        //| (data[i++] & 0xffL) << 40
+                        | (data[i++] & 0xffffL) << 48;
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 16;
+                m |= (data[i] & 0xffffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
+        }
+
+        public long hash64(char[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 2) << 2,
+                    i = 0;
+            // processing 4 "shorts" blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 "shorts"
+                m = data[i++] & 0xffffL
+                        //| (data[i++] & 0xffL) << 8
+                        | (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffffL) << 32
+                        //| (data[i++] & 0xffL) << 40
+                        | (data[i++] & 0xffffL) << 48;
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 16;
+                m |= (data[i] & 0xffffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
+        }
+
+        public long hash64(int[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 1) << 1,
+                    i = 0;
+            // processing 4 ints blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 ints
+                m = data[i++] & 0xffffffffL
+                        //| (data[i++] & 0xffL) << 8
+                        //| (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffffffffL) << 32;
+                //| (data[i++] & 0xffL) << 40
+                //| (data[i++] & 0xffffL) << 48
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 32;
+                m |= (data[i] & 0xffffffffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
+        }
+
+        public long hash64(long[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = data.length,
+                    i = 0;
+            // processing long as block in data
+            while (i < last) {
+                // pack a long as block
+                m = data[i++];
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            m = (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
+        }
+
+        public long hash64(float[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 1) << 1,
+                    i = 0;
+            // processing 4 "ints" blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 "ints"
+                m = Float.floatToIntBits(data[i++]) & 0xffffffffL
+                        //| (data[i++] & 0xffL) << 8
+                        //| (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (Float.floatToIntBits(data[i++]) & 0xffffffffL) << 32;
+                //| (data[i++] & 0xffL) << 40
+                //| (data[i++] & 0xffffL) << 48
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 32;
+                m |= (Float.floatToIntBits(data[i++]) & 0xffffffffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
+        }
+
+        public long hash64(double[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = data.length,
+                    i = 0;
+            // processing long as block in data
+            while (i < last) {
+                // pack a long as block
+                m = Double.doubleToLongBits(data[i++]);
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            m = (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
+        }
+
+        public long hash64(String data) {
+            if (data == null)
+                return 0;
+            return hash64(data.toCharArray());
+        }
+
+        public long hash64(char[] data, int start, int end) {
+            if (data == null || start >= end || end > data.length)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = ((end - start) >> 2) << 2,
+                    i = start;
+            // processing 4 "shorts" blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 "shorts"
+                m = data[i++] & 0xffffL
+                        //| (data[i++] & 0xffL) << 8
+                        | (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffffL) << 32
+                        //| (data[i++] & 0xffL) << 40
+                        | (data[i++] & 0xffffL) << 48;
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = end - 1; i >= last; --i) {
+                m <<= 16;
+                m |= (data[i] & 0xffffL);
+            }
+            m |= (long) (end - start) << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
+        }
+
+        public int hash(boolean[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m, o;
+            int last = (data.length >> 6) << 6,
+                    i = 0;
+            // processing 8 bytes blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 8 bytes
+                m = 0;
+                for (long j = 1L; j != 0; j <<= 1) {
+                    m |= (data[i++]) ? j : 0;
+                }
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 1;
+                m |= (data[i]) ? 1L : 0L;
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
+        }
+
+        public int hash(byte[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 3) << 3,
+                    i = 0;
+            // processing 8 bytes blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 8 bytes
+                m = data[i++] & 0xffL
+                        | (data[i++] & 0xffL) << 8
+                        | (data[i++] & 0xffL) << 16
+                        | (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffL) << 32
+                        | (data[i++] & 0xffL) << 40
+                        | (data[i++] & 0xffL) << 48
+                        | (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 8;
+                m |= (data[i] & 0xffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
+        }
+
+        public int hash(short[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 2) << 2,
+                    i = 0;
+            // processing 4 shorts blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 shorts
+                m = data[i++] & 0xffffL
+                        //| (data[i++] & 0xffL) << 8
+                        | (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffffL) << 32
+                        //| (data[i++] & 0xffL) << 40
+                        | (data[i++] & 0xffffL) << 48;
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 16;
+                m |= (data[i] & 0xffffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
+        }
+
+        public int hash(char[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 2) << 2,
+                    i = 0;
+            // processing 4 "shorts" blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 "shorts"
+                m = data[i++] & 0xffffL
+                        //| (data[i++] & 0xffL) << 8
+                        | (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffffL) << 32
+                        //| (data[i++] & 0xffL) << 40
+                        | (data[i++] & 0xffffL) << 48;
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 16;
+                m |= (data[i] & 0xffffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
+        }
+
+        public int hash(int[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 1) << 1,
+                    i = 0;
+            // processing 4 ints blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 ints
+                m = data[i++] & 0xffffffffL
+                        //| (data[i++] & 0xffL) << 8
+                        //| (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffffffffL) << 32;
+                //| (data[i++] & 0xffL) << 40
+                //| (data[i++] & 0xffffL) << 48
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 32;
+                m |= (data[i] & 0xffffffffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
+        }
+
+        public int hash(long[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = data.length,
+                    i = 0;
+            // processing long as block in data
+            while (i < last) {
+                // pack a long as block
+                m = data[i++];
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            m = (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
+        }
+
+        public int hash(float[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length >> 1) << 1,
+                    i = 0;
+            // processing 4 "ints" blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 "ints"
+                m = Float.floatToIntBits(data[i++]) & 0xffffffffL
+                        //| (data[i++] & 0xffL) << 8
+                        //| (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (Float.floatToIntBits(data[i++]) & 0xffffffffL) << 32;
+                //| (data[i++] & 0xffL) << 40
+                //| (data[i++] & 0xffffL) << 48
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length - 1; i >= last; --i) {
+                m <<= 32;
+                m |= (Float.floatToIntBits(data[i++]) & 0xffffffffL);
+            }
+            m |= (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
+        }
+
+        public int hash(double[] data) {
+            if (data == null)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = data.length,
+                    i = 0;
+            // processing long as block in data
+            while (i < last) {
+                // pack a long as block
+                m = Double.doubleToLongBits(data[i++]);
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            m = (long) data.length << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
+        }
+
+        public int hash(String data) {
+            if (data == null)
+                return 0;
+            return hash(data.toCharArray());
+        }
+
+        public int hash(char[] data, int start, int end) {
+            if (data == null || start >= end || end > data.length)
+                return 0;
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = ((end - start) >> 2) << 2,
+                    i = start;
+            // processing 4 "shorts" blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 "shorts"
+                m = data[i++] & 0xffffL
+                        //| (data[i++] & 0xffL) << 8
+                        | (data[i++] & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data[i++] & 0xffffL) << 32
+                        //| (data[i++] & 0xffL) << 40
+                        | (data[i++] & 0xffffL) << 48;
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = Long.rotateLeft(v1, 13);
+                v3 = Long.rotateLeft(v3, 16);
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = Long.rotateLeft(v0, 32);
+                v2 += v1;
+                v0 += v3;
+                v1 = Long.rotateLeft(v1, 17);
+                v3 = Long.rotateLeft(v3, 21);
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = Long.rotateLeft(v2, 32);
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = end - 1; i >= last; --i) {
+                m <<= 16;
+                m |= (data[i] & 0xffffL);
+            }
+            m |= (long) (end - start) << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = Long.rotateLeft(v1, 13);
+            v3 = Long.rotateLeft(v3, 16);
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = Long.rotateLeft(v0, 32);
+            v2 += v1;
+            v0 += v3;
+            v1 = Long.rotateLeft(v1, 17);
+            v3 = Long.rotateLeft(v3, 21);
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = Long.rotateLeft(v2, 32);
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
+        }
+
+        /*
+        public static void main(String[] args)
+        {
+            boolean[] bools = new boolean[129];
+            Arrays.fill(bools, true);
+            byte[] bytes = new byte[17];
+            Arrays.fill(bytes, (byte)-1);
+            bytes[16] = 1;
+            short[] shorts = new short[9];
+            Arrays.fill(shorts, (short)-1);
+            shorts[8] = 1;
+            int[] ints = new int[5];
+            Arrays.fill(ints, -1);
+            ints[4] = 1;
+            long[] longs = new long[3];
+            Arrays.fill(longs, -1L);
+            ints[2] = 1;
+            Sip a = new Sip(), b = new Sip(0xBEEFCAFE), c = new Sip(0xBEEFCAFE, 0xD0D0FEED);
+            System.out.println("bools   : " + StringKit.hex(a.hash64(bools)) + " " +
+                    StringKit.hex(b.hash64(bools)) + " " + StringKit.hex(c.hash64(bools)));
+            System.out.println("shorts  : " + StringKit.hex(a.hash64(shorts)) + " " +
+                    StringKit.hex(b.hash64(shorts)) + " " + StringKit.hex(c.hash64(shorts)));
+            System.out.println("ints    : " + StringKit.hex(a.hash64(ints)) + " " +
+                    StringKit.hex(b.hash64(ints)) + " " + StringKit.hex(c.hash64(ints)));
+            System.out.println("longs   : " + StringKit.hex(a.hash64(longs)) + " " +
+                    StringKit.hex(b.hash64(longs)) + " " + StringKit.hex(c.hash64(longs)));
+        }
+        */
+    }
 }
+

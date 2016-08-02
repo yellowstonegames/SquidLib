@@ -262,7 +262,7 @@ public class LongPeriodRNG implements RandomnessSource {
      * */
     public void jump() {
 
-        long[] t = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        long[] t = new long[16];
         for(int i = 0; i < 16; i++)
         for(int b = 0; b < 64; b++) {
             if ((jumpTable[i] & 1L << b) != 0) {
