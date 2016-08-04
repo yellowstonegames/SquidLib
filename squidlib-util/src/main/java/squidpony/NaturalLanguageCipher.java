@@ -72,7 +72,7 @@ public class NaturalLanguageCipher implements Serializable{
          */
         @Override
         public int next(int bits) {
-            return (int) ((((state << 1) & ~(state << 2)) ^ (state+=3)) & ~(-1 << bits));
+            return (int) ((state += 0x41041041041041L) & ~(-1 << bits));
         }
 
         /**
@@ -85,12 +85,12 @@ public class NaturalLanguageCipher implements Serializable{
          */
         @Override
         public long nextLong() {
-            return (((state << 1) & ~(state << 2)) ^ (state+=3));
+            return (state += 0x41041041041041L);
         }
 
         public double nextDouble()
         {
-            return Double.longBitsToDouble(0x3FFL << 52 | (((state << 1) & ~(state << 2)) ^ (state+=3)) >>> 12) - 1.0;
+            return Double.longBitsToDouble(0x3FFL << 52 | (state += 0x41041041041041L) >>> 12) - 1.0;
         }
 
         /**
@@ -127,7 +127,7 @@ public class NaturalLanguageCipher implements Serializable{
             VERBATION = 1L << 4, VERBMENT = 1L << 5, NOUNY = 1L << 6, NOUNEN = 1L << 7, NOUNIST = 1L << 8,
             NOUNISM = 1L << 9, NOUNIC = 1L << 10, NOUNIVE = 1L << 11, ADJECTIVELY = 1L << 12,
             ADJECTIVEST = 1L << 13, REVERB = 1L << 14, PREVERB = 1L << 15, POSTVERB = 1L << 16,  ENNOUN = 1L << 17,
-            PROVERB = 1L << 18,  ANTIVERB = 1L << 19,  DISVERB = 1L << 20;
+            PROVERB = 1L << 18,  ANTIVERB = 1L << 19,  DISNOUN = 1L << 20;
 
     /*
     qu->kw
@@ -177,7 +177,8 @@ se$->z
             new Replacer(Pattern.compile("ew"), "eu", false),
             new Replacer(Pattern.compile("eigh"), "ae", false),
             new Replacer(Pattern.compile("p[fh]"), "f", false),
-            new Replacer(Pattern.compile("n[gk]"), "y$1"),
+            new Replacer(Pattern.compile("nc"), "yk", false),
+            new Replacer(Pattern.compile("n([gk])"), "y$1"),
             new Replacer(Pattern.compile("a([bdfjlmnprtvz])e"), "ae$1"),
             new Replacer(Pattern.compile("e([bdjlmnptvz])e"), "ee$1"),
             new Replacer(Pattern.compile("i([bdfjlmnprtz])e"), "ai$1"),
@@ -189,6 +190,7 @@ se$->z
             new Replacer(Pattern.compile("oce$"), "oas", false),
             new Replacer(Pattern.compile("uce$"), "uus", false),
             new Replacer(Pattern.compile("se$"), "z", false),
+            new Replacer(Pattern.compile("e$"), "", false),
             new Replacer(Pattern.compile("^[pc]([nts])"), "$1"),
             new Replacer(Pattern.compile("^fth"), "t", false),
     };
@@ -305,14 +307,14 @@ se$->z
         rng = new RNG(rs);
         table = new HashMap<>(512);
         reverse = new HashMap<>(512);
-        pluralSuffix = language.word(rng, false, 1);
-        nounySuffix = language.word(rng, false, 1);
+        pluralSuffix = language.word(rng, false, 0);
+        nounySuffix = language.word(rng, false, 0);
         nounicSuffix = language.word(rng, false, 1);
         nouniveSuffix = language.word(rng, false, 1);
         nounistSuffix = language.word(rng, false, 1);
-        nounismSuffix = language.word(rng, false, 1);
-        nounenSuffix = language.word(rng, false, 1);
-        verbedSuffix = language.word(rng, false, 1);
+        nounismSuffix = language.word(rng, false, 1 + (rng.nextIntHasty(3) >> 1));
+        nounenSuffix = language.word(rng, false, 0);
+        verbedSuffix = language.word(rng, false, 0);
         verberSuffix = language.word(rng, false, 1);
         verbingSuffix = language.word(rng, false, 1);
         verbmentSuffix = language.word(rng, false, 1);
@@ -369,10 +371,10 @@ se$->z
         long h = 0, b = 0;
         if(data == null || end <= start || start >= data.length)
             return h;
-        int current, next;
-        long got, vc = 1, used = 0;
+        int current, next, count = 0, used = 0;
+        long got, vc = 0;
         boolean vowelStream = false;
-        for (int i = start, count = 0; i < end && count < 8 && vc < 7; i++, count++) {
+        for (int i = start; i < end && count < 10; i++, count++) { // && vc < 7
             current = data[i] - 'a';
             if(current > 26)
                 continue;
@@ -382,27 +384,120 @@ se$->z
             }
             else
                 next = 26;
-            h <<= 5;
-            b <<= 3;
             got = bigrams[27 * current + next];
-            i += got & 1;
+            if(got == 0)
+                continue;
+            h <<= 6;
+            //b <<= 3;
+            got = bigrams[27 * current + next];
+            i += got & 1L;
             h |= (got >>= 1);
-            used += 5;
+            used++;
+            //used += 5;
             if(count == 0) {
                 vowelStream = (got > 0 && got < 12);
             }else if (vowelStream != (got > 0 && got < 12)) {
-                vc+= (vowelStream) ? 0 : 1;
+                vc+= vowelStream ? 1 : 0;
                 vowelStream = !vowelStream;
             }
-            b |= (got >> 2);
+            //b |= (got >> 2);
         }
-        b &= ~(-1 << (35-Math.min(used, 35)));
+        vc += vowelStream ? 1 : 0;
+
+        if(used > 0 && count > 0) {
+            got = h;
+            for (; count < 11; count += used) {
+                h |= got << (6 * count);
+            }
+            h &= 0xFFFFFFFFFFFFFFFL; // 60 bits
+        }
+        /*b &= ~(-1 << (35-Math.min(used, 35)));
         if(used <= 20)
             b ^= b << 8;
-        h ^= ((vc & 7L) << 39) | (b << (35 - used));
-        return h;
+        h ^= ((vc & 7L) << 39) | (b << (used + 3));
+        */
+        vc = Math.max(1L, vc);
+        return h | ((vc & 15L) << 60);
     }
 
+    String conjugate(String data, long mods)
+    {
+        if(data == null)
+            return "";
+        StringBuilder sb = new StringBuilder(data);
+
+        if((mods & ENNOUN) != 0)
+        {
+            sb.insert(0, ennounPrefix);
+        }
+        if((mods & DISNOUN) != 0)
+        {
+            sb.insert(0, disnounPrefix);
+        }
+        if((mods & REVERB) != 0)
+        {
+            sb.insert(0, reverbPrefix);
+        }
+        if((mods & ANTIVERB) != 0)
+        {
+            sb.insert(0, antiverbPrefix);
+        }
+        if((mods & PROVERB) != 0)
+        {
+            sb.insert(0, proverbPrefix);
+        }
+        if((mods & POSTVERB) != 0)
+        {
+            sb.insert(0, postverbPrefix);
+        }
+        if((mods & PREVERB) != 0)
+        {
+            sb.insert(0, preverbPrefix);
+        }
+        if((mods & NOUNEN) != 0) {
+            sb.append(nounenSuffix);
+        }
+        if((mods & VERBER) != 0) {
+            sb.append(verberSuffix);
+        }
+        if((mods & VERBMENT) != 0) {
+            sb.append(verbmentSuffix);
+        }
+        if((mods & VERBATION) != 0) {
+            sb.append(verbationSuffix);
+        }
+        if((mods & NOUNIVE) != 0) {
+            sb.append(nouniveSuffix);
+        }
+        if((mods & NOUNISM) != 0) {
+            sb.append(nounismSuffix);
+        }
+        if((mods & NOUNIST) != 0) {
+            sb.append(nounistSuffix);
+        }
+        if((mods & NOUNIC) != 0) {
+            sb.append(nounicSuffix);
+        }
+        if((mods & ADJECTIVEST) != 0) {
+            sb.append(adjectivestSuffix);
+        }
+        if((mods & VERBED) != 0) {
+            sb.append(verbedSuffix);
+        }
+        if((mods & VERBING) != 0) {
+            sb.append(verbingSuffix);
+        }
+        if((mods & NOUNY) != 0) {
+            sb.append(nounySuffix);
+        }
+        if((mods & ADJECTIVELY) != 0) {
+            sb.append(adjectivelySuffix);
+        }
+        if((mods & PLURAL) != 0) {
+            sb.append(pluralSuffix);
+        }
+        return sb.toString();
+    }
     /**
      * Given a word in the source language (usually English), looks up an existing translation for that word, or if none
      * exists, generates a new word based on the hash of the source word and this LanguageCipher's FakeLanguageGen.
@@ -433,11 +528,16 @@ se$->z
                     reverb = false, ennoun = false, preverb = false, postverb = false,
                     proverb = false, antiverb = false, disnoun = false;
             */
-            if(end >= 3 && endO >= 3 && sc[end-1]=='s')
+            if(end >= 4 && endO >= 4 && sc[end-1]=='s')
             {
                 mods |= PLURAL;
                 end--;
                 endO--;
+                if(scO[endO-1] == 'e')
+                {
+                    end--;
+                    endO--;
+                }
             }
             if(end >= 5 && endO >= 5 && (sc[end - 2] == 'l' && sc[end-1] == 'y'))
             {
@@ -445,19 +545,26 @@ se$->z
                 end -= 2;
                 endO -= 2;
             }
+            /*
             else if(end >= 4 && endO >= 4 && scO[endO-1] == 'y')
             {
                 mods |= NOUNY;
                 end--;
                 endO--;
-            }
-            if(end >= 5 && endO >= 5 && sc[end-3] == 'i' && sc[end-2] == 'y' && sc[end-1]=='g')
+            }*/
+            if(end >= 5 && endO >= 5 && scO[endO-3] == 'i' && scO[endO-2] == 'n' && scO[endO-1]=='g')
             {
                 mods |= VERBING;
                 end-=3;
                 endO -= 3;
             }
-            if(end >= 4 && endO >= 4 && (((scO[endO-3] == 'a' || scO[endO-3] == 'o') && scO[endO-2] == 'd' && scO[endO-1]=='e') ||(scO[endO-2] == 'e' && scO[endO-1] == 'd')))
+            if(end >= 4 && endO >= 4 && ((scO[endO-3] == 'a' || scO[endO-3] == 'o') && scO[endO-2] == 'd' && scO[endO-1]=='e'))
+            {
+                mods |= VERBED;
+                end-=3;
+                endO-=3;
+            }
+            else if(end >= 4 && endO >= 4 && (scO[endO-2] == 'e' && scO[endO-1] == 'd'))
             {
                 mods |= VERBED;
                 end-=2;
@@ -484,18 +591,32 @@ se$->z
                     endO -= 2;
                 }
             }
-            if(end >= 5 && (sc[end-3] == 'i' && sc[end-2] == 's' && sc[end-1] == 'm'))
-            {
-                mods |=NOUNISM;
-                end -= 3;
-            }
             if(end >= 5 && (sc[end-3] == 'i' && sc[end-2] == 's' && sc[end-1] == 't'))
             {
                 mods |=NOUNIST;
                 end -= 3;
                 endO-=3;
+                if(endO >= 5 && (scO[endO-2] == 'i' && scO[endO-1] == 'v'))
+                {
+                    mods |= NOUNIVE;
+                    end-=2;
+                    endO-=2;
+                }
             }
-            if(end >= 8 && endO >= 8 && ((scO[endO - 4] == 't' || scO[endO - 4] == 's' || scO[endO - 4] == 'c') && scO[endO-2] == 'i' && scO[endO-2] == 'o' && scO[endO-1]=='n'))
+            if(end >= 5 && (sc[end-3] == 'i' && sc[end-2] == 's' && sc[end-1] == 'm'))
+            {
+                mods |=NOUNISM;
+                end -= 3;
+                endO -= 3;
+                if(endO >= 5 && (scO[endO-2] == 'i' && scO[endO-1] == 'v'))
+                {
+                    mods |= NOUNIVE;
+                    end-=2;
+                    endO-=2;
+                }
+
+            }
+            if(end >= 8 && endO >= 8 && ((scO[endO - 4] == 't' || scO[endO - 4] == 's' || scO[endO - 4] == 'c') && scO[endO-3] == 'i' && scO[endO-2] == 'o' && scO[endO-1]=='n'))
             {
                 mods |=VERBATION;
                 end-=4;
@@ -517,7 +638,6 @@ se$->z
             {
                 mods |= VERBER;
                 end-=2;
-                endO-=2;
             }
             if(end >= 4 && (sc[end-2] == 'e' && sc[end-1]=='n'))
             {
@@ -557,7 +677,7 @@ se$->z
             }
             if(end - start >= 5 && (sc[start] == 'd' && sc[start+1] == 'i' && sc[start+2] == 's'))
             {
-                mods |= DISVERB;
+                mods |= DISNOUN;
                 start += 3;
             }
             if(end - start >= 4 && (sc[start] == 'u' && sc[start+1] == 'n'))
@@ -570,12 +690,11 @@ se$->z
                 mods |= ENNOUN;
                 start += 2;
             }
-            long h = (phoneticHash64(sc, start, end)<< 21) | mods, frustration = 0;
-            h ^= h >>> 9;
+            long h = phoneticHash64(sc, start, end), frustration = 0;
             //System.out.print(source + ":" + ((h >>> 60) & 7) + ":" + StringKit.hex(h) + ", ");
             rs.setState(h);
             do {
-                ciphered = language.word(rng, false, (int) Math.ceil(((h >>> 60) & 7) / (0.9 + rng.nextDouble())));
+                ciphered = conjugate(language.word(rng, false, (int) Math.ceil(((h >>> 60) & 15) / (0.9 + 0.5 * rng.nextDouble()))), mods);
                 if(cacheLevel < 2 || frustration++ > 9)
                     break;
             }while (reverse.containsKey(ciphered));
@@ -604,10 +723,10 @@ se$->z
      * @param text a CharSequence, such as a String, that contains words in the source language
      * @return a String of the translated text.
      */
-    public String cipher(CharSequence text)
+    public String cipher(String text)
     {
         Replacer rep = wordMatch.replacer(new CipherSubstitution());
-        return rep.replace(text);
+        return rep.replace(text.replace('-', '\u2013'));
     }
 
     private class CipherSubstitution implements Substitution
@@ -675,7 +794,7 @@ se$->z
         sb.deleteCharAt(sb.length() - 1);
         sb.append(')');
 
-        pat = Pattern.compile("\\b" + sb + "\\b", "ui");
+        pat = Pattern.compile("(?<![\\pL\\&-])(?=[\\pL\\&-])" + sb + "(?![\\pL\\&-])", "ui");
 
         rep = pat.replacer(new DecipherSubstition(vocabulary));
         return rep.replace(text);
