@@ -25,6 +25,8 @@ if it isn't loading or looks wrong.
 Current Features:
 --
 ###Ease Of Use
+
+[![Join the chat at https://gitter.im/SquidPony/SquidLib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SquidPony/SquidLib?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 -   Standard GUI notation of (x,y) locations within the grid
 -   Uses Swing components or the scene2d.ui classes from libGDX
   -   Only one of either Swing or LibGDX is required to use to display a grid; using libGDX should work on desktop and Android, plus HTML with some caveats, as well as probably iOS via RoboVM (untested).
