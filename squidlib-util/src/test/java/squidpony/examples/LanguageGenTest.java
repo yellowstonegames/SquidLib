@@ -1,7 +1,7 @@
 package squidpony.examples;
 
 import squidpony.FakeLanguageGen;
-import squidpony.LanguageCipher;
+import squidpony.NaturalLanguageCipher;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.HashMap;
@@ -201,11 +201,12 @@ public class LanguageGenTest {
         System.out.println("\n-----------------------------------------------------------------------------");
         System.out.println();
         FakeLanguageGen[] languages = new FakeLanguageGen[]{
+            /*
                 FakeLanguageGen.LOVECRAFT,
                 FakeLanguageGen.JAPANESE_ROMANIZED,
                 FakeLanguageGen.FRENCH,
                 FakeLanguageGen.GREEK_ROMANIZED,
-                FakeLanguageGen.RUSSIAN_ROMANIZED,
+                FakeLanguageGen.RUSSIAN_ROMANIZED,*/
                 FakeLanguageGen.SWAHILI,
                 FakeLanguageGen.SOMALI,
                 FakeLanguageGen.ENGLISH,
@@ -283,6 +284,26 @@ public class LanguageGenTest {
         System.out.println("\n\nGENERATED:\n");
         StatefulRNG sr = new StatefulRNG(2252637788195L);
         for(FakeLanguageGen lang : languages) {
+            NaturalLanguageCipher cipher = new NaturalLanguageCipher(lang, 2252637788195L);
+            //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
+            int ctr = 0;
+            for (String s : oz) {
+                oz2[ctr] = cipher.cipher(s);
+                System.out.println(oz2[ctr++]);
+            }
+
+            HashMap<String, String> vocabulary = new HashMap<>(16);
+            cipher.learnTranslations(vocabulary, "Dorothy", "farmer", "the", "room", "one", "uncle", "aunt");
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, vocabulary));
+            }
+            System.out.println();
+            for (String s : oz2) {
+                System.out.println(cipher.decipher(s, cipher.reverse));
+            }
+            System.out.println();
+
+            /*
             LanguageCipher cipher = new LanguageCipher(lang, 2252637788195L);
             //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
             int ctr = 0;
@@ -301,6 +322,7 @@ public class LanguageGenTest {
                 System.out.println(cipher.decipher(s, cipher.reverse));
             }
             System.out.println();
+            */
             /*
             cipher = new LanguageCipher(lang, 0x123456789L);
             ctr = 0;

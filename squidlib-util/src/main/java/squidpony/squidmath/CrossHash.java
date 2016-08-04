@@ -630,9 +630,13 @@ public class CrossHash {
         }
     }
 
+    /**
+     * Implementation of hashing functions using SipHash instead of FNV. Faster than FNV.
+     * Code taken from https://github.com/nahi/siphash-java-inline with some minor tweaks.
+     */
     public static class Sip implements Serializable {
         private static final long serialVersionUID = 0L;
-        private final long k0, k1;
+        public long k0, k1;
 
         public Sip() {
             k0 = 0x2ffeeb0a48316f40L;
@@ -641,6 +645,7 @@ public class CrossHash {
 
         public Sip(long k) {
             k0 = k;
+            // murmurhash3 avalanche function
             k ^= k >> 33;
             k *= 0xff51afd7ed558ccdL;
             k ^= k >> 33;
@@ -655,8 +660,6 @@ public class CrossHash {
 
         /**
          * SipHash implementation with hand inlining the SIPROUND.
-         * <br>
-         * Modified to use Long.rotateLeft instead of doing it by hand, since it's often a fast JVM intrinsic.
          * <br>
          * To know details about SipHash, see;
          * "a fast short-input PRF" https://www.131002.net/siphash/
@@ -689,36 +692,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -734,36 +723,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -771,68 +746,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return v0 ^ v1 ^ v2 ^ v3;
         }
@@ -864,36 +811,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -909,36 +842,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -946,68 +865,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return v0 ^ v1 ^ v2 ^ v3;
         }
@@ -1039,36 +930,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -1084,36 +961,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -1121,68 +984,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return v0 ^ v1 ^ v2 ^ v3;
         }
@@ -1214,36 +1049,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -1259,36 +1080,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -1296,68 +1103,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return v0 ^ v1 ^ v2 ^ v3;
         }
@@ -1389,36 +1168,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -1434,36 +1199,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -1471,72 +1222,43 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return v0 ^ v1 ^ v2 ^ v3;
         }
-
         public long hash64(long[] data) {
             if (data == null)
                 return 0;
@@ -1557,36 +1279,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -1596,36 +1304,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -1633,68 +1327,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return v0 ^ v1 ^ v2 ^ v3;
         }
@@ -1726,36 +1392,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -1771,36 +1423,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -1808,68 +1446,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return v0 ^ v1 ^ v2 ^ v3;
         }
@@ -1894,36 +1504,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -1933,36 +1529,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -1970,68 +1552,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return v0 ^ v1 ^ v2 ^ v3;
         }
@@ -2069,36 +1623,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -2114,36 +1654,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -2151,68 +1677,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return v0 ^ v1 ^ v2 ^ v3;
         }
@@ -2240,36 +1738,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -2285,36 +1769,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -2322,68 +1792,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
@@ -2415,36 +1857,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -2460,36 +1888,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -2497,68 +1911,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
@@ -2590,36 +1976,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -2635,36 +2007,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -2672,68 +2030,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
@@ -2765,36 +2095,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -2810,36 +2126,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -2847,68 +2149,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
@@ -2940,36 +2214,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -2985,36 +2245,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -3022,68 +2268,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
@@ -3108,36 +2326,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -3147,36 +2351,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -3184,68 +2374,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
@@ -3277,36 +2439,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -3322,36 +2470,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -3359,68 +2493,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
@@ -3445,36 +2551,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -3484,36 +2576,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -3521,68 +2599,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
@@ -3620,36 +2670,22 @@ public class CrossHash {
                 v3 ^= m;
 
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = Long.rotateLeft(v1, 13);
-                v3 = Long.rotateLeft(v3, 16);
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = Long.rotateLeft(v0, 32);
-                v2 += v1;
-                v0 += v3;
-                v1 = Long.rotateLeft(v1, 17);
-                v3 = Long.rotateLeft(v3, 21);
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = Long.rotateLeft(v2, 32);
+                v0 += v1;                    v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;                    v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+                v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+                v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
                 // }
                 v0 ^= m;
                 // }
@@ -3665,36 +2701,22 @@ public class CrossHash {
             // MSGROUND {
             v3 ^= m;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             v0 ^= m;
             // }
@@ -3702,68 +2724,40 @@ public class CrossHash {
             // finishing...
             v2 ^= 0xff;
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = Long.rotateLeft(v1, 13);
-            v3 = Long.rotateLeft(v3, 16);
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = Long.rotateLeft(v0, 32);
-            v2 += v1;
-            v0 += v3;
-            v1 = Long.rotateLeft(v1, 17);
-            v3 = Long.rotateLeft(v3, 21);
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = Long.rotateLeft(v2, 32);
+            v0 += v1;                    v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51; v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;                    v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32; v2 += v1;
+            v0 += v3;                    v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43; v1 ^= v2;
+            v3 ^= v0;                    v2 = (v2 << 32) | v2 >>> 32;
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
