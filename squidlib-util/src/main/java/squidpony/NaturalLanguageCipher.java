@@ -172,7 +172,6 @@ se$->z
             new Replacer(Pattern.compile("tx"), "x", false),
             new Replacer(Pattern.compile("zh"), "j", false),
             new Replacer(Pattern.compile("ge$"), "j", false),
-            new Replacer(Pattern.compile("ge"), "je", false),
             new Replacer(Pattern.compile("we$"), "w", false),
             new Replacer(Pattern.compile("ew"), "eu", false),
             new Replacer(Pattern.compile("eigh"), "ae", false),
@@ -294,6 +293,52 @@ se$->z
         this(language, 0);
     }
 
+    private Pattern[] additionalPrefixChecks = {
+            //17 is REFlags.UNICODE | REFlags.IGNORE_CASE
+            Pattern.compile("(?:(?:[pрρ][hн])|[fd])[aаαiτιuμυνv]$", 17),
+            Pattern.compile("[kкκcсςq][uμυνv]$", 17),
+            Pattern.compile("[bъыбвβЪЫБ][iτι][tтτг]$", 17),
+            Pattern.compile("[sξζzcсς](?:[hн]?)[iτιyуλγУ]$", 17),
+            Pattern.compile("[aаαΛ][nи][aаαΛiτιyуλγУuμυνvoоюσο]*$", 17),
+            Pattern.compile("[tтτΓг][iτιyуλγУ]+$", 17),
+            Pattern.compile("[cсςkкκq][lι]?[iτιyуλγУ]+$", 17),
+            Pattern.compile("[aаαΛ][sξζz]$", 17),
+            Pattern.compile("[nиfvν][iτιyуλγУaаαΛ]+$", 17),
+            Pattern.compile("[pрρ][eезξεЗΣoоюσοiτιyуλγУuμυνv]+$", 17),
+            Pattern.compile("[g][hн]?[aаαΛeезξεЗΣyуλγУ]+$", 17),
+            Pattern.compile("[wψшщuμυνv](?:[hн]?)[aаαΛeезξεЗΣoоюσοuμυνv]+$", 17),
+    }, additionalSuffixChecks = {
+            Pattern.compile("^[aаαeезξεЗΣoоюσοuμυ]*[nи]*[tтτΓгdgkкκcсςq]", 17),
+            Pattern.compile("^[iτιyуλγУaаαΛ]*[gj]", 17),
+            Pattern.compile("^[nи]..?[Ssξlιζz]", 17),
+            Pattern.compile("^[iτιyуλγУaаαΛ][dtтτΓг]", 17),
+            Pattern.compile("^[uμυ]*[mм]", 17),
+    };
+
+    private String addPart(String original, int syllables)
+    {
+        String done;
+        Pattern[] checks = null;
+        if(original.endsWith("-"))
+        {
+            checks = additionalPrefixChecks;
+        }
+        else if(original.startsWith("-"))
+        {
+            checks = additionalSuffixChecks;
+        }
+        syllables <<= 1;
+        do {
+            done = language.word(rng, false, syllables >> 1, checks);
+            if(cacheLevel < 2 || ++syllables > 5)
+                break;
+        }while(reverse.containsKey(done));
+        switch (cacheLevel) {
+            case 2: reverse.put(done, original);
+            case 1: table.put(original, done);
+        }
+        return done;
+    }
     /**
      * Constructs a LanguageCipher that will use the given style of language generator to produce its text.
      * @param language a FakeLanguageGen, typically one of the static constants in that class or a mix of them.
@@ -303,31 +348,33 @@ se$->z
     {
         this.shift = shift;
         this.language = language.copy();
-        rs = new SemiRandom(0xDF58476D1CE4E5B9L);
+        rs = new SemiRandom(0xDF58476D1CE4E5B9L + shift);
         rng = new RNG(rs);
         table = new HashMap<>(512);
         reverse = new HashMap<>(512);
-        pluralSuffix = language.word(rng, false, 0);
-        nounySuffix = language.word(rng, false, 0);
-        nounicSuffix = language.word(rng, false, 1);
-        nouniveSuffix = language.word(rng, false, 1);
-        nounistSuffix = language.word(rng, false, 1);
-        nounismSuffix = language.word(rng, false, 1 + (rng.nextIntHasty(3) >> 1));
-        nounenSuffix = language.word(rng, false, 0);
-        verbedSuffix = language.word(rng, false, 0);
-        verberSuffix = language.word(rng, false, 1);
-        verbingSuffix = language.word(rng, false, 1);
-        verbmentSuffix = language.word(rng, false, 1);
-        verbationSuffix = language.word(rng, false, rng.nextIntHasty(2) + 1);
-        adjectivelySuffix = language.word(rng, false, 1);
-        adjectivestSuffix = language.word(rng, false, 1);
-        reverbPrefix = language.word(rng, false, 1);
-        ennounPrefix = language.word(rng, false, 1);
-        preverbPrefix = language.word(rng, false, 1);
-        proverbPrefix = language.word(rng, false, 1);
-        postverbPrefix = language.word(rng, false, 1);
-        antiverbPrefix = language.word(rng, false, 2 - (rng.nextIntHasty(3) >> 1));
-        disnounPrefix = language.word(rng, false, 1);
+        pluralSuffix = addPart("-s", 0);
+        nounySuffix = addPart("-y", 0);
+        nounicSuffix = addPart("-ic", 0);
+        nouniveSuffix = addPart("-ive", 0);
+        nounistSuffix = addPart("-ist", 0);
+        nounismSuffix = addPart("-ism", 1 + (rng.nextIntHasty(3) >> 1));
+        nounenSuffix = addPart("-en", 0);
+        verbedSuffix = addPart("-ed", 0);
+        verberSuffix = addPart("-er", 0);
+        verbingSuffix = addPart("-ing", 1);
+        verbmentSuffix = addPart("-ment", 0);
+        verbationSuffix = addPart("-ation", rng.nextIntHasty(2) + 1);
+        adjectivelySuffix = addPart("-ly", 0);
+        adjectivestSuffix = addPart("-est", 0);
+        reverbPrefix = addPart("re-", 0);
+        ennounPrefix = addPart("en-", 0);
+        preverbPrefix = addPart("pre-", 0);
+        proverbPrefix = addPart("pro-", 0);
+        postverbPrefix = addPart("post-", 0);
+        antiverbPrefix = addPart("anti-", 2 - (rng.nextIntHasty(3) >> 1));
+        disnounPrefix = addPart("dis-", 0);
+        table.clear();
+        reverse.clear();
     }
 
     /**
@@ -512,12 +559,12 @@ se$->z
         if(table.containsKey(s2))
             ciphered = table.get(s2);
         else {
-            String altered = s2;
+            CharSequence altered = FakeLanguageGen.removeAccents(s2);
             for (int i = 0; i < preproc.length; i++) {
                 altered = preproc[i].replace(altered);
             }
 
-            char[] sc = altered.toCharArray(), scO = s2.toCharArray();
+            char[] sc = ((String)altered).toCharArray(), scO = s2.toCharArray();
             int start = 0, end = sc.length, endO = scO.length;
             long mods = 0;
             /*
@@ -690,7 +737,7 @@ se$->z
                 mods |= ENNOUN;
                 start += 2;
             }
-            long h = phoneticHash64(sc, start, end), frustration = 0;
+            long h = phoneticHash64(sc, start, end) + shift, frustration = 0;
             //System.out.print(source + ":" + ((h >>> 60) & 7) + ":" + StringKit.hex(h) + ", ");
             rs.setState(h);
             do {
