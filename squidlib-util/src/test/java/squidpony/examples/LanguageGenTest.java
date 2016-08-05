@@ -201,15 +201,15 @@ public class LanguageGenTest {
         System.out.println("\n-----------------------------------------------------------------------------");
         System.out.println();
         FakeLanguageGen[] languages = new FakeLanguageGen[]{
-            /*
+
+                FakeLanguageGen.ENGLISH,
                 FakeLanguageGen.LOVECRAFT,
                 FakeLanguageGen.JAPANESE_ROMANIZED,
                 FakeLanguageGen.FRENCH,
                 FakeLanguageGen.GREEK_ROMANIZED,
-                FakeLanguageGen.RUSSIAN_ROMANIZED,*/
+                FakeLanguageGen.RUSSIAN_ROMANIZED,
                 FakeLanguageGen.SWAHILI,
                 FakeLanguageGen.SOMALI,
-                FakeLanguageGen.ENGLISH,
                 FakeLanguageGen.FANTASY_NAME,
                 FakeLanguageGen.FANCY_FANTASY_NAME,
                 FakeLanguageGen.ARABIC_ROMANIZED,
@@ -238,24 +238,29 @@ public class LanguageGenTest {
                         FakeLanguageGen.modifier("u+", "ú", 0.18),*/
                         //FakeLanguageGen.modifier("aa", "au"),
                         FakeLanguageGen.modifier("ii", "ai"),
-                        FakeLanguageGen.modifier("uu", "eu"),
+                        FakeLanguageGen.modifier("uu", "ia"),
                         FakeLanguageGen.modifier("([aeo])\\1", "$1"),
                         FakeLanguageGen.modifier("^x", "v"),
                         FakeLanguageGen.modifier("([^aeiou]|^)u([^aeiou]|$)", "$1a$2", 0.6),
-                        FakeLanguageGen.modifier("([aeiou])([^aeiou])([aeiou])", "$1v$3", 0.06),
-                        FakeLanguageGen.modifier("([aeiou])([^aeiou])([aeiou])", "$1l$3", 0.07),
-                        FakeLanguageGen.modifier("([aeiou])([^aeiou])([aeiou])", "$1n$3", 0.07),
-                        FakeLanguageGen.modifier("([aeiou])([^aeiou])([aeiou])", "$1z$3", 0.08),
-                        FakeLanguageGen.modifier("([^aeiou])([aeiou]+)$", "$1ia", 0.35),
+                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1v$2", 0.06),
+                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1l$2", 0.07),
+                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1n$2", 0.07),
+                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1z$2", 0.08),
+                        FakeLanguageGen.modifier("([^aeiou])[aeiou]+$", "$1ia", 0.35),
                         FakeLanguageGen.modifier("([^aeiou])[bpdtkgj]", "$1"),
                         FakeLanguageGen.modifier("[jg]$", "th"),
                         FakeLanguageGen.modifier("g", "c", 0.92),
-                        FakeLanguageGen.modifier("q$", "l", 0.4),
-                        FakeLanguageGen.modifier("q$", "n", 0.5),
-                        FakeLanguageGen.modifier("q$", "s"),
+                        FakeLanguageGen.modifier("([aeiou])[wy]$", "$1l", 0.6),
+                        FakeLanguageGen.modifier("([aeiou])[wy]$", "$1n"),
+                        FakeLanguageGen.modifier("[qf]$", "l", 0.4),
+                        FakeLanguageGen.modifier("[qf]$", "n", 0.65),
+                        FakeLanguageGen.modifier("[qf]$", "s"),
+                        FakeLanguageGen.modifier("cy", "sp"),
+                        FakeLanguageGen.modifier("kl", "sk"),
                         FakeLanguageGen.modifier("qu+", "qui"),
                         FakeLanguageGen.modifier("q([^u])", "qu$1"),
                         FakeLanguageGen.modifier("cc", "ch"),
+                        FakeLanguageGen.modifier("[^aeiou]([^aeiou][^aeiou])", "$1"),
                         FakeLanguageGen.Modifier.NO_DOUBLES
                 )
                 //FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
@@ -285,7 +290,7 @@ public class LanguageGenTest {
         System.out.println("\n\nGENERATED:\n");
         StatefulRNG sr = new StatefulRNG(2252637788195L);
         for(FakeLanguageGen lang : languages) {
-            NaturalLanguageCipher cipher = new NaturalLanguageCipher(lang, 2252637788195L);
+            NaturalLanguageCipher cipher = new NaturalLanguageCipher(lang, 41041041L);
             //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
             int ctr = 0;
             for (String s : oz) {

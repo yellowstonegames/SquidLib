@@ -46,22 +46,23 @@ public class FakeLanguageGen implements Serializable {
     static final Pattern[]
             vulgarChecks = new Pattern[]
             {
-                    Pattern.compile("[SsξCcсςСΖZ][hнНlι].{1,3}[dtтτТΤΓг]"),
-                    Pattern.compile("(?:(?:[PpрρРΡ][hнН])|[FfDd]).{1,3}[KkкκКΚCcсςСxхжχХЖΧQq]"), // lots of these end in a 'k' sound, huh
-                    Pattern.compile("[KkкκКΚCcсςСQq].{1,3}[KkкκКΚCcсςСxхжχХЖΧQqMmмМΜ]"),
-                    Pattern.compile("[BbъыбвβЪЫБВΒ].?.?.?[cсςС][hнН]"),
-                    Pattern.compile("[HhнН][^AaаαАΑΛeеёзξεЕЁЗΞΕΣiτιΙ][^AaаαАΑΛeеёзξεЕЁЗΞΕΣiτιΙ]?[rяЯ]"),
-                    Pattern.compile("[TtтτТΤΓгCcсςС]..?[tтτТΤΓг]"),
-                    Pattern.compile("(?:(?:[PpрρРΡ][hнН])|[Ff])..?[rяЯ][tтτТΤΓг]"),
-                    Pattern.compile("[SsξΖZ]([CcсςС]?)[hнН][iτιΙ].?[sξzΖ]"),
-                    Pattern.compile("[AaаαАΑΛ][NnийИЙΝ]..?[SsξlιζzΖ]"),
-                    Pattern.compile("[AaаαАΑΛ]([sξζz]{2})"),
-                    Pattern.compile("[uμυνv]([hнН]?)[nийИЙΝ]+[tтτТΤΓг]"),
-                    Pattern.compile("[NnFfVvν]..?[jg]"), // might as well remove two possible slurs and a body part with one check
-                    Pattern.compile("[PpрρРΡ][eеёзξεЕЁЗΞΕΣiτιΙoоюσοОЮΟuμυνv][eеёзξεЕЁЗΞΕΣoоюσοОЮΟSsξζzΖZuμυνv]"), // the grab bag of juvenile words
-                    Pattern.compile("[MmмМΜ][hнНwWψΨшщШЩ]?..?[rяЯ].?d"), // should pick up the #1 obscenity from Spanish and French
-                    Pattern.compile("[Gg][HhнН]?[aаαАΑΛeеёзξεЕЁЗΞΕΣ][yуλγУΥeеёзξεЕЁЗΞΕΣ]"), // could be inappropriate for random text
-                    Pattern.compile("[wWψΨшщШЩUuμυνv](?:[hнН]?)[AaаαАΑΛeеёзξεЕЁЗΞΕΣoоюσοОЮΟuμυνv](?:[NnийИЙΝ]+)[GgKkкκКΚCcсςСxхжχХЖΧQq]")
+                    //17 is REFlags.UNICODE | REFlags.IGNORE_CASE
+                    Pattern.compile("[sξζzkкκcсς][hнlι].{1,3}[dtтτΓг]", 17),
+                    Pattern.compile("(?:(?:[pрρ][hн])|[fd]).{1,3}[kкκcсςxхжχq]", 17), // lots of these end in a 'k' sound, huh
+                    Pattern.compile("[kкκcсςСQq].{1,3}[kкκcсςxхжχqmм]", 17),
+                    Pattern.compile("[bъыбвβЪЫБ].{1,3}[cсς]", 17),
+                    Pattern.compile("[hн][^aаαΛeезξεЗΣiτιyуλγУ][^aаαΛeезξεЗΣiτιyуλγУ]?[rяΓ]", 17),
+                    Pattern.compile("[tтτΓгcсς]..?[tтτΓг]", 17),
+                    Pattern.compile("(?:(?:[pрρ][hн])|[f])..?[rяΓ][tтτΓг]", 17),
+                    Pattern.compile("[Ssξζzcсς][hн][iτιyуλγУ].?[sξζzcсς]", 17),
+                    Pattern.compile("[aаαΛ][nи]..?[Ssξlιζz]", 17),
+                    Pattern.compile("[aаαΛ]([sξζz]{2})", 17),
+                    Pattern.compile("[uμυνv]([hн]?)[nи]+[tтτΓг]", 17),
+                    Pattern.compile("[nиfvν]..?[jg]", 17), // might as well remove two possible slurs and a body part with one check
+                    Pattern.compile("[pрρ](?:(?:([eезξεЗΣoоюσοuμυνv])\\1)|(?:[eезξεЗΣiτιyуλγУuμυνv]+[sξζzcсς]))", 17), // the grab bag of juvenile words
+                    Pattern.compile("[mм][hнwψшщ]?..?[rяΓ].?d", 17), // should pick up the #1 obscenity from Spanish and French
+                    Pattern.compile("[g][hн]?[aаαАΑΛeеёзξεЕЁЗΕΣ][yуλγУeеёзξεЕЁЗΕΣ]", 17), // could be inappropriate for random text
+                    Pattern.compile("[wψшщuμυνv](?:[hн]?)[aаαΛeеёзξεЗΕΣoоюσοuμυνv](?:[nи]+)[gkкκcсςxхжχq]", 17)
             },
             genericSanityChecks = new Pattern[]
                     {
@@ -276,7 +277,7 @@ public class FakeLanguageGen implements Serializable {
      * @param str a string that may contain accented Latin-script characters
      * @return a string with all accented characters replaced with their (possibly ASCII) counterparts
      */
-    public CharSequence removeAccents(CharSequence str) {
+    public static CharSequence removeAccents(CharSequence str) {
         CharSequence alteredString = str;
         for (int i = 0; i < accentFinders.length; i++) {
             alteredString = accentFinders[i].replace(alteredString);
@@ -2205,6 +2206,16 @@ public class FakeLanguageGen implements Serializable {
      * @return a word in the fake language as a String
      */
     public String word(RNG rng, boolean capitalize, int approxSyllables) {
+        return word(rng, capitalize, approxSyllables, null);
+    }
+    /**
+     * Generate a word from this FakeLanguageGen using the specified RNG.
+     *
+     * @param rng        the RNG to use for the randomized string building
+     * @param capitalize true if the word should start with a capital letter, false otherwise
+     * @return a word in the fake language as a String
+     */
+    public String word(RNG rng, boolean capitalize, int approxSyllables, Pattern[] additionalChecks) {
         if (approxSyllables <= 0) {
             String finished = rng.getRandomElement(openingVowels);
             if (capitalize) return finished.substring(0, 1).toUpperCase();
@@ -2215,18 +2226,18 @@ public class FakeLanguageGen implements Serializable {
             int i = 0;
             if (rng.nextDouble() < vowelStartFrequency) {
                 sb.append(rng.getRandomElement(openingVowels));
-                if (approxSyllables == 1)
+                if (approxSyllables == 1 && closingConsonants.length > 0)
                     sb.append(rng.getRandomElement(closingConsonants));
-                else
+                else if(midConsonants.length > 0)
                     sb.append(rng.getRandomElement(midConsonants));
                 i++;
-            } else {
+            } else if(openingConsonants.length > 0){
                 sb.append(rng.getRandomElement(openingConsonants));
             }
             String close = "";
             boolean redouble = false;
             if (i < approxSyllables) {
-                if (rng.nextDouble() < syllableEndFrequency) {
+                if (closingSyllables.length > 0 && rng.nextDouble() < syllableEndFrequency) {
                     close = rng.getRandomElement(closingSyllables);
                     if (close.contains("@") && (approxSyllables & 1) == 0) {
                         redouble = true;
@@ -2238,7 +2249,7 @@ public class FakeLanguageGen implements Serializable {
                         ender.append(close);
                     else if (redouble && rng.nextDouble() < vowelEndFrequency) {
                         ender.append(rng.getRandomElement(midVowels));
-                        if (rng.nextDouble() < vowelSplitFrequency) {
+                        if (vowelSplitters.length > 0 && rng.nextDouble() < vowelSplitFrequency) {
                             ender.append(rng.getRandomElement(vowelSplitters));
                             ender.append(rng.getRandomElement(midVowels));
                         }
@@ -2288,11 +2299,15 @@ public class FakeLanguageGen implements Serializable {
                 sb = mod.modify(rng, sb);
             }
 
+            if (clean && !checkAll(sb, vulgarChecks))
+                continue;
+
+            if(additionalChecks != null && !checkAll(sb, additionalChecks))
+                continue;
+
             if (capitalize)
                 sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
 
-            if (clean && !checkAll(sb, vulgarChecks))
-                continue;
             return sb.toString();
         }
     }
