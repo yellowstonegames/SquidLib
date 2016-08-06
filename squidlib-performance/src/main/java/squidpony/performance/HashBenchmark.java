@@ -128,6 +128,43 @@ public class HashBenchmark {
         iseed = 9000;
         doSipInt();
     }
+    public long doLightning()
+    {
+        LongPeriodRNG rng = new LongPeriodRNG(seed);
+
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            seed += CrossHash.Lightning.hash64(rng.state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureLightning() throws InterruptedException {
+        seed = 9000;
+        doLightning();
+    }
+
+    public long doLightningInt()
+    {
+        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            iseed += CrossHash.Lightning.hash(rng.state);
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureLightningInt() throws InterruptedException {
+        iseed = 9000;
+        doLightningInt();
+    }
 
     public long doJVMInt()
     {
