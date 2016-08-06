@@ -2798,9 +2798,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( (data[i] ? 127 : 0) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( (data[i] ? 127 : 0) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2811,9 +2811,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i);
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L);
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2824,9 +2824,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2837,9 +2837,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2850,9 +2850,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2863,9 +2863,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2876,9 +2876,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( Float.floatToIntBits(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2889,9 +2889,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( Double.doubleToLongBits(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2904,9 +2904,9 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
 
-            long z, result = 0;
-            for (int i = start; i < end && i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = start; i < end && i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2922,9 +2922,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( hash64(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2935,9 +2935,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( hash64(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2948,9 +2948,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( hash64(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2962,9 +2962,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( (data[i] ? 127 : 0) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( (data[i] ? 127 : 0) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2975,9 +2975,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -2988,9 +2988,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -3001,9 +3001,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -3014,9 +3014,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -3027,9 +3027,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -3040,9 +3040,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( Float.floatToIntBits(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -3053,9 +3053,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( Double.doubleToLongBits(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -3068,9 +3068,9 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
 
-            long z, result = 0;
-            for (int i = start; i < end && i < data.length; ) {
-                z = ( data[i] + ++i );
+            long z, result = 1;
+            for (int i = start; i < end && i < data.length; i++) {
+                z = ( data[i] + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -3086,9 +3086,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( hash64(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -3099,9 +3099,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( hash64(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
@@ -3112,9 +3112,9 @@ public class CrossHash {
         {
             if(data == null)
                 return 0;
-            long z, result = 0;
-            for (int i = 0; i < data.length; ) {
-                z = ( hash64(data[i]) + ++i );
+            long z, result = 1;
+            for (int i = 0; i < data.length; i++) {
+                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
                 z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
                 z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
                 result ^= z ^ (z >>> 31);
