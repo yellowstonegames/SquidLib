@@ -434,6 +434,13 @@ public class GreasedRegion implements Serializable {
         return toChars('.', '#');
     }
 
+    /**
+     * Returns a copy of map where if a cell is "on" in this GreasedRegion, this keeps the value in map intact,
+     * and where a cell is "off", it instead writes the char filler.
+     * @param map a 2D char array that will not be modified
+     * @param filler the char to use where this GreasedRegion stores an "off" cell
+     * @return a masked copy of map
+     */
     public char[][] mask(char[][] map, char filler)
     {
         if(map == null || map.length == 0)
@@ -446,7 +453,27 @@ public class GreasedRegion implements Serializable {
             }
         }
         return chars;
+    }
 
+    /**
+     * "Inverse mask for ints;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
+     * the value in map intact, and where a cell is "on", it instead writes the int toWrite.
+     * @param map a 2D int array that will not be modified
+     * @param toWrite the int to use where this GreasedRegion stores an "on" cell
+     * @return an altered copy of map
+     */
+    public int[][] writeInts(int[][] map, int toWrite)
+    {
+        if(map == null || map.length == 0)
+            return new int[0][0];
+        int width2 = Math.min(width, map.length), height2 = Math.min(height, map[0].length);
+        int[][] ints = new int[width2][height2];
+        for (int x = 0; x < width2; x++) {
+            for (int y = 0; y < height2; y++) {
+                ints[x][y] = (data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0 ? toWrite : map[x][y];
+            }
+        }
+        return ints;
     }
 
     public GreasedRegion or(GreasedRegion other)
