@@ -79,7 +79,7 @@ import java.io.IOException;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 100, height = 100, depth = 16;
+    public static int width = 70, height = 70, depth = 16;
     public static void main( String[] args )
     {
         //seed is, in base 36, the number SQUIDLIB
@@ -417,6 +417,31 @@ public class DungeonGeneratorTest {
 
         }
 */
+        ThinDungeonGenerator tdg = new ThinDungeonGenerator(width, height, rng);
+        tdg.addDoors(12, false);
+        //tdg.addWater(SectionDungeonGenerator.CAVE, 13);
+        //tdg.addBoulders(SectionDungeonGenerator.ALL, 13);
+        tdg.addWater(SectionDungeonGenerator.CAVE, 9);
+        tdg.addMaze(30);
+        tdg.addLake(10, '£', '¢');
+        rng.setState(0xFEEEEEEEEEL);
+        serpent = new SerpentMapGenerator(width, height, rng, 0.2);
+        serpent.putWalledBoxRoomCarvers(5);
+        serpent.putWalledRoundRoomCarvers(3);
+        serpent.putCaveCarvers(3);
+        map = serpent.generate();
+        env = serpent.getEnvironment();
+        tdg.generate(map, env);
+        //RNG rand = new RNG();
+        //tdg.generate(rand.getRandomElement(TilesetType.values()));
+        sdungeon = GwtCompatibility.copy2D(tdg.getDungeon());
+        sdungeon[tdg.stairsUp.x][tdg.stairsUp.y] = '<';
+        sdungeon[tdg.stairsDown.x][tdg.stairsDown.y] = '>';
+
+        //dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+        //        DungeonUtility.hashesToLines(sdungeon, true)));
+        System.out.println(tdg);
+
     }
     // Generates a preview webpage when given the right images.
     // See the following for generated images with different parameters (scroll down and right to see the map)

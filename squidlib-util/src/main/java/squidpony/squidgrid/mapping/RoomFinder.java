@@ -1,9 +1,7 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
+import squidpony.GwtCompatibility;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +27,8 @@ public class RoomFinder {
      * A simplified version of the dungeon map, using '#' for walls and '.' for floors.
      */
     basic;
+
+    public int[][] environment;
     /**
      * Not likely to be used directly, but there may be things you can do with these that are cumbersome using only
      * RoomFinder's simpler API.
@@ -74,6 +74,7 @@ public class RoomFinder {
         width = dungeon.length;
         height = dungeon[0].length;
         map = new char[width][height];
+        environment = new int[width][height];
         for (int i = 0; i < width; i++) {
             System.arraycopy(dungeon[i], 0, map[i], 0, height);
         }
@@ -84,6 +85,9 @@ public class RoomFinder {
         allFloors = new GreasedRegion(basic, '.');
         allRooms = allFloors.copy().retract8way().flood(allFloors, 2);
         allCorridors = allFloors.copy().andNot(allRooms);
+        allRooms.writeInts(environment, MixedGenerator.ROOM_FLOOR);
+        allCorridors.writeInts(environment, MixedGenerator.CORRIDOR_FLOOR);
+
         allCaves = new GreasedRegion(width, height);
         GreasedRegion d = allCorridors.copy().fringe().and(allRooms);
         connections = doorways = d.asCoords();
@@ -118,6 +122,7 @@ public class RoomFinder {
         width = dungeon.length;
         height = dungeon[0].length;
         map = new char[width][height];
+        environment = new int[width][height];
         for (int i = 0; i < width; i++) {
             System.arraycopy(dungeon[i], 0, map[i], 0, height);
         }
@@ -132,6 +137,9 @@ public class RoomFinder {
             allFloors = new GreasedRegion(basic, '.');
             allRooms = allFloors.copy().retract8way().flood(allFloors, 2);
             allCorridors = allFloors.copy().andNot(allRooms);
+            allRooms.writeInts(environment, MixedGenerator.ROOM_FLOOR);
+            allCorridors.writeInts(environment, MixedGenerator.CORRIDOR_FLOOR);
+
             GreasedRegion d = allCorridors.copy().fringe().and(allRooms);
             connections = doorways = d.asCoords();
             mouths = new Coord[0];
@@ -163,6 +171,8 @@ public class RoomFinder {
             caves.put(floors, new ArrayList<GreasedRegion>());
             connections = mouths = floors.copy().andNot(floors.copy().retract8way()).retract().asCoords();
             doorways = new Coord[0];
+            floors.writeInts(environment, MixedGenerator.CAVE_FLOOR);
+
         }
     }
 
@@ -182,6 +192,7 @@ public class RoomFinder {
         width = dungeon.length;
         height = dungeon[0].length;
         map = new char[width][height];
+        this.environment = GwtCompatibility.copy2D(environment);
         for (int i = 0; i < width; i++) {
             System.arraycopy(dungeon[i], 0, map[i], 0, height);
         }
@@ -457,5 +468,163 @@ public class RoomFinder {
         }
 
         return regions;
+    }
+    public RoomFinder makeThin()
+    {
+        int nw = (width << 1) - 1, nh = (height << 1) - 1;
+        char[][] d2 = new char[nw][nh];
+        int[][] e2 = new int[nw][nh];
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                d2[x*2][y*2] = map[x][y];
+                e2[x*2][y*2] = environment[x][y];
+            }
+        }
+        int eLow, eHigh;
+        for (int x = 1; x < nw; x+=2) {
+            for (int y = 0; y < nh; y += 2) {
+                eLow = e2[x - 1][y];
+                eHigh = e2[x + 1][y];
+                switch (eLow) {
+                    case MixedGenerator.CAVE_WALL:
+                    case MixedGenerator.CORRIDOR_WALL:
+                    case MixedGenerator.ROOM_WALL:
+                    case MixedGenerator.UNTOUCHED:
+                        switch (eHigh) {
+                            case MixedGenerator.CAVE_WALL:
+                            case MixedGenerator.CORRIDOR_WALL:
+                            case MixedGenerator.ROOM_WALL:
+                            case MixedGenerator.UNTOUCHED:
+                                e2[x][y] = MixedGenerator.UNTOUCHED;
+                                d2[x][y] = d2[x - 1][y];
+                                break;
+                            case MixedGenerator.CAVE_FLOOR:
+                                if (PerlinNoise.noise(x * 0.3, y * 0.3) > 0.1) {
+                                    e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                                    d2[x][y] = d2[x + 1][y];
+                                } else {
+                                    e2[x][y] = MixedGenerator.UNTOUCHED;
+                                    d2[x][y] = d2[x - 1][y];
+                                }
+                                break;
+                            default:
+                                e2[x][y] = MixedGenerator.UNTOUCHED;
+                                d2[x][y] = d2[x - 1][y];
+                                break;
+                        }
+                        break;
+                    case MixedGenerator.CAVE_FLOOR:
+                        switch (eHigh) {
+                            case MixedGenerator.CAVE_WALL:
+                            case MixedGenerator.CORRIDOR_WALL:
+                            case MixedGenerator.ROOM_WALL:
+                            case MixedGenerator.UNTOUCHED:
+                                if (PerlinNoise.noise(x * 0.3, y * 0.3) > 0.1) {
+                                    e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                                    d2[x][y] = d2[x - 1][y];
+                                } else {
+                                    e2[x][y] = MixedGenerator.UNTOUCHED;
+                                    d2[x][y] = d2[x + 1][y];
+                                }
+                                break;
+                            default:
+                                e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                                d2[x][y] = d2[x - 1][y];
+                        }
+                        break;
+                    default:
+                        switch (eHigh) {
+                            case MixedGenerator.CAVE_WALL:
+                            case MixedGenerator.CORRIDOR_WALL:
+                            case MixedGenerator.ROOM_WALL:
+                            case MixedGenerator.UNTOUCHED:
+                                e2[x][y] = MixedGenerator.UNTOUCHED;
+                                d2[x][y] = d2[x + 1][y];
+                                break;
+                            case MixedGenerator.CAVE_FLOOR:
+                                e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                                d2[x][y] = d2[x + 1][y];
+                                break;
+                            default:
+                                e2[x][y] = e2[x - 1][y];
+                                d2[x][y] = d2[x - 1][y];
+
+                        }
+                }
+            }
+        }
+        for (int x = 0; x < nw; x++) {
+            for (int y = 1; y < nh; y += 2) {
+                eLow = e2[x][y - 1];
+                eHigh = e2[x][y + 1];
+                switch (eLow) {
+                    case MixedGenerator.CAVE_WALL:
+                    case MixedGenerator.CORRIDOR_WALL:
+                    case MixedGenerator.ROOM_WALL:
+                    case MixedGenerator.UNTOUCHED:
+                        switch (eHigh) {
+                            case MixedGenerator.CAVE_WALL:
+                            case MixedGenerator.CORRIDOR_WALL:
+                            case MixedGenerator.ROOM_WALL:
+                            case MixedGenerator.UNTOUCHED:
+                                e2[x][y] = MixedGenerator.UNTOUCHED;
+                                d2[x][y] = d2[x][y - 1];
+                                break;
+                            case MixedGenerator.CAVE_FLOOR:
+                                if (PerlinNoise.noise(x * 0.3, y * 0.3) > 0.1) {
+                                    e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                                    d2[x][y] = d2[x][y + 1];
+                                } else {
+                                    e2[x][y] = MixedGenerator.UNTOUCHED;
+                                    d2[x][y] = d2[x][y - 1];
+                                }
+                                break;
+                            default:
+                                e2[x][y] = MixedGenerator.UNTOUCHED;
+                                d2[x][y] = d2[x - 1][y];
+                                break;
+                        }
+                        break;
+                    case MixedGenerator.CAVE_FLOOR:
+                        switch (eHigh) {
+                            case MixedGenerator.CAVE_WALL:
+                            case MixedGenerator.CORRIDOR_WALL:
+                            case MixedGenerator.ROOM_WALL:
+                            case MixedGenerator.UNTOUCHED:
+                                if (PerlinNoise.noise(x * 0.3, y * 0.3) > 0.1) {
+                                    e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                                    d2[x][y] = d2[x][y - 1];
+                                } else {
+                                    e2[x][y] = MixedGenerator.UNTOUCHED;
+                                    d2[x][y] = d2[x][y + 1];
+                                }
+                                break;
+                            default:
+                                e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                                d2[x][y] = d2[x][y - 1];
+                        }
+                        break;
+                    default:
+                        switch (eHigh) {
+                            case MixedGenerator.CAVE_WALL:
+                            case MixedGenerator.CORRIDOR_WALL:
+                            case MixedGenerator.ROOM_WALL:
+                            case MixedGenerator.UNTOUCHED:
+                                e2[x][y] = MixedGenerator.UNTOUCHED;
+                                d2[x][y] = d2[x][y + 1];
+                                break;
+                            case MixedGenerator.CAVE_FLOOR:
+                                e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                                d2[x][y] = d2[x][y + 1];
+                                break;
+                            default:
+                                e2[x][y] = e2[x][y - 1];
+                                d2[x][y] = d2[x][y - 1];
+                        }
+                }
+            }
+        }
+        return new RoomFinder(d2, e2);
     }
 }

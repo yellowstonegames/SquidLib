@@ -570,7 +570,7 @@ public class SectionDungeonGenerator {
         for(Coord temp : new Coord[]{Coord.get(pt.x + 1, pt.y), Coord.get(pt.x - 1, pt.y),
                 Coord.get(pt.x, pt.y + 1), Coord.get(pt.x, pt.y - 1)})
         {
-            if(coll.contains(temp) && !(temp.x == pt.x && temp.y == pt.y))
+            if(!(temp.x == pt.x && temp.y == pt.y))
                 coll.remove(temp);
         }
 
@@ -584,7 +584,7 @@ public class SectionDungeonGenerator {
                 Coord.get(pt2.x + 1, pt2.y), Coord.get(pt2.x - 1, pt2.y),
                 Coord.get(pt2.x, pt2.y + 1), Coord.get(pt2.x, pt2.y - 1),})
         {
-            if(coll.contains(temp) && !(temp.x == pt1.x && temp.y == pt1.y) && !(temp.x == pt2.x && temp.y == pt2.y))
+            if(!(temp.x == pt1.x && temp.y == pt1.y) && !(temp.x == pt2.x && temp.y == pt2.y))
                 coll.remove(temp);
         }
 
@@ -861,7 +861,7 @@ public class SectionDungeonGenerator {
 
 
 
-    private char[][] innerGenerate() {
+    protected char[][] innerGenerate() {
         dungeon = new char[width][height];
         for (int x = 0; x < width; x++) {
             Arrays.fill(dungeon[x], '#');
@@ -901,7 +901,7 @@ public class SectionDungeonGenerator {
         return dungeon;
 
     }
-    private char[][] makeDoors(ArrayList<char[][]> rooms, ArrayList<char[][]> corridors, char[][] allCaves,
+    protected char[][] makeDoors(ArrayList<char[][]> rooms, ArrayList<char[][]> corridors, char[][] allCaves,
                                char[][] allCorridors)
     {
         char[][] map = new char[width][height];
@@ -955,7 +955,7 @@ public class SectionDungeonGenerator {
         return map;
 
     }
-    private char[][][] makeLake(ArrayList<char[][]> rooms, ArrayList<char[][]> caves)
+    protected char[][][] makeLake(ArrayList<char[][]> rooms, ArrayList<char[][]> caves)
     {
         char[][][] maps = new char[2][width][height];
         char[][] fusedMap;
@@ -1062,7 +1062,7 @@ public class SectionDungeonGenerator {
         return maps;
     }
 
-    private char[][] innerGenerate(char[][] map, EnumMap<FillEffect, Integer> fx)
+    protected char[][] innerGenerate(char[][] map, EnumMap<FillEffect, Integer> fx)
     {
         OrderedSet<Coord> hazards = new OrderedSet<>();
         int floorCount = DungeonUtility.countCells(map, '.'),
@@ -1248,7 +1248,7 @@ public class SectionDungeonGenerator {
                 trans[y][x] = dungeon[x][y];
             }
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int row = 0; row < height; row++) {
             sb.append(trans[row]);
             sb.append('\n');
