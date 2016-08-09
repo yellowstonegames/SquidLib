@@ -570,8 +570,7 @@ public class SectionDungeonGenerator {
         for(Coord temp : new Coord[]{Coord.get(pt.x + 1, pt.y), Coord.get(pt.x - 1, pt.y),
                 Coord.get(pt.x, pt.y + 1), Coord.get(pt.x, pt.y - 1)})
         {
-            if(!(temp.x == pt.x && temp.y == pt.y))
-                coll.remove(temp);
+            coll.remove(temp);
         }
 
         return coll;
@@ -874,29 +873,41 @@ public class SectionDungeonGenerator {
                 corridorMap = innerGenerate(allCorridors, corridorFX),
                 allCaves = RoomFinder.merge(cv, width, height),
                 caveMap = innerGenerate(allCaves, caveFX),
-                doorMap = makeDoors(rm, cr, allCaves, allCorridors);
+                doorMap;
         char[][][] lakesAndMazes = makeLake(rm, cv);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if(corridorMap[x][y] != '#' && lakesAndMazes[0][x][y] != '#')
+                if (corridorMap[x][y] != '#' && lakesAndMazes[0][x][y] != '#')
                     dungeon[x][y] = ':';
-                else if(doorMap[x][y] == '+' || doorMap[x][y] == '/')
-                    dungeon[x][y] = doorMap[x][y];
-                else if(doorMap[x][y] == '*')
-                    dungeon[x][y] = '#';
-                else if(roomMap[x][y] != '#')
+                else if (roomMap[x][y] != '#')
                     dungeon[x][y] = roomMap[x][y];
-                else if(lakesAndMazes[1][x][y] != '#')
+                else if (lakesAndMazes[1][x][y] != '#') {
                     dungeon[x][y] = lakesAndMazes[1][x][y];
-                else if(corridorMap[x][y] != '#')
+                    finder.environment[x][y] = MixedGenerator.CORRIDOR_FLOOR;
+                } else if (corridorMap[x][y] != '#')
                     dungeon[x][y] = corridorMap[x][y];
-                else if(caveMap[x][y] != '#')
+                else if (caveMap[x][y] != '#')
                     dungeon[x][y] = caveMap[x][y];
-                else if(lakesAndMazes[0][x][y] != '#')
+                else if (lakesAndMazes[0][x][y] != '#') {
                     dungeon[x][y] = lakesAndMazes[0][x][y];
+                    finder.environment[x][y] = MixedGenerator.CAVE_FLOOR;
+                }
             }
         }
+        finder = new RoomFinder(dungeon, finder.environment);
+        rm = finder.findRooms();
+        cr = finder.findCorridors();
+        allCaves = RoomFinder.merge(cv, width, height);
+        doorMap = makeDoors(rm, cr, allCaves, allCorridors);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (doorMap[x][y] == '+' || doorMap[x][y] == '/')
+                    dungeon[x][y] = doorMap[x][y];
+                else if (doorMap[x][y] == '*')
+                    dungeon[x][y] = '#';
 
+            }
+        }
         placement = new Placement(finder);
         return dungeon;
 
