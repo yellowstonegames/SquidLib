@@ -416,32 +416,37 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
 
         }
-*/
-        ThinDungeonGenerator tdg = new ThinDungeonGenerator(width, height, rng);
-        tdg.addDoors(12, false);
-        //tdg.addWater(SectionDungeonGenerator.CAVE, 13);
-        //tdg.addBoulders(SectionDungeonGenerator.ALL, 13);
-        tdg.addWater(SectionDungeonGenerator.CAVE, 9);
-        tdg.addMaze(30);
-        tdg.addLake(10, '£', '¢');
-        rng.setState(0xFEEEEEEEEEL);
-        serpent = new SerpentMapGenerator(width, height, rng, 0.2);
-        serpent.putWalledBoxRoomCarvers(5);
-        serpent.putWalledRoundRoomCarvers(3);
-        serpent.putCaveCarvers(4);
-        map = serpent.generate();
-        env = serpent.getEnvironment();
-        tdg.generate(map, env);
-        //RNG rand = new RNG();
-        //tdg.generate(rand.getRandomElement(TilesetType.values()));
-        sdungeon = GwtCompatibility.copy2D(tdg.getDungeon());
-        sdungeon[tdg.stairsUp.x][tdg.stairsUp.y] = '<';
-        sdungeon[tdg.stairsDown.x][tdg.stairsDown.y] = '>';
-        //System.out.println(tdg);
-        tdg.setDungeon(DungeonUtility.hashesToLines(sdungeon, true));
-        System.out.println(tdg);
+        */
+        for(int k : new int[]{ThinDungeonGenerator.CAVE_WALL_NORMAL | ThinDungeonGenerator.CORRIDOR_WALL_NORMAL | ThinDungeonGenerator.ROOM_WALL_NORMAL,
+                ThinDungeonGenerator.CAVE_WALL_RETRACT | ThinDungeonGenerator.CORRIDOR_WALL_RETRACT | ThinDungeonGenerator.ROOM_WALL_RETRACT,
+                ThinDungeonGenerator.CAVE_WALL_CHAOTIC | ThinDungeonGenerator.CORRIDOR_WALL_EXPAND | ThinDungeonGenerator.ROOM_WALL_EXPAND
+        }) {
+            ThinDungeonGenerator tdg = new ThinDungeonGenerator(width, height, rng, k, 0, 0);
+            tdg.addDoors(12, false);
+            //tdg.addWater(SectionDungeonGenerator.CAVE, 13);
+            //tdg.addBoulders(SectionDungeonGenerator.ALL, 13);
+            tdg.addWater(SectionDungeonGenerator.CAVE, 9);
+            tdg.addMaze(30);
+            tdg.addLake(10, '£', '¢');
+            rng.setState(0xFEEEEEEEEEL);
+            serpent = new SerpentMapGenerator(width, height, rng, 0.2);
+            serpent.putWalledBoxRoomCarvers(5);
+            serpent.putWalledRoundRoomCarvers(3);
+            serpent.putCaveCarvers(4);
+            map = serpent.generate();
+            env = serpent.getEnvironment();
+            tdg.generate(map, env);
+            //RNG rand = new RNG();
+            //tdg.generate(rand.getRandomElement(TilesetType.values()));
+            sdungeon = GwtCompatibility.copy2D(tdg.getDungeon());
+            sdungeon[tdg.stairsUp.x][tdg.stairsUp.y] = '<';
+            sdungeon[tdg.stairsDown.x][tdg.stairsDown.y] = '>';
+            //System.out.println(tdg);
+            tdg.setDungeon(DungeonUtility.hashesToLines(sdungeon, true));
+            System.out.println(tdg);
+        }
 
-
+        /*
         sdg = new SectionDungeonGenerator(width, height, rng);
         sdg.addDoors(12, false);
         //tdg.addWater(SectionDungeonGenerator.CAVE, 13);
@@ -465,7 +470,7 @@ public class DungeonGeneratorTest {
         //System.out.println(sdg);
         sdg.setDungeon(DungeonUtility.hashesToLines(sdungeon, true));
         System.out.println(sdg);
-
+        */
 
     }
     // Generates a preview webpage when given the right images.
