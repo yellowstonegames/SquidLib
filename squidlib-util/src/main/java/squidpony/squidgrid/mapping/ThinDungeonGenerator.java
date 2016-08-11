@@ -92,7 +92,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 d2[x][y] = dLow;
                                 break;
                             case MixedGenerator.CAVE_FLOOR:
-                                if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                if (PerlinNoise.noise(x * 0.4, y * 0.4) > -0.2) {
                                     e2[x][y] = MixedGenerator.CAVE_FLOOR;
                                     d2[x][y] = dHigh;
                                 } else {
@@ -112,7 +112,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             case MixedGenerator.CORRIDOR_WALL:
                             case MixedGenerator.ROOM_WALL:
                             case MixedGenerator.UNTOUCHED:
-                                if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                if (PerlinNoise.noise(x * 0.4, y * 0.4) > -0.2) {
                                     e2[x][y] = MixedGenerator.CAVE_FLOOR;
                                     d2[x][y] = dLow;
                                 } else {
@@ -142,6 +142,10 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 e2[x][y] = eLow;
                                 d2[x][y] = dLow;
                         }
+                }
+                if(e2[x][y] != MixedGenerator.UNTOUCHED)
+                {
+                    d2[x][y] = '\u0006';
                 }
             }
         }
@@ -180,7 +184,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 d2[x][y] = dLow;
                                 break;
                             case MixedGenerator.CAVE_FLOOR:
-                                if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                if (PerlinNoise.noise(x * 0.4, y * 0.4) > -0.2) {
                                     e2[x][y] = MixedGenerator.CAVE_FLOOR;
                                     d2[x][y] = dHigh;
                                 } else {
@@ -200,7 +204,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             case MixedGenerator.CORRIDOR_WALL:
                             case MixedGenerator.ROOM_WALL:
                             case MixedGenerator.UNTOUCHED:
-                                if (PerlinNoise.noise(x * 0.8, y * 0.8) > -0.2) {
+                                if (PerlinNoise.noise(x * 0.4, y * 0.4) > -0.2) {
                                     e2[x][y] = MixedGenerator.CAVE_FLOOR;
                                     d2[x][y] = dLow;
                                 } else {
@@ -231,8 +235,37 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 d2[x][y] = dLow;
                         }
                 }
+                if(e2[x][y] != MixedGenerator.UNTOUCHED)
+                {
+                    d2[x][y] = '\u0006';
+                }
             }
         }
+
+        for (int x = 1; x < nw-1; x+=2) {
+            for (int y = 1; y < nh - 1; y += 2) {
+                if (d2[x - 1][y] == '#' && d2[x + 1][y] == '#') {
+                    e2[x][y] = MixedGenerator.UNTOUCHED;
+                    d2[x][y] = '#';
+                }
+            }
+        }
+        for (int x = 1; x < nw-1; x++) {
+            for (int y = 1; y < nh - 1; y += 2) {
+                if (e2[x][y - 1] == MixedGenerator.UNTOUCHED || e2[x][y + 1] == MixedGenerator.UNTOUCHED)
+                {
+                    if(e2[x-1][y] == MixedGenerator.UNTOUCHED) {
+                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                        d2[x][y] = '#';
+                    }
+                    else if(e2[x+1][y] == MixedGenerator.UNTOUCHED) {
+                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                        d2[x][y] = '#';
+                    }
+                }
+            }
+        }
+
         dungeon = d2;
         width = nw;
         height = nh;
@@ -252,6 +285,19 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
         super.innerGenerate();
         makeThin();
         return dungeon;
+    }
+    /**
+     * Provides a string representation of the latest generated dungeon.
+     * Because the spaces between occupy-able cells, when walkable, use the control character U+0006
+     * to indicate that they're not meant to be displayed, this replaces any instances of that character
+     * in the printable output with ordinary space characters, while keeping the internal representation
+     * as the control character.
+     *
+     * @return a printable string version of the latest generated dungeon.
+     */
+    @Override
+    public String toString() {
+        return super.toString().replace('\u0006', ' ');
     }
 
 }

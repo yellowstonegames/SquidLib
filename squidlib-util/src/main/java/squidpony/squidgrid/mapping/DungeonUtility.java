@@ -1080,8 +1080,6 @@ public class DungeonUtility {
                     case ',':
                     case '~':
                     case '^':
-                        portion[i][j] = 0.0;
-                        break;
                     default:
                         portion[i][j] = 0.0;
                 }
