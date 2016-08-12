@@ -206,11 +206,6 @@ public class DungeonGeneratorTest {
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
 
-        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(sdg.getDungeon(), true)));
-        System.out.println(dungeonGenerator);
-        System.out.println("------------------------------------------------------------");
-
 /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
         //dungeonGenerator.addDoors(10, false);
