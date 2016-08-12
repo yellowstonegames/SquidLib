@@ -772,7 +772,8 @@ public class DijkstraMap {
                 }
             }
 //            closed.putAll(open);
-            open = new IntDoubleOrderedMap(fresh);
+            open.clear();
+            open.putAll(fresh);
             fresh.clear();
         }
         closed.clear();
@@ -856,6 +857,15 @@ public class DijkstraMap {
                     if (adj.x < 0 || adj.y < 0 || width <= adj.x || height <= adj.y)
                     	/* Outside the map */
                         continue;
+                    if(d >= 4 && blockingRequirement > 0) // diagonal
+                    {
+                        if((gradientMap[cen.x + dirs[d].deltaX][cen.y] > FLOOR ? 1 : 0)
+                                + (gradientMap[cen.x][cen.y + dirs[d].deltaY] > FLOOR ? 1 : 0)
+                                >= blockingRequirement)
+                        {
+                            continue;
+                        }
+                    }
                     enc = adj.encode();
                     double h = heuristic(dirs[d]);
                     if (!closed.containsKey(enc) && !open.containsKey(enc) &&

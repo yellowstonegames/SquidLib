@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 
+import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
 
@@ -267,7 +268,7 @@ public class LinesPanel<T extends Color> extends Actor {
 	 * 
 	 * @param ics
 	 * @param ydx
-	 *            The index of {@link #ics} within {@link #content}.
+	 *            The index of {@code ics} within {@link #content}.
 	 * @return A variation of {@code ics}, or {@code ics} itself.
 	 */
 	protected IColoredString<T> transform(IColoredString<T> ics, int ydx) {

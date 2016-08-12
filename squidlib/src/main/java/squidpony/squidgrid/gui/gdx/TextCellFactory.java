@@ -93,6 +93,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory(/* Nullable */ AssetManager assetManager) {
     	this.assetManager = assetManager;
         scc = DefaultResources.getSCC();
+        swap.put("\u0006", " ");
     }
 
     public TextCellFactory copy()
