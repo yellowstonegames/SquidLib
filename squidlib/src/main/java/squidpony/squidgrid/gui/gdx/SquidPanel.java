@@ -47,7 +47,17 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected final TextCellFactory textFactory;
     protected float xOffset, yOffset;
     protected OrderedSet<AnimatedEntity> animatedEntities;
-    protected boolean distanceField = false;
+    /**
+     * For thin-wall maps, where only cells where x and y are both even numbers have backgrounds displayed.
+     * Should be false when using this SquidPanel for anything that isn't specifically a background of a map
+     * that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the foregrounds of
+     * thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with
+     * {@link squidpony.squidgrid.mapping.DungeonUtility#hashesToLines(char[][])} makes thin lines for walls
+     * that should be displayed as between the boundaries of other cells. The overlap behavior needed for some
+     * "thin enough" cells to be displayed between the cells can be accomplished by using
+     * {@link #setTextSize(int, int)} to double the previously-given cell width and height.
+     */
+    public boolean onlyRenderEven = false;
 
     /**
      * Creates a bare-bones panel with all default values for text rendering.
@@ -396,7 +406,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
     /**
-     * Takes a unicode codepoint for input.
+     * Takes a unicode char for input.
      *
      * @param x
      * @param y
@@ -413,19 +423,17 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
 	/**
-	 * @throws UnsupportedOperationException
-	 *             If the backing {@link IColorCenter} isn't an instance of
-	 *             {@link SquidColorCenter}.
+     * Puts the given character at position x, y, with its color determined by the given color interpolated with
+     * this SquidPanel's lightingColor (default is white light) by the amount specified by colorMultiplier (0.0
+     * causes no change to the given color, 1.0 uses the lightingColor only, and anything between 0 and 1 will
+     * produce some tint to color, and probably cache the produced color in the IColorCenter this uses).
 	 */
 	public void put(int x, int y, char c, Color color, float colorMultiplier) {
         if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) {
             return;//skip if out of bounds
         }
         contents[x][y] = String.valueOf(c);
-		if (!(scc instanceof SquidColorCenter))
-			throw new UnsupportedOperationException("This method required the color center to be a "
-					+ SquidColorCenter.class.getSimpleName());
-		colors[x][y] = ((SquidColorCenter) scc).lerp(color, lightingColor, colorMultiplier);
+		colors[x][y] = scc.lerp(color, lightingColor, colorMultiplier);
 	}
 
     @Override
@@ -471,15 +479,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     @Override
     public void draw (Batch batch, float parentAlpha) {
-        /*if(batch.isDrawing()) {
-            batch.end();
-            batch.begin();
-        }*/
         textFactory.configureShader(batch);
         Color tmp;
-
-        for (int x = gridOffsetX; x < gridWidth; x++) {
-            for (int y = gridOffsetY; y < gridHeight; y++) {
+        int inc = onlyRenderEven ? 2 : 1;
+        for (int x = gridOffsetX; x < gridWidth; x += inc) {
+            for (int y = gridOffsetY; y < gridHeight; y += inc) {
                 tmp = scc.filter(colors[x][y]);
                 textFactory.draw(batch, contents[x][y], tmp, xOffset + /*- getX() + */1f * x * cellWidth,
                         yOffset + /*- getY() + */1f * (gridHeight - y) * cellHeight + 1f);
@@ -919,7 +923,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     */
     public void recallActor(Actor a, boolean restoreSym)
     {
-        //animationCount--;
+        animationCount--;
         int x = Math.round((a.getX() - getX()) / cellWidth),
                 y = gridHeight - (int)(a.getY() / cellHeight) - 1;
 //             y = gridHeight - (int)((a.getY() - getY()) / cellHeight) - 1;
@@ -927,7 +931,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             return;
         if (restoreSym)
         	contents[x][y] = a.getName();
-        animationCount--;
         removeActor(a);
     }
     public void recallActor(AnimatedEntity ae)
@@ -1526,5 +1529,44 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public void setOffsets(float x, float y) {
         xOffset = x;
         yOffset = y;
+    }
+
+    /**
+     * Gets the status of a boolean flag used for rendering thin maps; it will almost always be false unless it
+     * was set to true with {@link #setOnlyRenderEven(boolean)}.
+     * <br>
+     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds
+     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background
+     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the
+     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with
+     * {@link squidpony.squidgrid.mapping.DungeonUtility#hashesToLines(char[][])} makes thin lines for walls
+     * that should be displayed as between the boundaries of other cells. The overlap behavior needed for some
+     * "thin enough" cells to be displayed between the cells can be accomplished by using
+     * {@link #setTextSize(int, int)} to double the previously-given cell width and height.
+     *
+     * @return the current status of the onlyRenderEven flag, which defaults to false
+     */
+    public boolean getOnlyRenderEven() {
+        return onlyRenderEven;
+    }
+    /**
+     * Sets the status of a boolean flag used for rendering thin maps; it should almost always be the default,
+     * which is false, unless you are using a thin-wall map, and then this should be true only if this
+     * SquidPanel is used for the background layer.
+     * <br>
+     * This is meant for thin-wall maps, where only cells where x and y are both even numbers have backgrounds
+     * displayed. Should be false when using this SquidPanel for anything that isn't specifically a background
+     * of a map that uses the thin-wall method from ThinDungeonGenerator or something similar. Even the
+     * foregrounds of thin-wall maps should have this false, since ThinDungeonGenerator (in conjunction with
+     * {@link squidpony.squidgrid.mapping.DungeonUtility#hashesToLines(char[][])} makes thin lines for walls
+     * that should be displayed as between the boundaries of other cells. The overlap behavior needed for some
+     * "thin enough" cells to be displayed between the cells can be accomplished by using
+     * {@link #setTextSize(int, int)} to double the previously-given cell width and height.
+     *
+     * @param onlyRenderEven generally, should only be true if this SquidPanel is a background of a thin map
+     */
+
+    public void setOnlyRenderEven(boolean onlyRenderEven) {
+        this.onlyRenderEven = onlyRenderEven;
     }
 }

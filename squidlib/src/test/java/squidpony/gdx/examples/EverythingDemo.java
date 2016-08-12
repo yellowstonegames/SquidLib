@@ -180,8 +180,8 @@ public class EverythingDemo extends ApplicationAdapter {
         //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
         //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
         // values are high) or rendering fewer pixels for speed (when values are low). Using 2 seems to work well.
-        cellWidth = 12 * INTERNAL_ZOOM;
-        cellHeight = 24 * INTERNAL_ZOOM;
+        cellWidth = 13 * INTERNAL_ZOOM;
+        cellHeight = 26 * INTERNAL_ZOOM;
         // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
         // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
         // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
@@ -404,7 +404,8 @@ public class EverythingDemo extends ApplicationAdapter {
                         //Uses DijkstraMap to get a path. from the player's position to the cursor
                         toCursor = playerToCursor.findPath(30, null, null, Coord.get(player.gridX, player.gridY), cursor);
                     }
-                    awaitedMoves = new ArrayList<>(toCursor);
+                    awaitedMoves.clear();
+                    awaitedMoves.addAll(toCursor);
                 }
                 return false;
             }
@@ -549,7 +550,7 @@ public class EverythingDemo extends ApplicationAdapter {
                     // if we would move into the player, instead damage the player and give newMons the current
                     // position of this monster.
                     if (tmp.x == player.gridX && tmp.y == player.gridY) {
-                        display.tint(player.gridX, player.gridY, SColor.PURE_CRIMSON, 0, 0.15f);
+                        display.tint(player.gridX, player.gridY, SColor.PURE_CRIMSON, 0, 0.415f);
                         health--;
                         //player.setText("" + health);
                         monsters.positionalModify(pos, mon.change(1));

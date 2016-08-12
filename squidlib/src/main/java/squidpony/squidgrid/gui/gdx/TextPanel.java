@@ -88,7 +88,7 @@ public class TextPanel<T extends Color> {
 
 	/**
 	 * Whether to use 'j' to scroll down, and 'k' to scroll up. Serious
-	 * roguelikes leave that to {@code true}.
+	 * roguelikes leave that to {@code true}, assuming they don't use j and k for movement...
 	 */
 	public boolean vimShortcuts = true;
 

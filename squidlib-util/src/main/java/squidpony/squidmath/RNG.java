@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import squidpony.GwtCompatibility;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
@@ -515,19 +516,26 @@ public class RNG implements Serializable {
      */
     public <T> T[] randomPortion(T[] data, T[] output)
     {
+        /*
         int length = data.length;
         int[] mapping = new int[length];
         for (int i = 0; i < length; i++) {
             mapping[i] = i;
         }
-
         for (int i = 0; i < output.length && length > 0; i++) {
             int r = nextInt(length);
-
             output[i] = data[mapping[r]];
-
             mapping[r] = length-1;
-            length--;
+        }
+        */
+
+        int length = data.length;
+        int n = Math.min(length, output.length);
+        int[] mapping = GwtCompatibility.range(n);
+        for (int i = 0; i < n; i++) {
+            int r = nextInt(length);
+            output[i] = data[mapping[r]];
+            mapping[r] = mapping[--length];
         }
 
         return output;

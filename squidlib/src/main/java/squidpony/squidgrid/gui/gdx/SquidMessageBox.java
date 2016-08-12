@@ -22,7 +22,7 @@ import java.util.List;
  * 
  * @see LinesPanel An alternative, which is also designed to write messages (not
  *      in a scrolling pane though), but which is backed up by {@link com.badlogic.gdx.scenes.scene2d.Actor}
- *      instead of {@link SquidPanel} (hence better supports tight serif fonts)
+ *      instead of {@link SquidPanel} (hence better supports tight variable-width fonts)
  */
 public class SquidMessageBox extends SquidPanel {
     protected ArrayList<IColoredString<Color>> messages = new ArrayList<>(256);
