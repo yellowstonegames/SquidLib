@@ -779,8 +779,8 @@ public class SectionDungeonGenerator {
             dijkstra.setGoal(stairsUp);
             dijkstra.scan(null);
             frustrated++;
-        }while (dijkstra.getMappedCount() < width + height && frustrated < 5);
-        if(frustrated >= 5)
+        }while (dijkstra.getMappedCount() < width + height && frustrated < 8);
+        if(frustrated >= 8)
         {
             return generate();
         }

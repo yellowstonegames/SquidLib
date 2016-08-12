@@ -478,7 +478,11 @@ public class DungeonGenerator {
             dijkstra.setGoal(stairsUp);
             dijkstra.scan(null);
             frustrated++;
-        }while (dijkstra.getMappedCount() < width + height && frustrated < 15);
+        }while (dijkstra.getMappedCount() < width + height && frustrated < 8);
+        if(frustrated >= 8)
+        {
+            return generate();
+        }
         double maxDijkstra = 0.0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
