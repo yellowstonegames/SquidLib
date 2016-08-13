@@ -5,14 +5,27 @@ import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.*;
 import squidpony.squidmath.*;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * An alternative to AStarSearch when you want to fully explore a search space, or when you want a gradient floodfill.
+ * It's currently significantly faster that AStarSearch, and also supports pathfinding to the nearest of multiple
+ * goals, which is not possible with AStarSearch. This last feature enables a whole host of others, like pathfinding
+ * for creatures that can attack targets between a specified minimum and maximum distance, and there's also the
+ * standard uses of Dijkstra Maps such as finding ideal paths to run away.
+ * As a bit of introduction, the article http://www.roguebasin.com/index.php?title=Dijkstra_Maps_Visualized can
+ * provide some useful information on how these work and how to visualize the information they can produce, while
+ * http://www.roguebasin.com/index.php?title=The_Incredible_Power_of_Dijkstra_Maps is an inspiring list of the
+ * various features Dijkstra Maps can enable.
+ * <br>
  * If you can't remember how to spell this, just remember: Does It Just Know Stuff? That's Really Awesome!
  * Created by Tommy Ettinger on 4/4/2015.
  */
-public class DijkstraMap {
+public class DijkstraMap implements Serializable {
+    private static final long serialVersionUID = -2456306898212944440L;
+
+    private static final double root2 = Math.sqrt(2.0);
     /**
      * The type of heuristic to use.
      */
@@ -32,7 +45,25 @@ public class DijkstraMap {
          * The distance it takes as the crow flies. This will NOT affect movement cost when calculating a path,
          * only the preferred squares to travel to (resulting in drastically more reasonable-looking paths).
          */
-        EUCLIDEAN
+        EUCLIDEAN;
+
+        double heuristic(Direction target) {
+            switch (this) {
+                case CHEBYSHEV:
+                    return 1.0;
+                case EUCLIDEAN:
+                    switch (target) {
+                        case DOWN_LEFT:
+                        case DOWN_RIGHT:
+                        case UP_LEFT:
+                        case UP_RIGHT:
+                            return root2;
+                        default:
+                            return 1.0;
+                    }
+            }
+            return 1.0;
+        }
     }
 
     /**
@@ -763,7 +794,7 @@ public class DijkstraMap {
                         }
                     }
                     enc = adj.encode();
-                    double h = heuristic(dirs[d]);
+                    double h = measurement.heuristic(dirs[d]);
                     if (!closed.containsKey(enc) && !open.containsKey(enc) && gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
@@ -867,7 +898,7 @@ public class DijkstraMap {
                         }
                     }
                     enc = adj.encode();
-                    double h = heuristic(dirs[d]);
+                    double h = measurement.heuristic(dirs[d]);
                     if (!closed.containsKey(enc) && !open.containsKey(enc) &&
                             gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
@@ -948,7 +979,7 @@ public class DijkstraMap {
                     	/* Outside the map */
                         continue;
                     enc = adj.encode();
-                    double h = heuristic(dirs[d]);
+                    double h = measurement.heuristic(dirs[d]);
                     if (!closed.containsKey(enc) && !open.containsKey(enc) &&
                             gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
@@ -1087,7 +1118,7 @@ public class DijkstraMap {
                         continue;
                     enc = adj.encode();
 
-                    double h = heuristic(dirs[d]);
+                    double h = measurement.heuristic(dirs[d]);
                     if (!closed.containsKey(enc) && !open.containsKey(enc) &&
                             gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
@@ -1226,7 +1257,7 @@ public class DijkstraMap {
                     	/* Outside the map */
                         continue;
                     enc = adj.encode();
-                    double h = heuristic(dirs[d]);
+                    double h = measurement.heuristic(dirs[d]);
                     if (!closed.containsKey(enc) && !open.containsKey(enc) && gradientMap[cen.x][cen.y] + h * costMap[adj.x][adj.y] < gradientMap[adj.x][adj.y]) {
                         setFresh(adj, cell.getDoubleValue() + h * costMap[adj.x][adj.y]);
                         ++numAssigned;
@@ -3385,26 +3416,6 @@ public class DijkstraMap {
         return fill;
     }
 
-    private static final double root2 = Math.sqrt(2.0);
-
-    private double heuristic(Direction target) {
-        switch (measurement) {
-            case MANHATTAN:
-            case CHEBYSHEV:
-                return 1.0;
-            case EUCLIDEAN:
-                switch (target) {
-                    case DOWN_LEFT:
-                    case DOWN_RIGHT:
-                    case UP_LEFT:
-                    case UP_RIGHT:
-                        return root2;
-                    default:
-                        return 1.0;
-                }
-        }
-        return 1.0;
-    }
     public int getMappedCount() {
         return mappedCount;
     }

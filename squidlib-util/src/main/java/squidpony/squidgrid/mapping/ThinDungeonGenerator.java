@@ -3,10 +3,14 @@ package squidpony.squidgrid.mapping;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 
+import java.io.Serializable;
+
 /**
  * Created by Tommy Ettinger on 8/7/2016.
  */
-public class ThinDungeonGenerator extends SectionDungeonGenerator {
+public class ThinDungeonGenerator extends SectionDungeonGenerator implements Serializable {
+    private static final long serialVersionUID = -2456306898212911110L;
+
     public static final int
             ROOM_WALL_RETRACT = 1, ROOM_WALL_NORMAL = 2, ROOM_WALL_EXPAND = 4, ROOM_WALL_CHAOTIC = 8,
             CORRIDOR_WALL_RETRACT = 16, CORRIDOR_WALL_NORMAL = 32, CORRIDOR_WALL_EXPAND = 64, CORRIDOR_WALL_CHAOTIC = 128,

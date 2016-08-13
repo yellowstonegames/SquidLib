@@ -5,6 +5,7 @@ import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -47,7 +48,8 @@ import static squidpony.squidmath.CoordPacker.*;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
-public class DungeonGenerator {
+public class DungeonGenerator implements Serializable {
+    private static final long serialVersionUID = -2456306898212911110L;
 
     /**
      * The effects that can be applied to this dungeon. More may be added in future releases.
