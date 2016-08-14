@@ -404,12 +404,15 @@ public class IntVLA implements Serializable, Cloneable {
         }
     }
     @Override
-	public int hashCode () {
+    public int hashCode () {
         int[] items = this.items;
         int h = 1;
         for (int i = 0, n = size; i < n; i++)
             h = h * 31 + items[i];
         return h;
+    }
+    public long hash64 () {
+        return CrossHash.Lightning.hash64(items);
     }
 
     @Override

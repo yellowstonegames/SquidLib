@@ -109,6 +109,8 @@ public abstract class Adjacency implements Serializable {
 
     public abstract int[][] neighborMaps();
 
+    public abstract boolean isBlocked(int start, int direction, int[][] neighbors, double[] map, double wall);
+
     public static class BasicAdjacency extends Adjacency implements Serializable {
         private static final long serialVersionUID = 0L;
 
@@ -172,6 +174,27 @@ public abstract class Adjacency implements Serializable {
                 }
             }
             return maps;
+        }
+
+        @Override
+        public boolean isBlocked(int start, int direction, int[][] neighbors, double[] map, double wall) {
+            if(direction < 4 || !validate(start))
+                return false;
+            switch (direction)
+            {
+                case 4: //UP_LEFT
+                    return (neighbors[0][start] < 0 || map[neighbors[0][start]] >= wall)
+                            && (neighbors[2][start] < 0 || map[neighbors[2][start]] >= wall);
+                case 5: //UP_RIGHT
+                    return (neighbors[0][start] < 0 || map[neighbors[0][start]] >= wall)
+                            && (neighbors[3][start] < 0 || map[neighbors[3][start]] >= wall);
+                case 6: //DOWN_LEFT
+                    return (neighbors[1][start] < 0 || map[neighbors[1][start]] >= wall)
+                            && (neighbors[2][start] < 0 || map[neighbors[2][start]] >= wall);
+                default: //DOWN_RIGHT
+                    return (neighbors[1][start] < 0 || map[neighbors[1][start]] >= wall)
+                            && (neighbors[3][start] < 0 || map[neighbors[3][start]] >= wall);
+            }
         }
     }
 
