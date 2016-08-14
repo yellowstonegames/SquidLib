@@ -501,6 +501,27 @@ public class RNG implements Serializable {
     }
 
     /**
+     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive) and stores it in
+     * the dest parameter, avoiding allocations.
+     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
+     * @param length the size of the ordering to produce
+     * @param dest the destination array; will be modified
+     * @return dest, filled with a random ordering containing all ints from 0 to length (exclusive)
+     */
+    public int[] randomOrdering(int length, int[] dest)
+    {
+        if(dest == null) return null;
+        for (int i = 0; i < length && i < dest.length; i++)
+        {
+            int r = nextIntHasty(i + 1);
+            if(r != i)
+                dest[i] = dest[r];
+            dest[r] = i;
+        }
+        return dest;
+    }
+
+    /**
      * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
      * it can, and then returns output. Will only use a given position in the given data at most once; does this by
      * generating random indices for data's elements, but only as much as needed, assigning the copied section to output

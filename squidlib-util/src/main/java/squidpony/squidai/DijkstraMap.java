@@ -1012,9 +1012,7 @@ public class DijkstraMap implements Serializable {
      * @return the Coord that it found first.
      */
     public Coord findNearest(Coord start, Coord... targets) {
-        OrderedSet<Coord> tgts = new OrderedSet<>(targets.length);
-        Collections.addAll(tgts, targets);
-        return findNearest(start, tgts);
+        return findNearest(start, new OrderedSet<>(targets));
     }
 
     /**
