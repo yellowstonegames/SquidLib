@@ -1,6 +1,8 @@
 package squidpony.examples;
 
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.IntDoubleOrderedMap;
+import squidpony.squidmath.LongPeriodRNG;
 
 import java.util.Arrays;
 
@@ -87,8 +89,9 @@ public class HashQualityTest {
                 {-31, -31},
                 {-31, -31, -31},
         };
-        int len = bytes.length;
         CrossHash.Sip sip = new CrossHash.Sip(0x9E3779B97F4A7C15L, 0xBF58476D1CE4E5B9L);
+
+        int len = bytes.length;
         for (int i = 0; i < len; i++) {
             System.out.println(Arrays.toString(longs[i]));
             System.out.println("JDK bytes: " + Arrays.hashCode(bytes[i]));
@@ -121,6 +124,39 @@ public class HashQualityTest {
             System.out.println("Lightning longs: " + CrossHash.Lightning.hash(longs[i]));
         }
 
+        IntDoubleOrderedMap collider = new IntDoubleOrderedMap(0x100000, 0.75f);
+        LongPeriodRNG lprng = new LongPeriodRNG();
+        lprng.reseed(0x66L);
+        for (int i = 0; i < 0x100000; i++) {
+            lprng.nextLong();
+            collider.put(Arrays.hashCode(lprng.state), i);
+        }
+        System.out.println("JDK collisions, 32-bit: " + (0x100000 - collider.size()));
+        collider.clear();
+
+        lprng.reseed(0x66L);
+        for (int i = 0; i < 0x100000; i++) {
+            lprng.nextLong();
+            collider.put(CrossHash.hash(lprng.state), i);
+        }
+        System.out.println("CrossHash collisions, 32-bit: " + (0x100000 - collider.size()));
+        collider.clear();
+
+        lprng.reseed(0x66L);
+        for (int i = 0; i < 0x100000; i++) {
+            lprng.nextLong();
+            collider.put(sip.hash(lprng.state), i);
+        }
+        System.out.println("Sip collisions, 32-bit: " + (0x100000 - collider.size()));
+        collider.clear();
+
+        lprng.reseed(0x66L);
+        for (int i = 0; i < 0x100000; i++) {
+            lprng.nextLong();
+            collider.put(CrossHash.Lightning.hash(lprng.state), i);
+        }
+        System.out.println("Lightning collisions, 32-bit: " + (0x100000 - collider.size()));
+        collider.clear();
 
     }
 }
