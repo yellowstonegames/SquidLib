@@ -4142,7 +4142,19 @@ public class CrossHash {
      * arrays can be computed in under 21 ms (in the benchmark, some amount of that is overhead from
      * generating a new array with LongPeriodRNG, since the benchmark uses that RNG's state for data, and the
      * default Arrays.hashCode implementation is only somewhat faster at under 16 ms).
+     * <br>
+     * There is certainly room for improvement with the specific numbers chosen; earlier versions used the
+     * multiplier "Neely's number", which is a probable prime made by taking the radix-29 number
+     * "HARGNALLINSCLOPIOPEEPIO" (a reference to a very unusual TV show), truncating to 64 bits, and rotating
+     * right by 42 bits. This version uses a different probable prime, made with a similar process; it starts
+     * with the radix-36 number "EDSGERWDIJKSTRA", then does the same process but rotates right by 37 bits to
+     * obtain a different prime. This results in fewer hash collisions on semi-random data (large PRNG states).
+     * The pattern seems to be that the current multiplier, based on base-36 "EDSGERWDIJKSTRA", results in
+     * fewer collisions on the tested data than any of the other hashes tested (including less collisions than
+     * Arrays.hashCode (second best), FNV using normal CrossHash, and Sip, while avoiding predictable failures
+     * that Arrays.hashCode has, like {@code Arrays.hashCode(new long[]{0})==Arrays.hashCode(new long[]{-1})}).
      */
+    @SuppressWarnings("NumericOverflow")
     public static class Lightning implements Serializable {
         private static final long serialVersionUID = 0L;
 
@@ -4151,7 +4163,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (data[i] ? 127L : 0L) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4161,7 +4173,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4171,7 +4183,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4181,7 +4193,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4191,7 +4203,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4201,7 +4213,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4211,7 +4223,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += Float.floatToIntBits(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4221,7 +4233,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += Double.doubleToLongBits(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4231,7 +4243,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = start; i < end && i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4245,7 +4257,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += hash64(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4255,7 +4267,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += hash64(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4265,7 +4277,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += hash64(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return result;
         }
@@ -4275,7 +4287,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (data[i] ? 127L : 0L) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4285,7 +4297,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4295,7 +4307,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4305,7 +4317,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4315,7 +4327,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
 
             }
             return (int) (result ^ (result >>> 32));
@@ -4326,7 +4338,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4336,7 +4348,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += Float.floatToIntBits(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4346,7 +4358,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += Double.doubleToLongBits(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4357,7 +4369,7 @@ public class CrossHash {
 
             long z = 1, result = 1;
             for (int i = start; i < end && i < data.length; i++) {
-                result ^= (z += data[i] * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4371,7 +4383,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += hash64(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4381,7 +4393,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += hash64(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
@@ -4391,7 +4403,7 @@ public class CrossHash {
                 return 0;
             long z = 1, result = 1;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += hash64(data[i]) * 0x632BE59BD9B4E019L + 0x9E3779B97F4A7C15L) ^ (z >>> 1);
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) ^ (z >>> 1);
             }
             return (int) (result ^ (result >>> 32));
         }
