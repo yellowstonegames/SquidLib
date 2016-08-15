@@ -109,6 +109,8 @@ public abstract class Adjacency implements Serializable {
 
     public abstract int[][] neighborMaps();
 
+    public abstract void portal(int[][] neighbors, int inputPortal, int outputPortal, boolean twoWay);
+
     public abstract boolean isBlocked(int start, int direction, int[][] neighbors, double[] map, double wall);
 
     public static class BasicAdjacency extends Adjacency implements Serializable {
@@ -194,6 +196,25 @@ public abstract class Adjacency implements Serializable {
                 default: //DOWN_RIGHT
                     return (neighbors[1][start] < 0 || map[neighbors[1][start]] >= wall)
                             && (neighbors[3][start] < 0 || map[neighbors[3][start]] >= wall);
+            }
+        }
+
+        @Override
+        public void portal(int[][] neighbors, int inputPortal, int outputPortal, boolean twoWay) {
+            if(neighbors == null || !validate(inputPortal) || !validate(outputPortal)
+                    || neighbors.length != maxAdjacent)
+                return;
+            for (int d = 0; d < maxAdjacent; d++) {
+                for (int i = 0; i < width * height; i++) {
+                    if(neighbors[d][i] == inputPortal)
+                    {
+                        neighbors[d][i] = outputPortal;
+                    }
+                    else if(twoWay && neighbors[d][i] == outputPortal)
+                    {
+                        neighbors[d][i] = inputPortal;
+                    }
+                }
             }
         }
     }
