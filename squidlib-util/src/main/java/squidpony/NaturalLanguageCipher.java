@@ -192,6 +192,17 @@ se$->z
             new Replacer(Pattern.compile("e$"), "", false),
             new Replacer(Pattern.compile("^[pc]([nts])"), "$1"),
             new Replacer(Pattern.compile("^fth"), "t", false),
+    }, conjugationProc = {
+            new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)" +
+                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\2" +
+                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1$2$1$2$3"),
+            new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)" +
+                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])" +
+                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])\\3", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1$2$3$1$3"),
+            new Replacer(Pattern.compile("([^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]{3})" +
+                    "(?:[^àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+)", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1"),
+            new Replacer(Pattern.compile("([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])" +
+                    "([àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя])(?:\\1\\2)+", REFlags.UNICODE | REFlags.IGNORE_CASE), "$1$2"),
     };
 
     static final long[] bigrams = {
@@ -312,6 +323,7 @@ se$->z
             Pattern.compile("^[iτιyуλγУaаαΛ]*[gj]", 17),
             Pattern.compile("^[nи]..?[Ssξlιζz]", 17),
             Pattern.compile("^[iτιyуλγУaаαΛ][dtтτΓг]", 17),
+            Pattern.compile("^[iτιyуλγУaаαΛ][kкκcсςq][kкκcсςq]", 17),
             Pattern.compile("^[uμυ]*[mм]", 17),
     };
 
@@ -543,7 +555,12 @@ se$->z
         if((mods & PLURAL) != 0) {
             sb.append(pluralSuffix);
         }
-        return sb.toString();
+        String done = sb.toString();
+        for(int conproc = 0; conproc < conjugationProc.length; conproc++)
+        {
+            done = conjugationProc[conproc].replace(done);
+        }
+        return done;
     }
     /**
      * Given a word in the source language (usually English), looks up an existing translation for that word, or if none
@@ -741,7 +758,7 @@ se$->z
             //System.out.print(source + ":" + ((h >>> 60) & 7) + ":" + StringKit.hex(h) + ", ");
             rs.setState(h);
             do {
-                ciphered = conjugate(language.word(rng, false, (int) Math.ceil(((h >>> 60) & 15) / (0.9 + 0.5 * rng.nextDouble()))), mods);
+                ciphered = conjugate(language.word(rng, false, (int) Math.ceil((h >>> 60) / (0.9 + 0.5 * rng.nextDouble()))), mods);
                 if(cacheLevel < 2 || frustration++ > 9)
                     break;
             }while (reverse.containsKey(ciphered));
