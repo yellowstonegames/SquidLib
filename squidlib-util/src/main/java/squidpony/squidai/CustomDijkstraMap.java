@@ -11,7 +11,6 @@ import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.RNG;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * An alternative to AStarSearch when you want to fully explore a search space, or when you want a gradient
@@ -256,12 +255,15 @@ public class CustomDijkstraMap implements Serializable {
     public CustomDijkstraMap initialize(final double[] level) {
         width = adjacency.width;
         height = adjacency.height;
-        gradientMap = new double[level.length];
-        physicalMap = new double[level.length];
-        costMap = new double[level.length];
-        System.arraycopy(level, 0, gradientMap, 0, level.length);
-        System.arraycopy(level, 0, physicalMap, 0, level.length);
-        Arrays.fill(costMap, 1.0);
+        int len = level.length;
+        gradientMap = new double[len];
+        physicalMap = new double[len];
+        costMap = new double[len];
+        System.arraycopy(level, 0, gradientMap, 0, len);
+        System.arraycopy(level, 0, physicalMap, 0, len);
+        for (int i = 0; i < len; i++) {
+            costMap[i] = (gradientMap[i] > FLOOR) ? WALL : 1.0;
+        }
         neighbors = adjacency.neighborMaps();
         initialized = true;
         return this;
@@ -368,7 +370,10 @@ public class CustomDijkstraMap implements Serializable {
      * @return this DijkstraMap for chaining.
      */
     public CustomDijkstraMap initializeCost(final double[] costs) {
-        if (!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
+        if (!initialized)
+            throw new IllegalStateException("DijkstraMap must be initialized first!");
+        if(costs.length != gradientMap.length)
+            throw new IllegalArgumentException("costs.length must equal gradientMap.length");
         costMap = new double[costs.length];
         System.arraycopy(costs, 0, costMap, 0, costs.length);
         return this;
@@ -520,7 +525,7 @@ public class CustomDijkstraMap implements Serializable {
                 closed.put(impassable[i], WALL);
             }
         }
-        int near, cen;
+        int near, cen, neighborCount = neighbors.length, mid;
 
         for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
             closed.remove(entry.getIntKey());
@@ -528,7 +533,8 @@ public class CustomDijkstraMap implements Serializable {
         }
         double currentLowest = 999000;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
-        int maxLength = adjacency.height * adjacency.width * adjacency.rotations * adjacency.depths;
+        Adjacency adjacency = this.adjacency;
+        int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
             if (gradientMap[l] > FLOOR && !goals.containsKey(l))
                 closed.put(l, physicalMap[l]);
@@ -548,18 +554,34 @@ public class CustomDijkstraMap implements Serializable {
 
             for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
                 cen = cell.getIntKey();
-                for (int d = 0; d < neighbors.length; d++) {
+                for (int d = 0; d < neighborCount; d++) {
                     near = neighbors[d][cen];
                     if (!adjacency.validate(near))
                     	// Outside the map
                     	continue;
                     if(adjacency.isBlocked(cen, d, neighbors, gradientMap, WALL))
                         continue;
-                    double h = adjacency.measurement.heuristic(adjacency.directions[d]);
-                    if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + h * costMap[near] < gradientMap[near]) {
-                        setFresh(near, cell.getDoubleValue() + h * costMap[near]);
-                        ++numAssigned;
-                        ++mappedCount;
+                    if(adjacency.twoStepRule) {
+                        near = neighbors[d][mid = near];
+                        // Outside the map
+                        if (!adjacency.validate(near))
+                            continue;
+                        if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
+                            continue;
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + costMap[near] < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                            ++numAssigned;
+                            ++mappedCount;
+                        }
+                    }
+                    else
+                    {
+                        //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + costMap[near] < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                            ++numAssigned;
+                            ++mappedCount;
+                        }
                     }
                 }
             }
@@ -603,7 +625,7 @@ public class CustomDijkstraMap implements Serializable {
                 closed.put(impassable[i], WALL);
             }
         }
-        int near, cen;
+        int near, cen, neighborCount = neighbors.length, mid;
 
         for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
             closed.remove(entry.getIntKey());
@@ -611,7 +633,8 @@ public class CustomDijkstraMap implements Serializable {
         }
         double currentLowest = 999000;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
-        int maxLength = adjacency.height * adjacency.width * adjacency.rotations * adjacency.depths;
+        Adjacency adjacency = this.adjacency;
+        int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
             if (gradientMap[l] > FLOOR && !goals.containsKey(l))
                 closed.put(l, physicalMap[l]);
@@ -632,18 +655,34 @@ public class CustomDijkstraMap implements Serializable {
 
             for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
                 cen = cell.getIntKey();
-                for (int d = 0; d < neighbors.length; d++) {
+                for (int d = 0; d < neighborCount; d++) {
                     near = neighbors[d][cen];
                     if (!adjacency.validate(near))
                         // Outside the map
                         continue;
                     if(adjacency.isBlocked(cen, d, neighbors, gradientMap, WALL))
                         continue;
-                    double h = adjacency.measurement.heuristic(adjacency.directions[d]);
-                    if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + h * costMap[near] < gradientMap[near]) {
-                        setFresh(near, cell.getDoubleValue() + h * costMap[near]);
-                        ++numAssigned;
-                        ++mappedCount;
+                    if(adjacency.twoStepRule) {
+                        near = neighbors[d][mid = near];
+                        if (!adjacency.validate(near))
+                            // Outside the map
+                            continue;
+                        if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
+                            continue;
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + costMap[near] < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                            ++numAssigned;
+                            ++mappedCount;
+                        }
+                    }
+                    else
+                    {
+                        //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + costMap[near] < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                            ++numAssigned;
+                            ++mappedCount;
+                        }
                     }
                 }
             }
@@ -940,8 +979,9 @@ public class CustomDijkstraMap implements Serializable {
     public double[] scan(int size, int... impassable) {
         if (!initialized) return null;
 
-        int near, cen, tmp, tmp2, xStore, yStore, rStore, nStore;
+        int near, cen, neighborCount = neighbors.length, mid, tmp, tmp2, xStore, yStore, rStore, nStore;
         double valStore;
+        Adjacency adjacency = this.adjacency;
 
         if (impassable != null) {
             for (int i = 0; i <impassable.length; i++) {
@@ -981,7 +1021,7 @@ public class CustomDijkstraMap implements Serializable {
         }
         double currentLowest = 999000;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
-        int maxLength = adjacency.height * adjacency.width * adjacency.rotations * adjacency.depths;
+        int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
             if (gradientMap[l] > FLOOR && !goals.containsKey(l)) {
                 xStore = adjacency.extractX(l);
@@ -1011,18 +1051,34 @@ public class CustomDijkstraMap implements Serializable {
 
             for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
                 cen = cell.getIntKey();
-                for (int d = 0; d < neighbors.length; d++) {
+                for (int d = 0; d < neighborCount; d++) {
                     near = neighbors[d][cen];
                     if (!adjacency.validate(near))
                         // Outside the map
                         continue;
                     //if(adjacency.isBlocked(cen, d, neighbors, gradientMap, WALL))
                     //    continue;
-                    double h = adjacency.measurement.heuristic(adjacency.directions[d]);
-                    if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + h * costMap[near] < gradientMap[near]) {
-                        setFresh(near, cell.getDoubleValue() + h * costMap[near]);
-                        ++numAssigned;
-                        ++mappedCount;
+                    if(adjacency.twoStepRule) {
+                        near = neighbors[d][mid = near];
+                        if (!adjacency.validate(near))
+                            // Outside the map
+                            continue;
+                        //if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
+                        //    continue;
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + costMap[near] < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                            ++numAssigned;
+                            ++mappedCount;
+                        }
+                    }
+                    else
+                    {
+                        //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + costMap[near] < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                            ++numAssigned;
+                            ++mappedCount;
+                        }
                     }
                 }
             }
@@ -1204,6 +1260,7 @@ public class CustomDijkstraMap implements Serializable {
         }
         if (goals.isEmpty())
             return new IntVLA(path);
+        Adjacency adjacency = this.adjacency;
         scan(impassable2.toArray());
         int currentPos = start, pt;
         double paidLength = 0.0;
@@ -1483,6 +1540,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             cachedFleeMap = scan(scanArray);
         }
+        Adjacency adjacency = this.adjacency;
         int currentPos = start, pt;
         double paidLength = 0.0;
         while (true) {
@@ -1567,6 +1625,7 @@ public class CustomDijkstraMap implements Serializable {
         }
         if (goals.isEmpty())
             return new IntVLA(path);
+        Adjacency adjacency = this.adjacency;
         scan(size, impassable2.toArray());
         int currentPos = start, pt;
         double paidLength = 0.0;
@@ -2025,6 +2084,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             cachedFleeMap = scan(size, scanArray);
         }
+        Adjacency adjacency = this.adjacency;
         int currentPos = start, pt;
         double paidLength = 0.0;
         while (true) {
