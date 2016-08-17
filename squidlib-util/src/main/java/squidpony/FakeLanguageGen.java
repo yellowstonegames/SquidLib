@@ -2487,7 +2487,8 @@ public class FakeLanguageGen implements Serializable {
             sb.append(' ');
             sb.append(word(rng, false));
         }
-        sb.append(rng.getRandomElement(endPunctuation));
+        if(endPunctuation != null && endPunctuation.length > 0)
+            sb.append(rng.getRandomElement(endPunctuation));
         return sb.toString();
     }
 
@@ -2575,7 +2576,10 @@ public class FakeLanguageGen implements Serializable {
             sb.append(' ');
             sb.append(next);
         }
-        next = rng.getRandomElement(endPunctuation);
+
+        if(endPunctuation != null && endPunctuation.length > 0)
+            sb.append(rng.getRandomElement(endPunctuation));
+
         if (sb.length() + next.length() >= maxChars)
             next = ".";
         sb.append(next);
