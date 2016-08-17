@@ -1,95 +1,137 @@
 package squidpony.examples;
 
+import squidpony.FakeLanguageGen;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.IntDoubleOrderedMap;
 import squidpony.squidmath.LongPeriodRNG;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.Arrays;
 
 /**
  * Created by Tommy Ettinger on 8/15/2016.
  */
+/*
+Mixed-script strings: Ыνωплiam аσιοguι ζi ινыπλειtsαυ рæφes
+JDK collisions, 32-bit: 146
+FNV collisions, 32-bit: 134
+Sip collisions, 32-bit: 129
+Lit collisions, 32-bit: 125
+English strings: Loorly sait nundeags jeefout; dug?
+JDK collisions, 32-bit: 123
+FNV collisions, 32-bit: 106
+Sip collisions, 32-bit: 130
+Lit collisions, 32-bit: 118
+Japanese (Romanized) strings: Iyainyado su shaisou oyo rogyadedu?
+JDK collisions, 32-bit: 113
+FNV collisions, 32-bit: 116
+Sip collisions, 32-bit: 128
+Lit collisions, 32-bit: 113
+Arabic (simplified, Romanized) strings: Akhrariid adhirzhaizh luju lari kuuramiit aih!
+JDK collisions, 32-bit: 140
+FNV collisions, 32-bit: 118
+Sip collisions, 32-bit: 141
+Lit collisions, 32-bit: 124
+
+ */
 public class HashQualityTest {
 
     public static void main(String[] args)
     {
+        CrossHash.Sip sip = new CrossHash.Sip(0x9E3779B97F4A7C15L, 0xBF58476D1CE4E5B9L);
+
         byte[][] bytes = {
                 null,
                 {},
-                {0},
-                {0, 0},
-                {0, 0, 0},
-                {1},
-                {1, 1},
-                {1, 1, 1},
-                {-1},
-                {-1, -1},
-                {-1, -1, -1},
-                {31},
-                {31, 31},
-                {31, 31, 31},
-                {-31},
-                {-31, -31},
-                {-31, -31, -31},
+                {0}, {0, 0}, {0, 0, 0},
+                {1}, {1, 1}, {1, 1, 1},
+                {2}, {2, 2}, {2, 2, 2},
+                {3}, {3, 3}, {3, 3, 3},
+                {4}, {4, 4}, {4, 4, 4},
+                {5}, {5, 5}, {5, 5, 5},
+                {6}, {6, 6}, {6, 6, 6},
+                {7}, {7, 7}, {7, 7, 7},
+                {8}, {8, 8}, {8, 8, 8},
+                {31}, {31, 31}, {31, 31, 31},
+                {-1}, {-1, -1}, {-1, -1, -1},
+                {-2}, {-2, -2}, {-2, -2, -2},
+                {-3}, {-3, -3}, {-3, -3, -3},
+                {-4}, {-4, -4}, {-4, -4, -4},
+                {-5}, {-5, -5}, {-5, -5, -5},
+                {-6}, {-6, -6}, {-6, -6, -6},
+                {-7}, {-7, -7}, {-7, -7, -7},
+                {-8}, {-8, -8}, {-8, -8, -8},
+                {-31}, {-31, -31}, {-31, -31, -31},
         };
         short[][] shorts = {
                 null,
                 {},
-                {0},
-                {0, 0},
-                {0, 0, 0},
-                {1},
-                {1, 1},
-                {1, 1, 1},
-                {-1},
-                {-1, -1},
-                {-1, -1, -1},
-                {31},
-                {31, 31},
-                {31, 31, 31},
-                {-31},
-                {-31, -31},
-                {-31, -31, -31},
+                {0}, {0, 0}, {0, 0, 0},
+                {1}, {1, 1}, {1, 1, 1},
+                {2}, {2, 2}, {2, 2, 2},
+                {3}, {3, 3}, {3, 3, 3},
+                {4}, {4, 4}, {4, 4, 4},
+                {5}, {5, 5}, {5, 5, 5},
+                {6}, {6, 6}, {6, 6, 6},
+                {7}, {7, 7}, {7, 7, 7},
+                {8}, {8, 8}, {8, 8, 8},
+                {31}, {31, 31}, {31, 31, 31},
+                {-1}, {-1, -1}, {-1, -1, -1},
+                {-2}, {-2, -2}, {-2, -2, -2},
+                {-3}, {-3, -3}, {-3, -3, -3},
+                {-4}, {-4, -4}, {-4, -4, -4},
+                {-5}, {-5, -5}, {-5, -5, -5},
+                {-6}, {-6, -6}, {-6, -6, -6},
+                {-7}, {-7, -7}, {-7, -7, -7},
+                {-8}, {-8, -8}, {-8, -8, -8},
+                {-31}, {-31, -31}, {-31, -31, -31},
         };
         int[][] ints = {
                 null,
                 {},
-                {0},
-                {0, 0},
-                {0, 0, 0},
-                {1},
-                {1, 1},
-                {1, 1, 1},
-                {-1},
-                {-1, -1},
-                {-1, -1, -1},
-                {31},
-                {31, 31},
-                {31, 31, 31},
-                {-31},
-                {-31, -31},
-                {-31, -31, -31},
+                {0}, {0, 0}, {0, 0, 0},
+                {1}, {1, 1}, {1, 1, 1},
+                {2}, {2, 2}, {2, 2, 2},
+                {3}, {3, 3}, {3, 3, 3},
+                {4}, {4, 4}, {4, 4, 4},
+                {5}, {5, 5}, {5, 5, 5},
+                {6}, {6, 6}, {6, 6, 6},
+                {7}, {7, 7}, {7, 7, 7},
+                {8}, {8, 8}, {8, 8, 8},
+                {31}, {31, 31}, {31, 31, 31},
+                {-1}, {-1, -1}, {-1, -1, -1},
+                {-2}, {-2, -2}, {-2, -2, -2},
+                {-3}, {-3, -3}, {-3, -3, -3},
+                {-4}, {-4, -4}, {-4, -4, -4},
+                {-5}, {-5, -5}, {-5, -5, -5},
+                {-6}, {-6, -6}, {-6, -6, -6},
+                {-7}, {-7, -7}, {-7, -7, -7},
+                {-8}, {-8, -8}, {-8, -8, -8},
+                {-31}, {-31, -31}, {-31, -31, -31},
         };
         long[][] longs = {
                 null,
                 {},
-                {0},
-                {0, 0},
-                {0, 0, 0},
-                {1},
-                {1, 1},
-                {1, 1, 1},
-                {-1},
-                {-1, -1},
-                {-1, -1, -1},
-                {31},
-                {31, 31},
-                {31, 31, 31},
-                {-31},
-                {-31, -31},
-                {-31, -31, -31},
+                {0}, {0, 0}, {0, 0, 0},
+                {1}, {1, 1}, {1, 1, 1},
+                {2}, {2, 2}, {2, 2, 2},
+                {3}, {3, 3}, {3, 3, 3},
+                {4}, {4, 4}, {4, 4, 4},
+                {5}, {5, 5}, {5, 5, 5},
+                {6}, {6, 6}, {6, 6, 6},
+                {7}, {7, 7}, {7, 7, 7},
+                {8}, {8, 8}, {8, 8, 8},
+                {31}, {31, 31}, {31, 31, 31},
+                {-1}, {-1, -1}, {-1, -1, -1},
+                {-2}, {-2, -2}, {-2, -2, -2},
+                {-3}, {-3, -3}, {-3, -3, -3},
+                {-4}, {-4, -4}, {-4, -4, -4},
+                {-5}, {-5, -5}, {-5, -5, -5},
+                {-6}, {-6, -6}, {-6, -6, -6},
+                {-7}, {-7, -7}, {-7, -7, -7},
+                {-8}, {-8, -8}, {-8, -8, -8},
+                {-31}, {-31, -31}, {-31, -31, -31},
         };
-        CrossHash.Sip sip = new CrossHash.Sip(0x9E3779B97F4A7C15L, 0xBF58476D1CE4E5B9L);
 
         int len = bytes.length;
         for (int i = 0; i < len; i++) {
@@ -124,39 +166,125 @@ public class HashQualityTest {
             System.out.println("Lightning longs: " + CrossHash.Lightning.hash(longs[i]));
         }
 
-        IntDoubleOrderedMap collider = new IntDoubleOrderedMap(0x100000, 0.75f);
+        int longHashLength = 0x100000, stringHashLength = 0x100000;
+        System.out.println("Long Hashing:");
+        System.out.println("---------------------------------");
+        IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(longHashLength, 0.75f),
+                colliderFNV = new IntDoubleOrderedMap(longHashLength, 0.75f),
+                colliderSip = new IntDoubleOrderedMap(longHashLength, 0.75f),
+                colliderLit = new IntDoubleOrderedMap(longHashLength, 0.75f);
         LongPeriodRNG lprng = new LongPeriodRNG();
-        lprng.reseed(0x66L);
-        for (int i = 0; i < 0x100000; i++) {
-            lprng.nextLong();
-            collider.put(Arrays.hashCode(lprng.state), i);
-        }
-        System.out.println("JDK collisions, 32-bit: " + (0x100000 - collider.size()));
-        collider.clear();
 
-        lprng.reseed(0x66L);
-        for (int i = 0; i < 0x100000; i++) {
-            lprng.nextLong();
-            collider.put(CrossHash.hash(lprng.state), i);
-        }
-        System.out.println("CrossHash collisions, 32-bit: " + (0x100000 - collider.size()));
-        collider.clear();
+        for (int bits = 16, mask = 0xFFFF; bits < 33; mask |= 1 << bits++) {
+            lprng.reseed(0x66L);
+            for (int i = 0; i < longHashLength; i++) {
+                lprng.nextLong();
+                colliderJDK.put(Arrays.hashCode(lprng.state) & mask, i);
+                colliderFNV.put(CrossHash.hash(lprng.state) & mask, i);
+                colliderSip.put(sip.hash(lprng.state) & mask, i);
+                colliderLit.put(CrossHash.Lightning.hash(lprng.state) & mask, i);
+            }
+            System.out.println("JDK collisions, " + bits + "-bit: " + (longHashLength - colliderJDK.size()));
+            System.out.println("FNV collisions, " + bits + "-bit: " + (longHashLength - colliderFNV.size()));
+            System.out.println("Sip collisions, " + bits + "-bit: " + (longHashLength - colliderSip.size()));
+            System.out.println("Lit collisions, " + bits + "-bit: " + (longHashLength - colliderLit.size()));
+            System.out.println();
+            colliderJDK.clear();
+            colliderFNV.clear();
+            colliderSip.clear();
+            colliderLit.clear();
 
-        lprng.reseed(0x66L);
-        for (int i = 0; i < 0x100000; i++) {
-            lprng.nextLong();
-            collider.put(sip.hash(lprng.state), i);
         }
-        System.out.println("Sip collisions, 32-bit: " + (0x100000 - collider.size()));
-        collider.clear();
 
-        lprng.reseed(0x66L);
-        for (int i = 0; i < 0x100000; i++) {
-            lprng.nextLong();
-            collider.put(CrossHash.Lightning.hash(lprng.state), i);
+        System.out.println("\nString Hashing:");
+        System.out.println("---------------------------------");
+        StatefulRNG srng = new StatefulRNG(0x1337CAFE);
+        String input;
+        FakeLanguageGen oddLang = FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC);
+        String[] midPunct = {",", ";", " -"}, endPunct = {".", "!", "?", "..."};
+
+        for (int i = 0; i < stringHashLength; i++) {
+            srng.setState(i);
+            input = oddLang.sentence(srng, 4, 9, midPunct, endPunct, 0.12);
+            colliderJDK.put(input.hashCode(), i);
+            colliderFNV.put(CrossHash.hash(input), i);
+            colliderSip.put(sip.hash(input), i);
+            colliderLit.put(CrossHash.Lightning.hash(input), i);
+            if((i & 0xffff) == 0)
+                System.out.println(input);
         }
-        System.out.println("Lightning collisions, 32-bit: " + (0x100000 - collider.size()));
-        collider.clear();
+        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size()));
+        System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
+        System.out.println("Sip collisions, 32-bit: " + (stringHashLength - colliderSip.size()));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
+        System.out.println();
+        colliderJDK.clear();
+        colliderFNV.clear();
+        colliderSip.clear();
+        colliderLit.clear();
+
+        oddLang = FakeLanguageGen.JAPANESE_ROMANIZED;
+        for (int i = 0; i < stringHashLength; i++) {
+            srng.setState(i);
+            input = oddLang.sentence(srng, 4, 9, midPunct, endPunct, 0.12);
+            colliderJDK.put(input.hashCode(), i);
+            colliderFNV.put(CrossHash.hash(input), i);
+            colliderSip.put(sip.hash(input), i);
+            colliderLit.put(CrossHash.Lightning.hash(input), i);
+            if((i & 0xffff) == 0)
+                System.out.println(input);
+        }
+        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size()));
+        System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
+        System.out.println("Sip collisions, 32-bit: " + (stringHashLength - colliderSip.size()));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
+        System.out.println();
+        colliderJDK.clear();
+        colliderFNV.clear();
+        colliderSip.clear();
+        colliderLit.clear();
+
+        oddLang = FakeLanguageGen.FANCY_FANTASY_NAME.mix(FakeLanguageGen.GREEK_AUTHENTIC, 0.67).mix(FakeLanguageGen.RUSSIAN_AUTHENTIC, 0.45);
+        for (int i = 0; i < stringHashLength; i++) {
+            srng.setState(i);
+            input = oddLang.sentence(srng, 4, 9, midPunct, endPunct, 0.12);
+            colliderJDK.put(input.hashCode(), i);
+            colliderFNV.put(CrossHash.hash(input), i);
+            colliderSip.put(sip.hash(input), i);
+            colliderLit.put(CrossHash.Lightning.hash(input), i);
+            if((i & 0xffff) == 0)
+                System.out.println(input);
+        }
+        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size()));
+        System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
+        System.out.println("Sip collisions, 32-bit: " + (stringHashLength - colliderSip.size()));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
+        System.out.println();
+        colliderJDK.clear();
+        colliderFNV.clear();
+        colliderSip.clear();
+        colliderLit.clear();
+
+        oddLang = FakeLanguageGen.ENGLISH;
+        for (int i = 0; i < stringHashLength; i++) {
+            srng.setState(i);
+            input = oddLang.sentence(srng, 4, 9, midPunct, endPunct, 0.12);
+            colliderJDK.put(input.hashCode(), i);
+            colliderFNV.put(CrossHash.hash(input), i);
+            colliderSip.put(sip.hash(input), i);
+            colliderLit.put(CrossHash.Lightning.hash(input), i);
+            if((i & 0xffff) == 0)
+                System.out.println(input);
+        }
+        System.out.println("JDK collisions, 32-bit: " + (stringHashLength - colliderJDK.size()));
+        System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
+        System.out.println("Sip collisions, 32-bit: " + (stringHashLength - colliderSip.size()));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
+        System.out.println();
+        colliderJDK.clear();
+        colliderFNV.clear();
+        colliderSip.clear();
+        colliderLit.clear();
 
     }
 }
