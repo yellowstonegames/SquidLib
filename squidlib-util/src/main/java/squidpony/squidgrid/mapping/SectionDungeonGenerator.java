@@ -6,8 +6,10 @@ import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumMap;
 
 import static squidpony.squidmath.CoordPacker.*;
 
@@ -38,9 +40,10 @@ import static squidpony.squidmath.CoordPacker.*;
  * what chars are shown by using addSwap() in TextCellFactory. After calling generate(), you can safely get the values
  * from the stairsUp and stairsDown fields, which are Coords that should be a long distance from each other but
  * connected in the dungeon. You may want to change those to staircase characters, but there's no requirement to do
- * anything with them. The DungeonUtility field of this class, utility, is a convenient way of accessing the non-static
- * methods in that class, such as randomFloor(), without needing to create another DungeonUtility (this class creates
- * one, so you don't have to).
+ * anything with them. It's recommended that you keep the resulting char[][] maps in some collection that can be saved,
+ * since SectionDungeonGenerator only stores a temporary copy of the most recently-generated map. The DungeonUtility
+ * field of this class, utility, is a convenient way of accessing the non-static methods in that class, such as
+ * randomFloor(), without needing to create another DungeonUtility (this class creates one, so you don't have to).
  * <br>
  * Example map with a custom-representation lake: https://gist.github.com/tommyettinger/0055075f9de59c452d25
  * @see DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
@@ -49,8 +52,7 @@ import static squidpony.squidmath.CoordPacker.*;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
-public class SectionDungeonGenerator implements Serializable {
-    private static final long serialVersionUID = -2456306898212911110L;
+public class SectionDungeonGenerator {
 
     /**
      * The effects that can be applied to this dungeon. More may be added in future releases.

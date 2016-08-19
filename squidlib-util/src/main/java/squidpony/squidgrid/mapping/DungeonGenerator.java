@@ -5,7 +5,6 @@ import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -25,9 +24,11 @@ import static squidpony.squidmath.CoordPacker.*;
  * Then call generate() to get a char[][] with the desired dungeon map, using a fixed repertoire of chars to represent
  * the different features. After calling generate(), you can safely get the values from the stairsUp and stairsDown
  * fields, which are Coords that should be a long distance from each other but connected in the dungeon. You may want
- * to change those to staircase characters, but there's no requirement to do anything with them. The DungeonUtility
- * field of this class, utility, is a convenient way of accessing the non-static methods in that class, such as
- * randomFloor(), without needing to create another DungeonUtility (this class creates one, so you don't have to).
+ * to change those to staircase characters, but there's no requirement to do anything with them. It's recommended that
+ * you keep the resulting char[][] maps in some collection that can be saved, since DungeonGenerator only stores a
+ * temporary copy of the most recently-generated map. The DungeonUtility field of this class, utility, is a convenient
+ * way of accessing the non-static methods in that class, such as randomFloor(), without needing to create another
+ * DungeonUtility (this class creates one, so you don't have to).
  * <br>
  * Previews for the kinds of dungeon this generates, given a certain argument to generate():
  * <ul>
@@ -48,9 +49,7 @@ import static squidpony.squidmath.CoordPacker.*;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
-public class DungeonGenerator implements Serializable {
-    private static final long serialVersionUID = -2456306898212911110L;
-
+public class DungeonGenerator {
     /**
      * The effects that can be applied to this dungeon. More may be added in future releases.
      */
