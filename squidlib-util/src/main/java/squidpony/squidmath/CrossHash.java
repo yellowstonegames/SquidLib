@@ -4199,8 +4199,7 @@ public class CrossHash {
     // 0x CA1C479692B5C6ABL
     // 0x C6B5275692B5CC83 // untested so far
     @SuppressWarnings("NumericOverflow")
-    public static class Lightning implements Serializable {
-        private static final long serialVersionUID = 0L;
+    public static class Lightning {
 
         public static long hash64(boolean[] data) {
             if (data == null)
