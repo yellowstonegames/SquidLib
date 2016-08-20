@@ -166,7 +166,7 @@ public class HashQualityTest {
             System.out.println("Lightning longs: " + CrossHash.Lightning.hash(longs[i]));
         }
 
-        int longHashLength = 0x100000, stringHashLength = 0x100000;
+        int longHashLength = 0x100000, stringHashLength = 0xC0000;
         System.out.println("Long Hashing:");
         System.out.println("---------------------------------");
         IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(longHashLength, 0.75f),
