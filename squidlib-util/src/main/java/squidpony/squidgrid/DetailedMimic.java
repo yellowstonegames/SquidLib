@@ -13,6 +13,7 @@ package squidpony.squidgrid;
 import squidpony.GwtCompatibility;
 import squidpony.squidgrid.mapping.AestheticDifference;
 import squidpony.squidmath.IntDoubleOrderedMap;
+import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
 
@@ -20,6 +21,16 @@ import squidpony.squidmath.RNG;
  * Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on
  * more than just booleans; it can produce similar styles of texture (its original use in SynTex), of map, of item
  * placement, and so on by specifying a different technique for differentiating two int values.
+ * <br>
+ * Two options are now available; the process() method allows the slow analyze() step to be computed once,
+ * before the rest of processing is potentially done many times, but the new neoProcess() method produces
+ * comparable or better results and is drastically faster even without needing analysis. This means
+ * neoProcess(), based on P.F. Harrison's algorithm in SynTex, is strongly recommended now.
+ * <br>
+ * Example results of neoProcess(), with a procedural dungeon first and the mimic versions after it:
+ * https://gist.github.com/tommyettinger/405336fb0fc74838d806c021aabe77da (you may need to click Raw and zoom
+ * out somewhat for it to render well).
+ * <br>
  * Ported from https://github.com/mxgmn/SynTex by Tommy Ettinger on 6/9/2016.
  */
 public class DetailedMimic {
@@ -60,6 +71,13 @@ public class DetailedMimic {
             return fullSynthesis(sample, sampleWidth, sampleHeight, proximity,
                     targetWidth, targetHeight, temperature, discrete);
         }
+    }
+
+    public int[] neoProcess(int[] sample, int sampleWidth, int sampleHeight, int targetWidth, int targetHeight,
+                         int detailLevel, int proximity, boolean discrete)
+    {
+            return reSynthesis(sample, sampleWidth, sampleHeight, proximity, 20,
+                    Math.max(1, detailLevel), discrete, targetWidth, targetHeight);
     }
 
     public RNG random;
@@ -185,6 +203,173 @@ public class DetailedMimic {
             origins[i] = -1;
         }
 
+        return result;
+    }
+
+
+    private int[] reSynthesis(int[] sample, int SW, int SH, int N, int M, int polish, boolean indexed, int OW, int OH)
+    {
+        IntVLA colors = new IntVLA();
+        int[] indexedSample = new int[Math.min(SW * SH, sample.length)];
+        for (int j = 0; j < indexedSample.length; j++)
+        {
+            int color = sample[j];
+
+            int i = 0;
+            for (int cn = 0; cn < colors.size; cn++)
+            {
+                if(colors.get(cn) == color) break;
+                i++;
+            }
+
+            if (i == colors.size) colors.add(color);
+            indexedSample[j] = i;
+        }
+
+        int colorsNumber = colors.size;
+
+        double[][] colorMetric = null;
+        if (!indexed && colorsNumber <= 1024)
+        {
+            colorMetric = new double[colorsNumber][colorsNumber];
+            for (int x = 0; x < colorsNumber; x++)
+            {
+                for (int y = 0; y < colorsNumber; y++)
+                {
+                    int cx = colors.get(x), cy = colors.get(y);
+                    colorMetric[x][y] = difference.difference(cx, cy);
+                }
+            }
+        }
+
+        int[] origins = new int[OW * OH];
+        for (int i = 0; i < origins.length; i++) origins[i] = -1;
+
+        int[] shuffle = new int[OW * OH];
+        for (int i = 0; i < shuffle.length; i++)
+        {
+            int j = random.nextIntHasty(i + 1);
+            if (j != i) shuffle[i] = shuffle[j];
+            shuffle[j] = i;
+        }
+
+        for (int round = 0; round <= polish; round++) for (int counter = 0; counter < shuffle.length; counter++)
+        {
+            int f = shuffle[counter];
+            int fx = f % OW, fy = f / OW;
+            int neighborsNumber = round > 0 ? 8 : Math.min(8, counter);
+            int neighborsFound = 0;
+
+            int[] candidates = new int[neighborsNumber + M];
+
+            if (neighborsNumber > 0)
+            {
+                int[] neighbors = new int[neighborsNumber];
+                int[] x = new int[4], y = new int[4];
+
+                for (int radius = 1; neighborsFound < neighborsNumber; radius++)
+                {
+                    x[0] = fx - radius;
+                    y[0] = fy - radius;
+                    x[1] = fx - radius;
+                    y[1] = fy + radius;
+                    x[2] = fx + radius;
+                    y[2] = fy + radius;
+                    x[3] = fx + radius;
+                    y[3] = fy - radius;
+
+                    for (int k = 0; k < 2 * radius; k++)
+                    {
+                        for (int d = 0; d < 4; d++)
+                        {
+                            x[d] = (x[d] + 10 * OW) % OW;
+                            y[d] = (y[d] + 10 * OH) % OH;
+
+                            if (neighborsFound >= neighborsNumber) continue;
+                            int point = x[d] + y[d] * OW;
+                            if (origins[point] != -1)
+                            {
+                                neighbors[neighborsFound] = point;
+                                neighborsFound++;
+                            }
+                        }
+
+                        y[0]++;
+                        x[1]++;
+                        y[2]--;
+                        x[3]--;
+                    }
+                }
+
+
+                for (int n = 0; n < neighborsNumber; n++)
+                {
+                    int cx = (origins[neighbors[n]] + (f - neighbors[n]) % OW + 100 * SW) % SW;
+                    int cy = (origins[neighbors[n]] / SW + f / OW - neighbors[n] / OW + 100 * SH) % SH;
+                    candidates[n] = cx + cy * SW;
+                }
+            }
+
+            for (int m = 0; m < M; m++) candidates[neighborsNumber + m] = random.nextIntHasty(SW * SH);
+
+            double max = -1E+10;
+            int argmax = -1;
+
+            for (int c = 0; c < candidates.length; c++)
+            {
+                double sum = random.nextDouble(0.000001);
+                int ix = candidates[c] % SW, iy = candidates[c] / SW, jx = f % OW, jy = f / OW;
+                int SX, SY, FX, FY, S, F;
+                int origin;
+
+                for (int dy = -N; dy <= N; dy++)
+                {
+                    for (int dx = -N; dx <= N; dx++)
+                    {
+                        if (dx != 0 || dy != 0)
+                        {
+                            SX = ix + dx;
+                            if (SX < 0) SX += SW;
+                            else if (SX >= SW) SX -= SW;
+
+                            SY = iy + dy;
+                            if (SY < 0) SY += SH;
+                            else if (SY >= SH) SY -= SH;
+
+                            FX = jx + dx;
+                            if (FX < 0) FX += OW;
+                            else if (FX >= OW) FX -= OW;
+
+                            FY = jy + dy;
+                            if (FY < 0) FY += OH;
+                            else if (FY >= OH) FY -= OH;
+
+                            S = SX + SY * SW;
+                            F = FX + FY * OW;
+
+                            origin = origins[F];
+                            if (origin != -1)
+                            {
+                                if (indexed) sum += sample[origin] == sample[S] ? 1 : -1;
+                                else if (colorMetric != null) sum += colorMetric[indexedSample[origin]][indexedSample[S]];
+                                else sum += difference.difference(sample[origin], sample[S]);
+                            }
+                        }
+                    }
+                }
+
+                if (sum >= max)
+                {
+                    max = sum;
+                    argmax = candidates[c];
+                }
+            }
+
+            origins[f] = argmax;
+        }
+
+        int[] result = new int[OW * OH];
+        for (int i = 0; i < result.length; i++) result[i] = sample[origins[i]];
         return result;
     }
 

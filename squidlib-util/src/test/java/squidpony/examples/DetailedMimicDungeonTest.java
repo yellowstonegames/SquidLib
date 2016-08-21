@@ -22,7 +22,7 @@ public class DetailedMimicDungeonTest {
         rng.setState(2252637788195L);
         SectionDungeonGenerator sdg = new SectionDungeonGenerator(width, height, rng);
         DungeonGenerator dg;
-/*        sdg.addDoors(12, false);
+       sdg.addDoors(12, false);
         //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
         sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
         sdg.addWater(SectionDungeonGenerator.CAVE, 14);
@@ -44,7 +44,7 @@ public class DetailedMimicDungeonTest {
                 DungeonUtility.hashesToLines(sdungeon, true)));
         System.out.println(sdg);
         System.out.println("------------------------------------------------------------");
-        */
+        /*
         sdg.addDoors(30, false);
         //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
         sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
@@ -65,8 +65,10 @@ public class DetailedMimicDungeonTest {
                 DungeonUtility.hashesToLines(sdungeon, false)));
         System.out.println(sdg);
         System.out.println("------------------------------------------------------------");
+        */
         DetailedMimic dm = new DetailedMimic(null, rng);
         int[] sample = convertCharToInt(map);
+        /*
         dm.analyze(sample, width, height, 2, 3, true);
         for (double i = 0.875; i <= 2.0; i+= 0.125) {
             int w = (int)(width * i), h = (int)(height * i);
@@ -80,7 +82,20 @@ public class DetailedMimicDungeonTest {
                     DungeonUtility.hashesToLines(sdungeon, false)));
             System.out.println(sdg);
             System.out.println("------------------------------------------------------------");
-
+        }
+        */
+        for (double i = 0.875; i <= 2.0; i+= 0.125) {
+            int w = (int)(width * i), h = (int)(height * i);
+            dg = new DungeonGenerator(w, h, rng);
+            map = convertIntToChar(dm.neoProcess(sample, width, height, w, h,
+                    2, 3, true), w, h);
+            DungeonUtility.ensurePath(map, rng, '\t', '#');
+            map = DungeonUtility.wallWrap(map);
+            sdungeon = dg.generate(map);
+            sdg.setDungeon(DungeonUtility.doubleWidth(
+                    DungeonUtility.hashesToLines(sdungeon, false)));
+            System.out.println(sdg);
+            System.out.println("------------------------------------------------------------");
         }
 
     }
