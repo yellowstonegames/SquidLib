@@ -55,7 +55,7 @@ public class HashVisualizer extends ApplicationAdapter {
                 {
                     case SquidInput.ENTER:
                         hashMode++;
-                        hashMode %= 6;
+                        hashMode %= 28;
                         Gdx.graphics.requestRendering();
                         break;
                     case 'Q':
@@ -79,7 +79,7 @@ public class HashVisualizer extends ApplicationAdapter {
     public void putMap()
     {
         display.clear();
-        int[] coordinates = new int[2];
+        int[] coordinates = new int[2], coordinate = new int[1];
         long code;
         switch (hashMode) {
             case 0:
@@ -117,31 +117,238 @@ public class HashVisualizer extends ApplicationAdapter {
                     coordinates[0] = x;
                     for (int y = 0; y < height; y++) {
                         coordinates[1] = y;
-                        code = sipB.hash(coordinates) << 8 | 255L;
+                        code = CrossHash.Lightning.hash(coordinates) << 8 | 255L;
                         display.put(x, y, colorFactory.get(code));
                     }
                 }
                 break;
             case 4:
                 for (int x = 0; x < width; x++) {
-                    coordinates[0] = x;
                     for (int y = 0; y < height; y++) {
-                        coordinates[1] = y;
-                        code = sipC.hash(coordinates) << 8 | 255L;
+                        coordinate[0] = (x << 9) | y;
+                        code = Arrays.hashCode(coordinate) << 8 | 255L;
                         display.put(x, y, colorFactory.get(code));
                     }
                 }
                 break;
-            default:
+            case 5:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = CrossHash.hash(coordinate) << 8 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 6:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = sipA.hash(coordinate) << 8 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 7:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = CrossHash.Lightning.hash(coordinate) << 8 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 8:
                 for (int x = 0; x < width; x++) {
                     coordinates[0] = x;
                     for (int y = 0; y < height; y++) {
                         coordinates[1] = y;
-                        code = CrossHash.Lightning.hash(coordinates) << 8 | 255L;
+                        code = CrossHash.hash64(coordinates) << 8 | 255L;
                         display.put(x, y, colorFactory.get(code));
                     }
                 }
                 break;
+            case 9:
+                for (int x = 0; x < width; x++) {
+                    coordinates[0] = x;
+                    for (int y = 0; y < height; y++) {
+                        coordinates[1] = y;
+                        code = sipA.hash64(coordinates) << 8 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 10:
+                for (int x = 0; x < width; x++) {
+                    coordinates[0] = x;
+                    for (int y = 0; y < height; y++) {
+                        coordinates[1] = y;
+                        code = CrossHash.Lightning.hash64(coordinates) << 8 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 11:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = CrossHash.hash64(coordinate) << 8 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 12:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = sipA.hash64(coordinate) << 8 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 13:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = CrossHash.Lightning.hash64(coordinate) << 8 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 14:
+                for (int x = 0; x < width; x++) {
+                    coordinates[0] = x;
+                    for (int y = 0; y < height; y++) {
+                        coordinates[1] = y;
+                        code = Arrays.hashCode(coordinates) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 15:
+                for (int x = 0; x < width; x++) {
+                    coordinates[0] = x;
+                    for (int y = 0; y < height; y++) {
+                        coordinates[1] = y;
+                        code = CrossHash.hash(coordinates) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 16:
+                for (int x = 0; x < width; x++) {
+                    coordinates[0] = x;
+                    for (int y = 0; y < height; y++) {
+                        coordinates[1] = y;
+                        code = sipA.hash(coordinates) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 17:
+                for (int x = 0; x < width; x++) {
+                    coordinates[0] = x;
+                    for (int y = 0; y < height; y++) {
+                        coordinates[1] = y;
+                        code = CrossHash.Lightning.hash(coordinates) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 18:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = Arrays.hashCode(coordinate) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 19:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = CrossHash.hash(coordinate) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 20:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = sipA.hash(coordinate) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 21:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = CrossHash.Lightning.hash(coordinate) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 22:
+                for (int x = 0; x < width; x++) {
+                    coordinates[0] = x;
+                    for (int y = 0; y < height; y++) {
+                        coordinates[1] = y;
+                        code = CrossHash.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 23:
+                for (int x = 0; x < width; x++) {
+                    coordinates[0] = x;
+                    for (int y = 0; y < height; y++) {
+                        coordinates[1] = y;
+                        code = sipA.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 24:
+                for (int x = 0; x < width; x++) {
+                    coordinates[0] = x;
+                    for (int y = 0; y < height; y++) {
+                        coordinates[1] = y;
+                        code = CrossHash.Lightning.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 25:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = CrossHash.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 26:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = sipA.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+            case 27:
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        coordinate[0] = (x << 9) | y;
+                        code = CrossHash.Lightning.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                        display.put(x, y, colorFactory.get(code));
+                    }
+                }
+                break;
+
         }
 
     }
