@@ -489,6 +489,8 @@ public class RNG implements Serializable {
      */
     public int[] randomOrdering(int length)
     {
+        if(length <= 0)
+            return new int[0];
         int[] dest = new int[length];
         for (int i = 0; i < length; i++)
         {

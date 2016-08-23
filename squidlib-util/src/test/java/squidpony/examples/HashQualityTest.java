@@ -200,12 +200,88 @@ public class HashQualityTest {
         System.out.println("---------------------------------");
         StatefulRNG srng = new StatefulRNG(0x1337CAFE);
         String input;
-        FakeLanguageGen oddLang = FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC);
-        String[] midPunct = {",", ";", " -"}, endPunct = {".", "!", "?", "..."};
+        FakeLanguageGen oddLang;
+        String[] midPunct = {",", ";", " -"}, endPunct = {"..."};
+        char[] massive;
+        int langLength;
+        srng.setState(0x1337CAFE);
+        oddLang = FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC);
+        massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
+        langLength = massive.length;
+        for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {
+            colliderFNV.put(CrossHash.hash(massive, s, s+e+32), i);
+            colliderSip.put(sip.hash(massive, s, s+e+32), i);
+            colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32), i);
+            if(e >= 0x1fd)
+                s += 7;
+        }
+        System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
+        System.out.println("Sip collisions, 32-bit: " + (stringHashLength - colliderSip.size()));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
+        System.out.println();
+        colliderFNV.clear();
+        colliderSip.clear();
+        colliderLit.clear();
 
+        srng.setState(0x1337CAFE);
+        oddLang = FakeLanguageGen.JAPANESE_ROMANIZED;
+        massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
+        langLength = massive.length;
+        for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {
+            colliderFNV.put(CrossHash.hash(massive, s, s+e+32), i);
+            colliderSip.put(sip.hash(massive, s, s+e+32), i);
+            colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32), i);
+            if(e >= 0x1fd)
+                s += 7;
+        }
+        System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
+        System.out.println("Sip collisions, 32-bit: " + (stringHashLength - colliderSip.size()));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
+        System.out.println();
+        colliderFNV.clear();
+        colliderSip.clear();
+        colliderLit.clear();
+
+        oddLang = FakeLanguageGen.FANCY_FANTASY_NAME.mix(FakeLanguageGen.GREEK_AUTHENTIC, 0.67).mix(FakeLanguageGen.RUSSIAN_AUTHENTIC, 0.45);
+        massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
+        langLength = massive.length;
+        for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {
+            colliderFNV.put(CrossHash.hash(massive, s, s+e+32), i);
+            colliderSip.put(sip.hash(massive, s, s+e+32), i);
+            colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32), i);
+            if(e >= 0x1fd)
+                s += 7;
+        }
+        System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
+        System.out.println("Sip collisions, 32-bit: " + (stringHashLength - colliderSip.size()));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
+        System.out.println();
+        colliderFNV.clear();
+        colliderSip.clear();
+        colliderLit.clear();
+
+        oddLang = FakeLanguageGen.ENGLISH;
+        massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
+        langLength = massive.length;
+        for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {
+            colliderFNV.put(CrossHash.hash(massive, s, s+e+32), i);
+            colliderSip.put(sip.hash(massive, s, s+e+32), i);
+            colliderLit.put(CrossHash.Lightning.hash(massive, s, s+e+32), i);
+            if(e >= 0x1fd)
+                s += 7;
+        }
+        System.out.println("FNV collisions, 32-bit: " + (stringHashLength - colliderFNV.size()));
+        System.out.println("Sip collisions, 32-bit: " + (stringHashLength - colliderSip.size()));
+        System.out.println("Lit collisions, 32-bit: " + (stringHashLength - colliderLit.size()));
+        System.out.println();
+        colliderFNV.clear();
+        colliderSip.clear();
+        colliderLit.clear();
+
+        /*
         for (int i = 0; i < stringHashLength; i++) {
             srng.setState(i);
-            input = oddLang.sentence(srng, 4, 9, midPunct, endPunct, 0.12);
+            input = oddLang.word(srng, true, 7);
             colliderJDK.put(input.hashCode(), i);
             colliderFNV.put(CrossHash.hash(input), i);
             colliderSip.put(sip.hash(input), i);
@@ -226,7 +302,7 @@ public class HashQualityTest {
         oddLang = FakeLanguageGen.JAPANESE_ROMANIZED;
         for (int i = 0; i < stringHashLength; i++) {
             srng.setState(i);
-            input = oddLang.sentence(srng, 4, 9, midPunct, endPunct, 0.12);
+            input = oddLang.word(srng, true, 7);
             colliderJDK.put(input.hashCode(), i);
             colliderFNV.put(CrossHash.hash(input), i);
             colliderSip.put(sip.hash(input), i);
@@ -247,7 +323,7 @@ public class HashQualityTest {
         oddLang = FakeLanguageGen.FANCY_FANTASY_NAME.mix(FakeLanguageGen.GREEK_AUTHENTIC, 0.67).mix(FakeLanguageGen.RUSSIAN_AUTHENTIC, 0.45);
         for (int i = 0; i < stringHashLength; i++) {
             srng.setState(i);
-            input = oddLang.sentence(srng, 4, 9, midPunct, endPunct, 0.12);
+            input = oddLang.word(srng, true, 7);
             colliderJDK.put(input.hashCode(), i);
             colliderFNV.put(CrossHash.hash(input), i);
             colliderSip.put(sip.hash(input), i);
@@ -268,7 +344,7 @@ public class HashQualityTest {
         oddLang = FakeLanguageGen.ENGLISH;
         for (int i = 0; i < stringHashLength; i++) {
             srng.setState(i);
-            input = oddLang.sentence(srng, 4, 9, midPunct, endPunct, 0.12);
+            input = oddLang.word(srng, true, 7);
             colliderJDK.put(input.hashCode(), i);
             colliderFNV.put(CrossHash.hash(input), i);
             colliderSip.put(sip.hash(input), i);
@@ -285,6 +361,6 @@ public class HashQualityTest {
         colliderFNV.clear();
         colliderSip.clear();
         colliderLit.clear();
-
+        */
     }
 }

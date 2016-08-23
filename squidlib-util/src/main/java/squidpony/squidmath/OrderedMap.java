@@ -2064,7 +2064,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         /**
          * The reciprocal of {@link #LONG_PHI} modulo 2<sup>64</sup>.
          */
-        private static final long INV_LONG_PHI = 0xf1de83e19937733dL;
+        private static final long INV_LONG_PHI = 0xF1DE83E19937733DL;
 
         /**
          * Avalanches the bits of an integer by applying the finalisation step of MurmurHash3.
