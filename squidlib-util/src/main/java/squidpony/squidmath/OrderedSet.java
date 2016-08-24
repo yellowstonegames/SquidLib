@@ -161,7 +161,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         key = (K[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        hasher = new CrossHash.DefaultHasher();
+        hasher = CrossHash.defaultHasher;
     }
     /**
      * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
@@ -314,7 +314,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         key = (K[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        this.hasher = (hasher == null) ? new CrossHash.DefaultHasher() : hasher;
+        this.hasher = (hasher == null) ? CrossHash.defaultHasher : hasher;
     }
 
     /**

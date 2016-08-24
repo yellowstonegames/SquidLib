@@ -39,10 +39,10 @@ import java.io.Serializable;
  * does approximately as well as Lightning, with no clear patterns visible. The idea is from a technical report
  * on visual uses for hashing, http://www.clockandflame.com/media/Goulburn06.pdf .
  * <ul>
- *     <li>{@link java.util.Arrays#hashCode(int[])}: http://i.imgur.com/S4Gh1sX.png</li>
- *     <li>{@link CrossHash#hash(int[])}: http://i.imgur.com/x8SDqvL.png</li>
- *     <li>{@link CrossHash.Sip#hash(int[])}: http://i.imgur.com/keSpIwm.png</li>
- *     <li>{@link CrossHash.Lightning#hash(int[])}: http://i.imgur.com/afGJ9cA.png</li>
+ * <li>{@link java.util.Arrays#hashCode(int[])}: http://i.imgur.com/S4Gh1sX.png</li>
+ * <li>{@link CrossHash#hash(int[])}: http://i.imgur.com/x8SDqvL.png</li>
+ * <li>{@link CrossHash.Sip#hash(int[])}: http://i.imgur.com/keSpIwm.png</li>
+ * <li>{@link CrossHash.Lightning#hash(int[])}: http://i.imgur.com/afGJ9cA.png</li>
  * </ul>
  * <br>
  * Note: This class was formerly called StableHash, but since that refers to a specific
@@ -254,6 +254,7 @@ public class CrossHash {
         }
         return h;
     }
+
     /**
      * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
      *
@@ -552,12 +553,12 @@ public class CrossHash {
         return h;
     }
 
-    public interface IHasher {
+    public interface IHasher extends Serializable {
         int hash(Object data);
     }
 
     private static class BooleanHasher implements IHasher {
-        BooleanHasher() {
+        protected BooleanHasher() {
         }
 
         public int hash(Object data) {
@@ -568,7 +569,7 @@ public class CrossHash {
     public static final IHasher booleanHasher = new BooleanHasher();
 
     private static class ByteHasher implements IHasher {
-        ByteHasher() {
+        protected ByteHasher() {
         }
 
         public int hash(Object data) {
@@ -579,7 +580,7 @@ public class CrossHash {
     public static final IHasher byteHasher = new ByteHasher();
 
     private static class ShortHasher implements IHasher {
-        ShortHasher() {
+        protected ShortHasher() {
         }
 
         public int hash(Object data) {
@@ -590,7 +591,7 @@ public class CrossHash {
     public static final IHasher shortHasher = new ShortHasher();
 
     private static class CharHasher implements IHasher {
-        CharHasher() {
+        protected CharHasher() {
         }
 
         public int hash(Object data) {
@@ -601,7 +602,7 @@ public class CrossHash {
     public static final IHasher charHasher = new CharHasher();
 
     private static class IntHasher implements IHasher {
-        IntHasher() {
+        protected IntHasher() {
         }
 
         public int hash(Object data) {
@@ -612,7 +613,7 @@ public class CrossHash {
     public static final IHasher intHasher = new IntHasher();
 
     private static class LongHasher implements IHasher {
-        LongHasher() {
+        protected LongHasher() {
         }
 
         public int hash(Object data) {
@@ -623,7 +624,7 @@ public class CrossHash {
     public static final IHasher longHasher = new LongHasher();
 
     private static class FloatHasher implements IHasher {
-        FloatHasher() {
+        protected FloatHasher() {
         }
 
         public int hash(Object data) {
@@ -634,7 +635,7 @@ public class CrossHash {
     public static final IHasher floatHasher = new FloatHasher();
 
     private static class DoubleHasher implements IHasher {
-        DoubleHasher() {
+        protected DoubleHasher() {
         }
 
         public int hash(Object data) {
@@ -645,7 +646,7 @@ public class CrossHash {
     public static final IHasher doubleHasher = new DoubleHasher();
 
     private static class Char2DHasher implements IHasher {
-        Char2DHasher() {
+        protected Char2DHasher() {
         }
 
         public int hash(Object data) {
@@ -656,7 +657,7 @@ public class CrossHash {
     public static final IHasher char2DHasher = new Char2DHasher();
 
     private static class StringHasher implements IHasher {
-        StringHasher() {
+        protected StringHasher() {
         }
 
         public int hash(Object data) {
@@ -667,7 +668,7 @@ public class CrossHash {
     public static final IHasher stringHasher = new StringHasher();
 
     private static class StringArrayHasher implements IHasher {
-        StringArrayHasher() {
+        protected StringArrayHasher() {
         }
 
         public int hash(Object data) {
@@ -678,13 +679,16 @@ public class CrossHash {
     public static final IHasher stringArrayHasher = new StringArrayHasher();
 
     public static class DefaultHasher implements IHasher {
-        public DefaultHasher() {
+        protected DefaultHasher() {
         }
 
         public int hash(Object data) {
             return data.hashCode();
         }
     }
+
+    public static final IHasher defaultHasher = new DefaultHasher();
+
 
     /**
      * Implementation of hashing functions using SipHash instead of FNV. Faster than FNV.
@@ -4232,20 +4236,21 @@ public class CrossHash {
      * There is certainly room for improvement with the specific numbers chosen; earlier versions used the
      * state multiplier "Neely's number", which is a probable prime made by taking the radix-29 number
      * "HARGNALLINSCLOPIOPEEPIO" (a reference to a very unusual TV show), truncating to 64 bits, and rotating
-     * right by 42 bits. This version uses "Neely's number" for an initial state, and uses a different probable
-     * prime as the state multiplier, made with a similar process; it starts with the radix-36 number
-     * "EDSGERWDIJKSTRA", then does the same process but rotates right by 37 bits to obtain a different prime.
-     * This tweak seems to help with hash collisions. Extensive trial and error was used to find the current
-     * output multiplier, which has no real relationship to anything else but has exactly 32 of 64 bits set to
-     * 1, has 1 in the least and most significant bit indices (meaning it is negative and odd), and other than
-     * that seems to have better results on most inputs for mystifying reasons. Earlier versions applied a Gray
-     * code step to alter the output instead of a multiplier that heavily overflows to obfuscate state, but that
-     * had a predictable pattern for most of the inputs tried, which seemed less-than-ideal for a hash. Vitally,
-     * Lightning avoids predictable collisions that Arrays.hashCode has, like
+     * right by 42 bits. This version uses "Neely's number" for an initial state and during finalization, and
+     * uses a different probable prime as the state multiplier, made with a similar process; it starts with the
+     * radix-36 number "EDSGERWDIJKSTRA", then does the same process but rotates right by 37 bits to obtain a
+     * different prime. This tweak seems to help with hash collisions. Extensive trial and error was used to
+     * find the current output multiplier, which has no real relationship to anything else but has exactly 32 of
+     * 64 bits set to 1, has 1 in the least and most significant bit indices (meaning it is negative and odd),
+     * and other than that seems to have better results on most inputs for mystifying reasons. Earlier versions
+     * applied a Gray code step to alter the output instead of a multiplier that heavily overflows to obfuscate
+     * state, but that had a predictable pattern for most of the inputs tried, which seemed less-than-ideal for
+     * a hash. Vitally, Lightning avoids predictable collisions that Arrays.hashCode has, like
      * {@code Arrays.hashCode(new long[]{0})==Arrays.hashCode(new long[]{-1})}.
      * <br>
      * The output multiplier is 0xC6BC279692B5CC83L, the state multiplier is 0xD0E89D2D311E289FL, the number
-     * added to the state (from LightRNG) is 0x9E3779B97F4A7C15L, and the starting state is 0x632BE59BD9B4E019L.
+     * added to the state (from LightRNG and code derived from FastUtil, but obtained from the golden ratio
+     * phi) is 0x9E3779B97F4A7C15L, and the starting state ("Neely's Number") is 0x632BE59BD9B4E019L.
      * <br>
      * To help find patterns in hash output in a visual way, you can hash an x,y point, take the bottom 24 bits,
      * and use that as an RGB color for the pixel at that x,y point. On a 512x512 grid of points, the patterns
@@ -4253,10 +4258,10 @@ public class CrossHash {
      * SipHash) does approximately as well as Lightning, with no clear patterns visible. The idea is from a
      * technical report on visual uses for hashing, http://www.clockandflame.com/media/Goulburn06.pdf .
      * <ul>
-     *     <li>{@link java.util.Arrays#hashCode(int[])}: http://i.imgur.com/S4Gh1sX.png</li>
-     *     <li>{@link CrossHash#hash(int[])}: http://i.imgur.com/x8SDqvL.png</li>
-     *     <li>{@link CrossHash.Sip#hash(int[])}: http://i.imgur.com/keSpIwm.png</li>
-     *     <li>{@link CrossHash.Lightning#hash(int[])}: http://i.imgur.com/afGJ9cA.png</li>
+     * <li>{@link java.util.Arrays#hashCode(int[])}: http://i.imgur.com/S4Gh1sX.png</li>
+     * <li>{@link CrossHash#hash(int[])}: http://i.imgur.com/x8SDqvL.png</li>
+     * <li>{@link CrossHash.Sip#hash(int[])}: http://i.imgur.com/keSpIwm.png</li>
+     * <li>{@link CrossHash.Lightning#hash(int[])}: http://i.imgur.com/afGJ9cA.png</li>
      * </ul>
      */
     // tested output multipliers
@@ -4295,7 +4300,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(byte[] data) {
@@ -4305,7 +4310,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(short[] data) {
@@ -4315,7 +4320,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(char[] data) {
@@ -4325,7 +4330,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(int[] data) {
@@ -4335,7 +4340,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(long[] data) {
@@ -4345,7 +4350,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(float[] data) {
@@ -4355,7 +4360,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(double[] data) {
@@ -4365,7 +4370,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(char[] data, int start, int end) {
@@ -4375,7 +4380,7 @@ public class CrossHash {
             for (int i = start; i < end && i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(String data) {
@@ -4389,7 +4394,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(String[] data) {
@@ -4399,7 +4404,17 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
+        }
+
+        public static long hash64(Iterable<String> data) {
+            if (data == null)
+                return 0;
+            long z = 0x632BE59BD9B4E019L, result = 1L;
+            for (String datum : data) {
+                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+            }
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static long hash64(String[]... data) {
@@ -4409,7 +4424,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
+            return result ^ Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
         public static int hash(boolean[] data) {
@@ -4419,7 +4434,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(byte[] data) {
@@ -4429,7 +4444,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(short[] data) {
@@ -4439,7 +4454,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(char[] data) {
@@ -4449,7 +4464,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(int[] data) {
@@ -4460,7 +4475,7 @@ public class CrossHash {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
 
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(long[] data) {
@@ -4470,7 +4485,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(float[] data) {
@@ -4480,7 +4495,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(double[] data) {
@@ -4490,7 +4505,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(char[] data, int start, int end) {
@@ -4501,7 +4516,7 @@ public class CrossHash {
             for (int i = start; i < end && i < data.length; i++) {
                 result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(String data) {
@@ -4515,7 +4530,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(String[] data) {
@@ -4525,7 +4540,17 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
+        }
+
+        public static int hash(Iterable<String> data) {
+            if (data == null)
+                return 0;
+            long z = 0x632BE59BD9B4E019L, result = 1L;
+            for (String datum : data) {
+                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+            }
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
         public static int hash(String[]... data) {
@@ -4535,7 +4560,7 @@ public class CrossHash {
             for (int i = 0; i < data.length; i++) {
                 result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z + 0xC6BC279692B5CC83L) * (result + 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
     }
 

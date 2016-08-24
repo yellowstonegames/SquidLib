@@ -248,6 +248,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doLightIntR();
     }
+    /*
     public long doLightBetweenR()
     {
         RNG rng = new RNG(new LightRNG(iseed));
@@ -282,7 +283,7 @@ public class RNGBenchmark {
         iseed = 9000;
         System.out.println(doLightBetweenHastyR());
     }
-
+    */
     public long doThreadLocalRandom()
     {
         ThreadLocalRandom rng = ThreadLocalRandom.current();
@@ -388,7 +389,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doPermutedInt();
     }
-
+    /*
     public long doPermutedR()
     {
         RNG rng = new RNG(new PermutedRNG(seed));
@@ -488,9 +489,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doXorIntR();
     }
-
-
-
+    */
     public long doChaosR()
     {
         RNG rng = new RNG(new ChaosRNG());
@@ -633,6 +632,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doGDXInt();
     }
+    /*
     public long doIsaac()
     {
         IsaacRNG rng = new IsaacRNG(seed);
@@ -695,6 +695,78 @@ public class RNGBenchmark {
         }
         return iseed;
     }
+    */
+    public long doThunder()
+    {
+        ThunderRNG rng = new ThunderRNG(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunder() throws InterruptedException {
+        seed = 9000;
+        doThunder();
+    }
+
+    public long doThunderInt()
+    {
+        ThunderRNG rng = new ThunderRNG(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunderInt() throws InterruptedException {
+        iseed = 9000;
+        doThunderInt();
+    }
+    public long doThunderR()
+    {
+        RNG rng = new RNG(new ThunderRNG(seed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunderR() throws InterruptedException {
+        seed = 9000;
+        doThunderR();
+    }
+
+    public long doThunderIntR()
+    {
+        RNG rng = new RNG(new ThunderRNG(iseed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunderIntR() throws InterruptedException {
+        iseed = 9000;
+        doThunderIntR();
+    }
+    
 
 /*
     public long doSecureRandom()
