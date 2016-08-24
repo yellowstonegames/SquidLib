@@ -465,7 +465,7 @@ public class SobolQRNG implements RandomnessSource {
 
         for (int i = 0; i < dimension; i++) {
             x[i] ^= direction[i][c];
-            v[i] = (int) (x[i] & 0x7fffffff);
+            v[i] = (int) (x[i] >>> 20);
         }
         count++;
         return v;
@@ -565,14 +565,19 @@ public class SobolQRNG implements RandomnessSource {
             long[] l = nextLongVector();
             return (l[0] << 32) ^ (l[1]);
         }
-        return (nextLongVector()[0] << 32) ^ (nextLongVector()[0]);
+        return ((long)(nextIntVector()[0]) << 32) ^ (nextIntVector()[0]);
+    }
+    public double nextDouble() {
+        return nextVector()[0];
     }
 
+    public double nextDouble(double max) {
+        return nextVector(max)[0];
+    }
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
      * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
      * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
-     *
      * @return a copy of this RandomnessSource
      */
     @Override

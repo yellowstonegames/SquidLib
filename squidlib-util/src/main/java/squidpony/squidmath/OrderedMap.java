@@ -166,7 +166,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         value = (V[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        hasher = new CrossHash.DefaultHasher();
+        hasher = CrossHash.defaultHasher;
     }
 
     /**
@@ -255,7 +255,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         value = (V[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        this.hasher = (hasher == null) ? new CrossHash.DefaultHasher() : hasher;
+        this.hasher = (hasher == null) ? CrossHash.defaultHasher : hasher;
     }
     /**
      * Creates a new hash map with 0.75f as load factor.
