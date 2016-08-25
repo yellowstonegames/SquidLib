@@ -116,12 +116,12 @@ public class RNGTest {
             c = sbl.next(32);
             /*System.out.println("SBL : " + */ binaryString(c, 17);
             c = thunder.nextInt();
-            System.out.println("T   : " + binaryString(c, 18));
+            /*System.out.println("T   : " + */ binaryString(c, 18);
             c = tr.nextInt();
-            System.out.println("TR  : " + binaryString(c, 19));
+            /*System.out.println("TR  : " + */ binaryString(c, 19);
             c = trr.nextInt();
-            System.out.println("TRR: " + binaryString(c, 20));
-            System.out.println();
+            /*System.out.println("TRR: " + */ binaryString(c, 20);
+            //System.out.println();
         }
         for(int k = 0; k < 21; k++) {
             for (int i = 31; i >= 0; i--) {
@@ -179,12 +179,12 @@ public class RNGTest {
             l = sbl.nextLong();
             /*System.out.println("SBL : " + */ binaryString(l, 17);
             l = thunder.nextLong();
-            System.out.println("T   : " + binaryString(l, 18));
+            /*System.out.println("T   : " + */ binaryString(l, 18);
             l = tr.nextLong();
-            System.out.println("TR  : " + binaryString(l, 19));
+            /*System.out.println("TR  : " + */ binaryString(l, 19);
             l = trr.nextLong();
-            System.out.println("TRR : " + binaryString(l, 20));
-            System.out.println();
+            /*System.out.println("TRR : " + */ binaryString(l, 20);
+            //System.out.println();
 
             /*l = lrr.nextLong();
             System.out.println("LRR : " + binaryString(l, 6));
@@ -272,13 +272,12 @@ public class RNGTest {
             d = (int)((sbl.nextDouble() - 0.5) * 0xffffffffL);
             /*System.out.println("SBL : " + */ binaryString(d, 17);
             d = (int)((thunder.nextDouble() - 0.5) * 0xffffffffL);
-            System.out.println("T   : " + binaryString(d, 18));
+            /*System.out.println("T   : " + */ binaryString(d, 18);
             d = (int)((tr.nextDouble() - 0.5) * 0xffffffffL);
-            System.out.println("TR  : " + binaryString(d, 19));
+            /*System.out.println("TR  : " + */ binaryString(d, 19);
             d = (int)((trr.nextDouble() - 0.5) * 0xffffffffL);
-            System.out.println("TRR : " + binaryString(d, 20));
-            System.out.println();
-
+            /*System.out.println("TRR : " + */ binaryString(d, 20);
+            //System.out.println();
             //System.out.println();
         }
         for(int k = 0; k < 21; k++) {
