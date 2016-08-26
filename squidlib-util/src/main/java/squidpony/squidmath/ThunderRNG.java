@@ -7,14 +7,14 @@ import squidpony.annotation.Beta;
  * similarity to the name for that hash, Lightning, but also to how the current version acts like LightRNG,
  * sort-of, but involves a thunder-like "echo" where the earlier results are used as additional state for the
  * next result. Why should you consider it? It appears to be the fastest RandomnessSource we have available,
- * nearly twice the speed of LightRNG, but statistical testing shows it has significant flaws and probable
+ * nearly twice the speed of LightRNG, but statistical testing shows it has likely flaws and probable
  * patterns, like the related category of fast RNGs used by java.util.Random (linear congruential generators).
  * For RNG usage that isn't particularly demanding statistically, this may be a good choice, but if the numbers
- * need to be fair, particularly for random shuffles, look elsewhere (LightRNG has good speed and implements
- * the same interfaces, for example).
+ * need to be fair and unpredictable, especially for random shuffles, look elsewhere (LightRNG has good speed
+ * and implements the same interfaces, for example).
  * <br>
  * The tool used for testing this RNG is PractRand, http://pracrand.sourceforge.net/ > The binaries it provides
- * don't seem to work as intended on Windows, so I built from source, generated 32MB files of random 64-bit
+ * don't seem to work as intended on Windows, so I built from source, generated 64MB files of random 64-bit
  * output with various generators as "Thunder.dat", "Light.dat" and so on, then ran the executables I had
  * built with the MS compilers, with the command line {@code RNG_test.exe stdin64 < Thunder.dat} . For most of
  * the other generators I tried, there were no or nearly-no statistical failures it could find, but there were
@@ -29,7 +29,7 @@ import squidpony.annotation.Beta;
 public class ThunderRNG implements StatefulRandomness, RandomnessSource {
 
     /** The state can be seeded with any value. */
-    public long state, lag;
+    public long state;
     /** Creates a new generator seeded using Math.random. */
     public ThunderRNG() {
         this((long) Math.floor(Math.random() * Long.MAX_VALUE));
@@ -60,7 +60,13 @@ public class ThunderRNG implements StatefulRandomness, RandomnessSource {
         //return (state * 0xD0E89D2D311E289FL) ^ (state += 0x9E3779B97F4A7C15L);
         //return ((state >> 5) * 0xC6BC279692B5CC83L) ^ (state += 0x9E3779B97F4A7C15L);
         //return ((state += 0x9E3779B97F4A7C15L) >>> (state >>> 60L)) * 0x632BE59BD9B4E019L; //pretty good quality
-        return 0xC6BC279692B5CC83L * (lag ^= 0xD0E89D2D311E289FL * ((state += 0x9E3779B97F4A7C15L) >> 18L));
+        //return 0xC6BC279692B5CC83L * (lag ^= 0xD0E89D2D311E289FL * ((state += 0x9E3779B97F4A7C15L) >> 18L));
+        //return lag += 0xC6BC279692B5CC83L * ((state += 0x9E3779B97F4A7C15L) * 2862933555777941757L + 7046029254386353087L);
+        //return (lag += (state += 0x9E3779B97F4A7C15L) & 0xDF5DFFDADFE8FFFFL) * 2862933555777941757L + 7046029254386353087L;
+        //return (lag += ((state += 0x9E3779B97F4A7C15L) >> 3) & 0xDF5DFFDADFE8FFFFL) * 2862933555777941757L + 7046029254386353087L;
+        //return state ^ ((state += 0x9E3779B97F4A7C15L) >> 18) * 0xC6BC279692B5CC83L;
+        return (state ^ ((state += 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L;
+        //return state = state * 2862933555777941757L + 7046029254386353087L; // LCG for comparison
     }
 
     public int nextInt()
@@ -94,8 +100,7 @@ public class ThunderRNG implements StatefulRandomness, RandomnessSource {
      */
     @Override
     public void setState(long state) {
-        this.state = state + 0x9E3779B97F4A7C15L;
-        lag = 0xD0E89D2D311E289FL * (this.state >> 18L);
+        this.state = state;
     }
 
     /**
