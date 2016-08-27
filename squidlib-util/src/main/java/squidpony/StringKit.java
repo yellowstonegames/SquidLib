@@ -345,9 +345,9 @@ public class StringKit {
         byte[][] values = new byte[mi.count()][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeBytes(mi.nextMatch().group(1));
+            values[i++] = decodeBytes(mi.next().group(1));
         }
         return values;
     }
@@ -360,9 +360,9 @@ public class StringKit {
         short[][] values = new short[mi.count()][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeShorts(mi.nextMatch().group(1));
+            values[i++] = decodeShorts(mi.next().group(1));
         }
         return values;
     }
@@ -375,9 +375,9 @@ public class StringKit {
         int[][] values = new int[mi.count()][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeInts(mi.nextMatch().group(1));
+            values[i++] = decodeInts(mi.next().group(1));
         }
         return values;
     }
@@ -391,9 +391,9 @@ public class StringKit {
         float[][] values = new float[mi.count()][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeFloats(mi.nextMatch().group(1));
+            values[i++] = decodeFloats(mi.next().group(1));
         }
         return values;
     }
@@ -406,9 +406,9 @@ public class StringKit {
         long[][] values = new long[mi.count()][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeLongs(mi.nextMatch().group(1));
+            values[i++] = decodeLongs(mi.next().group(1));
         }
         return values;
     }
@@ -422,9 +422,9 @@ public class StringKit {
         byte[][][] values = new byte[mi.count()][][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeBytes2D(mi.nextMatch().group(1));
+            values[i++] = decodeBytes2D(mi.next().group(1));
         }
         return values;
     }
@@ -437,9 +437,9 @@ public class StringKit {
         short[][][] values = new short[mi.count()][][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeShorts2D(mi.nextMatch().group(1));
+            values[i++] = decodeShorts2D(mi.next().group(1));
         }
         return values;
     }
@@ -452,9 +452,9 @@ public class StringKit {
         int[][][] values = new int[mi.count()][][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeInts2D(mi.nextMatch().group(1));
+            values[i++] = decodeInts2D(mi.next().group(1));
         }
         return values;
     }
@@ -467,9 +467,9 @@ public class StringKit {
         float[][][] values = new float[mi.count()][][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeFloats2D(mi.nextMatch().group(1));
+            values[i++] = decodeFloats2D(mi.next().group(1));
         }
         return values;
     }
@@ -482,9 +482,9 @@ public class StringKit {
         long[][][] values = new long[mi.count()][][];
         int i = 0;
         matcher.setTarget(data);
-        while (mi.hasMore())
+        while (mi.hasNext())
         {
-            values[i++] = decodeLongs2D(mi.nextMatch().group(1));
+            values[i++] = decodeLongs2D(mi.next().group(1));
         }
         return values;
     }
