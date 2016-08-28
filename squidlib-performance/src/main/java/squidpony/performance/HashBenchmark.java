@@ -202,6 +202,43 @@ public class HashBenchmark {
         doJVMInt();
     }
 
+    public long doStorm()
+    {
+        LongPeriodRNG rng = new LongPeriodRNG(seed);
+        CrossHash.Storm storm = new CrossHash.Storm();
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            seed += storm.hash64(rng.state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureStorm() throws InterruptedException {
+        seed = 9000;
+        doStorm();
+    }
+
+    public long doStormInt()
+    {
+        LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        CrossHash.Storm storm = new CrossHash.Storm();
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            iseed += storm.hash(rng.state);
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureStormInt() throws InterruptedException {
+        iseed = 9000;
+        doStormInt();
+    }
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
      *
