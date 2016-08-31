@@ -1,47 +1,83 @@
 package squidpony.squidmath;
 
+import squidpony.StringKit;
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
+
 /**
- * Like LightRNG, but shares a lot in common with a hashing mechanism in CrossHash. The name comes from its
- * similarity to the name for that hash, Lightning, but also to how the current version acts like LightRNG,
+ * Like LightRNG, but shares a lot in common with CrossHash's hashing mechanism. The name comes from its
+ * similarity to the nickname for that hash, Lightning, but also to how the current version acts like LightRNG,
  * sort-of, but involves a thunder-like "echo" where the earlier results are used as additional state for the
  * next result. Why should you consider it? It appears to be the fastest RandomnessSource we have available,
- * nearly twice the speed of LightRNG, but statistical testing shows it has likely flaws and probable
- * patterns, like the related category of fast RNGs used by java.util.Random (linear congruential generators).
- * For RNG usage that isn't particularly demanding statistically, this may be a good choice, but if the numbers
- * need to be fair and unpredictable, especially for random shuffles, look elsewhere (LightRNG has good speed
- * and implements the same interfaces, for example).
+ * and is the only RNG in the library that can generate 1 billion random long values in under 1 second (or
+ * rather, under 900 ms) on an Intel i7-4700MQ laptop processor (second-fastest RandomnessSource depends on
+ * other factors, but is effectively a tie between LightRNG and XoRoRNG at roughly 1200 ms on the same laptop).
+ * Any layer on top of generating long values slows this down, which is the case for most of the
+ * RandomnessSource implementations, but ThunderRNG's {@link #nextInt()} method, which gets the most
+ * significant 32 bits of a random long and returns them as an int, is also the fastest way we have to generate
+ * int values. This does not implement StatefulRandomness because it stores state in two parts, each a long;
+ * each is incremented by a different addend with each number generated. Part B is always odd, and is
+ * incremented by a large, empirically-chosen number that is even; because odd + even = odd, always, part B
+ * never becomes even. Part A is always incremented by an irregular selection of the bits in Part B, but the
+ * selection never causes the increment to be by an even number (this also means it never increments by 0).
+ * This irregular increment seems to increase the period, but by how much is not clear.
+ * <br>
+ * The reason why nextInt() uses only the most significant half of the bits, even though it requires a shift in
+ * addition to a cast, is because the period of the less significant bits is lower, though by how much isn't
+ * clear. One early test used a 512x512 pixel window with a call to ThunderRNG's next() method for each pixel
+ * (2 to the 18 calls per render), getting only two bits at time (yes, this is wasteful and a bad idea in
+ * practice). Though the seed wasn't being reset each frame, the generated 2-bit values were effectively
+ * identical between frames (adding one additional call to next() made the random sections move predictably
+ * along one axis, one pixel at a time, which indicates they would be the same values every frame if the extra
+ * call was removed). The early version that had this likely flaw always took the lowest bits, here the lowest
+ * two bits, in next(), but changing next() to use the same number of bits, but from higher in the random long,
+ * eliminated this issue. Calls to nextLong() should still be expected to have a lower-than-normal period for
+ * the low bits, with the bottom 2 bits likely having a period of 4096 or less. The period of the full 64
+ * bits is unknown at this time, but is probably higher than 2 to the 64, and is almost certainly at least 2 to
+ * the 63 (which is the probable period of Part B on its own, and because Part A changes by a subset of Part
+ * B every time).
  * <br>
  * The tool used for testing this RNG is PractRand, http://pracrand.sourceforge.net/ > The binaries it provides
  * don't seem to work as intended on Windows, so I built from source, generated 64MB files of random 64-bit
  * output with various generators as "Thunder.dat", "Light.dat" and so on, then ran the executables I had
  * built with the MS compilers, with the command line {@code RNG_test.exe stdin64 < Thunder.dat} . For most of
- * the other generators I tried, there were no or nearly-no statistical failures it could find, but there were
- * a significant amount of failures with ThunderRNG (though many more in earlier versions).
- * <br>
- * This is also a StatefulRandomness as well as a RandomnessSource, so it can be given to StatefulRNG's
- * constructor to allow the RNG to get and set the current state.
+ * the other generators I tried, there were no or nearly-no statistical failures it could find, and as of the
+ * commit on August 30, ThunderRNG also has no statistical failures or even anomalies (earlier versions were
+ * slightly faster (at best speed, 600-700ms) but had multiple outright failures (the fastest ones failed the
+ * majority of tests)).
  * <br>
  * Created by Tommy Ettinger on 8/23/2016.
  */
 @Beta
-public class ThunderRNG implements StatefulRandomness, RandomnessSource {
+public class ThunderRNG implements RandomnessSource, Serializable {
+    private static final long serialVersionUID = 3L;
 
     /** The state can be seeded with any value. */
     public long state;
+    protected long jumble;
     /** Creates a new generator seeded using Math.random. */
     public ThunderRNG() {
-        this((long) Math.floor(Math.random() * Long.MAX_VALUE));
+        this((long) Math.floor(Math.random() * Long.MAX_VALUE), (long) Math.floor(Math.random() * Long.MAX_VALUE));
     }
 
     public ThunderRNG( final long seed ) {
-        setState(seed);
+        state = seed;
+        jumble = (seed ^ ((seed + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L;
+        jumble ^= (((seed + 0x9E3779B97F4A7C15L) ^ ((seed + 0x9E3779B97F4A7C15L + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L) >>> 32;
+        jumble |= 1L;
     }
+    public ThunderRNG(final long partA, final long partB)
+    {
+        state = partA;
+        jumble = partB | 1L;
+    }
+
 
     @Override
     public int next( int bits ) {
-        return (int)( nextLong() & ( 1L << bits ) - 1 );
+        //return (int)( nextLong() & ( 1L << bits ) - 1 );
+        return (int)( nextLong() >>> (64 - bits) );
     }
 
     /**
@@ -65,7 +101,12 @@ public class ThunderRNG implements StatefulRandomness, RandomnessSource {
         //return (lag += (state += 0x9E3779B97F4A7C15L) & 0xDF5DFFDADFE8FFFFL) * 2862933555777941757L + 7046029254386353087L;
         //return (lag += ((state += 0x9E3779B97F4A7C15L) >> 3) & 0xDF5DFFDADFE8FFFFL) * 2862933555777941757L + 7046029254386353087L;
         //return state ^ ((state += 0x9E3779B97F4A7C15L) >> 18) * 0xC6BC279692B5CC83L;
-        return (state ^ ((state += 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L;
+        //return (state >> 18) * 0xC6BC279692B5CC83L + (state += 0x9E3779B97F4A7C15L);
+        //return (state ^ ((state += 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L; // former best
+        //return (state ^ ((state += jumble) >> 17)) * (jumble += 0x8D784F2D256B9906L);
+        //return (state ^ ((state ^= jumble) >> 17)) * (jumble += 0xC6BC279692B5CC83L);
+        //return (state ^ ((state += jumble) >> 17)) * (jumble += 0x8D784F2D256B9906L);
+        return state ^ 0xC6BC279692B5CC83L * ((state += jumble & (jumble += 0xBC6EF372FEB7FC6AL)) >> 15);
         //return state = state * 2862933555777941757L + 7046029254386353087L; // LCG for comparison
     }
 
@@ -84,23 +125,38 @@ public class ThunderRNG implements StatefulRandomness, RandomnessSource {
     }
 
     /**
-     * Get the current internal state of the StatefulRandomness as a long.
+     * Get "Part A" of the current internal state of the ThunderRNG as a long. Reconstituting the state of this
+     * ThunderRNG requires Part A (given by this) and Part B (given by {@link #getStatePartB()})
      *
-     * @return the current internal state of this object.
+     * @return part A of the current internal state of this object.
      */
-    @Override
-    public long getState() {
+    public long getStatePartA() {
         return state;
     }
 
     /**
-     * Set the current internal state of this StatefulRandomness with a long.
+     * Get "Part A" of the current internal state of the ThunderRNG as a long. Reconstituting the state of this
+     * ThunderRNG requires Part A (given by {@link #getStatePartA()}) and Part B (given by this).
      *
-     * @param state a 64-bit long. You should avoid passing 0, even though some implementations can handle that.
+     * @return part B of the current internal state of this object.
      */
-    @Override
-    public void setState(long state) {
-        this.state = state;
+    public long getStatePartB() {
+        return jumble;
+    }
+
+    /**
+     * Set the current internal state of this ThunderRNG with two long parts, often obtained using the previous
+     * state of another ThunderRNG using {@link #getStatePartA()} and {@link #getStatePartB()}, but any values
+     * are allowed for both parts. Only the upper 63 bits are used of partB; the bottom bit of partB is always
+     * changed to 1 internally so the RNG works as intended.
+     *
+     * @param partA any 64-bit long
+     * @param partB any 64-bit long, but the least significant bit will be ignored (e.g. 2 and 3 are identical)
+     */
+    public void setState(long partA, long partB) {
+        state = partA;
+        jumble = partB | 1L;
+
     }
 
     /**
@@ -112,6 +168,12 @@ public class ThunderRNG implements StatefulRandomness, RandomnessSource {
      */
     @Override
     public RandomnessSource copy() {
-        return new ThunderRNG(state);
+        return new ThunderRNG(state, jumble);
     }
+
+    @Override
+    public String toString() {
+        return "ThunderRNG with state parts A=0x" + StringKit.hex(state) + "L, B=0x"  + StringKit.hex(jumble)+ 'L';
+    }
+
 }

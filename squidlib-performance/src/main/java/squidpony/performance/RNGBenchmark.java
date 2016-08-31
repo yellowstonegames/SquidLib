@@ -207,6 +207,22 @@ import java.util.concurrent.TimeUnit;
  * RNGBenchmark.measureXoRoInt      avgt    3  1407.854 ± 111.257  ms/op
  * RNGBenchmark.measureXoRoIntR     avgt    3  1470.919 ±  57.782  ms/op
  * RNGBenchmark.measureXoRoR        avgt    3  1303.842 ± 116.414  ms/op
+ *
+ * Benchmark                         Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureThunder       avgt    3   853.882 ±  36.359  ms/op
+ * RNGBenchmark.measureThunderInt    avgt    3   923.142 ±  84.828  ms/op
+ * RNGBenchmark.measureThunderIntR   avgt    3  1066.153 ± 105.311  ms/op
+ * RNGBenchmark.measureThunderR      avgt    3   920.317 ± 105.918  ms/op
+ * RNGBenchmark.measureGDX           avgt    3  1334.309 ± 131.846  ms/op
+ * RNGBenchmark.measureGDXInt        avgt    3  1296.175 ± 223.224  ms/op
+ * RNGBenchmark.measureLight         avgt    3  1215.778 ± 144.113  ms/op
+ * RNGBenchmark.measureLightInt      avgt    3  1214.945 ±  35.725  ms/op
+ * RNGBenchmark.measureLightIntR     avgt    3  1365.549 ± 169.021  ms/op
+ * RNGBenchmark.measureLightR        avgt    3  1219.114 ± 102.143  ms/op
+ * RNGBenchmark.measureXoRo          avgt    3  1183.430 ±  64.072  ms/op
+ * RNGBenchmark.measureXoRoInt       avgt    3  1338.848 ±  24.186  ms/op
+ * RNGBenchmark.measureXoRoIntR      avgt    3  1408.628 ±  78.247  ms/op
+ * RNGBenchmark.measureXoRoR         avgt    3  1237.680 ±  23.373  ms/op
  */
 public class RNGBenchmark {
 
@@ -391,7 +407,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doRandomInt();
     }
-
+    /*
     public long doPermuted()
     {
         PermutedRNG rng = new PermutedRNG(seed);
