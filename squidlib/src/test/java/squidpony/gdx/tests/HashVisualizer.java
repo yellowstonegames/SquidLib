@@ -8,17 +8,17 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.IFilter;
 import squidpony.squidgrid.gui.gdx.*;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.RandomnessSource;
-import squidpony.squidmath.ThunderRNG;
+import squidpony.squidmath.*;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Created by Tommy Ettinger on 8/20/2016.
@@ -33,12 +33,14 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 0;
+    private int hashMode = 0, rngMode = 0;
     private CrossHash.Sip sipA;
     private CrossHash.Storm stormA, stormB, stormC;
     private int testType = 0;
-    private RandomnessSource random;
-
+    private RandomnessSource fuzzy, random;
+    private Random jreRandom;
+    private RandomXS128 gdxRandom;
+    private long seed;
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -56,15 +58,18 @@ public class HashVisualizer extends ApplicationAdapter {
         filter1 = new Filters.PaletteFilter(SColor.YELLOW_GREEN_SERIES),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
         filter2 = new Filters.PaletteFilter(new SColor[]{SColor.TREE_PEONY, SColor.NAVAJO_WHITE, SColor.BELLFLOWER, SColor.CAPE_JASMINE, SColor.CELADON, SColor.DAWN, SColor.TEAL}),
         filter3 = new Filters.GrayscaleFilter(),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
-        filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW});
-        colorFactory = new SquidColorCenter(filter4);
+        filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
+        filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
+        colorFactory = new SquidColorCenter();
         sipA = new CrossHash.Sip();
         stormA = new CrossHash.Storm();
         stormB= new CrossHash.Storm(0xBEEFF00DCAFECABAL);
         stormC = new CrossHash.Storm(16L);
-        random = new ThunderRNG(0xBEEFCAFEF00DCABAL, 0x1337BABECAFECABAL);
+        fuzzy = new ThunderRNG(0xBEEFCAFEF00DCABAL, 0x1337BABECAFECABAL);
         view = new ScreenViewport();
         stage = new Stage(view, batch);
+        seed = 0xBEEFF00DCAFECABAL;
+
 
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -72,13 +77,34 @@ public class HashVisualizer extends ApplicationAdapter {
                 switch (key)
                 {
                     case SquidInput.ENTER:
-                        hashMode++;
-                        hashMode %= 28;
+                        if(testType == 5) {
+                            rngMode++;
+                            rngMode %= 9;
+                        }
+                        else {
+                            hashMode++;
+                            hashMode %= 28;
+                        }
+                        putMap();
                         //Gdx.graphics.requestRendering();
                         break;
                     case 'S':
                     case 's':
-                        testType = (testType + 1) % 3;
+                        testType = (testType + 1) & 1;
+                        putMap();
+                        //Gdx.graphics.requestRendering();
+                        break;
+                    case 'A':
+                    case 'a':
+                        testType = 3;
+                        putMap();
+                        //Gdx.graphics.requestRendering();
+                        break;
+                    case 'R':
+                    case 'r':
+                        testType = 5;
+                        seed = fuzzy.nextLong();
+                        putMap();
                         //Gdx.graphics.requestRendering();
                         break;
                     case 'Q':
@@ -98,7 +124,7 @@ public class HashVisualizer extends ApplicationAdapter {
         Stack stk = new Stack(display, overlay);
         stage.addActor(stk);
         stk.layout();
-
+        putMap();
         //Gdx.graphics.setContinuousRendering(false);
         //Gdx.graphics.requestRendering();
     }
@@ -651,14 +677,109 @@ public class HashVisualizer extends ApplicationAdapter {
                 }
             }
             break;
+            case 5: { //RNG mode
+                switch (rngMode) {
+                    case 0:
+                        Gdx.graphics.setTitle("java.util.Random");
+                        jreRandom = new Random(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = (jreRandom.nextInt() << 8) | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 1:
+                        Gdx.graphics.setTitle("ThunderRNG");
+                        random = new ThunderRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 2:
+                        Gdx.graphics.setTitle("LightRNG");
+                        random = new LightRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 3:
+                        Gdx.graphics.setTitle("XorRNG");
+                        random = new XorRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 4:
+                        Gdx.graphics.setTitle("XoRoRNG");
+                        random = new XoRoRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 5:
+                        Gdx.graphics.setTitle("PermutedRNG");
+                        random = new PermutedRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 6:
+                        Gdx.graphics.setTitle("LongPeriodRNG");
+                        random = new LongPeriodRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 7:
+                        Gdx.graphics.setTitle("IsaacRNG");
+                        random = new IsaacRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    default:
+                        Gdx.graphics.setTitle("RandomXS128 from LibGDX");
+                        gdxRandom = new RandomXS128(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = (gdxRandom.nextInt() << 8) | 255L;
+                                display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                }
+            }
+            break;
             default:
             {
                 switch (hashMode) {
                     case 0:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Arrays.hashCode(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -666,9 +787,9 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 1:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -676,9 +797,9 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 2:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = sipA.hash(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -686,218 +807,218 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 3:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 4:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Arrays.hashCode(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 5:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 6:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = sipA.hash(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 7:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 8:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash64(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 9:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = sipA.hash64(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 10:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash64(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 11:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash64(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 12:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = sipA.hash64(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 13:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash64(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 14:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Arrays.hashCode(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 15:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 16:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = sipA.hash(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 17:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 18:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Arrays.hashCode(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 19:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 20:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = sipA.hash(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 21:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 22:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash64(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 23:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = sipA.hash64(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -905,44 +1026,44 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 24:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + random.next(2)) >>> 2) << 3);
+                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = (((y + random.next(2)) >>> 2) << 3);
+                                coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash64(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 25:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash64(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 26:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = sipA.hash64(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                     case 27:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = ((((x + random.next(2)) >>> 2) << 9) | ((y + random.next(2)) >>> 2));
+                                coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash64(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
-                        //overlay.put(4, 4, String.valueOf(random.next(2)), SColor.MIDORI);
+                        //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
                         break;
                 }
             }
@@ -958,7 +1079,7 @@ public class HashVisualizer extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         view.apply(true);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
-        putMap();
+        //putMap();
         // if the user clicked, we have a list of moves to perform.
 
         // if we are waiting for the player's input and get input, process it.
