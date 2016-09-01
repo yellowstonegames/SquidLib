@@ -206,12 +206,14 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
+
     //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measurePathAStar() throws InterruptedException {
         System.out.println(doPathAStar());
     }
+    /*
     public long doPathPlannedAStar()
     {
         PlannedAStar astar = new PlannedAStar(astarMap, AStarSearch.SearchType.CHEBYSHEV);
@@ -237,7 +239,7 @@ public class DijkstraBenchmark {
     public void measurePathPlannedAStar() throws InterruptedException {
         System.out.println(doPathPlannedAStar());
     }
-
+    */
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
      *

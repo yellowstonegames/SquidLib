@@ -208,21 +208,21 @@ import java.util.concurrent.TimeUnit;
  * RNGBenchmark.measureXoRoIntR     avgt    3  1470.919 ±  57.782  ms/op
  * RNGBenchmark.measureXoRoR        avgt    3  1303.842 ± 116.414  ms/op
  *
- * Benchmark                         Mode  Cnt     Score     Error  Units
- * RNGBenchmark.measureThunder       avgt    3   853.882 ±  36.359  ms/op
- * RNGBenchmark.measureThunderInt    avgt    3   923.142 ±  84.828  ms/op
- * RNGBenchmark.measureThunderIntR   avgt    3  1066.153 ± 105.311  ms/op
- * RNGBenchmark.measureThunderR      avgt    3   920.317 ± 105.918  ms/op
- * RNGBenchmark.measureGDX           avgt    3  1334.309 ± 131.846  ms/op
- * RNGBenchmark.measureGDXInt        avgt    3  1296.175 ± 223.224  ms/op
- * RNGBenchmark.measureLight         avgt    3  1215.778 ± 144.113  ms/op
- * RNGBenchmark.measureLightInt      avgt    3  1214.945 ±  35.725  ms/op
- * RNGBenchmark.measureLightIntR     avgt    3  1365.549 ± 169.021  ms/op
- * RNGBenchmark.measureLightR        avgt    3  1219.114 ± 102.143  ms/op
- * RNGBenchmark.measureXoRo          avgt    3  1183.430 ±  64.072  ms/op
- * RNGBenchmark.measureXoRoInt       avgt    3  1338.848 ±  24.186  ms/op
- * RNGBenchmark.measureXoRoIntR      avgt    3  1408.628 ±  78.247  ms/op
- * RNGBenchmark.measureXoRoR         avgt    3  1237.680 ±  23.373  ms/op
+ * Benchmark                        Mode  Cnt     Score     Error  Units
+ * RNGBenchmark.measureGDX          avgt    3  1330.069 ±  82.401  ms/op
+ * RNGBenchmark.measureGDXInt       avgt    3  1272.507 ± 103.801  ms/op
+ * RNGBenchmark.measureLight        avgt    3  1233.945 ± 653.550  ms/op
+ * RNGBenchmark.measureLightInt     avgt    3  1211.301 ±  79.526  ms/op
+ * RNGBenchmark.measureLightIntR    avgt    3  1392.179 ± 552.502  ms/op
+ * RNGBenchmark.measureLightR       avgt    3  1207.975 ± 107.328  ms/op
+ * RNGBenchmark.measureThunder      avgt    3   848.403 ±  55.360  ms/op
+ * RNGBenchmark.measureThunderInt   avgt    3   920.933 ±  55.772  ms/op
+ * RNGBenchmark.measureThunderIntR  avgt    3  1074.927 ± 119.307  ms/op
+ * RNGBenchmark.measureThunderR     avgt    3   916.797 ±  58.557  ms/op
+ * RNGBenchmark.measureXoRo         avgt    3  1182.115 ± 146.899  ms/op
+ * RNGBenchmark.measureXoRoInt      avgt    3  1382.232 ±  68.132  ms/op
+ * RNGBenchmark.measureXoRoIntR     avgt    3  1458.964 ±  10.307  ms/op
+ * RNGBenchmark.measureXoRoR        avgt    3  1249.812 ± 450.441  ms/op
  */
 public class RNGBenchmark {
 

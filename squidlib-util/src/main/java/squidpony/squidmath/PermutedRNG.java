@@ -147,7 +147,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness
         return next;
     }
 
-    private static long permute(long p)
+    public static long permute(long p)
     {
         p ^= p >>> (5 + ((p >>> 59) & 31));
         p *= -5840758589994634535L;

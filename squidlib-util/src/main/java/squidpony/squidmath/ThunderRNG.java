@@ -21,7 +21,7 @@ import java.io.Serializable;
  * incremented by a large, empirically-chosen number that is even; because odd + even = odd, always, part B
  * never becomes even. Part A is always incremented by an irregular selection of the bits in Part B, but the
  * selection never causes the increment to be by an even number (this also means it never increments by 0).
- * This irregular increment seems to increase the period, but by how much is not clear.
+ * This irregular increment seems to increase ThunderRNG's period, but by how much is not clear.
  * <br>
  * The reason why nextInt() uses only the most significant half of the bits, even though it requires a shift in
  * addition to a cast, is because the period of the less significant bits is lower, though by how much isn't
@@ -31,21 +31,22 @@ import java.io.Serializable;
  * identical between frames (adding one additional call to next() made the random sections move predictably
  * along one axis, one pixel at a time, which indicates they would be the same values every frame if the extra
  * call was removed). The early version that had this likely flaw always took the lowest bits, here the lowest
- * two bits, in next(), but changing next() to use the same number of bits, but from higher in the random long,
+ * two bits, in next(), but changing next() to use the same number of bits from higher in the random long
  * eliminated this issue. Calls to nextLong() should still be expected to have a lower-than-normal period for
  * the low bits, with the bottom 2 bits likely having a period of 4096 or less. The period of the full 64
  * bits is unknown at this time, but is probably higher than 2 to the 64, and is almost certainly at least 2 to
- * the 63 (which is the probable period of Part B on its own, and because Part A changes by a subset of Part
- * B every time).
+ * the 63 (which is the probable period of Part B on its own, and because Part A changes every time by a
+ * random-seeming, non-zero subset of Part B where the LSB is always set, the final result can't have a lower
+ * period than Part B).
  * <br>
  * The tool used for testing this RNG is PractRand, http://pracrand.sourceforge.net/ > The binaries it provides
  * don't seem to work as intended on Windows, so I built from source, generated 64MB files of random 64-bit
  * output with various generators as "Thunder.dat", "Light.dat" and so on, then ran the executables I had
  * built with the MS compilers, with the command line {@code RNG_test.exe stdin64 < Thunder.dat} . For most of
- * the other generators I tried, there were no or nearly-no statistical failures it could find, and as of the
- * commit on August 30, ThunderRNG also has no statistical failures or even anomalies (earlier versions were
+ * the other generators I tried, there were no or nearly-no statistical failures it could find, and as of the (second)
+ * commit on August 31, ThunderRNG also has no statistical failures or even anomalies. Earlier versions were
  * slightly faster (at best speed, 600-700ms) but had multiple outright failures (the fastest ones failed the
- * majority of tests)).
+ * majority of tests).
  * <br>
  * Created by Tommy Ettinger on 8/23/2016.
  */
@@ -63,9 +64,7 @@ public class ThunderRNG implements RandomnessSource, Serializable {
 
     public ThunderRNG( final long seed ) {
         state = seed;
-        jumble = (seed ^ ((seed + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L;
-        jumble ^= (((seed + 0x9E3779B97F4A7C15L) ^ ((seed + 0x9E3779B97F4A7C15L + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L) >>> 32;
-        jumble |= 1L;
+        jumble = (seed + bitPermute(seed + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;
     }
     public ThunderRNG(final long partA, final long partB)
     {
@@ -73,6 +72,19 @@ public class ThunderRNG implements RandomnessSource, Serializable {
         jumble = partB | 1L;
     }
 
+    /**
+     * Not needed for external use, but it may be handy in code that needs to alter a long in some random-seeming way.
+     * Passing 0 to this yields 0. May actually change the number of set bits, so it isn't quite a permutation in the
+     * normal way of thinking about it.
+     * @param p a number that should have its bits permuted, as a long
+     * @return a permuted-bits version of p, as a long
+     */
+    public static long bitPermute(long p)
+    {
+        p ^= p >>> (5 + (p >>> 59));
+        p *= 0xAEF17502108EF2D9L;
+        return p ^ (p >>> 43);
+    }
 
     @Override
     public int next( int bits ) {
@@ -106,13 +118,13 @@ public class ThunderRNG implements RandomnessSource, Serializable {
         //return (state ^ ((state += jumble) >> 17)) * (jumble += 0x8D784F2D256B9906L);
         //return (state ^ ((state ^= jumble) >> 17)) * (jumble += 0xC6BC279692B5CC83L);
         //return (state ^ ((state += jumble) >> 17)) * (jumble += 0x8D784F2D256B9906L);
-        return state ^ 0xC6BC279692B5CC83L * ((state += jumble & (jumble += 0xBC6EF372FEB7FC6AL)) >> 15);
+        return state ^ 0xC6BC279692B5CC83L * ((state += jumble & (jumble += 0xBC6EF372FEB7FC6AL)) >> 16);
         //return state = state * 2862933555777941757L + 7046029254386353087L; // LCG for comparison
     }
 
     public int nextInt()
     {
-        return (int)(nextLong());
+        return (int)(nextLong() >>> 32);
     }
     /**
      * This returns a maximum of 0.9999999999999999 because that is the largest
@@ -156,13 +168,27 @@ public class ThunderRNG implements RandomnessSource, Serializable {
     public void setState(long partA, long partB) {
         state = partA;
         jumble = partB | 1L;
+    }
 
+    /**
+     * Replicates the behavior of the constructor that takes one long, and sets both parts of the state to what that
+     * constructor would assign given the same seed.
+     * @param seed any long
+     */
+    public void reseed( final long seed ) {
+        state = seed;
+        jumble = (seed + bitPermute(seed + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;
+        /*
+        jumble = (seed ^ ((seed + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L;
+        jumble ^= (((seed + 0x9E3779B97F4A7C15L) ^ ((seed + 0x9E3779B97F4A7C15L + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L) >>> 32;
+        jumble |= 1L;
+        */
     }
 
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
-     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
-     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
+     * copy the state so it isn't shared, usually, and produces a new value with the same exact state.
      *
      * @return a copy of this RandomnessSource
      */
