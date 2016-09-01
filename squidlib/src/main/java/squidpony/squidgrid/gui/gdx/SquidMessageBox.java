@@ -248,7 +248,7 @@ public class SquidMessageBox extends SquidPanel {
      * the boundaries of the clickable area until it knows its own position and bounds.
      *
      * @param x x position in pixels or other units that libGDX is set to use
-     * @param x y position in pixels or other units that libGDX is set to use
+     * @param y y position in pixels or other units that libGDX is set to use
      * @param width the width in pixels (usually) of the message box; changes on resize
      * @param height the height in pixels (usually) of the message box; changes on resize
      */

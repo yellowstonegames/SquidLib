@@ -475,7 +475,7 @@ public class TextCellFactory implements Disposable {
     /**
      * Returns the height of a single cell.
      *
-     * @return
+     * @return the height of a single cell
      */
     public int height() {
         return height;
@@ -707,8 +707,8 @@ public class TextCellFactory implements Disposable {
      * ISO Control characters, non-printing characters and invalid unicode
      * characters are all considered by definition to fit.
      *
-     * @param codepoint
-     * @return
+     * @param codepoint the codepoint of the char in question
+     * @return true if the char will fit, or if it is non-printing in some way; false otherwise
      */
     public boolean willFit(int codepoint) {
         if (!initialized) {

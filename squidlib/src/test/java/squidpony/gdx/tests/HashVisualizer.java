@@ -62,9 +62,9 @@ public class HashVisualizer extends ApplicationAdapter {
         filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
         colorFactory = new SquidColorCenter();
         sipA = new CrossHash.Sip();
-        stormA = new CrossHash.Storm();
-        stormB= new CrossHash.Storm(0xBEEFF00DCAFECABAL);
-        stormC = new CrossHash.Storm(16L);
+        stormA = CrossHash.Storm.alpha;
+        stormB = CrossHash.Storm.beta;
+        stormC = CrossHash.Storm.chi;
         fuzzy = new ThunderRNG(0xBEEFCAFEF00DCABAL, 0x1337BABECAFECABAL);
         view = new ScreenViewport();
         stage = new Stage(view, batch);

@@ -17,10 +17,10 @@ public class UIUtil {
 	 * @param renderer_
 	 *            The renderer to use. If {@code null} a new one will be
 	 *            allocated.
-	 * @param a
+	 * @param a the actor to draw around
 	 * @param margin
 	 *            The size of the margin to draw.
-	 * @param c
+	 * @param color
 	 *            The margins' colors.
 	 */
 	public static void drawMarginsAround(ShapeRenderer renderer_, Actor a, float margin, Color color,
@@ -182,7 +182,7 @@ public class UIUtil {
 	/**
 	 * Draws a rectangle using a {@link ShapeRenderer}.
 	 * 
-	 * @parem sRender_ The renderer to use. If {@code null} a new one will be
+	 * @param sRender_ The renderer to use. If {@code null} a new one will be
 	 *        allocated.
 	 * @param botLeftX
 	 *            The bottom left x of the rectangle.

@@ -1,13 +1,12 @@
 package squidpony.examples;
 
-import org.junit.Test;
 import squidpony.StringKit;
 
 /**
  * Created by Tommy Ettinger on 6/1/2016.
  */
 public class EncodingTest {
-    @Test
+    //@Test
     public void test2D()
     {
         CharSequence cs = StringKit.encode(new byte[][]{
@@ -23,7 +22,7 @@ public class EncodingTest {
             System.out.println();
         }
     }
-    @Test
+    //@Test
     public void test3D()
     {
         CharSequence cs = StringKit.encode(new byte[][][]{

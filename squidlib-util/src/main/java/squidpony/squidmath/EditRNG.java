@@ -610,8 +610,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
         EditRNG editRNG = (EditRNG) o;
 
         if (Double.compare(editRNG.expected, expected) != 0) return false;
-        if (Double.compare(editRNG.centrality, centrality) != 0) return false;
-        return Double.compare(editRNG.rawLatest, rawLatest) == 0;
+        return Double.compare(editRNG.centrality, centrality) == 0 && Double.compare(editRNG.rawLatest, rawLatest) == 0;
 
     }
 

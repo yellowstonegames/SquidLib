@@ -1,8 +1,5 @@
 package squidpony.squidgrid.gui.gdx;
 
-import java.util.LinkedList;
-import java.util.ListIterator;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,10 +11,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
-
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
+
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  * An actor capable of drawing {@link IColoredString}s. It is lines-oriented:
@@ -146,10 +145,11 @@ public class LinesPanel<T extends Color> extends Actor {
 	}
 
 	/**
-	 * @param font
-	 * @param height
+	 * Used to help find the last parameter to give the constructor of this class.
+	 * @param font the font being used
+	 * @param height the height of the area you want to put text into
 	 * @return The last argument to give to
-	 *         {@link #WrappingLinesPanel(IMarkup, BitmapFont, int)} when the
+	 *         {@link #LinesPanel(IMarkup, BitmapFont, int)} when the
 	 *         desired <b>pixel</b> height is {@code height}
 	 */
 	public static int computeMaxLines(BitmapFont font, float height) {

@@ -56,7 +56,7 @@ import java.io.Serializable;
  * @author Tommy Ettinger
  */
 public class CrossHash {
-    public static int hash(boolean[] data) {
+    public static int hash(final boolean[] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length - 1, o = 0;
@@ -71,7 +71,7 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(byte[] data) {
+    public static int hash(final byte[] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
@@ -82,7 +82,7 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(char[] data) {
+    public static int hash(final char[] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
@@ -95,7 +95,7 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(short[] data) {
+    public static int hash(final short[] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
@@ -108,7 +108,7 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(int[] data) {
+    public static int hash(final int[] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
@@ -125,7 +125,7 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(long[] data) {
+    public static int hash(final long[] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
@@ -150,7 +150,7 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(float[] data) {
+    public static int hash(final float[] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length, t;
@@ -168,7 +168,7 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(double[] data) {
+    public static int hash(final double[] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
@@ -195,13 +195,20 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(String s) {
-        if (s == null)
+    public static int hash(final CharSequence data) {
+        if (data == null)
             return 0;
-        return hash(s.toCharArray());
+        int h = -2128831035, len = data.length();
+        for (int i = 0; i < len; i++) {
+            h ^= data.charAt(i) & 0xff;
+            h *= 16777619;
+            h ^= data.charAt(i) >>> 8;
+            h *= 16777619;
+        }
+        return h;
     }
 
-    public static int hash(String[] data) {
+    public static int hash(final CharSequence[] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length, t;
@@ -219,7 +226,7 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(char[][] data) {
+    public static int hash(final char[][] data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length, t;
@@ -237,7 +244,7 @@ public class CrossHash {
         return h;
     }
 
-    public static int hash(String[]... data) {
+    public static int hash(final CharSequence[]... data) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length, t;
@@ -263,7 +270,7 @@ public class CrossHash {
      * @param end   the end of the section to hash (exclusive)
      * @return
      */
-    public static int hash(char[] data, int start, int end) {
+    public static int hash(final char[] data, int start, int end) {
         if (data == null)
             return 0;
         int h = -2128831035, len = data.length;
@@ -280,7 +287,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(boolean[] data) {
+    public static long hash64(final boolean[] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length - 1, o = 0;
@@ -295,7 +302,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(byte[] data) {
+    public static long hash64(final byte[] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
@@ -306,7 +313,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(char[] data) {
+    public static long hash64(final char[] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
@@ -319,7 +326,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(short[] data) {
+    public static long hash64(final short[] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
@@ -332,7 +339,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(int[] data) {
+    public static long hash64(final int[] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
@@ -349,7 +356,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(long[] data) {
+    public static long hash64(final long[] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
@@ -374,7 +381,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(float[] data) {
+    public static long hash64(final float[] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
@@ -392,7 +399,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(double[] data) {
+    public static long hash64(final double[] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
@@ -418,13 +425,20 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(String s) {
-        if (s == null)
+    public static long hash64(final CharSequence data) {
+        if (data == null)
             return 0;
-        return hash64(s.toCharArray());
+        long h = -3750763034362895579L, len = data.length();
+        for (int i = 0; i < len; i++) {
+            h ^= data.charAt(i) & 0xff;
+            h *= 1099511628211L;
+            h ^= data.charAt(i) >>> 8;
+            h *= 1099511628211L;
+        }
+        return h;
     }
 
-    public static long hash64(String[] data) {
+    public static long hash64(final CharSequence[] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
@@ -450,7 +464,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(char[][] data) {
+    public static long hash64(final char[][] data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
@@ -476,7 +490,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(Iterable<String> data) {
+    public static long hash64(final Iterable<String> data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, t;
@@ -502,7 +516,7 @@ public class CrossHash {
         return h;
     }
 
-    public static long hash64(String[]... data) {
+    public static long hash64(final CharSequence[]... data) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length, t;
@@ -536,7 +550,7 @@ public class CrossHash {
      * @param end   the end of the section to hash (exclusive)
      * @return
      */
-    public static long hash64(char[] data, int start, int end) {
+    public static long hash64(final char[] data, int start, int end) {
         if (data == null)
             return 0;
         long h = -3750763034362895579L, len = data.length;
@@ -554,14 +568,14 @@ public class CrossHash {
     }
 
     public interface IHasher extends Serializable {
-        int hash(Object data);
+        int hash(final Object data);
     }
 
     private static class BooleanHasher implements IHasher {
         protected BooleanHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return (data instanceof boolean[]) ? CrossHash.hash((boolean[]) data) : data.hashCode();
         }
     }
@@ -572,7 +586,7 @@ public class CrossHash {
         protected ByteHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return (data instanceof byte[]) ? CrossHash.hash((byte[]) data) : data.hashCode();
         }
     }
@@ -583,7 +597,7 @@ public class CrossHash {
         protected ShortHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return (data instanceof short[]) ? CrossHash.hash((short[]) data) : data.hashCode();
         }
     }
@@ -594,7 +608,7 @@ public class CrossHash {
         protected CharHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return (data instanceof char[]) ? CrossHash.hash((char[]) data) : data.hashCode();
         }
     }
@@ -605,7 +619,7 @@ public class CrossHash {
         protected IntHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return (data instanceof int[]) ? CrossHash.hash((int[]) data) : data.hashCode();
         }
     }
@@ -616,7 +630,7 @@ public class CrossHash {
         protected LongHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return (data instanceof long[]) ? CrossHash.hash((long[]) data) : data.hashCode();
         }
     }
@@ -627,7 +641,7 @@ public class CrossHash {
         protected FloatHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return (data instanceof float[]) ? CrossHash.hash((float[]) data) : data.hashCode();
         }
     }
@@ -638,7 +652,7 @@ public class CrossHash {
         protected DoubleHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return (data instanceof double[]) ? CrossHash.hash((double[]) data) : data.hashCode();
         }
     }
@@ -649,7 +663,7 @@ public class CrossHash {
         protected Char2DHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return (data instanceof char[][]) ? CrossHash.hash((char[][]) data) : data.hashCode();
         }
     }
@@ -660,8 +674,8 @@ public class CrossHash {
         protected StringHasher() {
         }
 
-        public int hash(Object data) {
-            return (data instanceof String) ? CrossHash.hash((String) data) : data.hashCode();
+        public int hash(final Object data) {
+            return (data instanceof CharSequence) ? CrossHash.hash((CharSequence) data) : data.hashCode();
         }
     }
 
@@ -671,8 +685,8 @@ public class CrossHash {
         protected StringArrayHasher() {
         }
 
-        public int hash(Object data) {
-            return (data instanceof String[]) ? CrossHash.hash((String[]) data) : data.hashCode();
+        public int hash(final Object data) {
+            return (data instanceof CharSequence[]) ? CrossHash.hash((CharSequence[]) data) : data.hashCode();
         }
     }
 
@@ -682,7 +696,7 @@ public class CrossHash {
         protected DefaultHasher() {
         }
 
-        public int hash(Object data) {
+        public int hash(final Object data) {
             return data.hashCode();
         }
     }
@@ -741,7 +755,7 @@ public class CrossHash {
          * Code taken from https://github.com/nahi/siphash-java-inline with some minor tweaks.
          */
 
-        public long hash64(boolean[] data) {
+        public long hash64(final boolean[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -912,7 +926,7 @@ public class CrossHash {
             return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public long hash64(byte[] data) {
+        public long hash64(final byte[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -1087,7 +1101,7 @@ public class CrossHash {
             return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public long hash64(short[] data) {
+        public long hash64(final short[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -1262,7 +1276,7 @@ public class CrossHash {
             return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public long hash64(char[] data) {
+        public long hash64(final char[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -1437,7 +1451,7 @@ public class CrossHash {
             return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public long hash64(int[] data) {
+        public long hash64(final int[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -1612,7 +1626,7 @@ public class CrossHash {
             return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public long hash64(long[] data) {
+        public long hash64(final long[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -1774,7 +1788,7 @@ public class CrossHash {
             return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public long hash64(float[] data) {
+        public long hash64(final float[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -1949,7 +1963,7 @@ public class CrossHash {
             return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public long hash64(double[] data) {
+        public long hash64(final double[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -2111,13 +2125,184 @@ public class CrossHash {
             return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public long hash64(String data) {
+
+        public long hash64(final CharSequence data) {
             if (data == null)
                 return 0;
-            return hash64(data.toCharArray());
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length() >> 2) << 2,
+                    i = 0;
+            // processing 4 "shorts" blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 "shorts"
+                m = data.charAt(i++) & 0xffffL
+                        //| (data[i++] & 0xffL) << 8
+                        | (data.charAt(i++) & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data.charAt(i++) & 0xffffL) << 32
+                        //| (data[i++] & 0xffL) << 40
+                        | (data.charAt(i++) & 0xffffL) << 48;
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51;
+                v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32;
+                v2 += v1;
+                v0 += v3;
+                v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43;
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = (v2 << 32) | v2 >>> 32;
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51;
+                v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32;
+                v2 += v1;
+                v0 += v3;
+                v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43;
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = (v2 << 32) | v2 >>> 32;
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length() - 1; i >= last; --i) {
+                m <<= 16;
+                m |= (data.charAt(i) & 0xffffL);
+            }
+            m |= (long) data.length() << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public long hash64(char[] data, int start, int end) {
+
+        public long hash64(final char[] data, int start, int end) {
             if (data == null || start >= end || end > data.length)
                 return 0;
             long k0 = this.k0,
@@ -2292,7 +2477,7 @@ public class CrossHash {
             return v0 ^ v1 ^ v2 ^ v3;
         }
 
-        public int hash(boolean[] data) {
+        public int hash(final boolean[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -2463,7 +2648,7 @@ public class CrossHash {
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
 
-        public int hash(byte[] data) {
+        public int hash(final byte[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -2638,7 +2823,7 @@ public class CrossHash {
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
 
-        public int hash(short[] data) {
+        public int hash(final short[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -2813,7 +2998,7 @@ public class CrossHash {
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
 
-        public int hash(char[] data) {
+        public int hash(final char[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -2988,7 +3173,7 @@ public class CrossHash {
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
 
-        public int hash(int[] data) {
+        public int hash(final int[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -3163,7 +3348,7 @@ public class CrossHash {
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
 
-        public int hash(long[] data) {
+        public int hash(final long[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -3325,7 +3510,7 @@ public class CrossHash {
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
 
-        public int hash(float[] data) {
+        public int hash(final float[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -3500,7 +3685,7 @@ public class CrossHash {
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
 
-        public int hash(double[] data) {
+        public int hash(final double[] data) {
             if (data == null)
                 return 0;
             long k0 = this.k0,
@@ -3662,13 +3847,183 @@ public class CrossHash {
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
 
-        public int hash(String data) {
+
+        public int hash(final CharSequence data) {
             if (data == null)
                 return 0;
-            return hash(data.toCharArray());
+            long k0 = this.k0,
+                    k1 = this.k1,
+                    v0 = 0x736f6d6570736575L ^ k0,
+                    v1 = 0x646f72616e646f6dL ^ k1,
+                    v2 = 0x6c7967656e657261L ^ k0,
+                    v3 = 0x7465646279746573L ^ k1,
+                    m;
+            int last = (data.length() >> 2) << 2,
+                    i = 0;
+            // processing 4 "shorts" blocks in data
+            while (i < last) {
+                // pack a block to long, as LE 4 "shorts"
+                m = data.charAt(i++) & 0xffffL
+                        //| (data[i++] & 0xffL) << 8
+                        | (data.charAt(i++) & 0xffffL) << 16
+                        //| (data[i++] & 0xffL) << 24
+                        | (data.charAt(i++) & 0xffffL) << 32
+                        //| (data[i++] & 0xffL) << 40
+                        | (data.charAt(i++) & 0xffffL) << 48;
+                //| (data[i++] & 0xffL) << 56;
+                // MSGROUND {
+                v3 ^= m;
+
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51;
+                v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32;
+                v2 += v1;
+                v0 += v3;
+                v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43;
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = (v2 << 32) | v2 >>> 32;
+                // }
+                // SIPROUND {
+                v0 += v1;
+                v2 += v3;
+                v1 = (v1 << 13) | v1 >>> 51;
+                v3 = (v3 << 16) | v3 >>> 48;
+                v1 ^= v0;
+                v3 ^= v2;
+                v0 = (v0 << 32) | v0 >>> 32;
+                v2 += v1;
+                v0 += v3;
+                v1 = (v1 << 17) | v1 >>> 47;
+                v3 = (v3 << 21) | v3 >>> 43;
+                v1 ^= v2;
+                v3 ^= v0;
+                v2 = (v2 << 32) | v2 >>> 32;
+                // }
+                v0 ^= m;
+                // }
+            }
+
+            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
+            m = 0;
+            for (i = data.length() - 1; i >= last; --i) {
+                m <<= 16;
+                m |= (data.charAt(i) & 0xffffL);
+            }
+            m |= (long) data.length() << 56;
+            // MSGROUND {
+            v3 ^= m;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            v0 ^= m;
+            // }
+
+            // finishing...
+            v2 ^= 0xff;
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            // SIPROUND {
+            v0 += v1;
+            v2 += v3;
+            v1 = (v1 << 13) | v1 >>> 51;
+            v3 = (v3 << 16) | v3 >>> 48;
+            v1 ^= v0;
+            v3 ^= v2;
+            v0 = (v0 << 32) | v0 >>> 32;
+            v2 += v1;
+            v0 += v3;
+            v1 = (v1 << 17) | v1 >>> 47;
+            v3 = (v3 << 21) | v3 >>> 43;
+            v1 ^= v2;
+            v3 ^= v0;
+            v2 = (v2 << 32) | v2 >>> 32;
+            // }
+            return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
 
-        public int hash(char[] data, int start, int end) {
+        public int hash(final char[] data, int start, int end) {
             if (data == null || start >= end || end > data.length)
                 return 0;
             long k0 = this.k0,
@@ -3842,368 +4197,7 @@ public class CrossHash {
             // }
             return (int) (v0 ^ v1 ^ v2 ^ v3);
         }
-
-        /*
-        public static void main(String[] args)
-        {
-            boolean[] bools = new boolean[129];
-            Arrays.fill(bools, true);
-            byte[] bytes = new byte[17];
-            Arrays.fill(bytes, (byte)-1);
-            bytes[16] = 1;
-            short[] shorts = new short[9];
-            Arrays.fill(shorts, (short)-1);
-            shorts[8] = 1;
-            int[] ints = new int[5];
-            Arrays.fill(ints, -1);
-            ints[4] = 1;
-            long[] longs = new long[3];
-            Arrays.fill(longs, -1L);
-            ints[2] = 1;
-            Sip a = new Sip(), b = new Sip(0xBEEFCAFE), c = new Sip(0xBEEFCAFE, 0xD0D0FEED);
-            System.out.println("bools   : " + StringKit.hex(a.hash64(bools)) + " " +
-                    StringKit.hex(b.hash64(bools)) + " " + StringKit.hex(c.hash64(bools)));
-            System.out.println("shorts  : " + StringKit.hex(a.hash64(shorts)) + " " +
-                    StringKit.hex(b.hash64(shorts)) + " " + StringKit.hex(c.hash64(shorts)));
-            System.out.println("ints    : " + StringKit.hex(a.hash64(ints)) + " " +
-                    StringKit.hex(b.hash64(ints)) + " " + StringKit.hex(c.hash64(ints)));
-            System.out.println("longs   : " + StringKit.hex(a.hash64(longs)) + " " +
-                    StringKit.hex(b.hash64(longs)) + " " + StringKit.hex(c.hash64(longs)));
-        }
-        */
     }
-/*
-    public static class Lightning implements Serializable {
-        private static final long serialVersionUID = 0L;
-        public static long hash64(boolean[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( (data[i] ? 127 : 0) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(byte[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(short[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(char[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(int[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(long[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(float[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(double[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-
-        public static long hash64(char[] data, int start, int end)
-        {
-            if (data == null || start >= end)
-                return 0;
-
-            long z, result = 1;
-            for (int i = start; i < end && i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(String data)
-        {
-            return hash64(data.toCharArray());
-        }
-
-        public static long hash64(char[][] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(String[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-        public static long hash64(String[]... data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return result;
-        }
-
-        public static int hash(boolean[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( (data[i] ? 127 : 0) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(byte[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(short[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(char[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(int[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(long[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(float[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(double[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-
-        public static int hash(char[] data, int start, int end)
-        {
-            if (data == null || start >= end)
-                return 0;
-
-            long z, result = 1;
-            for (int i = start; i < end && i < data.length; i++) {
-                z = ( data[i] + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(String data)
-        {
-            return hash(data.toCharArray());
-        }
-
-        public static int hash(char[][] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(String[] data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-        public static int hash(String[]... data)
-        {
-            if(data == null)
-                return 0;
-            long z, result = 1;
-            for (int i = 0; i < data.length; i++) {
-                z = ( hash64(data[i]) + 0x9E3779B97F4A7C15L );
-                z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-                z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-                result ^= z ^ (z >>> 31);
-            }
-            return (int)(result ^ (result >>> 32));
-        }
-    }
-    */
 
     /**
      * A quick, simple hashing function that seems to have good results. Like LightRNG, it stores a state that
@@ -4294,7 +4288,7 @@ public class CrossHash {
     @SuppressWarnings("NumericOverflow")
     public static class Lightning {
 
-        public static long hash64(boolean[] data) {
+        public static long hash64(final boolean[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4304,7 +4298,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(byte[] data) {
+        public static long hash64(final byte[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4314,7 +4308,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(short[] data) {
+        public static long hash64(final short[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4324,7 +4318,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(char[] data) {
+        public static long hash64(final char[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4334,7 +4328,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(int[] data) {
+        public static long hash64(final int[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4344,7 +4338,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(long[] data) {
+        public static long hash64(final long[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4354,7 +4348,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(float[] data) {
+        public static long hash64(final float[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4364,7 +4358,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(double[] data) {
+        public static long hash64(final double[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4374,7 +4368,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(char[] data, int start, int end) {
+        public static long hash64(final char[] data, int start, int end) {
             if (data == null || start >= end)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4384,7 +4378,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(CharSequence data) {
+        public static long hash64(final CharSequence data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4394,7 +4388,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
         }
 
-        public static long hash64(char[][] data) {
+        public static long hash64(final char[][] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4404,7 +4398,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(String[] data) {
+        public static long hash64(final CharSequence[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4414,7 +4408,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(Iterable<String> data) {
+        public static long hash64(final Iterable<String> data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4424,7 +4418,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static long hash64(String[]... data) {
+        public static long hash64(final CharSequence[]... data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4434,7 +4428,7 @@ public class CrossHash {
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
 
-        public static int hash(boolean[] data) {
+        public static int hash(final boolean[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4444,7 +4438,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(byte[] data) {
+        public static int hash(final byte[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4454,7 +4448,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(short[] data) {
+        public static int hash(final short[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4464,7 +4458,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(char[] data) {
+        public static int hash(final char[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4474,7 +4468,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(int[] data) {
+        public static int hash(final int[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4485,7 +4479,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(long[] data) {
+        public static int hash(final long[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4495,7 +4489,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(float[] data) {
+        public static int hash(final float[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4505,7 +4499,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(double[] data) {
+        public static int hash(final double[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4515,7 +4509,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(char[] data, int start, int end) {
+        public static int hash(final char[] data, int start, int end) {
             if (data == null || start >= end)
                 return 0;
 
@@ -4526,7 +4520,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(CharSequence data) {
+        public static int hash(final CharSequence data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4536,7 +4530,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(char[][] data) {
+        public static int hash(final char[][] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4546,7 +4540,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(String[] data) {
+        public static int hash(final CharSequence[] data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4556,7 +4550,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(Iterable<String> data) {
+        public static int hash(final Iterable<String> data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4566,7 +4560,7 @@ public class CrossHash {
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
 
-        public static int hash(String[]... data) {
+        public static int hash(final CharSequence[]... data) {
             if (data == null)
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
@@ -4582,6 +4576,13 @@ public class CrossHash {
      * <br>
      * The salt field is not serialized, so it is important that the same salt will be given by the
      * program when the same hash results are wanted for some inputs.
+     * <br>
+     * A group of 24 static, final, pre-initialized Storm members are present in this class, each with the
+     * name of a letter in the Greek alphabet (this uses the convention on Wikipedia,
+     * https://en.wikipedia.org/wiki/Greek_alphabet#Letters , where lambda is spelled with a 'b'). The whole
+     * group of 24 pre-initialized members are also present in a static array called {@code predefined}.
+     * These can be useful when, for example, you want to get multiple hashes of a single array or String
+     * as part of cuckoo hashing or similar techniques that need multiple hashes for the same inputs.
      */
     public static class Storm implements Serializable
     {
@@ -4593,7 +4594,12 @@ public class CrossHash {
         {
             this(0L);
         }
-        public Storm(long alteration)
+
+        public Storm(final CharSequence alteration)
+        {
+            this(Lightning.hash64(alteration));
+        }
+        public Storm(final long alteration)
         {
             $alt = (alteration + 0x9E3779B97F4A7C15L);
             $alt = ($alt ^ ($alt >>> 30)) * 0xBF58476D1CE4E5B9L;
@@ -4602,290 +4608,298 @@ public class CrossHash {
             $alt += (191 - Long.bitCount($alt));
         }
 
-        public long hash64(boolean[] data) {
+        public static final Storm alpha = new Storm("alpha"), beta = new Storm("beta"), gamma = new Storm("gamma"),
+                delta = new Storm("delta"), epsilon = new Storm("epsilon"), zeta = new Storm("zeta"),
+                eta = new Storm("eta"), theta = new Storm("theta"), iota = new Storm("iota"),
+                kappa = new Storm("kappa"), lambda = new Storm("lambda"), mu = new Storm("mu"),
+                nu = new Storm("nu"), xi = new Storm("xi"), omicron = new Storm("omicron"), pi = new Storm("pi"),
+                rho = new Storm("rho"), sigma = new Storm("sigma"), tau = new Storm("tau"),
+                upsilon = new Storm("upsilon"), phi = new Storm("phi"), chi = new Storm("chi"), psi = new Storm("psi"),
+                omega = new Storm("omega");
+        public static final Storm[] predefined = new Storm[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,
+                kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega};
+        public long hash64(final boolean[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(byte[] data) {
+        public long hash64(final byte[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(short[] data) {
+        public long hash64(final short[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(char[] data) {
+        public long hash64(final char[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(int[] data) {
+        public long hash64(final int[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(long[] data) {
+        public long hash64(final long[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(float[] data) {
+        public long hash64(final float[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(double[] data) {
+        public long hash64(final double[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(char[] data, int start, int end) {
+        public long hash64(final char[] data, int start, int end) {
             if (data == null || start >= end)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = start; i < end && i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = start; i < end && i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(CharSequence data) {
+        public long hash64(final CharSequence data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length(); i++) {
-                result ^= (~(result * spice) * bacon + (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length();
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
         }
 
-        public long hash64(char[][] data) {
+        public long hash64(final char[][] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(String[] data) {
+        public long hash64(final CharSequence[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(Iterable<String> data) {
+        public long hash64(final Iterable<String> data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L;
             for (String datum : data) {
-                result ^= (~(result * spice) * bacon + (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public long hash64(String[]... data) {
+        public long hash64(final CharSequence[]... data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon;
+            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
 
-        public int hash(boolean[] data) {
+        public int hash(final boolean[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(byte[] data) {
+        public int hash(final byte[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(short[] data) {
+        public int hash(final short[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(char[] data) {
+        public int hash(final char[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(int[] data) {
+        public int hash(final int[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
 
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(long[] data) {
+        public int hash(final long[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(float[] data) {
+        public int hash(final float[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(double[] data) {
+        public int hash(final double[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(char[] data, int start, int end) {
+        public int hash(final char[] data, int start, int end) {
             if (data == null || start >= end)
                 return 0;
 
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = start; i < end && i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = start; i < end && i < len; i++) {
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(CharSequence data) {
+        public int hash(final CharSequence data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length(); i++) {
-                result ^= (~(result * spice) * bacon + (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length();
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(char[][] data) {
+        public int hash(final char[][] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(String[] data) {
+        public int hash(final CharSequence[] data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(Iterable<String> data) {
+        public int hash(final Iterable<String> data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L;
             for (String datum : data) {
-                result ^= (~(result * spice) * bacon + (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
-        public int hash(String[]... data) {
+        public int hash(final CharSequence[]... data) {
             if (data == null)
                 return 0;
-            long bacon = $alt, z = Long.rotateLeft(0x9E3779B97F4A7C15L, (int)(bacon & 63)), result = 0xA5A5A5A5A5A5A5A5L, spice = bacon << 1;
-            for (int i = 0; i < data.length; i++) {
-                result ^= (~(result * spice) * bacon + (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL));
+            long z = 0x632BE59BD9B4E019L, chips = $alt, result = 1L, len = data.length;
+            for (int i = 0; i < len; i++) {
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
-            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58)) + bacon) ^ (result >>> 32));
+            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ chips ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
 
     }
-
-
 }
 
