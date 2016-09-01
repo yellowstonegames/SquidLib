@@ -23,6 +23,13 @@ public class ColoredStringList<T> extends ArrayList<IColoredString<T>> {
 	}
 
 	/**
+	 * @return A fresh empty instance.
+	 */
+	public static <T> ColoredStringList<T> create() {
+		return new ColoredStringList<T>();
+	}
+
+	/**
 	 * Appends {@code text} to {@code this}, without specifying its color.
 	 * 
 	 * @param text
