@@ -566,8 +566,7 @@ public class DharmaRNG extends RNG implements Serializable{
         DharmaRNG dharmaRNG = (DharmaRNG) o;
 
         if (Double.compare(dharmaRNG.fairness, fairness) != 0) return false;
-        if (Double.compare(dharmaRNG.produced, produced) != 0) return false;
-        return Double.compare(dharmaRNG.baseline, baseline) == 0;
+        return Double.compare(dharmaRNG.produced, produced) == 0 && Double.compare(dharmaRNG.baseline, baseline) == 0;
 
     }
 

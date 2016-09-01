@@ -39,7 +39,7 @@ public class HashQualityTest {
     public static void main(String[] args)
     {
         CrossHash.Sip sip = new CrossHash.Sip(0x9E3779B97F4A7C15L, 0xBF58476D1CE4E5B9L);
-        CrossHash.Storm storm = new CrossHash.Storm(0x9E3779B97F4A7C15L);
+        CrossHash.Storm storm = CrossHash.Storm.chi;
         byte[][] bytes = {
                 null,
                 {},

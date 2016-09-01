@@ -366,7 +366,7 @@ public class SquidInput extends InputAdapter {
      *
      * @param keycode a keycode as passed by LibGDX
      * @param shift true if Shift key is being held.
-     * @return
+     * @return a char appropriate to the given keycode; often uses shift to capitalize or change a char, but not for keys like the arrow keys that normally don't produce chars
      */
     public char fromCode(int keycode, boolean shift)
     {

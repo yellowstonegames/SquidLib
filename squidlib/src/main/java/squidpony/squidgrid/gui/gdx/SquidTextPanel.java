@@ -1,16 +1,15 @@
 package squidpony.squidgrid.gui.gdx;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-
 import squidpony.SquidTags;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ICombinedPanel;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A panel to display some text. It can either compute its size on its own or
@@ -25,10 +24,10 @@ import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
  * <p>
  * This class is deprecated. You should likely use {@link TextPanel} instead,
  * because it directly relies on libgdx for rendering and hence has a more
- * "serif" display, which is appropriate for text. Moreover {@link TextPanel}
- * uses more recent stuff (such as {@link GDXMarkup}), supports scrolling, and
- * is more memory efficient (no backing {@link SquidPanel} -> save on allocated
- * arrays).
+ * "flowing" display, where variable-width fonts can be used, and that is
+ * more appropriate for text. Moreover {@link TextPanel} uses more recent stuff
+ * (such as {@link GDXMarkup}), supports scrolling, and is more memory efficient
+ * (no backing {@link SquidPanel} -> save on allocated arrays).
  * </p>
  * 
  * @author smelC
