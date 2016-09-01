@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -1133,10 +1134,74 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 	}
 
     /**
+     * Slides {@code name} from {@code (x,y)} to {@code (newx, newy)}. If
+     * {@code name} or {@code
+     * color} is {@code null}, it is picked from this panel (hereby removing the
+     * current name, if any).
+     *
+     * @param x
+     *            Where to start the slide, horizontally.
+     * @param y
+     *            Where to start the slide, vertically.
+     * @param name
+     *            The name to slide, or {@code null} to pick it from this
+     *            panel's {@code (x,y)} cell.
+     * @param color
+     *            The color to use, or {@code null} to pick it from this panel's
+     *            {@code (x,y)} cell.
+     * @param newX
+     *            Where to end the slide, horizontally.
+     * @param newY
+     *            Where to end the slide, vertically.
+     * @param duration
+     *            The animation's duration.
+     * @param postRunnable0 a Runnable to execute first after the slide completes.
+     * @param postRunnables
+     * 			  Runnables to execute after the slide (and postRunnable0). Should not
+     * 			  contain null members. Use this to do something after the slide's animation ends.
+     */
+    public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, int newX,
+                      int newY, float duration, Runnable postRunnable0, Runnable... postRunnables) {
+        final Actor a = createActor(x, y, name == null ? contents[x][y] : name,
+                color == null ? colors[x][y] : color, false);
+        if (a == null)
+            return;
+
+        duration = clampDuration(duration);
+        animationCount++;
+
+        final int nbActions = 2 + (postRunnables == null ? 0 : postRunnables.length) + (postRunnable0 == null ? 0 : 1);
+
+        int index = 0;
+        final Action[] sequence = new Action[nbActions];
+        final float nextX = adjustX(newX, false);
+        final float nextY = adjustY(newY);
+        sequence[index++] = Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration);
+        if(postRunnable0 != null)
+        {
+            sequence[index++] = Actions.run(postRunnable0);
+        }
+        if (postRunnables != null) {
+            for (int i = 0; i < postRunnables.length; i++)
+                sequence[index++] = Actions.run(postRunnables[i]);
+        }
+		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                recallActor(a, name == null);
+            }
+        }));
+
+        a.addAction(Actions.sequence(sequence));
+    }
+
+
+    /**
      * Starts a movement animation for the object at the given grid location at the default speed.
      *
-     * @param start
-     * @param end
+     * @param start Coord to pick up a tile from and slide
+     * @param end Coord to end the slide on
      */
     public void slide(Coord start, Coord end) {
         slide(start.x, start.y, end.x, end.y, DEFAULT_ANIMATION_DURATION);
@@ -1146,8 +1211,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * Starts a movement animation for the object at the given grid location at the default speed for one grid square in
      * the direction provided.
      *
-     * @param start
-     * @param direction
+     * @param start Coord to pick up a tile from and slide
+     * @param direction Direction enum that indicates which way the slide should go
      */
     public void slide(Coord start, Direction direction) {
         slide(start.x, start.y, start.x + direction.deltaX, start.y + direction.deltaY, DEFAULT_ANIMATION_DURATION);
@@ -1251,8 +1316,8 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * Starts a tint animation for {@code ae} for the given {@code duration} in seconds.
      *
      * @param ae an AnimatedEntity returned by animateActor()
-     * @param color
-     * @param duration
+     * @param color what to transition ae's color towards, and then transition back from
+     * @param duration how long the total "round-trip" transition should take in milliseconds
      */
     public void tint(final AnimatedEntity ae, Color color, float duration) {
         final Actor a = ae.actor;
@@ -1276,7 +1341,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     /**
 	 * Like {@link #tint(int, int, Color, float)}, but waits for {@code delay}
 	 * (in seconds) before performing it.
-	 */
+     * @param delay how long to wait in milliseconds before starting the effect
+     * @param x the x-coordinate of the cell to tint
+     * @param y the y-coordinate of the cell to tint
+     * @param color what to transition ae's color towards, and then transition back from
+     * @param duration how long the total "round-trip" transition should take in milliseconds
+     */
     public void tint(float delay, int x, int y, Color color, float duration) {
         final Actor a = cellToActor(x, y);
         if(a == null)
@@ -1323,9 +1393,62 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
     /**
+     * Like {@link #tint(int, int, Color, float)}, but waits for {@code delay}
+     * (in seconds) before performing it. Additionally, enqueue {@code postRunnable0}
+     * followed by {@code postRunnables} for running after the created action ends.
+     * @param delay how long to wait in milliseconds before starting the effect
+     * @param x the x-coordinate of the cell to tint
+     * @param y the y-coordinate of the cell to tint
+     * @param color what to transition ae's color towards, and then transition back from
+     * @param duration how long the total "round-trip" transition should take in milliseconds
+     * @param postRunnable0 the first Runnable to execute after the tint; should not be null
+     * @param postRunnables
+     * 			  additional Runnables to execute after the tint. Should not contain null members.
+     */
+
+    public void tint(float delay, int x, int y, Color color, float duration, Runnable postRunnable0, Runnable... postRunnables) {
+        final Actor a = cellToActor(x, y);
+        if(a == null)
+            return;
+        duration = clampDuration(duration);
+        animationCount++;
+
+        Color ac = scc.filter(a.getColor());
+
+        final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnables == null ? 0 : postRunnables.length) + (postRunnable0 == null ? 0 : 1);
+        final Action[] sequence = new Action[nbActions];
+        int index = 0;
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
+        sequence[index++] = Actions.color(color, duration * 0.3f);
+        sequence[index++] = Actions.color(ac, duration * 0.7f);
+        if(postRunnable0 != null)
+        {
+            sequence[index++] = Actions.run(postRunnable0);
+        }
+        if (postRunnables != null) {
+            for (int i = 0; i < postRunnables.length; i++)
+                sequence[index++] = Actions.run(postRunnables[i]);
+        }
+		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                recallActor(a, true);
+            }
+        });
+
+        a.addAction(Actions.sequence(sequence));
+    }
+
+    /**
 	 * Starts a tint animation for the object at {@code (x,y)} for the given
 	 * {@code duration} (in seconds).
-	 */
+     * @param x the x-coordinate of the cell to tint
+     * @param y the y-coordinate of the cell to tint
+     * @param color
+     * @param duration
+     */
     public final void tint(int x, int y, Color color, float duration) {
     	tint(0f, x, y, color, duration);
     }
@@ -1335,9 +1458,9 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 	 * {@link #tint(int, int, Color, float)}, this action does not restore the
 	 * cell's color at the end of its execution. This is for example useful to
 	 * fade the game screen when the rogue dies.
-	 * 
-	 * @param x
-	 * @param y
+	 *
+     * @param x the x-coordinate of the cell to tint
+     * @param y the y-coordinate of the cell to tint
 	 * @param color
 	 *            The color at the end of the fadeout.
 	 * @param duration
