@@ -64,6 +64,17 @@ import java.util.concurrent.TimeUnit;
  * HashBenchmark.measureLightningInt  avgt    3   18.505 ±  0.817  ms/op
  * HashBenchmark.measureSip           avgt    3   77.700 ±  6.883  ms/op
  * HashBenchmark.measureSipInt        avgt    3   77.576 ±  2.672  ms/op
+ *
+ * Benchmark                          Mode  Cnt    Score    Error  Units
+ * HashBenchmark.measureFNV           avgt    3  137.748 ± 31.812  ms/op
+ * HashBenchmark.measureFNVInt        avgt    3  150.993 ± 19.462  ms/op
+ * HashBenchmark.measureJVMInt        avgt    3   15.003 ±  2.244  ms/op
+ * HashBenchmark.measureLightning     avgt    3   19.766 ±  3.597  ms/op
+ * HashBenchmark.measureLightningInt  avgt    3   19.550 ±  7.034  ms/op
+ * HashBenchmark.measureSip           avgt    3   78.889 ± 21.236  ms/op
+ * HashBenchmark.measureSipInt        avgt    3   77.797 ±  5.196  ms/op
+ * HashBenchmark.measureStorm         avgt    3   24.542 ±  2.893  ms/op
+ * HashBenchmark.measureStormInt      avgt    3   25.070 ±  3.274  ms/op
  */
 public class HashBenchmark {
 

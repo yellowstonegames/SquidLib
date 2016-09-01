@@ -328,7 +328,7 @@ public enum Direction {
 	}
 
 
-    Direction(int x, int y) {
+    private Direction(int x, int y) {
         deltaX = x;
         deltaY = y;
     }

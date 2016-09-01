@@ -1048,6 +1048,7 @@ public class TextCellFactory implements Disposable {
                 lb = new Label(swap.get(s), style);
             else
                 lb = new Label(s, style);
+            //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             lb.setColor(scc.filter(color));
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);

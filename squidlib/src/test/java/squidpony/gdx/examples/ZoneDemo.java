@@ -44,19 +44,22 @@ public class ZoneDemo extends ApplicationAdapter {
     private Stage stage;
     private SquidColorCenter colorCenter;
     private TextPanel<Color> current;
+    private int INTERNAL_ZOOM = 1;
     @Override
     public void create () {
         batch = new SpriteBatch();
         width = 80;
         height = 50;
-        cellWidth = 16;
-        cellHeight = 16;
+
+        cellWidth = 16 * INTERNAL_ZOOM;
+        cellHeight = 16 * INTERNAL_ZOOM;
         TextCellFactory tcf = DefaultResources.getStretchableFont().addSwap('.', ' ');
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
+        //tcf.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f));
         screenWidth = width * cellWidth;
         screenHeight = height * cellHeight;
         display.setAnimationDuration(0.2f);
-        display.setTextSize(cellWidth, cellHeight + 1);
+        display.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM);
         stage = new Stage(new StretchViewport(screenWidth, screenHeight), batch);
 
         rng = new RNG(0xBABABADAL);
@@ -250,8 +253,7 @@ public class ZoneDemo extends ApplicationAdapter {
                 //new TextCellFactory().fontDistanceField("Gentium-distance.fnt", "Gentium-distance.png")
                 //new TextCellFactory().fontDistanceField("Noto-Sans-distance.fnt", "Noto-Sans-distance.png")
                 //        .setSmoothingMultiplier(0.4f).height(30).width(7)
-                DefaultResources.getStretchablePrintFont()
-        );
+                DefaultResources.getStretchablePrintFont().width(7 * INTERNAL_ZOOM).height(30 * INTERNAL_ZOOM));
         current.backgroundColor = colorCenter.get(30, 30, 30);
         final ColoredStringList<Color> text = new ColoredStringList<Color>();
         text.addColoredText("SquidLib ", colorCenter.get(255, 0, 0));
