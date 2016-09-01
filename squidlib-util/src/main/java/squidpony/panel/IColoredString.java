@@ -653,14 +653,21 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		@Override
 		public String presentWithMarkup(IMarkup<T> markup) {
 			final StringBuilder result = new StringBuilder();
+			boolean open = false;
 			for (Bucket<T> fragment : fragments) {
-				if(fragment.color != null)
+				if(fragment.color != null) {
+					if (open)
+						result.append(markup.closeMarkup());
 					result.append(markup.getMarkup(fragment.color));
-				else
-					result.append(markup.closeMarkup());
+					open = true;
+				}
+				else {
+					if (open)
+						result.append(markup.closeMarkup());
+					open = false;
+				}
 				result.append(fragment.text);
 			}
-			result.append(markup.closeMarkup());
 			return result.toString();
 		}
 

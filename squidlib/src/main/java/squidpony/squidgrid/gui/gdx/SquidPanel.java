@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -1099,9 +1100,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 	 *            Where to end the slide, vertically.
 	 * @param duration
 	 *            The animation's duration.
+	 * @param postRunnables
+	 * 			  Runnables to execute after the slide. Can be null. But should not contain null
+	 *            members. Use that to do something after the slide's animation end.
 	 */
 	public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, int newX,
-			int newY, float duration) {
+			int newY, float duration, Runnable... postRunnables) {
 		final Actor a = createActor(x, y, name == null ? contents[x][y] : name,
 				color == null ? colors[x][y] : color, false);
 		if (a == null)
@@ -1109,15 +1113,27 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
 		duration = clampDuration(duration);
 		animationCount++;
-		float nextX = adjustX(newX, false), nextY = adjustY(newY);
+		
+		final int nbActions = 2 + (postRunnables == null ? 0 : postRunnables.length);
 
-		a.addAction(Actions.sequence(Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration),
-				Actions.delay(duration, Actions.run(new Runnable() {
+		int index = 0;
+		final Action[] sequence = new Action[nbActions];
+		final float nextX = adjustX(newX, false);
+		final float nextY = adjustY(newY);
+		sequence[index++] = Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration);
+		if (postRunnables != null) {
+			for (int i = 0; i < postRunnables.length; i++)
+				sequence[index++] = Actions.run(postRunnables[i]);
+		}
+		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+		sequence[index++] = Actions.delay(duration, Actions.run(new Runnable() {
 					@Override
 					public void run() {
 						recallActor(a, name == null);
 					}
-				}))));
+				}));
+
+		a.addAction(Actions.sequence(sequence));
 	}
 
     /**
@@ -1263,9 +1279,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     /**
 	 * Like {@link #tint(int, int, Color, float)}, but waits for {@code delay}
-	 * (in seconds) before performing it.
+	 * (in seconds) before performing it. Additionally, enqueue {@code postRunnables} for running after
+	 * the created action ends.
+	 * 
+	 * @param postRunnables
+	 * 			  Runnables to execute after the tint. Can be null. But should not contain null
+	 *            members.
 	 */
-    public void tint(float delay, int x, int y, Color color, float duration) {
+    public void tint(float delay, int x, int y, Color color, float duration, Runnable... postRunnables) {
         final Actor a = cellToActor(x, y);
         if(a == null)
             return;
@@ -1273,33 +1294,27 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         animationCount++;
 
         Color ac = scc.filter(a.getColor());
-        if(delay > 0)
-            a.addAction(Actions.sequence(
-                    Actions.delay(delay),
-                    Actions.color(color, duration * 0.3f),
-                    Actions.color(ac, duration * 0.7f),
-                    Actions.delay(0.0f, Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            recallActor(a, true);
-                        }
-                    }))));
-        else
-            a.addAction(Actions.sequence(
-                    Actions.color(color, duration * 0.3f),
-                    Actions.color(ac, duration * 0.7f),
-                    Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            recallActor(a, true);
-                        }
-                    })));
-                /*Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        recallActor(a);
-                    }
-                })*/
+
+        final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnables == null ? 0 : postRunnables.length);
+        final Action[] sequence = new Action[nbActions];
+        int index = 0;
+		if (0 < delay)
+			sequence[index++] = Actions.delay(delay);
+		sequence[index++] = Actions.color(color, duration * 0.3f);
+		sequence[index++] = Actions.color(ac, duration * 0.7f);
+		if (postRunnables != null) {
+			for (int i = 0; i < postRunnables.length; i++)
+				sequence[index++] = Actions.run(postRunnables[i]);
+		}
+		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+		sequence[index++] = Actions.run(new Runnable() {
+			@Override
+			public void run() {
+				recallActor(a, true);
+			}
+		});
+
+		a.addAction(Actions.sequence(sequence));
     }
 
     /**

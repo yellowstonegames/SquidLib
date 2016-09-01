@@ -327,8 +327,7 @@ public enum Direction {
 		throw new IllegalStateException("Unmatched " + getClass().getSimpleName() + ": " + this);
 	}
 
-
-    Direction(int x, int y) {
+    private Direction(int x, int y) {
         deltaX = x;
         deltaY = y;
     }
