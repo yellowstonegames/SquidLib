@@ -1115,29 +1115,15 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 	 */
 	public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, int newX,
 			int newY, float duration) {
-		final Actor a = createActor(x, y, name == null ? contents[x][y] : name,
-				color == null ? colors[x][y] : color, false);
-		if (a == null)
-			return;
-
-		duration = clampDuration(duration);
-		animationCount++;
-		float nextX = adjustX(newX, false), nextY = adjustY(newY);
-
-		a.addAction(Actions.sequence(Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration),
-				Actions.delay(duration, Actions.run(new Runnable() {
-					@Override
-					public void run() {
-						recallActor(a, name != null);
-					}
-				}))));
+	    slide(x, y, name, color, newX, newY, duration, null);
 	}
 
     /**
      * Slides {@code name} from {@code (x,y)} to {@code (newx, newy)}. If
-     * {@code name} or {@code
-     * color} is {@code null}, it is picked from this panel (hereby removing the
-     * current name, if any).
+     * {@code name} or {@code color} is {@code null}, it is picked from this
+     * panel (thereby removing the current name, if any). This also allows
+     * a Runnable to be given as {@code postRunnable} to be run after the
+     * slide completes.
      *
      * @param x
      *            Where to start the slide, horizontally.
@@ -1155,13 +1141,10 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      *            Where to end the slide, vertically.
      * @param duration
      *            The animation's duration.
-     * @param postRunnable0 a Runnable to execute first after the slide completes.
-     * @param postRunnables
-     * 			  Runnables to execute after the slide (and postRunnable0). Should not
-     * 			  contain null members. Use this to do something after the slide's animation ends.
+     * @param postRunnable a Runnable to execute after the slide completes; may be null to do nothing.
      */
     public void slide(int x, int y, final /* @Nullable */ String name, /* @Nullable */ Color color, int newX,
-                      int newY, float duration, Runnable postRunnable0, Runnable... postRunnables) {
+                      int newY, float duration, /* @Nullable */ Runnable postRunnable) {
         final Actor a = createActor(x, y, name == null ? contents[x][y] : name,
                 color == null ? colors[x][y] : color, false);
         if (a == null)
@@ -1170,20 +1153,16 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         duration = clampDuration(duration);
         animationCount++;
 
-        final int nbActions = 2 + (postRunnables == null ? 0 : postRunnables.length) + (postRunnable0 == null ? 0 : 1);
+        final int nbActions = 2 + (postRunnable == null ? 0 : 1);
 
         int index = 0;
         final Action[] sequence = new Action[nbActions];
         final float nextX = adjustX(newX, false);
         final float nextY = adjustY(newY);
         sequence[index++] = Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration);
-        if(postRunnable0 != null)
+        if(postRunnable != null)
         {
-            sequence[index++] = Actions.run(postRunnable0);
-        }
-        if (postRunnables != null) {
-            for (int i = 0; i < postRunnables.length; i++)
-                sequence[index++] = Actions.run(postRunnables[i]);
+            sequence[index++] = Actions.run(postRunnable);
         }
 		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
         sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
@@ -1348,65 +1327,22 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param duration how long the total "round-trip" transition should take in milliseconds
      */
     public void tint(float delay, int x, int y, Color color, float duration) {
-        final Actor a = cellToActor(x, y);
-        if(a == null)
-            return;
-        duration = clampDuration(duration);
-        animationCount++;
-
-        Color ac = scc.filter(a.getColor());
-        if(delay > 0)
-            a.addAction(Actions.sequence(
-                    Actions.delay(delay),
-                    Actions.color(color, duration * 0.3f),
-                    Actions.color(ac, duration * 0.7f),
-                    Actions.delay(0.0f, Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            recallActor(a, true);
-                        }
-                    }))));
-        else
-            a.addAction(Actions.sequence(
-                    Actions.color(color, duration * 0.3f),
-                    Actions.color(ac, duration * 0.7f),
-                    Actions.delay(0.0f, Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            recallActor(a, true);
-                        }
-                    }))));
-        /*
-        Actions.run(new Runnable() {
-                        @Override
-                        public void run() {
-                            recallActor(a);
-                        }
-                    })
-         */
-                /*Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        recallActor(a);
-                    }
-                })*/
+        tint(delay, x, y, color, duration, null);
     }
 
     /**
      * Like {@link #tint(int, int, Color, float)}, but waits for {@code delay}
-     * (in seconds) before performing it. Additionally, enqueue {@code postRunnable0}
-     * followed by {@code postRunnables} for running after the created action ends.
+     * (in seconds) before performing it. Additionally, enqueue {@code postRunnable}
+     * for running after the created action ends.
      * @param delay how long to wait in milliseconds before starting the effect
      * @param x the x-coordinate of the cell to tint
      * @param y the y-coordinate of the cell to tint
      * @param color what to transition ae's color towards, and then transition back from
      * @param duration how long the total "round-trip" transition should take in milliseconds
-     * @param postRunnable0 the first Runnable to execute after the tint; should not be null
-     * @param postRunnables
-     * 			  additional Runnables to execute after the tint. Should not contain null members.
+     * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
      */
 
-    public void tint(float delay, int x, int y, Color color, float duration, Runnable postRunnable0, Runnable... postRunnables) {
+    public void tint(float delay, int x, int y, Color color, float duration, Runnable postRunnable) {
         final Actor a = cellToActor(x, y);
         if(a == null)
             return;
@@ -1415,22 +1351,18 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
         Color ac = scc.filter(a.getColor());
 
-        final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnables == null ? 0 : postRunnables.length) + (postRunnable0 == null ? 0 : 1);
+        final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         final Action[] sequence = new Action[nbActions];
         int index = 0;
         if (0 < delay)
             sequence[index++] = Actions.delay(delay);
         sequence[index++] = Actions.color(color, duration * 0.3f);
         sequence[index++] = Actions.color(ac, duration * 0.7f);
-        if(postRunnable0 != null)
+        if(postRunnable != null)
         {
-            sequence[index++] = Actions.run(postRunnable0);
+            sequence[index++] = Actions.run(postRunnable);
         }
-        if (postRunnables != null) {
-            for (int i = 0; i < postRunnables.length; i++)
-                sequence[index++] = Actions.run(postRunnables[i]);
-        }
-		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnable' */
         sequence[index] = Actions.run(new Runnable() {
             @Override
             public void run() {
