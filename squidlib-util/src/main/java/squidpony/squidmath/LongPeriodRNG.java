@@ -234,7 +234,7 @@ public class LongPeriodRNG implements RandomnessSource {
         final long s0 = state[choice];
         long s1 = state[choice = (choice + 1) & 15];
         s1 ^= s1 << 31; // a
-        state[choice] = s1 ^ s0 ^ (s1 >> 11) ^ (s0 >> 30); // b,c
+        state[choice] = s1 ^ s0 ^ (s1 >>> 11) ^ (s0 >>> 30); // b,c
         return state[choice] * 1181783497276652981L;
     }
 
