@@ -777,8 +777,8 @@ public class HashVisualizer extends ApplicationAdapter {
                 switch (hashMode) {
                     case 0:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Arrays.hashCode(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -787,8 +787,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 1:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -797,8 +797,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 2:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = sipA.hash(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -807,8 +807,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 3:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -858,8 +858,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 8:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash64(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -869,8 +869,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 9:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = sipA.hash64(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -880,8 +880,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 10:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash64(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -921,8 +921,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 14:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Arrays.hashCode(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -932,8 +932,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 15:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -943,8 +943,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 16:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = sipA.hash(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -1005,8 +1005,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 22:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash64(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -1016,8 +1016,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 23:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = sipA.hash64(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -1026,8 +1026,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 24:
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
+                                coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash64(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
@@ -1079,7 +1079,9 @@ public class HashVisualizer extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         view.apply(true);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
-        //putMap();
+        if(testType == 3)
+            putMap();
+
         // if the user clicked, we have a list of moves to perform.
 
         // if we are waiting for the player's input and get input, process it.

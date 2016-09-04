@@ -63,8 +63,8 @@ public class ThunderRNG implements RandomnessSource, Serializable {
     }
 
     public ThunderRNG( final long seed ) {
-        state = seed;
-        jumble = (seed + bitPermute(seed + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;
+        state = (seed + bitPermute(seed + 0xC6BC279692B5CC83L)) * 0x9E3779B97F4A7C15L + 0x632BE59BD9B4E019L;
+        jumble = (state + bitPermute(state + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;
     }
     public ThunderRNG(final long partA, final long partB)
     {
@@ -118,7 +118,16 @@ public class ThunderRNG implements RandomnessSource, Serializable {
         //return (state ^ ((state += jumble) >> 17)) * (jumble += 0x8D784F2D256B9906L);
         //return (state ^ ((state ^= jumble) >> 17)) * (jumble += 0xC6BC279692B5CC83L);
         //return (state ^ ((state += jumble) >> 17)) * (jumble += 0x8D784F2D256B9906L);
-        return state ^ 0xC6BC279692B5CC83L * ((state += jumble & (jumble += 0xBC6EF372FEB7FC6AL)) >> 16);
+        //return state ^ 0xC6BC279692B5CC83L * ((state += jumble & (jumble += 0xBC6EF372FEB7FC6AL)) >> 16); //known excellent
+        //return state ^ 0xC6BC279692B5CC83L * ((state += jumble & (jumble += 0x3779B97F57FF375EL)) >> 25);
+        //BEST KNOWN
+        return state ^ (0x9E3779B97F4A7C15L * ((state += jumble & (jumble += 0xAB79B96DCD7FE75EL)) >> 20));
+
+        //return ((state >> 4) * 0x9E3779B97F4A7C15L ^ (state += 0xBC6756B4A5B16C57L));
+        //return ((state >> 16) * 0x9E3779B97F4A7C15L ^ (state += 0xC6BC279692B5CC83L));
+        //return state ^ (((state += 0xC6BC279692B5CC83L) >> 12) * 0x9E3779B97F4A7C15L);
+        //return (state += ((jumble += 0xD0E89D2D311E289FL) >> 28) * 0xC6BC279692B5CC83L) * 0x9E3779B97F4A7C15L;
+
         //return state = state * 2862933555777941757L + 7046029254386353087L; // LCG for comparison
     }
 
@@ -176,8 +185,8 @@ public class ThunderRNG implements RandomnessSource, Serializable {
      * @param seed any long
      */
     public void reseed( final long seed ) {
-        state = seed;
-        jumble = (seed + bitPermute(seed + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;
+        state = (seed + bitPermute(seed + 0xC6BC279692B5CC83L)) * 0x9E3779B97F4A7C15L + 0x632BE59BD9B4E019L;
+        jumble = (state + bitPermute(state + 0x9E3779B97F4A7C15L)) * 0xC6BC279692B5CC83L + 0x632BE59BD9B4E019L | 1L;
         /*
         jumble = (seed ^ ((seed + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L;
         jumble ^= (((seed + 0x9E3779B97F4A7C15L) ^ ((seed + 0x9E3779B97F4A7C15L + 0x9E3779B97F4A7C15L) >> 18)) * 0xC6BC279692B5CC83L) >>> 32;
