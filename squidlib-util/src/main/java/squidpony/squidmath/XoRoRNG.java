@@ -158,7 +158,7 @@ public class XoRoRNG implements RandomnessSource {
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
         state0 = z ^ (z >>> 31);
-        state = seed + 0x9E3779B97F4A7C15L;
+        state += state0 + 0x9E3779B97F4A7C15L;
         z = state;
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
         z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;

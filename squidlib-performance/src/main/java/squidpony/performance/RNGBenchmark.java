@@ -229,6 +229,143 @@ public class RNGBenchmark {
     private static long seed = 9000;
     private static int iseed = 9000;
 
+    public long doThunder()
+    {
+        ThunderRNG rng = new ThunderRNG(seed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunder() throws InterruptedException {
+        seed = 9000;
+        doThunder();
+    }
+
+    public long doThunderInt()
+    {
+        ThunderRNG rng = new ThunderRNG(iseed);
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunderInt() throws InterruptedException {
+        iseed = 9000;
+        doThunderInt();
+    }
+    public long doThunderR()
+    {
+        RNG rng = new RNG(new ThunderRNG(seed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunderR() throws InterruptedException {
+        seed = 9000;
+        doThunderR();
+    }
+
+    public long doThunderIntR()
+    {
+        RNG rng = new RNG(new ThunderRNG(iseed));
+
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureThunderIntR() throws InterruptedException {
+        iseed = 9000;
+        doThunderIntR();
+    }
+
+    public long doXoRo()
+    {
+        XoRoRNG rng = new XoRoRNG(seed);
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureXoRo() throws InterruptedException {
+        seed = 9000;
+        doXoRo();
+    }
+
+    public long doXoRoInt()
+    {
+        XoRoRNG rng = new XoRoRNG(iseed);
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureXoRoInt() throws InterruptedException {
+        iseed = 9000;
+        doXoRoInt();
+    }
+
+    public long doXoRoR()
+    {
+        RNG rng = new RNG(new XoRoRNG(seed));
+        for (int i = 0; i < 1000000000; i++) {
+            seed += rng.nextLong();
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureXoRoR() throws InterruptedException {
+        seed = 9000;
+        doXoRoR();
+    }
+
+    public long doXoRoIntR()
+    {
+        RNG rng = new RNG(new XoRoRNG(iseed));
+        for (int i = 0; i < 1000000000; i++) {
+            iseed += rng.nextInt();
+        }
+        return iseed;
+    }
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureXoRoIntR() throws InterruptedException {
+        iseed = 9000;
+        doXoRoIntR();
+    }
+
     public long doLight()
     {
         LightRNG rng = new LightRNG(seed);
@@ -299,6 +436,7 @@ public class RNGBenchmark {
         iseed = 9000;
         doLightIntR();
     }
+
     /*
     public long doLightBetweenR()
     {
@@ -335,78 +473,7 @@ public class RNGBenchmark {
         System.out.println(doLightBetweenHastyR());
     }
     */
-    public long doThreadLocalRandom()
-    {
-        ThreadLocalRandom rng = ThreadLocalRandom.current();
-        //rng.setSeed(seed);
 
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThreadLocalRandom() throws InterruptedException {
-        seed = 9000;
-        doThreadLocalRandom();
-    }
-
-    public long doThreadLocalRandomInt()
-    {
-        ThreadLocalRandom rng = ThreadLocalRandom.current();
-        //rng.setSeed(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThreadLocalRandomInt() throws InterruptedException {
-        iseed = 9000;
-        doThreadLocalRandomInt();
-    }
-    public long doRandom()
-    {
-        Random rng = new Random(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureRandom() throws InterruptedException {
-        seed = 9000;
-        doRandom();
-    }
-
-    public long doRandomInt()
-    {
-        Random rng = new Random(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureRandomInt() throws InterruptedException {
-        iseed = 9000;
-        doRandomInt();
-    }
     /*
     public long doPermuted()
     {
@@ -578,75 +645,80 @@ public class RNGBenchmark {
         iseed = 9000;
         doChaosRInt();
     }
-
-
-
-
-    public long doXoRo()
+    public long doThreadLocalRandom()
     {
-        XoRoRNG rng = new XoRoRNG(seed);
+        ThreadLocalRandom rng = ThreadLocalRandom.current();
+        //rng.setSeed(seed);
+
         for (int i = 0; i < 1000000000; i++) {
             seed += rng.nextLong();
         }
         return seed;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureXoRo() throws InterruptedException {
+    public void measureThreadLocalRandom() throws InterruptedException {
         seed = 9000;
-        doXoRo();
+        doThreadLocalRandom();
     }
 
-    public long doXoRoInt()
+    public long doThreadLocalRandomInt()
     {
-        XoRoRNG rng = new XoRoRNG(iseed);
+        ThreadLocalRandom rng = ThreadLocalRandom.current();
+        //rng.setSeed(iseed);
+
         for (int i = 0; i < 1000000000; i++) {
             iseed += rng.nextInt();
         }
         return iseed;
     }
-    @Benchmark
+
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureXoRoInt() throws InterruptedException {
+    public void measureThreadLocalRandomInt() throws InterruptedException {
         iseed = 9000;
-        doXoRoInt();
+        doThreadLocalRandomInt();
     }
-
-    public long doXoRoR()
+    public long doRandom()
     {
-        RNG rng = new RNG(new XoRoRNG(seed));
+        Random rng = new Random(seed);
+
         for (int i = 0; i < 1000000000; i++) {
             seed += rng.nextLong();
         }
         return seed;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureXoRoR() throws InterruptedException {
+    public void measureRandom() throws InterruptedException {
         seed = 9000;
-        doXoRoR();
+        doRandom();
     }
 
-    public long doXoRoIntR()
+    public long doRandomInt()
     {
-        RNG rng = new RNG(new XoRoRNG(iseed));
+        Random rng = new Random(iseed);
+
         for (int i = 0; i < 1000000000; i++) {
             iseed += rng.nextInt();
         }
         return iseed;
     }
-    @Benchmark
+
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureXoRoIntR() throws InterruptedException {
+    public void measureRandomInt() throws InterruptedException {
         iseed = 9000;
-        doXoRoIntR();
+        doRandomInt();
     }
+
+
 
     public long doGDX()
     {
@@ -658,7 +730,7 @@ public class RNGBenchmark {
         return seed;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureGDX() throws InterruptedException {
@@ -676,7 +748,7 @@ public class RNGBenchmark {
         return iseed;
     }
 
-    @Benchmark
+    //@Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureGDXInt() throws InterruptedException {
@@ -747,77 +819,6 @@ public class RNGBenchmark {
         return iseed;
     }
     */
-    public long doThunder()
-    {
-        ThunderRNG rng = new ThunderRNG(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThunder() throws InterruptedException {
-        seed = 9000;
-        doThunder();
-    }
-
-    public long doThunderInt()
-    {
-        ThunderRNG rng = new ThunderRNG(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThunderInt() throws InterruptedException {
-        iseed = 9000;
-        doThunderInt();
-    }
-    public long doThunderR()
-    {
-        RNG rng = new RNG(new ThunderRNG(seed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThunderR() throws InterruptedException {
-        seed = 9000;
-        doThunderR();
-    }
-
-    public long doThunderIntR()
-    {
-        RNG rng = new RNG(new ThunderRNG(iseed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThunderIntR() throws InterruptedException {
-        iseed = 9000;
-        doThunderIntR();
-    }
-    
 
 /*
     public long doSecureRandom()
