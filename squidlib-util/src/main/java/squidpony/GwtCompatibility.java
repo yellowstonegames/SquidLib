@@ -69,8 +69,35 @@ public class GwtCompatibility {
         if(end - start <= 0)
             return new int[0];
         int[] r = new int[end - start];
-        for (int i = start; i < end; i++) {
-            r[i] = i;
+        for (int i = 0, n = start; n < end; i++, n++) {
+            r[i] = n;
+        }
+        return r;
+    }
+
+    /**
+     * Stupidly simple convenience method that produces a char range from start to end, including end, as a char array.
+     * @param start the inclusive lower bound on the range, such as 'a'
+     * @param end the inclusive upper bound on the range, such as 'z'
+     * @return the range of chars as a char array
+     */
+    public static char[] charSpan(char start, char end)
+    {
+        if(end - start <= 0)
+            return new char[0];
+        if(end == 0xffff)
+        {
+
+            char[] r = new char[0x10000 - start];
+            for (char i = 0, n = start; n < end; i++, n++) {
+                r[i] = n;
+            }
+            r[0xffff - start] = 0xffff;
+            return r;
+        }
+        char[] r = new char[end - start + 1];
+        for (char i = 0, n = start; n <= end; i++, n++) {
+            r[i] = n;
         }
         return r;
     }
