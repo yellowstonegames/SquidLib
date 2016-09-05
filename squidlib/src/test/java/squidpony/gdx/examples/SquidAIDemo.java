@@ -357,7 +357,7 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         OrderedMap<Coord, ArrayList<Coord>> ideal = whichTech.idealLocations(user, visibleTargets, whichAllies);
         Coord targetCell = null;
-        targetCell = GwtCompatibility.first(ideal.keySet());
+        targetCell = ideal.firstKey();
 
         if(targetCell != null)
         {

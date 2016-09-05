@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import squidpony.GwtCompatibility;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -7,7 +8,6 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -19,8 +19,7 @@ public class SpillTest {
 
     public static void main(String[] args) {
         for (Spill.Measurement m : Spill.Measurement.values()) {
-            LightRNG lrng = new LightRNG(0x1337deadbeefc000L);
-            RNG rng = new RNG(lrng);
+            StatefulRNG rng = new StatefulRNG(0x1337deadbeefc000L);
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
 
             char[][] dun = dg.generate();
@@ -37,7 +36,7 @@ public class SpillTest {
             ArrayList<Coord> ordered = spreader.start(entry, 20, impassable);
             ordered.addAll(spreader.start(entry, 35, impassable));
             boolean[][] sm = spreader.spillMap;
-            char[][] md = Arrays.copyOf(dun, dun.length),
+            char[][] md = GwtCompatibility.copy2D(dun),
                     hl = DungeonUtility.hashesToLines(dun);
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
@@ -56,27 +55,22 @@ public class SpillTest {
             System.out.println();
         }
         for (Spill.Measurement m : Spill.Measurement.values()) {
-            LightRNG lrng = new LightRNG(0x1337deadbeefc000L);
-            RNG rng = new RNG(lrng);
-            DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
+            StatefulRNG rng = new StatefulRNG(0x1337deadbeefc000L);
+            DungeonGenerator dg = new DungeonGenerator(80, 80, rng);
             char[][] dun = dg.generate();
             MultiSpill spreader = new MultiSpill(dun, m, rng);
 
             System.out.println(dg);
-            short[] valid = CoordPacker.pack(dun, '.');
-
+            GreasedRegion valid = new GreasedRegion(dun, '.');
             OrderedMap<Coord, Double> entries = new OrderedMap<>(16);
-            ArrayList<Coord> section = CoordPacker.randomPortion(valid, 16, rng);
-            for (int i = 0; i < 4; i++) {
-                entries.put(section.get(i * 4    ), 1.0);
-                entries.put(section.get(i * 4 + 1), 0.75);
-                entries.put(section.get(i * 4 + 2), 0.5);
-                entries.put(section.get(i * 4 + 3), 0.25);
+            Coord[] section = valid.randomSeparated(20.0 / valid.count(), rng);
+            for (int i = 0; i < 16 && i < section.length; i++) {
+                entries.put(section[i], 1.0 - (i & 3) * 0.25);
             }
 
             ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
             short[][] sm = spreader.spillMap;
-            char[][] md = Arrays.copyOf(dun, dun.length),
+            char[][] md = GwtCompatibility.copy2D(dun),
                     hl = DungeonUtility.hashesToLines(dun);
             for (int x = 0; x < md.length; x++) {
                 for (int y = 0; y < md[x].length; y++) {
@@ -94,6 +88,32 @@ public class SpillTest {
             System.out.println(dg);
 
             System.out.println();
+        }
+        for (int i = 0; i < 5; i++) {
+            StatefulRNG rng = new StatefulRNG(i * 31 + 257);
+            int dim = 40 + i * 40, count = 30 + 20 * (i * i);
+            char[][] blank = GwtCompatibility.fill2D('.', dim, dim);
+            MultiSpill spreader = new MultiSpill(blank, Spill.Measurement.MANHATTAN, rng);
+
+            SobolQRNG sobol = new SobolQRNG(4);
+            double[] filler = sobol.skipTo(rng.between(1000, 65000));
+            OrderedMap<Coord, Double> entries = new OrderedMap<>(count);
+            for (int j = 0; j < count; j++) {
+                sobol.fillVector(filler);
+                entries.put(Coord.get((int)(dim * filler[0]), (int)(dim * filler[1])), (filler[2] + filler[3] + 1.0) / 3.0);
+            }
+            ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
+            short[][] sm = spreader.spillMap;
+            for (int x = 0; x < dim; x++) {
+                for (int y = 0; y < dim; y++) {
+                    blank[x][y] = (char) ('a' + Integer.bitCount(sm[x][y] + 7) % 26);
+                }
+            }
+            for(Coord c : entries.keySet())
+            {
+                blank[c.x][c.y] = '@';
+            }
+            DungeonUtility.debugPrint(blank);
         }
     }
 }
