@@ -754,7 +754,7 @@ se$->z
                 mods |= ENNOUN;
                 start += 2;
             }
-            long h = phoneticHash64(sc, start, end) + shift, frustration = 0;
+            long h = phoneticHash64(sc, start, end) ^ (shift & 0xFFFFFFFFFFFFFFFL) ^ (shift >>> 14), frustration = 0;
             //System.out.print(source + ":" + ((h >>> 60) & 7) + ":" + StringKit.hex(h) + ", ");
             rs.setState(h);
             do {

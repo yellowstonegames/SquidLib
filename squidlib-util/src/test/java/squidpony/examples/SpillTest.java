@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import regexodus.Category;
 import squidpony.GwtCompatibility;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
@@ -89,31 +90,38 @@ public class SpillTest {
 
             System.out.println();
         }
+        char[] glyphs = Category.Ll.contents();
+        //int gs = glyphs.length;
         for (int i = 0; i < 5; i++) {
-            StatefulRNG rng = new StatefulRNG(i * 31 + 257);
-            int dim = 40 + i * 40, count = 30 + 20 * (i * i);
-            char[][] blank = GwtCompatibility.fill2D('.', dim, dim);
+            StatefulRNG rng = new StatefulRNG(i * 65567 + 257);
+            int dim = 40 + i * 40, count = 30 + 20 * i;
+            char[][] blank = GwtCompatibility.fill2D('~', dim, dim);
             MultiSpill spreader = new MultiSpill(blank, Spill.Measurement.MANHATTAN, rng);
 
-            SobolQRNG sobol = new SobolQRNG(4);
-            double[] filler = sobol.skipTo(rng.between(1000, 65000));
+            //SobolQRNG sobol = new SobolQRNG(3);
+            //double[] filler = sobol.skipTo(rng.between(1000, 6500));
             OrderedMap<Coord, Double> entries = new OrderedMap<>(count);
             for (int j = 0; j < count; j++) {
-                sobol.fillVector(filler);
-                entries.put(Coord.get((int)(dim * filler[0]), (int)(dim * filler[1])), (filler[2] + filler[3] + 1.0) / 3.0);
+                //sobol.fillVector(filler);
+                //entries.put(Coord.get((int)(dim * filler[0]), (int)(dim * filler[1])), (filler[2] + 0.25) / 1.25);
+                entries.put(rng.nextCoord(dim, dim), (rng.nextDouble() + 0.25) / 1.25);
             }
             ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
             short[][] sm = spreader.spillMap;
             for (int x = 0; x < dim; x++) {
                 for (int y = 0; y < dim; y++) {
-                    blank[x][y] = (char) ('a' + Integer.bitCount(sm[x][y] + 7) % 26);
+                    //blank[x][y] = (char) ('a' + Integer.bitCount(sm[x][y] + 7) % 26);
+                    if((sm[x][y] & 1) == 0)
+                        blank[x][y] = glyphs[sm[x][y]];
                 }
             }
             for(Coord c : entries.keySet())
             {
-                blank[c.x][c.y] = '@';
+                if((sm[c.x][c.y] & 1) == 0)
+                    blank[c.x][c.y] = '@';
             }
             DungeonUtility.debugPrint(blank);
+            System.out.println();
         }
     }
 }
