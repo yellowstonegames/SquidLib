@@ -243,6 +243,7 @@ public class SobolQRNG implements RandomnessSource {
      * @throws IOException if the stream could not be read
      * @throws ArithmeticException if the content could not be parsed successfully
      */
+    @GwtIncompatible
     private int initFromStream(final InputStream is) throws ArithmeticException, IOException {
 
         // special case: dimension 1 -> use unit initialization
@@ -584,6 +585,7 @@ public class SobolQRNG implements RandomnessSource {
     public RandomnessSource copy() {
         SobolQRNG next = new SobolQRNG(dimension);
         next.count = count;
+        next.skipTo(count);
         return next;
     }
 }
