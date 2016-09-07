@@ -25,6 +25,7 @@ import squidpony.panel.ISquidPanel;
  * @param <T>
  *            The type of colors.
  */
+@Deprecated
 public class GroupCombinedPanel<T> extends Group implements ICombinedPanel<T> {
 
 	protected/* @Nullable */ISquidPanel<T> bg;
