@@ -1817,7 +1817,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         if (l >= n || size > maxFill(l, f)) return true;
         try {
             rehash(l);
-        } catch (OutOfMemoryError cantDoIt) {
+        } catch (Exception cantDoIt) {
             return false;
         }
         return true;
@@ -1841,7 +1841,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         if (l >= n || size > maxFill(l, f)) return true;
         try {
             rehash(l);
-        } catch (OutOfMemoryError cantDoIt) {
+        } catch (Exception cantDoIt) {
             return false;
         }
         return true;
@@ -1951,6 +1951,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @return a deep copy of this map.
      */
     @SuppressWarnings("unchecked")
+    @GwtIncompatible
     public OrderedMap<K, V> clone() {
         OrderedMap<K, V> c;
         try {
@@ -1962,8 +1963,8 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             c.order = (IntVLA) order.clone();
             c.hasher = hasher;
             return c;
-        } catch (CloneNotSupportedException cantHappen) {
-            throw new InternalError(cantHappen + (cantHappen.getMessage() != null ?
+        } catch (Exception cantHappen) {
+            throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
                     "; " + cantHappen.getMessage() : ""));
         }
     }

@@ -1942,7 +1942,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         if (l >= n || size > maxFill(l, f)) return true;
         try {
             rehash(l);
-        } catch (OutOfMemoryError cantDoIt) {
+        } catch (Exception cantDoIt) {
             return false;
         }
         return true;
@@ -1966,7 +1966,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         if (l >= n || size > maxFill(l, f)) return true;
         try {
             rehash(l);
-        } catch (OutOfMemoryError cantDoIt) {
+        } catch (Exception cantDoIt) {
             return false;
         }
         return true;

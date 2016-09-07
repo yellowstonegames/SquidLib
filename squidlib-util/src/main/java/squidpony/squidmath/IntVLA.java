@@ -15,6 +15,8 @@
  ******************************************************************************/
 package squidpony.squidmath;
 
+import squidpony.annotation.GwtIncompatible;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -391,6 +393,7 @@ public class IntVLA implements Serializable, Cloneable {
         return new IntVLA(this);
     }
 
+    @GwtIncompatible
     @SuppressWarnings("unchecked")
     @Override
     public Object clone() {

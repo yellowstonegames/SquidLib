@@ -18,7 +18,14 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 import squidpony.annotation.GwtIncompatible;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but modified to support indexed access.
@@ -1219,7 +1226,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         if (l >= n || size > maxFill(l, f)) return true;
         try {
             rehash(l);
-        } catch (OutOfMemoryError cantDoIt) {
+        } catch (Exception cantDoIt) {
             return false;
         }
         return true;
@@ -1243,7 +1250,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         if (l >= n || size > maxFill(l, f)) return true;
         try {
             rehash(l);
-        } catch (OutOfMemoryError cantDoIt) {
+        } catch (Exception cantDoIt) {
             return false;
         }
         return true;
@@ -1349,7 +1356,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @return a deep copy of this map.
      */
     @SuppressWarnings("unchecked")
-    @Override
+    @GwtIncompatible
     public Object clone() {
         OrderedSet<K> c;
         try {
@@ -1359,8 +1366,8 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             c.order = (IntVLA) order.clone();
             c.hasher = hasher;
             return c;
-        } catch (CloneNotSupportedException cantHappen) {
-            throw new InternalError(cantHappen + (cantHappen.getMessage() != null ?
+        } catch (Exception cantHappen) {
+            throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
                     "; " + cantHappen.getMessage() : ""));
         }
     }
