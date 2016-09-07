@@ -73,6 +73,7 @@ import java.util.*;
  * @param <T>
  *            The type of colors.
  */
+@Deprecated
 public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T> {
 
 	/**
@@ -1150,6 +1151,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 * 
 	 * @author smelC
 	 */
+	@Deprecated
 	public static abstract class PreAllocatedPanels<T extends Color> extends ButtonsPanel<T> {
 
 		protected PreAllocatedPanels(ISquidPanel<T> bg, ISquidPanel<T> fg,
