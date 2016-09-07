@@ -436,6 +436,7 @@ public class DharmaRNG extends RNG implements Serializable{
      * @param elements an array of T; will not be modified
      * @return a shuffled copy of elements
      */
+    @GwtIncompatible
     @Override
     public <T> T[] shuffle(T[] elements) {
         return super.shuffle(elements);
