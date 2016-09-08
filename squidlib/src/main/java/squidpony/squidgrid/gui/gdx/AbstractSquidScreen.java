@@ -19,7 +19,7 @@ import squidpony.IColorCenter;
  * (for example: splash screen -> (main menu screen <-> game screen)). To build
  * your {@link SquidPanel}, you should use the protected methods that this class
  * provides. In this way, you won't have to worry about the screen size and
- * resizes.
+ * resizing.
  * </p>
  * 
  * <p>
@@ -34,8 +34,8 @@ import squidpony.IColorCenter;
  * <p>
  * There really is now way around this class being abstract. Very often, the
  * result of {@link #getNext()} cannot be precomputed. For example after a game
- * screen, either you'll go to the win screen or the loose screen. And the
- * latters cannot be precomputed when building the game screen :-(
+ * screen, either you'll go to the win screen or the lose screen. And the
+ * latter cannot be precomputed when building the game screen :-(
  * </p>
  * 
  * @author smelC

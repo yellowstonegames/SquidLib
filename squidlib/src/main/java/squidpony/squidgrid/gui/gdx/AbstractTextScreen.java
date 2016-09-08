@@ -14,7 +14,10 @@ import java.util.List;
  * 
  * <p>
  * If you use libgdx {@link Color} as your type of color, you can use a less
- * abstract subtype: {@link TextScreen}.
+ * abstract subtype: {@link TextScreen}, but that relies on some older, less-pretty
+ * rendering done by the deprecated class {@link GroupCombinedPanel}, and you may
+ * prefer using {@link TextPanel} or sometimes {@link LinesPanel} where you want
+ * to display more than a few words of legible wrapped text.
  * </p>
  * 
  * @author smelC

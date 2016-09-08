@@ -351,10 +351,11 @@ public class DungeonGenerator {
 
         return coll;
     }
-
     protected OrderedSet<Coord> viableDoorways(boolean doubleDoors, char[][] map)
     {
         OrderedSet<Coord> doors = new OrderedSet<>();
+        OrderedSet<Coord> blocked = new OrderedSet<>(4);
+        DijkstraMap dm = new DijkstraMap(map, DijkstraMap.Measurement.EUCLIDEAN);
         for(int x = 1; x < map.length - 1; x++) {
             for (int y = 1; y < map[x].length - 1; y++) {
                 if(map[x][y] == '#')
@@ -368,6 +369,14 @@ public class DungeonGenerator {
                                 && map[x][y + 1] != '#' && map[x][y - 1] != '#'
                                 && map[x+1][y + 1] != '#' && map[x+1][y - 1] != '#') {
                             if (map[x + 2][y + 1] != '#' || map[x - 1][y + 1] != '#' || map[x + 2][y - 1] != '#' || map[x - 1][y - 1] != '#') {
+                                dm.resetMap();
+                                dm.clearGoals();
+                                dm.setGoal(x, y+1);
+                                blocked.clear();
+                                blocked.add(Coord.get(x, y));
+                                blocked.add(Coord.get(x + 1, y));
+                                if(dm.partialScan(16, blocked)[x][y-1] < DijkstraMap.FLOOR)
+                                    continue;
                                 doors.add(Coord.get(x, y));
                                 doors.add(Coord.get(x + 1, y));
                                 doors = removeAdjacent(doors, Coord.get(x, y), Coord.get(x + 1, y));
@@ -378,8 +387,16 @@ public class DungeonGenerator {
                                 && map[x + 1][y] != '#' && map[x - 1][y] != '#'
                                 && map[x + 1][y+1] != '#' && map[x - 1][y+1] != '#') {
                             if (map[x + 1][y + 2] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y + 2] != '#' || map[x - 1][y - 1] != '#') {
+                                dm.resetMap();
+                                dm.clearGoals();
+                                dm.setGoal(x+1, y);
+                                blocked.clear();
+                                blocked.add(Coord.get(x, y));
+                                blocked.add(Coord.get(x, y+1));
+                                if(dm.partialScan(16, blocked)[x-1][y] < DijkstraMap.FLOOR)
+                                    continue;
                                 doors.add(Coord.get(x, y));
-                                doors.add(Coord.get(x, y + 1));
+                                doors.add(Coord.get(x, y+1));
                                 doors = removeAdjacent(doors, Coord.get(x, y), Coord.get(x, y + 1));
                                 continue;
                             }
@@ -388,11 +405,25 @@ public class DungeonGenerator {
                 }
                 if (map[x + 1][y] == '#' && map[x - 1][y] == '#' && map[x][y + 1] != '#' && map[x][y - 1] != '#') {
                     if (map[x + 1][y + 1] != '#' || map[x - 1][y + 1] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y - 1] != '#') {
+                        dm.resetMap();
+                        dm.clearGoals();
+                        dm.setGoal(x, y+1);
+                        blocked.clear();
+                        blocked.add(Coord.get(x, y));
+                        if(dm.partialScan(16, blocked)[x][y-1] < DijkstraMap.FLOOR)
+                            continue;
                         doors.add(Coord.get(x, y));
                         doors = removeAdjacent(doors, Coord.get(x, y));
                     }
                 } else if (map[x][y + 1] == '#' && map[x][y - 1] == '#' && map[x + 1][y] != '#' && map[x - 1][y] != '#') {
                     if (map[x + 1][y + 1] != '#' || map[x + 1][y - 1] != '#' || map[x - 1][y + 1] != '#' || map[x - 1][y - 1] != '#') {
+                        dm.resetMap();
+                        dm.clearGoals();
+                        dm.setGoal(x+1, y);
+                        blocked.clear();
+                        blocked.add(Coord.get(x, y));
+                        if(dm.partialScan(16, blocked)[x-1][y] < DijkstraMap.FLOOR)
+                            continue;
                         doors.add(Coord.get(x, y));
                         doors = removeAdjacent(doors, Coord.get(x, y));
                     }
@@ -400,7 +431,6 @@ public class DungeonGenerator {
 
             }
         }
-
 
         return doors;
     }
@@ -497,8 +527,8 @@ public class DungeonGenerator {
                 }
             }
         }
-        stairsDown = singleRandom(pack(dijkstra.gradientMap, maxDijkstra * 0.7,
-                DijkstraMap.FLOOR), rng);
+        stairsDown = new GreasedRegion(dijkstra.gradientMap, maxDijkstra * 0.7,
+                DijkstraMap.FLOOR).singleRandom(rng);
 
         return innerGenerate(map);
     }
@@ -528,9 +558,9 @@ public class DungeonGenerator {
         stairsDown = null;
 
         dijkstra.clearGoals();
-        Coord[] stairs = allPacked(pack(map, '<', '>'));
-        for (Coord s : stairs) {
-            dijkstra.setGoal(s);
+        ArrayList<Coord> stairs = DungeonUtility.allMatching(map, '<', '>');
+        for (int j = 0; j < stairs.size(); j++) {
+            dijkstra.setGoal(stairs.get(j));
         }
         dijkstra.scan(null);
         for (int i = 0; i < width; i++) {
@@ -621,11 +651,19 @@ public class DungeonGenerator {
             }
         }
         if (boulderFill > 0.0) {
+            /*
             short[] floor = pack(map, '.');
             short[] viable = retract(floor, 1, width, height, true);
             ArrayList<Coord> boulders = randomPortion(viable, boulderFill, rng);
             for (Coord boulder : boulders) {
                 map[boulder.x][boulder.y] = '#';
+            }
+            */
+            Coord[] boulders = new GreasedRegion(map, '.').retract8way(1).randomPortion(rng, boulderFill);
+            Coord t;
+            for (int i = 0; i < boulders.length; i++) {
+                t = boulders[i];
+                map[t.x][t.y] = '#';
             }
         }
 
