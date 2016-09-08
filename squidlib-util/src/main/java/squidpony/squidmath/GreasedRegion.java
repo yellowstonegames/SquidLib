@@ -1600,6 +1600,41 @@ public class GreasedRegion implements Serializable {
         return new Coord(-1, -1);
     }
 
+
+    public Coord[] randomPortion(RNG rng, int size)
+    {
+        int ct = 0, idx = 0, run = 0;
+        for (int i = 0; i < width * ySections; i++) {
+            ct += Long.bitCount(data[i]);
+        }
+        if(ct <= 0)
+            return new Coord[0];
+        if(ct <= size)
+            return asCoords();
+        Coord[] points = new Coord[size];
+        int[] order = rng.randomOrdering(ct);
+        Arrays.sort(order, 0, size);
+        long t, w;
+        ALL:
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                if((t = data[x * ySections + s]) != 0)
+                {
+                    w = Long.lowestOneBit(t);
+                    while (w != 0) {
+                        if (run++ == order[idx]) {
+                            points[idx++] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                            if (idx >= size) break ALL;
+                        }
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return points;
+    }
+
     public boolean test(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height && ySections > 0 &&

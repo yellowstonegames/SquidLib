@@ -1413,4 +1413,22 @@ public class DungeonUtility {
         }
         return points;
     }
+
+    public static ArrayList<Coord> allMatching(char[][] map, char... matching)
+    {
+        if(map == null || map.length <= 0 || matching == null || matching.length <= 0)
+            return new ArrayList<Coord>(0);
+        int width = map.length, height = map[0].length;
+        char[] matches = new char[matching.length];
+        System.arraycopy(matching, 0, matches, 0, matching.length);
+        Arrays.sort(matches);
+        ArrayList<Coord> points = new ArrayList<Coord>(map.length * 4);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(Arrays.binarySearch(matches, map[x][y]) >= 0)
+                    points.add(Coord.get(x, y));
+            }
+        }
+        return points;
+    }
 }

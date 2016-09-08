@@ -411,7 +411,7 @@ public class DungeonGeneratorTest {
             System.out.println("------------------------------------------------------------");
 
         }
-        */
+
         for(int k : new int[]{ThinDungeonGenerator.CAVE_WALL_NORMAL | ThinDungeonGenerator.CORRIDOR_WALL_NORMAL | ThinDungeonGenerator.ROOM_WALL_NORMAL,
                 ThinDungeonGenerator.CAVE_WALL_RETRACT | ThinDungeonGenerator.CORRIDOR_WALL_RETRACT | ThinDungeonGenerator.ROOM_WALL_RETRACT,
                 ThinDungeonGenerator.CAVE_WALL_CHAOTIC | ThinDungeonGenerator.CORRIDOR_WALL_EXPAND | ThinDungeonGenerator.ROOM_WALL_EXPAND
@@ -441,7 +441,6 @@ public class DungeonGeneratorTest {
             System.out.println(tdg);
         }
 
-        /*
         sdg = new SectionDungeonGenerator(width, height, rng);
         sdg.addDoors(12, false);
         //tdg.addWater(SectionDungeonGenerator.CAVE, 13);
