@@ -211,4 +211,26 @@ public class ThunderRNG implements RandomnessSource, Serializable {
         return "ThunderRNG with state parts A=0x" + StringKit.hex(state) + "L, B=0x"  + StringKit.hex(jumble)+ 'L';
     }
 
+    public static long determine(int x)
+    {
+        final long a = ((x ^ 0xC6BC279692B5CC83L) << 32) ^ x, b = (((x ^ 0x632BE59BD9B4E019L) << 32) ^ x) | 1L;
+        return a ^ (0x9E3779B97F4A7C15L * ((a + b & (b + 0xAB79B96DCD7FE75EL)) >> 20));
+    }
+
+    public static long determine(int x, int y)
+    {
+        final long a = ((x ^ 0xC6BC279692B5CC83L) << 32) ^ x, b = (((y ^ 0x632BE59BD9B4E019L) << 32) ^ y) | 1L;
+        return a ^ (0x9E3779B97F4A7C15L * ((a + b & (b + 0xAB79B96DCD7FE75EL)) >> 20));
+    }
+    public static long determine(int x, int y, int z)
+    {
+        final long a = ((x ^ 0xC6BC279692B5CC83L) << 32) ^ z, b = (((y ^ 0x632BE59BD9B4E019L) << 32) ^ y) | 1L;
+        return a ^ (0x9E3779B97F4A7C15L * ((a + b & (b + 0xAB79B96DCD7FE75EL)) >> 20));
+    }
+    public static long determine(int x, int y, int z, int w)
+    {
+        final long a = ((x ^ 0xC6BC279692B5CC83L) << 32) ^ z, b = (((y ^ 0x632BE59BD9B4E019L) << 32) ^ ((w ^ 0xD0E89D2D311E289FL) << 1)) | 1L;
+        return a ^ (0x9E3779B97F4A7C15L * ((a + b & (b + 0xAB79B96DCD7FE75EL)) >> 20));
+    }
+
 }
