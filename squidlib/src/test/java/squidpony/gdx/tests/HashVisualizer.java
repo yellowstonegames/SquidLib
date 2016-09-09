@@ -33,7 +33,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 0, rngMode = 0;
+    private int hashMode = 0, rngMode = 0, noiseMode = 0;
     private CrossHash.Sip sipA;
     private CrossHash.Storm stormA, stormB, stormC;
     private int testType = 0;
@@ -41,6 +41,63 @@ public class HashVisualizer extends ApplicationAdapter {
     private Random jreRandom;
     private RandomXS128 gdxRandom;
     private long seed;
+
+    public static double toDouble(long n)
+    {
+        return Double.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
+        //return Double.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
+    }
+
+    public static float toFloat(int n)
+    {
+        return (Float.intBitsToFloat(0x3F800000 | n >>> 9) - 1.0f);
+    }
+
+/*
+    public static float determine(float alpha, float beta)
+    {
+        //final int a = ((x * 0x92B5CC83) << 16) ^ x, b = (((y * 0xD9B4E019) << 16) ^ y) | 1;
+
+        //final int x = (~alpha << 15) * ~beta + ((alpha >> 1) << 1) + ((alpha >> 2) << 2) + (beta >> ((alpha + ~beta) & 3)),
+        //        y = (alpha + ~beta << 17) + ((beta >> 1) << 1) + ((beta >> 2) << 2) + (alpha >> (beta & 3));
+
+        final float x = (alpha + 1.4051f) * (beta + 0.9759f),
+                y = (beta + 2.3757f) * (alpha + 0.7153f) + x * 0.7255f;
+
+        //final float x = (alpha + 1.875371971f) * (beta + 0.875716533f),
+        //        y = (beta + 3.875716533f) * (alpha + 0.6298371981f);
+
+                //a = (((x >> 1) * y + x) ^ (~((x >> 1) * y + x) << 15)) + y,
+                //b = ((y + (y >> 1) * a) ^ (~(y + (y >> 1) * a) << 14)) + x;
+        //return toFloat(x ^ (0xCC83 * ((x + y & (y + 0xCD7FE75E)) >> 6)));
+        //return toFloat(x * y);
+        return ((x % 0.29f) + (y % 0.3f) + alpha * 11.138421537629f % 0.22f + beta * 9.3751649568f % 0.21f); // & 8388607
+    }
+*/
+    public static int rawNoise(int alpha, int beta)
+    {
+        // int x = a * 0x1B + b * 0xB9, y = (a * 0x6F ^ b * 0x53), z = x * 0x2D + y * 0xE5, w = (z ^ x) + y * 0xF1,
+        // x = a * 0x1B + b * 0x29, y = (a * 0x2F ^ b * 0x13), z = x * 0x3D + y * 0x45, w = (z ^ x) + y * 0x37,
+        // near = (x * 0xB9 ^ y * 0x1B) + (x * 0x57 ^ z * 0x6F) + (y * 0x57 ^ z * 0xB9 ) + (x * 0x2D ^ w * 0xE5) + (y  * 0xA7 ^ w * 0xF1);
+        // x = a * 11 + b * 10, y = (a * 13 ^ b * 14), z = x * 4 + y * 5, w = (z * 8 ^ x * 9) + y * 7,
+        // out = (x ^ y) + (x ^ z) + (y ^ z) + (x ^ w) + (y ^ w);
+        final int a = alpha + ((alpha >> 1) << 2) + ((alpha >> 2) << 4) + (beta >> 1) + (beta >> 2),
+                b = beta + ((beta >> 1) << 2) + ((beta >> 2) << 4) + (alpha >> 1) + (alpha >> 2),
+                a2 = a * 31 ^ a - b, b2 = b * 29 ^ b - a,
+                x = a2 + b2, y = (a2 ^ b2), z = x + y, w = (z ^ x) + y,
+                out = (x + y + z + w) ^ (a2 + b) * b2 ^ (b2 + a) * a2;
+        return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
+    }
+    public static int discreteNoise(int x, int y) {
+        int n = rawNoise(x, y), t = n << 5;
+        t += ((rawNoise(x + 1, y) + rawNoise(x - 1, y) + rawNoise(x, y + 1) + rawNoise(x, y - 1) +
+                rawNoise(x + 1, y+1) + rawNoise(x - 1, y-1) + rawNoise(x-1, y + 1) + rawNoise(x+1, y - 1)) * 3) +
+                rawNoise(x + 2, y) + rawNoise(x - 2, y) + rawNoise(x, y + 2) + rawNoise(x, y - 2) +
+                rawNoise(x + 2, y+2) + rawNoise(x - 2, y-2) + rawNoise(x-2, y + 2) + rawNoise(x+2, y - 2);
+        return t >>> 6;
+    }
+
+
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -65,7 +122,7 @@ public class HashVisualizer extends ApplicationAdapter {
         stormA = CrossHash.Storm.alpha;
         stormB = CrossHash.Storm.beta;
         stormC = CrossHash.Storm.chi;
-        fuzzy = new ThunderRNG(0xBEEFCAFEF00DCABAL, 0x1337BABECAFECABAL);
+        fuzzy = new ThunderRNG(0xBEEFCAFEF00DCABAL);
         view = new ScreenViewport();
         stage = new Stage(view, batch);
         seed = 0xBEEFF00DCAFECABAL;
@@ -77,9 +134,13 @@ public class HashVisualizer extends ApplicationAdapter {
                 switch (key)
                 {
                     case SquidInput.ENTER:
-                        if(testType == 5) {
+                        if(testType == 4) {
+                            noiseMode++;
+                            noiseMode &= 1;
+                        }
+                        else if(testType == 5) {
                             rngMode++;
-                            rngMode %= 9;
+                            rngMode %= 18;
                         }
                         else {
                             hashMode++;
@@ -97,6 +158,12 @@ public class HashVisualizer extends ApplicationAdapter {
                     case 'A':
                     case 'a':
                         testType = 3;
+                        putMap();
+                        //Gdx.graphics.requestRendering();
+                        break;
+                    case 'N':
+                    case 'n':
+                        testType = 4;
                         putMap();
                         //Gdx.graphics.requestRendering();
                         break;
@@ -134,6 +201,8 @@ public class HashVisualizer extends ApplicationAdapter {
         overlay.erase();
         int[] coordinates = new int[2], coordinate = new int[1];
         long code;
+        float bright;
+        int iBright;
         switch (testType) {
             case 1: {
                 switch (hashMode) {
@@ -677,6 +746,102 @@ public class HashVisualizer extends ApplicationAdapter {
                 }
             }
             break;
+            case 4: { //Noise mode
+                switch (noiseMode) {
+                    case 0:
+                        Gdx.graphics.setTitle("Perlin Noise");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = ((float) PerlinNoise.noise(x * 0.125f, y * 0.125f) + 1.0f) * 0.5f;
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 1:
+                        Gdx.graphics.setTitle("Discrete Noise");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = discreteNoise(x, y);
+                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                            }
+                        }
+                        break;
+                    /*
+                                        case 2:
+                        Gdx.graphics.setTitle("LightRNG");
+                        random = new LightRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 3:
+                        Gdx.graphics.setTitle("XorRNG");
+                        random = new XorRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 4:
+                        Gdx.graphics.setTitle("XoRoRNG");
+                        random = new XoRoRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 5:
+                        Gdx.graphics.setTitle("PermutedRNG");
+                        random = new PermutedRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 6:
+                        Gdx.graphics.setTitle("LongPeriodRNG");
+                        random = new LongPeriodRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 7:
+                        Gdx.graphics.setTitle("IsaacRNG");
+                        random = new IsaacRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 8:
+                        Gdx.graphics.setTitle("RandomXS128 from LibGDX");
+                        gdxRandom = new RandomXS128(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(gdxRandom.nextInt());
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                     */
+                }
+            }
+            break;
             case 5: { //RNG mode
                 switch (rngMode) {
                     case 0:
@@ -759,13 +924,103 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         break;
-                    default:
+                    case 8:
                         Gdx.graphics.setTitle("RandomXS128 from LibGDX");
                         gdxRandom = new RandomXS128(seed);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = (gdxRandom.nextInt() << 8) | 255L;
                                 display.put(x, y, colorFactory.get(code));
+                            }
+                        }
+                        break;
+                    case 9:
+                        Gdx.graphics.setTitle("java.util.Random");
+                        jreRandom = new Random(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(jreRandom.nextInt());
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 10:
+                        Gdx.graphics.setTitle("ThunderRNG");
+                        random = new ThunderRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 11:
+                        Gdx.graphics.setTitle("LightRNG");
+                        random = new LightRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 12:
+                        Gdx.graphics.setTitle("XorRNG");
+                        random = new XorRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 13:
+                        Gdx.graphics.setTitle("XoRoRNG");
+                        random = new XoRoRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 14:
+                        Gdx.graphics.setTitle("PermutedRNG");
+                        random = new PermutedRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 15:
+                        Gdx.graphics.setTitle("LongPeriodRNG");
+                        random = new LongPeriodRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 16:
+                        Gdx.graphics.setTitle("IsaacRNG");
+                        random = new IsaacRNG(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 17:
+                        Gdx.graphics.setTitle("RandomXS128 from LibGDX");
+                        gdxRandom = new RandomXS128(seed);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(gdxRandom.nextInt());
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
                             }
                         }
                         break;
