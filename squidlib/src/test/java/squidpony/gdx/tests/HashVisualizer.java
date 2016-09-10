@@ -33,10 +33,10 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 0, rngMode = 0, noiseMode = 0;
+    private int hashMode = 0, rngMode = 0, noiseMode = 1;
     private CrossHash.Sip sipA;
     private CrossHash.Storm stormA, stormB, stormC;
-    private int testType = 0;
+    private int testType = 4;
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
     private RandomXS128 gdxRandom;
@@ -74,27 +74,69 @@ public class HashVisualizer extends ApplicationAdapter {
         return ((x % 0.29f) + (y % 0.3f) + alpha * 11.138421537629f % 0.22f + beta * 9.3751649568f % 0.21f); // & 8388607
     }
 */
-    public static int rawNoise(int alpha, int beta)
+    public static int rawNoise0(int alpha, int beta)
     {
         // int x = a * 0x1B + b * 0xB9, y = (a * 0x6F ^ b * 0x53), z = x * 0x2D + y * 0xE5, w = (z ^ x) + y * 0xF1,
         // x = a * 0x1B + b * 0x29, y = (a * 0x2F ^ b * 0x13), z = x * 0x3D + y * 0x45, w = (z ^ x) + y * 0x37,
         // near = (x * 0xB9 ^ y * 0x1B) + (x * 0x57 ^ z * 0x6F) + (y * 0x57 ^ z * 0xB9 ) + (x * 0x2D ^ w * 0xE5) + (y  * 0xA7 ^ w * 0xF1);
         // x = a * 11 + b * 10, y = (a * 13 ^ b * 14), z = x * 4 + y * 5, w = (z * 8 ^ x * 9) + y * 7,
         // out = (x ^ y) + (x ^ z) + (y ^ z) + (x ^ w) + (y ^ w);
-        final int a = alpha + ((alpha >> 1) << 2) + ((alpha >> 2) << 4) + (beta >> 1) + (beta >> 2),
-                b = beta + ((beta >> 1) << 2) + ((beta >> 2) << 4) + (alpha >> 1) + (alpha >> 2),
+        final int a = alpha + ((alpha >> 1) << 2) + (beta >> 1),// + ((alpha >> 2) << 4) + (beta >> 2),
+                b = beta + ((beta >> 1) << 2) + (alpha >> 1),// + ((beta >> 2) << 4) + (alpha >> 2),
                 a2 = a * 31 ^ a - b, b2 = b * 29 ^ b - a,
                 x = a2 + b2, y = (a2 ^ b2), z = x + y, w = (z ^ x) + y,
                 out = (x + y + z + w) ^ (a2 + b) * b2 ^ (b2 + a) * a2;
         return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
     }
+
     public static int discreteNoise(int x, int y) {
-        int n = rawNoise(x, y), t = n << 5;
-        t += ((rawNoise(x + 1, y) + rawNoise(x - 1, y) + rawNoise(x, y + 1) + rawNoise(x, y - 1) +
-                rawNoise(x + 1, y+1) + rawNoise(x - 1, y-1) + rawNoise(x-1, y + 1) + rawNoise(x+1, y - 1)) * 3) +
+        //int n = rawNoise(x, y), t = n << 4;
+        return ((rawNoise(x, y) << 2) +
+                rawNoise(x + 1, y) + rawNoise(x - 1, y) + rawNoise(x, y + 1) + rawNoise(x, y - 1)/* +
+                 + rawNoise(x + 1, y+1) + rawNoise(x - 1, y-1) + rawNoise(x-1, y + 1) + rawNoise(x+1, y - 1)*/
+                 /* >> 1) +
                 rawNoise(x + 2, y) + rawNoise(x - 2, y) + rawNoise(x, y + 2) + rawNoise(x, y - 2) +
-                rawNoise(x + 2, y+2) + rawNoise(x - 2, y-2) + rawNoise(x-2, y + 2) + rawNoise(x+2, y - 2);
-        return t >>> 6;
+                rawNoise(x + 2, y+2) + rawNoise(x - 2, y-2) + rawNoise(x-2, y + 2) + rawNoise(x+2, y - 2) +
+                rawNoise(x + 2, y+1) + rawNoise(x - 2, y+1) + rawNoise(x+1, y + 2) + rawNoise(x+1, y - 2) +
+                rawNoise(x + 2, y-1) + rawNoise(x - 2, y-1) + rawNoise(x-1, y + 2) + rawNoise(x-1, y - 2)*/
+        ) >> 3;
+    }
+
+    public static float discreteNoise(int x, int y, float zoom) {
+        //int n = rawNoise(x, y), t = n << 4;
+        final float alef = x / zoom, bet = y / zoom;
+        final int alpha = (int) (alef), beta = (int) (bet);
+        final float aBias = (alef - alpha)+1, bBias = (bet - beta)+1;
+        final int a0 = (int) (aBias - 0.75f)-1, a1 = (int) (aBias + 0.75f)-1,
+                a2 = (int) (aBias - 0.25f)-1, a3 = (int) (aBias + 0.25f)-1,
+                b0 = (int)(bBias - 0.75f)-1, b1 = (int) (bBias + 0.75f)-1,
+                b2 = (int)(bBias - 0.25f)-1, b3 = (int) (bBias + 0.25f)-1;
+        //midBias = (2f - Math.abs(1f - aBias) - Math.abs(1f - bBias)), //(rawNoise(alpha, beta) << 2) +
+        return  (rawNoise(alpha + a0, beta) + rawNoise(alpha + a1, beta) +
+                rawNoise(alpha, beta + b0) + rawNoise(alpha, beta + b1) +
+                rawNoise(alpha + a2, beta) + rawNoise(alpha + a3, beta) +
+                rawNoise(alpha, beta + b2) + rawNoise(alpha, beta + b3)
+                /*
+                rawNoise(alpha + 1, beta) * aBias + rawNoise(alpha - 1, beta) * (1 - aBias) +
+                rawNoise(alpha, beta + 1) * bBias + rawNoise(alpha, beta - 1) * (1 - bBias) +
+
+                rawNoise(alpha + 1, beta+1) * aBias * bBias + rawNoise(alpha - 1, beta-1) * (1 - aBias) * (1 - bBias) +
+                rawNoise(alpha-1, beta + 1) * (1 - aBias) * bBias + rawNoise(alpha+1, beta - 1) * aBias * (1 - bBias)/* +
+                 + rawNoise(x + 1, y+1) + rawNoise(x - 1, y-1) + rawNoise(x-1, y + 1) + rawNoise(x+1, y - 1)*/
+                 /* >> 1) +
+                rawNoise(x + 2, y) + rawNoise(x - 2, y) + rawNoise(x, y + 2) + rawNoise(x, y - 2) +
+                rawNoise(x + 2, y+2) + rawNoise(x - 2, y-2) + rawNoise(x-2, y + 2) + rawNoise(x+2, y - 2) +
+                rawNoise(x + 2, y+1) + rawNoise(x - 2, y+1) + rawNoise(x+1, y + 2) + rawNoise(x+1, y - 2) +
+                rawNoise(x + 2, y-1) + rawNoise(x - 2, y-1) + rawNoise(x-1, y + 2) + rawNoise(x-1, y - 2)*/
+        ) * 0.00048828125f;//0.00078125f;//;//0.000244140625f;//0.001953125f; //0.0009765625f; // 0.00048828125f;
+    }
+
+    public static int rawNoise(int x, int y) {
+        //final int mx = x * 17 ^ ((x ^ 11) + (y ^ 13)), my = y * 29 ^ (7 + x + y),
+        final int mx = (x * 0x9E37 ^ y * 0x7C15) + (y * 0xA47F + x * 0x79B9), my = (y * 0xA47F ^ x * 0x79B9) ^ (x * 0x9E37 + y * 0x7C15),
+                gx = mx ^ (mx >> 1), gy = my ^ (my >> 1),
+                out = ((gx + gy + (gx * gy)) >>> 4 & 0x1ff); //((Integer.bitCount(gx) + Integer.bitCount(gy) & 63) << 3) ^
+        return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
     }
 
 
@@ -136,7 +178,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     case SquidInput.ENTER:
                         if(testType == 4) {
                             noiseMode++;
-                            noiseMode &= 1;
+                            noiseMode &= 3;
                         }
                         else if(testType == 5) {
                             rngMode++;
@@ -752,17 +794,35 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Perlin Noise");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = ((float) PerlinNoise.noise(x * 0.125f, y * 0.125f) + 1.0f) * 0.5f;
+                                bright = ((float) PerlinNoise.noise(x, y) + 1.0f) * 0.5f;
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
                             }
                         }
                         break;
                     case 1:
-                        Gdx.graphics.setTitle("Discrete Noise");
+                        Gdx.graphics.setTitle("Discrete Noise, no zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = discreteNoise(x, y);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                            }
+                        }
+                        break;
+                    case 2:
+                        Gdx.graphics.setTitle("Discrete Noise, x2 zoom");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = discreteNoise(x, y, 2f);
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 3:
+                        Gdx.graphics.setTitle("Discrete Noise, x3.7 zoom");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = discreteNoise(x, y, 3.7f);
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
                             }
                         }
                         break;
