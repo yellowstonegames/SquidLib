@@ -176,7 +176,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     case SquidInput.ENTER:
                         if (testType == 4) {
                             noiseMode++;
-                            noiseMode &= 3;
+                            noiseMode &= 7;
                         } else if (testType == 5) {
                             rngMode++;
                             rngMode %= 18;
@@ -240,6 +240,7 @@ public class HashVisualizer extends ApplicationAdapter {
         long code;
         float bright;
         int iBright;
+        int[][] map;
         switch (testType) {
             case 1: {
                 switch (hashMode) {
@@ -824,6 +825,52 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         break;
+                    case 4:
+                        Gdx.graphics.setTitle("Merlin Noise, mixed smooth zoom 2");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = (MerlinNoise.noise2D(x, y, 6f) * 20
+                                        + MerlinNoise.noise2D(x + 333 * 3, y + 333 * 3, 5f) * 3
+                                        + MerlinNoise.noise2D(x + 333 * 4, y + 333 * 4, 3f) * 2
+                                        + MerlinNoise.noise2D(x + 333 * 5, y + 333 * 5, 1f)
+                                        + MerlinNoise.noise2D(x + 333 * 3, y + 333 * 3, 7f) * 3
+                                        + MerlinNoise.noise2D(x + 333 * 4, y + 333 * 4, 9f) * 2
+                                        + MerlinNoise.noise2D(x + 333 * 5, y + 333 * 5, 11f)) >> 5;
+                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                            }
+                        }
+                        break;
+                    case 5:
+                        Gdx.graphics.setTitle("Merlin Precalc Noise, seed 0");
+                        map = MerlinNoise.preCalcNoise2D(width, height, 0);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = map[x][y];
+                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                            }
+                        }
+                        break;
+                    case 6:
+                        Gdx.graphics.setTitle("Merlin Precalc Noise, seed 65535");
+                        map = MerlinNoise.preCalcNoise2D(width, height, 65535);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = map[x][y];
+                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                            }
+                        }
+                        break;
+                    case 7:
+                        Gdx.graphics.setTitle("Merlin Precalc Noise, seed 0xD0E89D2D311E289FL");
+                        map = MerlinNoise.preCalcNoise2D(width, height, 0xD0E89D2D311E289FL);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = map[x][y];
+                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                            }
+                        }
+                        break;
+
                     /*
                                         case 2:
                         Gdx.graphics.setTitle("LightRNG");
