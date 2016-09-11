@@ -99,6 +99,60 @@ public class MerlinNoise {
                 bCell * (0.5 + absB - absA - cornerPref)) * mx
         ) * 0.125);
     }
+
+
+    /**
+     * Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.
+     * Does allow taking a seed because internally it uses a ThunderRNG to quickly generate initial white noise before
+     * processing it into more continuous noise. This generates a lot of random numbers (at least 1 + 14 * height, or
+     * more if width is greater than 64), so ThunderRNG's high speed and presumed higher-than-2-to-the-64 period are
+     * both assets here.
+     * <br>
+     * The 2D int array this produces has ints ranging from 1 to 255, with extreme values very unlikely. Because 0 is
+     * impossible for this to generate, it should be fine to use values from this as denominators in division.
+     * @param width the width of the 2D int array to generate
+     * @param height the height of the 2D int array to generate
+     * @param seed the RNG seed to use when pseudo-randomly generating the initial white noise this then processes
+     * @return a 2D int array where each int should be between 1 and 255, inclusive
+     */
+    public static int[][] preCalcNoise2D(int width, int height, long seed)
+    {
+        ThunderRNG random = new ThunderRNG(seed);
+        int w = (width << 1) + 2, h = (height << 1) + 2;
+        GreasedRegion[] regions = new GreasedRegion[]{
+            new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
+                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
+                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
+                new GreasedRegion(random, w, h).retract().expand(3)
+        };
+        random.reseed(random.nextLong());
+        int[][] data = GreasedRegion.bitSum(regions);
+
+        regions = new GreasedRegion[]{
+                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
+                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
+                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
+                new GreasedRegion(random, w, h).retract().expand(3)
+        };
+        int[][] data2 = GreasedRegion.bitSum(regions), data3 = new int[width][height];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                data[x][y] += 128 - data2[x][y];
+            }
+        }
+        for (int x = 0, dx = 1; x < width; x++, dx+= 2) {
+            for (int y = 0, dy = 1; y < height; y++, dy+=2) {
+                data3[x][y] = ((data[dx][dy] << 2) + data[dx-1][dy] + data[dx+1][dy] + data[dx][dy+1] + data[dx][dy-1]) >>> 3;
+            }
+        }
+        return data3;
+        /*
+        int[][] data = GreasedRegion.bitSum(regions);
+        return GreasedRegion.selectiveNegate(data, new GreasedRegion(random, width, height), 0xff);
+        */
+    }
+
+
     /*
     public static int noise2D(int x, int y, double zoom) {
         final double alef = x / zoom, bet = y / zoom;

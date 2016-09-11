@@ -240,6 +240,30 @@ public class GreasedRegion implements Serializable {
     }
 
     /**
+     * Constructor for an random GreasedRegion of the given width and height.
+     * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
+     * @param random a RandomnessSource (such as LightRNG or ThunderRNG) that this will use to generate its contents
+     * @param width the maximum width for the GreasedRegion
+     * @param height the maximum height for the GreasedRegion
+     */
+    public GreasedRegion(RandomnessSource random, int width, int height)
+    {
+        this.width = width;
+        this.height = height;
+        ySections = (height + 63) >> 6;
+        yEndMask = (-1L >>> (64 - (height & 63)));
+        data = new long[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            data[i] = random.nextLong();
+        }
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
+    }
+
+    /**
      * Copy constructor that takes another GreasedRegion and copies all of its data into this new one.
      * If you find yourself frequently using this constructor and assigning it to the same variable, consider using the
      * {@link #remake(GreasedRegion)} method on the variable instead, which will, if it has the same width and height
@@ -1647,6 +1671,45 @@ public class GreasedRegion implements Serializable {
         return x >= 0 && y >= 0 && x < width && y < height && ySections > 0 &&
                 ((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0);
     }
+
+    /**
+     * Generates a 2D int array from an array or vararg of GreasedRegions, treating each cell in the nth region as the
+     * nth bit of the int at the corresponding x,y cell in the int array. This means if you give 8 GreasedRegions to
+     * this method, it can produce any 8-bit number in a cell (0-255); if you give 16 GreasedRegions, then it can
+     * produce any 16-bit number (0-65535).
+     * @param regions an array or vararg of GreasedRegions; must all have the same width and height
+     * @return a 2D int array with the same width and height as the regions, with bits per int taken from the regions
+     */
+    public static int[][] bitSum(GreasedRegion... regions)
+    {
+        if(regions == null || regions.length <= 0)
+            return new int[0][0];
+        int w = regions[0].width, h = regions[0].height, l = Math.min(32, regions.length), ys = regions[0].ySections;
+        int[][] numbers = new int[w][h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int i = 0; i < l; i++) {
+                    numbers[x][y] |= (regions[i].data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1 << i : 0;
+                }
+            }
+        }
+        return numbers;
+    }
+
+    /*
+    public static int[][] selectiveNegate(int[][] numbers, GreasedRegion region, int mask)
+    {
+        if(region == null)
+            return numbers;
+        int w = region.width, h = region.height, ys = region.ySections;
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                if((region.data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0) numbers[x][y] = (~numbers[x][y] & mask);
+            }
+        }
+        return numbers;
+    }
+    */
 
     @Override
     public boolean equals(Object o) {
