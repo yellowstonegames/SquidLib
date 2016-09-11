@@ -42,40 +42,37 @@ public class HashVisualizer extends ApplicationAdapter {
     private RandomXS128 gdxRandom;
     private long seed;
 
-    public static double toDouble(long n)
-    {
+    public static double toDouble(long n) {
         return Double.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
         //return Double.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
     }
 
-    public static float toFloat(int n)
-    {
+    public static float toFloat(int n) {
         return (Float.intBitsToFloat(0x3F800000 | n >>> 9) - 1.0f);
     }
 
-/*
-    public static float determine(float alpha, float beta)
-    {
-        //final int a = ((x * 0x92B5CC83) << 16) ^ x, b = (((y * 0xD9B4E019) << 16) ^ y) | 1;
+    /*
+        public static float determine(float alpha, float beta)
+        {
+            //final int a = ((x * 0x92B5CC83) << 16) ^ x, b = (((y * 0xD9B4E019) << 16) ^ y) | 1;
 
-        //final int x = (~alpha << 15) * ~beta + ((alpha >> 1) << 1) + ((alpha >> 2) << 2) + (beta >> ((alpha + ~beta) & 3)),
-        //        y = (alpha + ~beta << 17) + ((beta >> 1) << 1) + ((beta >> 2) << 2) + (alpha >> (beta & 3));
+            //final int x = (~alpha << 15) * ~beta + ((alpha >> 1) << 1) + ((alpha >> 2) << 2) + (beta >> ((alpha + ~beta) & 3)),
+            //        y = (alpha + ~beta << 17) + ((beta >> 1) << 1) + ((beta >> 2) << 2) + (alpha >> (beta & 3));
 
-        final float x = (alpha + 1.4051f) * (beta + 0.9759f),
-                y = (beta + 2.3757f) * (alpha + 0.7153f) + x * 0.7255f;
+            final float x = (alpha + 1.4051f) * (beta + 0.9759f),
+                    y = (beta + 2.3757f) * (alpha + 0.7153f) + x * 0.7255f;
 
-        //final float x = (alpha + 1.875371971f) * (beta + 0.875716533f),
-        //        y = (beta + 3.875716533f) * (alpha + 0.6298371981f);
+            //final float x = (alpha + 1.875371971f) * (beta + 0.875716533f),
+            //        y = (beta + 3.875716533f) * (alpha + 0.6298371981f);
 
-                //a = (((x >> 1) * y + x) ^ (~((x >> 1) * y + x) << 15)) + y,
-                //b = ((y + (y >> 1) * a) ^ (~(y + (y >> 1) * a) << 14)) + x;
-        //return toFloat(x ^ (0xCC83 * ((x + y & (y + 0xCD7FE75E)) >> 6)));
-        //return toFloat(x * y);
-        return ((x % 0.29f) + (y % 0.3f) + alpha * 11.138421537629f % 0.22f + beta * 9.3751649568f % 0.21f); // & 8388607
-    }
-*/
-    public static int rawNoise0(int alpha, int beta)
-    {
+                    //a = (((x >> 1) * y + x) ^ (~((x >> 1) * y + x) << 15)) + y,
+                    //b = ((y + (y >> 1) * a) ^ (~(y + (y >> 1) * a) << 14)) + x;
+            //return toFloat(x ^ (0xCC83 * ((x + y & (y + 0xCD7FE75E)) >> 6)));
+            //return toFloat(x * y);
+            return ((x % 0.29f) + (y % 0.3f) + alpha * 11.138421537629f % 0.22f + beta * 9.3751649568f % 0.21f); // & 8388607
+        }
+    */
+    public static int rawNoise0(int alpha, int beta) {
         // int x = a * 0x1B + b * 0xB9, y = (a * 0x6F ^ b * 0x53), z = x * 0x2D + y * 0xE5, w = (z ^ x) + y * 0xF1,
         // x = a * 0x1B + b * 0x29, y = (a * 0x2F ^ b * 0x13), z = x * 0x3D + y * 0x45, w = (z ^ x) + y * 0x37,
         // near = (x * 0xB9 ^ y * 0x1B) + (x * 0x57 ^ z * 0x6F) + (y * 0x57 ^ z * 0xB9 ) + (x * 0x2D ^ w * 0xE5) + (y  * 0xA7 ^ w * 0xF1);
@@ -92,31 +89,33 @@ public class HashVisualizer extends ApplicationAdapter {
     public static int discreteNoise(int x, int y) {
         //int n = rawNoise(x, y), t = n << 4;
         return ((rawNoise(x, y) << 2) +
-                rawNoise(x + 1, y) + rawNoise(x - 1, y) + rawNoise(x, y + 1) + rawNoise(x, y - 1)/* +
-                 + rawNoise(x + 1, y+1) + rawNoise(x - 1, y-1) + rawNoise(x-1, y + 1) + rawNoise(x+1, y - 1)*/
-                 /* >> 1) +
-                rawNoise(x + 2, y) + rawNoise(x - 2, y) + rawNoise(x, y + 2) + rawNoise(x, y - 2) +
-                rawNoise(x + 2, y+2) + rawNoise(x - 2, y-2) + rawNoise(x-2, y + 2) + rawNoise(x+2, y - 2) +
-                rawNoise(x + 2, y+1) + rawNoise(x - 2, y+1) + rawNoise(x+1, y + 2) + rawNoise(x+1, y - 2) +
-                rawNoise(x + 2, y-1) + rawNoise(x - 2, y-1) + rawNoise(x-1, y + 2) + rawNoise(x-1, y - 2)*/
+                rawNoise(x + 1, y) + rawNoise(x - 1, y) + rawNoise(x, y + 1) + rawNoise(x, y - 1)
         ) >> 3;
     }
 
     public static float discreteNoise(int x, int y, float zoom) {
         //int n = rawNoise(x, y), t = n << 4;
         final float alef = x / zoom, bet = y / zoom;
-        final int alpha = (int) (alef), beta = (int) (bet);
-        final float aBias = (alef - alpha)+1, bBias = (bet - beta)+1;
-        final int a0 = (int) (aBias - 0.75f)-1, a1 = (int) (aBias + 0.75f)-1,
-                a2 = (int) (aBias - 0.25f)-1, a3 = (int) (aBias + 0.25f)-1,
-                b0 = (int)(bBias - 0.75f)-1, b1 = (int) (bBias + 0.75f)-1,
-                b2 = (int)(bBias - 0.25f)-1, b3 = (int) (bBias + 0.25f)-1;
+        final int alpha = (int) (alef), beta = (int) (bet),
+                north = rawNoise(alpha, beta - 1), south = rawNoise(alpha, beta + 1),
+                east = rawNoise(alpha + 1, beta), west = rawNoise(alpha - 1, beta),
+                center = rawNoise(alpha, beta);
+        final float aBias = (alef - alpha), bBias = (bet - beta);
+        return (((aBias - 0.75f) < 0 ? west : center) * 0.6f + ((aBias + 0.75f) >= 1 ? east : center) * 0.6f +
+                ((aBias - 0.25f) < 0 ? west : center) * 0.4f + ((aBias + 0.2f) >= 1 ? east : center) * 0.4f +
+                ((bBias - 0.75f) < 0 ? north : center) * 0.6f + ((bBias + 0.75f) >= 1 ? south : center) * 0.6f +
+                ((bBias - 0.25f) < 0 ? north : center) * 0.4f + ((bBias + 0.25f) >= 1 ? south : center) * 0.4f
+        ) * 0.0009765625f;
+    }
+        /*
+        ((aBias - 0.75f) < 1 ? west : center) + ((aBias + 0.75f) >= 2 ? east : center) +
+                ((aBias - 0.25f) < 1 ? west : center) + ((aBias + 0.25f) >= 2 ? east : center) +
+                ((bBias - 0.75f) < 1 ? north : center) + ((bBias + 0.75f) >= 2 ? south : center) +
+                ((bBias - 0.25f) < 1 ? north : center) + ((bBias + 0.25f) >= 2 ? south : center)
+         */
+
         //midBias = (2f - Math.abs(1f - aBias) - Math.abs(1f - bBias)), //(rawNoise(alpha, beta) << 2) +
-        return  (rawNoise(alpha + a0, beta) + rawNoise(alpha + a1, beta) +
-                rawNoise(alpha, beta + b0) + rawNoise(alpha, beta + b1) +
-                rawNoise(alpha + a2, beta) + rawNoise(alpha + a3, beta) +
-                rawNoise(alpha, beta + b2) + rawNoise(alpha, beta + b3)
-                /*
+        /*
                 rawNoise(alpha + 1, beta) * aBias + rawNoise(alpha - 1, beta) * (1 - aBias) +
                 rawNoise(alpha, beta + 1) * bBias + rawNoise(alpha, beta - 1) * (1 - bBias) +
 
@@ -128,20 +127,20 @@ public class HashVisualizer extends ApplicationAdapter {
                 rawNoise(x + 2, y+2) + rawNoise(x - 2, y-2) + rawNoise(x-2, y + 2) + rawNoise(x+2, y - 2) +
                 rawNoise(x + 2, y+1) + rawNoise(x - 2, y+1) + rawNoise(x+1, y + 2) + rawNoise(x+1, y - 2) +
                 rawNoise(x + 2, y-1) + rawNoise(x - 2, y-1) + rawNoise(x-1, y + 2) + rawNoise(x-1, y - 2)*/
-        ) * 0.00048828125f;//0.00078125f;//;//0.000244140625f;//0.001953125f; //0.0009765625f; // 0.00048828125f;
-    }
+        //0.00078125f;//;//0.000244140625f;//0.001953125f; //0.0009765625f; // 0.00048828125f;
+
 
     public static int rawNoise(int x, int y) {
         //final int mx = x * 17 ^ ((x ^ 11) + (y ^ 13)), my = y * 29 ^ (7 + x + y),
         final int mx = (x * 0x9E37 ^ y * 0x7C15) + (y * 0xA47F + x * 0x79B9), my = (y * 0xA47F ^ x * 0x79B9) ^ (x * 0x9E37 + y * 0x7C15),
-                gx = mx ^ (mx >> 1), gy = my ^ (my >> 1),
-                out = ((gx + gy + (gx * gy)) >>> 4 & 0x1ff); //((Integer.bitCount(gx) + Integer.bitCount(gy) & 63) << 3) ^
+                //gx = mx ^ (mx >> 1), gy = my ^ (my >> 1),
+                out = ((mx + my + (mx * my)) >>> 4 & 0x1ff); //((Integer.bitCount(gx) + Integer.bitCount(gy) & 63) << 3) ^
         return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
     }
 
 
     @Override
-    public void create () {
+    public void create() {
         batch = new SpriteBatch();
         width = 512;
         height = 512;
@@ -150,15 +149,15 @@ public class HashVisualizer extends ApplicationAdapter {
         display = new SquidPanel(width, height, 1, 1);
         overlay = new SquidPanel(16, 8, DefaultResources.getStretchableFont().width(32).height(64).initBySize());
         IFilter<Color> filter0 = new Filters.PaletteFilter(
-                new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f,                           0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f},
+                new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f},
                 new float[]{0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f,},
                 new float[]{0.5f, 0.5625f, 0.625f, 0.6875f, 0.75f, 0.8125f, 0.875f, 0.9375f, 1f, 0.5f, 0.5625f, 0.625f, 0.6875f, 0.75f, 0.8125f, 0.875f, 0.9375f, 1f},
                 new float[]{1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f,}),
-        filter1 = new Filters.PaletteFilter(SColor.YELLOW_GREEN_SERIES),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
-        filter2 = new Filters.PaletteFilter(new SColor[]{SColor.TREE_PEONY, SColor.NAVAJO_WHITE, SColor.BELLFLOWER, SColor.CAPE_JASMINE, SColor.CELADON, SColor.DAWN, SColor.TEAL}),
-        filter3 = new Filters.GrayscaleFilter(),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
-        filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
-        filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
+                filter1 = new Filters.PaletteFilter(SColor.YELLOW_GREEN_SERIES),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
+                filter2 = new Filters.PaletteFilter(new SColor[]{SColor.TREE_PEONY, SColor.NAVAJO_WHITE, SColor.BELLFLOWER, SColor.CAPE_JASMINE, SColor.CELADON, SColor.DAWN, SColor.TEAL}),
+                filter3 = new Filters.GrayscaleFilter(),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
+                filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
+                filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
         colorFactory = new SquidColorCenter();
         sipA = new CrossHash.Sip();
         stormA = CrossHash.Storm.alpha;
@@ -173,18 +172,15 @@ public class HashVisualizer extends ApplicationAdapter {
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
-                switch (key)
-                {
+                switch (key) {
                     case SquidInput.ENTER:
-                        if(testType == 4) {
+                        if (testType == 4) {
                             noiseMode++;
                             noiseMode &= 3;
-                        }
-                        else if(testType == 5) {
+                        } else if (testType == 5) {
                             rngMode++;
                             rngMode %= 18;
-                        }
-                        else {
+                        } else {
                             hashMode++;
                             hashMode %= 28;
                         }
@@ -218,8 +214,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 'Q':
                     case 'q':
-                    case SquidInput.ESCAPE:
-                    {
+                    case SquidInput.ESCAPE: {
                         Gdx.app.exit();
                     }
                 }
@@ -237,8 +232,8 @@ public class HashVisualizer extends ApplicationAdapter {
         //Gdx.graphics.setContinuousRendering(false);
         //Gdx.graphics.requestRendering();
     }
-    public void putMap()
-    {
+
+    public void putMap() {
         display.erase();
         overlay.erase();
         int[] coordinates = new int[2], coordinate = new int[1];
@@ -791,38 +786,41 @@ public class HashVisualizer extends ApplicationAdapter {
             case 4: { //Noise mode
                 switch (noiseMode) {
                     case 0:
-                        Gdx.graphics.setTitle("Perlin Noise");
+                        Gdx.graphics.setTitle("Perlin Noise, x8 zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = ((float) PerlinNoise.noise(x, y) + 1.0f) * 0.5f;
+                                bright = ((float) PerlinNoise.noise(x / 8.0, y / 8.0) + 1.0f) * 0.5f;
                                 display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
                             }
                         }
                         break;
                     case 1:
-                        Gdx.graphics.setTitle("Discrete Noise, no zoom");
+                        Gdx.graphics.setTitle("Merlin Noise, no zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = discreteNoise(x, y);
+                                iBright = MerlinNoise.noise2D(x, y);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("Discrete Noise, x2 zoom");
+                        Gdx.graphics.setTitle("Merlin Noise, x5 smooth zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = discreteNoise(x, y, 2f);
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                iBright = MerlinNoise.noise2D(x, y, 5f);
+                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Discrete Noise, x3.7 zoom");
+                        Gdx.graphics.setTitle("Merlin Noise, mixed smooth zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = discreteNoise(x, y, 3.7f);
-                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
+                                iBright = (MerlinNoise.noise2D(x, y, 6f) * 10
+                                        + MerlinNoise.noise2D(x + 333 * 3, y + 333 * 3, 5f) * 3
+                                        + MerlinNoise.noise2D(x + 333 * 4, y + 333 * 4, 3f) * 2
+                                        + MerlinNoise.noise2D(x + 333 * 5, y + 333 * 5, 1f)) >> 4;
+                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
                         break;
@@ -1087,15 +1085,15 @@ public class HashVisualizer extends ApplicationAdapter {
                 }
             }
             break;
-            default:
-            {
+            default: {
                 switch (hashMode) {
                     case 0:
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = Arrays.hashCode(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = Arrays.hashCode(coordinates) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1105,7 +1103,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = CrossHash.hash(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = CrossHash.hash(coordinates) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1115,7 +1114,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = sipA.hash(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = sipA.hash(coordinates) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1125,7 +1125,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = CrossHash.Lightning.hash(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = CrossHash.Lightning.hash(coordinates) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1135,7 +1136,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = Arrays.hashCode(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = Arrays.hashCode(coordinate) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1145,7 +1147,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = CrossHash.hash(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = CrossHash.hash(coordinate) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1155,7 +1158,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = sipA.hash(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = sipA.hash(coordinate) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1165,7 +1169,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = CrossHash.Lightning.hash(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = CrossHash.Lightning.hash(coordinate) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1176,7 +1181,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = CrossHash.hash64(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = CrossHash.hash64(coordinates) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1187,7 +1193,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = sipA.hash64(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = sipA.hash64(coordinates) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1198,7 +1205,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = CrossHash.Lightning.hash64(coordinates) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = CrossHash.Lightning.hash64(coordinates) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1208,7 +1216,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = CrossHash.hash64(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = CrossHash.hash64(coordinate) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1218,7 +1227,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = sipA.hash64(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = sipA.hash64(coordinate) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1228,7 +1238,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = CrossHash.Lightning.hash64(coordinate) & 7L; code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
+                                code = CrossHash.Lightning.hash64(coordinate) & 7L;
+                                code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1239,7 +1250,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = Arrays.hashCode(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = Arrays.hashCode(coordinates) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1250,7 +1262,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = CrossHash.hash(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = CrossHash.hash(coordinates) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1261,7 +1274,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = sipA.hash(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = sipA.hash(coordinates) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1272,7 +1286,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = CrossHash.Lightning.hash(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = CrossHash.Lightning.hash(coordinates) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1282,7 +1297,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = Arrays.hashCode(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = Arrays.hashCode(coordinate) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1292,7 +1308,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = CrossHash.hash(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = CrossHash.hash(coordinate) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1302,7 +1319,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = sipA.hash(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = sipA.hash(coordinate) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1312,7 +1330,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = CrossHash.Lightning.hash(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = CrossHash.Lightning.hash(coordinate) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1323,7 +1342,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = CrossHash.hash64(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = CrossHash.hash64(coordinates) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1334,7 +1354,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = sipA.hash64(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = sipA.hash64(coordinates) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1344,7 +1365,8 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = CrossHash.Lightning.hash64(coordinates) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = CrossHash.Lightning.hash64(coordinates) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1354,7 +1376,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = CrossHash.hash64(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = CrossHash.hash64(coordinate) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1364,7 +1387,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = sipA.hash64(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = sipA.hash64(coordinate) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1374,7 +1398,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = CrossHash.Lightning.hash64(coordinate) & 1792L; code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
+                                code = CrossHash.Lightning.hash64(coordinate) & 1792L;
+                                code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1385,8 +1410,9 @@ public class HashVisualizer extends ApplicationAdapter {
         }
 
     }
+
     @Override
-    public void render () {
+    public void render() {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -1394,13 +1420,13 @@ public class HashVisualizer extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         view.apply(true);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
-        if(testType == 3)
+        if (testType == 3)
             putMap();
 
         // if the user clicked, we have a list of moves to perform.
 
         // if we are waiting for the player's input and get input, process it.
-        if(input.hasNext()) {
+        if (input.hasNext()) {
             input.next();
         }
 
@@ -1418,7 +1444,7 @@ public class HashVisualizer extends ApplicationAdapter {
         //Gdx.graphics.requestRendering();
     }
 
-    public static void main (String[] arg) {
+    public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Test: Hash Visualization";
         config.width = 512;
