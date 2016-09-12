@@ -805,19 +805,19 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("Merlin Noise, x5 smooth zoom");
+                        Gdx.graphics.setTitle("Merlin Noise, x4 smooth zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = MerlinNoise.noise2D(x, y, 5f);
+                                iBright = MerlinNoise.noise2D(x, y, 4f);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Merlin Noise, mixed smooth zoom");
+                        Gdx.graphics.setTitle("Merlin Noise, mixed smooth zoom x8");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (MerlinNoise.noise2D(x, y, 6f) * 10
+                                iBright = (MerlinNoise.noise2D(x, y, 8f) * 10
                                         + MerlinNoise.noise2D(x + 333 * 3, y + 333 * 3, 5f) * 3
                                         + MerlinNoise.noise2D(x + 333 * 4, y + 333 * 4, 3f) * 2
                                         + MerlinNoise.noise2D(x + 333 * 5, y + 333 * 5, 1f)) >> 4;
@@ -826,16 +826,16 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 4:
-                        Gdx.graphics.setTitle("Merlin Noise, mixed smooth zoom 2");
+                        Gdx.graphics.setTitle("Merlin Noise, extra-mixed smooth zoom x8");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (MerlinNoise.noise2D(x, y, 6f) * 20
+                                iBright = (MerlinNoise.noise2D(x, y, 8f) * 20
                                         + MerlinNoise.noise2D(x + 333 * 3, y + 333 * 3, 5f) * 3
                                         + MerlinNoise.noise2D(x + 333 * 4, y + 333 * 4, 3f) * 2
                                         + MerlinNoise.noise2D(x + 333 * 5, y + 333 * 5, 1f)
-                                        + MerlinNoise.noise2D(x + 333 * 3, y + 333 * 3, 7f) * 3
-                                        + MerlinNoise.noise2D(x + 333 * 4, y + 333 * 4, 9f) * 2
-                                        + MerlinNoise.noise2D(x + 333 * 5, y + 333 * 5, 11f)) >> 5;
+                                        + MerlinNoise.noise2D(x + 333 * 6, y + 333 * 6, 11f) * 3
+                                        + MerlinNoise.noise2D(x + 333 * 7, y + 333 * 7, 13f) * 2
+                                        + MerlinNoise.noise2D(x + 333 * 8, y + 333 * 8, 15f)) >> 5;
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
