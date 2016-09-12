@@ -118,6 +118,22 @@ public class MultiSpill {
 
         initialize(level);
     }
+    /**
+     * Used to construct a Spill from the output of another, specifying a distance calculation and RNG.
+     * <br>
+     * This constructor allows you to specify an RNG, but only the RandomnessSource of that RNG will be used. If
+     * the RandomnessSource does not also implement StatefulRandomness, then it will be used to generate a seed for
+     * a LightRNG and that will be used instead.
+     * @param level a short[][] that should have been the spillMap of another MultiSpill
+     * @param measurement a Spill.Measurement that should usually be MANHATTAN
+     */
+    public MultiSpill(final short[][] level, Measurement measurement, RNG random) {
+        rng = new StatefulRNG(random.getRandomness());
+
+        this.measurement = measurement;
+
+        initialize(level);
+    }
 
     /**
      * Constructor meant to take a char[][] returned by DungeonGen.generate(), or any other
@@ -167,11 +183,10 @@ public class MultiSpill {
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
-     *
-     * This constructor allows you to specify an RNG, but the actual RandomnessSource the RNG that this object uses
-     * will not be identical to the one passed as random (64 bits will be requested from the passed RNG, and that will
-     * be used to seed this class' RNG).
-     *
+     * <br>
+     * This constructor allows you to specify an RNG, but only the RandomnessSource of that RNG will be used. If
+     * the RandomnessSource does not also implement StatefulRandomness, then it will be used to generate a seed for
+     * a LightRNG and that will be used instead.
      * @param level a char[][] that should use '#' for walls and '.' for floors
      * @param measurement a Spill.Measurement that should usually be MANHATTAN
      * @param random an RNG that will be converted to a StatefulRNG if it is not one already
@@ -194,7 +209,7 @@ public class MultiSpill {
         width = level.length;
         height = level[0].length;
         spillMap = new short[width][height];
-        anySpillMap = new GreasedRegion(level, 1, 32767);
+        anySpillMap = new GreasedRegion(level, 1, 0x7fff);
         anyFreshMap = new GreasedRegion(width, height);
         physicalMap = new boolean[width][height];
         for (int y = 0; y < height; y++) {
@@ -344,6 +359,7 @@ public class MultiSpill {
         ArrayList<Coord> spillers = new ArrayList<>(entries);
         spreadPattern = new ArrayList<>(spillers.size());
         fresh.clear();
+        filled = 0;
         boolean hasFresh = false;
         for (short i = 0; i < spillers.size(); i++) {
             spreadPattern.add(new ArrayList<Coord>(128));
@@ -426,6 +442,7 @@ public class MultiSpill {
                 biases = new ArrayList<>(sz);
         spreadPattern = new ArrayList<>(sz);
         fresh.clear();
+        filled = 0;
         boolean hasFresh = false;
         for (short i = 0; i < sz; i++) {
             spreadPattern.add(new ArrayList<Coord>(128));
@@ -434,7 +451,7 @@ public class MultiSpill {
             Coord c = spillers.get(i);
             Double d = entries.getAt(i);
             biases.add(d);
-            if (d <= 0.0001)
+            if (d <= 0.0001 || c.x < 0 || c.y < 0)
                 continue;
             spillMap[c.x][c.y] = i;
             if (!impassable.contains(c)) {

@@ -1,10 +1,13 @@
 package squidpony.squidmath;
 
+import squidpony.annotation.Beta;
+
 /**
  * Simple somewhat-continuous noise functions that use int coordinates instead of the traditional double (this approach
  * works better on a grid). It's called this because it should be possible to replace PerlinNoise with MerlinNoise, and
  * because working with noise functions makes me feel like a wizard.
  */
+@Beta
 public class MerlinNoise {
 
     private MerlinNoise()
@@ -39,6 +42,7 @@ public class MerlinNoise {
     }
     */
 
+    /*
     public static int rawNoise2D(int x, int y) {
         //final int mx = x * 17 ^ ((x ^ 11) + (y ^ 13)), my = y * 29 ^ (7 + x + y),
         final int
@@ -57,8 +61,11 @@ public class MerlinNoise {
                 //out = ((sx * sy * mx * my) >>> 8 & 0x1ff); //((Integer.bitCount(gx) + Integer.bitCount(gy) & 63) << 3) ^
                 out = ((gz * 19) ^ (gw * 11) ^ (gp * 13) ^ (gq * 17)) & 0x1ff;
         return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
-    }
+    }*/
 
+    public static int rawNoise2D(int x, int y) {
+        return ((x * 0x9E3779B9 ^ 0xC6BC2796) * (y * 0x92B5CC83 + 0xD9B4E019) - (x ^ ~y) * 0x632BE59B * (~x + y) * 0x7F4A7C15) >>> 8 & 0xff;
+    }
 
     /**
      * 2D merlin noise.
@@ -72,6 +79,30 @@ public class MerlinNoise {
                 rawNoise2D(x + 1, y) + rawNoise2D(x - 1, y) + rawNoise2D(x, y + 1) + rawNoise2D(x, y - 1)
         ) >> 3;
     }
+                        /*(
+                                cellA * (0.5 + absA - absB) +// * (1 - aCoreBias) +
+                                cellB * (0.5 + absB - absA)// * (1 - bCoreBias) +
+                             //   cellAr * aCoreBias + cellBr * bCoreBias
+                        ) * (mx)
+                        */
+                                        /*(cellAB * cornerPref * 2.0 +
+                        cellA * (1.0 + absA - absB - cornerPref) * (1 - aCoreBias) +
+                        cellB * (1.0 + absB - absA - cornerPref) * (1 - bCoreBias) +
+                        cellAr * (1.0 - cornerPref) * aCoreBias + cellBr * bCoreBias * (1.0 - cornerPref)
+                ) * mx * 0.5
+                */
+/*
+                (cellAB * cornerPref * 2.0 +
+                                cellA * (1.0 + absA - absB - cornerPref) * (1 - aCoreBias) +
+                                cellB * (1.0 + absB - absA - cornerPref) * (1 - bCoreBias) +
+                                cellAr * (1.0 - cornerPref) * aCoreBias + cellBr * bCoreBias * (1.0 - cornerPref)
+                        ) * mx * 0.5
+                */
+                /*
+                                cellA * (0.5 + absA - absB - cornerPref) +
+                                cellB * (0.5 + absB - absA - cornerPref)) * mx
+
+                 */
 
     /**
      * 2D merlin noise with a zoom factor.
@@ -81,9 +112,38 @@ public class MerlinNoise {
      * @param zoom if greater than 1.0, will make the details of the noise larger; if less, will make them smaller
      * @return noise from 0 to 255, inclusive
      */
+    /*
     public static int noise2D(int x, int y, double zoom) {
-        final double alef = x / zoom, bet = y / zoom;
-        final int alpha = (int) (alef), beta = (int) (bet);
+        final double alef = x / (zoom * 8.0), bet = y / (zoom * 8.0);
+        final int alpha = (int) ((x >> 3) / zoom), beta = (int) ((y >> 3) / zoom);
+        final double aBias = (alef - alpha), bBias = (bet - beta),
+                absA = Math.abs(aBias - 0.5), absB = Math.abs(bBias - 0.5),
+                //cornerPref = 0.5 * (absA + absB),
+                cornerPref = Math.max(absA + absB - 0.5, 0) * 0.5,
+                mx = (Math.max(absA, absB))// * 0.5 + (absA + absB) * 0.5),
+                //aCoreBias = Math.max(0.25 - absA, 0), bCoreBias = Math.max(0.25 - absB, 0)
+                ;
+        final int aCond = (aBias < 0.5 ? -1 : 1), bCond = (bBias < 0.5 ? -1 : 1),
+                centerCell = rawNoise2D(alpha, beta),
+                cellA = rawNoise2D(alpha + aCond, beta),
+                cellB = rawNoise2D(alpha, beta + bCond),
+                cellAr = rawNoise2D(alpha - aCond, beta),
+                cellBr = rawNoise2D(alpha, beta - bCond),
+                //cellAB   = (rawNoise2D(alpha + aCond, beta + bCond) + (cellA + cellB)) / 3;
+                //cellArB  = (rawNoise2D(alpha - aCond, beta + bCond) * 6 + (cellAr + cellB) * 5) >> 4,
+                //cellABr  = (rawNoise2D(alpha + aCond, beta - bCond) * 6 + (cellA + cellBr) * 5) >> 4,
+                //cellArBr = (rawNoise2D(alpha - aCond, beta - bCond) * 6 + (cellAr + cellBr) * 5) >> 4;
+        return (int)(((centerCell)// * (1 - aCoreBias - bCoreBias) + cellAr * aCoreBias + cellBr * bCoreBias)
+                * (1 - mx) +
+                ((absA > absB) ? cellA * (1.4 + (absA - absB)) + cellB * (0.6 - (absA - absB)) :
+                        cellB * (1.4 + (absB - absA)) + cellA * (0.6 - (absB - absA))) * mx * 0.5)
+        );
+    }*/
+
+
+    public static int noise2D(int x, int y, double zoom) {
+        final double alef = x / (zoom * 8.0), bet = y / (zoom * 8.0);
+        final int alpha = (int) ((x >> 3) / zoom), beta = (int) ((y >> 3) / zoom);
         final double aBias = (alef - alpha), bBias = (bet - beta),
                 absA = Math.abs(aBias - 0.5), absB = Math.abs(bBias - 0.5),
                 cornerPref = Math.max(absA + absB - 0.5, 0),
@@ -92,12 +152,12 @@ public class MerlinNoise {
                 aCell = rawNoise2D(alpha + (aBias < 0.5 ? -1 : 1), beta),
                 bCell = rawNoise2D(alpha, beta + (bBias < 0.5 ? -1 : 1)),
                 cornerCell = (rawNoise2D(alpha + (aBias < 0.5 ? -1 : 1), beta + (bBias < 0.5 ? -1 : 1)) * 6 + (aCell + bCell) * 5) >> 4;
-        return (int)(( //(centerCell * (1 - absA - absB) + aCell * absA + bCell * absB)
+        return (int) ( //(centerCell * (1 - absA - absB) + aCell * absA + bCell * absB)
                 centerCell * (8 - mx) +
-                (cornerCell * cornerPref * 2.0 +
-                aCell * (0.5 + absA - absB - cornerPref) +
-                bCell * (0.5 + absB - absA - cornerPref)) * mx
-        ) * 0.125);
+                        (cornerCell * cornerPref * 2.0 +
+                                aCell * (0.5 + absA - absB - cornerPref) +
+                                bCell * (0.5 + absB - absA - cornerPref)) * mx
+        ) >>> 3;
     }
 
 

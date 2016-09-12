@@ -1,12 +1,15 @@
 package squidpony.examples;
 
-import regexodus.Category;
 import squidpony.GwtCompatibility;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
+import squidpony.squidgrid.mapping.SpillWorldMap;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -90,11 +93,11 @@ public class SpillTest {
 
             System.out.println();
         }
-        char[] glyphs = Category.Ll.contents();
+        char[] glyphs = "adeghjklnprstwxy".toCharArray(); //Category.IdentifierStart.contents();
         //int gs = glyphs.length;
-        for (int i = 0; i < 5; i++) {
-            StatefulRNG rng = new StatefulRNG(i * 65567 + 257);
-            int dim = 40 + i * 40, count = 30 + 20 * i;
+        for (int i = 2; i < 3; i++) {
+            StatefulRNG rng = new StatefulRNG(); //i * 5617
+            int dim = 40 + i * 40, count = 20 + 10 * i * i;
             char[][] blank = GwtCompatibility.fill2D('~', dim, dim);
             MultiSpill spreader = new MultiSpill(blank, Spill.Measurement.MANHATTAN, rng);
 
@@ -104,24 +107,37 @@ public class SpillTest {
             for (int j = 0; j < count; j++) {
                 //sobol.fillVector(filler);
                 //entries.put(Coord.get((int)(dim * filler[0]), (int)(dim * filler[1])), (filler[2] + 0.25) / 1.25);
-                entries.put(rng.nextCoord(dim, dim), (rng.nextDouble() + 0.25) / 1.25);
+                entries.put(rng.nextCoord(dim - 14, dim - 14).add(7), (rng.nextDouble() + 0.25) * 0.8);
+            }
+            count = entries.size();
+            int extra = (dim - 2) * 2;
+            double edgePower = count * 0.6 / extra;
+            for (int x = 1; x < dim - 1; x+=2) {
+                entries.put(Coord.get(x, 0), edgePower);
+                entries.put(Coord.get(x, dim - 1), edgePower);
+            }
+            for (int y = 1; y < dim - 1; y+=2) {
+                entries.put(Coord.get(0, y), edgePower);
+                entries.put(Coord.get(dim - 1, y), edgePower);
             }
             ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
             short[][] sm = spreader.spillMap;
             for (int x = 0; x < dim; x++) {
                 for (int y = 0; y < dim; y++) {
                     //blank[x][y] = (char) ('a' + Integer.bitCount(sm[x][y] + 7) % 26);
-                    if((sm[x][y] & 1) == 0)
-                        blank[x][y] = glyphs[sm[x][y]];
+                    if(sm[x][y] < count && (sm[x][y] & 15) <= 10)
+                        blank[x][y] = glyphs[sm[x][y] & 15];
                 }
             }
             for(Coord c : entries.keySet())
             {
-                if((sm[c.x][c.y] & 1) == 0)
+                if(sm[c.x][c.y] < count && (sm[c.x][c.y] & 15) <= 10)
                     blank[c.x][c.y] = '@';
             }
             DungeonUtility.debugPrint(blank);
             System.out.println();
         }
+        SpillWorldMap swm = new SpillWorldMap(160, 100, new StatefulRNG().nextLong());
+        DungeonUtility.debugPrint(swm.generate("CHINAQWXYZ".toCharArray()));
     }
 }
