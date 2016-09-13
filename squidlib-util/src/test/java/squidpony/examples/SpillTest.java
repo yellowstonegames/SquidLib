@@ -137,7 +137,18 @@ public class SpillTest {
             DungeonUtility.debugPrint(blank);
             System.out.println();
         }
-        SpillWorldMap swm = new SpillWorldMap(160, 100, new StatefulRNG().nextLong());
-        DungeonUtility.debugPrint(swm.generate("CHINAQWXYZ".toCharArray()));
+        int factions = 40;
+        int w = 100, h = 60;
+        SpillWorldMap swm;
+        for (String world : new String[]{"Ertah", "Tera", "Tarrah", "Morple", "Oruzdiam"}) {
+            swm = new SpillWorldMap(w += 20, h += 15, world);
+            System.out.println(world + '_' + w + 'x' + h);
+            DungeonUtility.debugPrint(swm.generate(factions, true));
+            System.out.println("     Atlas for the world of " + world);
+            for (int i = 0; i < factions + 2; i++) {
+                System.out.println("  " + swm.atlas.keyAt(i) + "  :  " + swm.atlas.getAt(i));
+            }
+            System.out.println();
+        }
     }
 }

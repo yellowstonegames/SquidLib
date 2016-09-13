@@ -1,33 +1,58 @@
 package squidpony.squidgrid.mapping;
 
+import regexodus.Category;
+import squidpony.Thesaurus;
+import squidpony.annotation.Beta;
 import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 
 /**
+ * Generates a procedural world map and fills it with the requested number of factions, keeping some land unclaimed.
+ * The factions are given procedural names in an atlas that is linked to the chars used by the world map.
+ * Uses MultiSpill internally to produce the semi-random land and water shapes, hence the name.
+ * <a href="https://gist.github.com/tommyettinger/4a16a09bebed8e2fe8473c8ea444a2dd">Example output</a>.
  * Created by Tommy Ettinger on 9/12/2016.
  */
+@Beta
 public class SpillWorldMap {
 
     public int width;
     public int height;
     public StatefulRNG rng;
-    public SpillWorldMap(int width, int height, long seed)
-    {
+    public String name;
+    public char[][] politicalMap;
+    protected static final char[] letters = Category.L.contents();
+    public OrderedMap<Character, String> atlas;
+
+    /**
+     * Constructs a SpillWorldMap using the given width, height, and world name, and uses the world name as the
+     * basis for all future random generation in this object.
+     *
+     * @param width     the width of the map in cells
+     * @param height    the height of the map in cells
+     * @param worldName a String name for the world that will be used as a seed for all random generation here
+     */
+    public SpillWorldMap(int width, int height, String worldName) {
         this.width = Math.max(width, 20);
         this.height = Math.max(width, 20);
-        rng = new StatefulRNG(seed);
+        rng = new StatefulRNG(CrossHash.Lightning.hash64(worldName));
     }
 
-    public char[][] generate(char... factions) {
-        if(factions == null || factions.length == 0)
-            return new char[width][height];
-        int count = 10 + 10 * (width >>> 4) * (height >>> 4), factionCount = factions.length;
+    /**
+     * Generates a basic physical map for this world, then overlays a more involved political map with the given number
+     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
+     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
+     * land. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
+     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object.
+     *
+     * @param factionCount the number of factions to have claiming land
+     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
+     */
+    public char[][] generate(int factionCount, boolean makeAtlas) {
+        int count = 10 + 3 * (width >>> 4) * (height >>> 4);
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
 
         //SobolQRNG sobol = new SobolQRNG(3);
@@ -40,7 +65,7 @@ public class SpillWorldMap {
         }
         count = entries.size();
         int extra = (width - 1) + (height - 1);
-        double edgePower = count * 0.6 / extra;
+        double edgePower = count * 0.5 / extra;
         for (int x = 1; x < width - 1; x += 2) {
             entries.put(Coord.get(x, 0), edgePower);
             entries.put(Coord.get(x, height - 1), edgePower);
@@ -62,22 +87,45 @@ public class SpillWorldMap {
         }
         GreasedRegion map = new GreasedRegion(sm, 0, 0x7fff);
         Coord[] centers = map.randomPortion(rng, factionCount);
-        int volume = (int) (map.count() * rng.between(0.75, 1.0));
+        int volume = (int) (map.count() * rng.between(0.9, 1.0));
 
         spreader.initialize(sm);
         entries.clear();
-        entries.put(Coord.get(-1,-1), 0.0);
+        entries.put(Coord.get(-1, -1), 0.0);
         for (int i = 0; i < factionCount; i++) {
-            entries.put(centers[i], rng.between(0.4, 1.0));
+            entries.put(centers[i], rng.between(0.5, 1.0));
         }
         spreader.start(entries, volume, null);
         sm = spreader.spillMap;
-        char[][] world = new char[width][height];
+        politicalMap = new char[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                world[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : factions[sm[x][y] - 1];
+                politicalMap[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : letters[(sm[x][y] - 1) & 511];
             }
         }
-        return world;
+        if (makeAtlas) {
+            atlas = new OrderedMap<>(factionCount + 2);
+            atlas.put('~', "Water");
+            atlas.put('%', "Wilderness");
+            Thesaurus th = new Thesaurus(rng.nextLong());
+            th.addKnownCategories();
+            for (int i = 0; i < factionCount && i < 512; i++) {
+                atlas.put(letters[i], th.makeNationName());
+            }
+        }
+        return politicalMap;
     }
+    /**
+     * Generates a basic physical map for this world, then overlays a more involved political map with the given number
+     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
+     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
+     * land. Does not generate an atlas, so you should come up with meanings for the letters yourself.
+     *
+     * @param factionCount the number of factions to have claiming land
+     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
+     */
+    public char[][] generate(int factionCount) {
+        return generate(factionCount, false);
+    }
+
 }
