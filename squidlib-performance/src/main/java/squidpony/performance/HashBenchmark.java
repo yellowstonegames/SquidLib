@@ -119,43 +119,6 @@ public class HashBenchmark {
         doFNVInt();
     }
 
-    public long doSip()
-    {
-        LongPeriodRNG rng = new LongPeriodRNG(seed);
-        CrossHash.Sip sip = new CrossHash.Sip();
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            seed += sip.hash64(rng.state);
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureSip() throws InterruptedException {
-        seed = 9000;
-        doSip();
-    }
-
-    public long doSipInt()
-    {
-        LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        CrossHash.Sip sip = new CrossHash.Sip();
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += sip.hash(rng.state);
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureSipInt() throws InterruptedException {
-        iseed = 9000;
-        doSipInt();
-    }
     public long doLightning()
     {
         LongPeriodRNG rng = new LongPeriodRNG(seed);
@@ -273,7 +236,7 @@ public class HashBenchmark {
     public long doStormInt()
     {
         LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        CrossHash.Storm storm = CrossHash.Storm.alpha;
+        CrossHash.Storm storm = CrossHash.Storm.chi;
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
             iseed += storm.hash(rng.state);
@@ -310,9 +273,9 @@ public class HashBenchmark {
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(HashBenchmark.class.getSimpleName())
-                .timeout(TimeValue.seconds(30))
-                .warmupIterations(3)
-                .measurementIterations(3)
+                .timeout(TimeValue.seconds(60))
+                .warmupIterations(8)
+                .measurementIterations(8)
                 .forks(1)
                 .build();
 

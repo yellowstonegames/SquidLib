@@ -34,8 +34,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private Stage stage;
     private Viewport view;
     private int hashMode = 0, rngMode = 0, noiseMode = 1;
-    private CrossHash.Sip sipA;
-    private CrossHash.Storm stormA, stormB, stormC;
+    private CrossHash.Storm storm, stormA, stormB, stormC;
     private int testType = 4;
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -159,7 +158,7 @@ public class HashVisualizer extends ApplicationAdapter {
                 filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
                 filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
         colorFactory = new SquidColorCenter();
-        sipA = new CrossHash.Sip();
+        storm = new CrossHash.Storm();
         stormA = CrossHash.Storm.alpha;
         stormB = CrossHash.Storm.beta;
         stormC = CrossHash.Storm.chi;
@@ -540,7 +539,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = sipA.hash(coordinates) << 8 | 255L;
+                                code = storm.hash(coordinates) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -577,7 +576,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = sipA.hash(coordinate) << 8 | 255L;
+                                code = storm.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -606,7 +605,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = sipA.hash64(coordinates) << 8 | 255L;
+                                code = storm.hash64(coordinates) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -634,7 +633,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = sipA.hash64(coordinate) << 8 | 255L;
+                                code = storm.hash64(coordinate) << 8 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -673,7 +672,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = sipA.hash(coordinates) & 0xFFFFFF00 | 255L;
+                                code = storm.hash(coordinates) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -710,7 +709,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = sipA.hash(coordinate) & 0xFFFFFF00 | 255L;
+                                code = storm.hash(coordinate) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -739,7 +738,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = sipA.hash64(coordinates) & 0xFFFFFF00 | 255L;
+                                code = storm.hash64(coordinates) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -767,7 +766,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = sipA.hash64(coordinate) & 0xFFFFFF00 | 255L;
+                                code = storm.hash64(coordinate) & 0xFFFFFF00 | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
                         }
@@ -1161,7 +1160,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = sipA.hash(coordinates) & 7L;
+                                code = storm.hash(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -1205,7 +1204,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = sipA.hash(coordinate) & 7L;
+                                code = storm.hash(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -1240,7 +1239,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = sipA.hash64(coordinates) & 7L;
+                                code = storm.hash64(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -1274,7 +1273,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = sipA.hash64(coordinate) & 7L;
+                                code = storm.hash64(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -1321,7 +1320,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = sipA.hash(coordinates) & 1792L;
+                                code = storm.hash(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -1366,7 +1365,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = sipA.hash(coordinate) & 1792L;
+                                code = storm.hash(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -1401,7 +1400,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = sipA.hash64(coordinates) & 1792L;
+                                code = storm.hash64(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
@@ -1434,7 +1433,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = sipA.hash64(coordinate) & 1792L;
+                                code = storm.hash64(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, colorFactory.get(code));
                             }
