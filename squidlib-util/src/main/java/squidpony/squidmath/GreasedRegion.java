@@ -1631,7 +1631,7 @@ public class GreasedRegion implements Serializable {
         for (int i = 0; i < width * ySections; i++) {
             ct += Long.bitCount(data[i]);
         }
-        if(ct <= 0)
+        if(ct <= 0 || size <= 0)
             return new Coord[0];
         if(ct <= size)
             return asCoords();

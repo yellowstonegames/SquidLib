@@ -17,7 +17,8 @@ import static squidpony.Maker.makeOM;
  */
 public class Thesaurus implements Serializable{
     private static final long serialVersionUID = 3387639905758074640L;
-    protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+)");
+    protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+)"),
+            similarFinder = Pattern.compile(".*?\\b(\\w\\w\\w\\w).*?{\\@1}.*$", "ui");
     public OrderedMap<String, GapShuffler<String>> mappings;
     protected StatefulRNG rng;
 
@@ -78,12 +79,14 @@ public class Thesaurus implements Serializable{
     {
         if(synonyms.isEmpty())
             return this;
+        long prevState = rng.getState();
         rng.setState(CrossHash.hash64(synonyms));
         GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng);
         for(String syn : synonyms)
         {
             mappings.put(syn, shuffler);
         }
+        rng.setState(prevState);
         return this;
     }
 
@@ -100,9 +103,11 @@ public class Thesaurus implements Serializable{
     {
         if(synonyms.isEmpty())
             return this;
+        long prevState = rng.getState();
         rng.setState(CrossHash.hash64(synonyms));
         GapShuffler<String> shuffler = new GapShuffler<>(synonyms, rng);
         mappings.put(keyword, shuffler);
+        rng.setState(prevState);
         return this;
     }
 
@@ -236,7 +241,38 @@ public class Thesaurus implements Serializable{
         }
     }
 
-    public static OrderedMap<String, ArrayList<String>> categories = makeOM(
+    private class RandomLanguageSubstitution implements Substitution
+    {
+        @Override
+        public void appendSubstitution(MatchResult match, TextBuffer dest) {
+            dest.append(FakeLanguageGen.randomLanguage(rng).word(rng, true));
+        }
+    }
+
+    /**
+     * Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth".
+     * Needs {@link #addKnownCategories()} to be called on this Thesaurus first. May use accented characters, as in
+     * "Thùdshù-Hyóttiálb Hegemony" or "The Glorious Chô Empire"; if you want to strip these out and replace accented
+     * chars with their un-accented counterparts, you can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
+     * returns a CharSequence that can be converted to String if needed.
+     * @return a random name for a nation or a loose equivalent to a nation, as a String
+     */
+    public String makeNationName()
+    {
+        String working = process(rng.getRandomElement(nationTerms));
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(rng.getRandomElement(nationTerms));
+        Replacer replacer = Pattern.compile("@").replacer(new RandomLanguageSubstitution());
+        return replacer.replace(working);
+    }
+
+    private static final String[] nationTerms = new String[]{
+            "Union`adj` Union`noun` of @", "Union`adj` @ Union`noun`", "@ Union`noun`", "@ Union`noun`", "@-@ Union`noun`", "Union`adj` Union`noun` of @",
+            "Union`adj` Duchy`nouns` of @",  "The @ Duchy`noun`", "The Fancy`adj` @ Duchy`noun`", "The Sole`adj` @ Empire`noun`",
+            "@ Empire`noun`", "@ Empire`noun`", "@ Empire`noun`", "@-@ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Fancy`adj` @ Empire`noun`", "The Holy`adj` @ Empire`noun`",};
+
+    public static final OrderedMap<String, ArrayList<String>> categories = makeOM(
             "calm`adj`",
             makeList("harmonious", "peaceful", "pleasant", "serene", "placid", "tranquil", "calm"),
             "calm`noun`",
@@ -246,15 +282,17 @@ public class Thesaurus implements Serializable{
             "org`nouns`",
             makeList("fraternities", "brotherhoods", "orders", "groups", "foundations", "associations", "guilds", "fellowships", "partnerships"),
             "empire`adj`",
-            makeList("imperial", "princely", "kingly", "regal", "dominant", "dynastic", "royal", "hegemonic", "monarchic", "ascendant"),
+            makeList("imperial", "prince's", "king's", "sultan's", "regal", "dynastic", "royal", "hegemonic", "monarchic", "ascendant", "emir's", "lordly"),
             "empire`noun`",
-            makeList("empire", "emirate", "kingdom", "sultanate", "dominion", "dynasty", "imperium", "hegemony", "triumvirate", "ascendancy"),
+            makeList("empire", "emirate", "kingdom", "sultanate", "dominion", "dynasty", "imperium", "hegemony", "triumvirate", "ascendancy", "monarchy", "commonwealth"),
             "empire`nouns`",
-            makeList("empires", "emirates", "kingdoms", "sultanates", "dominions", "dynasties", "imperia", "hegemonies", "triumvirates", "ascendancies"),
+            makeList("empires", "emirates", "kingdoms", "sultanates", "dominions", "dynasties", "imperia", "hegemonies", "triumvirates", "ascendancies", "monarchies", "commonwealths"),
+            "union`adj`",
+            makeList("united", "allied", "people's", "confederated", "federated", "congressional", "independent", "associated", "unified", "democratic"),
             "union`noun`",
-            makeList("union", "alliance", "coalition", "confederation", "federation", "congress", "confederacy", "league", "faction"),
+            makeList("union", "alliance", "coalition", "confederation", "federation", "congress", "confederacy", "league", "faction", "republic"),
             "union`nouns`",
-            makeList("unions", "alliances", "coalitions", "confederations", "federations", "congresses", "confederacies", "leagues", "factions"),
+            makeList("unions", "alliances", "coalitions", "confederations", "federations", "congresses", "confederacies", "leagues", "factions", "republics"),
             "militia`noun`",
             makeList("rebellion", "resistance", "militia", "liberators", "warriors", "fighters", "militants", "front", "irregulars"),
             "militia`nouns`",
@@ -288,9 +326,9 @@ public class Thesaurus implements Serializable{
             "good`adj`",
             makeList("righteous", "moral", "good", "pure", "compassionate", "flawless", "perfect"),
             "sinister`adj`",
-            makeList("shadowy", "silent", "lethal", "deadly", "fatal", "venomous", "cutthroat", "murderous", "bloodstained"),
+            makeList("shadowy", "silent", "lethal", "deadly", "fatal", "venomous", "cutthroat", "murderous", "bloodstained", "stalking"),
             "sinister`noun`",
-            makeList("shadow", "silence", "assassin", "ninja", "venom", "poison", "snake", "murder", "blood", "razor"),
+            makeList("shadow", "silence", "assassin", "ninja", "venom", "poison", "snake", "murder", "blood", "razor", "tiger"),
             "blade`noun`",
             makeList("blade", "knife", "sword", "axe", "stiletto", "katana", "scimitar", "hatchet", "spear", "glaive", "halberd",
                     "hammer", "maul", "flail", "mace", "sickle", "scythe", "whip", "lance", "nunchaku", "saber", "cutlass", "trident"),
@@ -324,7 +362,7 @@ public class Thesaurus implements Serializable{
             "tech`adj`",
             makeList("cyber", "digital", "electronic", "techno", "hacker", "crypto", "turbo", "mechanical", "servo"),
             "sole`adj`",
-            makeList("sole", "true", "singular", "total", "ultimate", "final"),
+            makeList("sole", "true", "singular", "total", "ultimate", "final", "last"),
             "light`adj`",
             makeList("bright", "glowing", "solar", "stellar", "lunar", "radiant", "luminous", "shimmering"),
             "light`noun`",

@@ -77,6 +77,7 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("[Hh][tcszi]?h"),
                             Pattern.compile("[Tt]t[^aeiouy]{2}"),
                             Pattern.compile("[Yy]h([^aeiouy]|$)"),
+                            Pattern.compile("([dbvcxqjky])\\1$"),
                             Pattern.compile("[szSZrlRL][^aeiou][rlsz]"),
                             Pattern.compile("[UIuiYy][wy]"),
                             Pattern.compile("^[UIui][ae]")
@@ -1840,13 +1841,13 @@ public class FakeLanguageGen implements Serializable {
 
         openCons.put("b", "b bl br by bw bh");
         openCons.put("bh", "bh");
-        openCons.put("c", "c cl cr csh cth sc scl");
+        openCons.put("c", "c cl cr cz cth sc scl");
         openCons.put("ch", "ch ch chw");
         openCons.put("d", "d dr dz dy dw dh");
         openCons.put("dh", "dh");
         openCons.put("f", "f fl fr fy fw sf");
         openCons.put("g", "g gl gr gw gy gn");
-        openCons.put("h", "bh csh cth ch ch chw dh h hm hy hw kh khl khw ph phl phr sh sh shl sht shk shp shm shn shr shw shpl th th thr thl thw");
+        openCons.put("h", "bh cth ch ch chw dh h hm hy hw kh khl khw ph phl phr sh shl shqu shk shp shm shn shr shw shpl th th thr thl thw");
         openCons.put("j", "j j");
         openCons.put("k", "k kr kl ky kn sk skl shk");
         openCons.put("kh", "kh khl khw");
@@ -1856,86 +1857,89 @@ public class FakeLanguageGen implements Serializable {
         openCons.put("p", "p pl pr py pw pn sp spr spl shp shpl ph phl phr");
         openCons.put("ph", "ph phl phr");
         openCons.put("q", "q");
-        openCons.put("qu", "qu squ");
+        openCons.put("qu", "qu squ shqu");
         openCons.put("r", "br cr dr fr gr kr mr pr phr r str spr smr shr tr thr vr wr zvr");
-        openCons.put("s", "s sc scl sf sk skl st str sp spr spl sl sm smr sn sw sy squ ts");
-        openCons.put("t", "st str sht t ts tr tl ty tw tl");
+        openCons.put("s", "s sc scl sf sk skl st str sp spr spl sl sm smr sn sw sy squ ts sh shl shqu shk shp shm shn shr shw shpl");
+        openCons.put("sh", "sh shl shqu shk shp shm shn shr shw shpl");
+        openCons.put("t", "st str t ts tr tl ty tw tl");
         openCons.put("th", "cth th thr thl thw");
         openCons.put("tl", "tl");
         openCons.put("v", "v vr vy zv zvr");
         openCons.put("w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w wr zw");
         openCons.put("x", "x");
         openCons.put("y", "by dy fy gy hy ky my ny py sy ty vy y zy");
-        openCons.put("z", "dz z zv zvr zl zy zw");
+        openCons.put("z", "cz dz z zv zvr zl zy zw");
 
-        midCons.put("b", "lb lb rb rb bl br bl br bl br lbr rbl skbr scbr zb lbh rbh");
+        midCons.put("b", "lb lb rb rb bl br bl br bl br lbr rbl skbr scbr zb lbh rbh bb");
         midCons.put("bh", "lbh rbh");
-        midCons.put("c", "lc lc lsc rc rc rsc cl cr cl cr cl cr lcr rcl sctr scdr scbr scpr msc mscr nsc nscr ngscr ndscr");
+        midCons.put("c", "lc lc lsc rc rc rsc cl cr cl cr cl cr lcr rcl sctr scdr scbr scpr msc mscr nsc nscr ngscr ndscr cc");
         midCons.put("ch", "lch lch rch rch");
-        midCons.put("d", "ld ld rd rd skdr scdr dr dr dr rdr ldr zd zdr ndr ndscr ndskr ndst ldh rdh");
+        midCons.put("d", "ld ld rd rd skdr scdr dr dr dr rdr ldr zd zdr ndr ndscr ndskr ndst ldh rdh dd");
         midCons.put("dh", "ldh rdh");
-        midCons.put("f", "lf lf rf rf fl fr fl fr fl fr lfr rfl");
-        midCons.put("g", "lg lg rg rg gl gr gl gr gl gr lgr rgl zg zgr ngr ngl ngscr ngskr");
-        midCons.put("h", "lch lph lth lch lph lth lsh rch rph rsh rth rch rph rsh rth phl phr phl phr phl phr lphr rphl shl shr shl shr shl shr lshr rshl zth msh mshr");
+        midCons.put("f", "lf lf rf rf fl fr fl fr fl fr lfr rfl ff");
+        midCons.put("g", "lg lg rg rg gl gr gl gr gl gr lgr rgl zg zgr ngr ngl ngscr ngskr gg");
+        midCons.put("h", "lch lph lth lsh rch rph rsh rth phl phr lphr rphl shl shr lshr rshl msh mshr zth ");
         midCons.put("j", "lj lj rj rj");
-        midCons.put("k", "lk lk lsk rk rk rsk kl kr kl kr kl kr lkr rkl sktr skdr skbr skpr zk zkr msk mskr nsk nskr ngskr ndskr");
+        midCons.put("k", "lk lsk rk rsk kl kr lkr rkl sktr skdr skbr skpr zk zkr msk mskr nsk nskr ngskr ndskr kk");
         midCons.put("kh", "lkh rkh");
-        midCons.put("l", "lb lc lch ld lf lg lj lk lm ln lp lph ls lst lt lth lb lc lch ld lf lg lj lk lm ln lp lph ls lst lt lth lsc lsk lsp lv lz lsh bl bl bl lbr rbl cl cl cl lcr rcl fl fl fl lfr rfl gl gl gl lgr rgl kl kl kl lkr rkl pl pl pl lpr rpl phl phl phl lphr rphl shl shl shl lshr rshl sl sl sl rsl lsl ldr ltr lx ngl nsl msl nsl");
-        midCons.put("m", "lm lm rm rm zm msl msc mscr msh mshr mst msp msk mskr");
-        midCons.put("n", "ln ln rn rn nx zn zn ntr ntr ndr ngr ngl nsl nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp");
-        midCons.put("p", "lp lp lsp rp rp rsp pl pr pl pr pl pr lpr rpl skpr scpr zp msp nsp lph lph rph rph phl phr phl phr phl phr lphr rphl");
-        midCons.put("ph", "lph lph rph rph phl phr phl phr phl phr lphr rphl");
+        midCons.put("l", "lb lc lch ld lf lg lj lk lm ln lp lph ls lst lt lth lsc lsk lsp lv lz lsh bl lbr rbl cl lcr rcl fl lfr rfl gl lgr rgl kl lkr rkl pl lpr rpl phl lphr rphl shl lshr rshl sl rsl lsl ldr ltr lx ngl nsl msl nsl ll");
+        midCons.put("m", "lm lm rm rm zm msl msc mscr msh mshr mst msp msk mskr mm");
+        midCons.put("n", "ln ln rn rn nx zn zn ntr ntr ndr ngr ngl nsl nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp nn");
+        midCons.put("p", "lp lsp rp rsp pl pr lpr rpl skpr scpr zp msp nsp lph rph phl phr lphr rphl pp");
+        midCons.put("ph", "lph lph rph rph phl phr lphr rphl");
         midCons.put("q", "");
         midCons.put("qu", "lqu rqu");
-        midCons.put("r", "rb rc rch rd rf rg rj rk rm rn rp rph rs rsh rst rt rth rb rc rch rd rf rg rj rk rm rn rp rph rs rsh rst rt rth rsc rsk rsp rv rz br br br lbr rbl cr cr cr lcr rcl fr fr fr lfr rfl gr gr gr lgr rgl kr kr kr lkr rkl pr pr pr lpr rpl phr phr phr lphr rphl shr shr shr lshr rshl rsl sktr sctr skdr scdr skbr scbr skpr scpr dr dr dr rdr ldr tr tr tr rtr ltr rx zr zdr ztr zgr zkr ntr ntr ndr ngr mscr mshr mskr nscr ngscr ndscr nskr ngskr ndskr");
-        midCons.put("s", "ls lst ls lst lsc lsk lsp rs rst rs rst rsc rsk rsp sl sl sl rsl lsl sktr sctr skdr scdr skbr scbr skpr scpr nsl msl msc mscr mst msp msk mskr nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp");
-        midCons.put("t", "lst lt lst lt rst rt rst rt sktr sctr tr tr tr rtr ltr zt ztr ntr ntr mst nst ndst ltl rtl");
-        midCons.put("th", "lth lth rth rth zth cth");
+        midCons.put("r", "rb rc rch rd rf rg rj rk rm rn rp rph rs rsh rst rt rth rsc rsk rsp rv rz br br br lbr rbl cr cr cr lcr rcl fr fr fr lfr rfl gr gr gr lgr rgl kr kr kr lkr rkl pr pr pr lpr rpl phr phr phr lphr rphl shr shr shr lshr rshl rsl sktr sctr skdr scdr skbr scbr skpr scpr dr dr dr rdr ldr tr tr tr rtr ltr rx zr zdr ztr zgr zkr ntr ntr ndr ngr mscr mshr mskr nscr ngscr ndscr nskr ngskr ndskr rr");
+        midCons.put("s", "ls lst lsc lsk lsp rs rst rsc rsk rsp sl rsl lsl sktr sctr skdr scdr skbr scbr skpr scpr nsl msl msc mscr mst msp msk mskr nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp lsh rsh sh shl shqu shk shp shm shn shr shw shpl lshr rshl msh mshr ss");
+        midCons.put("sh", "lsh rsh sh shl shqu shk shp shm shn shr shw shpl lshr rshl msh mshr");
+        midCons.put("t", "lst lt rst rt sktr sctr tr rtr ltr zt ztr ntr ntr mst nst ndst ltl rtl tt");
+        midCons.put("th", "lth rth zth cth");
         midCons.put("tl", "ltl rtl");
-        midCons.put("v", "lv rv");
-        midCons.put("w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w w wr zw");
+        midCons.put("v", "lv rv vv");
+        midCons.put("w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w wr zw");
         midCons.put("x", "nx rx lx");
-        midCons.put("y", "by dy fy gy hy ky my ny py sy ty vy y y zy");
-        midCons.put("z", "lz rz zn zd zt zg zk zm zn zp zb zr zdr ztr zgr zkr zth");
+        midCons.put("y", "by dy fy gy hy ky my ny py sy ty vy y zy");
+        midCons.put("z", "lz rz zn zd zt zg zk zm zn zp zb zr zdr ztr zgr zkr zth zz");
 
-        closeCons.put("b", "b lb rb bs bz mb mbs bh bh lbh rbh mbh");
+        closeCons.put("b", "b lb rb bs bz mb mbs bh bh lbh rbh mbh bb");
         closeCons.put("bh", "bh lbh rbh mbh");
-        closeCons.put("c", "c ck ck ck cks lc rc cs cz ct csh cth sc");
+        closeCons.put("c", "c ck cks lc rc cs cz ct cz cth sc");
         closeCons.put("ch", "ch lch rch tch pch kch mch nch");
-        closeCons.put("d", "d ld rd ds dz dt dsh dth gd nd nds dh dh ldh rdh ndh");
+        closeCons.put("d", "d ld rd ds dz dt dsh dth gd nd nds dh dh ldh rdh ndh dd");
         closeCons.put("dh", "dh ldh rdh ndh");
-        closeCons.put("f", "f lf rf fs fz ft fsh fth");
-        closeCons.put("g", "g lg rg gs gz gd gsh gth ng ngs");
-        closeCons.put("h", "csh cth ch lch rch tch pch kch mch nch dsh dth fsh fth gsh gth h hs ksh kth psh pth ph ph ph ph ph ph lph rph phs pht phth");
+        closeCons.put("f", "f lf rf fs fz ft fsh fth ff");
+        closeCons.put("g", "g lg rg gs gz gd gsh gth ng ngs gg");
+        closeCons.put("h", "cth ch lch rch tch pch kch mch nch dsh dth fsh fth gsh gth h hs ksh kth psh pth ph ph ph ph ph ph lph rph phs pht phth");
         closeCons.put("j", "j");
         closeCons.put("k", "ck cks kch k lk rk ks kz kt ksh kth nk nks sk");
         closeCons.put("kh", "kh");
-        closeCons.put("l", "lb lc lch ld lf lg lk l ls lz lp lph");
-        closeCons.put("m", "mch m ms mb mt mp mbs mps mz sm");
-        closeCons.put("n", "nch n ns nd nt nk nds nks nz ng ngs");
+        closeCons.put("l", "lb lc lch ld lf lg lk l ls lz lp lph ll");
+        closeCons.put("m", "mch m ms mb mt mp mbs mps mz sm mm");
+        closeCons.put("n", "nch n ns nd nt nk nds nks nz ng ngs nn");
         closeCons.put("p", "pch mp mps p lp rp ps pz pt psh pth sp sp ph lph rph phs pht phth");
         closeCons.put("ph", "ph lph rph phs pht phth");
         closeCons.put("q", "q");
         closeCons.put("qu", "");
         closeCons.put("r", "rb rc rch rd rf rg rk rp rph r rs rz");
-        closeCons.put("s", "bs cks cs ds fs gs hs ks ls ms mbs mps ns nds nks ngs ps phs rs s st sp st sp sc sk sm ts");
-        closeCons.put("t", "ct tch dt ft kt mt nt pt pht st st t ts tz");
+        closeCons.put("s", "bs cks cs ds fs gs hs ks ls ms mbs mps ns nds nks ngs ps phs rs s st sp st sp sc sk sm ts lsh rsh sh shk shp msh ss");
+        closeCons.put("sh", "lsh rsh sh shk shp msh");
+        closeCons.put("t", "ct tch dt ft kt mt nt pt pht st st t ts tz tt");
         closeCons.put("th", "cth dth fth gth kth pth phth th ths");
         closeCons.put("tl", "");
         closeCons.put("v", "v");
         closeCons.put("w", "");
         closeCons.put("x", "x");
         closeCons.put("y", "");
-        closeCons.put("z", "bz cz dz fz gz kz lz mz nz pz rz tz z");
+        closeCons.put("z", "bz cz dz fz gz kz lz mz nz pz rz tz z zz");
 
     }
 
     public static FakeLanguageGen randomLanguage(RNG rng) {
-        int[] lengths = new int[rng.between(3, 6)];
-        System.arraycopy(new int[]{1, 2, 3, 4, 5}, 0, lengths, 0, lengths.length);
+        int[] lengths = new int[rng.between(3, 5)];
+        System.arraycopy(new int[]{1, 2, 3, 4}, 0, lengths, 0, lengths.length);
         double[] chances = new double[lengths.length];
         System.arraycopy(new double[]{
-                8 + rng.nextDouble(5), 9 + rng.nextDouble(5), 5 + rng.nextDouble(5), 2 + rng.nextDouble(4), 1 + rng.nextDouble(3)
+                5 + rng.nextDouble(4), 13 + rng.nextDouble(9), 3 + rng.nextDouble(3), 1 + rng.nextDouble(2)
         }, 0, chances, 0, chances.length);
         double vowelHeavy = rng.between(0.2, 0.5), diversity = rng.between(0.4, 0.8);
         int sz = openCons.size();
@@ -1994,21 +1998,21 @@ public class FakeLanguageGen implements Serializable {
         }
 
         n = 0;
-        if (rng.nextDouble() < 0.8) {
+        if (rng.nextDouble() < 0.75) {
             missingSounds.add("z");
             Collections.addAll(forbidden, parts1.get("z").split(" "));
             Collections.addAll(forbidden, parts2.get("z").split(" "));
             Collections.addAll(forbidden, parts3.get("z").split(" "));
             n++;
         }
-        if (rng.nextDouble() < 0.8) {
+        if (rng.nextDouble() < 0.82) {
             missingSounds.add("x");
             Collections.addAll(forbidden, parts1.get("x").split(" "));
             Collections.addAll(forbidden, parts2.get("x").split(" "));
             Collections.addAll(forbidden, parts3.get("x").split(" "));
             n++;
         }
-        if (rng.nextDouble() < 0.9) {
+        if (rng.nextDouble() < 0.92) {
             missingSounds.add("qu");
             Collections.addAll(forbidden, parts1.get("qu").split(" "));
             Collections.addAll(forbidden, parts2.get("qu").split(" "));
@@ -2022,28 +2026,28 @@ public class FakeLanguageGen implements Serializable {
             Collections.addAll(forbidden, parts3.get("q").split(" "));
             n++;
         }
-        if (rng.nextDouble() < 0.96) {
+        if (rng.nextDouble() < 0.97) {
             missingSounds.add("tl");
             Collections.addAll(forbidden, parts1.get("tl").split(" "));
             Collections.addAll(forbidden, parts2.get("tl").split(" "));
             Collections.addAll(forbidden, parts3.get("tl").split(" "));
             n++;
         }
-        if (rng.nextDouble() < 0.85) {
+        if (rng.nextDouble() < 0.86) {
             missingSounds.add("ph");
             Collections.addAll(forbidden, parts1.get("ph").split(" "));
             Collections.addAll(forbidden, parts2.get("ph").split(" "));
             Collections.addAll(forbidden, parts3.get("ph").split(" "));
             n++;
         }
-        if (rng.nextDouble() < 0.9) {
+        if (rng.nextDouble() < 0.94) {
             missingSounds.add("kh");
             Collections.addAll(forbidden, parts1.get("kh").split(" "));
             Collections.addAll(forbidden, parts2.get("kh").split(" "));
             Collections.addAll(forbidden, parts3.get("kh").split(" "));
             n++;
         }
-        if (rng.nextDouble() < 0.9) {
+        if (rng.nextDouble() < 0.96) {
             missingSounds.add("bh");
             missingSounds.add("dh");
             Collections.addAll(forbidden, parts1.get("bh").split(" "));
