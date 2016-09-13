@@ -4,44 +4,68 @@ import java.io.Serializable;
 
 /**
  * Simple hashing functions that we can rely on staying the same cross-platform.
- * These use the Fowler/Noll/Vo Hash (FNV-1a) algorithm, which is public domain.
- * The hashes this returns are always 0 when given null to hash. Arrays with identical
- * elements of identical types will hash identically. Arrays with identical numerical
- * values but different types will hash differently. There are faster hashes out there,
- * but many of them are intended to run on very modern desktop processors (not, say,
- * Android phone processors, and they don't need to worry about uncertain performance
- * on GWT regarding 64-bit math). We probably don't need to hash arrays or Strings so
- * often that this (still very high-performance!) hash would be a bottleneck.
+ * The static methods of this class (not its inner classes) use the Fowler/Noll/Vo
+ * Hash (FNV-1a) algorithm, which is public domain. The hashes this returns are always
+ * 0 when given null to hash. Arrays with identical elements of identical types will
+ * hash identically. Arrays with identical numerical values but different types will
+ * hash differently (only for FNV-1a, not the inner classes). FNV-1a may be somewhat
+ * slow if you are running many hashes or hashing very large data; in that case you
+ * should consider one of the inner classes, Lightning or Storm.
  * <br>
- * There are two static inner classes in CrossHash, Sip and Lightning, that provide different
- * hashing properties. Sip has the best quality from a technical standpoint, implementing the
- * SipHash algorithm with inlined loops from https://github.com/nahi/siphash-java-inline, has
- * a sound theoretical basis for why it does what it does, and also allows 128 bits of salt-like
- * modifiers as member variables that can make 2 to the 128 individual hashing functions from
- * one set of code (though Sip's code is much larger than the others). Sip has some properties
- * of a cryptographic hash, but I'm not recommending it for that usage. Lightning has no
- * theoretical basis or grounds in any reason other than empirical testing for why it does
- * what it does, and this seems to be in line with many widely-used hashes (see: The Art of
- * Hashing, http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx ). That said,
- * it performs very well, just slightly behind Arrays.hashCode (18-20 ms instead of 15 ms for
- * over a million hashes of 16-element long arrays, including overhead for generating them,
- * while Sip and FNV-1a take approximately 80 ms and 135-155 ms, respectively, for the same
- * data). All of the hashes used here have about the same rate of collisions on identical
- * data, but Lightning seems to do better than the rest more often than it does worse than
- * all the others. Lightning has been changed frequently and is not considered stable yet,
- * so it isn't  being considered to replace the FNV-1a algorithm in CrossHash. It seems to
- * meet all the criteria for a good hash function, though, including doing well with a
- * visual test that shows issues in FNV-1a and especially Arrays.hashCode.
+ * There are two static inner classes in CrossHash, Lightning and Storm, that provide different
+ * hashing properties, as well as the inner IHasher interface.
+ * <br>
+ * IHasher values are provided as static fields, and use FNV-1a to hash a specific type or fall
+ * back to Object.hashCode if given an object with the wrong type. IHasher values are optional
+ * parts of OrderedMap and OrderedSet, and allow arrays to be used as keys in those collections
+ * while keeping hashing by value instead of the normal hashing by reference for arrays. You
+ * probably won't ever need to make a class that implements IHasher yourself.
+ * <br>
+ * The inner classes provide alternate, faster hashing algorithms. Lightning has no theoretical
+ * basis or grounds in any reason other than empirical testing for why it does what it does, and
+ * this seems to be in line with many widely-used hashes (see: The Art of Hashing,
+ * http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx ). That said, it performs
+ * very well, just slightly behind Arrays.hashCode (18-20 ms instead of 15 ms for over a million
+ * hashes of 16-element long arrays, including overhead for generating them, while SipHash and
+ * FNV-1a take approximately 80 ms and 135-155 ms, respectively, for the same data).
+ * <br>
+ * Storm is a variant on Lightning with 64 bits for a salt-like modifier as a member variable,
+ * which can make 2 to the 64 individual hashing functions from one set of code. Storm has some
+ * properties of a cryptographic hash, but is not recommended it for that usage. It is, however
+ * ideal for situations that show up often in game development where end users may be able to see
+ * and possibly alter some information that you don't want changed (i.e. save data stored on a
+ * device or in the browser's LocalStorage). If you want a way to verify the data is what you
+ * think it is, you can store a hash, using one of the many-possible hash functions this can
+ * produce, somewhere else and verify that the saved data has the hash it did last time; if the
+ * exact hashing function isn't known (or exact functions aren't known) by a tampering user,
+ * then it is unlikely they can make the hash match even if they can edit it. Storm is slightly
+ * slower than Lightning, at about 25-26 ms for a million hashes (still including some RNG
+ * overhead) instead of Lightning's 18-20 ms, but should never be worse than twice as slow as
+ * Arrays.hashCode, and is still about three times faster than the similar SipHash that SquidLib
+ * previously had in this class.
+ * <br>
+ * All of the hashes used here have about the same rate of collisions on identical data
+ * (testing used Arrays.hashCode, FNV-1a, Lightning, Storm, and the now-removed SipHash), but
+ * Lightning (and Storm) seem to do better than the rest on collision rates more often than
+ * they do worse than all the others. Lightning has been changed frequently but is considered
+ * stable now, but it isn't being considered to replace the FNV-1a algorithm in CrossHash for
+ * compatibility reasons. It seems to meet all the criteria for a good hash function, though,
+ * including doing well with a visual test that shows issues in FNV-1a and especially
+ * Arrays.hashCode. Storm is still not necessarily in a final version; the commit that removed
+ * SipHash also changed Storm's algorithm to more heavily factor in the salt and allow that
+ * salt to alter any patterns present in the output, making similar data hash very differently
+ * when the salts are different.
  * <br>
  * To help find patterns in hash output in a visual way, you can hash an x,y point, take the bottom 24 bits,
  * and use that as an RGB color for the pixel at that x,y point. On a 512x512 grid of points, the patterns
  * in Arrays.hashCode and the default CrossHash algorithm (FNV-1a) are evident, and Sip (implementing SipHash)
- * does approximately as well as Lightning, with no clear patterns visible. The idea is from a technical report
- * on visual uses for hashing, http://www.clockandflame.com/media/Goulburn06.pdf .
+ * does approximately as well as Lightning, with no clear patterns visible (Sip has been removed from SquidLib
+ * because it needs a lot of code and is slower than Storm and especially Lightning). The idea is from a
+ * technical report on visual uses for hashing, http://www.clockandflame.com/media/Goulburn06.pdf .
  * <ul>
  * <li>{@link java.util.Arrays#hashCode(int[])}: http://i.imgur.com/S4Gh1sX.png</li>
  * <li>{@link CrossHash#hash(int[])}: http://i.imgur.com/x8SDqvL.png</li>
- * <li>{@link CrossHash.Sip#hash(int[])}: http://i.imgur.com/keSpIwm.png</li>
+ * <li>(Former) CrossHash.Sip.hash(int[]): http://i.imgur.com/keSpIwm.png</li>
  * <li>{@link CrossHash.Lightning#hash(int[])}: http://i.imgur.com/afGJ9cA.png</li>
  * </ul>
  * <br>
@@ -703,3502 +727,6 @@ public class CrossHash {
 
     public static final IHasher defaultHasher = new DefaultHasher();
 
-
-    /**
-     * Implementation of hashing functions using SipHash instead of FNV. Faster than FNV.
-     * Code taken from https://github.com/nahi/siphash-java-inline with some minor tweaks.
-     * In the original source, this information is given:
-     * <br>
-     * SipHash implementation with hand inlining the SIPROUND.
-     * <br>
-     * To know details about SipHash, see;
-     * "a fast short-input PRF" https://www.131002.net/siphash/
-     * <br>
-     * SIPROUND is defined in siphash24.c that can be downloaded from the above
-     * site.  Following [Editor's note: omitted here] license notice is subject to change
-     * based on the licensing policy of siphash24.c (currently Apache 2 license).
-     */
-    public static class Sip implements Serializable {
-        private static final long serialVersionUID = 0L;
-        public long k0, k1;
-
-        public Sip() {
-            k0 = 0x2ffeeb0a48316f40L;
-            k1 = 0x5b34a39f070b5837L;
-        }
-
-        public Sip(long k) {
-            k0 = k;
-            // murmurhash3 avalanche function
-            k ^= k >> 33;
-            k *= 0xff51afd7ed558ccdL;
-            k ^= k >> 33;
-            k *= 0xc4ceb9fe1a85ec53L;
-            k1 = k ^ (k >> 33);
-        }
-
-        public Sip(long k0, long k1) {
-            this.k0 = k0;
-            this.k1 = k1;
-        }
-
-        /**
-         * SipHash implementation with hand inlining the SIPROUND.
-         * <br>
-         * To know details about SipHash, see;
-         * "a fast short-input PRF" https://www.131002.net/siphash/
-         * <br>
-         * SIPROUND is defined in siphash24.c that can be downloaded from the above
-         * site.  Following license notice is subject to change based on the licensing
-         * policy of siphash24.c (currently Apache 2 license).
-         * <br>
-         * Code taken from https://github.com/nahi/siphash-java-inline with some minor tweaks.
-         */
-
-        public long hash64(final boolean[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m, o;
-            int last = (data.length >> 6) << 6,
-                    i = 0;
-            // processing 8 bytes blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 8 bytes
-                m = 0;
-                for (long j = 1L; j != 0; j <<= 1) {
-                    m |= (data[i++]) ? j : 0;
-                }
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 1;
-                m |= (data[i]) ? 1L : 0L;
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-        public long hash64(final byte[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 3) << 3,
-                    i = 0;
-            // processing 8 bytes blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 8 bytes
-                m = data[i++] & 0xffL
-                        | (data[i++] & 0xffL) << 8
-                        | (data[i++] & 0xffL) << 16
-                        | (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffL) << 32
-                        | (data[i++] & 0xffL) << 40
-                        | (data[i++] & 0xffL) << 48
-                        | (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 8;
-                m |= (data[i] & 0xffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-        public long hash64(final short[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 2) << 2,
-                    i = 0;
-            // processing 4 shorts blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 shorts
-                m = data[i++] & 0xffffL
-                        //| (data[i++] & 0xffL) << 8
-                        | (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffffL) << 32
-                        //| (data[i++] & 0xffL) << 40
-                        | (data[i++] & 0xffffL) << 48;
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 16;
-                m |= (data[i] & 0xffffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-        public long hash64(final char[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 2) << 2,
-                    i = 0;
-            // processing 4 "shorts" blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 "shorts"
-                m = data[i++] & 0xffffL
-                        //| (data[i++] & 0xffL) << 8
-                        | (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffffL) << 32
-                        //| (data[i++] & 0xffL) << 40
-                        | (data[i++] & 0xffffL) << 48;
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 16;
-                m |= (data[i] & 0xffffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-        public long hash64(final int[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 1) << 1,
-                    i = 0;
-            // processing 4 ints blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 ints
-                m = data[i++] & 0xffffffffL
-                        //| (data[i++] & 0xffL) << 8
-                        //| (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffffffffL) << 32;
-                //| (data[i++] & 0xffL) << 40
-                //| (data[i++] & 0xffffL) << 48
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 32;
-                m |= (data[i] & 0xffffffffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-        public long hash64(final long[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = data.length,
-                    i = 0;
-            // processing long as block in data
-            while (i < last) {
-                // pack a long as block
-                m = data[i++];
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            m = (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-        public long hash64(final float[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 1) << 1,
-                    i = 0;
-            // processing 4 "ints" blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 "ints"
-                m = Float.floatToIntBits(data[i++]) & 0xffffffffL
-                        //| (data[i++] & 0xffL) << 8
-                        //| (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (Float.floatToIntBits(data[i++]) & 0xffffffffL) << 32;
-                //| (data[i++] & 0xffL) << 40
-                //| (data[i++] & 0xffffL) << 48
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 32;
-                m |= (Float.floatToIntBits(data[i++]) & 0xffffffffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-        public long hash64(final double[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = data.length,
-                    i = 0;
-            // processing long as block in data
-            while (i < last) {
-                // pack a long as block
-                m = Double.doubleToLongBits(data[i++]);
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            m = (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-
-        public long hash64(final CharSequence data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length() >> 2) << 2,
-                    i = 0;
-            // processing 4 "shorts" blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 "shorts"
-                m = data.charAt(i++) & 0xffffL
-                        //| (data[i++] & 0xffL) << 8
-                        | (data.charAt(i++) & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data.charAt(i++) & 0xffffL) << 32
-                        //| (data[i++] & 0xffL) << 40
-                        | (data.charAt(i++) & 0xffffL) << 48;
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length() - 1; i >= last; --i) {
-                m <<= 16;
-                m |= (data.charAt(i) & 0xffffL);
-            }
-            m |= (long) data.length() << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-
-        public long hash64(final char[] data, int start, int end) {
-            if (data == null || start >= end || end > data.length)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = start + (((end - start) >> 2) << 2),
-                    i = start;
-            // processing 4 "shorts" blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 "shorts"
-                m = data[i++] & 0xffffL
-                        //| (data[i++] & 0xffL) << 8
-                        | (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffffL) << 32
-                        //| (data[i++] & 0xffL) << 40
-                        | (data[i++] & 0xffffL) << 48;
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = end - 1; i >= last; --i) {
-                m <<= 16;
-                m |= (data[i] & 0xffffL);
-            }
-            m |= (long) (end - start) << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return v0 ^ v1 ^ v2 ^ v3;
-        }
-
-        public int hash(final boolean[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m, o;
-            int last = (data.length >> 6) << 6,
-                    i = 0;
-            // processing 8 bytes blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 8 bytes
-                m = 0;
-                for (long j = 1L; j != 0; j <<= 1) {
-                    m |= (data[i++]) ? j : 0;
-                }
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 1;
-                m |= (data[i]) ? 1L : 0L;
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-
-        public int hash(final byte[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 3) << 3,
-                    i = 0;
-            // processing 8 bytes blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 8 bytes
-                m = data[i++] & 0xffL
-                        | (data[i++] & 0xffL) << 8
-                        | (data[i++] & 0xffL) << 16
-                        | (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffL) << 32
-                        | (data[i++] & 0xffL) << 40
-                        | (data[i++] & 0xffL) << 48
-                        | (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 8;
-                m |= (data[i] & 0xffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-
-        public int hash(final short[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 2) << 2,
-                    i = 0;
-            // processing 4 shorts blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 shorts
-                m = data[i++] & 0xffffL
-                        //| (data[i++] & 0xffL) << 8
-                        | (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffffL) << 32
-                        //| (data[i++] & 0xffL) << 40
-                        | (data[i++] & 0xffffL) << 48;
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 16;
-                m |= (data[i] & 0xffffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-
-        public int hash(final char[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 2) << 2,
-                    i = 0;
-            // processing 4 "shorts" blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 "shorts"
-                m = data[i++] & 0xffffL
-                        //| (data[i++] & 0xffL) << 8
-                        | (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffffL) << 32
-                        //| (data[i++] & 0xffL) << 40
-                        | (data[i++] & 0xffffL) << 48;
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 16;
-                m |= (data[i] & 0xffffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-
-        public int hash(final int[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 1) << 1,
-                    i = 0;
-            // processing 4 ints blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 ints
-                m = data[i++] & 0xffffffffL
-                        //| (data[i++] & 0xffL) << 8
-                        //| (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffffffffL) << 32;
-                //| (data[i++] & 0xffL) << 40
-                //| (data[i++] & 0xffffL) << 48
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 32;
-                m |= (data[i] & 0xffffffffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-
-        public int hash(final long[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = data.length,
-                    i = 0;
-            // processing long as block in data
-            while (i < last) {
-                // pack a long as block
-                m = data[i++];
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            m = (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-
-        public int hash(final float[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length >> 1) << 1,
-                    i = 0;
-            // processing 4 "ints" blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 "ints"
-                m = Float.floatToIntBits(data[i++]) & 0xffffffffL
-                        //| (data[i++] & 0xffL) << 8
-                        //| (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (Float.floatToIntBits(data[i++]) & 0xffffffffL) << 32;
-                //| (data[i++] & 0xffL) << 40
-                //| (data[i++] & 0xffffL) << 48
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length - 1; i >= last; --i) {
-                m <<= 32;
-                m |= (Float.floatToIntBits(data[i++]) & 0xffffffffL);
-            }
-            m |= (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-
-        public int hash(final double[] data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = data.length,
-                    i = 0;
-            // processing long as block in data
-            while (i < last) {
-                // pack a long as block
-                m = Double.doubleToLongBits(data[i++]);
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            m = (long) data.length << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-
-
-        public int hash(final CharSequence data) {
-            if (data == null)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = (data.length() >> 2) << 2,
-                    i = 0;
-            // processing 4 "shorts" blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 "shorts"
-                m = data.charAt(i++) & 0xffffL
-                        //| (data[i++] & 0xffL) << 8
-                        | (data.charAt(i++) & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data.charAt(i++) & 0xffffL) << 32
-                        //| (data[i++] & 0xffL) << 40
-                        | (data.charAt(i++) & 0xffffL) << 48;
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = data.length() - 1; i >= last; --i) {
-                m <<= 16;
-                m |= (data.charAt(i) & 0xffffL);
-            }
-            m |= (long) data.length() << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-
-        public int hash(final char[] data, int start, int end) {
-            if (data == null || start >= end || end > data.length)
-                return 0;
-            long k0 = this.k0,
-                    k1 = this.k1,
-                    v0 = 0x736f6d6570736575L ^ k0,
-                    v1 = 0x646f72616e646f6dL ^ k1,
-                    v2 = 0x6c7967656e657261L ^ k0,
-                    v3 = 0x7465646279746573L ^ k1,
-                    m;
-            int last = start + (((end - start) >> 2) << 2),
-                    i = start;
-            // processing 4 "shorts" blocks in data
-            while (i < last) {
-                // pack a block to long, as LE 4 "shorts"
-                m = data[i++] & 0xffffL
-                        //| (data[i++] & 0xffL) << 8
-                        | (data[i++] & 0xffffL) << 16
-                        //| (data[i++] & 0xffL) << 24
-                        | (data[i++] & 0xffffL) << 32
-                        //| (data[i++] & 0xffL) << 40
-                        | (data[i++] & 0xffffL) << 48;
-                //| (data[i++] & 0xffL) << 56;
-                // MSGROUND {
-                v3 ^= m;
-
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                // SIPROUND {
-                v0 += v1;
-                v2 += v3;
-                v1 = (v1 << 13) | v1 >>> 51;
-                v3 = (v3 << 16) | v3 >>> 48;
-                v1 ^= v0;
-                v3 ^= v2;
-                v0 = (v0 << 32) | v0 >>> 32;
-                v2 += v1;
-                v0 += v3;
-                v1 = (v1 << 17) | v1 >>> 47;
-                v3 = (v3 << 21) | v3 >>> 43;
-                v1 ^= v2;
-                v3 ^= v0;
-                v2 = (v2 << 32) | v2 >>> 32;
-                // }
-                v0 ^= m;
-                // }
-            }
-
-            // packing the last block to long, as LE 0-7 bytes + the length in the top byte
-            m = 0;
-            for (i = end - 1; i >= last; --i) {
-                m <<= 16;
-                m |= (data[i] & 0xffffL);
-            }
-            m |= (long) (end - start) << 56;
-            // MSGROUND {
-            v3 ^= m;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            v0 ^= m;
-            // }
-
-            // finishing...
-            v2 ^= 0xff;
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
-            v0 += v1;
-            v2 += v3;
-            v1 = (v1 << 13) | v1 >>> 51;
-            v3 = (v3 << 16) | v3 >>> 48;
-            v1 ^= v0;
-            v3 ^= v2;
-            v0 = (v0 << 32) | v0 >>> 32;
-            v2 += v1;
-            v0 += v3;
-            v1 = (v1 << 17) | v1 >>> 47;
-            v3 = (v3 << 21) | v3 >>> 43;
-            v1 ^= v2;
-            v3 ^= v0;
-            v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            return (int) (v0 ^ v1 ^ v2 ^ v3);
-        }
-    }
-
     /**
      * A quick, simple hashing function that seems to have good results. Like LightRNG, it stores a state that
      * it updates independently of the output, and this starts at a large prime. At each step, it takes the
@@ -4218,9 +746,9 @@ public class CrossHash {
      * array with LongPeriodRNG, since the benchmark uses that RNG's state for data, and the default
      * Arrays.hashCode implementation is only somewhat faster at under 16 ms). After several tries and tweaks
      * to the constants this uses, it also gets remarkably few hash collisions. On the same 0x100000, or
-     * 1048576, RNG states for data, Lightning gets 115 collisions, the JDK Arrays.hashCode method gets 136
+     * 1048576, RNG states for data, Lightning gets 110 collisions, the JDK Arrays.hashCode method gets 129
      * collisions, Sip (implementing SipHash) gets 145 collisions, and CrossHash (using the FNV-1a algorithm)
-     * gets 146 collisions. Storm depends on the salt chosen, but with one initialized with the phi-based
+     * gets 135 collisions. Storm depends on the salt chosen, but with one initialized with the phi-based
      * constant that shows up in LightRNG and here, Storm gets 116 collisions. Dispersion is not perfect, but
      * at many bit sizes Lightning continues to have less collisions (it disperses better than the other hashes
      * with several quantities of bits, at least on this test data). Lightning also does relatively well, though
@@ -4250,12 +778,14 @@ public class CrossHash {
      * To help find patterns in hash output in a visual way, you can hash an x,y point, take the bottom 24 bits,
      * and use that as an RGB color for the pixel at that x,y point. On a 512x512 grid of points, the patterns
      * in Arrays.hashCode and the default CrossHash algorithm (FNV-1a) are evident, and Sip (implementing
-     * SipHash) does approximately as well as Lightning, with no clear patterns visible. The idea is from a
-     * technical report on visual uses for hashing, http://www.clockandflame.com/media/Goulburn06.pdf .
+     * SipHash) does approximately as well as Lightning, with no clear patterns visible (Sip has been removed
+     * from SquidLib because it needs a lot of code and is slower than Storm and especially Lightning). The
+     * idea is from a technical report on visual uses for hashing,
+     * http://www.clockandflame.com/media/Goulburn06.pdf .
      * <ul>
      * <li>{@link java.util.Arrays#hashCode(int[])}: http://i.imgur.com/S4Gh1sX.png</li>
      * <li>{@link CrossHash#hash(int[])}: http://i.imgur.com/x8SDqvL.png</li>
-     * <li>{@link CrossHash.Sip#hash(int[])}: http://i.imgur.com/keSpIwm.png</li>
+     * <li>(Former) CrossHash.Sip.hash(int[]): http://i.imgur.com/keSpIwm.png</li>
      * <li>{@link CrossHash.Lightning#hash(int[])}: http://i.imgur.com/afGJ9cA.png</li>
      * </ul>
      */
@@ -4588,7 +1118,7 @@ public class CrossHash {
     {
         private static final long serialVersionUID = 2352426757973945149L;
 
-        private transient long $alt;
+        private final transient long $alt;
 
         public Storm()
         {
@@ -4601,11 +1131,11 @@ public class CrossHash {
         }
         public Storm(final long alteration)
         {
-            $alt = (alteration + 0x9E3779B97F4A7C15L);
-            $alt = ($alt ^ ($alt >>> 30)) * 0xBF58476D1CE4E5B9L;
-            $alt = ($alt ^ ($alt >>> 27)) * 0x94D049BB133111EBL;
-            $alt ^= ($alt >>> 31);
-            $alt += (191 - Long.bitCount($alt));
+            long s = (alteration + 0x9E3779B97F4A7C15L);
+            s = (s ^ (s >>> 30)) * 0xBF58476D1CE4E5B9L;
+            s = (s ^ (s >>> 27)) * 0x94D049BB133111EBL;
+            s ^= (s >>> 31);
+            $alt = (s += (191 - Long.bitCount(s)));
         }
 
         public static final Storm alpha = new Storm("alpha"), beta = new Storm("beta"), gamma = new Storm("gamma"),
@@ -4621,9 +1151,9 @@ public class CrossHash {
         public long hash64(final boolean[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4631,9 +1161,9 @@ public class CrossHash {
         public long hash64(final byte[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4641,9 +1171,9 @@ public class CrossHash {
         public long hash64(final short[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4651,9 +1181,9 @@ public class CrossHash {
         public long hash64(final char[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4661,9 +1191,9 @@ public class CrossHash {
         public long hash64(final int[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4671,9 +1201,9 @@ public class CrossHash {
         public long hash64(final long[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4681,9 +1211,9 @@ public class CrossHash {
         public long hash64(final float[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4691,9 +1221,9 @@ public class CrossHash {
         public long hash64(final double[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4701,9 +1231,9 @@ public class CrossHash {
         public long hash64(final char[] data, int start, int end) {
             if (data == null || start >= end)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = start; i < end && i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4711,9 +1241,9 @@ public class CrossHash {
         public long hash64(final CharSequence data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length();
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length();
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58));
         }
@@ -4721,9 +1251,9 @@ public class CrossHash {
         public long hash64(final char[][] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4731,9 +1261,9 @@ public class CrossHash {
         public long hash64(final CharSequence[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4741,9 +1271,9 @@ public class CrossHash {
         public long hash64(final Iterable<String> data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L;
             for (String datum : data) {
-                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4751,9 +1281,9 @@ public class CrossHash {
         public long hash64(final CharSequence[]... data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58));
         }
@@ -4761,9 +1291,9 @@ public class CrossHash {
         public int hash(final boolean[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4771,9 +1301,9 @@ public class CrossHash {
         public int hash(final byte[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4781,9 +1311,9 @@ public class CrossHash {
         public int hash(final short[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4791,9 +1321,9 @@ public class CrossHash {
         public int hash(final char[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4801,9 +1331,9 @@ public class CrossHash {
         public int hash(final int[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
 
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
@@ -4812,9 +1342,9 @@ public class CrossHash {
         public int hash(final long[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4822,9 +1352,9 @@ public class CrossHash {
         public int hash(final float[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4832,9 +1362,9 @@ public class CrossHash {
         public int hash(final double[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4843,9 +1373,9 @@ public class CrossHash {
             if (data == null || start >= end)
                 return 0;
 
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = start; i < end && i < len; i++) {
-                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4853,9 +1383,9 @@ public class CrossHash {
         public int hash(final CharSequence data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length();
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length();
             for (int i = 0; i < len; i++) {
-                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z >>> 58))) ^ (result >>> 32));
         }
@@ -4863,9 +1393,9 @@ public class CrossHash {
         public int hash(final char[][] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4873,9 +1403,9 @@ public class CrossHash {
         public int hash(final CharSequence[] data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4883,9 +1413,9 @@ public class CrossHash {
         public int hash(final Iterable<String> data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L;
             for (String datum : data) {
-                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
@@ -4893,9 +1423,9 @@ public class CrossHash {
         public int hash(final CharSequence[]... data) {
             if (data == null)
                 return 0;
-            long chips = $alt * 0x9E3779B97F4A7C15L, z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
+            final long chips = $alt << 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
