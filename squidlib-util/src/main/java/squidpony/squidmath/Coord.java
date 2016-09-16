@@ -458,9 +458,37 @@ public class Coord implements Serializable {
         return POOL[0].length - 3;
     }
 
+    /**
+     * Enlarges the pool of cached Coords to the given width and height, and doesn't change
+     * a dimension if it would be reduced in size.
+     * Cached Coord values will be reused by Coord.get instead of re-allocated each time.
+     * The default pool allows Coords with x and y each between -3 and 255, inclusive, to
+     * be cached, and is considered to have width and height of 256 to begin with. Giving a
+     * width greater than 256 will allow Coords with x greater than 255 to be cached;
+     * likewise for height. If width or height is smaller than the current cache width or
+     * height, that dimension will not change, but the other still may if it is valid. You
+     * cannot shrink the pool size.
+     * @param width the new width for the pool of cached Coords; will be ignored if smaller than the current width
+     * @param height the new height for the pool of cached Coords; will be ignored if smaller than the current height
+     */
+    public static void expandPoolTo(int width, int height)
+    {
+        expandPool(Math.max(0, width + 3 - POOL.length), Math.max(0, height + 3 - POOL[0].length));
+    }
+
+    /**
+     * Enlarges the pool of cached Coords by the given amount of expansion for x and y.
+     * Cached Coord values will be reused by Coord.get instead of re-allocated each time.
+     * The default pool allows Coords with x and y each between -3 and 255, inclusive, to
+     * be cached, and this can increase the size in the positive direction. If either
+     * xIncrease or yIncrease is negative, this method returns immediately and does nothing
+     * else; the same is true of both arguments are zero. You cannot shrink the pool size.
+     * @param xIncrease the amount to increase cache's width by
+     * @param yIncrease the amount to increase cache's height by
+     */
     public static void expandPool(int xIncrease, int yIncrease)
     {
-        if(xIncrease < 0 || yIncrease < 0)
+        if((xIncrease < 0 || yIncrease < 0) || (xIncrease | yIncrease) == 0 )
             return;
         int width = POOL.length, height = POOL[0].length;
         Coord[][] POOL2 = new Coord[width + xIncrease][height + yIncrease];

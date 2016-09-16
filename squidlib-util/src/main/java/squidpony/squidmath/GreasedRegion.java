@@ -1474,6 +1474,10 @@ public class GreasedRegion implements Serializable {
 
     public Coord[] randomSeparated(double fraction, RNG rng)
     {
+        return randomSeparated(fraction, rng, -1);
+    }
+    public Coord[] randomSeparated(double fraction, RNG rng, int limit)
+    {
         if(fraction < 0)
             return new Coord[0];
         if(fraction > 1)
@@ -1491,7 +1495,10 @@ public class GreasedRegion implements Serializable {
                 }
             }
         }
-        Coord[] vl = new Coord[ct = (int)(fraction * xTotal)];
+        ct = (int)(fraction * xTotal);
+        if(limit >= 0 && limit < ct)
+            ct = limit;
+        Coord[] vl = new Coord[ct];
         double[] vec = new double[2];
         sobol.skipTo(rng.between(1000, 65000));
         EACH_SOBOL:
