@@ -884,7 +884,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                     : (value[index]).equals((e.getValue())));
         }
         public int hashCode() {
-            return ((key[index]) == null ? 0 : hasher.hash(key[index]))
+            return hasher.hash(key[index])
                     ^ ((value[index]) == null ? 0 : (value[index]).hashCode());
         }
         @Override
