@@ -25,7 +25,7 @@ public class SpillWorldMap {
     public String name;
     public char[][] politicalMap;
     protected static final char[] letters = Category.L.contents();
-    public OrderedMap<Character, String> atlas;
+    public final OrderedMap<Character, String> atlas = new OrderedMap<>(16);
 
     /**
      * Constructs a SpillWorldMap using the given width, height, and world name, and uses the world name as the
@@ -37,7 +37,7 @@ public class SpillWorldMap {
      */
     public SpillWorldMap(int width, int height, String worldName) {
         this.width = Math.max(width, 20);
-        this.height = Math.max(width, 20);
+        this.height = Math.max(height, 20);
         rng = new StatefulRNG(CrossHash.Lightning.hash64(worldName));
     }
 
@@ -46,8 +46,14 @@ public class SpillWorldMap {
      * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
      * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
      * land. If makeAtlas is true, it also generates an atlas with the procedural names of all the factions and a
-     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object.
-     *
+     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object but will
+     * be empty if makeAtlas has never been true in a call to this.
+     * <br>
+     * If width or height is larger than 256, consider enlarging the Coord pool before calling this with
+     * {@code Coord.expandPoolTo(width, height);}. This will have no effect if width and height are both less than or
+     * equal to 256, but if you expect to be using maps that are especially large (which makes sense for world maps),
+     * expanding the pool will use more memory initially and then (possibly) much less over time, easing pressure on
+     * the garbage collector as well, as re-allocations of large Coords that would otherwise be un-cached are avoided.
      * @param factionCount the number of factions to have claiming land
      * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
      */
@@ -55,13 +61,13 @@ public class SpillWorldMap {
         int count = 10 + 3 * (width >>> 4) * (height >>> 4);
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
 
-        //SobolQRNG sobol = new SobolQRNG(3);
-        //double[] filler = sobol.skipTo(rng.between(1000, 6500));
+        SobolQRNG sobol = new SobolQRNG(2);
+        sobol.skipTo(rng.between(1000, 6500));
         OrderedMap<Coord, Double> entries = new OrderedMap<>(count);
         for (int j = 0; j < count; j++) {
             //sobol.fillVector(filler);
             //entries.put(Coord.get((int)(dim * filler[0]), (int)(dim * filler[1])), (filler[2] + 0.25) / 1.25);
-            entries.put(rng.nextCoord(width - 14, height - 14).add(7), (rng.nextDouble() + 0.25) * 0.8);
+            entries.put(sobol.nextCoord(width - 16, height - 16).add(8), (rng.nextDouble() + 0.2) * 0.8);
         }
         count = entries.size();
         int extra = (width - 1) + (height - 1);
@@ -86,7 +92,7 @@ public class SpillWorldMap {
             }
         }
         GreasedRegion map = new GreasedRegion(sm, 0, 0x7fff);
-        Coord[] centers = map.randomPortion(rng, factionCount);
+        Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
         int volume = (int) (map.count() * rng.between(0.9, 1.0));
 
         spreader.initialize(sm);
@@ -104,7 +110,7 @@ public class SpillWorldMap {
             }
         }
         if (makeAtlas) {
-            atlas = new OrderedMap<>(factionCount + 2);
+            atlas.clear();
             atlas.put('~', "Water");
             atlas.put('%', "Wilderness");
             Thesaurus th = new Thesaurus(rng.nextLong());

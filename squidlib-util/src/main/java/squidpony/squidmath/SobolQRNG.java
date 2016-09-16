@@ -341,12 +341,7 @@ public class SobolQRNG implements RandomnessSource {
         }
 
         // find the index c of the rightmost 0
-        int c = 1;
-        int value = count - 1;
-        while ((value & 1) == 1) {
-            value >>= 1;
-            c++;
-        }
+        int c = 1 + Integer.numberOfTrailingZeros(count);
 
         for (int i = 0; i < dimension; i++) {
             x[i] ^= direction[i][c];
@@ -365,12 +360,7 @@ public class SobolQRNG implements RandomnessSource {
         }
 
         // find the index c of the rightmost 0
-        int c = 1;
-        int value = count - 1;
-        while ((value & 1) == 1) {
-            value >>= 1;
-            c++;
-        }
+        int c = 1 + Integer.numberOfTrailingZeros(count);
 
         for (int i = 0; i < dimension && i < toFill.length; i++) {
             x[i] ^= direction[i][c];
@@ -378,6 +368,42 @@ public class SobolQRNG implements RandomnessSource {
         }
         count++;
         return toFill;
+    }
+    /** Generate a random vector.
+     * @return a random vector as an array of double in the range [0.0, 1.0).
+     */
+    public Coord nextCoord(int xLimit, int yLimit) {
+        if (count == 0) {
+            count++;
+            return Coord.get(0, 0);
+        }
+
+        // find the index c of the rightmost 0
+        int cx = 0, cy = 0, c = 1 + Integer.numberOfTrailingZeros(count);
+
+        if(dimension <= 0)
+            return Coord.get(0, 0);
+        x[0] ^= direction[0][c];
+        cx = (int)((x[0] >>> 20) % xLimit);
+
+        if(dimension == 1)
+        {
+            x[0] ^= direction[0][1 + Integer.numberOfTrailingZeros(++count)];
+            cy = (int) ((x[0] >>> 20) % yLimit);
+        }
+        else {
+            x[1] ^= direction[1][c];
+            cy = (int) ((x[1] >>> 20) % yLimit);
+            // ensure the next number stays on track for other dimensions
+            if(dimension > 2)
+            {
+                for (int i = 2; i < dimension; i++) {
+                    x[i] ^= direction[i][c];
+                }
+            }
+        }
+        count++;
+        return Coord.get(cx, cy);
     }
 
     /** Generate a random vector.
@@ -392,12 +418,7 @@ public class SobolQRNG implements RandomnessSource {
         }
 
         // find the index c of the rightmost 0
-        int c = 1;
-        int value = count - 1;
-        while ((value & 1) == 1) {
-            value >>= 1;
-            c++;
-        }
+        int c = 1 + Integer.numberOfTrailingZeros(count);
 
         for (int i = 0; i < dimension; i++) {
             x[i] ^= direction[i][c];
@@ -489,7 +510,7 @@ public class SobolQRNG implements RandomnessSource {
         for (int i = 0; i < dimension; i++) {
             x[i] ^= direction[i][c];
             //suboptimal, but this isn't meant for quality of randomness, actually the opposite.
-            v[i] = (int)(x[i] / SCALE * max) % max;
+            v[i] = (int) ((x[i] >>> 20) % max);
         }
         count++;
         return v;
