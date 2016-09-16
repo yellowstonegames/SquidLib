@@ -1,10 +1,8 @@
 package squidpony.examples;
 
 import squidpony.FakeLanguageGen;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.IntDoubleOrderedMap;
-import squidpony.squidmath.LongPeriodRNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidgrid.Radius;
+import squidpony.squidmath.*;
 
 import java.util.Arrays;
 
@@ -131,7 +129,86 @@ public class HashQualityTest {
                 {-8}, {-8, -8}, {-8, -8, -8},
                 {-31}, {-31, -31}, {-31, -31, -31},
         };
+        Object[][] objects = {
+            null,
+            {},
+                {new OrderedSet<String>(2)},
+                {new OrderedSet<String>(2), new OrderedMap<String, String>(2)},
+                {new OrderedSet<String>(2), new OrderedMap<String, String>(2), new OrderedSet<String>(2)},
 
+                {new GreasedRegion()},
+                {new GreasedRegion(), new GreasedRegion()},
+                {new GreasedRegion(), new GreasedRegion(), new GreasedRegion()},
+
+                {new LightRNG(0)},
+                {new LightRNG(0), new LightRNG(0)},
+                {new LightRNG(0), new LightRNG(0), new LightRNG(0)},
+
+                {FakeLanguageGen.ENGLISH},
+                {FakeLanguageGen.ENGLISH, FakeLanguageGen.RUSSIAN_AUTHENTIC},
+                {FakeLanguageGen.ENGLISH, FakeLanguageGen.RUSSIAN_AUTHENTIC, FakeLanguageGen.GREEK_AUTHENTIC},
+
+                {new LongPeriodRNG(0)},
+                {new LongPeriodRNG(0), new LongPeriodRNG(0)},
+                {new LongPeriodRNG(0), new LongPeriodRNG(0), new LongPeriodRNG(0)},
+
+                {new ShortVLA()},
+                {new ShortVLA(), new ShortVLA()},
+                {new ShortVLA(), new ShortVLA(), new ShortVLA()},
+
+                {new IntVLA()},
+                {new IntVLA(), new IntVLA()},
+                {new IntVLA(), new IntVLA(), new IntVLA()},
+
+                {Radius.SQUARE},
+                {Radius.SQUARE, Radius.CIRCLE},
+                {Radius.SQUARE, Radius.CIRCLE, Radius.DIAMOND},
+
+                {new XoRoRNG(0)},
+                {new XoRoRNG(0), new XoRoRNG(0)},
+                {new XoRoRNG(0), new XoRoRNG(0), new XoRoRNG(0)},
+
+                {new SquidID(5, 5)},
+                {new SquidID(5, 5), new SquidID(5, 5)},
+                {new SquidID(5, 5), new SquidID(5, 5), new SquidID(5, 5)},
+
+
+                {new GreasedRegion(), new LightRNG(0)},
+                {new GreasedRegion(), new LightRNG(0), new GreasedRegion(), new LightRNG(0)},
+                {new GreasedRegion(), new LightRNG(0), new GreasedRegion(), new LightRNG(0), new GreasedRegion(), new LightRNG(0)},
+
+                {new LightRNG(0), FakeLanguageGen.ENGLISH},
+                {new LightRNG(0), FakeLanguageGen.ENGLISH, new LightRNG(0), FakeLanguageGen.RUSSIAN_AUTHENTIC},
+                {new LightRNG(0), FakeLanguageGen.ENGLISH, new LightRNG(0), FakeLanguageGen.RUSSIAN_AUTHENTIC, new LightRNG(0), FakeLanguageGen.GREEK_AUTHENTIC},
+
+                {FakeLanguageGen.ENGLISH, new LongPeriodRNG(0)},
+                {FakeLanguageGen.ENGLISH, new LongPeriodRNG(0), FakeLanguageGen.RUSSIAN_AUTHENTIC, new LongPeriodRNG(0)},
+                {FakeLanguageGen.ENGLISH, new LongPeriodRNG(0), FakeLanguageGen.RUSSIAN_AUTHENTIC, new LongPeriodRNG(0), FakeLanguageGen.GREEK_AUTHENTIC, new LongPeriodRNG(0)},
+
+                {new LongPeriodRNG(0), new ShortVLA()},
+                {new LongPeriodRNG(0), new ShortVLA(), new LongPeriodRNG(0), new ShortVLA()},
+                {new LongPeriodRNG(0), new ShortVLA(), new LongPeriodRNG(0), new ShortVLA(), new LongPeriodRNG(0), new ShortVLA()},
+
+                {new ShortVLA(), new IntVLA()},
+                {new ShortVLA(), new IntVLA(), new ShortVLA(), new IntVLA()},
+                {new ShortVLA(), new IntVLA(), new ShortVLA(), new IntVLA(), new ShortVLA(), new IntVLA()},
+
+                {new IntVLA(), Radius.SQUARE},
+                {new IntVLA(), Radius.SQUARE, new IntVLA(), Radius.CIRCLE},
+                {new IntVLA(), Radius.SQUARE, new IntVLA(), Radius.CIRCLE, new IntVLA(), Radius.DIAMOND},
+
+                {Radius.SQUARE, new XoRoRNG(0)},
+                {Radius.SQUARE, new XoRoRNG(0), Radius.CIRCLE, new XoRoRNG(0)},
+                {Radius.SQUARE, new XoRoRNG(0), Radius.CIRCLE, new XoRoRNG(0), Radius.DIAMOND, new XoRoRNG(0)},
+
+                {new XoRoRNG(0), new SquidID(5, 5)},
+                {new XoRoRNG(0), new SquidID(5, 5), new XoRoRNG(0), new SquidID(5, 5)},
+                {new XoRoRNG(0), new SquidID(5, 5), new XoRoRNG(0), new SquidID(5, 5), new XoRoRNG(0), new SquidID(5, 5)},
+
+                {new SquidID(5, 5), null},
+                {new SquidID(5, 5), null, new SquidID(5, 5), null},
+                {new SquidID(5, 5), null, new SquidID(5, 5), null, new SquidID(5, 5), null},
+        };
         int len = bytes.length;
         for (int i = 0; i < len; i++) {
             System.out.println(Arrays.toString(longs[i]));
@@ -139,6 +216,7 @@ public class HashQualityTest {
             System.out.println("JDK shorts: " + Arrays.hashCode(shorts[i]));
             System.out.println("JDK ints: " + Arrays.hashCode(ints[i]));
             System.out.println("JDK longs: " + Arrays.hashCode(longs[i]));
+            System.out.println("JDK objects: " + Arrays.hashCode(objects[i]));
         }
 
         for (int i = 0; i < len; i++) {
@@ -155,6 +233,7 @@ public class HashQualityTest {
             System.out.println("Lightning shorts: " + CrossHash.Lightning.hash(shorts[i]));
             System.out.println("Lightning ints: " + CrossHash.Lightning.hash(ints[i]));
             System.out.println("Lightning longs: " + CrossHash.Lightning.hash(longs[i]));
+            System.out.println("Lightning objects: " + CrossHash.Lightning.hash(objects[i]));
         }
 
         for (int i = 0; i < len; i++) {
@@ -164,6 +243,7 @@ public class HashQualityTest {
             System.out.println("Storm ints: " + storm.hash(ints[i]));
             System.out.println("Storm longs: " + storm.hash(longs[i]));
         }
+
 
         int longHashLength = 0x100000, stringHashLength = 0xC0000;
         System.out.println("Long Hashing:");

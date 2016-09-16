@@ -240,4 +240,19 @@ public class LightRNG implements RandomnessSource, StatefulRandomness
         return "LightRNG with state 0x" + StringKit.hex(state) + 'L';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LightRNG lightRNG = (LightRNG) o;
+
+        return state == lightRNG.state;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (state ^ (state >>> 32));
+    }
 }

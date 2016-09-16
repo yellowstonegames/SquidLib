@@ -133,5 +133,4 @@ public class SpillWorldMap {
     public char[][] generate(int factionCount) {
         return generate(factionCount, false);
     }
-
 }

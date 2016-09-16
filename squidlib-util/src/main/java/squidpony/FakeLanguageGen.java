@@ -3161,7 +3161,7 @@ public class FakeLanguageGen implements Serializable {
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(alterations);
+            return CrossHash.Lightning.hash(alterations);
         }
 
         @Override

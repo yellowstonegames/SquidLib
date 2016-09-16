@@ -2,6 +2,8 @@ package squidpony.squidmath;
 
 import squidpony.StringKit;
 
+import java.util.Arrays;
+
 /**
  * An RNG that has a drastically longer period than the other generators in SquidLib, other than MersenneTwister,
  * without sacrificing speed or HTML target compatibility. If you don't already know what the period of an RNG is, this
@@ -367,5 +369,24 @@ public class LongPeriodRNG implements RandomnessSource {
     @Override
     public String toString() {
         return "LongPeriodRNG with state hash 0x" + StringKit.hexHash(state) + "L, choice 0x" + StringKit.hex(choice);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LongPeriodRNG that = (LongPeriodRNG) o;
+
+        if (choice != that.choice) return false;
+        return Arrays.equals(state, that.state);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = CrossHash.Lightning.hash(state);
+        result = 31 * result + choice;
+        return result;
     }
 }
