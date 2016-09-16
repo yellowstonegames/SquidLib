@@ -1078,11 +1078,9 @@ public class SectionDungeonGenerator {
             flooded = new GreasedRegion(center, width, height).spill(chosen, potentialLakeSize, rng).and(limit);
 
             deep = flooded.decode();
+            flooded.flood(new GreasedRegion(fusedMap, '.').fringe8way(3), 3).and(limit);
 
-            GreasedRegion shore = new GreasedRegion(fusedMap, '.').fringe8way(3).flood(flooded, 3).and(limit),
-                    lake = shore.copy().or(flooded);
-
-            boolean[][] shallow = shore.decode();
+            boolean[][] shallow = flooded.decode();
 
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
@@ -1094,7 +1092,7 @@ public class SectionDungeonGenerator {
             }
             ArrayList<GreasedRegion> change = new ArrayList<>();
             for (GreasedRegion room : finder.rooms.keySet()) {
-                if(lake.intersects(tmp.remake(room).expand8way()))
+                if(flooded.intersects(tmp.remake(room).expand8way()))
                     change.add(room);
             }
             for (GreasedRegion region : change) {

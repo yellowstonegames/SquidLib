@@ -7,7 +7,4 @@
 <module>
 	<inherits name='squidlib-util' />
 	<source path="squidpony/squidgrid/gui/gdx" />
-	<!-- Following line is not needed: .js files are pre-compiled and new-joe-kuo-6.1000.txt
-	     is only used in SobolQRNG which is Gwt incompatible anyway -->
-	<!-- <source path="src/main/java/resources" /> -->
 </module>

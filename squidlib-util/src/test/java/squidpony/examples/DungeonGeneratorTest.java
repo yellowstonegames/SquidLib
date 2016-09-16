@@ -115,8 +115,8 @@ public class DungeonGeneratorTest {
         rng.setState(2252637788195L);
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.2);
         serpent.putWalledBoxRoomCarvers(5);
-        serpent.putWalledRoundRoomCarvers(3);
-        serpent.putCaveCarvers(6);
+        serpent.putRoundRoomCarvers(3);
+        serpent.putCaveCarvers(3);
         char[][] map = serpent.generate();
         dungeonGenerator.generate(map);
 
@@ -135,12 +135,12 @@ public class DungeonGeneratorTest {
         //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
         sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
         sdg.addWater(SectionDungeonGenerator.CAVE, 9);
-        sdg.addMaze(30);
-        sdg.addLake(10, '£', '¢');
+        sdg.addMaze(15);
+        sdg.addLake(8, '£', '¢');
         rng.setState(0xFEEEEEEEEEL);
         serpent = new SerpentMapGenerator(width, height, rng, 0.2);
         serpent.putWalledBoxRoomCarvers(5);
-        serpent.putWalledRoundRoomCarvers(3);
+        serpent.putRoundRoomCarvers(3);
         serpent.putCaveCarvers(3);
         map = serpent.generate();
         int[][] env = serpent.getEnvironment();

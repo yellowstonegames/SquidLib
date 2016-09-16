@@ -8,4 +8,14 @@
 <module>
     <source path="squidpony"/>
     <inherits name='regexodus'/>
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.MersenneTwister" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.Elias" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.ChaosRNG" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid.mapping" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid.mapping.styled" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.tileset" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai" />
 </module>
