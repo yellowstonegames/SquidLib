@@ -127,7 +127,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     /**
      * The acceptable load factor.
      */
-    protected final float f;
+    public final float f;
 
     /**
      * The initial default size of a hash table.
@@ -368,6 +368,69 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     public OrderedSet(final Collection<? extends K> c, CrossHash.IHasher hasher) {
         this(c, DEFAULT_LOAD_FACTOR, hasher);
+    }
+
+    /**
+     * Creates a new hash set and fills it with the elements of a given array.
+     *
+     * @param a
+     *            an array whose elements will be used to fill the set.
+     * @param offset
+     *            the first element to use.
+     * @param length
+     *            the number of elements to use.
+     * @param f
+     *            the load factor.
+     */
+    public OrderedSet(final K[] a, final int offset,
+                      final int length, final float f, CrossHash.IHasher hasher) {
+        this(length < 0 ? 0 : length, f, hasher);
+        if ( a == null ) throw new NullPointerException( "Array passed to OrderedSet constructor cannot be null" );
+        if ( offset < 0 ) throw new ArrayIndexOutOfBoundsException( "Offset (" + offset + ") is negative" );
+        if ( length < 0 ) throw new IllegalArgumentException( "Length (" + length + ") is negative" );
+        if ( offset + length > a.length ) {
+            throw new ArrayIndexOutOfBoundsException(
+                    "Last index (" + ( offset + length ) + ") is greater than array length (" + a.length + ")" );
+        }
+        for (int i = 0; i < length; i++)
+            add(a[offset + i]);
+    }
+    /**
+     * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
+     * factor and fills it with the elements of a given array.
+     *
+     * @param a
+     *            an array whose elements will be used to fill the set.
+     * @param offset
+     *            the first element to use.
+     * @param length
+     *            the number of elements to use.
+     */
+    public OrderedSet(final K[] a, final int offset,
+                      final int length, CrossHash.IHasher hasher) {
+        this(a, offset, length, DEFAULT_LOAD_FACTOR, hasher);
+    }
+
+    /**
+     * Creates a new hash set copying the elements of an array.
+     *
+     * @param a
+     *            an array to be copied into the new hash set.
+     * @param f
+     *            the load factor.
+     */
+    public OrderedSet(final K[] a, final float f, CrossHash.IHasher hasher) {
+        this(a, 0, a.length, f, hasher);
+    }
+    /**
+     * Creates a new hash set with {@link #DEFAULT_LOAD_FACTOR} as load
+     * factor copying the elements of an array.
+     *
+     * @param a
+     *            an array to be copied into the new hash set.
+     */
+    public OrderedSet(final K[] a, CrossHash.IHasher hasher) {
+        this(a, DEFAULT_LOAD_FACTOR, hasher);
     }
 
     private int realSize() {

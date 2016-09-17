@@ -64,9 +64,12 @@
         <findbugs.version>3.0.2</findbugs.version>
         <cobertura.version>2.7</cobertura.version>
         <jdk.version>1.7</jdk.version>
+        <!--
         <gdx.version>1.9.3</gdx.version>
+        -->
+        <gdx.version>1.9.5-SNAPSHOT</gdx.version>
         <junit.version>4.11</junit.version>
-        <regexodus.version>0.1.6</regexodus.version>
+        <regexodus.version>0.1.7-SNAPSHOT</regexodus.version>
     </properties>
 
     <prerequisites>
@@ -86,8 +89,15 @@
     <modules>
         <module>squidlib-util</module>
         <module>squidlib</module>
+        <module>squidlib-extra</module>
         <!--<module>squidlib-performance</module>-->
     </modules>
+    <repositories>
+        <repository>
+            <id>Maven Snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
     <profiles>
         <profile>
             <id>doclint-java8-disable</id>

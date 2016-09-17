@@ -2433,6 +2433,17 @@ public class FakeLanguageGen implements Serializable {
         return sentence(srng, minWords, maxWords, new String[]{",", ",", ",", ";"},
                 new String[]{".", ".", ".", "!", "?", "..."}, 0.2);
     }
+    /**
+     * Generate a sentence from this FakeLanguageGen, using and changing the current seed.
+     *
+     * @param minWords an int for the minimum number of words in a sentence; should be at least 1
+     * @param maxWords an int for the maximum number of words in a sentence; should be at least equal to minWords
+     * @return a sentence in the gibberish language as a String
+     */
+    public String sentence(RNG rng, int minWords, int maxWords) {
+        return sentence(rng, minWords, maxWords, new String[]{",", ",", ",", ";"},
+                new String[]{".", ".", ".", "!", "?", "..."}, 0.2);
+    }
 
     /**
      * Generate a sentence from this FakeLanguageGen, using and changing the current seed.

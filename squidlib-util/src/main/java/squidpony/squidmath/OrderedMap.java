@@ -99,7 +99,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     /**
      * The acceptable load factor.
      */
-    protected final float f;
+    public final float f;
     /**
      * Cached set of entries.
      */
@@ -145,7 +145,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     /**
-     * Creates a new hash map.
+     * Creates a new OrderedMap.
      * <p>
      * <p>The actual table size will be the least power of two greater than <code>expected</code>/<code>f</code>.
      *
@@ -170,25 +170,25 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     /**
-     * Creates a new hash map with 0.75f as load factor.
+     * Creates a new OrderedMap with 0.75f as load factor.
      *
-     * @param expected the expected number of elements in the hash map.
+     * @param expected the expected number of elements in the OrderedMap.
      */
     public OrderedMap(final int expected) {
         this(expected, DEFAULT_LOAD_FACTOR);
     }
 
     /**
-     * Creates a new hash map with initial expected 16 entries and 0.75f as load factor.
+     * Creates a new OrderedMap with initial expected 16 entries and 0.75f as load factor.
      */
     public OrderedMap() {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR);
     }
 
     /**
-     * Creates a new hash map copying a given one.
+     * Creates a new OrderedMap copying a given one.
      *
-     * @param m a {@link Map} to be copied into the new hash map.
+     * @param m a {@link Map} to be copied into the new OrderedMap.
      * @param f the load factor.
      */
     public OrderedMap(final Map<? extends K, ? extends V> m, final float f) {
@@ -197,43 +197,62 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     /**
-     * Creates a new hash map with 0.75f as load factor copying a given one.
+     * Creates a new OrderedMap with 0.75f as load factor copying a given one.
      *
-     * @param m a {@link Map} to be copied into the new hash map.
+     * @param m a {@link Map} to be copied into the new OrderedMap.
      */
     public OrderedMap(final Map<? extends K, ? extends V> m) {
         this(m, DEFAULT_LOAD_FACTOR);
     }
 
     /**
-     * Creates a new hash map using the elements of two parallel arrays.
+     * Creates a new OrderedMap using the elements of two parallel arrays.
      *
-     * @param k the array of keys of the new hash map.
-     * @param v the array of corresponding values in the new hash map.
+     * @param keyArray the array of keys of the new OrderedMap.
+     * @param valueArray the array of corresponding values in the new OrderedMap.
      * @param f the load factor.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public OrderedMap(final K[] k, final V[] v, final float f) {
-        this(k.length, f);
-        if (k.length != v.length)
-            throw new IllegalArgumentException("The key array and the value array have different lengths (" + k.length + " and " + v.length + ")");
-        for (int i = 0; i < k.length; i++)
-            put(k[i], v[i]);
+    public OrderedMap(final K[] keyArray, final V[] valueArray, final float f) {
+        this(keyArray.length, f);
+        if (keyArray.length != valueArray.length)
+            throw new IllegalArgumentException("The key array and the value array have different lengths (" + keyArray.length + " and " + valueArray.length + ")");
+        for (int i = 0; i < keyArray.length; i++)
+            put(keyArray[i], valueArray[i]);
     }
-
     /**
-     * Creates a new hash map with 0.75f as load factor using the elements of two parallel arrays.
+     * Creates a new OrderedMap using the elements of two parallel arrays.
      *
-     * @param k the array of keys of the new hash map.
-     * @param v the array of corresponding values in the new hash map.
+     * @param keyColl the collection of keys of the new OrderedMap.
+     * @param valueColl the collection of corresponding values in the new OrderedMap.
+     * @param f the load factor.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
-    public OrderedMap(final K[] k, final V[] v) {
-        this(k, v, DEFAULT_LOAD_FACTOR);
+    public OrderedMap(final Collection<K> keyColl, final Collection<V> valueColl, final float f) {
+        this(keyColl.size(), f);
+        if (keyColl.size() != valueColl.size())
+            throw new IllegalArgumentException("The key array and the value array have different lengths (" + keyColl.size() + " and " + valueColl.size() + ")");
+        Iterator<K> ki = keyColl.iterator();
+        Iterator<V> vi = valueColl.iterator();
+        while (ki.hasNext() && vi.hasNext())
+        {
+            put(ki.next(), vi.next());
+        }
     }
 
     /**
-     * Creates a new hash map.
+     * Creates a new OrderedMap with 0.75f as load factor using the elements of two parallel arrays.
+     *
+     * @param keyArray the array of keys of the new OrderedMap.
+     * @param valueArray the array of corresponding values in the new OrderedMap.
+     * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
+     */
+    public OrderedMap(final K[] keyArray, final V[] valueArray) {
+        this(keyArray, valueArray, DEFAULT_LOAD_FACTOR);
+    }
+
+    /**
+     * Creates a new OrderedMap.
      * <p>
      * <p>The actual table size will be the least power of two greater than <code>expected</code>/<code>f</code>.
      *
@@ -258,26 +277,28 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         this.hasher = (hasher == null) ? CrossHash.defaultHasher : hasher;
     }
     /**
-     * Creates a new hash map with 0.75f as load factor.
+     * Creates a new OrderedMap with 0.75f as load factor.
      *
-     * @param expected the expected number of elements in the hash map.
+     * @param expected the expected number of elements in the OrderedMap.
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
      */
     public OrderedMap(final int expected, CrossHash.IHasher hasher) {
         this(expected, DEFAULT_LOAD_FACTOR, hasher);
     }
 
     /**
-     * Creates a new hash map with initial expected 16 entries and 0.75f as load factor.
+     * Creates a new OrderedMap with initial expected 16 entries and 0.75f as load factor.
      */
     public OrderedMap(CrossHash.IHasher hasher) {
         this(DEFAULT_INITIAL_SIZE, DEFAULT_LOAD_FACTOR, hasher);
     }
 
     /**
-     * Creates a new hash map copying a given one.
+     * Creates a new OrderedMap copying a given one.
      *
-     * @param m a {@link Map} to be copied into the new hash map.
+     * @param m a {@link Map} to be copied into the new OrderedMap.
      * @param f the load factor.
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
      */
     public OrderedMap(final Map<? extends K, ? extends V> m, final float f, CrossHash.IHasher hasher) {
         this(m.size(), f, hasher);
@@ -285,14 +306,41 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     /**
-     * Creates a new hash map with 0.75f as load factor copying a given one.
-     *
-     * @param m a {@link Map} to be copied into the new hash map.
+     * Creates a new OrderedMap with 0.75f as load factor copying a given one.
+     * @param m a {@link Map} to be copied into the new OrderedMap.
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
      */
     public OrderedMap(final Map<? extends K, ? extends V> m, CrossHash.IHasher hasher) {
         this(m, DEFAULT_LOAD_FACTOR, hasher);
     }
 
+    /**
+     * Creates a new OrderedMap using the elements of two parallel arrays.
+     *
+     * @param keyArray the array of keys of the new OrderedMap.
+     * @param valueArray the array of corresponding values in the new OrderedMap.
+     * @param f the load factor.
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
+     */
+    public OrderedMap(final K[] keyArray, final V[] valueArray, final float f, CrossHash.IHasher hasher) {
+        this(keyArray.length, f, hasher);
+        if (keyArray.length != valueArray.length)
+            throw new IllegalArgumentException("The key array and the value array have different lengths (" + keyArray.length + " and " + valueArray.length + ")");
+        for (int i = 0; i < keyArray.length; i++)
+            put(keyArray[i], valueArray[i]);
+    }
+    /**
+     * Creates a new OrderedMap with 0.75f as load factor using the elements of two parallel arrays.
+     *
+     * @param keyArray the array of keys of the new OrderedMap.
+     * @param valueArray the array of corresponding values in the new OrderedMap.
+     * @param hasher used to hash items; typically only needed when K is an array, where CrossHash has implementations
+     * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
+     */
+    public OrderedMap(final K[] keyArray, final V[] valueArray, CrossHash.IHasher hasher) {
+        this(keyArray, valueArray, DEFAULT_LOAD_FACTOR, hasher);
+    }
 
     private int realSize() {
         return containsNullKey ? size - 1 : size;
@@ -846,7 +894,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     /**
-     * The entry class for a hash map does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
+     * The entry class for a OrderedMap does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
      * {@link Entry#setValue(Object)} are reflected in the map
      */
     final class MapEntry
@@ -1006,10 +1054,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         throw new UnsupportedOperationException();
     }
     /**
-     * A list iterator over a linked map.
+     * A list iterator over a OrderedMap.
      *
      * <P>
-     * This class provides a list iterator over a linked hash map. The
+     * This class provides a list iterator over a OrderedMap. The
      * constructor runs in constant time.
      */
     private class MapIterator {
@@ -1743,6 +1791,15 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         return keys;
     }
 
+    public OrderedSet<K> keysAsOrderedSet()
+    {
+        OrderedSet<K> os = new OrderedSet<K>(size, f, hasher);
+        for (int i = 0; i < size; i++) {
+            os.add(keyAt(i));
+        }
+        return os;
+    }
+
     /**
      * An iterator on values.
      * <p>
@@ -1786,6 +1843,15 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     public Collection<V> values() {
         if (values == null) values = new ValueCollection();
         return values;
+    }
+
+    public ArrayList<V> valuesAsList()
+    {
+        ArrayList<V> ls = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            ls.add(getAt(i));
+        }
+        return ls;
     }
 
     /**
@@ -1944,7 +2010,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * Returns a deep copy of this map.
      *
      * <P>
-     * This method performs a deep copy of this hash map; the data stored in the
+     * This method performs a deep copy of this OrderedMap; the data stored in the
      * map, however, is not cloned. Note that this makes a difference only for
      * object keys.
      *
@@ -2360,7 +2426,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      */
     public V getAt(final int idx) {
         int pos;
-        final K[] key = this.key;
         if (idx < 0 || idx >= order.size)
             return defRetValue;
         // The starting point.
@@ -2374,7 +2439,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @return the key at the index, if the index is valid, otherwise null
      */
     public K keyAt(final int idx) {
-        final K[] key = this.key;
         if (idx < 0 || idx >= order.size)
             return null;
         // The starting point.
