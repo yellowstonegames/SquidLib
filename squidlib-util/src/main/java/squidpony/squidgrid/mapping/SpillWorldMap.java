@@ -27,6 +27,13 @@ public class SpillWorldMap {
     protected static final char[] letters = Category.L.contents();
     public final OrderedMap<Character, String> atlas = new OrderedMap<>(16);
 
+    public SpillWorldMap()
+    {
+        width = 20;
+        height = 20;
+        name = "Permadeath Island";
+        rng = new StatefulRNG(CrossHash.Lightning.hash64(name));
+    }
     /**
      * Constructs a SpillWorldMap using the given width, height, and world name, and uses the world name as the
      * basis for all future random generation in this object.
@@ -38,7 +45,8 @@ public class SpillWorldMap {
     public SpillWorldMap(int width, int height, String worldName) {
         this.width = Math.max(width, 20);
         this.height = Math.max(height, 20);
-        rng = new StatefulRNG(CrossHash.Lightning.hash64(worldName));
+        name = worldName;
+        rng = new StatefulRNG(CrossHash.Lightning.hash64(name));
     }
 
     /**

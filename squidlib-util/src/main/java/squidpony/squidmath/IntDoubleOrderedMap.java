@@ -103,7 +103,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     /**
      * The acceptable load factor.
      */
-    protected final float f;
+    public final float f;
     /**
      * Cached set of entries.
      */
@@ -2039,9 +2039,6 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
     /**
      * Returns a hash code for this map.
-     * <p>
-     * This method overrides the generic method provided by the superclass. Since <code>equals()</code> is not overriden, it is important that the value returned by this method is the same value as
-     * the one returned by the overriden method.
      *
      * @return a hash code for this map.
      */
@@ -2059,6 +2056,19 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         if (containsNullKey) h += HashCommon.double2int(value[n]);
         return h;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Map))
+            return false;
+        Map<?, ?> m = (Map<?, ?>) o;
+        if (m.size() != size())
+            return false;
+        return mapEntrySet().containsAll(m.entrySet());
+    }
+
 
     /**
      * Delegates to the corresponding type-specific method.
