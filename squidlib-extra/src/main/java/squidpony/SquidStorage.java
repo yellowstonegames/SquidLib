@@ -7,16 +7,17 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import regexodus.Pattern;
-import squidpony.squidmath.IntDoubleOrderedMap;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
+import squidpony.annotation.Beta;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 /**
+ * Helps games store information in libGDX's Preferences class as Strings, then get it back out.
  * Created by Tommy Ettinger on 9/16/2016.
  */
+@Beta
 public class SquidStorage {
     public final Preferences preferences;
     public final String storageName;
@@ -27,7 +28,7 @@ public class SquidStorage {
     {
         this("nameless");
     }
-    public SquidStorage(String name)
+    public SquidStorage(final String name)
     {
         storageName = name;
         preferences = Gdx.app.getPreferences(storageName);
@@ -87,7 +88,70 @@ public class SquidStorage {
                         json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
             }
         });
-        json.addClassTag("S_", String.class);
+        json.setSerializer(char[][].class, new Json.Serializer<char[][]>() {
+            @Override
+            public void write(Json json, char[][] object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                int sz = object.length;
+                json.writeArrayStart();
+                for (int i = 0; i < sz; i++) {
+                    json.writeValue(String.valueOf(object[i]));
+                }
+                json.writeArrayEnd();
+            }
+
+            @Override
+            public char[][] read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData.isNull())
+                    return null;
+                int sz = jsonData.size;
+                char[][] data = new char[sz][];
+                JsonValue c = jsonData.child();
+                for (int i = 0; i < sz && c != null; i++, c = c.next()) {
+                    data[i] = c.asString().toCharArray();
+                }
+                return data;
+            }
+        });
+        json.addClassTag("#Str", String.class);
+        json.addClassTag("Bool#", Boolean.class);
+        json.addClassTag("bool#", Boolean.TYPE);
+        json.addClassTag("Byt#", Byte.class);
+        json.addClassTag("byt#", Byte.TYPE);
+        json.addClassTag("Sho#", Short.class);
+        json.addClassTag("sho#", Short.TYPE);
+        json.addClassTag("Char#", Character.class);
+        json.addClassTag("char#", Character.TYPE);
+        json.addClassTag("Int#", Integer.class);
+        json.addClassTag("int#", Integer.TYPE);
+        json.addClassTag("Flo#", Float.class);
+        json.addClassTag("flo#", Float.TYPE);
+        json.addClassTag("Lng#", Long.class);
+        json.addClassTag("lng#", Long.TYPE);
+        json.addClassTag("Dbl#", Double.class);
+        json.addClassTag("dbl#", Double.TYPE);
+
+        json.addClassTag("#IDOM", IntDoubleOrderedMap.class);
+        json.addClassTag("#Lang", FakeLanguageGen.class);
+        json.addClassTag("#LnAl", FakeLanguageGen.Alteration.class);
+        json.addClassTag("#LnMd", FakeLanguageGen.Modifier.class);
+        json.addClassTag("#OMap", OrderedMap.class);
+        json.addClassTag("#OSet", OrderedSet.class);
+        json.addClassTag("#IVLA", IntVLA.class);
+        json.addClassTag("#SVLA", ShortVLA.class);
+        json.addClassTag("#RNG", RNG.class);
+        json.addClassTag("#SRNG", StatefulRNG.class);
+        json.addClassTag("#Ligh", LightRNG.class);
+        json.addClassTag("#LonP", LongPeriodRNG.class);
+        json.addClassTag("#Thun", ThunderRNG.class);
+        json.addClassTag("#Strm", CrossHash.Storm.class);
+
+
+
         contents = new OrderedMap<>(16, 0.2f);
     }
     public SquidStorage put(String innerName, Object o)
