@@ -280,6 +280,15 @@ public class GreasedRegion implements Serializable {
         data = new long[width * ySections];
         System.arraycopy(other.data, 0, data, 0, width * ySections);
     }
+    public GreasedRegion(final long[] data2, final int width, final int height)
+    {
+        this.width = width;
+        this.height = height;
+        ySections = (height + 63) >> 6;
+        yEndMask = (-1L >>> (64 - (height & 63)));
+        data = new long[width * ySections];
+        System.arraycopy(data2, 0, data, 0, width * ySections);
+    }
 
     public GreasedRegion remake(GreasedRegion other) {
         if (width == other.width && height == other.height) {
