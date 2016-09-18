@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import squidpony.squidgrid.mapping.SpillWorldMap;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.ThunderRNG;
 
 import java.util.Arrays;
 
@@ -24,24 +26,26 @@ public class SquidStorageTest extends ApplicationAdapter{
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
 
             FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(srng), lang2;
-
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
+            GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75), g2;
             store.put("rng", srng);
             store.put("language", randomLanguage);
             store.put("world", world);
+            store.put("grease", grease);
             store.store("Test");
             System.out.println("Stored preference bytes: " + store.preferencesSize());
             r2 = store.get("Test", "rng", StatefulRNG.class);
-
             lang2 = store.get("Test", "language", FakeLanguageGen.class);
             w2 = store.get("Test", "world", SpillWorldMap.class);
+            g2 = store.get("Test", "grease", GreasedRegion.class);
             long seed1 = srng.getState(), seed2 = r2.getState();
             System.out.println("StatefulRNG states equal: " + (seed1 == seed2));
             System.out.println("FakeLanguageGen values equal: " + randomLanguage.equals(lang2));
             System.out.println("FakeLanguageGen outputs equal: " + randomLanguage.sentence(srng, 5, 10).equals(lang2.sentence(r2, 5, 10)));
             System.out.println("SpillWorldMap.politicalMap values equal: " + Arrays.deepEquals(world.politicalMap, w2.politicalMap));
             System.out.println("SpillWorldMap.atlas values equal: " + world.atlas.equals(w2.atlas));
+            System.out.println("GreasedRegion values equal: " + grease.equals(g2));
 
             store.preferences.clear();
             store.preferences.flush();
@@ -56,9 +60,11 @@ public class SquidStorageTest extends ApplicationAdapter{
 
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
+            GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75), g2;
             store.put("rng", srng);
             store.put("language", randomLanguage);
             store.put("world", world);
+            store.put("grease", grease);
             String shown = store.show();
             System.out.println(shown);
             System.out.println("Uncompressed preference bytes: " + shown.length() * 2);

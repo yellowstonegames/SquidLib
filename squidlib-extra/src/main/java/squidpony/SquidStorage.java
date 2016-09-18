@@ -46,6 +46,22 @@ public class SquidStorage {
             }
         });
 
+        json.setSerializer(GreasedRegion.class, new Json.Serializer<GreasedRegion>() {
+            @Override
+            public void write(Json json, GreasedRegion object, Class knownType) {
+                json.writeObjectStart();
+                json.writeValue("w", object.width);
+                json.writeValue("h", object.height);
+                json.writeValue("d", object.data);
+                json.writeObjectEnd();
+            }
+
+            @Override
+            public GreasedRegion read(Json json, JsonValue jsonData, Class type) {
+                return new GreasedRegion(jsonData.get("d").asLongArray(), jsonData.getInt("w"), jsonData.getInt("h"));
+            }
+        });
+
         json.setSerializer(IntDoubleOrderedMap.class, new Json.Serializer<IntDoubleOrderedMap>() {
             @Override
             public void write(Json json, IntDoubleOrderedMap object, Class knownType) {
@@ -117,24 +133,24 @@ public class SquidStorage {
                 return data;
             }
         });
-        json.addClassTag("#Str", String.class);
-        json.addClassTag("Bool#", Boolean.class);
-        json.addClassTag("bool#", Boolean.TYPE);
-        json.addClassTag("Byt#", Byte.class);
-        json.addClassTag("byt#", Byte.TYPE);
-        json.addClassTag("Sho#", Short.class);
-        json.addClassTag("sho#", Short.TYPE);
-        json.addClassTag("Char#", Character.class);
-        json.addClassTag("char#", Character.TYPE);
-        json.addClassTag("Int#", Integer.class);
-        json.addClassTag("int#", Integer.TYPE);
-        json.addClassTag("Flo#", Float.class);
-        json.addClassTag("flo#", Float.TYPE);
-        json.addClassTag("Lng#", Long.class);
-        json.addClassTag("lng#", Long.TYPE);
-        json.addClassTag("Dbl#", Double.class);
-        json.addClassTag("dbl#", Double.TYPE);
-
+        json.addClassTag("#St", String.class);
+        json.addClassTag("#Z", Boolean.class);
+        json.addClassTag("#z", boolean.class);
+        json.addClassTag("#B", Byte.class);
+        json.addClassTag("#b", byte.class);
+        json.addClassTag("#S", Short.class);
+        json.addClassTag("#s", short.class);
+        json.addClassTag("#C", Character.class);
+        json.addClassTag("#c", char.class);
+        json.addClassTag("#I", Integer.class);
+        json.addClassTag("#i", int.class);
+        json.addClassTag("#F", Float.class);
+        json.addClassTag("#f", float.class);
+        json.addClassTag("#L", Long.class);
+        json.addClassTag("#l", long.class);
+        json.addClassTag("#D", Double.class);
+        json.addClassTag("#d", double.class);
+        json.addClassTag("#Grea", GreasedRegion.class);
         json.addClassTag("#IDOM", IntDoubleOrderedMap.class);
         json.addClassTag("#Lang", FakeLanguageGen.class);
         json.addClassTag("#LnAl", FakeLanguageGen.Alteration.class);
@@ -145,9 +161,14 @@ public class SquidStorage {
         json.addClassTag("#SVLA", ShortVLA.class);
         json.addClassTag("#RNG", RNG.class);
         json.addClassTag("#SRNG", StatefulRNG.class);
+        json.addClassTag("#EdiR", EditRNG.class);
+        json.addClassTag("#DhaR", DharmaRNG.class);
+        json.addClassTag("#DecR", DeckRNG.class);
         json.addClassTag("#Ligh", LightRNG.class);
         json.addClassTag("#LonP", LongPeriodRNG.class);
         json.addClassTag("#Thun", ThunderRNG.class);
+        json.addClassTag("#XoRo", XoRoRNG.class);
+        json.addClassTag("#XorR", XorRNG.class);
         json.addClassTag("#Strm", CrossHash.Storm.class);
 
 
