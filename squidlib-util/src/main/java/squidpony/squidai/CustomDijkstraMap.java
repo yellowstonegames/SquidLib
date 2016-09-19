@@ -57,6 +57,10 @@ public class CustomDijkstraMap implements Serializable {
      */
     public double[] costMap = null;
 
+    /**
+     * The neighbors map, as produced by adjacency; can be modified by passing neighbors as the first argument to
+     * {@link Adjacency#portal(int[][], int, int, boolean)} if you want to create portals between non-adjacent cells.
+     */
     public int[][] neighbors;
     /**
      * Height of the map. Exciting stuff. Don't change this, instead call initialize().
@@ -516,7 +520,7 @@ public class CustomDijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[] scan(int... impassable) {
+    public double[] scan(int[] impassable) {
         if (!initialized) return null;
 
         if (impassable != null) {
@@ -976,7 +980,7 @@ public class CustomDijkstraMap implements Serializable {
      *                   creature. Non-square creatures are not supported because turning is really hard.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
-    public double[] scan(int size, int... impassable) {
+    public double[] scan(int size, int[] impassable) {
         if (!initialized) return null;
 
         int near, cen, neighborCount = neighbors.length, mid, tmp, tmp2, xStore, yStore, rStore, nStore;

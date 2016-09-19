@@ -47,4 +47,41 @@ public class OrthoLine {
     {
         return line(start.x, start.y, end.x, end.y);
     }
+    /**
+     * Draws a line from (startX, startY) to (endX, endY) using only N/S/E/W movement. Returns an array of Coord in order.
+     *
+     * @param startX x of starting point
+     * @param startY y of starting point
+     * @param endX   x of ending point
+     * @param endY   y of ending point
+     * @return array of Coord, including (startX, startY) and (endX, endY) and all points walked between
+     */
+    public static Coord[] line_(int startX, int startY, int endX, int endY) {
+        int dx = endX - startX, dy = endY - startY, nx = Math.abs(dx), ny = Math.abs(dy);
+        int signX = (dx > 0) ? 1 : -1, signY = (dy > 0) ? 1 : -1, workX = startX, workY = startY;
+        Coord[] drawn = new Coord[nx + ny + 1];
+        drawn[0] = Coord.get(startX, startY);
+        for (int i = 1, ix = 0, iy = 0; ix < nx || iy < ny; i++) {
+            if ((0.5f + ix) / nx < (0.5 + iy) / ny) {
+                workX += signX;
+                ix++;
+            } else {
+                workY += signY;
+                iy++;
+            }
+            drawn[i] = Coord.get(workX, workY);
+        }
+        return drawn;
+    }
+
+    /**
+     * Draws a line from start to end using only N/S/E/W movement. Returns a List of Coord in order.
+     * @param start starting point
+     * @param end ending point
+     * @return List of Coord, including start and end and all points walked between
+     */
+    public static Coord[] line_(Coord start, Coord end)
+    {
+        return line_(start.x, start.y, end.x, end.y);
+    }
 }
