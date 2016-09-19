@@ -98,6 +98,5 @@ public class FOVCacheBenchmark {
                 .build();
 
         new Runner(opt).run();
-
     }
 }
