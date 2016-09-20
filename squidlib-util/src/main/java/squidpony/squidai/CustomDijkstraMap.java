@@ -55,7 +55,7 @@ public class CustomDijkstraMap implements Serializable {
      * to gradientMap during a scan. The values for walls are identical to the value used by gradientMap, that is, this
      * class' WALL static final field. Floors, however, are never given FLOOR as a value, and default to 1.0 .
      */
-    public double[] costMap = null;
+    public int[] costMap = null;
 
     /**
      * The neighbors map, as produced by adjacency; can be modified by passing neighbors as the first argument to
@@ -112,7 +112,7 @@ public class CustomDijkstraMap implements Serializable {
     private int mappedCount = 0;
 
     /**
-     * Construct a DijkstraMap without a level to actually scan. If you use this constructor, you must call an
+     * Construct a CustomDijkstraMap without a level to actually scan. If you use this constructor, you must call an
      * initialize() method before using this class.
      */
     public CustomDijkstraMap() {
@@ -126,7 +126,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Construct a DijkstraMap without a level to actually scan. This constructor allows you to specify an RNG before
+     * Construct a CustomDijkstraMap without a level to actually scan. This constructor allows you to specify an RNG before
      * it is ever used in this class. If you use this constructor, you must call an initialize() method before using
      * any other methods in the class.
      */
@@ -141,7 +141,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Used to construct a DijkstraMap from the output of another.
+     * Used to construct a CustomDijkstraMap from the output of another.
      *
      * @param level
      */
@@ -150,7 +150,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Used to construct a DijkstraMap from the output of another, specifying a distance calculation.
+     * Used to construct a CustomDijkstraMap from the output of another, specifying a distance calculation.
      *
      * @param level
      * @param adjacency
@@ -249,7 +249,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * Used to initialize or re-initialize a CustomDijkstraMap that needs a new PhysicalMap because it either wasn't given
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
      *
@@ -262,19 +262,21 @@ public class CustomDijkstraMap implements Serializable {
         int len = level.length;
         gradientMap = new double[len];
         physicalMap = new double[len];
-        costMap = new double[len];
+        costMap = new int[len];
         System.arraycopy(level, 0, gradientMap, 0, len);
         System.arraycopy(level, 0, physicalMap, 0, len);
         for (int i = 0; i < len; i++) {
-            costMap[i] = (gradientMap[i] > FLOOR) ? WALL : 1.0;
+            costMap[i] = (gradientMap[i] > FLOOR) ? '#' : '.';
         }
+        adjacency.costRules.putAndMoveToFirst('#', WALL);
+
         neighbors = adjacency.neighborMaps();
         initialized = true;
         return this;
     }
 
     /**
-     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * Used to initialize or re-initialize a CustomDijkstraMap that needs a new PhysicalMap because it either wasn't given
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
      *
@@ -286,7 +288,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Used to initialize or re-initialize a DijkstraMap that needs a new PhysicalMap because it either wasn't given
+     * Used to initialize or re-initialize a CustomDijkstraMap that needs a new PhysicalMap because it either wasn't given
      * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
      * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ). This
      * initialize() method allows you to specify an alternate wall char other than the default character, '#' .
@@ -301,15 +303,19 @@ public class CustomDijkstraMap implements Serializable {
         int rot = adjacency.rotations, dex;
         gradientMap = new double[width*height*rot];
         physicalMap = new double[width*height*rot];
-        costMap = new double[width*height*rot];
+        costMap = new int[width*height*rot];
+        IntDoubleOrderedMap cst = adjacency.costRules;
+        cst.putAndMoveToFirst(alternateWall, WALL);
+        int c;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                double t = (level[x][y] == alternateWall) ? WALL : FLOOR;
+                c = level[x][y];
+                double t = (c == alternateWall) ? WALL : FLOOR;
                 for (int r = 0; r < rot; r++) {
                     dex = adjacency.composite(x, y, r, 0);
                     gradientMap[dex] = t;
                     physicalMap[dex] = t;
-                    costMap[dex] = (t == WALL) ? WALL : 1.0;
+                    costMap[dex] = c;
                 }
             }
         }
@@ -321,37 +327,20 @@ public class CustomDijkstraMap implements Serializable {
     /**
      * Used to initialize the entry cost modifiers for games that require variable costs to enter squares. This expects
      * a char[][] of the same exact dimensions as the 2D array that was used to previously initialize() this
-     * DijkstraMap, treating the '#' char as a wall (impassable) and anything else as having a normal cost to enter.
+     * CustomDijkstraMap, treating the '#' char as a wall (impassable) and anything else as having a normal cost to enter.
      * The costs can be accessed later by using costMap directly (which will have a valid value when this does not
      * throw an exception), or by calling setCost().
      *
      * @param level a 2D char array that uses '#' for walls
-     * @return this DijkstraMap for chaining.
+     * @return this CustomDijkstraMap for chaining.
      */
     public CustomDijkstraMap initializeCost(final char[][] level) {
-        return initializeCost(level, '#');
-    }
-
-    /**
-     * Used to initialize the entry cost modifiers for games that require variable costs to enter squares. This expects
-     * a char[][] of the same exact dimensions as the 2D array that was used to previously initialize() this
-     * DijkstraMap, treating the '#' char as a wall (impassable) and anything else as having a normal cost to enter.
-     * The costs can be accessed later by using costMap directly (which will have a valid value when this does not
-     * throw an exception), or by calling setCost().
-     * <p/>
-     * This method allows you to specify an alternate wall char other than the default character, '#' .
-     *
-     * @param level         a 2D char array that uses alternateChar for walls.
-     * @param alternateWall a char to use to represent walls.
-     * @return this DijkstraMap for chaining.
-     */
-    public CustomDijkstraMap initializeCost(final char[][] level, char alternateWall) {
-        if (!initialized) throw new IllegalStateException("DijkstraMap must be initialized first!");
+        if (!initialized) throw new IllegalStateException("CustomDijkstraMap must be initialized first!");
         int rot = adjacency.rotations;
-        double c;
+        int c;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                c = (level[x][y] == alternateWall) ? WALL : 1.0;
+                c = level[x][y];
                 for (int r = 0; r < rot; r++) {
                     costMap[adjacency.composite(x, y, r, 0)] = c;
                 }
@@ -362,24 +351,25 @@ public class CustomDijkstraMap implements Serializable {
 
     /**
      * Used to initialize the entry cost modifiers for games that require variable costs to enter squares. This expects
-     * a double[][] of the same exact dimensions as the 2D array that was used to previously initialize() this
-     * DijkstraMap, using the exact values given in costs as the values to enter cells, even if they aren't what this
-     * class would assign normally -- walls and other impassable values should be given WALL as a value, however.
-     * The costs can be accessed later by using costMap directly (which will have a valid value when this does not
-     * throw an exception), or by calling setCost().
+     * an int[] with length equal to the length of any inner array of neighbors (a field that is given a value during
+     * initialize() by this object's Adjacency value), using the int corresponding to a location as the tile type to
+     * look up for that location, as a key in {@link Adjacency#costRules}, even if an int isn't what this class would
+     * assign normally -- although, walls and other impassable values should be given '#' (which can be put in an int
+     * array) or the value of alternateWall, if this was given one, as a value. The tiles can be accessed later by using
+     * costMap directly (which will have a valid value when this does not throw an exception), or by calling setCost().
      * <p/>
      * This method should be slightly more efficient than the other initializeCost methods.
      *
-     * @param costs a 2D double array that already has the desired cost values
-     * @return this DijkstraMap for chaining.
+     * @param tiles an int array that already has tile types that {@link #adjacency} can find values for
+     * @return this CustomDijkstraMap for chaining.
      */
-    public CustomDijkstraMap initializeCost(final double[] costs) {
+    public CustomDijkstraMap initializeCost(final int[] tiles) {
         if (!initialized)
-            throw new IllegalStateException("DijkstraMap must be initialized first!");
-        if(costs.length != gradientMap.length)
+            throw new IllegalStateException("CustomDijkstraMap must be initialized first!");
+        if(tiles.length != gradientMap.length)
             throw new IllegalArgumentException("costs.length must equal gradientMap.length");
-        costMap = new double[costs.length];
-        System.arraycopy(costs, 0, costMap, 0, costs.length);
+        costMap = new int[tiles.length];
+        System.arraycopy(tiles, 0, costMap, 0, tiles.length);
         return this;
     }
 
@@ -426,7 +416,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Resets this DijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
+     * Resets this CustomDijkstraMap to a state with no goals, no discovered path, and no changes made to gradientMap
      * relative to physicalMap.
      */
     public void reset() {
@@ -454,19 +444,19 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Marks a cell's cost for pathfinding as cost, unless the cell is a wall or unreachable area (then it always sets
-     * the cost to the value of the WALL field).
-     *
+     * Marks a cell's type for pathfinding cost as tile (it still will look up the tile in the
+     * {@link Adjacency#costRules} field of {@link #adjacency} when it tries to move through one), unless the cell is a
+     * wall or unreachable area (then it always sets the cost to a value that should have the same cost as a wall).
      * @param pt
-     * @param cost
+     * @param tile
      */
-    public void setCost(int pt, double cost) {
+    public void setCost(int pt, int tile) {
         if (!initialized || !adjacency.validate(pt)) return;
         if (physicalMap[pt] > FLOOR) {
-            costMap[pt] = WALL;
+            costMap[pt] = adjacency.costRules.firstIntKey();
             return;
         }
-        costMap[pt] = cost;
+        costMap[pt] = tile;
     }
 
     /**
@@ -508,7 +498,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Recalculate the Dijkstra map and return it. Cells that were marked as goals with setGoal will have
+     * Recalculate the CustomDijkstra map and return it. Cells that were marked as goals with setGoal will have
      * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
      * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
      * which will have a value defined by the WALL constant in this class, and areas that the scan was
@@ -529,13 +519,14 @@ public class CustomDijkstraMap implements Serializable {
                 closed.put(impassable[i], WALL);
             }
         }
+        int[][] neighbors = this.neighbors;
         int near, cen, neighborCount = neighbors.length, mid;
 
         for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
             closed.remove(entry.getIntKey());
             gradientMap[entry.getIntKey()] = entry.getDoubleValue();
         }
-        double currentLowest = 999000;
+        double currentLowest = 999000, cs;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         Adjacency adjacency = this.adjacency;
         int maxLength = gradientMap.length;
@@ -553,6 +544,7 @@ public class CustomDijkstraMap implements Serializable {
         int numAssigned = lowest.size();
         mappedCount = goals.size();
         open.putAll(lowest);
+        lowest = adjacency.costRules;
         while (numAssigned > 0) {
             numAssigned = 0;
 
@@ -572,17 +564,19 @@ public class CustomDijkstraMap implements Serializable {
                             continue;
                         if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
                             continue;
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + costMap[near] < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                        cs = lowest.get(costMap[near]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
+                        cs = lowest.get(costMap[near] | ((adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)));
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + costMap[near] < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs);
                             ++numAssigned;
                             ++mappedCount;
                         }
@@ -607,7 +601,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * Recalculate the CustomDijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
      * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
      * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
      * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
@@ -635,7 +629,7 @@ public class CustomDijkstraMap implements Serializable {
             closed.remove(entry.getIntKey());
             gradientMap[entry.getIntKey()] = entry.getDoubleValue();
         }
-        double currentLowest = 999000;
+        double currentLowest = 999000, cs;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         Adjacency adjacency = this.adjacency;
         int maxLength = gradientMap.length;
@@ -653,6 +647,7 @@ public class CustomDijkstraMap implements Serializable {
         int numAssigned = lowest.size();
         mappedCount = goals.size();
         open.putAll(lowest);
+        lowest = adjacency.costRules;
         int iter = 0;
         while (numAssigned > 0 && iter < limit) {
             numAssigned = 0;
@@ -673,17 +668,19 @@ public class CustomDijkstraMap implements Serializable {
                             continue;
                         if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
                             continue;
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + costMap[near] < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                        cs = lowest.get(costMap[near]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
+                        cs = lowest.get(costMap[near] | ((adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)));
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + costMap[near] < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs);
                             ++numAssigned;
                             ++mappedCount;
                         }
@@ -709,7 +706,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /*
-     * Recalculate the Dijkstra map until it reaches a cell index in targets, then returns the first target found.
+     * Recalculate the CustomDijkstra map until it reaches a cell index in targets, then returns the first target found.
      * This uses the current measurement.
      *
      * @param start   the cell to use as the origin for finding the nearest target
@@ -811,7 +808,7 @@ public class CustomDijkstraMap implements Serializable {
 
 
     /*
-     * Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first target found.
+     * Recalculate the CustomDijkstra map until it reaches a Coord in targets, then returns the first target found.
      * This uses the current measurement.
      *
      * @param start   the cell to use as the origin for finding the nearest target
@@ -878,7 +875,7 @@ public class CustomDijkstraMap implements Serializable {
 
 
     /*
-     * Recalculate the Dijkstra map until it reaches a Coord in targets, then returns the first several targets found,
+     * Recalculate the CustomDijkstra map until it reaches a Coord in targets, then returns the first several targets found,
      * up to limit or less if the map is fully searched without finding enough.
      * This uses the current measurement.
      *
@@ -956,8 +953,8 @@ public class CustomDijkstraMap implements Serializable {
     }
     */
     /**
-     * Recalculate the Dijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
-     * a cell in the returned Dijkstra map assumes that a creature is square, with a side length equal to the passed
+     * Recalculate the CustomDijkstra map for a creature that is potentially larger than 1x1 cell and return it. The value of
+     * a cell in the returned CustomDijkstra map assumes that a creature is square, with a side length equal to the passed
      * size, that its minimum-x, minimum-y cell is the starting cell, and that any cell with a distance number
      * represents the distance for the creature's minimum-x, minimum-y cell to reach it. Cells that cannot be entered
      * by the minimum-x, minimum-y cell because of sizing (such as a floor cell next to a maximum-x and/or maximum-y
@@ -1023,7 +1020,7 @@ public class CustomDijkstraMap implements Serializable {
                 }
             }
         }
-        double currentLowest = 999000;
+        double currentLowest = 999000, cs;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
@@ -1050,6 +1047,7 @@ public class CustomDijkstraMap implements Serializable {
         }
         int numAssigned = lowest.size();
         open.putAll(lowest);
+        lowest = adjacency.costRules;
         while (numAssigned > 0) {
             numAssigned = 0;
 
@@ -1069,17 +1067,19 @@ public class CustomDijkstraMap implements Serializable {
                             continue;
                         //if(adjacency.isBlocked(mid, d, neighbors, gradientMap, WALL))
                         //    continue;
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + costMap[near] < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                        cs = lowest.get(costMap[near]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[mid] + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs);
                             ++numAssigned;
                             ++mappedCount;
                         }
                     }
                     else
                     {
+                        cs = lowest.get(costMap[near] | ((adjacency.extractR(cen) == adjacency.extractR(near) ? 0 : 0x10000)));
                         //double h = adjacency.measurement.heuristic(adjacency.directions[d]);
-                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + costMap[near] < gradientMap[near]) {
-                            setFresh(near, cell.getDoubleValue() + costMap[near]);
+                        if (!closed.containsKey(near) && !open.containsKey(near) && gradientMap[cen] + cs < gradientMap[near]) {
+                            setFresh(near, cell.getDoubleValue() + cs);
                             ++numAssigned;
                             ++mappedCount;
                         }
@@ -1228,7 +1228,7 @@ public class CustomDijkstraMap implements Serializable {
     */
 
     /**
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to the closest reachable
      * goal. The maximum length of the returned list is given by length; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -1290,9 +1290,9 @@ public class CustomDijkstraMap implements Serializable {
                 path.clear();
                 break;
             }
-            currentPos = neighbors[choice][currentPos];
+            currentPos = neighbors[choice][pt = currentPos];
             path.add(currentPos);
-            paidLength += costMap[currentPos];
+            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
@@ -1313,7 +1313,7 @@ public class CustomDijkstraMap implements Serializable {
 
     // TODO: Tackle these next two once there's a CustomLOS class
     /*
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is
      * reached, or further from a goal if the preferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
@@ -1342,7 +1342,7 @@ public class CustomDijkstraMap implements Serializable {
     }
     */
     /*
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
      * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
      * which may go further from a goal if the minPreferredRange has not been met at the current distance.
@@ -1481,7 +1481,7 @@ public class CustomDijkstraMap implements Serializable {
     private int cachedSize = 1;
 
     /**
-     * Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed fearSources and start point, and returns a list
      * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
      * for running away. The maximum length of the returned list is given by length; if moving the full
      * length of the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -1569,9 +1569,9 @@ public class CustomDijkstraMap implements Serializable {
                 path.clear();
                 break;
             }
-            currentPos = neighbors[choice][currentPos];
+            currentPos = neighbors[choice][pt = currentPos];
             path.add(currentPos);
-            paidLength += costMap[currentPos];
+            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
@@ -1588,7 +1588,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /**
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to the closest reachable
      * goal. The maximum length of the returned list is given by length; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -1655,9 +1655,9 @@ public class CustomDijkstraMap implements Serializable {
                 path.clear();
                 break;
             }
-            currentPos = neighbors[choice][currentPos];
+            currentPos = neighbors[choice][pt = currentPos];
             path.add(currentPos);
-            paidLength += costMap[currentPos];
+            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
@@ -1746,7 +1746,7 @@ public class CustomDijkstraMap implements Serializable {
     */
     // TODO: Again, this needs CustomLOS
     /*
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is
      * reached, or further from a goal if the preferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
@@ -1881,7 +1881,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
     /*
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed goals and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
      * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
      * which may go further from a goal if the minPreferredRange has not been met at the current distance.
@@ -2021,7 +2021,7 @@ public class CustomDijkstraMap implements Serializable {
     }
     */
     /**
-     * Scans the dungeon using DijkstraMap.scan with the listed fearSources and start point, and returns a list
+     * Scans the dungeon using CustomDijkstraMap.scan with the listed fearSources and start point, and returns a list
      * of Coord positions (using Manhattan distance) needed to get further from the closest fearSources, meant
      * for running away. The maximum length of the returned list is given by length; if moving the full
      * length of the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -2113,9 +2113,9 @@ public class CustomDijkstraMap implements Serializable {
                 path.clear();
                 break;
             }
-            currentPos = neighbors[choice][currentPos];
+            currentPos = neighbors[choice][pt = currentPos];
             path.add(currentPos);
-            paidLength += costMap[currentPos];
+            paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
             frustration++;
             if (paidLength > length - 1.0) {
                 if (onlyPassable.contains(currentPos)) {
@@ -2271,7 +2271,7 @@ public class CustomDijkstraMap implements Serializable {
     }
      */
     /**
-     * A simple limited flood-fill that returns a OrderedMap of Coord keys to the Double values in the DijkstraMap, only
+     * A simple limited flood-fill that returns a OrderedMap of Coord keys to the Double values in the CustomDijkstraMap, only
      * calculating out to a number of steps determined by limit. This can be useful if you need many flood-fills and
      * don't need a large area for each, or if you want to have an effect spread to a certain number of cells away.
      *

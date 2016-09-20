@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.util.ArrayList;
@@ -54,6 +55,53 @@ public class ColorChangeImage extends Image {
      * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
      */
     public ColorChangeImage(Texture texture, float loopTime, Color... colors) {
+        super(texture);
+
+        if(colors == null || colors.length == 0)
+            this.colors = DefaultResources.getSCC().rainbow(12);
+        else {
+            this.colors = new ArrayList<>(colors.length);
+            Collections.addAll(this.colors, colors);
+        }
+        this.loopTime = loopTime;
+    }
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(TextureRegion texture, List<Color> colors) {
+        super(texture);
+
+        if(colors == null || colors.isEmpty())
+            this.colors = DefaultResources.getSCC().rainbow(12);
+        else
+            this.colors = colors;
+    }
+
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(TextureRegion texture, float loopTime, List<Color> colors) {
+        super(texture);
+
+        if(colors == null || colors.isEmpty())
+            this.colors = DefaultResources.getSCC().rainbow(12);
+        else
+            this.colors = colors;
+        this.loopTime = loopTime;
+    }
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(TextureRegion texture, float loopTime, Color... colors) {
         super(texture);
 
         if(colors == null || colors.length == 0)
