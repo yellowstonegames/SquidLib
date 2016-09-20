@@ -2,6 +2,7 @@ package squidpony.squidgrid;
 
 import squidpony.squidai.DijkstraMap.Measurement;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.IntDoubleOrderedMap;
 
 import java.io.Serializable;
 
@@ -89,7 +90,35 @@ public abstract class Adjacency implements Serializable {
      * diagonal one is a better option).
      */
     public Measurement measurement;
-    public int width, height, rotations, depths;
+    /**
+     * Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.
+     */
+    public int width,
+    /**
+     * Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.
+     */
+    height,
+    /**
+     * Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.
+     */
+    rotations,
+    /**
+     * Can be changed if the map changes; you should get the neighbors from neighborMaps() again after changing this.
+     */
+    depths;
+
+    /**
+     * Used in place of a double[][] of costs in CustomDijkstraMap; allows you to set the costs to enter tiles (via
+     * {@link #addCostRule(char, double)} or {@link #addCostRule(char, double, boolean)} if the map has rotations).
+     * A cost of 1.0 is normal for most implementations; higher costs make a movement harder to perform and take more
+     * time if the game uses that mechanic, while lower costs (which should always be greater than 0.0) make a move
+     * easier to perform. Most games can do perfectly well with just 1.0 and 2.0, if they use this at all, plus possibly
+     * a very high value for impossible moves (say, 9999.0 for something like a submarine trying to enter suburbia).
+     * <br>
+     * Adjacency implementations are expected to set a reasonable default value for when missing keys are queried, using
+     * {@link IntDoubleOrderedMap#defaultReturnValue(double)}; there may be a reason for user code to call this as well.
+     */
+    public IntDoubleOrderedMap costRules = new IntDoubleOrderedMap(32);
 
     public abstract int extractX(int data);
 
@@ -113,6 +142,12 @@ public abstract class Adjacency implements Serializable {
 
     public abstract boolean isBlocked(int start, int direction, int[][] neighbors, double[] map, double wall);
 
+    public IntDoubleOrderedMap addCostRule(char tile, double cost)
+    {
+        return addCostRule(tile, cost, false);
+    }
+    public abstract IntDoubleOrderedMap addCostRule(char tile, double cost, boolean isRotation);
+
     public static class BasicAdjacency extends Adjacency implements Serializable {
         private static final long serialVersionUID = 0L;
 
@@ -130,6 +165,7 @@ public abstract class Adjacency implements Serializable {
             maxAdjacent = (measurement == Measurement.MANHATTAN) ? 4 : 8;
             twoStepRule = false;
             blockingRule = 2;
+            costRules.defaultReturnValue(1.0);
         }
 
         @Override
@@ -180,8 +216,8 @@ public abstract class Adjacency implements Serializable {
 
         @Override
         public boolean isBlocked(int start, int direction, int[][] neighbors, double[] map, double wall) {
-            if(direction < 4 || !validate(start))
-                return false;
+            if(direction < 4)
+                return !validate(start);
             switch (direction)
             {
                 case 4: //UP_LEFT
@@ -217,6 +253,12 @@ public abstract class Adjacency implements Serializable {
                 }
             }
         }
+
+        @Override
+        public IntDoubleOrderedMap addCostRule(char tile, double cost, boolean isRotation) {
+            costRules.put(tile, cost);
+            return costRules;
+        }
     }
 
     public static class ThinWallAdjacency extends BasicAdjacency implements Serializable {
@@ -229,7 +271,117 @@ public abstract class Adjacency implements Serializable {
         public ThinWallAdjacency(int width, int height, Measurement metric) {
             super(width, height, metric);
             twoStepRule = true;
+            costRules.defaultReturnValue(0.5);
+        }
+
+        @Override
+        public IntDoubleOrderedMap addCostRule(char tile, double cost, boolean isRotation) {
+            costRules.put(tile, cost * 0.5);
+            return costRules;
         }
     }
 
+    public static class RotationAdjacency extends Adjacency implements Serializable {
+        private static final long serialVersionUID = 0L;
+
+        private RotationAdjacency() {
+            this(20, 20, Measurement.MANHATTAN);
+        }
+        private int shift;
+        public RotationAdjacency(int width, int height, Measurement metric) {
+            this.width = width;
+            this.height = height;
+            rotations = (measurement == Measurement.MANHATTAN) ? 4 : 8;
+            shift = (measurement == Measurement.MANHATTAN) ? 2 : 3;
+            depths = 1;
+            measurement = metric;
+            directions = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS_CLOCKWISE : Direction.CLOCKWISE;
+            maxAdjacent = 3;
+            twoStepRule = false;
+            blockingRule = 2;
+            costRules.defaultReturnValue(1.0);
+        }
+
+        @Override
+        public int extractX(int data) {
+            return (data >>> shift) % width;
+        }
+
+        @Override
+        public int extractY(int data) {
+            return (data >>> shift) / width;
+        }
+
+        @Override
+        public int extractR(int data) {
+            return data & (rotations - 1);
+        }
+
+        @Override
+        public int extractN(int data) {
+            return 0;
+        }
+
+        @Override
+        public int composite(int x, int y, int r, int n) {
+            if(x < 0 || y < 0 || x >= width || y >= height || r < 0 || r >= rotations)
+                return -1;
+            return ((y * width + x) << shift) | r;
+        }
+
+        @Override
+        public boolean validate(int data) {
+            return data >= 0 && extractY(data) < height;
+        }
+
+        @Override
+        public int[][] neighborMaps() {
+            int[][] maps = new int[maxAdjacent][width * height * rotations * depths];
+            int current;
+            for (int r = 0; r < rotations; r++) {
+                Direction dir = directions[r];
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        current = ((y * width + x) << shift) | r;
+                        maps[1][current] = composite(x + dir.deltaX, y + dir.deltaY, r, 0);
+                        maps[0][current] = composite(x, y, r - 1 & (rotations - 1), 0);
+                        maps[2][current] = composite(x, y, r + 1 & (rotations - 1), 0);
+                    }
+                }
+            }
+            return maps;
+        }
+
+        @Override
+        public boolean isBlocked(int start, int direction, int[][] neighbors, double[] map, double wall) {
+            if(rotations <= 4 || (direction & 1) == 0)
+                return !validate(start);
+
+            return (neighbors[0][start] < 0 || map[neighbors[0][start]] >= wall)
+                            && (neighbors[2][start] < 0 || map[neighbors[2][start]] >= wall);
+        }
+
+        @Override
+        public void portal(int[][] neighbors, int inputPortal, int outputPortal, boolean twoWay) {
+            if(neighbors == null || !validate(inputPortal) || !validate(outputPortal)
+                    || neighbors.length != maxAdjacent)
+                return;
+            for (int i = 0; i < width * height * rotations; i++) {
+                if (neighbors[1][i] == inputPortal) {
+                    neighbors[1][i] = outputPortal;
+                } else if (twoWay && neighbors[1][i] == outputPortal) {
+                    neighbors[1][i] = inputPortal;
+                }
+            }
+        }
+
+        @Override
+        public IntDoubleOrderedMap addCostRule(char tile, double cost, boolean isRotation) {
+            if(isRotation)
+                costRules.put(tile | 0x10000, Math.max(0.001, cost));
+            else
+                costRules.put(tile, cost);
+            return costRules;
+        }
+    }
 }

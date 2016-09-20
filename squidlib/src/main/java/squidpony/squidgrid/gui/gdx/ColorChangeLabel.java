@@ -18,9 +18,12 @@ import java.util.List;
 public class ColorChangeLabel extends Label {
 
     private List<Color> colors;
-    private float progress = 0f;
-    private float loopTime = 2f;
-
+    protected float progress = 0f;
+    protected float loopTime = 2f;
+    protected ColorChangeLabel()
+    {
+        this(null, null);
+    }
     /**
      * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.
      * @param text the text to display in this ColorChangeLabel
@@ -64,7 +67,7 @@ public class ColorChangeLabel extends Label {
             this.colors = DefaultResources.getSCC().rainbow(12);
         else
             this.colors = new ArrayList<>(colors);
-        this.loopTime = loopTime;
+        this.loopTime = loopTime == 0 ? 1 : loopTime;
     }
 
     /**
@@ -82,7 +85,7 @@ public class ColorChangeLabel extends Label {
             this.colors = new ArrayList<>(colors.length);
             Collections.addAll(this.colors, colors);
         }
-        this.loopTime = loopTime;
+        this.loopTime = loopTime == 0 ? 1 : loopTime;
     }
 
     /**

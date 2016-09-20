@@ -20,7 +20,7 @@ public class SquidStorageTest extends ApplicationAdapter{
     public void create() {
         super.create();
         SquidStorage store = new SquidStorage("StorageTest");
-        if(true) {
+        if(false) {
             store.compress = true;
             System.out.println(store.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;

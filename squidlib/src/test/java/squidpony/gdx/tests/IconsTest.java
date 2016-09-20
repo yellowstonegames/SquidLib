@@ -127,13 +127,15 @@ public class IconsTest extends ApplicationAdapter{
         if(ctr > 0.05) {
             Coord pt;
             AnimatedEntity ent;
+            Integer uo;
             for (int i = 0; i < points.length; i++) {
                 pt = points[i];
                 ent = things.get(pt);
                 if(ent == null || ent.actor == null)
                     continue;
-                ent.actor.setUserObject(((Integer) (ent.actor.getUserObject()) + 1) % colors.size());
-                ent.actor.setColor(colors.get((Integer) ent.actor.getUserObject()));
+                uo =  ((Integer) (ent.actor.getUserObject()) + 1) % colors.size();
+                ent.actor.setUserObject(uo);
+                ent.actor.setColor(colors.get(uo));
             }
         }
         SquidPanel panel = layers.getForegroundLayer();
