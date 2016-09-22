@@ -1,15 +1,19 @@
 package squidpony.squidgrid.mapping;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.RNG;
 import squidpony.squidmath.StatefulRNG;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * A static class that can be used to modify the char[][] dungeons that other generators produce.
@@ -1330,6 +1334,26 @@ public class DungeonUtility {
         return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
     }
 
+	/**
+	 * @param zone
+	 * @param result
+	 *            The list to fill if non null (i.e. if non-null, it is
+	 *            returned). If null, a fresh list will be allocated and
+	 *            returned.
+	 * @return Elements in {@code zone} that are neighbors to an element not in
+	 *         {@code zone}.
+	 */
+	public static List<Coord> border(final List<Coord> zone, /* @Nullable */ List<Coord> buffer) {
+		final int zsz = zone.size();
+		final List<Coord> border = buffer == null ? new ArrayList<Coord>(zsz / 4) : buffer;
+		for (int i = 0; i < zsz; i++) {
+			final Coord c = zone.get(i);
+			if (hasANeighborNotIn(c, zone))
+				border.add(c);
+		}
+		return border;
+	}
+
     /**
      * Quickly counts the number of char elements in level that are equal to match.
      *
@@ -1387,4 +1411,33 @@ public class DungeonUtility {
         }
         return map;
     }
+
+	/**
+	 * @param x
+	 * @param y
+	 * @param diameter
+	 * @param buf
+	 *            Where to add the coordinates, or null for this method to
+	 *            allocate a fresh list.
+	 * @return The coordinates of a circle centered {@code (x, y)}, whose
+	 *         diameter is {@code (radius * 2) + 1}.
+	 */
+	public static List<Coord> circle(int x, int y, int radius, /* @Nullable */ List<Coord> buf) {
+		final List<Coord> result = buf == null ? new ArrayList<Coord>() : buf;
+		for (int dx = -radius; dx <= radius; ++dx) {
+			final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));
+			for (int dy = -high; dy <= high; ++dy) {
+				result.add(Coord.get(x + dx, y + dy));
+			}
+		}
+		return result;
+	}
+
+	private static boolean hasANeighborNotIn(Coord c, Collection<Coord> others) {
+		for (Direction dir : Direction.OUTWARDS) {
+			if (!others.contains(c.translate(dir)))
+				return true;
+		}
+		return false;
+	}
 }
