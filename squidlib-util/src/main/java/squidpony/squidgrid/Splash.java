@@ -73,12 +73,25 @@ public class Splash {
 	 *            to find it.
 	 * @param volume
 	 *            The number of cells to spill on.
+	 * @param drunks
+	 *            The ratio of drunks to use to make the splash more realistic.
+	 *            Like for dungeon generation, if greater than 0, drunk walkers
+	 *            will remove the splash's margins, to make it more realistic.
+	 *            You don't need that if you're doing a splash that is bounded
+	 *            by walls, because the fill will be realistic. If you're doing
+	 *            a splash that isn't bounded, use that for its borders not to
+	 *            be too square.
+	 * 
+	 *            <p>
+	 *            Useful values are 0, 1, and 2. Giving more will likely yield
+	 *            an empty result, on any decent map sizes.
+	 *            </p>
 	 * @return The spill. It is a list of coordinates (containing {@code start})
 	 *         valid in {@code level} that are all adjacent and whose symbol is
 	 *         passable. If non-empty, this is guaranteed to be an
 	 *         {@link ArrayList}.
 	 */
-	public List<Coord> spill(RNG rng, char[][] level, Coord start, int volume) {
+	public List<Coord> spill(RNG rng, char[][] level, Coord start, int volume, int drunks) {
 		if (!DungeonUtility.inLevel(level, start) || !passable(level[start.x][start.y]))
 			return Collections.emptyList();
 
@@ -118,7 +131,38 @@ public class Splash {
 			}
 		}
 
+		if (0 < drunks)
+			drunkinize(rng, level, result, DungeonUtility.border(result, null), drunks);
+
 		return result;
+	}
+
+	/**
+	 * @param rng
+	 * @param map
+	 *            The map on which {@code zone} is a pool
+	 * @param zone
+	 *            The zone to shrink
+	 * @param border
+	 *            {@code zone}'s border
+	 * @param drunks
+	 *            The number of drunken walkers to consider
+	 */
+	protected void drunkinize(RNG rng, char[][] map, List<Coord> zone, List<Coord> border, int drunks) {
+		if (drunks == 0)
+			return;
+
+		final int sz = zone.size();
+		final int nb = (sz / 10) * drunks;
+		if (nb == 0)
+			return;
+
+		assert !border.isEmpty();
+		for (int j = 0; j < nb && !zone.isEmpty(); j++) {
+			drunkinize0(rng, zone, border, drunks);
+			if (border.isEmpty() || zone.isEmpty())
+				return;
+		}
 	}
 
 	protected boolean passable(char c) {
@@ -126,8 +170,37 @@ public class Splash {
 	}
 
 	/**
-	 * @param rng used to randomize the floodfill
-	 * @param level char 2D array with x, y indices for the dungeon/map level
+	 * Removes a circle from {@code zone}, by taking the circle's center in
+	 * {@code zone} 's border: {@code border}.
+	 * 
+	 * @param border
+	 *            {@code result}'s border.
+	 */
+	private void drunkinize0(RNG rng, List<Coord> zone, List<Coord> border, int nb) {
+		assert !border.isEmpty();
+		assert !zone.isEmpty();
+
+		final int width = rng.nextInt(nb) + 1;
+		final int height = rng.nextInt(nb) + 1;
+		final int radius = Math.max(1, Math.round(nb * Math.min(width, height)));
+		final Coord center = rng.getRandomElement(border);
+		zone.remove(center);
+		for (int dx = -radius; dx <= radius; ++dx) {
+			final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));
+			for (int dy = -high; dy <= high; ++dy) {
+				final Coord c = center.translate(dx, dy);
+				zone.remove(c);
+				if (zone.isEmpty())
+					return;
+			}
+		}
+	}
+
+	/**
+	 * @param rng
+	 *            used to randomize the floodfill
+	 * @param level
+	 *            char 2D array with x, y indices for the dungeon/map level
 	 * @param start
 	 *            Where the spill should start. It should be passable, otherwise
 	 *            an empty list gets returned. Consider using
@@ -138,12 +211,25 @@ public class Splash {
 	 * @param impassable the set of chars on the level that block the spill, such
 	 *                   as walls or maybe other spilled things (oil and water).
 	 *                   May be null, which makes this treat '#' as impassable.
+	 * @param drunks
+	 *            The ratio of drunks to use to make the splash more realistic.
+	 *            Like for dungeon generation, if greater than 0, drunk walkers
+	 *            will remove the splash's margins, to make it more realistic.
+	 *            You don't need that if you're doing a splash that is bounded
+	 *            by walls, because the fill will be realistic. If you're doing
+	 *            a splash that isn't bounded, use that for its borders not to
+	 *            be too square.
+	 * 
+	 *            <p>
+	 *            Useful values are 0, 1, and 2. Giving more will likely yield
+	 *            an empty result, on any decent map sizes.
+	 *            </p>
 	 * @return The spill. It is a list of coordinates (containing {@code start})
 	 *         valid in {@code level} that are all adjacent and whose symbol is
 	 *         passable. If non-empty, this is guaranteed to be an
 	 *         {@link ArrayList}.
 	 */
-	public static List<Coord> spill(RNG rng, char[][] level, Coord start, int volume, Set<Character> impassable)
+	public static List<Coord> spill(RNG rng, char[][] level, Coord start, int volume, Set<Character> impassable, int drunks)
 	{
 		Set<Character> blocked;
 		if(impassable == null)
@@ -155,7 +241,7 @@ public class Splash {
 			splashHash = blocked.hashCode();
 			splashCache = new Splash(blocked);
 		}
-		return splashCache.spill(rng, level, start, volume);
+		return splashCache.spill(rng, level, start, volume, drunks);
 	}
 
 }
