@@ -16,6 +16,9 @@
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid.mapping" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid.mapping.styled" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.tileset" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.ZOI" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.AimLimit" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.Reach" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.Technique" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.Threat" />
 </module>

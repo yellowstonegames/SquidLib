@@ -245,7 +245,7 @@ public class Thesaurus implements Serializable{
     {
         @Override
         public void appendSubstitution(MatchResult match, TextBuffer dest) {
-            dest.append(FakeLanguageGen.randomLanguage(rng).word(rng, true));
+            dest.append(FakeLanguageGen.randomLanguage(rng.nextLong()).word(rng, true));
         }
     }
 

@@ -20,12 +20,12 @@ public class SquidStorageTest extends ApplicationAdapter{
     public void create() {
         super.create();
         SquidStorage store = new SquidStorage("StorageTest");
-        if(false) {
+        if(true) {
             store.compress = true;
             System.out.println(store.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
 
-            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(srng), lang2;
+            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(srng.nextLong()), lang2;
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
             GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75), g2;
@@ -56,7 +56,7 @@ public class SquidStorageTest extends ApplicationAdapter{
             System.out.println(store.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
 
-            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(srng), lang2;
+            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(srng.nextLong()), lang2;
 
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
