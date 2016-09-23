@@ -67,7 +67,7 @@
         <!--
         <gdx.version>1.9.3</gdx.version>
         -->
-        <gdx.version>1.9.5-SNAPSHOT</gdx.version>
+        <gdx.version>1.9.3</gdx.version>
         <junit.version>4.11</junit.version>
         <regexodus.version>0.1.7</regexodus.version>
     </properties>

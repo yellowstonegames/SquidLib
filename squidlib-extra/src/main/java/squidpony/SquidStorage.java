@@ -133,6 +133,17 @@ public class SquidStorage {
                 return data;
             }
         });
+        json.setSerializer(FakeLanguageGen.class, new Json.Serializer<FakeLanguageGen>() {
+            @Override
+            public void write(Json json, FakeLanguageGen object, Class knownType) {
+                json.writeValue(object.serializeToString());
+            }
+
+            @Override
+            public FakeLanguageGen read(Json json, JsonValue jsonData, Class type) {
+                return FakeLanguageGen.deserializeFromString(jsonData.asString());
+            }
+        });
         json.addClassTag("#St", String.class);
         json.addClassTag("#Z", Boolean.class);
         json.addClassTag("#z", boolean.class);

@@ -87,7 +87,6 @@ public class Maker {
      * @param <T> just about any non-primitive type
      * @return a newly-allocated ArrayList containing all of elements, in order
      */
-    @SafeVarargs
     public static <T> ArrayList<T> makeList(T... elements) {
         if(elements == null) return null;
         ArrayList<T> list = new ArrayList<>(elements.length);
@@ -102,7 +101,6 @@ public class Maker {
      * @param <T> just about any non-primitive type
      * @return a newly-allocated LinkedHashSet containing all of the non-duplicate items in elements, in order
      */
-    @SafeVarargs
     public static <T> LinkedHashSet<T> makeLHS(T... elements) {
         if(elements == null) return null;
         LinkedHashSet<T> set = new LinkedHashSet<>(elements.length);
@@ -177,7 +175,6 @@ public class Maker {
      * @param <T> just about any non-primitive type
      * @return a newly-allocated OrderedSet containing all of the non-duplicate items in elements, in order
      */
-    @SafeVarargs
     public static <T> OrderedSet<T> makeOS(T... elements) {
         if(elements == null) return null;
         return new OrderedSet<T>(elements);
