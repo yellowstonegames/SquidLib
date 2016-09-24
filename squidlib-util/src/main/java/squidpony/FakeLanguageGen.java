@@ -2514,11 +2514,48 @@ public class FakeLanguageGen implements Serializable {
                 (sanityChecks == null) ? other.sanityChecks : sanityChecks, true, mods);
     }
 
-    public FakeLanguageGen mix(double influence0, FakeLanguageGen other1, double influence1, Object... pairs)
+    private static double readDouble(Object o)
+    {
+        if(o instanceof Double) return (double) o;
+        else if(o instanceof Float) return ((Float) o);
+        else if(o instanceof Long) return ((Long) o).doubleValue();
+        else if(o instanceof Integer) return ((Integer) o);
+        else if(o instanceof Short) return ((Short) o);
+        else if(o instanceof Byte) return ((Byte) o);
+        else if(o instanceof Character) return ((Character) o);
+        return 0.0;
+    }
+    /**
+     * Produces a FakeLanguageGen by mixing this FakeLanguageGen with one or more other FakeLanguageGen objects. Takes
+     * a weight for this, another FakeLanguageGen, a weight for that FakeLanguageGen, then a possibly-empty group of
+     * FakeLanguageGen parameters and the weights for those parameters. If other1 is null or if pairs has been given a
+     * value of null instead of the normal (possibly empty) array of Objects, then this simply returns a copy of this
+     * FakeLanguageGen. Otherwise, it will at least mix this language with other1 using the given weights for each.
+     * If pairs is not empty, it has special requirements for what types it allows and in what order, but does no type
+     * checking. Specifically, pairs requires the first Object to be a FakeLanguageGen, the next to be a number of some
+     * kind that will be the weight for the previous FakeLanguageGen(this method can handle non-Double weights, and
+     * converts them to Double if needed), and every two parameters after that to follow the same order and pattern
+     * (FakeLanguageGen, then number, then FakeLanguageGen, then number...). Weights are absolute, and don't depend on
+     * earlier weights, which is the case when chaining the {@link #mix(FakeLanguageGen, double)} method. This makes
+     * reasoning about the ideal weights for multiple mixed languages easier; to mix 3 languages equally you can use
+     * 3 equal weights with this, whereas with mix chaining you would need to mix the first two with 0.5 and the third
+     * with 0.33 .
+     * <br>
+     * Unlike the static method {@link #mixAll(Object...)}, this _is_ intended for external use, in part because the
+     * technique for mixing languages by weight is so much more intuitive, but also because this assigns valid data for
+     * serializing and deserializing this FakeLanguageGen that allows it to use significantly less space (less than 1/72
+     * the bytes used in one not-quite-simple test).
+     * @param myWeight the weight to assign this FakeLanguageGen in the mix
+     * @param other1 another FakeLanguageGen to mix in; if null, this method will abort and return {@link #copy()}
+     * @param weight1 the weight to assign other1 in the mix
+     * @param pairs may be empty, not null; otherwise must alternate between FakeLanguageGen and number (weight) elements
+     * @return a FakeLanguageGen produced by mixing this with any FakeLanguageGen arguments by the given weights
+     */
+    public FakeLanguageGen mix(double myWeight, FakeLanguageGen other1, double weight1, Object... pairs)
     {
         if(other1 == null || pairs == null)
             return copy();
-        OrderedSet<Modifier> original_mods = new OrderedSet<>(modifiers), mods = new OrderedSet<>(modifiers);
+        OrderedSet<Modifier> mods = new OrderedSet<>(modifiers);
         FakeLanguageGen mixer = removeModifiers();
         FakeLanguageGen[] languages = new FakeLanguageGen[2 + (pairs.length >>> 1)];
         double[] weights = new double[languages.length];
@@ -2526,22 +2563,22 @@ public class FakeLanguageGen implements Serializable {
         boolean summarize = true;
         double total = 0.0, current, weight;
         languages[0] = mixer;
-        total += (weights[0] = influence0);
+        total += (weights[0] = myWeight);
         if((summaries[0] = mixer.summary) == null) summarize = false;
         mods.addAll(other1.modifiers);
         languages[1] = other1.removeModifiers();
-        total += (weights[1] = influence1);
+        total += (weights[1] = weight1);
         if(summarize && (summaries[1] = languages[1].summary) == null) summarize = false;
         for (int i = 1, p = 2; i < pairs.length; i+=2, p++) {
             if(pairs[i] == null || pairs[i-1] == null)
                 continue;
             languages[p] = ((FakeLanguageGen) (pairs[i-1])).removeModifiers();
-            total += (weights[p] = (Double)(pairs[i]));
+            total += (weights[p] = readDouble(pairs[i]));
             if(summarize && (summaries[p] = languages[p].summary) == null) summarize = false;
         }
         if(total == 0)
             return copy();
-        current = influence0 / total;
+        current = myWeight / total;
         for (int i = 1; i < languages.length; i++) {
             if((weight = weights[i]) > 0)
                 mixer = mixer.mix(languages[i], (weight / total) / (current += weight / total));
@@ -2568,17 +2605,35 @@ public class FakeLanguageGen implements Serializable {
         else
             return mixer.addModifiers(mods);
     }
+
+    /**
+     * Produces a FakeLanguageGen from a group of FakeLanguageGen parameters and the weights for those parameters.
+     * Requires the first Object in pairs to be a FakeLanguageGen, the next to be a number of some kind that will be the
+     * weight for the previous FakeLanguageGen(this method can handle non-Double weights, and converts them to Double
+     * if needed), and every two parameters after that to follow the same order and pattern (FakeLanguageGen, then
+     * number, then FakeLanguageGen, then number...). There should be at least 4 elements in pairs, half of them
+     * languages and half of them weights, for this to do any mixing, but it can produce a result with as little as one
+     * FakeLanguageGen (returning a copy of the first FakeLanguageGen). Weights are absolute, and don't depend on
+     * earlier weights, which is the case when chaining the {@link #mix(FakeLanguageGen, double)} method. This makes
+     * reasoning about the ideal weights for multiple mixed languages easier; to mix 3 languages equally you can use
+     * 3 equal weights with this, whereas with mix chaining you would need to mix the first two with 0.5 and the third
+     * with 0.33 .
+     * <br>
+     * Not intended for external use, but it could be useful. Used internally in the deserialization code.
+     * @param pairs should have at least one item, and must alternate between FakeLanguageGen and number (weight) elements
+     * @return a FakeLanguageGen produced by mixing any FakeLanguageGen arguments by the given weights
+     */
     public static FakeLanguageGen mixAll(Object... pairs)
     {
         int len;
         if(pairs == null || (len = pairs.length) <= 0)
-            return ENGLISH;
+            return ENGLISH.copy();
         if(len < 4)
-            return (FakeLanguageGen) (pairs[0]);
+            return ((FakeLanguageGen) (pairs[0])).copy();
         Object[] pairs2 = new Object[len - 4];
         if(len > 4)
             System.arraycopy(pairs, 4, pairs2, 0, len - 4);
-        return ((FakeLanguageGen)pairs[0]).mix(((Double) pairs[1]), (FakeLanguageGen)pairs[2], ((Double) pairs[3]), pairs2);
+        return ((FakeLanguageGen)pairs[0]).mix(readDouble(pairs[1]), (FakeLanguageGen)pairs[2], readDouble(pairs[3]), pairs2);
     }
 
     public FakeLanguageGen addAccents(double vowelInfluence, double consonantInfluence) {
@@ -2803,6 +2858,7 @@ public class FakeLanguageGen implements Serializable {
             {
                 pairs.add(randomLanguage(Long.parseLong(data.substring(poundIndex + 1, snailIndex))));
                 pairs.add(Double.valueOf(data.substring(snailIndex+1, tildeIndex)));
+                poundIndex = -1;
             }
             else
             {

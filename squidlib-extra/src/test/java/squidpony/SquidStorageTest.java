@@ -25,7 +25,7 @@ public class SquidStorageTest extends ApplicationAdapter{
             System.out.println(store.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
 
-            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(srng.nextLong()), lang2;
+            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3), lang2;
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
             GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75), g2;
@@ -33,7 +33,10 @@ public class SquidStorageTest extends ApplicationAdapter{
             store.put("language", randomLanguage);
             store.put("world", world);
             store.put("grease", grease);
+
+            System.out.println(store.show());
             store.store("Test");
+
             System.out.println("Stored preference bytes: " + store.preferencesSize());
             r2 = store.get("Test", "rng", StatefulRNG.class);
             lang2 = store.get("Test", "language", FakeLanguageGen.class);
@@ -54,17 +57,20 @@ public class SquidStorageTest extends ApplicationAdapter{
         else {
             store.compress = false;
             System.out.println(store.preferences.get().values());
-            StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
+            StatefulRNG srng = new StatefulRNG("Hello, Storage!");
 
-            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(srng.nextLong()), lang2;
+            FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3);
 
-            SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
+            SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme");
             world.generate(15, true);
-            GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75), g2;
+            GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75);
             store.put("rng", srng);
+
             store.put("language", randomLanguage);
+
             store.put("world", world);
             store.put("grease", grease);
+
             String shown = store.show();
             System.out.println(shown);
             System.out.println("Uncompressed preference bytes: " + shown.length() * 2);
