@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.tommyettinger</groupId>
-            <artifactId>blazingchain</artifactId>    
+            <artifactId>blazingchain</artifactId>
             <version>1.4.4</version>
         </dependency>
         <dependency>
