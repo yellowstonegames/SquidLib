@@ -38,7 +38,13 @@
         <dependency>
             <groupId>com.github.tommyettinger</groupId>
             <artifactId>blazingchain</artifactId>
-            <version>1.4.4</version>
+            <version>${blazingchain.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tommyettinger</groupId>
+            <artifactId>blazingchain</artifactId>
+            <version>${blazingchain.version}</version>
+            <classifier>sources</classifier>
         </dependency>
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
