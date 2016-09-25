@@ -7,9 +7,7 @@
   -->
 <module>
     <source path="squidpony"/>
-    <!--
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath" />
-    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.MersenneTwister" />
-    -->
+    <inherits name="squidlib-util" />
+    <inherits name="regexodus"/>
+    <inherits name="blazing.chain"/>
 </module>

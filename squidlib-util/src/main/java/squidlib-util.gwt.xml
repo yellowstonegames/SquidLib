@@ -7,18 +7,44 @@
   -->
 <module>
     <source path="squidpony"/>
-    <inherits name='regexodus'/>
+    <inherits name="regexodus"/>
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.FakeLanguageGen" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntVLA" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Coord" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.GreasedRegion" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedMap" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedSet" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.IntDoubleOrderedMap" />
+
+    <!--
     <extend-configuration-property name="gdx.reflect.include" value="squidpony" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath" />
     <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.MersenneTwister" />
     <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.Elias" />
     <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.ChaosRNG" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid.mapping" />
-    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid.mapping.styled" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.CoordPacker" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.CrossHash" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.AStarSearch" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.Bresenham" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.DDALine" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.Elias" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.OrthoLine" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.WobblyLine" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.CombinationGenerator" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.PermutationGenerator" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.MathExtras" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.NeuralParticle" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidmath.MerlinNoise" />
+
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidgrid" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid.Adjacency" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidgrid.mapping" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidgrid.mapping.SpillWorldMap" />
+    <extend-configuration-property name="gdx.reflect.exclude" value="squidpony.squidgrid.mapping.styled" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.ZOI" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.AimLimit" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.Reach" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.Technique" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidai.Threat" />
+    -->
 </module>
