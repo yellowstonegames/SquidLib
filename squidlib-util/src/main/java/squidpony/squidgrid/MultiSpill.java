@@ -460,8 +460,6 @@ public class MultiSpill {
             }
         }
 
-
-
         Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         while (hasFresh && filled < volume) {

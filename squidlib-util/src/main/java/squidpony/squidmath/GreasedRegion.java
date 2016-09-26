@@ -539,6 +539,28 @@ public class GreasedRegion implements Serializable {
     }
 
     /**
+     * Returns a copy of map where if a cell is "on" in this GreasedRegion, this keeps the value in map intact,
+     * and where a cell is "off", it instead writes the short filler. Meant for use with MultiSpill, but may be
+     * used anywhere you have a 2D short array. {@link #mask(char[][], char)} is more likely to be useful.
+     * @param map a 2D short array that will not be modified
+     * @param filler the short to use where this GreasedRegion stores an "off" cell
+     * @return a masked copy of map
+     */
+    public short[][] mask(short[][] map, short filler)
+    {
+        if(map == null || map.length == 0)
+            return new short[0][0];
+        int width2 = Math.min(width, map.length), height2 = Math.min(height, map[0].length);
+        short[][] shorts = new short[width2][height2];
+        for (int x = 0; x < width2; x++) {
+            for (int y = 0; y < height2; y++) {
+                shorts[x][y] = (data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0 ? map[x][y] : filler;
+            }
+        }
+        return shorts;
+    }
+
+    /**
      * "Inverse mask for ints;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
      * the value in map intact, and where a cell is "on", it instead writes the int toWrite.
      * @param map a 2D int array that will not be modified

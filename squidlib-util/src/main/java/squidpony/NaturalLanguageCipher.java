@@ -768,8 +768,10 @@ se$->z
             }
         }
         char[] chars = ciphered.toCharArray();
-        // Lu is the upper case letter category in Unicode; we're using regexodus for this because GWT probably
-        // won't respect unicode case data on its own. We are using GWT to capitalize, though. Hope it works...
+        // Lu is the upper case letter category in Unicode; we're using regexodus for this because GWT won't
+        // respect unicode case data on its own (see
+        // https://github.com/gwtproject/gwt/blob/2.6.1/user/super/com/google/gwt/emul/java/lang/Character.java#L54-L61
+        // ). We are using GWT to capitalize, though, which appears to work in practice and the docs agree.
         if(Category.Lu.contains(source.charAt(0)))
             chars[0] = Character.toUpperCase(chars[0]);
         if(source.length() > 1 && Category.Lu.contains(source.charAt(1))) {

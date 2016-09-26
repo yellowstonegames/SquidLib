@@ -1,5 +1,6 @@
 package squidpony;
 
+import regexodus.Category;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.ProbabilityTable;
 import squidpony.squidmath.RNG;
@@ -179,7 +180,16 @@ public class WeightedLetterNamegen {
         "Frances",
         "Ann",
         "Joyce",
-        "Diane"
+        "Diane",
+        "Jane",
+        "Shauna",
+        "Trisha",
+        "Eileen",
+        "Danielle",
+        "Jacquelyn",
+        "Lynn",
+        "Hannah",
+        "Brittany"
     };
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="USA last names static name list">
@@ -203,7 +213,18 @@ public class WeightedLetterNamegen {
         "Clark",
         "Lewis",
         "Robinson",
-        "Walker"
+        "Walker",
+        "Willis",
+        "Carter",
+        "King",
+        "Lee",
+        "Grant",
+        "Howard",
+        "Morris",
+        "Bartlett",
+        "Paine",
+        "Wayne",
+        "Lorraine"
 };
 //</editor-fold>
 
@@ -250,7 +271,7 @@ public class WeightedLetterNamegen {
     };
 //</editor-fold>
 
-    private static final Character[] vowels = new Character[]{'a', 'e', 'i', 'o'};//not using y because it looks strange as a vowel in names
+    private static final char[] vowels = new char[]{'a', 'e', 'i', 'o'};//not using y because it looks strange as a vowel in names
     private static final int LAST_LETTER_CANDIDATES_MAX = 52;
 
     private RNG rng;
@@ -339,7 +360,7 @@ public class WeightedLetterNamegen {
                 wlg.add(nextLetter, 1);
 
                 // If letter was uppercase (beginning of name), also add a lowercase entry
-                if (Character.isUpperCase(letter)) {
+                if (Category.Lu.contains(letter)) {
                     letter = Character.toLowerCase(letter);
 
                     wlg = wl.get(letter);
@@ -382,7 +403,7 @@ public class WeightedLetterNamegen {
                 char intermediateLetterCandidate = getIntermediateLetter(name.charAt(name.length() - 1), lastLetter);
 
                 // Only attach last letter if the candidate is valid (if no candidate, the antepenultimate letter always occurs at the end)
-                if (Character.isLetter(intermediateLetterCandidate)) {
+                if (Category.L.contains(intermediateLetterCandidate)) {
                     name += intermediateLetterCandidate;
                     name += lastLetter;
                     break;
@@ -412,7 +433,7 @@ public class WeightedLetterNamegen {
      * @return	The best fit letter between the provided letters.
      */
     private char getIntermediateLetter(char letterBefore, char letterAfter) {
-        if (Character.isLetter(letterBefore) && Character.isLetter(letterAfter)) {
+        if (Category.L.contains(letterBefore) && Category.L.contains(letterAfter)) {
             // First grab all letters that come after the 'letterBefore'
             HashMap<Character, ProbabilityTable<Character>> wl = letters.get(letterBefore);
             if (wl == null) {
@@ -473,12 +494,16 @@ public class WeightedLetterNamegen {
     }
 
     private boolean isVowel(char c) {
-        for (char v : vowels) {
-            if (c == v) {
+        switch(c)
+        {
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
                 return true;
-            }
+            default:
+                return false;
         }
-        return false;
     }
 
     /**
@@ -505,7 +530,7 @@ public class WeightedLetterNamegen {
         if (letters.containsKey(letter)) {
             return letters.get(letter).get(letter).random();
         } else {
-            return rng.getRandomElement(vowels);
+            return vowels[rng.nextIntHasty(4)];
         }
     }
 }
