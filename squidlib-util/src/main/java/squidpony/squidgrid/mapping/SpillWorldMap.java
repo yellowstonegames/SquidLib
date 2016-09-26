@@ -7,7 +7,7 @@ import squidpony.squidgrid.MultiSpill;
 import squidpony.squidgrid.Spill;
 import squidpony.squidmath.*;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Generates a procedural world map and fills it with the requested number of factions, keeping some land unclaimed.
@@ -18,7 +18,6 @@ import java.util.ArrayList;
  */
 @Beta
 public class SpillWorldMap {
-
     public int width;
     public int height;
     public StatefulRNG rng;
@@ -63,45 +62,90 @@ public class SpillWorldMap {
      * expanding the pool will use more memory initially and then (possibly) much less over time, easing pressure on
      * the garbage collector as well, as re-allocations of large Coords that would otherwise be un-cached are avoided.
      * @param factionCount the number of factions to have claiming land
+     * @param makeAtlas if true, this will assign random names to factions, accessible via {@link #atlas}
      * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
      */
     public char[][] generate(int factionCount, boolean makeAtlas) {
-        int count = 10 + 3 * (width >>> 4) * (height >>> 4);
+        //, extra = 25 + (height * width >>> 4);
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
+        GreasedRegion bounds = new GreasedRegion(width, height).not().retract(4),
+                smallerBounds = bounds.copy().retract(5), area = new GreasedRegion(width, height),
+                tmpEdge = new GreasedRegion(width, height), tmpInner = new GreasedRegion(width, height),
+                tmpOOB = new GreasedRegion(width, height);
+        Coord[] pts = smallerBounds.randomPortion(rng, rng.between(24, 48));
+        int aLen = pts.length;
+        short[][] sm = new short[width][height], tmpSM;
+        Arrays.fill(sm[0], (short) (-1));
+        for (int i = 1; i < width; i++) {
+            System.arraycopy(sm[0], 0, sm[i], 0, height);
+        }
+        OrderedMap<Coord, Double> entries = new OrderedMap<>();
+        OrderedSet<Coord> oob;
+        for (int i = 0; i < aLen; i++) {
+            int volume = 10 + (height * width) / (aLen * 2);
+            area.clear().insert(pts[i]).spill(bounds, volume, rng).expand8way(2);
+            tmpInner.remake(area).retract(4).expand8way().and(area);
+            tmpEdge.remake(area).surface8way();
+            Coord[] edges = tmpEdge.separatedPortion(0.5);
+            int eLen = edges.length;
+            Double[] powers = new Double[eLen];
+            Arrays.fill(powers, 0.1);
+            entries = new OrderedMap<>(edges, powers);
+            eLen = entries.size();
+            for (int j = 0; j < 32; j++) {
+                entries.put(tmpInner.singleRandom(rng), (rng.nextDouble() + 1.5) * 0.4);
+            }
+            tmpOOB.remake(area).not();
+            oob = new OrderedSet<>(tmpOOB.asCoords());
 
+            spreader.start(entries, -1, oob);
+            tmpSM = spreader.spillMap;
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if (tmpSM[x][y] >= eLen)
+                        sm[x][y] = 0;
+                }
+            }
+
+        }
+        /*
+        // old version; produced a strange "swiss cheese" world map layout.
         SobolQRNG sobol = new SobolQRNG(2);
         sobol.skipTo(rng.between(1000, 6500));
-        OrderedMap<Coord, Double> entries = new OrderedMap<>(count);
-        for (int j = 0; j < count; j++) {
-            //sobol.fillVector(filler);
-            //entries.put(Coord.get((int)(dim * filler[0]), (int)(dim * filler[1])), (filler[2] + 0.25) / 1.25);
-            entries.put(sobol.nextCoord(width - 16, height - 16).add(8), (rng.nextDouble() + 0.2) * 0.8);
+        //sobol.fillVector(filler);
+        //entries.put(Coord.get((int)(dim * filler[0]), (int)(dim * filler[1])), (filler[2] + 0.25) / 1.25);
+        for (int j = 0; j < 8; j++) {
+            entries.put(sobol.nextCoord(width - 16, height - 16).add(8), 0.85);
+        }
+        for (int j = 8; j < count; j++) {
+            entries.put(sobol.nextCoord(width - 16, height - 16).add(8), (rng.nextDouble() + 0.25) * 0.3);
         }
         count = entries.size();
-        int extra = (width - 1) + (height - 1);
-        double edgePower = count * 0.5 / extra;
-        for (int x = 1; x < width - 1; x += 2) {
+        double edgePower = 0.95;// count * 0.8 / extra;
+        for (int x = 1; x < width - 1; x += 4) {
             entries.put(Coord.get(x, 0), edgePower);
             entries.put(Coord.get(x, height - 1), edgePower);
         }
-        for (int y = 1; y < height - 1; y += 2) {
+        for (int y = 1; y < height - 1; y += 4) {
             entries.put(Coord.get(0, y), edgePower);
             entries.put(Coord.get(width - 1, y), edgePower);
         }
-        ArrayList<ArrayList<Coord>> ordered = spreader.start(entries, -1, null);
+        spreader.start(entries, -1, null);
         short[][] sm = spreader.spillMap;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 //blank[x][y] = (char) ('a' + Integer.bitCount(sm[x][y] + 7) % 26);
-                if (sm[x][y] >= count || (sm[x][y] & 15) > 10)
+                if (sm[x][y] >= count || (sm[x][y] & 7) == 0)
                     sm[x][y] = -1;
                 else
                     sm[x][y] = 0;
             }
         }
+        */
         GreasedRegion map = new GreasedRegion(sm, 0, 0x7fff);
         Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
-        int volume = (int) (map.count() * rng.between(0.9, 1.0));
+        int controlled = (int) (map.count() * rng.between(0.9, 1.0));
 
         spreader.initialize(sm);
         entries.clear();
@@ -109,7 +153,7 @@ public class SpillWorldMap {
         for (int i = 0; i < factionCount; i++) {
             entries.put(centers[i], rng.between(0.5, 1.0));
         }
-        spreader.start(entries, volume, null);
+        spreader.start(entries, controlled, null);
         sm = spreader.spillMap;
         politicalMap = new char[width][height];
         for (int x = 0; x < width; x++) {

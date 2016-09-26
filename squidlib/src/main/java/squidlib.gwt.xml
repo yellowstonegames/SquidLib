@@ -5,6 +5,7 @@
      <inherits name='squidlib' />
   -->
 <module>
+	<inherits name="regexodus"/>
 	<inherits name='squidlib-util' />
 	<source path="squidpony/squidgrid/gui/gdx" />
 </module>

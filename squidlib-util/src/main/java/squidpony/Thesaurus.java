@@ -223,9 +223,9 @@ public class Thesaurus implements Serializable{
             String nx = mappings.get(word2).getNext();
             if(nx.isEmpty())
                 return nx;
-            if(word.length() > 1 && Character.isUpperCase(word.charAt(1)))
+            if(word.length() > 1 && Category.Lu.contains(word.charAt(1)))
                 return nx.toUpperCase();
-            if(Character.isUpperCase(word.charAt(0)))
+            if(Category.Lu.contains(word.charAt(0)))
             {
                 return Character.toUpperCase(nx.charAt(0)) + nx.substring(1, nx.length());
             }

@@ -2,7 +2,6 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.annotation.Beta;
 import squidpony.squidmath.PerlinNoise;
-import squidpony.squidmath.RNG;
 
 /**
  * Tools to create maps. Not commonly used outside of code that needs height maps.
@@ -10,20 +9,20 @@ import squidpony.squidmath.RNG;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
-public class MapFactory {
+public class HeightMapFactory {
     /**
      * Returns a randomly generated map of doubles. Commonly referred to as a
-     * Height Map.
+     * Height Map. Uses {@link PerlinNoise} in layers to generate coherent heights.
      *
      * @param width in cells
      * @param height in cells
-     * @return the created map
+     * @param offset a double that changes the sampling process; often randomly generated
+     * @return the created map as a 2D double array
      */
-    public static double[][] heightMap(int width, int height, RNG rng) {
+    public static double[][] heightMap(int width, int height, double offset) {
         double[][] heightMap = new double[width][height];
         int perldivisors[] = new int[]{1, 1, 2, 4, 8, 16, 64};
 
-        double offset = rng.nextInt();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 //Get noise
