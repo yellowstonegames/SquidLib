@@ -384,7 +384,7 @@ public class FOV implements Serializable {
         if (neighbors.isEmpty()) {
             return 0;
         }
-        neighbors = neighbors.subList(0, rippleNeighbors);
+        neighbors = neighbors.subList(0, Math.min(neighbors.size(), rippleNeighbors));
 /*
         while (neighbors.size() > rippleNeighbors) {
             Coord p = neighbors.remove(0);

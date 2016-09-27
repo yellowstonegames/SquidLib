@@ -5,24 +5,42 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import squidpony.squidmath.StatefulRNG;
 
 /**
- * Default BitmapFonts, a sample image, and a central RNG for use with LibGDX.
+ * Default BitmapFonts, a sample image, "stretchable" fonts and icons, and a central RNG for use with LibGDX.
  * The fonts provided are all monospaced, with most looking rather similar (straight orthogonal lines and right-angle
- * curves), but the one that looks... better than the rest (Inconsolata-LGC, accessible by getSmoothFont(),
+ * curves), but one that looks... better than the rest (Inconsolata-LGC, accessible by getSmoothFont(),
  * getLargeSmoothFont(), or as a distance field font that smoothly scales with getStretchableFont() or a square variant
- * with getStretchableSquareFont()) also supports Greek and Cyrillic, and is the only one to do so. If you can't decide,
- * go with getStretchableFont() or getStretchableSquareFont(), which return TextCellFactory objects.
- *
- * The most Latin script support is in the font Mandrill, accessible by getDefaultUnicodeFont() and
- * getLargeUnicodeFont() in two different sizes, and the latter should be suitable for everything from Spanish and
- * French, to Polish to Vietnamese.
+ * with getStretchableSquareFont()) also supports Greek and Cyrillic, and is one of a few to do so.
+ * getStretchableTypewriterFont() is a nice alternative to the other monospaced fonts, with a chunky, ornamented style.
+ * getStretchablePrintFont() and getStretchableCleanFont() are non-monospaced fonts for use in LinesPanel and other
+ * places that can use variable-width fonts (you can still use fixed-width ones, but square fonts probably won't look
+ * good).
+ * <br>
+ * If you can't decide, go with getStretchableFont() or getStretchableSquareFont(), which return TextCellFactory
+ * objects, and call their .width(int), .height(int), and .initBySize() methods to make them the size (and aspect ratio)
+ * you want. You can use getStretchableFont() or getStretchableTypewriterFont() with the same width and height to make
+ * a horizontally-stretched version of a square font instead of the existing square fonts that add blank space.
+ * <br>
+ * The most Latin script support for a monospaced font is in the font Mandrill, accessible by getDefaultUnicodeFont()
+ * and getLargeUnicodeFont() in two different sizes, and the latter should be suitable for everything from Spanish and
+ * French, to Polish to Vietnamese. You can use Gentium for even better language support with a variable-width font in
+ * LinesPanel or the like; it is accessible with getStretchablePrintFont(). Google's Noto font also supports many glyphs
+ * in a variable-width format; it is accessible with getStretchableCleanFont() but may have some issues with baseline
+ * level changing and character-to-character alignment seeming too high or low.
  * <br>
  * The sample image is a tentacle taken from a public domain icon collection graciously released by Henrique Lazarini;
  * it's fitting for SquidLib to have a tentacle as a logo or something, I guess?
+ * <br>
+ * The icons are from http://game-icons.net , there are over 2000 of them, and they're among the only images that should
+ * both be recolor-able easily (like chars in a font) and resize-able easily if you use a stretchable font at the same
+ * time. The stretchable font TextCellFactories do some work with shaders that makes most images look incorrect, but
+ * allow distance field fonts and these distance field icons to resize smoothly. Mixing stretchable fonts with
+ * non-stretchable images or fonts is not a great idea, and usually involves a slow shader change back and forth.
  * <br>
  * You can get a default RNG with getGuiRandom(); this should probably not be reused for non-GUI-related randomness,
  * but is meant instead to be used wherever randomized purely-aesthetic effects are needed, such as a jiggling effect.
@@ -35,6 +53,7 @@ public class DefaultResources implements LifecycleListener {
             unicode1 = null, unicode2 = null;
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null;
+    private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt",
             narrowName = "Rogue-Zodiac-6x12.fnt",
             unicodeName = "Mandrill-6x16.fnt",
@@ -452,6 +471,33 @@ public class DefaultResources implements LifecycleListener {
         return instance.tentacleRegion;
     }
 
+
+    /**
+     * Gets a TextureAtlas containing many icons with a distance field effect applied, allowing them to be used with
+     * "stretchable" fonts and be resized in the same way. These will not look as-expected if stretchable fonts are not
+     * in use, and will seem hazy and indistinct if the shader hasn't been set up for a distance field effect by
+     * TextCellFactory (which stretchable fonts will do automatically). The one page of the TextureAtlas is 2048x2048,
+     * which may be too large for some old, low-end Android phones, and possibly integrated graphics with fairly old
+     * processors on desktop. It has over 2000 icons.
+     * <br>
+     * The icons are CC-BY and the license is distributed with them, though the icons are not necessarily included with
+     * SquidLib. If you use the icon atlas, be sure to include icons-license.txt with it and reference it with your
+     * game's license and/or credits information.
+     * @return a TextureAtlas containing over 2000 icons with a distance field effect
+     */
+    public static TextureAtlas getIconAtlas()
+    {
+        initialize();
+        if(instance.iconAtlas == null)
+        {
+            try {
+                instance.iconAtlas = new TextureAtlas(Gdx.files.internal("icons.atlas"));
+            } catch (Exception ignored) {
+            }
+        }
+        return instance.iconAtlas;
+    }
+
     /**
      * This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any
      * changes to this RNG's state will not change behavior elsewhere in the program; this means the GUI mainly.
@@ -579,6 +625,10 @@ public class DefaultResources implements LifecycleListener {
         if(tentacle != null) {
             tentacle.dispose();
             tentacle = null;
+        }
+        if(iconAtlas != null) {
+            iconAtlas.dispose();
+            iconAtlas = null;
         }
     }
 

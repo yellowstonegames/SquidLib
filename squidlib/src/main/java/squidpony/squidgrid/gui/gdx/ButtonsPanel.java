@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import regexodus.Category;
 import squidpony.SquidTags;
 import squidpony.panel.IColoredString;
 import squidpony.panel.ICombinedPanel;
@@ -73,6 +74,7 @@ import java.util.*;
  * @param <T>
  *            The type of colors.
  */
+@Deprecated
 public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T> {
 
 	/**
@@ -1031,7 +1033,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	}
 
 	protected boolean canBeShortcut(char c) {
-		return Character.isLetter(c);
+		return Category.L.contains(c);
 	}
 
 	/**
@@ -1150,6 +1152,7 @@ public abstract class ButtonsPanel<T extends Color> extends GroupCombinedPanel<T
 	 * 
 	 * @author smelC
 	 */
+	@Deprecated
 	public static abstract class PreAllocatedPanels<T extends Color> extends ButtonsPanel<T> {
 
 		protected PreAllocatedPanels(ISquidPanel<T> bg, ISquidPanel<T> fg,

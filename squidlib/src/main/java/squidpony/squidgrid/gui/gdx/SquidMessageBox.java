@@ -22,14 +22,13 @@ import java.util.List;
  * 
  * @see LinesPanel An alternative, which is also designed to write messages (not
  *      in a scrolling pane though), but which is backed up by {@link com.badlogic.gdx.scenes.scene2d.Actor}
- *      instead of {@link SquidPanel} (hence better supports tight serif fonts)
+ *      instead of {@link SquidPanel} (hence better supports tight variable-width fonts)
  */
 public class SquidMessageBox extends SquidPanel {
     protected ArrayList<IColoredString<Color>> messages = new ArrayList<>(256);
     protected ArrayList<Label> labels = new ArrayList<>(256);
     protected int messageIndex = 0;
     //private static Pattern lineWrapper;
-    protected GDXMarkup markup = new GDXMarkup();
     private char[][] basicBorders;
     /**
      * Creates a bare-bones panel with all default values for text rendering.
@@ -249,7 +248,7 @@ public class SquidMessageBox extends SquidPanel {
      * the boundaries of the clickable area until it knows its own position and bounds.
      *
      * @param x x position in pixels or other units that libGDX is set to use
-     * @param x y position in pixels or other units that libGDX is set to use
+     * @param y y position in pixels or other units that libGDX is set to use
      * @param width the width in pixels (usually) of the message box; changes on resize
      * @param height the height in pixels (usually) of the message box; changes on resize
      */

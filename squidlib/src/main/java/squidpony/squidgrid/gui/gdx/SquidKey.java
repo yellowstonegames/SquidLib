@@ -60,7 +60,7 @@ public class SquidKey implements InputProcessor {
 
     /**
      * Gets this object's InputProcessor.
-     * @return
+     * @return this object's InputProcessor
      */
     public InputProcessor getProcessor () {
         return processor;

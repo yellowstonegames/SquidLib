@@ -643,7 +643,6 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				result.append(fragment.text);
 			return result.toString();
 		}
-
 		/**
 		 * Given some way of converting from a T value to an in-line markup tag, returns a string representation of
 		 * this IColoredString with in-line markup representing colors.

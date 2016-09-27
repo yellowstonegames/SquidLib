@@ -19,6 +19,14 @@ public enum Direction {
      */
     public static final Direction[] CARDINALS = {UP, DOWN, LEFT, RIGHT};
     /**
+     * An array which holds only the four cardinal directions in clockwise order.
+     */
+    public static final Direction[] CARDINALS_CLOCKWISE = {UP, RIGHT, DOWN, LEFT};
+    /**
+     * An array which holds only the four cardinal directions in counter-clockwise order.
+     */
+    public static final Direction[] CARDINALS_COUNTERCLOCKWISE = {UP, LEFT, DOWN, RIGHT};
+    /**
      * An array which holds only the four diagonal directions.
      */
     public static final Direction[] DIAGONALS = {UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
@@ -26,6 +34,14 @@ public enum Direction {
      * An array which holds all eight OUTWARDS directions.
      */
     public static final Direction[] OUTWARDS = {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+    /**
+     * An array which holds all eight OUTWARDS directions in clockwise order.
+     */
+    public static final Direction[] CLOCKWISE = {UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT};
+    /**
+     * An array which holds all eight OUTWARDS directions in counter-clockwise order.
+     */
+    public static final Direction[] COUNTERCLOCKWISE = {UP, UP_LEFT, LEFT, DOWN_LEFT, DOWN, DOWN_RIGHT, RIGHT, UP_RIGHT};
     /**
      * The x coordinate difference for this direction.
      */
