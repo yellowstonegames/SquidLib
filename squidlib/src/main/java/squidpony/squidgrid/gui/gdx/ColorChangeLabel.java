@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import squidpony.squidgrid.Direction;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,27 +32,7 @@ public class ColorChangeLabel extends Label {
      * @param colors a Collection (usually a List) of Color, such as one returned by SquidColorCenter's gradient method
      */
     public ColorChangeLabel(CharSequence text, LabelStyle style, Collection<Color> colors) {
-        super(text, style);
-        if(colors == null || colors.isEmpty())
-            this.colors = DefaultResources.getSCC().rainbow(12);
-        else
-            this.colors = new ArrayList<>(colors);
-    }
-
-    /**
-     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.
-     * @param text the text to display in this ColorChangeLabel
-     * @param style the LabelStyle to use for this; typically TextCellFactory handles this
-     * @param colors an array or vararg of Color
-     */
-    public ColorChangeLabel(CharSequence text, LabelStyle style, Color... colors) {
-        super(text, style);
-        if (colors == null || colors.length == 0)
-            this.colors = DefaultResources.getSCC().rainbow(12);
-        else {
-            this.colors = new ArrayList<>(colors.length);
-            Collections.addAll(this.colors, colors);
-        }
+        this(text, style, 2f, false, colors);
     }
 
     /**
@@ -61,13 +42,34 @@ public class ColorChangeLabel extends Label {
      * @param loopTime the amount of time, in seconds, it takes to loop through all the colors in the list
      * @param colors a Collection (usually a List) of Color, such as one returned by SquidColorCenter's gradient method
      */
-    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, Collection<Color> colors) {
+    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, Collection<Color> colors){
+        this(text, style, loopTime, false, colors);
+    }
+
+    /**
+     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.
+     * @param text the text to display in this ColorChangeLabel
+     * @param style the LabelStyle to use for this; typically TextCellFactory handles this
+     * @param loopTime the amount of time, in seconds, it takes to loop through all the colors in the list
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors a Collection (usually a List) of Color, such as one returned by SquidColorCenter's gradient method
+     */
+    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, boolean doubleWidth, Collection<Color> colors){
         super(text, style);
         if(colors == null || colors.isEmpty())
             this.colors = DefaultResources.getSCC().rainbow(12);
         else
             this.colors = new ArrayList<>(colors);
         this.loopTime = loopTime == 0 ? 1 : loopTime;
+    }
+    /**
+     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.
+     * @param text the text to display in this ColorChangeLabel
+     * @param style the LabelStyle to use for this; typically TextCellFactory handles this
+     * @param colors an array or vararg of Color
+     */
+    public ColorChangeLabel(CharSequence text, LabelStyle style, Color... colors) {
+        this(text, style, 2f, false, colors);
     }
 
     /**
@@ -77,7 +79,19 @@ public class ColorChangeLabel extends Label {
      * @param loopTime the amount of time, in seconds, it takes to loop through all the colors in the list
      * @param colors an array or vararg of Color
      */
-    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, Color... colors) {
+    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, Color... colors){
+        this(text, style, loopTime, false, colors);
+    }
+
+    /**
+     * Constructs a ColorChangeLabel. Used internally by TextCellFactory, but library users are unlikely to need this.
+     * @param text the text to display in this ColorChangeLabel
+     * @param style the LabelStyle to use for this; typically TextCellFactory handles this
+     * @param loopTime the amount of time, in seconds, it takes to loop through all the colors in the list
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors an array or vararg of Color
+     */
+    public ColorChangeLabel(CharSequence text, LabelStyle style, float loopTime, boolean doubleWidth, Color... colors){
         super(text, style);
         if (colors == null || colors.length == 0)
             this.colors = DefaultResources.getSCC().rainbow(12);

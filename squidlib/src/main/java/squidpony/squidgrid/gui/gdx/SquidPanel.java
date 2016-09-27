@@ -47,7 +47,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected Color lightingColor = SColor.WHITE;
     protected final TextCellFactory textFactory;
     protected float xOffset, yOffset;
-    protected OrderedSet<AnimatedEntity> animatedEntities;
+    public final OrderedSet<AnimatedEntity> animatedEntities;
     /**
      * For thin-wall maps, where only cells where x and y are both even numbers have backgrounds displayed.
      * Should be false when using this SquidPanel for anything that isn't specifically a background of a map
@@ -661,7 +661,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Collection<Color> colors, float loopTime)
     {
-        Actor a = textFactory.makeActor(s, colors, loopTime);
+        Actor a = textFactory.makeActor(s, colors, loopTime, doubleWidth);
         a.setName(s);
         a.setPosition(adjustX(x, doubleWidth), adjustY(y));
         /*
@@ -674,7 +674,35 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         animatedEntities.add(ae);
         return ae;
     }
-
+    /**
+     * Create an AnimatedEntity at position x, y, using '^' as its contents, but as an image so it can be rotated.
+     * Uses the given colors in a looping pattern, that doesn't count as an animation. If doubleWidth is true, treats
+     * the '^' as starting in the middle of a 2-char cell.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param colors
+     * @param loopTime
+     * @return
+     */
+    public AnimatedEntity directionMarker(int x, int y, boolean doubleWidth, Collection<Color> colors, float loopTime)
+    {
+        Actor a = textFactory.makeDirectionMarker(colors, loopTime, doubleWidth);
+        a.setName("^");
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
+    public AnimatedEntity directionMarker(int x, int y, boolean doubleWidth, Color color)
+    {
+        Actor a = textFactory.makeDirectionMarker(color);
+        a.setName("^");
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
     /**
      * Create an AnimatedEntity at position x, y, using the char c with a color looked up by index in palette.
      * @param x
