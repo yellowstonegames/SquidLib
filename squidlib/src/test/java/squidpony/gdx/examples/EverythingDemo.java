@@ -458,7 +458,6 @@ public class EverythingDemo extends ApplicationAdapter {
         clearHelp();
 
         if (health <= 0) return;
-
         int newX = player.gridX + xmod, newY = player.gridY + ymod;
         if (newX >= 0 && newY >= 0 && newX < width && newY < height
                 && bareDungeon[newX][newY] != '#') {
@@ -477,7 +476,6 @@ public class EverythingDemo extends ApplicationAdapter {
                 display.slide(player, newX, newY);
                 monsters.remove(Coord.get(newX, newY));
             }
-
             phase = Phase.PLAYER_ANIM;
         }
     }

@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import squidpony.squidgrid.Direction;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
+ * An Image that has multiple possible color tints that it cycles through over time.
  * Created by Tommy Ettinger on 3/23/2016.
  */
 public class ColorChangeImage extends Image {
@@ -25,21 +27,30 @@ public class ColorChangeImage extends Image {
      * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
      */
     public ColorChangeImage(Texture texture, List<Color> colors) {
-        super(texture);
-
-        if(colors == null || colors.isEmpty())
-            this.colors = DefaultResources.getSCC().rainbow(12);
-        else
-            this.colors = colors;
+        this(texture, 2f, colors);
     }
 
     /**
      * Creates an image stretched and aligned center, that will use the specified list of colors.
      *
      * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
      * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
      */
     public ColorChangeImage(Texture texture, float loopTime, List<Color> colors) {
+        this(texture, loopTime, false, colors);
+    }
+
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(Texture texture, float loopTime, boolean doubleWidth, List<Color> colors) {
+
         super(texture);
 
         if(colors == null || colors.isEmpty())
@@ -47,14 +58,51 @@ public class ColorChangeImage extends Image {
         else
             this.colors = colors;
         this.loopTime = loopTime;
+        setSize(texture.getWidth(), texture.getHeight());
+        setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
     }
+
     /**
      * Creates an image stretched and aligned center, that will use the specified list of colors.
      *
      * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(Texture texture, float loopTime, boolean doubleWidth, float width, float height, List<Color> colors) {
+
+        super(texture);
+
+        if(colors == null || colors.isEmpty())
+            this.colors = DefaultResources.getSCC().rainbow(12);
+        else
+            this.colors = colors;
+        this.loopTime = loopTime;
+        setSize(width, height);
+        setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
+    }
+
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
      * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
      */
     public ColorChangeImage(Texture texture, float loopTime, Color... colors) {
+        this(texture, loopTime, false, colors);
+    }
+
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(Texture texture, float loopTime, boolean doubleWidth, Color... colors) {
         super(texture);
 
         if(colors == null || colors.length == 0)
@@ -64,7 +112,32 @@ public class ColorChangeImage extends Image {
             Collections.addAll(this.colors, colors);
         }
         this.loopTime = loopTime;
+        setSize(texture.getWidth(), texture.getHeight());
+        setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
     }
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(Texture texture, float loopTime, boolean doubleWidth, float width, float height, Color... colors) {
+        super(texture);
+
+        if(colors == null || colors.length == 0)
+            this.colors = DefaultResources.getSCC().rainbow(12);
+        else {
+            this.colors = new ArrayList<>(colors.length);
+            Collections.addAll(this.colors, colors);
+        }
+        this.loopTime = loopTime;
+
+        setSize(width, height);
+        setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
+    }
+
     /**
      * Creates an image stretched and aligned center, that will use the specified list of colors.
      *
@@ -72,21 +145,30 @@ public class ColorChangeImage extends Image {
      * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
      */
     public ColorChangeImage(TextureRegion texture, List<Color> colors) {
-        super(texture);
-
-        if(colors == null || colors.isEmpty())
-            this.colors = DefaultResources.getSCC().rainbow(12);
-        else
-            this.colors = colors;
+        this(texture, 2f, colors);
     }
 
     /**
      * Creates an image stretched and aligned center, that will use the specified list of colors.
      *
      * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
      * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
      */
     public ColorChangeImage(TextureRegion texture, float loopTime, List<Color> colors) {
+        this(texture, loopTime, false, colors);
+    }
+
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(TextureRegion texture, float loopTime, boolean doubleWidth, List<Color> colors) {
+
         super(texture);
 
         if(colors == null || colors.isEmpty())
@@ -94,14 +176,48 @@ public class ColorChangeImage extends Image {
         else
             this.colors = colors;
         this.loopTime = loopTime;
+        setSize(texture.getRegionWidth(), texture.getRegionHeight());
+        setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
+    }/**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(TextureRegion texture, float loopTime, boolean doubleWidth, float width, float height, List<Color> colors) {
+
+        super(texture);
+
+        if(colors == null || colors.isEmpty())
+            this.colors = DefaultResources.getSCC().rainbow(12);
+        else
+            this.colors = colors;
+        this.loopTime = loopTime;
+        setSize(width, height);
+        setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
     }
     /**
      * Creates an image stretched and aligned center, that will use the specified list of colors.
      *
      * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
      * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
      */
     public ColorChangeImage(TextureRegion texture, float loopTime, Color... colors) {
+        this(texture, loopTime, false, colors);
+    }
+
+    /**
+     * Creates an image stretched and aligned center, that will use the specified list of colors.
+     *
+     * @param texture the texture to use
+     * @param loopTime the amount of time, in seconds, to spend transitioning through the colors before repeating
+     * @param doubleWidth true if this takes up two grid cells; only matters if you use {@link AnimatedEntity#setDirection(Direction)}
+     * @param colors a List of Color, such as one returned by SquidColorCenter's gradient or rainbow methods
+     */
+    public ColorChangeImage(TextureRegion texture, float loopTime, boolean doubleWidth, Color... colors) {
         super(texture);
 
         if(colors == null || colors.length == 0)
@@ -111,6 +227,9 @@ public class ColorChangeImage extends Image {
             Collections.addAll(this.colors, colors);
         }
         this.loopTime = loopTime;
+
+        setSize(texture.getRegionWidth(), texture.getRegionHeight());
+        setOrigin(doubleWidth ? 16 : 1); //Align.right or Align.center
     }
 
     /**

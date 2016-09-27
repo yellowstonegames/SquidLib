@@ -56,6 +56,7 @@ public class TextCellFactory implements Disposable {
 	protected /* Nullable */AssetManager assetManager;
     public BitmapFont bmpFont = null;
     protected Texture block = null;
+    protected TextureRegion dirMarker = null;
     protected String fitting = SQUID_FITTING;
     protected IColorCenter<Color> scc;
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
@@ -151,6 +152,8 @@ public class TextCellFactory implements Disposable {
         block.draw(temp, 0, 0);
         temp.dispose();
         style = new Label.LabelStyle(bmpFont, null);
+        BitmapFont.Glyph g = bmpFont.getData().getGlyph('^');
+        dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
         initialized = true;
         initializedByFont = true;
         return this;
@@ -193,6 +196,8 @@ public class TextCellFactory implements Disposable {
         }
         descent = bmpFont.getDescent();
         style = new Label.LabelStyle(bmpFont, null);
+        BitmapFont.Glyph g = bmpFont.getData().getGlyph('^');
+        dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
         initialized = true;
         initializedBySize = true;
         return this;
@@ -1067,40 +1072,7 @@ public class TextCellFactory implements Disposable {
      * @return the Actor, with no position set.
      */
     public Actor makeActor(String s, Collection<Color> colors) {
-        if (!initialized) {
-            throw new IllegalStateException("This factory has not yet been initialized!");
-        }
-        ArrayList<Color> colors2;
-        if(colors == null || colors.isEmpty())
-            colors2 = null;
-        else {
-            colors2 = new ArrayList<>(colors.size());
-            for (Color c : colors) {
-                colors2.add(scc.filter(c));
-            }
-        }
-        if (s == null) {
-            ColorChangeImage im = new ColorChangeImage(block, colors2);
-            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
-            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
-            return im;
-        } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            ColorChangeImage im = new ColorChangeImage(block, colors2);
-            //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth * s.length(), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
-            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
-            return im;
-        } else {
-            ColorChangeLabel lb;
-            if(swap.containsKey(s))
-                lb = new ColorChangeLabel(swap.get(s), style, colors2);
-            else
-                lb = new ColorChangeLabel(s, style, colors2);
-            lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
-            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
-            return lb;
-        }
+        return makeActor(s, colors, 2f, false);
     }
     /**
      * Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
@@ -1113,41 +1085,100 @@ public class TextCellFactory implements Disposable {
      * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
      * @return the Actor, with no position set.
      */
-    public Actor makeActor(String s, Collection<Color> colors, float loopTime) {
+    public Actor makeActor(String s, Collection<Color> colors, float loopTime)
+    {
+        return makeActor(s, colors, loopTime, false);
+    }
+    /**
+     * Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
+     * block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
+     * ColorChange classes will rotate between all colors given in the List each second, and are not affected by setColor,
+     * though they are affected by their setColors methods. Their color change is not considered an animation for the
+     * purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param s a String to make into an Actor, which can be null for a solid block.
+     * @param colors a List of Color to tint s with, looping through all elements in the list each second
+     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(String s, Collection<Color> colors, float loopTime, boolean doubleWidth) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
-        ArrayList<Color> colors2;
-        if(colors == null || colors.isEmpty())
-            colors2 = null;
-        else {
+        ArrayList<Color> colors2 = null;
+        if(colors != null && !colors.isEmpty())
+        {
             colors2 = new ArrayList<>(colors.size());
             for (Color c : colors) {
                 colors2.add(scc.filter(c));
             }
         }
         if (s == null) {
-            ColorChangeImage im = new ColorChangeImage(block, loopTime, colors2);
+            ColorChangeImage im = new ColorChangeImage(block, loopTime, doubleWidth, colors2);
             //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+            im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            ColorChangeImage im = new ColorChangeImage(block, loopTime, colors2);
+            ColorChangeImage im = new ColorChangeImage(block, loopTime, doubleWidth, colors2);
             //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth * s.length(), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
+            im.setSize(actualCellWidth * s.length() * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
             ColorChangeLabel lb;
             if(swap.containsKey(s))
-                lb = new ColorChangeLabel(swap.get(s), style, loopTime, colors2);
+                lb = new ColorChangeLabel(swap.get(s), style, loopTime, doubleWidth, colors2);
             else
-                lb = new ColorChangeLabel(s, style, loopTime, colors2);
+                lb = new ColorChangeLabel(s, style, loopTime, doubleWidth, colors2);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
         }
+    }
+
+    /**
+     * Creates a ColorChangeImage Actor that should look like the glyph '^' in this font, but will be rotate-able. The
+     * ColorChange classes will rotate between all colors given in the List in the given amount of loopTime, and are not
+     * affected by setColor, though they are affected by their setColors methods. Their color change is not considered
+     * an animation for the purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param colors a List of Color to tint s with, looping through all elements in the list each second
+     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
+     * @return the Actor, with no position set.
+     */
+    public Actor makeDirectionMarker(Collection<Color> colors, float loopTime, boolean doubleWidth) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        ArrayList<Color> colors2 = null;
+        if (colors != null && !colors.isEmpty()) {
+            colors2 = new ArrayList<>(colors.size());
+            for (Color c : colors) {
+                colors2.add(scc.filter(c));
+            }
+        }
+        ColorChangeImage im = new ColorChangeImage(dirMarker, loopTime, doubleWidth,
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);
+        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+        im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+        return im;
+    }
+    /**
+     * Creates a Image Actor that should look like the glyph '^' in this font, but will be rotate-able.
+     * @param color a Color to tint the '^' with
+     * @return the Actor, with no position set.
+     */
+    public Actor makeDirectionMarker(Color color) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        Image im = new Image(dirMarker);
+        im.setColor(scc.filter(color));
+        //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+        im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+        im.setOrigin(1); //center
+        // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+        return im;
     }
 
     /**
