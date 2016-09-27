@@ -375,6 +375,42 @@ public class Coord implements Serializable {
         return hash;
     }
 
+    /**
+     * Something like hashCode(), but reversible with {@code Coord.decode()}. Works for Coords between roughly -256 and
+     * 32000 in each of x and y, but will probably only decode to pooled Coords if x and y are both between -3 and 255
+     * (inclusive for both).
+     * @return an int as a unique code for this Coord
+     */
+    public int encode()
+    {
+        return ((x + 256) << 16) ^ (y + 256);
+    }
+
+    /**
+     * An alternative to getting a Coord with Coord.get() only to encode() it as the next step. This doesn't create a
+     * Coord in the middle step. Can be decoded with Coord.decode() to get the (x,y) Coord.
+     * @param x the x position to encode
+     * @param y the y position to encode
+     * @return the coded int that a Coord at (x,y) would produce with encode()
+     */
+    public static int pureEncode(int x, int y)
+    {
+        return ((x + 256) << 16) ^ (y + 256);
+    }
+    /**
+     * This can take an int produced by {@code someCoord.encode()} and get the original Coord back out of it. It
+     * works for all pooled Coords where the pool hasn't been expanded past about 32,000 in either dimension. It even
+     * works for Coords with negative x or y as well, if they are no lower than -256 in either dimension. This will
+     * almost certainly fail (producing a gibberish Coord that probably won't be pooled) on hashes produced by any other
+     * class, including subclasses of Coord.
+     * @param code an encoded int from a Coord, but not a subclass of Coord
+     * @return the Coord that gave hash as its hashCode()
+     */
+    public static Coord decode(int code)
+    {
+        return get((code >>> 16) - 256, (code & 0xFFFF) - 256);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Coord) {
@@ -422,9 +458,37 @@ public class Coord implements Serializable {
         return POOL[0].length - 3;
     }
 
+    /**
+     * Enlarges the pool of cached Coords to the given width and height, and doesn't change
+     * a dimension if it would be reduced in size.
+     * Cached Coord values will be reused by Coord.get instead of re-allocated each time.
+     * The default pool allows Coords with x and y each between -3 and 255, inclusive, to
+     * be cached, and is considered to have width and height of 256 to begin with. Giving a
+     * width greater than 256 will allow Coords with x greater than 255 to be cached;
+     * likewise for height. If width or height is smaller than the current cache width or
+     * height, that dimension will not change, but the other still may if it is valid. You
+     * cannot shrink the pool size.
+     * @param width the new width for the pool of cached Coords; will be ignored if smaller than the current width
+     * @param height the new height for the pool of cached Coords; will be ignored if smaller than the current height
+     */
+    public static void expandPoolTo(int width, int height)
+    {
+        expandPool(Math.max(0, width + 3 - POOL.length), Math.max(0, height + 3 - POOL[0].length));
+    }
+
+    /**
+     * Enlarges the pool of cached Coords by the given amount of expansion for x and y.
+     * Cached Coord values will be reused by Coord.get instead of re-allocated each time.
+     * The default pool allows Coords with x and y each between -3 and 255, inclusive, to
+     * be cached, and this can increase the size in the positive direction. If either
+     * xIncrease or yIncrease is negative, this method returns immediately and does nothing
+     * else; the same is true of both arguments are zero. You cannot shrink the pool size.
+     * @param xIncrease the amount to increase cache's width by
+     * @param yIncrease the amount to increase cache's height by
+     */
     public static void expandPool(int xIncrease, int yIncrease)
     {
-        if(xIncrease < 0 || yIncrease < 0)
+        if((xIncrease < 0 || yIncrease < 0) || (xIncrease | yIncrease) == 0 )
             return;
         int width = POOL.length, height = POOL[0].length;
         Coord[][] POOL2 = new Coord[width + xIncrease][height + yIncrease];

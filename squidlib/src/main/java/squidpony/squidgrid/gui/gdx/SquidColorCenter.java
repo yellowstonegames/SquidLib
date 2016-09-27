@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import squidpony.IColorCenter;
 import squidpony.IFilter;
+import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
@@ -338,7 +339,6 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
         return loopingGradient(fromColor, midColor, steps, Interpolation.linear);
     }
 
-
     /**
      * Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the
      * gradient. The interpolation argument can be used to make the color stay close to fromColor and/or toColor longer
@@ -360,7 +360,6 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
         }
         return colors;
     }
-
 
     /**
      * Finds a gradient with the specified number of steps going from fromColor to midColor, then midColor to (possibly)
@@ -421,6 +420,43 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
         }
         return colors;
     }
+
+    /**
+     * Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the
+     * gradient. This does not typically take a direct path on its way between fromColor and toColor, and is useful to
+     * generate a wide variety of colors that can be confined to a rough amount of maximum difference by choosing values
+     * for fromColor and toColor that are more similar.
+     * <br>
+     * Try using colors for fromColor and toColor that have different r, g, and b values, such as gray and white, then
+     * compare to colors that don't differ on, for example, r, such as bright red and pink. In the first case, red,
+     * green, blue, and many other colors will be generated if there are enough steps; in the second case, red will be
+     * at the same level in all generated colors (very high, so no pure blue or pure green, but purple and yellow are
+     * possible). This should help illustrate how this chooses how far to "zig-zag" off the straight-line path.
+     * @param fromColor the color to start with, included in the gradient
+     * @param toColor the color to end on, included in the gradient
+     * @param steps the number of elements to use in the gradient; ideally no greater than 345 to avoid duplicates
+     * @return an ArrayList composed of the zig-zag steps from fromColor to toColor, with length equal to steps
+     */
+    public ArrayList<Color> zigzagGradient(Color fromColor, Color toColor, int steps)
+    {
+        ArrayList<Color> colors = new ArrayList<>((steps > 1) ? steps : 1);
+        colors.add(filter(fromColor));
+        if(steps < 2)
+            return colors;
+        float dr = toColor.r - fromColor.r, dg = toColor.g - fromColor.g, db = toColor.b - fromColor.b,
+                a = fromColor.a, cr, cg, cb;
+        int decoded;
+        for (float i = 1; i < steps; i++) {
+            // 345 happens to be the distance on our 3D Hilbert curve that corresponds to (7,7,7).
+            decoded = Math.round(345 * (i / (steps - 1)));
+            cr = (CoordPacker.hilbert3X[decoded] / 7f) * dr + fromColor.r;
+            cg = (CoordPacker.hilbert3Y[decoded] / 7f) * dg + fromColor.g;
+            cb = (CoordPacker.hilbert3Z[decoded] / 7f) * db + fromColor.b;
+            colors.add(get(cr, cg, cb, a));
+        }
+        return colors;
+    }
+
     @Override
     public String toString() {
         return "SquidColorCenter{" +

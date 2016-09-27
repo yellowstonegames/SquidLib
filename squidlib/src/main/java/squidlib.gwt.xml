@@ -5,6 +5,7 @@
      <inherits name='squidlib' />
   -->
 <module>
+	<inherits name="regexodus"/>
 	<inherits name='squidlib-util' />
 	<source path="squidpony/squidgrid/gui/gdx" />
 	<!-- Following line is not needed: .js files are pre-compiled and new-joe-kuo-6.1000.txt
