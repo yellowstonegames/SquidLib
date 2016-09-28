@@ -83,7 +83,7 @@ public class Placement {
             for(GreasedRegion region : finder.rooms.keySet()) {
                 working.remake(region).retract().fringe().andNot(nonRoom);
                 for (GreasedRegion sp : working.split()) {
-                    if (sp.count() >= 3)
+                    if (sp.size() >= 3)
                         alongStraightWalls.add(arrayToSet(sp.asCoords()));
                 }
             }
@@ -130,7 +130,7 @@ public class Placement {
                 working = null;
                 working2 = region.copy().retract();
                 for (int i = 2; i < 7; i++) {
-                    if(working2.count() <= 0)
+                    if(working2.isEmpty())
                         break;
                     working = working2.copy();
                     working2.retract();

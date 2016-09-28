@@ -439,8 +439,7 @@ public class CustomDijkstraMap implements Serializable {
         if (physicalMap[pt] > FLOOR) {
             return;
         }
-
-        goals.put(pt, GOAL);
+        adjacency.putAllVariants(goals, pt, GOAL);
     }
 
     /**
@@ -512,11 +511,11 @@ public class CustomDijkstraMap implements Serializable {
      */
     public double[] scan(int[] impassable) {
         if (!initialized) return null;
+        Adjacency adjacency = this.adjacency;
 
         if (impassable != null) {
             for (int i = 0; i <impassable.length; i++) {
-
-                closed.put(impassable[i], WALL);
+                adjacency.putAllVariants(closed, impassable[i], WALL);
             }
         }
         int[][] neighbors = this.neighbors;
@@ -528,7 +527,6 @@ public class CustomDijkstraMap implements Serializable {
         }
         double currentLowest = 999000, cs;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
-        Adjacency adjacency = this.adjacency;
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
             if (gradientMap[l] > FLOOR && !goals.containsKey(l))
@@ -616,11 +614,11 @@ public class CustomDijkstraMap implements Serializable {
      */
     public double[] partialScan(int limit, int... impassable) {
         if (!initialized) return null;
+        Adjacency adjacency = this.adjacency;
 
         if (impassable != null) {
             for (int i = 0; i <impassable.length; i++) {
-
-                closed.put(impassable[i], WALL);
+                adjacency.putAllVariants(closed, impassable[i], WALL);
             }
         }
         int near, cen, neighborCount = neighbors.length, mid;
@@ -631,7 +629,6 @@ public class CustomDijkstraMap implements Serializable {
         }
         double currentLowest = 999000, cs;
         IntDoubleOrderedMap lowest = new IntDoubleOrderedMap();
-        Adjacency adjacency = this.adjacency;
         int maxLength = gradientMap.length;
         for (int l = 0; l < maxLength; l++) {
             if (gradientMap[l] > FLOOR && !goals.containsKey(l))
@@ -986,18 +983,7 @@ public class CustomDijkstraMap implements Serializable {
 
         if (impassable != null) {
             for (int i = 0; i <impassable.length; i++) {
-                tmp = impassable[i];
-                xStore = adjacency.extractX(tmp);
-                yStore = adjacency.extractY(tmp);
-                rStore = adjacency.extractR(tmp);
-                nStore = adjacency.extractN(tmp);
-                for (int a = 0; a < size; a++) {
-                    for (int b = 0; b < size; b++) {
-                        tmp2 = adjacency.composite(xStore - a, yStore - b, rStore, nStore);
-                        if (tmp2 >= 0)
-                            closed.put(tmp2, WALL);
-                    }
-                }
+                adjacency.putAllVariants(closed, impassable[i], WALL, -size);
             }
         }
         mappedCount = 0;

@@ -67,7 +67,7 @@ public class SpillTest {
             System.out.println(dg);
             GreasedRegion valid = new GreasedRegion(dun, '.');
             OrderedMap<Coord, Double> entries = new OrderedMap<>(16);
-            Coord[] section = valid.randomSeparated(20.0 / valid.count(), rng);
+            Coord[] section = valid.randomSeparated(20.0 / valid.size(), rng);
             for (int i = 0; i < 16 && i < section.length; i++) {
                 entries.put(section[i], 1.0 - (i & 3) * 0.25);
             }

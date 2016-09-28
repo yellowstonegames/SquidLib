@@ -1024,7 +1024,7 @@ public class SectionDungeonGenerator {
         GreasedRegion limit = new GreasedRegion(width, height).insertRectangle(1, 1, width - 2, height - 2),
                 potential = new GreasedRegion(fusedMap, '#').and(limit),
                 flooded, chosen, tmp = new GreasedRegion(width, height);
-        int ctr = potential.count(), potentialMazeSize = ctr * mazeFill / 100, potentialLakeSize = ctr * lakeFill / 100;
+        int ctr = potential.size(), potentialMazeSize = ctr * mazeFill / 100, potentialLakeSize = ctr * lakeFill / 100;
         ArrayList<GreasedRegion> viable;
         int minSize;
         Coord center;
@@ -1035,9 +1035,9 @@ public class SectionDungeonGenerator {
                 return maps;
 
             chosen = viable.get(0);
-            minSize = chosen.count();
+            minSize = chosen.size();
             for (GreasedRegion sa : viable) {
-                int sz = sa.count();
+                int sz = sa.size();
                 if (sz > minSize) {
                     chosen = sa;
                     minSize = sz;
@@ -1066,9 +1066,9 @@ public class SectionDungeonGenerator {
             if (viable.isEmpty())
                 return maps;
             chosen = viable.get(0);
-            minSize = chosen.count();
+            minSize = chosen.size();
             for (GreasedRegion sa : viable) {
-                int sz = sa.count();
+                int sz = sa.size();
                 if (sz > minSize) {
                     chosen = sa;
                     minSize = sz;
