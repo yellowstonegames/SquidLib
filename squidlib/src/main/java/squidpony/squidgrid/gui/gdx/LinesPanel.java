@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
-import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
 
@@ -264,9 +263,9 @@ public class LinesPanel<T extends Color> extends Actor {
 
 	/**
 	 * If you want to grey out "older" messages, you would do it in this method,
-	 * when {@code ydx > 0} (using an {@link IColorCenter} maybe ?).
+	 * when {@code ydx > 0} (using an {@link squidpony.IColorCenter} maybe ?).
 	 * 
-	 * @param ics
+	 * @param ics an IColorCenter with the same generic color type as this LinesPanel
 	 * @param ydx
 	 *            The index of {@code ics} within {@link #content}.
 	 * @return A variation of {@code ics}, or {@code ics} itself.

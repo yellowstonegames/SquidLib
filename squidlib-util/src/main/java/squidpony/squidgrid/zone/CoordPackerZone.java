@@ -1,0 +1,62 @@
+package squidpony.squidgrid.zone;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import squidpony.squidgrid.zone.Zone.Skeleton;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.CoordPacker;
+
+/**
+ * A zone constructed by {@link CoordPacker}.
+ * 
+ * @author smelC
+ */
+public class CoordPackerZone extends Skeleton {
+
+	protected final short[] shorts;
+
+	protected transient List<Coord> unpacked;
+
+	private static final long serialVersionUID = -3718415979846804238L;
+
+	public CoordPackerZone(short[] shorts) {
+		this.shorts = shorts;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return CoordPacker.isEmpty(shorts);
+	}
+
+	@Override
+	public int size() {
+		return CoordPacker.count(shorts);
+	}
+
+	@Override
+	public boolean contains(int x, int y) {
+		return CoordPacker.regionsContain(shorts, CoordPacker.packOne(x, y));
+	}
+
+	@Override
+	public boolean contains(Coord c) {
+		return CoordPacker.regionsContain(shorts, CoordPacker.packOne(c));
+	}
+
+	@Override
+	public List<Coord> getAll() {
+		if (unpacked == null) {
+			final Coord[] allPacked = CoordPacker.allPacked(shorts);
+			unpacked = new ArrayList<Coord>(allPacked.length);
+			for (Coord c : allPacked)
+				unpacked.add(c);
+		}
+		return unpacked;
+	}
+
+	@Override
+	public String toString() {
+		return (unpacked == null ? shorts : unpacked).toString();
+	}
+}
