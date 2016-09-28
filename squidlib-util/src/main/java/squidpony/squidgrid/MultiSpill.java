@@ -326,7 +326,7 @@ public class MultiSpill {
 
     protected void setFresh(int idx, final Coord pt) {
         if(!initialized) return;
-        if(anyFreshMap.test(pt.x, pt.y))
+        if(anyFreshMap.contains(pt.x, pt.y))
             return;
         fresh.get(idx).add(pt);
         anyFreshMap.insert(pt);
@@ -394,7 +394,7 @@ public class MultiSpill {
                     if(!adj.isWithin(width, height))
                         continue;
                     double h = heuristic(dirs[d]);
-                    if (physicalMap[adj.x][adj.y] && !anySpillMap.test(adj.x, adj.y) && !impassable.contains(adj) && rng.nextDouble(h) <= 1.0) {
+                    if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y) && !impassable.contains(adj) && rng.nextDouble(h) <= 1.0) {
                         setFresh(i, adj);
                     }
                 }
@@ -484,7 +484,7 @@ public class MultiSpill {
                         if(!adj.isWithin(width, height))
                             continue;
                         double h = heuristic(dirs[d]);
-                        if (physicalMap[adj.x][adj.y] && !anySpillMap.test(adj.x, adj.y) && !impassable.contains(adj)
+                        if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y) && !impassable.contains(adj)
                                 && rng.nextDouble(h) <= 1.0) {
                             setFresh(i, adj);
                         }

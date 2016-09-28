@@ -2,18 +2,20 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.zone.Zone;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Region encoding of 64x64 areas as a number of long arrays; uncompressed (fatty), but fast (greased lightning).
  * Created by Tommy Ettinger on 6/24/2016.
  */
 @Beta
-public class GreasedRegion implements Serializable {
+public class GreasedRegion extends Zone.Skeleton implements Serializable {
     private static final long serialVersionUID = 0;
     private static final SobolQRNG sobol = new SobolQRNG(2);
 
@@ -1165,10 +1167,10 @@ public class GreasedRegion implements Serializable {
 
     public GreasedRegion flood(GreasedRegion bounds, int amount)
     {
-        int ct = count(), ct2;
+        int ct = size(), ct2;
         for (int i = 0; i < amount; i++) {
             flood(bounds);
-            if(ct == (ct2 = count()))
+            if(ct == (ct2 = size()))
                 break;
             else
                 ct = ct2;
@@ -1181,7 +1183,7 @@ public class GreasedRegion implements Serializable {
     public GreasedRegion[] floodSeries(GreasedRegion bounds, int amount)
     {
         if(amount <= 0) return new GreasedRegion[0];
-        int ct = count(), ct2;
+        int ct = size(), ct2;
         GreasedRegion[] regions = new GreasedRegion[amount];
         boolean done = false;
         GreasedRegion temp = new GreasedRegion(this);
@@ -1191,7 +1193,7 @@ public class GreasedRegion implements Serializable {
             }
             else {
                 regions[i] = new GreasedRegion(temp.flood(bounds));
-                if (ct == (ct2 = temp.count()))
+                if (ct == (ct2 = temp.size()))
                     done = true;
                 else
                     ct = ct2;
@@ -1266,10 +1268,10 @@ public class GreasedRegion implements Serializable {
 
     public GreasedRegion flood8way(GreasedRegion bounds, int amount)
     {
-        int ct = count(), ct2;
+        int ct = size(), ct2;
         for (int i = 0; i < amount; i++) {
             flood8way(bounds);
-            if(ct == (ct2 = count()))
+            if(ct == (ct2 = size()))
                 break;
             else
                 ct = ct2;
@@ -1280,7 +1282,7 @@ public class GreasedRegion implements Serializable {
     public GreasedRegion[] floodSeries8way(GreasedRegion bounds, int amount)
     {
         if(amount <= 0) return new GreasedRegion[0];
-        int ct = count(), ct2;
+        int ct = size(), ct2;
         GreasedRegion[] regions = new GreasedRegion[amount];
         boolean done = false;
         GreasedRegion temp = new GreasedRegion(this);
@@ -1290,7 +1292,7 @@ public class GreasedRegion implements Serializable {
             }
             else {
                 regions[i] = new GreasedRegion(temp.flood8way(bounds));
-                if (ct == (ct2 = temp.count()))
+                if (ct == (ct2 = temp.size()))
                     done = true;
                 else
                     ct = ct2;
@@ -1303,7 +1305,7 @@ public class GreasedRegion implements Serializable {
     {
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
             return this;
-        int current = count();
+        int current = size();
         if(current >= volume)
             return this;
         GreasedRegion t = new GreasedRegion(this);
@@ -1359,7 +1361,7 @@ public class GreasedRegion implements Serializable {
         GreasedRegion remaining = new GreasedRegion(this), filled = new GreasedRegion(this);
         while (fst.x >= 0) {
             filled.clear().insert(fst).flood(remaining, 8);
-            if(filled.count() <= 4)
+            if(filled.size() <= 4)
                 andNot(filled);
             remaining.andNot(filled);
             fst = remaining.first();
@@ -1383,7 +1385,7 @@ public class GreasedRegion implements Serializable {
         OrderedSet<GreasedRegion> found = new OrderedSet<>(packed.length);
         GreasedRegion tmp;
         for (int i = 0; i < packed.length; i++) {
-            if((tmp = packed[i]) != null && tmp.test(x, y))
+            if((tmp = packed[i]) != null && tmp.contains(x, y))
                 found.add(tmp);
         }
         return found;
@@ -1393,14 +1395,14 @@ public class GreasedRegion implements Serializable {
     {
         OrderedSet<GreasedRegion> found = new OrderedSet<>(packed.size());
         for (GreasedRegion tmp : packed) {
-            if(tmp != null && tmp.test(x, y))
+            if(tmp != null && tmp.contains(x, y))
                 found.add(tmp);
         }
         return found;
     }
 
 
-    public int count()
+    public int size()
     {
         int c = 0;
         for (int i = 0; i < width * ySections; i++) {
@@ -1565,13 +1567,13 @@ public class GreasedRegion implements Serializable {
         double sz = height * width;
         if(sz == 0)
             return 0;
-        double onAmount = sz - count(), retractedOn = sz - copy().retract().count();
+        double onAmount = sz - size(), retractedOn = sz - copy().retract().size();
         return (onAmount + retractedOn) / (sz * 2.0);
     }
     public double rateRegularity()
     {
         GreasedRegion me2 = copy().surface8way();
-        double irregularCount = me2.count(), regularCount = me2.remake(this).surface().count();
+        double irregularCount = me2.size(), regularCount = me2.remake(this).surface().size();
         if(irregularCount == 0)
             return 0;
         return regularCount / irregularCount;
@@ -1619,6 +1621,30 @@ public class GreasedRegion implements Serializable {
             }
         }
         return points;
+    }
+
+    /**
+     * @return All cells in this zone.
+     */
+    @Override
+    public List<Coord> getAll() {
+        ArrayList<Coord> points = new ArrayList<>();
+        long t, w;
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                if((t = data[x * ySections + s]) != 0)
+                {
+                    w = Long.lowestOneBit(t);
+                    while (w != 0) {
+                        points.add(Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w)));
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return points;
+
     }
 
     public Coord first()
@@ -1697,17 +1723,23 @@ public class GreasedRegion implements Serializable {
         return points;
     }
 
-    public boolean test(int x, int y)
+    @Override
+    public boolean contains(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height && ySections > 0 &&
                 ((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0);
     }
 
-    public boolean test(Coord pt)
-    {
-        int x = pt.x, y = pt.y;
-        return x >= 0 && y >= 0 && x < width && y < height && ySections > 0 &&
-                ((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0);
+
+    /**
+     * @return Whether this zone is empty.
+     */
+    @Override
+    public boolean isEmpty() {
+        for (int i = 0; i < data.length; i++) {
+            if(data[i] != 0L) return false;
+        }
+        return true;
     }
 
     /**

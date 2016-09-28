@@ -145,7 +145,7 @@ public class SpillWorldMap {
         */
         GreasedRegion map = new GreasedRegion(sm, 0, 0x7fff);
         Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
-        int controlled = (int) (map.count() * rng.between(0.9, 1.0));
+        int controlled = (int) (map.size() * rng.between(0.9, 1.0));
 
         spreader.initialize(sm);
         entries.clear();

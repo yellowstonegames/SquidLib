@@ -1,11 +1,12 @@
 package squidpony.squidgrid.zone;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import squidpony.squidgrid.zone.Zone.Skeleton;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A zone constructed by {@link CoordPacker}.
@@ -49,8 +50,7 @@ public class CoordPackerZone extends Skeleton {
 		if (unpacked == null) {
 			final Coord[] allPacked = CoordPacker.allPacked(shorts);
 			unpacked = new ArrayList<Coord>(allPacked.length);
-			for (Coord c : allPacked)
-				unpacked.add(c);
+			Collections.addAll(unpacked, allPacked);
 		}
 		return unpacked;
 	}

@@ -148,6 +148,12 @@ public abstract class Adjacency implements Serializable {
     }
     public abstract IntDoubleOrderedMap addCostRule(char tile, double cost, boolean isRotation);
 
+    public IntDoubleOrderedMap putAllVariants(IntDoubleOrderedMap map, int key, double value)
+    {
+        return putAllVariants(map, key, value, 1);
+    }
+    public abstract IntDoubleOrderedMap putAllVariants(IntDoubleOrderedMap map, int key, double value, int size);
+
     public static class BasicAdjacency extends Adjacency implements Serializable {
         private static final long serialVersionUID = 0L;
 
@@ -258,6 +264,31 @@ public abstract class Adjacency implements Serializable {
         public IntDoubleOrderedMap addCostRule(char tile, double cost, boolean isRotation) {
             costRules.put(tile, cost);
             return costRules;
+        }
+
+        @Override
+        public IntDoubleOrderedMap putAllVariants(IntDoubleOrderedMap map, int key, double value, int size) {
+            int baseX = key % width, baseY = key / width, comp;
+            if (key >= 0 && baseY < height) {
+                if (size < 0) {
+                    for (int x = size+1; x <= 0; x++) {
+                        for (int y = size+1; y <= 0; y++) {
+                            comp = composite(baseX + x, baseY + y, 0, 0);
+                            if(comp >= 0)
+                                map.put(comp, value);
+                        }
+                    }
+                } else {
+                    for (int x = 0; x < size; x++) {
+                        for (int y = 0; y < size; y++) {
+                            comp = composite(baseX + x, baseY + y, 0, 0);
+                            if(comp >= 0)
+                                map.put(comp, value);
+                        }
+                    }
+                }
+            }
+            return map;
         }
     }
 
@@ -383,5 +414,34 @@ public abstract class Adjacency implements Serializable {
                 costRules.put(tile, cost);
             return costRules;
         }
+        @Override
+        public IntDoubleOrderedMap putAllVariants(IntDoubleOrderedMap map, int key, double value, int size) {
+            int baseX = (key >>> shift) % width, baseY = (key>>>shift) / width, comp;
+            if (key >= 0 && baseY < height) {
+                if (size < 0) {
+                    for (int x = size+1; x <= 0; x++) {
+                        for (int y = size+1; y <= 0; y++) {
+                            for (int r = 0; r < rotations; r++) {
+                                comp = composite(baseX + x, baseY + y, r, 0);
+                                if(comp >= 0)
+                                    map.put(comp, value);
+                            }
+                        }
+                    }
+                } else {
+                    for (int x = 0; x < size; x++) {
+                        for (int y = 0; y < size; y++) {
+                            for (int r = 0; r < rotations; r++) {
+                                comp = composite(baseX + x, baseY + y, r, 0);
+                                if(comp >= 0)
+                                    map.put(comp, value);
+                            }
+                        }
+                    }
+                }
+            }
+            return map;
+        }
+
     }
 }
