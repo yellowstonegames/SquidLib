@@ -46,8 +46,7 @@ public class AnimatedEntity {
      * rotated to indicate a direction over a cell.
      * @param dir the direction that "up" for this should point toward
      */
-    public void setDirection(Direction dir)
-    {
+    public void setDirection(Direction dir) {
         actor.setRotation(directionToDegrees(dir));
     }
     static float directionToDegrees(Direction d)

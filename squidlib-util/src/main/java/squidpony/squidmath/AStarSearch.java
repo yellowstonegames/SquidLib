@@ -271,4 +271,44 @@ public class AStarSearch implements Serializable{
 
         return smallest;
     }
+
+	@Override
+	public String toString() {
+		final int width = map.length;
+		final int height = width == 0 ? 0 : map[0].length;
+		final StringBuilder result = new StringBuilder(width * height);
+		int maxLen = 0;
+		/*
+		 * First we compute the longest (String-wise) entry, so that we can
+		 * "indent" shorter cells, so that the output looks good (and is hereby
+		 * readable).
+		 */
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				final String output = String.valueOf(Math.round(map[x][y]));
+				final int locLen = output.length();
+				if (maxLen < locLen)
+					maxLen = locLen;
+			}
+		}
+		final String eol = System.getProperty("line.separator");
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				final long v = Math.round(map[x][y]);
+				final String s = String.valueOf(v);
+				final int slen = s.length();
+				assert slen <= maxLen;
+				int diff = maxLen - slen;
+				while (0 < diff) {
+					result.append(" ");
+					diff--;
+				}
+				result.append(s);
+			}
+			if (y < height - 1)
+				result.append(eol);
+		}
+		return result.toString();
+	}
+
 }
