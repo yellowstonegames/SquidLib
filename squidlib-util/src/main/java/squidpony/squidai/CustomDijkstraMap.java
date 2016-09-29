@@ -1239,8 +1239,10 @@ public class CustomDijkstraMap implements Serializable {
         IntVLA impassable2;
         if (impassable == null)
             impassable2 = new IntVLA();
-        else
+        else {
             impassable2 = new IntVLA(impassable);
+            impassable2.removeValue(start);
+        }
         if (onlyPassable == null)
             onlyPassable = new IntVLA();
 
@@ -1267,13 +1269,12 @@ public class CustomDijkstraMap implements Serializable {
                 pt = neighbors[reuse[d]][currentPos];
                 if (gradientMap[pt] < best && !path.contains(pt)) {
                     best = gradientMap[pt];
-                    choice = reuse[d];
+                    choice = adjacency.invertAdjacent[reuse[d]];
                 }
             }
 
 
             if (best >= gradientMap[currentPos] || physicalMap[neighbors[choice][currentPos]] > FLOOR) {
-                path.clear();
                 break;
             }
             currentPos = neighbors[choice][pt = currentPos];

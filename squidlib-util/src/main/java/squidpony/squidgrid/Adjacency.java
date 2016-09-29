@@ -154,6 +154,9 @@ public abstract class Adjacency implements Serializable {
     }
     public abstract IntDoubleOrderedMap putAllVariants(IntDoubleOrderedMap map, int key, double value, int size);
 
+    public int[] invertAdjacent;
+
+
     public static class BasicAdjacency extends Adjacency implements Serializable {
         private static final long serialVersionUID = 0L;
 
@@ -167,8 +170,18 @@ public abstract class Adjacency implements Serializable {
             rotations = 1;
             depths = 1;
             measurement = metric;
-            directions = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
-            maxAdjacent = (measurement == Measurement.MANHATTAN) ? 4 : 8;
+            if(metric == Measurement.MANHATTAN)
+            {
+                directions = Direction.CARDINALS;
+                maxAdjacent = 4;
+                invertAdjacent = new int[]{1, 0, 3, 2};
+            }
+            else
+            {
+                directions = Direction.OUTWARDS;
+                maxAdjacent = 8;
+                invertAdjacent = new int[]{1, 0, 3, 2, 7, 6, 5, 4};
+            }
             twoStepRule = false;
             blockingRule = 2;
             costRules.defaultReturnValue(1.0);
@@ -322,11 +335,21 @@ public abstract class Adjacency implements Serializable {
         public RotationAdjacency(int width, int height, Measurement metric) {
             this.width = width;
             this.height = height;
-            rotations = (measurement == Measurement.MANHATTAN) ? 4 : 8;
-            shift = (measurement == Measurement.MANHATTAN) ? 2 : 3;
-            depths = 1;
             measurement = metric;
-            directions = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS_CLOCKWISE : Direction.CLOCKWISE;
+            if(metric == Measurement.MANHATTAN)
+            {
+                rotations = 4;
+                shift = 2;
+                directions = Direction.CARDINALS_CLOCKWISE;
+            }
+            else
+            {
+                rotations = 8;
+                shift = 3;
+                directions = Direction.CLOCKWISE;
+            }
+            invertAdjacent = new int[]{2, 1, 0};
+            depths = 1;
             maxAdjacent = 3;
             twoStepRule = false;
             blockingRule = 2;
@@ -442,6 +465,5 @@ public abstract class Adjacency implements Serializable {
             }
             return map;
         }
-
     }
 }
