@@ -52,10 +52,8 @@ public class RotationDemo extends ApplicationAdapter {
         }
 
         public Creature move(int pos) {
-            entity.gridX = adjacency.extractX(pos);
-            entity.gridY = adjacency.extractY(pos);
-            marker.gridX = entity.gridX;
-            marker.gridY = entity.gridY;
+            marker.gridX = entity.gridX = adjacency.extractX(pos);
+            marker.gridY = entity.gridY = adjacency.extractY(pos);
             this.pos = pos;
             marker.setDirection(adjacency.directions[adjacency.extractR(pos)]);
             return this;
@@ -78,7 +76,6 @@ public class RotationDemo extends ApplicationAdapter {
     private int[][] lights;
     private Color[][] colors, bgColors;
     private double[][] fovmap;
-    private double[] pathMap;
     private Creature player;
     private FOV fov;
     public static final int INTERNAL_ZOOM = 1;
@@ -86,23 +83,23 @@ public class RotationDemo extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static final int width = 90;
+    private static final int width = 70;
     /**
      * In number of cells
      */
-    private static final int height = 30;
+    private static final int height = 26;
     /**
      * The pixel width of a cell
      */
-    private static final int cellWidth = 13 * INTERNAL_ZOOM;
+    private static final int cellWidth = 16 * INTERNAL_ZOOM;
     /**
      * The pixel height of a cell
      */
-    private static final int cellHeight = 26 * INTERNAL_ZOOM;
+    private static final int cellHeight = 31 * INTERNAL_ZOOM;
     private VisualInput input;
     private double counter;
     private boolean[][] seen;
-    private int health = 7;
+    private int health = 9;
     private SquidColorCenter fgCenter, bgCenter;
     private Color bgColor;
     private ArrayList<Color> playerMarkColors, monsterMarkColors;
@@ -183,8 +180,8 @@ public class RotationDemo extends ApplicationAdapter {
         fgCenter = colorCenters[16];
         bgCenter = colorCenters[17];
         currentCenter = 8;
-        playerMarkColors = fgCenter.loopingGradient(SColor.BRIGHT_GREEN, SColor.LIGHT_YELLOW_DYE, 64);
-        monsterMarkColors = fgCenter.loopingGradient(SColor.CRIMSON, SColor.ATOMIC_TANGERINE, 64);
+        playerMarkColors = fgCenter.loopingGradient(SColor.HAN_PURPLE, SColor.PSYCHEDELIC_PURPLE, 64);
+        monsterMarkColors = fgCenter.loopingGradient(SColor.CRIMSON, SColor.ORANGE_RED, 64);
         batch = new SpriteBatch();
 
         // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
@@ -232,12 +229,31 @@ public class RotationDemo extends ApplicationAdapter {
         serpent.putWalledRoundRoomCarvers(2);
         char[][] mg = serpent.generate();
         decoDungeon = dungeonGen.generate(mg, serpent.getEnvironment());
-
-        // change the TilesetType to lots of different choices to see what dungeon works best.
-        //bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
         bareDungeon = dungeonGen.getBareDungeon();
         lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
-
+        /*
+        decoDungeon = new char[][]{
+                {'#','#','#','#',},
+                {'#','.','.','#',},
+                {'#','.','.','#',},
+                {'#','#','#','#',},
+        };
+        // change the TilesetType to lots of different choices to see what dungeon works best.
+        bareDungeon = new char[][]{
+                {'#','#','#','#',},
+                {'#','.','.','#',},
+                {'#','.','.','#',},
+                {'#','#','#','#',},
+        };
+        lineDungeon  = new char[][]{
+                {'#','#','#','#',},
+                {'#','.','.','#',},
+                {'#','.','.','#',},
+                {'#','#','#','#',},
+        };
+        lineDungeon = DungeonUtility.hashesToLines(lineDungeon);
+        */
+        /*
         adjacency.addCostRule('"', 1.0);
         adjacency.addCostRule('"', 0.001, true);
         adjacency.addCostRule('~', 1.0);
@@ -246,7 +262,7 @@ public class RotationDemo extends ApplicationAdapter {
         adjacency.addCostRule(',', 0.001, true);
         adjacency.addCostRule('.', 0.001, true);
         adjacency.addCostRule('/', 0.001, true);
-
+        */
         // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
         final GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
         final Coord pl = placement.singleRandom(rng);
@@ -254,13 +270,14 @@ public class RotationDemo extends ApplicationAdapter {
         int numMonsters = 25;
         monsters = new OrderedMap<>(numMonsters);
         int p;
+
         for (int i = 0; i < numMonsters; i++) {
             Coord monPos = placement.singleRandom(rng);
             placement.remove(monPos);
             p = adjacency.composite(monPos.x, monPos.y, rng.nextIntHasty(8), 0);
-            monsters.put(p >> 3, new Creature(display.animateActor(monPos.x, monPos.y, 'Я',
+            monsters.put(p >> 3, new Creature(display.animateActor(monPos.x, monPos.y, ' ', //'Я'
                     fgCenter.filter(display.getPalette().get(11))),
-                    display.directionMarker(monPos.x, monPos.y, monsterMarkColors, 3f, 3, false),
+                    display.directionMarker(monPos.x, monPos.y, monsterMarkColors, 1.5f, 3, false),
                     p,
                     0));
         }
@@ -270,15 +287,20 @@ public class RotationDemo extends ApplicationAdapter {
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
         getToPlayer = new CustomDijkstraMap(decoDungeon, adjacency, rng);
         getToPlayer.setGoal(adjacency.composite(pl.x, pl.y, rng.nextIntHasty(8), 0));
-        pathMap = getToPlayer.scan(null);
 
-        player = new Creature(display.animateActor(pl.x, pl.y, '@', SColor.HAN_PURPLE, false),
-                display.directionMarker(pl.x, pl.y, playerMarkColors, 4f, 3, false),
+        player = new Creature(display.animateActor(pl.x, pl.y, ' ', SColor.HAN_PURPLE, false),
+                display.directionMarker(pl.x, pl.y, playerMarkColors, 2f, 3, false),
                 adjacency.composite(pl.x, pl.y, rng.nextIntHasty(8), 0), health);
+        /*
+        player = new Creature(display.animateActor(1, 1, ' ', SColor.HAN_PURPLE, false),
+                display.directionMarker(pl.x, pl.y, SColor.HAN_PURPLE, 3, false),
+                adjacency.composite(1, 1, 4, 0), health);
+        */
 //                fgCenter.filter(display.getPalette().get(30)));
         toCursor = new IntVLA(10);
         awaitedMoves = new IntVLA(10);
-        playerToCursor = new CustomDijkstraMap(decoDungeon, adjacency);
+        playerToCursor = new CustomDijkstraMap(decoDungeon, adjacency, rng);
+
         final int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
                 initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
         colors = new Color[width][height];
@@ -400,14 +422,6 @@ public class RotationDemo extends ApplicationAdapter {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 if (fovmap[screenX][screenY] > 0.0 && awaitedMoves.size == 0) {
-                    /*
-                    System.out.println("player.pos=" + player.pos +
-                            " with x="+adjacency.extractX(player.pos) + ", y=" + adjacency.extractY(player.pos) + "r=" + adjacency.extractR(player.pos));
-                    int clicked = adjacency.composite(screenX, screenY, 0, 0);
-                    System.out.println("clicked pos=" + clicked +
-                            " with x="+adjacency.extractX(clicked) + ", y=" + adjacency.extractY(clicked) + ", r=" + adjacency.extractR(clicked));
-                    System.out.println("screenX=" + screenX + ", screenY=" + screenY);
-                    */
                     if (toCursor.size == 0) {
                         //Uses DijkstraMap to get a path from the player's position to the cursor
                         toCursor = playerToCursor.findPath(30, null, null, player.pos, adjacency.composite(screenX, screenY, 0, 0));
@@ -555,6 +569,7 @@ public class RotationDemo extends ApplicationAdapter {
                     mon.change(1);
                     monsters.alter(pos, tmp >>> 3);
                     display.slide(mon.entity, adjacency.extractX(tmp), adjacency.extractY(tmp));
+                    display.slide(mon.marker, adjacency.extractX(tmp), adjacency.extractY(tmp));
                     mon.move(tmp);
                 }
 

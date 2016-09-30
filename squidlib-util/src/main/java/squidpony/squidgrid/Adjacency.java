@@ -136,11 +136,11 @@ public abstract class Adjacency implements Serializable {
         return Coord.get(extractX(data), extractY(data));
     }
 
-    public abstract int[][] neighborMaps();
+    public abstract int[][][] neighborMaps();
 
-    public abstract void portal(int[][] neighbors, int inputPortal, int outputPortal, boolean twoWay);
+    public abstract void portal(int[][][] neighbors, int inputPortal, int outputPortal, boolean twoWay);
 
-    public abstract boolean isBlocked(int start, int direction, int[][] neighbors, double[] map, double wall);
+    public abstract boolean isBlocked(int start, int direction, int[][][] neighbors, double[] map, double wall);
 
     public IntDoubleOrderedMap addCostRule(char tile, double cost)
     {
@@ -156,6 +156,24 @@ public abstract class Adjacency implements Serializable {
 
     public int[] invertAdjacent;
 
+    public String show(int data)
+    {
+        if(data < 0)
+            return "(-,-,-)";
+        return "(" + extractX(data) + ',' + extractY(data) + ',' + extractR(data) + ')';
+    }
+    public String showMap(int[] map, int r)
+    {
+        r %= rotations;
+        StringBuilder sb = new StringBuilder(width * height * 8);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                sb.append(show(map[(y * width + x) * rotations + r])).append(' ');
+            }
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
 
     public static class BasicAdjacency extends Adjacency implements Serializable {
         private static final long serialVersionUID = 0L;
@@ -220,13 +238,14 @@ public abstract class Adjacency implements Serializable {
         }
 
         @Override
-        public int[][] neighborMaps() {
-            int[][] maps = new int[maxAdjacent][width * height * rotations * depths];
+        public int[][][] neighborMaps() {
+            int[][][] maps = new int[2][maxAdjacent][width * height * rotations * depths];
             for (int m = 0; m < maxAdjacent; m++) {
                 Direction dir = directions[m];
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
-                        maps[m][y * width + x] = composite(x + dir.deltaX, y + dir.deltaY, 0, 0);
+                        maps[0][m][y * width + x] = composite(x - dir.deltaX, y - dir.deltaY, 0, 0);
+                        maps[1][m][y * width + x] = composite(x + dir.deltaX, y + dir.deltaY, 0, 0);
                     }
                 }
             }
@@ -234,40 +253,50 @@ public abstract class Adjacency implements Serializable {
         }
 
         @Override
-        public boolean isBlocked(int start, int direction, int[][] neighbors, double[] map, double wall) {
+        public boolean isBlocked(int start, int direction, int[][][] neighbors, double[] map, double wall) {
             if(direction < 4)
                 return !validate(start);
+            int[][] near = neighbors[1];
             switch (direction)
             {
                 case 4: //UP_LEFT
-                    return (neighbors[0][start] < 0 || map[neighbors[0][start]] >= wall)
-                            && (neighbors[2][start] < 0 || map[neighbors[2][start]] >= wall);
+                    return (near[0][start] < 0 || map[near[0][start]] >= wall)
+                            && (near[2][start] < 0 || map[near[2][start]] >= wall);
                 case 5: //UP_RIGHT
-                    return (neighbors[0][start] < 0 || map[neighbors[0][start]] >= wall)
-                            && (neighbors[3][start] < 0 || map[neighbors[3][start]] >= wall);
+                    return (near[0][start] < 0 || map[near[0][start]] >= wall)
+                            && (near[3][start] < 0 || map[near[3][start]] >= wall);
                 case 6: //DOWN_LEFT
-                    return (neighbors[1][start] < 0 || map[neighbors[1][start]] >= wall)
-                            && (neighbors[2][start] < 0 || map[neighbors[2][start]] >= wall);
+                    return (near[1][start] < 0 || map[near[1][start]] >= wall)
+                            && (near[2][start] < 0 || map[near[2][start]] >= wall);
                 default: //DOWN_RIGHT
-                    return (neighbors[1][start] < 0 || map[neighbors[1][start]] >= wall)
-                            && (neighbors[3][start] < 0 || map[neighbors[3][start]] >= wall);
+                    return (near[1][start] < 0 || map[near[1][start]] >= wall)
+                            && (near[3][start] < 0 || map[near[3][start]] >= wall);
             }
         }
 
         @Override
-        public void portal(int[][] neighbors, int inputPortal, int outputPortal, boolean twoWay) {
+        public void portal(int[][][] neighbors, int inputPortal, int outputPortal, boolean twoWay) {
             if(neighbors == null || !validate(inputPortal) || !validate(outputPortal)
                     || neighbors.length != maxAdjacent)
                 return;
             for (int d = 0; d < maxAdjacent; d++) {
                 for (int i = 0; i < width * height; i++) {
-                    if(neighbors[d][i] == inputPortal)
+                    if(neighbors[1][d][i] == inputPortal)
                     {
-                        neighbors[d][i] = outputPortal;
+                        neighbors[1][d][i] = outputPortal;
                     }
-                    else if(twoWay && neighbors[d][i] == outputPortal)
+                    else if(twoWay && neighbors[1][d][i] == outputPortal)
                     {
-                        neighbors[d][i] = inputPortal;
+                        neighbors[1][d][i] = inputPortal;
+                    }
+
+                    if(neighbors[0][d][i] == outputPortal)
+                    {
+                        neighbors[0][d][i] = inputPortal;
+                    }
+                    else if(twoWay && neighbors[0][d][i] == inputPortal)
+                    {
+                        neighbors[0][d][i] = outputPortal;
                     }
                 }
             }
@@ -341,19 +370,21 @@ public abstract class Adjacency implements Serializable {
                 rotations = 4;
                 shift = 2;
                 directions = Direction.CARDINALS_CLOCKWISE;
+                invertAdjacent = new int[]{2, 3, 0, 1};
             }
             else
             {
                 rotations = 8;
                 shift = 3;
                 directions = Direction.CLOCKWISE;
+                invertAdjacent = new int[]{4, 5, 6, 7, 0, 1, 2, 3};
             }
-            invertAdjacent = new int[]{2, 1, 0};
             depths = 1;
             maxAdjacent = 3;
             twoStepRule = false;
             blockingRule = 2;
             costRules.defaultReturnValue(1.0);
+            //invertAdjacent = new int[]{2, 1, 0};
         }
 
         @Override
@@ -389,17 +420,21 @@ public abstract class Adjacency implements Serializable {
         }
 
         @Override
-        public int[][] neighborMaps() {
-            int[][] maps = new int[maxAdjacent][width * height * rotations * depths];
+        public int[][][] neighborMaps() {
+            int[][][] maps = new int[2][maxAdjacent][width * height * rotations * depths];
             int current;
+            Direction dir;
             for (int r = 0; r < rotations; r++) {
-                Direction dir = directions[r];
+                dir = directions[r];
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
                         current = ((y * width + x) << shift) | r;
-                        maps[1][current] = composite(x + dir.deltaX, y + dir.deltaY, r, 0);
-                        maps[0][current] = composite(x, y, r - 1 & (rotations - 1), 0);
-                        maps[2][current] = composite(x, y, r + 1 & (rotations - 1), 0);
+                        maps[0][1][current] = composite(x - dir.deltaX, y - dir.deltaY, r, 0);
+                        maps[1][1][current] = composite(x + dir.deltaX, y + dir.deltaY, r, 0);
+                        maps[0][0][current] = maps[1][0][current] = composite(x, y, r - 1 & (rotations - 1), 0);
+                        maps[0][2][current] = maps[1][2][current] = composite(x, y, r + 1 & (rotations - 1), 0);
+                        //maps[0][composite(x, y, r - 1 & (rotations - 1), 0)] = current;
+                        //maps[2][composite(x, y, r + 1 & (rotations - 1), 0)] = current;
                     }
                 }
             }
@@ -407,24 +442,30 @@ public abstract class Adjacency implements Serializable {
         }
 
         @Override
-        public boolean isBlocked(int start, int direction, int[][] neighbors, double[] map, double wall) {
+        public boolean isBlocked(int start, int direction, int[][][] neighbors, double[] map, double wall) {
             if(rotations <= 4 || (direction & 1) == 0)
                 return !validate(start);
 
-            return (neighbors[0][start] < 0 || map[neighbors[0][start]] >= wall)
-                            && (neighbors[2][start] < 0 || map[neighbors[2][start]] >= wall);
+            return (neighbors[1][0][start] < 0 || map[neighbors[1][0][start]] >= wall)
+                            || (neighbors[1][2][start] < 0 || map[neighbors[1][2][start]] >= wall);
         }
 
         @Override
-        public void portal(int[][] neighbors, int inputPortal, int outputPortal, boolean twoWay) {
+        public void portal(int[][][] neighbors, int inputPortal, int outputPortal, boolean twoWay) {
             if(neighbors == null || !validate(inputPortal) || !validate(outputPortal)
                     || neighbors.length != maxAdjacent)
                 return;
             for (int i = 0; i < width * height * rotations; i++) {
-                if (neighbors[1][i] == inputPortal) {
-                    neighbors[1][i] = outputPortal;
-                } else if (twoWay && neighbors[1][i] == outputPortal) {
-                    neighbors[1][i] = inputPortal;
+                if (neighbors[0][1][i] == inputPortal) {
+                    neighbors[0][1][i] = outputPortal;
+                } else if (twoWay && neighbors[0][1][i] == outputPortal) {
+                    neighbors[0][1][i] = inputPortal;
+                }
+
+                if (neighbors[1][1][i] == outputPortal) {
+                    neighbors[1][1][i] = inputPortal;
+                } else if (twoWay && neighbors[1][1][i] == inputPortal) {
+                    neighbors[1][1][i] = outputPortal;
                 }
             }
         }
@@ -441,7 +482,15 @@ public abstract class Adjacency implements Serializable {
         public IntDoubleOrderedMap putAllVariants(IntDoubleOrderedMap map, int key, double value, int size) {
             int baseX = (key >>> shift) % width, baseY = (key>>>shift) / width, comp;
             if (key >= 0 && baseY < height) {
-                if (size < 0) {
+                if(size == 1)
+                {
+                    for (int r = 0; r < rotations; r++) {
+                        comp = composite(baseX, baseY, r, 0);
+                        if(comp >= 0)
+                            map.put(comp, value);
+                    }
+                }
+                else if (size < 0) {
                     for (int x = size+1; x <= 0; x++) {
                         for (int y = size+1; y <= 0; y++) {
                             for (int r = 0; r < rotations; r++) {
