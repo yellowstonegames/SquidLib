@@ -59,9 +59,9 @@ public class CustomDijkstraMap implements Serializable {
 
     /**
      * The neighbors map, as produced by adjacency; can be modified by passing neighbors as the first argument to
-     * {@link Adjacency#portal(int[][], int, int, boolean)} if you want to create portals between non-adjacent cells.
+     * {@link Adjacency#portal(int[][][], int, int, boolean)} if you want to create portals between non-adjacent cells.
      */
-    public int[][] neighbors;
+    public int[][][] neighbors;
     /**
      * Height of the map. Exciting stuff. Don't change this, instead call initialize().
      */
@@ -518,8 +518,8 @@ public class CustomDijkstraMap implements Serializable {
                 adjacency.putAllVariants(closed, impassable[i], WALL);
             }
         }
-        int[][] neighbors = this.neighbors;
-        int near, cen, neighborCount = neighbors.length, mid;
+        int[][] fromNeighbors = neighbors[0];
+        int near, cen, neighborCount = fromNeighbors.length, mid;
 
         for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
             closed.remove(entry.getIntKey());
@@ -549,14 +549,14 @@ public class CustomDijkstraMap implements Serializable {
             for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
                 cen = cell.getIntKey();
                 for (int d = 0; d < neighborCount; d++) {
-                    near = neighbors[d][cen];
+                    near = fromNeighbors[d][cen];
                     if (!adjacency.validate(near))
                     	// Outside the map
                     	continue;
                     if(adjacency.isBlocked(cen, d, neighbors, gradientMap, WALL))
                         continue;
                     if(adjacency.twoStepRule) {
-                        near = neighbors[d][mid = near];
+                        near = fromNeighbors[d][mid = near];
                         // Outside the map
                         if (!adjacency.validate(near))
                             continue;
@@ -621,7 +621,8 @@ public class CustomDijkstraMap implements Serializable {
                 adjacency.putAllVariants(closed, impassable[i], WALL);
             }
         }
-        int near, cen, neighborCount = neighbors.length, mid;
+        int[][] fromNeighbors = neighbors[0];
+        int near, invNear, cen, neighborCount = neighbors.length, mid;
 
         for (IntDoubleOrderedMap.MapEntry entry : goals.mapEntrySet()) {
             closed.remove(entry.getIntKey());
@@ -652,14 +653,14 @@ public class CustomDijkstraMap implements Serializable {
             for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
                 cen = cell.getIntKey();
                 for (int d = 0; d < neighborCount; d++) {
-                    near = neighbors[d][cen];
+                    near = fromNeighbors[d][cen];
                     if (!adjacency.validate(near))
                         // Outside the map
                         continue;
                     if(adjacency.isBlocked(cen, d, neighbors, gradientMap, WALL))
                         continue;
                     if(adjacency.twoStepRule) {
-                        near = neighbors[d][mid = near];
+                        near = fromNeighbors[d][mid = near];
                         if (!adjacency.validate(near))
                             // Outside the map
                             continue;
@@ -977,6 +978,7 @@ public class CustomDijkstraMap implements Serializable {
     public double[] scan(int size, int[] impassable) {
         if (!initialized) return null;
 
+        int[][] fromNeighbors = neighbors[0];
         int near, cen, neighborCount = neighbors.length, mid, tmp, tmp2, xStore, yStore, rStore, nStore;
         double valStore;
         Adjacency adjacency = this.adjacency;
@@ -1040,14 +1042,14 @@ public class CustomDijkstraMap implements Serializable {
             for (IntDoubleOrderedMap.MapEntry cell : open.mapEntrySet()) {
                 cen = cell.getIntKey();
                 for (int d = 0; d < neighborCount; d++) {
-                    near = neighbors[d][cen];
+                    near = fromNeighbors[d][cen];
                     if (!adjacency.validate(near))
                         // Outside the map
                         continue;
                     //if(adjacency.isBlocked(cen, d, neighbors, gradientMap, WALL))
                     //    continue;
                     if(adjacency.twoStepRule) {
-                        near = neighbors[d][mid = near];
+                        near = fromNeighbors[d][mid = near];
                         if (!adjacency.validate(near))
                             // Outside the map
                             continue;
@@ -1253,6 +1255,7 @@ public class CustomDijkstraMap implements Serializable {
         if (goals.isEmpty())
             return new IntVLA(path);
         Adjacency adjacency = this.adjacency;
+        int[][] toNeighbors = neighbors[1];
         scan(impassable2.toArray());
         int currentPos = start, pt;
         double paidLength = 0.0;
@@ -1266,18 +1269,18 @@ public class CustomDijkstraMap implements Serializable {
             int choice = rng.nextIntHasty(adjacency.maxAdjacent);
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
-                pt = neighbors[reuse[d]][currentPos];
+                pt = toNeighbors[reuse[d]][currentPos];
                 if (gradientMap[pt] < best && !path.contains(pt)) {
                     best = gradientMap[pt];
-                    choice = adjacency.invertAdjacent[reuse[d]];
+                    choice = reuse[d];// adjacency.invertAdjacent[reuse[d]];
                 }
             }
 
 
-            if (best >= gradientMap[currentPos] || physicalMap[neighbors[choice][currentPos]] > FLOOR) {
+            if (best >= gradientMap[currentPos] || physicalMap[toNeighbors[choice][currentPos]] > FLOOR) {
                 break;
             }
-            currentPos = neighbors[choice][pt = currentPos];
+            currentPos = toNeighbors[choice][pt = currentPos];
             path.add(currentPos);
             paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
             frustration++;
@@ -1532,6 +1535,7 @@ public class CustomDijkstraMap implements Serializable {
             cachedFleeMap = scan(scanArray);
         }
         Adjacency adjacency = this.adjacency;
+        int[][] toNeighbors = neighbors[1];
         int currentPos = start, pt;
         double paidLength = 0.0;
         while (true) {
@@ -1544,7 +1548,7 @@ public class CustomDijkstraMap implements Serializable {
             int choice = rng.nextIntHasty(adjacency.maxAdjacent);
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
-                pt = neighbors[reuse[d]][currentPos];
+                pt = toNeighbors[reuse[d]][currentPos];
                 if (gradientMap[pt] < best && !path.contains(pt)) {
                     best = gradientMap[pt];
                     choice = reuse[d];
@@ -1552,11 +1556,11 @@ public class CustomDijkstraMap implements Serializable {
             }
 
 
-            if (best >= gradientMap[currentPos] || physicalMap[neighbors[choice][currentPos]] > FLOOR) {
+            if (best >= gradientMap[currentPos] || physicalMap[toNeighbors[choice][currentPos]] > FLOOR) {
                 path.clear();
                 break;
             }
-            currentPos = neighbors[choice][pt = currentPos];
+            currentPos = toNeighbors[choice][pt = currentPos];
             path.add(currentPos);
             paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
             frustration++;
@@ -1617,6 +1621,7 @@ public class CustomDijkstraMap implements Serializable {
         if (goals.isEmpty())
             return new IntVLA(path);
         Adjacency adjacency = this.adjacency;
+        int[][] toNeighbors = neighbors[1];
         scan(size, impassable2.toArray());
         int currentPos = start, pt;
         double paidLength = 0.0;
@@ -1630,7 +1635,7 @@ public class CustomDijkstraMap implements Serializable {
             int choice = rng.nextIntHasty(adjacency.maxAdjacent);
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
-                pt = neighbors[reuse[d]][currentPos];
+                pt = toNeighbors[reuse[d]][currentPos];
                 if (gradientMap[pt] < best && !path.contains(pt)) {
                     best = gradientMap[pt];
                     choice = reuse[d];
@@ -1638,11 +1643,11 @@ public class CustomDijkstraMap implements Serializable {
             }
 
 
-            if (best >= gradientMap[currentPos] || physicalMap[neighbors[choice][currentPos]] > FLOOR) {
+            if (best >= gradientMap[currentPos] || physicalMap[toNeighbors[choice][currentPos]] > FLOOR) {
                 path.clear();
                 break;
             }
-            currentPos = neighbors[choice][pt = currentPos];
+            currentPos = toNeighbors[choice][pt = currentPos];
             path.add(currentPos);
             paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
             frustration++;
@@ -2076,6 +2081,7 @@ public class CustomDijkstraMap implements Serializable {
             cachedFleeMap = scan(size, scanArray);
         }
         Adjacency adjacency = this.adjacency;
+        int[][] toNeighbors = neighbors[1];
         int currentPos = start, pt;
         double paidLength = 0.0;
         while (true) {
@@ -2088,7 +2094,7 @@ public class CustomDijkstraMap implements Serializable {
             int choice = rng.nextIntHasty(adjacency.maxAdjacent);
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
-                pt = neighbors[reuse[d]][currentPos];
+                pt = toNeighbors[reuse[d]][currentPos];
                 if (gradientMap[pt] < best && !path.contains(pt)) {
                     best = gradientMap[pt];
                     choice = reuse[d];
@@ -2096,11 +2102,11 @@ public class CustomDijkstraMap implements Serializable {
             }
 
 
-            if (best >= gradientMap[currentPos] || physicalMap[neighbors[choice][currentPos]] > FLOOR) {
+            if (best >= gradientMap[currentPos] || physicalMap[toNeighbors[choice][currentPos]] > FLOOR) {
                 path.clear();
                 break;
             }
-            currentPos = neighbors[choice][pt = currentPos];
+            currentPos = toNeighbors[choice][pt = currentPos];
             path.add(currentPos);
             paidLength += adjacency.costRules.get(costMap[currentPos] | ((adjacency.extractR(pt) == adjacency.extractR(currentPos) ? 0 : 0x10000)));
             frustration++;
