@@ -66,6 +66,10 @@ public class MerlinNoise {
     public static int rawNoise2D(int x, int y) {
         return ((x * 0x9E3779B9 ^ 0xC6BC2796) * (y * 0x92B5CC83 + 0xD9B4E019) - (x ^ ~y) * 0x632BE59B * (~x + y) * 0x7F4A7C15) >>> 8 & 0xff;
     }
+    public static int rawNoise3D(int x, int y, int z) {
+        return ((z * 0xD0E89D2D + (x * 0x9E3779B9 ^ 0xC6BC2796) * (y * 0x92B5CC83 + 0xD9B4E019)) +
+                (x ^ ~y + z) * 0x632BE59B * (z ^ ~x + y) * 0x7F4A7C15 * (~z + x ^ y) * 0x311E289F) >>> 8 & 0xff;
+    }
 
     /**
      * 2D merlin noise.
@@ -75,9 +79,37 @@ public class MerlinNoise {
      * @return noise from 0 to 255, inclusive
      */
     public static int noise2D(int x, int y) {
-        return ((rawNoise2D(x, y) << 2) +
-                rawNoise2D(x + 1, y) + rawNoise2D(x - 1, y) + rawNoise2D(x, y + 1) + rawNoise2D(x, y - 1)
-        ) >> 3;
+        return (rawNoise2D(x-1,y-1) & 43) + (rawNoise2D(x-1,y+1) & 43) +
+                (rawNoise2D(x+1,y-1) & 43) + (rawNoise2D(x+1,y+1) & 43) +
+                (rawNoise2D(x-1,y) & 53) + (rawNoise2D(x+1,y) & 53) +
+                (rawNoise2D(x,y-1) & 53) + (rawNoise2D(x,y-1) & 53) +
+                (rawNoise2D(x,y) & 127) >>> 1;
+    }
+    /**
+     * 3D merlin noise.
+     *
+     * @param x x input
+     * @param y y input
+     * @param z z input
+     * @return noise from 0 to 255, inclusive
+     */
+    public static int noise3D(int x, int y, int z) {
+        return (rawNoise3D(x-1,y-1,z-1) & 12) + (rawNoise3D(x-1,y+1,z-1) & 12) +
+                (rawNoise3D(x+1,y-1,z-1) & 12) + (rawNoise3D(x+1,y+1,z-1) & 12) +
+                (rawNoise3D(x-1,y-1,z+1) & 12) + (rawNoise3D(x-1,y+1,z+1) & 12) +
+                (rawNoise3D(x+1,y-1,z+1) & 12) + (rawNoise3D(x+1,y+1,z+1) & 12) +
+
+                (rawNoise3D(x-1,y-1,z) & 25) + (rawNoise3D(x+1,y-1,z) & 25) +
+                (rawNoise3D(x-1,y+1,z) & 25) + (rawNoise3D(x+1,y+1,z) & 25) +
+                (rawNoise3D(x-1,y,z-1) & 25) + (rawNoise3D(x+1,y,z-1) & 25) +
+                (rawNoise3D(x-1,y,z+1) & 25) + (rawNoise3D(x+1,y,z+1) & 25) +
+                (rawNoise3D(x,y-1,z-1) & 25) + (rawNoise3D(x,y+1,z-1) & 25) +
+                (rawNoise3D(x,y-1,z+1) & 25) + (rawNoise3D(x,y+1,z+1) & 25) +
+
+                (rawNoise3D(x-1,y,z) & 62) + (rawNoise3D(x+1,y,z) & 62) +
+                (rawNoise3D(x,y-1,z) & 62) + (rawNoise3D(x,y+1,z) & 62) +
+                (rawNoise3D(x,y,z-1) & 62) + (rawNoise3D(x,y,z+1) & 62) +
+                (rawNoise3D(x,y,z)) >>> 2;
     }
                         /*(
                                 cellA * (0.5 + absA - absB) +// * (1 - aCoreBias) +
@@ -141,6 +173,44 @@ public class MerlinNoise {
     }*/
 
 
+    public static int noise2D(int x, int y, int zoom) {
+        if(zoom < 1)
+            return 0;
+        int v = 0, a = x << 1, b = y << 1;
+        for (int s = zoom; s > 0; s--) {
+            v += noise2D((a+=379) / s, (b+=379) / s) + noise2D((a) / s, (b+1) / s) + noise2D((a+1) / s, (b) / s);
+        }
+        //return v / zoom;
+        /*
+        double adj = Math.sin((v / (zoom * 1530.0)) * Math.PI);
+        return (int)(adj * adj * 255.5);
+        */
+        double adj = Math.sin((v / (zoom * 1530.0)) * Math.PI);
+        adj *= adj;
+        return (int) (Math.pow(adj, 2.0 - 2.0 * adj) * 255.5);
+    }
+
+    public static int noise3D(int x, int y, int z, int zoom) {
+        if(zoom < 1)
+            return 0;
+        int v = 0, a = x, b = y, c = z;
+        for (int s = zoom; s > 0; s--) {
+            v += noise3D((a+=379) / s, (b+=379) / s, (c+=379) / s)
+                    + noise3D((a) / s, (b+1) / s, (c) / s)
+                    + noise3D((a+1) / s, (b) / s, (c) / s)
+                    + noise3D((a) / s, (b) / s, (c+1) / s);
+        }
+        //return v / zoom;
+        /*
+        double adj = Math.sin((v / (zoom * 1530.0)) * Math.PI);
+        return (int)(adj * adj * 255.5);
+        */
+        double adj = Math.sin((v / (zoom * 2040.0)) * Math.PI);
+        adj *= adj;
+        return (int) (Math.pow(adj, 2.0 - 2.0 * adj) * 255.5);
+    }
+
+    /*
     public static int noise2D(int x, int y, double zoom) {
         final double alef = x / (zoom * 8.0), bet = y / (zoom * 8.0);
         final int alpha = (int) ((x >> 3) / zoom), beta = (int) ((y >> 3) / zoom);
@@ -159,7 +229,7 @@ public class MerlinNoise {
                                 bCell * (0.5 + absB - absA - cornerPref)) * mx
         ) >>> 3;
     }
-
+    */
 
     /**
      * Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.
