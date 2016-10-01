@@ -237,7 +237,7 @@ public class EverythingDemo extends ApplicationAdapter {
         counter = 0;
 
         dungeonGen = new DungeonGenerator(width, height, rng);
-        dungeonGen.addWater(8, 6);
+        dungeonGen.addWater(30, 6);
         dungeonGen.addGrass(5);
         dungeonGen.addBoulders(10);
         dungeonGen.addDoors(18, false);
@@ -646,7 +646,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
-                            lights[i][j] + (int) (-105 + 320 * fovmap[i][j]));
+                            lights[i][j] + (int) (-105 + 180 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
                     display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]), -140);

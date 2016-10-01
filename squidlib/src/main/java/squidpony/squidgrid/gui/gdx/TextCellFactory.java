@@ -70,6 +70,7 @@ public class TextCellFactory implements Disposable {
     protected float descent, lineHeight;
     private Label.LabelStyle style;
     protected OrderedMap<String, String> swap = new OrderedMap<>(32);
+    protected char directionGlyph = '^';
 
 
     /**
@@ -152,7 +153,7 @@ public class TextCellFactory implements Disposable {
         block.draw(temp, 0, 0);
         temp.dispose();
         style = new Label.LabelStyle(bmpFont, null);
-        BitmapFont.Glyph g = bmpFont.getData().getGlyph('^');
+        BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
         dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
         initialized = true;
         initializedByFont = true;
@@ -196,7 +197,7 @@ public class TextCellFactory implements Disposable {
         }
         descent = bmpFont.getDescent();
         style = new Label.LabelStyle(bmpFont, null);
-        BitmapFont.Glyph g = bmpFont.getData().getGlyph('^');
+        BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
         dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
         initialized = true;
         initializedBySize = true;
@@ -1158,6 +1159,7 @@ public class TextCellFactory implements Disposable {
         }
         ColorChangeImage im = new ColorChangeImage(dirMarker, loopTime, doubleWidth,
                 actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), colors2);
+        im.setAlign(2);
         //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
         im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
@@ -1313,6 +1315,15 @@ public class TextCellFactory implements Disposable {
      */
     public float getDescent() {
         return descent;
+    }
+
+    public char getDirectionGlyph() {
+        return directionGlyph;
+    }
+
+    public TextCellFactory setDirectionGlyph(char directionGlyph) {
+        this.directionGlyph = directionGlyph;
+        return this;
     }
 
     /**

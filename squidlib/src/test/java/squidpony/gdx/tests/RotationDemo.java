@@ -83,19 +83,19 @@ public class RotationDemo extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static final int width = 70;
+    private static final int width = 80;
     /**
      * In number of cells
      */
-    private static final int height = 26;
+    private static final int height = 30;
     /**
      * The pixel width of a cell
      */
-    private static final int cellWidth = 16 * INTERNAL_ZOOM;
+    private static final int cellWidth = 13 * INTERNAL_ZOOM;
     /**
      * The pixel height of a cell
      */
-    private static final int cellHeight = 31 * INTERNAL_ZOOM;
+    private static final int cellHeight = 25 * INTERNAL_ZOOM;
     private VisualInput input;
     private double counter;
     private boolean[][] seen;
@@ -109,79 +109,22 @@ public class RotationDemo extends ApplicationAdapter {
     private int framesWithoutAnimation = 0;
     private IntVLA toCursor, awaitedMoves;
     private String lang;
-    private SquidColorCenter[] colorCenters;
-    private int currentCenter;
-    private boolean changingColors = false;
     private TextCellFactory textFactory;
     private Viewport viewport;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
 
-    public static final Adjacency adjacency = new Adjacency.RotationAdjacency(width, height, DijkstraMap.Measurement.EUCLIDEAN);
+    public static final Adjacency adjacency = new Adjacency.RotationAdjacency(width, height, DijkstraMap.Measurement.MANHATTAN);
     @Override
     public void create() {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
         rng = new StatefulRNG(0xBADBEEFB0BBL);
 
-        // for demo purposes, we allow changing the SquidColorCenter and the filter effect associated with it.
-        // next, we populate the colorCenters array with the SquidColorCenters that will modify any colors we request
-        // of them using the filter we specify. Only one SquidColorCenter will be used at any time for foreground, and
-        // sometimes another will be used for background.
-        colorCenters = new SquidColorCenter[18];
-        // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
-        // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
-
-        colorCenters[0] = new SquidColorCenter(new Filters.MultiLerpFilter(
-                new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
-                new float[]{0.25f, 0.2f}
-        ));
-        colorCenters[1] = colorCenters[0];
-
-        // MultiLerpFilter here is given three colors to tint everything toward one of; this is meant to look bolder.
-
-        colorCenters[2] = new SquidColorCenter(new Filters.MultiLerpFilter(
-                new Color[]{SColor.RED_PIGMENT, SColor.MEDIUM_BLUE, SColor.LIME_GREEN},
-                new float[]{0.2f, 0.25f, 0.25f}
-        ));
-        colorCenters[3] = colorCenters[2];
-
-        // ColorizeFilter here is given a slightly-grayish dark brown to imitate a sepia tone.
-
-        colorCenters[4] = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.7f, -0.05f));
-        colorCenters[5] = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.65f, 0.07f));
-
-        // HallucinateFilter makes all the colors very saturated and move even when you aren't doing anything.
-
-        colorCenters[6] = new SquidColorCenter(new Filters.HallucinateFilter());
-        colorCenters[7] = colorCenters[6];
-
-        // SaturationFilter here is used to over-saturate the colors slightly. Background is less saturated.
-
-        colorCenters[8] = new SquidColorCenter(new Filters.SaturationFilter(1.35f));
-        colorCenters[9] = new SquidColorCenter(new Filters.SaturationFilter(1.15f));
-
-        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
-
-        colorCenters[10] = new SquidColorCenter(new Filters.SaturationFilter(0.7f));
-        colorCenters[11] = new SquidColorCenter(new Filters.SaturationFilter(0.5f));
-
-        // WiggleFilter here is used to randomize the colors slightly.
-
-        colorCenters[12] = new SquidColorCenter(new Filters.WiggleFilter());
-        colorCenters[13] = colorCenters[12];
-
-        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
-
-        colorCenters[14] = new SquidColorCenter(new Filters.PaletteFilter(SColor.BLUE_GREEN_SERIES));
-        colorCenters[15] = new SquidColorCenter(new Filters.PaletteFilter(SColor.ACHROMATIC_SERIES));
-
-        colorCenters[16] = DefaultResources.getSCC();
-        colorCenters[17] = colorCenters[16];
-
-        fgCenter = colorCenters[16];
-        bgCenter = colorCenters[17];
-        currentCenter = 8;
-        playerMarkColors = fgCenter.loopingGradient(SColor.HAN_PURPLE, SColor.PSYCHEDELIC_PURPLE, 64);
-        monsterMarkColors = fgCenter.loopingGradient(SColor.CRIMSON, SColor.ORANGE_RED, 64);
+        fgCenter = DefaultResources.getSCC();
+        bgCenter = DefaultResources.getSCC();
+        playerMarkColors = fgCenter.rainbow(64);
+        monsterMarkColors = fgCenter.rainbow(0.75f, 0.65f, 64);
+        //playerMarkColors = fgCenter.loopingGradient(SColor.HAN_PURPLE, SColor.PSYCHEDELIC_PURPLE, 64);
+        //monsterMarkColors = fgCenter.loopingGradient(SColor.CRIMSON, SColor.ORANGE_RED, 64);
         batch = new SpriteBatch();
 
         // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
@@ -191,7 +134,7 @@ public class RotationDemo extends ApplicationAdapter {
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
         textFactory = DefaultResources.getStretchableFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
-                .width(cellWidth).height(cellHeight).initBySize();
+                .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
@@ -214,12 +157,13 @@ public class RotationDemo extends ApplicationAdapter {
         //These need to have their positions set before adding any entities if there is an offset involved.
         messages.setBounds(0, 0, cellWidth * width, cellHeight * 4);
         display.setPosition(0, messages.getHeight());
-        messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
-                " Click the top or bottom border of this box to scroll.");
+        messages.appendWrappingMessage("You are the purple '^', and enemies are red. Click a cell to turn and move. " +
+                "Use ? for help, f to change colors, q to quit. " +
+                "Click the top or bottom border of this box to scroll.");
         counter = 0;
 
         dungeonGen = new SectionDungeonGenerator(width, height, rng);
-        dungeonGen.addWater(8, 6);
+        dungeonGen.addWater(0, 25, 6);
         dungeonGen.addGrass(MixedGenerator.CAVE_FLOOR, 20);
         dungeonGen.addBoulders(0, 7);
         dungeonGen.addDoors(18, false);
@@ -253,7 +197,7 @@ public class RotationDemo extends ApplicationAdapter {
         };
         lineDungeon = DungeonUtility.hashesToLines(lineDungeon);
         */
-        /*
+
         adjacency.addCostRule('"', 1.0);
         adjacency.addCostRule('"', 0.001, true);
         adjacency.addCostRule('~', 1.0);
@@ -262,7 +206,7 @@ public class RotationDemo extends ApplicationAdapter {
         adjacency.addCostRule(',', 0.001, true);
         adjacency.addCostRule('.', 0.001, true);
         adjacency.addCostRule('/', 0.001, true);
-        */
+
         // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
         final GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
         final Coord pl = placement.singleRandom(rng);
@@ -274,9 +218,9 @@ public class RotationDemo extends ApplicationAdapter {
         for (int i = 0; i < numMonsters; i++) {
             Coord monPos = placement.singleRandom(rng);
             placement.remove(monPos);
-            p = adjacency.composite(monPos.x, monPos.y, rng.nextIntHasty(8), 0);
-            monsters.put(p >> 3, new Creature(display.animateActor(monPos.x, monPos.y, ' ', //'Я'
-                    fgCenter.filter(display.getPalette().get(11))),
+            p = adjacency.composite(monPos.x, monPos.y, rng.nextIntHasty(4), 0);
+            monsters.put(p >> 3, new Creature(display.animateActor(monPos.x, monPos.y, 'Я',
+                    SColor.SCARLET),
                     display.directionMarker(monPos.x, monPos.y, monsterMarkColors, 1.5f, 3, false),
                     p,
                     0));
@@ -286,11 +230,11 @@ public class RotationDemo extends ApplicationAdapter {
         res = DungeonUtility.generateResistances(decoDungeon);
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
         getToPlayer = new CustomDijkstraMap(decoDungeon, adjacency, rng);
-        getToPlayer.setGoal(adjacency.composite(pl.x, pl.y, rng.nextIntHasty(8), 0));
+        getToPlayer.setGoal(adjacency.composite(pl.x, pl.y, rng.nextIntHasty(4), 0));
 
-        player = new Creature(display.animateActor(pl.x, pl.y, ' ', SColor.HAN_PURPLE, false),
+        player = new Creature(display.animateActor(pl.x, pl.y, '@', SColor.CAPE_JASMINE, false),
                 display.directionMarker(pl.x, pl.y, playerMarkColors, 2f, 3, false),
-                adjacency.composite(pl.x, pl.y, rng.nextIntHasty(8), 0), health);
+                adjacency.composite(pl.x, pl.y, rng.nextIntHasty(4), 0), health);
         /*
         player = new Creature(display.animateActor(1, 1, ' ', SColor.HAN_PURPLE, false),
                 display.directionMarker(pl.x, pl.y, SColor.HAN_PURPLE, 3, false),
@@ -402,17 +346,6 @@ public class RotationDemo extends ApplicationAdapter {
                         Gdx.app.exit();
                         break;
                     }
-                    case 'f':
-                    case 'F': {
-                        currentCenter = (currentCenter + 1) % 9;
-                        // idx is 3 when we use the HallucinateFilter, which needs special work
-                        changingColors = currentCenter == 3;
-                        fgCenter = colorCenters[currentCenter * 2];
-                        bgCenter = colorCenters[currentCenter * 2 + 1];
-                        display.setFGColorCenter(fgCenter);
-                        display.setBGColorCenter(bgCenter);
-                        break;
-                    }
                 }
             }
         }, new SquidMouse(cellWidth, cellHeight, width, height, 0, 0, new InputAdapter() {
@@ -441,14 +374,14 @@ public class RotationDemo extends ApplicationAdapter {
             // receive highlighting). Uses DijkstraMap.findPath() to find the path, which is surprisingly fast.
             @Override
             public boolean mouseMoved(int screenX, int screenY) {
-                /*
+
                 if (awaitedMoves.size != 0)
                     return false;
                 if (fovmap[screenX][screenY] > 0.0) {
                     //Uses DijkstraMap to get a path. from the player's position to the cursor
                     toCursor = playerToCursor.findPath(30, null, null, player.pos, adjacency.composite(screenX, screenY, 0, 0));
                 }
-                */
+
                 return false;
             }
         }));
@@ -678,7 +611,7 @@ public class RotationDemo extends ApplicationAdapter {
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
-                            lights[i][j] + (int) (-105 + 320 * fovmap[i][j]));
+                            lights[i][j] + (int) (-105 + 250 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
                     display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]), -140);
@@ -802,11 +735,6 @@ public class RotationDemo extends ApplicationAdapter {
             messages.put(width >> 1, 0, Character.forDigit(health, 10), SColor.DARK_PINK);
             // batch must end if it began.
             batch.end();
-        }
-        // if using a filter that changes each frame, clear the known relationship between requested and actual colors
-        if (changingColors) {
-            fgCenter.clearCache();
-            bgCenter.clearCache();
         }
     }
 
