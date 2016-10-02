@@ -10,8 +10,7 @@ import squidpony.annotation.Beta;
 @Beta
 public class MerlinNoise {
 
-    private MerlinNoise()
-    {
+    private MerlinNoise() {
 
     }
 
@@ -66,6 +65,7 @@ public class MerlinNoise {
     public static int rawNoise2D(int x, int y) {
         return ((x * 0x9E3779B9 ^ 0xC6BC2796) * (y * 0x92B5CC83 + 0xD9B4E019) - (x ^ ~y) * 0x632BE59B * (~x + y) * 0x7F4A7C15) >>> 8 & 0xff;
     }
+
     public static int rawNoise3D(int x, int y, int z) {
         return ((z * 0xD0E89D2D + (x * 0x9E3779B9 ^ 0xC6BC2796) * (y * 0x92B5CC83 + 0xD9B4E019)) +
                 (x ^ ~y + z) * 0x632BE59B * (z ^ ~x + y) * 0x7F4A7C15 * (~z + x ^ y) * 0x311E289F) >>> 8 & 0xff;
@@ -79,12 +79,13 @@ public class MerlinNoise {
      * @return noise from 0 to 255, inclusive
      */
     public static int noise2D(int x, int y) {
-        return (rawNoise2D(x-1,y-1) & 43) + (rawNoise2D(x-1,y+1) & 43) +
-                (rawNoise2D(x+1,y-1) & 43) + (rawNoise2D(x+1,y+1) & 43) +
-                (rawNoise2D(x-1,y) & 53) + (rawNoise2D(x+1,y) & 53) +
-                (rawNoise2D(x,y-1) & 53) + (rawNoise2D(x,y-1) & 53) +
-                (rawNoise2D(x,y) & 127) >>> 1;
+        return (rawNoise2D(x - 1, y - 1) & 43) + (rawNoise2D(x - 1, y + 1) & 43) +
+                (rawNoise2D(x + 1, y - 1) & 43) + (rawNoise2D(x + 1, y + 1) & 43) +
+                (rawNoise2D(x - 1, y) & 53) + (rawNoise2D(x + 1, y) & 53) +
+                (rawNoise2D(x, y - 1) & 53) + (rawNoise2D(x, y - 1) & 53) +
+                (rawNoise2D(x, y) & 127) >>> 1;
     }
+
     /**
      * 3D merlin noise.
      *
@@ -94,7 +95,7 @@ public class MerlinNoise {
      * @return noise from 0 to 255, inclusive
      */
     public static int noise3D(int x, int y, int z) {
-        return (rawNoise3D(x-1,y-1,z-1) & 12) + (rawNoise3D(x-1,y+1,z-1) & 12) +
+        /*return (rawNoise3D(x-1,y-1,z-1) & 12) + (rawNoise3D(x-1,y+1,z-1) & 12) +
                 (rawNoise3D(x+1,y-1,z-1) & 12) + (rawNoise3D(x+1,y+1,z-1) & 12) +
                 (rawNoise3D(x-1,y-1,z+1) & 12) + (rawNoise3D(x-1,y+1,z+1) & 12) +
                 (rawNoise3D(x+1,y-1,z+1) & 12) + (rawNoise3D(x+1,y+1,z+1) & 12) +
@@ -109,7 +110,12 @@ public class MerlinNoise {
                 (rawNoise3D(x-1,y,z) & 62) + (rawNoise3D(x+1,y,z) & 62) +
                 (rawNoise3D(x,y-1,z) & 62) + (rawNoise3D(x,y+1,z) & 62) +
                 (rawNoise3D(x,y,z-1) & 62) + (rawNoise3D(x,y,z+1) & 62) +
-                (rawNoise3D(x,y,z)) >>> 2;
+                */
+        return  (rawNoise3D(x - 1, y, z) & 55) + (rawNoise3D(x + 1, y, z) & 55) +
+                (rawNoise3D(x, y - 1, z) & 55) + (rawNoise3D(x, y + 1, z) & 55) +
+                (rawNoise3D(x, y, z - 1) & 55) + (rawNoise3D(x, y, z + 1) & 55) +
+
+                (rawNoise3D(x, y, z) & 181) >>> 1;
     }
                         /*(
                                 cellA * (0.5 + absA - absB) +// * (1 - aCoreBias) +
@@ -139,8 +145,8 @@ public class MerlinNoise {
     /**
      * 2D merlin noise with a zoom factor.
      *
-     * @param x x input
-     * @param y y input
+     * @param x    x input
+     * @param y    y input
      * @param zoom if greater than 1.0, will make the details of the noise larger; if less, will make them smaller
      * @return noise from 0 to 255, inclusive
      */
@@ -171,14 +177,12 @@ public class MerlinNoise {
                         cellB * (1.4 + (absB - absA)) + cellA * (0.6 - (absB - absA))) * mx * 0.5)
         );
     }*/
-
-
     public static int noise2D(int x, int y, int zoom) {
-        if(zoom < 1)
+        if (zoom < 1)
             return 0;
         int v = 0, a = x << 1, b = y << 1;
         for (int s = zoom; s > 0; s--) {
-            v += noise2D((a+=379) / s, (b+=379) / s) + noise2D((a) / s, (b+1) / s) + noise2D((a+1) / s, (b) / s);
+            v += noise2D((a += 379) / s, (b += 379) / s) + noise2D((a) / s, (b + 1) / s) + noise2D((a + 1) / s, (b) / s);
         }
         //return v / zoom;
         /*
@@ -191,23 +195,29 @@ public class MerlinNoise {
     }
 
     public static int noise3D(int x, int y, int z, int zoom) {
-        if(zoom < 1)
+        if (zoom < 1)
             return 0;
-        int v = 0, a = x, b = y, c = z;
+        int v = 0, a = x, b = y, c = z, t;
         for (int s = zoom; s > 0; s--) {
-            v += noise3D((a+=379) / s, (b+=379) / s, (c+=379) / s)
+            v += noise3D((a += 379) / s, (b += 379) / s, (c += 379) / s);
+            v += noise3D((a+(v&1)) / s, (b+(v>>1&1)) / s, (c+(v>>2&1)) / s) +
+                    noise3D((a-(v>>3&1)) / s, (b-(v>>4&1)) / s, (c-(v>>5&1)) / s);
+            //v += t + noise3D((a + (t & 3)) / s, (b + (t >> 2 & 3)) / s, (c + (t >> 4 & 3)) / s);
+                    //+ noise3D((a - (t >> 3 & 1)) / s, (b - (t >> 4 & 1)) / s, (c - (t >> 5 & 1)) / s);
+                    /*
                     + noise3D((a) / s, (b+1) / s, (c) / s)
                     + noise3D((a+1) / s, (b) / s, (c) / s)
-                    + noise3D((a) / s, (b) / s, (c+1) / s);
+                    + noise3D((a) / s, (b) / s, (c+1) / s);*/
         }
         //return v / zoom;
         /*
         double adj = Math.sin((v / (zoom * 1530.0)) * Math.PI);
         return (int)(adj * adj * 255.5);
         */
-        double adj = Math.sin((v / (zoom * 2040.0)) * Math.PI);
-        adj *= adj;
-        return (int) (Math.pow(adj, 2.0 - 2.0 * adj) * 255.5);
+
+        double adj = Math.sin((v / (zoom * 1530.0)) * Math.PI);
+        return (int)(adj * adj * 255.5);
+        //return (int) (Math.pow(adj, 2.0 - 2.0 * adj) * 255.5);
     }
 
     /*
@@ -240,17 +250,17 @@ public class MerlinNoise {
      * <br>
      * The 2D int array this produces has ints ranging from 1 to 255, with extreme values very unlikely. Because 0 is
      * impossible for this to generate, it should be fine to use values from this as denominators in division.
-     * @param width the width of the 2D int array to generate
+     *
+     * @param width  the width of the 2D int array to generate
      * @param height the height of the 2D int array to generate
-     * @param seed the RNG seed to use when pseudo-randomly generating the initial white noise this then processes
+     * @param seed   the RNG seed to use when pseudo-randomly generating the initial white noise this then processes
      * @return a 2D int array where each int should be between 1 and 255, inclusive
      */
-    public static int[][] preCalcNoise2D(int width, int height, long seed)
-    {
+    public static int[][] preCalcNoise2D(int width, int height, long seed) {
         ThunderRNG random = new ThunderRNG(seed);
         int w = (width << 1) + 2, h = (height << 1) + 2;
         GreasedRegion[] regions = new GreasedRegion[]{
-            new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
+                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
                 new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
                 new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),
                 new GreasedRegion(random, w, h).retract().expand(3)
@@ -270,9 +280,9 @@ public class MerlinNoise {
                 data[x][y] += 128 - data2[x][y];
             }
         }
-        for (int x = 0, dx = 1; x < width; x++, dx+= 2) {
-            for (int y = 0, dy = 1; y < height; y++, dy+=2) {
-                data3[x][y] = ((data[dx][dy] << 2) + data[dx-1][dy] + data[dx+1][dy] + data[dx][dy+1] + data[dx][dy-1]) >>> 3;
+        for (int x = 0, dx = 1; x < width; x++, dx += 2) {
+            for (int y = 0, dy = 1; y < height; y++, dy += 2) {
+                data3[x][y] = ((data[dx][dy] << 2) + data[dx - 1][dy] + data[dx + 1][dy] + data[dx][dy + 1] + data[dx][dy - 1]) >>> 3;
             }
         }
         return data3;

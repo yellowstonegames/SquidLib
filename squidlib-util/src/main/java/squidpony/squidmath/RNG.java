@@ -413,7 +413,8 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.
+     * Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy.
+     * Not GWT-compatible; use the overload that takes two arrays if you use GWT.
      * <br>
      * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
      * @param elements an array of T; will not be modified
@@ -434,7 +435,25 @@ public class RNG implements Serializable {
         }
         return array;
     }
-
+    /**
+     * Shuffles an array in place using the Fisher-Yates algorithm.
+     * If you don't want the array modified, use {@link #shuffle(Object[], Object[])}.
+     * Unlike {@link #shuffle(Object[])}, this is GWT-compatible.
+     * <br>
+     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+     * @param elements an array of T; <b>will</b> be modified
+     * @param <T>      can be any non-primitive type.
+     * @return elements after shuffling it in-place
+     */
+    public <T> T[] shuffleInPlace(T[] elements) {
+        for (int i = elements.length - 1; i > 0; i--) {
+            int r = nextInt(i + 1);
+            T t = elements[r];
+            elements[r] = elements[i];
+            elements[i] = t;
+        }
+        return elements;
+    }
     /**
      * Shuffle an array using the "inside-out" Fisher-Yates algorithm. DO NOT give the same array for both elements and
      * dest, since the prior contents of dest are rearranged before elements is used, and if they refer to the same

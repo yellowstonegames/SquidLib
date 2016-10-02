@@ -1139,9 +1139,9 @@ public class CrossHash {
      */
     public static class Storm implements Serializable
     {
-        private static final long serialVersionUID = 2352426757973945149L;
+        private static final long serialVersionUID = 3152426757973945155L;
 
-        private final transient long $alt;
+        private transient long $alt;
 
         public Storm()
         {
@@ -1171,6 +1171,7 @@ public class CrossHash {
                 omega = new Storm("omega");
         public static final Storm[] predefined = new Storm[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,
                 kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega};
+
         public long hash64(final boolean[] data) {
             if (data == null)
                 return 0;
@@ -1477,7 +1478,6 @@ public class CrossHash {
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z >>> 58))) ^ (result >>> 32));
         }
-
     }
 }
 

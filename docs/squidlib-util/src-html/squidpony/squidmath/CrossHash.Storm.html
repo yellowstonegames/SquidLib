@@ -1147,9 +1147,9 @@
 <span class="sourceLineNo">1139</span>     */<a name="line.1139"></a>
 <span class="sourceLineNo">1140</span>    public static class Storm implements Serializable<a name="line.1140"></a>
 <span class="sourceLineNo">1141</span>    {<a name="line.1141"></a>
-<span class="sourceLineNo">1142</span>        private static final long serialVersionUID = 2352426757973945149L;<a name="line.1142"></a>
+<span class="sourceLineNo">1142</span>        private static final long serialVersionUID = 3152426757973945155L;<a name="line.1142"></a>
 <span class="sourceLineNo">1143</span><a name="line.1143"></a>
-<span class="sourceLineNo">1144</span>        private final transient long $alt;<a name="line.1144"></a>
+<span class="sourceLineNo">1144</span>        private transient long $alt;<a name="line.1144"></a>
 <span class="sourceLineNo">1145</span><a name="line.1145"></a>
 <span class="sourceLineNo">1146</span>        public Storm()<a name="line.1146"></a>
 <span class="sourceLineNo">1147</span>        {<a name="line.1147"></a>
@@ -1179,313 +1179,313 @@
 <span class="sourceLineNo">1171</span>                omega = new Storm("omega");<a name="line.1171"></a>
 <span class="sourceLineNo">1172</span>        public static final Storm[] predefined = new Storm[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,<a name="line.1172"></a>
 <span class="sourceLineNo">1173</span>                kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega};<a name="line.1173"></a>
-<span class="sourceLineNo">1174</span>        public long hash64(final boolean[] data) {<a name="line.1174"></a>
-<span class="sourceLineNo">1175</span>            if (data == null)<a name="line.1175"></a>
-<span class="sourceLineNo">1176</span>                return 0;<a name="line.1176"></a>
-<span class="sourceLineNo">1177</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1177"></a>
-<span class="sourceLineNo">1178</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1178"></a>
-<span class="sourceLineNo">1179</span>                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1179"></a>
-<span class="sourceLineNo">1180</span>            }<a name="line.1180"></a>
-<span class="sourceLineNo">1181</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1181"></a>
-<span class="sourceLineNo">1182</span>        }<a name="line.1182"></a>
-<span class="sourceLineNo">1183</span><a name="line.1183"></a>
-<span class="sourceLineNo">1184</span>        public long hash64(final byte[] data) {<a name="line.1184"></a>
-<span class="sourceLineNo">1185</span>            if (data == null)<a name="line.1185"></a>
-<span class="sourceLineNo">1186</span>                return 0;<a name="line.1186"></a>
-<span class="sourceLineNo">1187</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1187"></a>
-<span class="sourceLineNo">1188</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1188"></a>
-<span class="sourceLineNo">1189</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1189"></a>
-<span class="sourceLineNo">1190</span>            }<a name="line.1190"></a>
-<span class="sourceLineNo">1191</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1191"></a>
-<span class="sourceLineNo">1192</span>        }<a name="line.1192"></a>
-<span class="sourceLineNo">1193</span><a name="line.1193"></a>
-<span class="sourceLineNo">1194</span>        public long hash64(final short[] data) {<a name="line.1194"></a>
-<span class="sourceLineNo">1195</span>            if (data == null)<a name="line.1195"></a>
-<span class="sourceLineNo">1196</span>                return 0;<a name="line.1196"></a>
-<span class="sourceLineNo">1197</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1197"></a>
-<span class="sourceLineNo">1198</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1198"></a>
-<span class="sourceLineNo">1199</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1199"></a>
-<span class="sourceLineNo">1200</span>            }<a name="line.1200"></a>
-<span class="sourceLineNo">1201</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1201"></a>
-<span class="sourceLineNo">1202</span>        }<a name="line.1202"></a>
-<span class="sourceLineNo">1203</span><a name="line.1203"></a>
-<span class="sourceLineNo">1204</span>        public long hash64(final char[] data) {<a name="line.1204"></a>
-<span class="sourceLineNo">1205</span>            if (data == null)<a name="line.1205"></a>
-<span class="sourceLineNo">1206</span>                return 0;<a name="line.1206"></a>
-<span class="sourceLineNo">1207</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1207"></a>
-<span class="sourceLineNo">1208</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1208"></a>
-<span class="sourceLineNo">1209</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1209"></a>
-<span class="sourceLineNo">1210</span>            }<a name="line.1210"></a>
-<span class="sourceLineNo">1211</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1211"></a>
-<span class="sourceLineNo">1212</span>        }<a name="line.1212"></a>
-<span class="sourceLineNo">1213</span><a name="line.1213"></a>
-<span class="sourceLineNo">1214</span>        public long hash64(final int[] data) {<a name="line.1214"></a>
-<span class="sourceLineNo">1215</span>            if (data == null)<a name="line.1215"></a>
-<span class="sourceLineNo">1216</span>                return 0;<a name="line.1216"></a>
-<span class="sourceLineNo">1217</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1217"></a>
-<span class="sourceLineNo">1218</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1218"></a>
-<span class="sourceLineNo">1219</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1219"></a>
-<span class="sourceLineNo">1220</span>            }<a name="line.1220"></a>
-<span class="sourceLineNo">1221</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1221"></a>
-<span class="sourceLineNo">1222</span>        }<a name="line.1222"></a>
-<span class="sourceLineNo">1223</span><a name="line.1223"></a>
-<span class="sourceLineNo">1224</span>        public long hash64(final long[] data) {<a name="line.1224"></a>
-<span class="sourceLineNo">1225</span>            if (data == null)<a name="line.1225"></a>
-<span class="sourceLineNo">1226</span>                return 0;<a name="line.1226"></a>
-<span class="sourceLineNo">1227</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1227"></a>
-<span class="sourceLineNo">1228</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1228"></a>
-<span class="sourceLineNo">1229</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1229"></a>
-<span class="sourceLineNo">1230</span>            }<a name="line.1230"></a>
-<span class="sourceLineNo">1231</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1231"></a>
-<span class="sourceLineNo">1232</span>        }<a name="line.1232"></a>
-<span class="sourceLineNo">1233</span><a name="line.1233"></a>
-<span class="sourceLineNo">1234</span>        public long hash64(final float[] data) {<a name="line.1234"></a>
-<span class="sourceLineNo">1235</span>            if (data == null)<a name="line.1235"></a>
-<span class="sourceLineNo">1236</span>                return 0;<a name="line.1236"></a>
-<span class="sourceLineNo">1237</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1237"></a>
-<span class="sourceLineNo">1238</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1238"></a>
-<span class="sourceLineNo">1239</span>                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1239"></a>
-<span class="sourceLineNo">1240</span>            }<a name="line.1240"></a>
-<span class="sourceLineNo">1241</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1241"></a>
-<span class="sourceLineNo">1242</span>        }<a name="line.1242"></a>
-<span class="sourceLineNo">1243</span><a name="line.1243"></a>
-<span class="sourceLineNo">1244</span>        public long hash64(final double[] data) {<a name="line.1244"></a>
-<span class="sourceLineNo">1245</span>            if (data == null)<a name="line.1245"></a>
-<span class="sourceLineNo">1246</span>                return 0;<a name="line.1246"></a>
-<span class="sourceLineNo">1247</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1247"></a>
-<span class="sourceLineNo">1248</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1248"></a>
-<span class="sourceLineNo">1249</span>                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1249"></a>
-<span class="sourceLineNo">1250</span>            }<a name="line.1250"></a>
-<span class="sourceLineNo">1251</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1251"></a>
-<span class="sourceLineNo">1252</span>        }<a name="line.1252"></a>
-<span class="sourceLineNo">1253</span><a name="line.1253"></a>
-<span class="sourceLineNo">1254</span>        public long hash64(final char[] data, int start, int end) {<a name="line.1254"></a>
-<span class="sourceLineNo">1255</span>            if (data == null || start &gt;= end)<a name="line.1255"></a>
-<span class="sourceLineNo">1256</span>                return 0;<a name="line.1256"></a>
-<span class="sourceLineNo">1257</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1257"></a>
-<span class="sourceLineNo">1258</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i++) {<a name="line.1258"></a>
-<span class="sourceLineNo">1259</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1259"></a>
-<span class="sourceLineNo">1260</span>            }<a name="line.1260"></a>
-<span class="sourceLineNo">1261</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1261"></a>
-<span class="sourceLineNo">1262</span>        }<a name="line.1262"></a>
-<span class="sourceLineNo">1263</span><a name="line.1263"></a>
-<span class="sourceLineNo">1264</span>        public long hash64(final CharSequence data) {<a name="line.1264"></a>
-<span class="sourceLineNo">1265</span>            if (data == null)<a name="line.1265"></a>
-<span class="sourceLineNo">1266</span>                return 0;<a name="line.1266"></a>
-<span class="sourceLineNo">1267</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length();<a name="line.1267"></a>
-<span class="sourceLineNo">1268</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1268"></a>
-<span class="sourceLineNo">1269</span>                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1269"></a>
-<span class="sourceLineNo">1270</span>            }<a name="line.1270"></a>
-<span class="sourceLineNo">1271</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z &gt;&gt;&gt; 58));<a name="line.1271"></a>
-<span class="sourceLineNo">1272</span>        }<a name="line.1272"></a>
-<span class="sourceLineNo">1273</span><a name="line.1273"></a>
-<span class="sourceLineNo">1274</span>        public long hash64(final char[][] data) {<a name="line.1274"></a>
-<span class="sourceLineNo">1275</span>            if (data == null)<a name="line.1275"></a>
-<span class="sourceLineNo">1276</span>                return 0;<a name="line.1276"></a>
-<span class="sourceLineNo">1277</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1277"></a>
-<span class="sourceLineNo">1278</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1278"></a>
-<span class="sourceLineNo">1279</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1279"></a>
-<span class="sourceLineNo">1280</span>            }<a name="line.1280"></a>
-<span class="sourceLineNo">1281</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1281"></a>
-<span class="sourceLineNo">1282</span>        }<a name="line.1282"></a>
-<span class="sourceLineNo">1283</span><a name="line.1283"></a>
-<span class="sourceLineNo">1284</span>        public long hash64(final CharSequence[] data) {<a name="line.1284"></a>
-<span class="sourceLineNo">1285</span>            if (data == null)<a name="line.1285"></a>
-<span class="sourceLineNo">1286</span>                return 0;<a name="line.1286"></a>
-<span class="sourceLineNo">1287</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1287"></a>
-<span class="sourceLineNo">1288</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1288"></a>
-<span class="sourceLineNo">1289</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1289"></a>
-<span class="sourceLineNo">1290</span>            }<a name="line.1290"></a>
-<span class="sourceLineNo">1291</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1291"></a>
-<span class="sourceLineNo">1292</span>        }<a name="line.1292"></a>
-<span class="sourceLineNo">1293</span><a name="line.1293"></a>
-<span class="sourceLineNo">1294</span>        public long hash64(final Iterable&lt;String&gt; data) {<a name="line.1294"></a>
-<span class="sourceLineNo">1295</span>            if (data == null)<a name="line.1295"></a>
-<span class="sourceLineNo">1296</span>                return 0;<a name="line.1296"></a>
-<span class="sourceLineNo">1297</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L;<a name="line.1297"></a>
-<span class="sourceLineNo">1298</span>            for (String datum : data) {<a name="line.1298"></a>
-<span class="sourceLineNo">1299</span>                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1299"></a>
-<span class="sourceLineNo">1300</span>            }<a name="line.1300"></a>
-<span class="sourceLineNo">1301</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1301"></a>
-<span class="sourceLineNo">1302</span>        }<a name="line.1302"></a>
-<span class="sourceLineNo">1303</span><a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>        public long hash64(final CharSequence[]... data) {<a name="line.1304"></a>
-<span class="sourceLineNo">1305</span>            if (data == null)<a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>                return 0;<a name="line.1306"></a>
-<span class="sourceLineNo">1307</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1307"></a>
-<span class="sourceLineNo">1308</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1308"></a>
-<span class="sourceLineNo">1309</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1309"></a>
-<span class="sourceLineNo">1310</span>            }<a name="line.1310"></a>
-<span class="sourceLineNo">1311</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1311"></a>
-<span class="sourceLineNo">1312</span>        }<a name="line.1312"></a>
-<span class="sourceLineNo">1313</span><a name="line.1313"></a>
-<span class="sourceLineNo">1314</span>        public long hash64(final Object[] data) {<a name="line.1314"></a>
-<span class="sourceLineNo">1315</span>            if (data == null)<a name="line.1315"></a>
-<span class="sourceLineNo">1316</span>                return 0;<a name="line.1316"></a>
-<span class="sourceLineNo">1317</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1317"></a>
-<span class="sourceLineNo">1318</span>            Object o;<a name="line.1318"></a>
-<span class="sourceLineNo">1319</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1319"></a>
-<span class="sourceLineNo">1320</span>                o = data[i];<a name="line.1320"></a>
-<span class="sourceLineNo">1321</span>                result ^= (z += ((o == null ? 0 : o.hashCode()) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1321"></a>
-<span class="sourceLineNo">1322</span><a name="line.1322"></a>
-<span class="sourceLineNo">1323</span>            }<a name="line.1323"></a>
-<span class="sourceLineNo">1324</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1324"></a>
-<span class="sourceLineNo">1325</span>        }<a name="line.1325"></a>
-<span class="sourceLineNo">1326</span>        public int hash(final boolean[] data) {<a name="line.1326"></a>
-<span class="sourceLineNo">1327</span>            if (data == null)<a name="line.1327"></a>
-<span class="sourceLineNo">1328</span>                return 0;<a name="line.1328"></a>
-<span class="sourceLineNo">1329</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1329"></a>
-<span class="sourceLineNo">1330</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1330"></a>
-<span class="sourceLineNo">1331</span>                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1331"></a>
-<span class="sourceLineNo">1332</span>            }<a name="line.1332"></a>
-<span class="sourceLineNo">1333</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1333"></a>
-<span class="sourceLineNo">1334</span>        }<a name="line.1334"></a>
-<span class="sourceLineNo">1335</span><a name="line.1335"></a>
-<span class="sourceLineNo">1336</span>        public int hash(final byte[] data) {<a name="line.1336"></a>
-<span class="sourceLineNo">1337</span>            if (data == null)<a name="line.1337"></a>
-<span class="sourceLineNo">1338</span>                return 0;<a name="line.1338"></a>
-<span class="sourceLineNo">1339</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1339"></a>
-<span class="sourceLineNo">1340</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1340"></a>
-<span class="sourceLineNo">1341</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1341"></a>
-<span class="sourceLineNo">1342</span>            }<a name="line.1342"></a>
-<span class="sourceLineNo">1343</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1343"></a>
-<span class="sourceLineNo">1344</span>        }<a name="line.1344"></a>
-<span class="sourceLineNo">1345</span><a name="line.1345"></a>
-<span class="sourceLineNo">1346</span>        public int hash(final short[] data) {<a name="line.1346"></a>
-<span class="sourceLineNo">1347</span>            if (data == null)<a name="line.1347"></a>
-<span class="sourceLineNo">1348</span>                return 0;<a name="line.1348"></a>
-<span class="sourceLineNo">1349</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1349"></a>
-<span class="sourceLineNo">1350</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1350"></a>
-<span class="sourceLineNo">1351</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1351"></a>
-<span class="sourceLineNo">1352</span>            }<a name="line.1352"></a>
-<span class="sourceLineNo">1353</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1353"></a>
-<span class="sourceLineNo">1354</span>        }<a name="line.1354"></a>
-<span class="sourceLineNo">1355</span><a name="line.1355"></a>
-<span class="sourceLineNo">1356</span>        public int hash(final char[] data) {<a name="line.1356"></a>
-<span class="sourceLineNo">1357</span>            if (data == null)<a name="line.1357"></a>
-<span class="sourceLineNo">1358</span>                return 0;<a name="line.1358"></a>
-<span class="sourceLineNo">1359</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1359"></a>
-<span class="sourceLineNo">1360</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1360"></a>
-<span class="sourceLineNo">1361</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1361"></a>
-<span class="sourceLineNo">1362</span>            }<a name="line.1362"></a>
-<span class="sourceLineNo">1363</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1363"></a>
-<span class="sourceLineNo">1364</span>        }<a name="line.1364"></a>
-<span class="sourceLineNo">1365</span><a name="line.1365"></a>
-<span class="sourceLineNo">1366</span>        public int hash(final int[] data) {<a name="line.1366"></a>
-<span class="sourceLineNo">1367</span>            if (data == null)<a name="line.1367"></a>
-<span class="sourceLineNo">1368</span>                return 0;<a name="line.1368"></a>
-<span class="sourceLineNo">1369</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1369"></a>
-<span class="sourceLineNo">1370</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1370"></a>
-<span class="sourceLineNo">1371</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1371"></a>
-<span class="sourceLineNo">1372</span><a name="line.1372"></a>
-<span class="sourceLineNo">1373</span>            }<a name="line.1373"></a>
-<span class="sourceLineNo">1374</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1374"></a>
-<span class="sourceLineNo">1375</span>        }<a name="line.1375"></a>
-<span class="sourceLineNo">1376</span><a name="line.1376"></a>
-<span class="sourceLineNo">1377</span>        public int hash(final long[] data) {<a name="line.1377"></a>
-<span class="sourceLineNo">1378</span>            if (data == null)<a name="line.1378"></a>
-<span class="sourceLineNo">1379</span>                return 0;<a name="line.1379"></a>
-<span class="sourceLineNo">1380</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1380"></a>
-<span class="sourceLineNo">1381</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1381"></a>
-<span class="sourceLineNo">1382</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1382"></a>
-<span class="sourceLineNo">1383</span>            }<a name="line.1383"></a>
-<span class="sourceLineNo">1384</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1384"></a>
-<span class="sourceLineNo">1385</span>        }<a name="line.1385"></a>
-<span class="sourceLineNo">1386</span><a name="line.1386"></a>
-<span class="sourceLineNo">1387</span>        public int hash(final float[] data) {<a name="line.1387"></a>
-<span class="sourceLineNo">1388</span>            if (data == null)<a name="line.1388"></a>
-<span class="sourceLineNo">1389</span>                return 0;<a name="line.1389"></a>
-<span class="sourceLineNo">1390</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1390"></a>
-<span class="sourceLineNo">1391</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1391"></a>
-<span class="sourceLineNo">1392</span>                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1392"></a>
-<span class="sourceLineNo">1393</span>            }<a name="line.1393"></a>
-<span class="sourceLineNo">1394</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1394"></a>
-<span class="sourceLineNo">1395</span>        }<a name="line.1395"></a>
-<span class="sourceLineNo">1396</span><a name="line.1396"></a>
-<span class="sourceLineNo">1397</span>        public int hash(final double[] data) {<a name="line.1397"></a>
-<span class="sourceLineNo">1398</span>            if (data == null)<a name="line.1398"></a>
-<span class="sourceLineNo">1399</span>                return 0;<a name="line.1399"></a>
-<span class="sourceLineNo">1400</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1400"></a>
-<span class="sourceLineNo">1401</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1401"></a>
-<span class="sourceLineNo">1402</span>                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1402"></a>
-<span class="sourceLineNo">1403</span>            }<a name="line.1403"></a>
-<span class="sourceLineNo">1404</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1404"></a>
-<span class="sourceLineNo">1405</span>        }<a name="line.1405"></a>
-<span class="sourceLineNo">1406</span><a name="line.1406"></a>
-<span class="sourceLineNo">1407</span>        public int hash(final char[] data, int start, int end) {<a name="line.1407"></a>
-<span class="sourceLineNo">1408</span>            if (data == null || start &gt;= end)<a name="line.1408"></a>
-<span class="sourceLineNo">1409</span>                return 0;<a name="line.1409"></a>
-<span class="sourceLineNo">1410</span><a name="line.1410"></a>
-<span class="sourceLineNo">1411</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1411"></a>
-<span class="sourceLineNo">1412</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i++) {<a name="line.1412"></a>
-<span class="sourceLineNo">1413</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1413"></a>
-<span class="sourceLineNo">1414</span>            }<a name="line.1414"></a>
-<span class="sourceLineNo">1415</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1415"></a>
-<span class="sourceLineNo">1416</span>        }<a name="line.1416"></a>
-<span class="sourceLineNo">1417</span><a name="line.1417"></a>
-<span class="sourceLineNo">1418</span>        public int hash(final CharSequence data) {<a name="line.1418"></a>
-<span class="sourceLineNo">1419</span>            if (data == null)<a name="line.1419"></a>
-<span class="sourceLineNo">1420</span>                return 0;<a name="line.1420"></a>
-<span class="sourceLineNo">1421</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length();<a name="line.1421"></a>
-<span class="sourceLineNo">1422</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1422"></a>
-<span class="sourceLineNo">1423</span>                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1423"></a>
-<span class="sourceLineNo">1424</span>            }<a name="line.1424"></a>
-<span class="sourceLineNo">1425</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1425"></a>
-<span class="sourceLineNo">1426</span>        }<a name="line.1426"></a>
-<span class="sourceLineNo">1427</span><a name="line.1427"></a>
-<span class="sourceLineNo">1428</span>        public int hash(final char[][] data) {<a name="line.1428"></a>
-<span class="sourceLineNo">1429</span>            if (data == null)<a name="line.1429"></a>
-<span class="sourceLineNo">1430</span>                return 0;<a name="line.1430"></a>
-<span class="sourceLineNo">1431</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1431"></a>
-<span class="sourceLineNo">1432</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1432"></a>
-<span class="sourceLineNo">1433</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1433"></a>
-<span class="sourceLineNo">1434</span>            }<a name="line.1434"></a>
-<span class="sourceLineNo">1435</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1435"></a>
-<span class="sourceLineNo">1436</span>        }<a name="line.1436"></a>
-<span class="sourceLineNo">1437</span><a name="line.1437"></a>
-<span class="sourceLineNo">1438</span>        public int hash(final CharSequence[] data) {<a name="line.1438"></a>
-<span class="sourceLineNo">1439</span>            if (data == null)<a name="line.1439"></a>
-<span class="sourceLineNo">1440</span>                return 0;<a name="line.1440"></a>
-<span class="sourceLineNo">1441</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1441"></a>
-<span class="sourceLineNo">1442</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1442"></a>
-<span class="sourceLineNo">1443</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1443"></a>
-<span class="sourceLineNo">1444</span>            }<a name="line.1444"></a>
-<span class="sourceLineNo">1445</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1445"></a>
-<span class="sourceLineNo">1446</span>        }<a name="line.1446"></a>
-<span class="sourceLineNo">1447</span><a name="line.1447"></a>
-<span class="sourceLineNo">1448</span>        public int hash(final Iterable&lt;String&gt; data) {<a name="line.1448"></a>
-<span class="sourceLineNo">1449</span>            if (data == null)<a name="line.1449"></a>
-<span class="sourceLineNo">1450</span>                return 0;<a name="line.1450"></a>
-<span class="sourceLineNo">1451</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L;<a name="line.1451"></a>
-<span class="sourceLineNo">1452</span>            for (String datum : data) {<a name="line.1452"></a>
-<span class="sourceLineNo">1453</span>                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1453"></a>
-<span class="sourceLineNo">1454</span>            }<a name="line.1454"></a>
-<span class="sourceLineNo">1455</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1455"></a>
-<span class="sourceLineNo">1456</span>        }<a name="line.1456"></a>
-<span class="sourceLineNo">1457</span><a name="line.1457"></a>
-<span class="sourceLineNo">1458</span>        public int hash(final CharSequence[]... data) {<a name="line.1458"></a>
-<span class="sourceLineNo">1459</span>            if (data == null)<a name="line.1459"></a>
-<span class="sourceLineNo">1460</span>                return 0;<a name="line.1460"></a>
-<span class="sourceLineNo">1461</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1461"></a>
-<span class="sourceLineNo">1462</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1462"></a>
-<span class="sourceLineNo">1463</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1463"></a>
-<span class="sourceLineNo">1464</span>            }<a name="line.1464"></a>
-<span class="sourceLineNo">1465</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1465"></a>
-<span class="sourceLineNo">1466</span>        }<a name="line.1466"></a>
-<span class="sourceLineNo">1467</span><a name="line.1467"></a>
-<span class="sourceLineNo">1468</span>        public int hash(final Object[] data) {<a name="line.1468"></a>
-<span class="sourceLineNo">1469</span>            if (data == null)<a name="line.1469"></a>
-<span class="sourceLineNo">1470</span>                return 0;<a name="line.1470"></a>
-<span class="sourceLineNo">1471</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1471"></a>
-<span class="sourceLineNo">1472</span>            Object o;<a name="line.1472"></a>
-<span class="sourceLineNo">1473</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1473"></a>
-<span class="sourceLineNo">1474</span>                o = data[i];<a name="line.1474"></a>
-<span class="sourceLineNo">1475</span>                result ^= (z += ((o == null ? 0 : o.hashCode()) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1475"></a>
-<span class="sourceLineNo">1476</span><a name="line.1476"></a>
-<span class="sourceLineNo">1477</span>            }<a name="line.1477"></a>
-<span class="sourceLineNo">1478</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1478"></a>
-<span class="sourceLineNo">1479</span>        }<a name="line.1479"></a>
-<span class="sourceLineNo">1480</span><a name="line.1480"></a>
+<span class="sourceLineNo">1174</span><a name="line.1174"></a>
+<span class="sourceLineNo">1175</span>        public long hash64(final boolean[] data) {<a name="line.1175"></a>
+<span class="sourceLineNo">1176</span>            if (data == null)<a name="line.1176"></a>
+<span class="sourceLineNo">1177</span>                return 0;<a name="line.1177"></a>
+<span class="sourceLineNo">1178</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1178"></a>
+<span class="sourceLineNo">1179</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1179"></a>
+<span class="sourceLineNo">1180</span>                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1180"></a>
+<span class="sourceLineNo">1181</span>            }<a name="line.1181"></a>
+<span class="sourceLineNo">1182</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1182"></a>
+<span class="sourceLineNo">1183</span>        }<a name="line.1183"></a>
+<span class="sourceLineNo">1184</span><a name="line.1184"></a>
+<span class="sourceLineNo">1185</span>        public long hash64(final byte[] data) {<a name="line.1185"></a>
+<span class="sourceLineNo">1186</span>            if (data == null)<a name="line.1186"></a>
+<span class="sourceLineNo">1187</span>                return 0;<a name="line.1187"></a>
+<span class="sourceLineNo">1188</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1188"></a>
+<span class="sourceLineNo">1189</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1189"></a>
+<span class="sourceLineNo">1190</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1190"></a>
+<span class="sourceLineNo">1191</span>            }<a name="line.1191"></a>
+<span class="sourceLineNo">1192</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1192"></a>
+<span class="sourceLineNo">1193</span>        }<a name="line.1193"></a>
+<span class="sourceLineNo">1194</span><a name="line.1194"></a>
+<span class="sourceLineNo">1195</span>        public long hash64(final short[] data) {<a name="line.1195"></a>
+<span class="sourceLineNo">1196</span>            if (data == null)<a name="line.1196"></a>
+<span class="sourceLineNo">1197</span>                return 0;<a name="line.1197"></a>
+<span class="sourceLineNo">1198</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1198"></a>
+<span class="sourceLineNo">1199</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1199"></a>
+<span class="sourceLineNo">1200</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1200"></a>
+<span class="sourceLineNo">1201</span>            }<a name="line.1201"></a>
+<span class="sourceLineNo">1202</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1202"></a>
+<span class="sourceLineNo">1203</span>        }<a name="line.1203"></a>
+<span class="sourceLineNo">1204</span><a name="line.1204"></a>
+<span class="sourceLineNo">1205</span>        public long hash64(final char[] data) {<a name="line.1205"></a>
+<span class="sourceLineNo">1206</span>            if (data == null)<a name="line.1206"></a>
+<span class="sourceLineNo">1207</span>                return 0;<a name="line.1207"></a>
+<span class="sourceLineNo">1208</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1208"></a>
+<span class="sourceLineNo">1209</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1209"></a>
+<span class="sourceLineNo">1210</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1210"></a>
+<span class="sourceLineNo">1211</span>            }<a name="line.1211"></a>
+<span class="sourceLineNo">1212</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1212"></a>
+<span class="sourceLineNo">1213</span>        }<a name="line.1213"></a>
+<span class="sourceLineNo">1214</span><a name="line.1214"></a>
+<span class="sourceLineNo">1215</span>        public long hash64(final int[] data) {<a name="line.1215"></a>
+<span class="sourceLineNo">1216</span>            if (data == null)<a name="line.1216"></a>
+<span class="sourceLineNo">1217</span>                return 0;<a name="line.1217"></a>
+<span class="sourceLineNo">1218</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1218"></a>
+<span class="sourceLineNo">1219</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1219"></a>
+<span class="sourceLineNo">1220</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1220"></a>
+<span class="sourceLineNo">1221</span>            }<a name="line.1221"></a>
+<span class="sourceLineNo">1222</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1222"></a>
+<span class="sourceLineNo">1223</span>        }<a name="line.1223"></a>
+<span class="sourceLineNo">1224</span><a name="line.1224"></a>
+<span class="sourceLineNo">1225</span>        public long hash64(final long[] data) {<a name="line.1225"></a>
+<span class="sourceLineNo">1226</span>            if (data == null)<a name="line.1226"></a>
+<span class="sourceLineNo">1227</span>                return 0;<a name="line.1227"></a>
+<span class="sourceLineNo">1228</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1228"></a>
+<span class="sourceLineNo">1229</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1229"></a>
+<span class="sourceLineNo">1230</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1230"></a>
+<span class="sourceLineNo">1231</span>            }<a name="line.1231"></a>
+<span class="sourceLineNo">1232</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1232"></a>
+<span class="sourceLineNo">1233</span>        }<a name="line.1233"></a>
+<span class="sourceLineNo">1234</span><a name="line.1234"></a>
+<span class="sourceLineNo">1235</span>        public long hash64(final float[] data) {<a name="line.1235"></a>
+<span class="sourceLineNo">1236</span>            if (data == null)<a name="line.1236"></a>
+<span class="sourceLineNo">1237</span>                return 0;<a name="line.1237"></a>
+<span class="sourceLineNo">1238</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1238"></a>
+<span class="sourceLineNo">1239</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1239"></a>
+<span class="sourceLineNo">1240</span>                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1240"></a>
+<span class="sourceLineNo">1241</span>            }<a name="line.1241"></a>
+<span class="sourceLineNo">1242</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1242"></a>
+<span class="sourceLineNo">1243</span>        }<a name="line.1243"></a>
+<span class="sourceLineNo">1244</span><a name="line.1244"></a>
+<span class="sourceLineNo">1245</span>        public long hash64(final double[] data) {<a name="line.1245"></a>
+<span class="sourceLineNo">1246</span>            if (data == null)<a name="line.1246"></a>
+<span class="sourceLineNo">1247</span>                return 0;<a name="line.1247"></a>
+<span class="sourceLineNo">1248</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1248"></a>
+<span class="sourceLineNo">1249</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1249"></a>
+<span class="sourceLineNo">1250</span>                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1250"></a>
+<span class="sourceLineNo">1251</span>            }<a name="line.1251"></a>
+<span class="sourceLineNo">1252</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1252"></a>
+<span class="sourceLineNo">1253</span>        }<a name="line.1253"></a>
+<span class="sourceLineNo">1254</span><a name="line.1254"></a>
+<span class="sourceLineNo">1255</span>        public long hash64(final char[] data, int start, int end) {<a name="line.1255"></a>
+<span class="sourceLineNo">1256</span>            if (data == null || start &gt;= end)<a name="line.1256"></a>
+<span class="sourceLineNo">1257</span>                return 0;<a name="line.1257"></a>
+<span class="sourceLineNo">1258</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1258"></a>
+<span class="sourceLineNo">1259</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i++) {<a name="line.1259"></a>
+<span class="sourceLineNo">1260</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1260"></a>
+<span class="sourceLineNo">1261</span>            }<a name="line.1261"></a>
+<span class="sourceLineNo">1262</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1262"></a>
+<span class="sourceLineNo">1263</span>        }<a name="line.1263"></a>
+<span class="sourceLineNo">1264</span><a name="line.1264"></a>
+<span class="sourceLineNo">1265</span>        public long hash64(final CharSequence data) {<a name="line.1265"></a>
+<span class="sourceLineNo">1266</span>            if (data == null)<a name="line.1266"></a>
+<span class="sourceLineNo">1267</span>                return 0;<a name="line.1267"></a>
+<span class="sourceLineNo">1268</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length();<a name="line.1268"></a>
+<span class="sourceLineNo">1269</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1269"></a>
+<span class="sourceLineNo">1270</span>                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1270"></a>
+<span class="sourceLineNo">1271</span>            }<a name="line.1271"></a>
+<span class="sourceLineNo">1272</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z &gt;&gt;&gt; 58));<a name="line.1272"></a>
+<span class="sourceLineNo">1273</span>        }<a name="line.1273"></a>
+<span class="sourceLineNo">1274</span><a name="line.1274"></a>
+<span class="sourceLineNo">1275</span>        public long hash64(final char[][] data) {<a name="line.1275"></a>
+<span class="sourceLineNo">1276</span>            if (data == null)<a name="line.1276"></a>
+<span class="sourceLineNo">1277</span>                return 0;<a name="line.1277"></a>
+<span class="sourceLineNo">1278</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1278"></a>
+<span class="sourceLineNo">1279</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1279"></a>
+<span class="sourceLineNo">1280</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1280"></a>
+<span class="sourceLineNo">1281</span>            }<a name="line.1281"></a>
+<span class="sourceLineNo">1282</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1282"></a>
+<span class="sourceLineNo">1283</span>        }<a name="line.1283"></a>
+<span class="sourceLineNo">1284</span><a name="line.1284"></a>
+<span class="sourceLineNo">1285</span>        public long hash64(final CharSequence[] data) {<a name="line.1285"></a>
+<span class="sourceLineNo">1286</span>            if (data == null)<a name="line.1286"></a>
+<span class="sourceLineNo">1287</span>                return 0;<a name="line.1287"></a>
+<span class="sourceLineNo">1288</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1288"></a>
+<span class="sourceLineNo">1289</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1289"></a>
+<span class="sourceLineNo">1290</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1290"></a>
+<span class="sourceLineNo">1291</span>            }<a name="line.1291"></a>
+<span class="sourceLineNo">1292</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1292"></a>
+<span class="sourceLineNo">1293</span>        }<a name="line.1293"></a>
+<span class="sourceLineNo">1294</span><a name="line.1294"></a>
+<span class="sourceLineNo">1295</span>        public long hash64(final Iterable&lt;String&gt; data) {<a name="line.1295"></a>
+<span class="sourceLineNo">1296</span>            if (data == null)<a name="line.1296"></a>
+<span class="sourceLineNo">1297</span>                return 0;<a name="line.1297"></a>
+<span class="sourceLineNo">1298</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L;<a name="line.1298"></a>
+<span class="sourceLineNo">1299</span>            for (String datum : data) {<a name="line.1299"></a>
+<span class="sourceLineNo">1300</span>                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1300"></a>
+<span class="sourceLineNo">1301</span>            }<a name="line.1301"></a>
+<span class="sourceLineNo">1302</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1302"></a>
+<span class="sourceLineNo">1303</span>        }<a name="line.1303"></a>
+<span class="sourceLineNo">1304</span><a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>        public long hash64(final CharSequence[]... data) {<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>            if (data == null)<a name="line.1306"></a>
+<span class="sourceLineNo">1307</span>                return 0;<a name="line.1307"></a>
+<span class="sourceLineNo">1308</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1308"></a>
+<span class="sourceLineNo">1309</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1309"></a>
+<span class="sourceLineNo">1310</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1310"></a>
+<span class="sourceLineNo">1311</span>            }<a name="line.1311"></a>
+<span class="sourceLineNo">1312</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1312"></a>
+<span class="sourceLineNo">1313</span>        }<a name="line.1313"></a>
+<span class="sourceLineNo">1314</span><a name="line.1314"></a>
+<span class="sourceLineNo">1315</span>        public long hash64(final Object[] data) {<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>            if (data == null)<a name="line.1316"></a>
+<span class="sourceLineNo">1317</span>                return 0;<a name="line.1317"></a>
+<span class="sourceLineNo">1318</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1318"></a>
+<span class="sourceLineNo">1319</span>            Object o;<a name="line.1319"></a>
+<span class="sourceLineNo">1320</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1320"></a>
+<span class="sourceLineNo">1321</span>                o = data[i];<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>                result ^= (z += ((o == null ? 0 : o.hashCode()) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span><a name="line.1323"></a>
+<span class="sourceLineNo">1324</span>            }<a name="line.1324"></a>
+<span class="sourceLineNo">1325</span>            return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58));<a name="line.1325"></a>
+<span class="sourceLineNo">1326</span>        }<a name="line.1326"></a>
+<span class="sourceLineNo">1327</span>        public int hash(final boolean[] data) {<a name="line.1327"></a>
+<span class="sourceLineNo">1328</span>            if (data == null)<a name="line.1328"></a>
+<span class="sourceLineNo">1329</span>                return 0;<a name="line.1329"></a>
+<span class="sourceLineNo">1330</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1330"></a>
+<span class="sourceLineNo">1331</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1331"></a>
+<span class="sourceLineNo">1332</span>                result ^= (z += (data[i] ? 0x9E3779B97F4A7C94L : 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1332"></a>
+<span class="sourceLineNo">1333</span>            }<a name="line.1333"></a>
+<span class="sourceLineNo">1334</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1334"></a>
+<span class="sourceLineNo">1335</span>        }<a name="line.1335"></a>
+<span class="sourceLineNo">1336</span><a name="line.1336"></a>
+<span class="sourceLineNo">1337</span>        public int hash(final byte[] data) {<a name="line.1337"></a>
+<span class="sourceLineNo">1338</span>            if (data == null)<a name="line.1338"></a>
+<span class="sourceLineNo">1339</span>                return 0;<a name="line.1339"></a>
+<span class="sourceLineNo">1340</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1340"></a>
+<span class="sourceLineNo">1341</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1341"></a>
+<span class="sourceLineNo">1342</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1342"></a>
+<span class="sourceLineNo">1343</span>            }<a name="line.1343"></a>
+<span class="sourceLineNo">1344</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1344"></a>
+<span class="sourceLineNo">1345</span>        }<a name="line.1345"></a>
+<span class="sourceLineNo">1346</span><a name="line.1346"></a>
+<span class="sourceLineNo">1347</span>        public int hash(final short[] data) {<a name="line.1347"></a>
+<span class="sourceLineNo">1348</span>            if (data == null)<a name="line.1348"></a>
+<span class="sourceLineNo">1349</span>                return 0;<a name="line.1349"></a>
+<span class="sourceLineNo">1350</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1350"></a>
+<span class="sourceLineNo">1351</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1351"></a>
+<span class="sourceLineNo">1352</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1352"></a>
+<span class="sourceLineNo">1353</span>            }<a name="line.1353"></a>
+<span class="sourceLineNo">1354</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1354"></a>
+<span class="sourceLineNo">1355</span>        }<a name="line.1355"></a>
+<span class="sourceLineNo">1356</span><a name="line.1356"></a>
+<span class="sourceLineNo">1357</span>        public int hash(final char[] data) {<a name="line.1357"></a>
+<span class="sourceLineNo">1358</span>            if (data == null)<a name="line.1358"></a>
+<span class="sourceLineNo">1359</span>                return 0;<a name="line.1359"></a>
+<span class="sourceLineNo">1360</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1360"></a>
+<span class="sourceLineNo">1361</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1361"></a>
+<span class="sourceLineNo">1362</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1362"></a>
+<span class="sourceLineNo">1363</span>            }<a name="line.1363"></a>
+<span class="sourceLineNo">1364</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1364"></a>
+<span class="sourceLineNo">1365</span>        }<a name="line.1365"></a>
+<span class="sourceLineNo">1366</span><a name="line.1366"></a>
+<span class="sourceLineNo">1367</span>        public int hash(final int[] data) {<a name="line.1367"></a>
+<span class="sourceLineNo">1368</span>            if (data == null)<a name="line.1368"></a>
+<span class="sourceLineNo">1369</span>                return 0;<a name="line.1369"></a>
+<span class="sourceLineNo">1370</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1370"></a>
+<span class="sourceLineNo">1371</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1371"></a>
+<span class="sourceLineNo">1372</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1372"></a>
+<span class="sourceLineNo">1373</span><a name="line.1373"></a>
+<span class="sourceLineNo">1374</span>            }<a name="line.1374"></a>
+<span class="sourceLineNo">1375</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1375"></a>
+<span class="sourceLineNo">1376</span>        }<a name="line.1376"></a>
+<span class="sourceLineNo">1377</span><a name="line.1377"></a>
+<span class="sourceLineNo">1378</span>        public int hash(final long[] data) {<a name="line.1378"></a>
+<span class="sourceLineNo">1379</span>            if (data == null)<a name="line.1379"></a>
+<span class="sourceLineNo">1380</span>                return 0;<a name="line.1380"></a>
+<span class="sourceLineNo">1381</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1381"></a>
+<span class="sourceLineNo">1382</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1382"></a>
+<span class="sourceLineNo">1383</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1383"></a>
+<span class="sourceLineNo">1384</span>            }<a name="line.1384"></a>
+<span class="sourceLineNo">1385</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1385"></a>
+<span class="sourceLineNo">1386</span>        }<a name="line.1386"></a>
+<span class="sourceLineNo">1387</span><a name="line.1387"></a>
+<span class="sourceLineNo">1388</span>        public int hash(final float[] data) {<a name="line.1388"></a>
+<span class="sourceLineNo">1389</span>            if (data == null)<a name="line.1389"></a>
+<span class="sourceLineNo">1390</span>                return 0;<a name="line.1390"></a>
+<span class="sourceLineNo">1391</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1391"></a>
+<span class="sourceLineNo">1392</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1392"></a>
+<span class="sourceLineNo">1393</span>                result ^= (z += (Float.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1393"></a>
+<span class="sourceLineNo">1394</span>            }<a name="line.1394"></a>
+<span class="sourceLineNo">1395</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1395"></a>
+<span class="sourceLineNo">1396</span>        }<a name="line.1396"></a>
+<span class="sourceLineNo">1397</span><a name="line.1397"></a>
+<span class="sourceLineNo">1398</span>        public int hash(final double[] data) {<a name="line.1398"></a>
+<span class="sourceLineNo">1399</span>            if (data == null)<a name="line.1399"></a>
+<span class="sourceLineNo">1400</span>                return 0;<a name="line.1400"></a>
+<span class="sourceLineNo">1401</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1401"></a>
+<span class="sourceLineNo">1402</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1402"></a>
+<span class="sourceLineNo">1403</span>                result ^= (z += (Double.doubleToLongBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1403"></a>
+<span class="sourceLineNo">1404</span>            }<a name="line.1404"></a>
+<span class="sourceLineNo">1405</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1405"></a>
+<span class="sourceLineNo">1406</span>        }<a name="line.1406"></a>
+<span class="sourceLineNo">1407</span><a name="line.1407"></a>
+<span class="sourceLineNo">1408</span>        public int hash(final char[] data, int start, int end) {<a name="line.1408"></a>
+<span class="sourceLineNo">1409</span>            if (data == null || start &gt;= end)<a name="line.1409"></a>
+<span class="sourceLineNo">1410</span>                return 0;<a name="line.1410"></a>
+<span class="sourceLineNo">1411</span><a name="line.1411"></a>
+<span class="sourceLineNo">1412</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1412"></a>
+<span class="sourceLineNo">1413</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i++) {<a name="line.1413"></a>
+<span class="sourceLineNo">1414</span>                result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1414"></a>
+<span class="sourceLineNo">1415</span>            }<a name="line.1415"></a>
+<span class="sourceLineNo">1416</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1416"></a>
+<span class="sourceLineNo">1417</span>        }<a name="line.1417"></a>
+<span class="sourceLineNo">1418</span><a name="line.1418"></a>
+<span class="sourceLineNo">1419</span>        public int hash(final CharSequence data) {<a name="line.1419"></a>
+<span class="sourceLineNo">1420</span>            if (data == null)<a name="line.1420"></a>
+<span class="sourceLineNo">1421</span>                return 0;<a name="line.1421"></a>
+<span class="sourceLineNo">1422</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length();<a name="line.1422"></a>
+<span class="sourceLineNo">1423</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1423"></a>
+<span class="sourceLineNo">1424</span>                result ^= (z += (data.charAt(i) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1424"></a>
+<span class="sourceLineNo">1425</span>            }<a name="line.1425"></a>
+<span class="sourceLineNo">1426</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int)(z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1426"></a>
+<span class="sourceLineNo">1427</span>        }<a name="line.1427"></a>
+<span class="sourceLineNo">1428</span><a name="line.1428"></a>
+<span class="sourceLineNo">1429</span>        public int hash(final char[][] data) {<a name="line.1429"></a>
+<span class="sourceLineNo">1430</span>            if (data == null)<a name="line.1430"></a>
+<span class="sourceLineNo">1431</span>                return 0;<a name="line.1431"></a>
+<span class="sourceLineNo">1432</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1432"></a>
+<span class="sourceLineNo">1433</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1433"></a>
+<span class="sourceLineNo">1434</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1434"></a>
+<span class="sourceLineNo">1435</span>            }<a name="line.1435"></a>
+<span class="sourceLineNo">1436</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1436"></a>
+<span class="sourceLineNo">1437</span>        }<a name="line.1437"></a>
+<span class="sourceLineNo">1438</span><a name="line.1438"></a>
+<span class="sourceLineNo">1439</span>        public int hash(final CharSequence[] data) {<a name="line.1439"></a>
+<span class="sourceLineNo">1440</span>            if (data == null)<a name="line.1440"></a>
+<span class="sourceLineNo">1441</span>                return 0;<a name="line.1441"></a>
+<span class="sourceLineNo">1442</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1442"></a>
+<span class="sourceLineNo">1443</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1443"></a>
+<span class="sourceLineNo">1444</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1444"></a>
+<span class="sourceLineNo">1445</span>            }<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>        }<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span><a name="line.1448"></a>
+<span class="sourceLineNo">1449</span>        public int hash(final Iterable&lt;String&gt; data) {<a name="line.1449"></a>
+<span class="sourceLineNo">1450</span>            if (data == null)<a name="line.1450"></a>
+<span class="sourceLineNo">1451</span>                return 0;<a name="line.1451"></a>
+<span class="sourceLineNo">1452</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L;<a name="line.1452"></a>
+<span class="sourceLineNo">1453</span>            for (String datum : data) {<a name="line.1453"></a>
+<span class="sourceLineNo">1454</span>                result ^= (z += (hash64(datum) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span>            }<a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>        }<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span><a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>        public int hash(final CharSequence[]... data) {<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span>            if (data == null)<a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>                return 0;<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1462"></a>
+<span class="sourceLineNo">1463</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>                result ^= (z += (hash64(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span>            }<a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>        }<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span><a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>        public int hash(final Object[] data) {<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span>            if (data == null)<a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>                return 0;<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span>            final long chips = $alt &lt;&lt; 1 ^ 0xC6BC279692B5CC83L; long z = 0x632BE59BD9B4E019L + chips, result = 1L, len = data.length;<a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>            Object o;<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>            for (int i = 0; i &lt; len; i++) {<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>                o = data[i];<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>                result ^= (z += ((o == null ? 0 : o.hashCode()) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * chips;<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span><a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>            }<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>            return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ $alt ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (chips + z &gt;&gt;&gt; 58))) ^ (result &gt;&gt;&gt; 32));<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span>        }<a name="line.1480"></a>
 <span class="sourceLineNo">1481</span>    }<a name="line.1481"></a>
 <span class="sourceLineNo">1482</span>}<a name="line.1482"></a>
 <span class="sourceLineNo">1483</span><a name="line.1483"></a>

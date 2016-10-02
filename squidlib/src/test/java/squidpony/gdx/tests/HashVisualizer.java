@@ -41,6 +41,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private RandomXS128 gdxRandom;
     private long seed;
     private int ctr = 0;
+    private boolean keepGoing = false;
 
     public static double toDouble(long n) {
         return Double.longBitsToDouble(0x3FF0000000000000L | n >>> 12) - 1.0;
@@ -142,11 +143,11 @@ public class HashVisualizer extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        width = 512;
-        height = 512;
-        cellWidth = 1;
-        cellHeight = 1;
-        display = new SquidPanel(width, height, 1, 1);
+        width = 256;
+        height = 256;
+        cellWidth = 2;
+        cellHeight = 2;
+        display = new SquidPanel(width, height, 2, 2);
         overlay = new SquidPanel(16, 8, DefaultResources.getStretchableFont().width(32).height(64).initBySize());
         IFilter<Color> filter0 = new Filters.PaletteFilter(
                 new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f},
@@ -190,6 +191,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     case 'C':
                     case 'c':
                         ctr++;
+                        if(alt) keepGoing = !keepGoing;
                         putMap();
                         break;
                     case 'S':
@@ -838,10 +840,10 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 4:
-                        Gdx.graphics.setTitle("Merlin Noise 3D, x8 smooth zoom");
+                        Gdx.graphics.setTitle("Merlin Noise 3D, x6 smooth zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = MerlinNoise.noise3D(x, y, ctr, 5);
+                                iBright = MerlinNoise.noise3D(x, y, ctr, 3);
                                 display.put(x, y, colorFactory.get(iBright, iBright, iBright));
                             }
                         }
@@ -867,14 +869,19 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 7:
-                        Gdx.graphics.setTitle("Merlin Precalc Noise, seed 0xD0E89D2D311E289FL");
-                        map = MerlinNoise.preCalcNoise2D(width, height, 0xD0E89D2D311E289FL);
+                        Gdx.graphics.setTitle("Perlin 3D Noise, x8 zoom");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = map[x][y];
-                                display.put(x, y, colorFactory.get(iBright, iBright, iBright));
+                                bright = (float)
+                                        (PerlinNoise.noise(x / 8.0, y / 8.0, ctr) * 8 +
+                                                PerlinNoise.noise(x / 4.0, y / 4.0, ctr) * 4 +
+                                                PerlinNoise.noise(x / 2.0, y / 2.0, ctr) * 2 +
+                                                PerlinNoise.noise(x, y, ctr)
+                                                + 15.0f) / 30f;
+                                display.put(x, y, colorFactory.get(bright, bright, bright, 1f));
                             }
                         }
+
                         break;
 
                     /*
@@ -1473,17 +1480,17 @@ public class HashVisualizer extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         view.apply(true);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
-        if (testType == 3)
+        if (testType == 3 || keepGoing) {
+            ctr++;
             putMap();
-
+        }
         // if the user clicked, we have a list of moves to perform.
 
         // if we are waiting for the player's input and get input, process it.
         if (input.hasNext()) {
             input.next();
         }
-
-        // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
+        // stage has its own batch and must be explicitly told to draw().
         stage.draw();
     }
 
