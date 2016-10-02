@@ -191,6 +191,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <notimestamp>true</notimestamp>
                     <outputDirectory>../docs/${project.name}</outputDirectory>
                     <debug>false</debug>
                     <minmemory>256m</minmemory>
